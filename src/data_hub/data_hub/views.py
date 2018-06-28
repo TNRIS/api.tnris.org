@@ -4,5 +4,4 @@ from django.views.generic import View
 
 class HealthCheckView(View):
     def get(self, request, *args, **kwargs):
-        return HttpResponse(status=200)
-        
+        return HttpResponse("hi there", status=200)

@@ -1,4 +1,4 @@
-"""data_hub URL Configuration
+"""lcd URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/2.0/topics/http/urls/
@@ -13,14 +13,21 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
 from django.urls import path, include
+from rest_framework import routers
+from rest_framework_swagger.views import get_swagger_view
+from rest_framework.schemas import get_schema_view
 
-from .views import HealthCheckView
+
+router = routers.DefaultRouter(trailing_slash=False)
+# router.register(r'collections/?', CollectionViewSet)
+# router.register(r'resources/?', ResourceViewSet, base_name="Resource")
+
+schema_view = get_swagger_view(title='TNRIS Data API')
+# schema_view = get_schema_view(title='Historical Imagery API')
 
 urlpatterns = [
-    path('grappelli/', include('grappelli.urls')), # grappelli URLS
-    path('admin/', admin.site.urls), # admin site
-    path('api/v1/', include('lcd.urls')),
-    path('health/', HealthCheckView.as_view())
+    path('', include(router.urls)),
+    path('schema/', schema_view),
+    path('data_hub-auth/?', include('rest_framework.urls', namespace='rest_framework'))
 ]

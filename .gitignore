@@ -102,3 +102,6 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+# tnrisis ignores
+src/data_hub/set-env-secrets.sh

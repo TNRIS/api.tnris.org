@@ -1,57 +1,73 @@
-# from django.contrib import admin
-#
-# # Register your models here.
-#
-# from django.contrib import admin
-#
+from django.contrib import admin
+
 # from .filters import CollectionAgencyNameFilter, CollectionCountyFilter, \
 #     CountyDropdownFilter
 # from .forms import CollectionForm, ProductForm
-# from .models import (Agency, Collection, County, CountyRelate, FrameSize,
-#                      LineIndex, MicroficheIndex, PhotoIndex, Product, Scale)
-#
-#
-# class AgencyAdmin(admin.ModelAdmin):
-#     model = Agency
-#     ordering = ('name',)
-#
-#
-# class FrameSizeAdmin(admin.ModelAdmin):
-#     model = FrameSize
-#     ordering = ('frame_size',)
-#
-#
-# class ScaleAdmin(admin.ModelAdmin):
-#     model = Scale
-#     ordering = ('scale',)
-#
+from .models import (
+    ZippedByAreaType,
+    StateType,
+    CountyType,
+    QuadType,
+    QQuadType,
+    UsngType,
+    TemplateType,
+    LicenseType
+)
+
+
+class ZippedByAreaTypeAdmin(admin.ModelAdmin):
+    model = ZippedByAreaType
+    ordering = ('zipped_by_area_type_name',)
+
+
+class StateTypeAdmin(admin.ModelAdmin):
+    model = StateType
+    ordering = ('state_fips', 'state_name',)
+
+
+class CountyTypeAdmin(admin.ModelAdmin):
+    model = CountyType
+    ordering = ('county_name',)
+
+
+class QuadTypeAdmin(admin.ModelAdmin):
+    model = QuadType
+    ordering = ('usgs_doq_name',)
+
+
+class QQuadTypeAdmin(admin.ModelAdmin):
+    model = QQuadType
+    ordering = ('q_quad_name',)
+
+
+class UsngTypeAdmin(admin.ModelAdmin):
+    model = UsngType
+    ordering = ('usng_name',)
+
+
+class TemplateTypeAdmin(admin.ModelAdmin):
+    model = TemplateType
+    ordering = ('template',)
+
+
+class LicenseTypeAdmin(admin.ModelAdmin):
+    model = LicenseType
+    ordering = ('license_abbreviation',)
+
+
+admin.site.register(ZippedByAreaType, ZippedByAreaTypeAdmin)
+admin.site.register(StateType, StateTypeAdmin)
+admin.site.register(CountyType, CountyTypeAdmin)
+admin.site.register(QuadType, QuadTypeAdmin)
+admin.site.register(QQuadType, QQuadTypeAdmin)
+admin.site.register(UsngType, UsngTypeAdmin)
+admin.site.register(TemplateType, TemplateTypeAdmin)
+admin.site.register(LicenseType, LicenseTypeAdmin)
 #
 # class PhotoIndexInlineAdmin(admin.StackedInline):
 #     classes = ('grp-collapse grp-closed',)
 #     inline_classes = ('grp-collapse grp-closed',)
 #     model = PhotoIndex
-#     extra = 0
-#
-#
-# class LineIndexInlineAdmin(admin.StackedInline):
-#     classes = ('grp-collapse grp-closed',)
-#     inline_classes = ('grp-collapse grp-open',)
-#     model = LineIndex
-#     extra = 0
-#
-#
-# class MicroficheIndexInlineAdmin(admin.StackedInline):
-#     classes = ('grp-collapse grp-closed',)
-#     inline_classes = ('grp-collapse grp-open',)
-#     model = MicroficheIndex
-#     extra = 0
-#
-#
-# class ProductInlineAdmin(admin.StackedInline):
-#     classes = ('grp-collapse grp-closed',)
-#     inline_classes = ('grp-collapse grp-open',)
-#     model = Product
-#     form = ProductForm
 #     extra = 0
 #
 #
@@ -107,10 +123,3 @@
 #     ordering = ('name',)
 #     list_display = ('name', 'fips')
 #     # search_fields = ['name', 'fips']
-#
-#
-# admin.site.register(Agency, AgencyAdmin)
-# admin.site.register(Collection, CollectionAdmin)
-# admin.site.register(County, CountyAdmin)
-# admin.site.register(FrameSize, FrameSizeAdmin)
-# admin.site.register(Scale, ScaleAdmin)

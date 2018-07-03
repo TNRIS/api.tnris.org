@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 
 import os
 
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -90,8 +91,12 @@ WSGI_APPLICATION = 'data_hub.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('DB_NAME', 'data_tnris_org'),
+        'USER': os.environ.get('DB_USER', 'tnris'),
+        'PASSWORD': os.environ.get('DB_PASSWORD'),
+        'HOST': os.environ.get('DB_HOST', '127.0.0.1'),
+        'PORT': os.environ.get('DB_PORT', '9000')
     }
 }
 
@@ -130,7 +135,7 @@ USE_TZ = True
 
 
 # Grappelli Settings
-GRAPPELLI_ADMIN_TITLE = "TNRIS Data Concierge"
+GRAPPELLI_ADMIN_TITLE = "TNRIS Data Hub"
 GRAPPELLI_SWITCH_USER = True
 
 

@@ -20,6 +20,7 @@ from .views import HealthCheckView
 
 urlpatterns = [
     path('grappelli/', include('grappelli.urls')), # grappelli URLS
+    path('admin/doc/', include('django.contrib.admindocs.urls')), # django admindocs
     path('admin/', admin.site.urls), # admin site
     path('api/v1/', include('lcd.urls')),
     path('health/', HealthCheckView.as_view())

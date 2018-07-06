@@ -11,7 +11,17 @@ from .models import (
     QQuadType,
     UsngType,
     TemplateType,
-    LicenseType
+    LicenseType,
+    UseType,
+    FileType,
+    DataType,
+    ResolutionType,
+    EpsgType,
+    CategoryType,
+    SourceType,
+    BandType,
+    EpsgRelate,
+    Collection
 )
 
 
@@ -55,6 +65,54 @@ class LicenseTypeAdmin(admin.ModelAdmin):
     ordering = ('license_abbreviation',)
 
 
+class UseTypeAdmin(admin.ModelAdmin):
+    model = UseType
+    ordering = ('use_type',)
+
+
+class FileTypeAdmin(admin.ModelAdmin):
+    model = FileType
+    ordering = ('file_type',)
+
+
+class DataTypeAdmin(admin.ModelAdmin):
+    model = DataType
+    ordering = ('data_type',)
+
+
+class ResolutionTypeAdmin(admin.ModelAdmin):
+    model = ResolutionType
+    ordering = ('resolution',)
+
+
+class EpsgTypeAdmin(admin.ModelAdmin):
+    model = EpsgType
+    ordering = ('epsg_code',)
+
+
+class CategoryTypeAdmin(admin.ModelAdmin):
+    model = CategoryType
+    ordering = ('category',)
+
+
+class SourceTypeAdmin(admin.ModelAdmin):
+    model = SourceType
+    ordering = ('source_name',)
+
+
+class BandTypeAdmin(admin.ModelAdmin):
+    model = BandType
+    ordering = ('band_abbreviation',)
+
+
+class EpsgRelateAdmin(admin.ModelAdmin):
+    model = EpsgRelate
+    ordering = ('epsg_type_id',)
+
+
+class CollectionAdmin(admin.ModelAdmin):
+    model = Collection
+
 admin.site.register(ZippedByAreaType, ZippedByAreaTypeAdmin)
 admin.site.register(StateType, StateTypeAdmin)
 admin.site.register(CountyType, CountyTypeAdmin)
@@ -63,6 +121,18 @@ admin.site.register(QQuadType, QQuadTypeAdmin)
 admin.site.register(UsngType, UsngTypeAdmin)
 admin.site.register(TemplateType, TemplateTypeAdmin)
 admin.site.register(LicenseType, LicenseTypeAdmin)
+admin.site.register(UseType, UseTypeAdmin)
+admin.site.register(FileType, FileTypeAdmin)
+admin.site.register(DataType, DataTypeAdmin)
+admin.site.register(ResolutionType, ResolutionTypeAdmin)
+admin.site.register(EpsgType, EpsgTypeAdmin)
+admin.site.register(CategoryType, CategoryTypeAdmin)
+admin.site.register(SourceType, SourceTypeAdmin)
+admin.site.register(BandType, BandTypeAdmin)
+admin.site.register(EpsgRelate, EpsgRelateAdmin)
+admin.site.register(Collection, CollectionAdmin)
+
+
 #
 # class PhotoIndexInlineAdmin(admin.StackedInline):
 #     classes = ('grp-collapse grp-closed',)

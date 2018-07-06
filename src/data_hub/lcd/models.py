@@ -5,6 +5,10 @@ import uuid
 from django.db import models
 
 
+"""
+Domain tables
+"""
+
 class ZippedByAreaType(models.Model):
     """Domain defining areas that resources are zipped up by"""
 
@@ -14,7 +18,7 @@ class ZippedByAreaType(models.Model):
         verbose_name_plural = 'Zipped By Area Types'
         unique_together = ('zipped_by_area_type', 'zipped_by_area_type_name')
 
-    zipped_by_area_type_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    zipped_by_area_type_id = models.UUIDField('Zipped By Area Type ID', primary_key=True, default=uuid.uuid4, editable=False)
     ZIPPED_BY_AREA_TYPE_CHOICES = (
         ('state', 'state'),
         ('county', 'county'),
@@ -41,7 +45,7 @@ class StateType(models.Model):
         verbose_name_plural = 'States'
         unique_together = ('state_fips', 'state_name')
 
-    state_type_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    state_type_id = models.UUIDField('State Type ID', primary_key=True, default=uuid.uuid4, editable=False)
     state_fips = models.PositiveIntegerField('State FIPS', null=True)
     state_name = models.CharField('State Name', max_length=25)
     created = models.DateTimeField('Created', auto_now_add=True)
@@ -59,7 +63,7 @@ class CountyType(models.Model):
         verbose_name_plural = 'Counties'
         unique_together = ('county_fips', 'county_name')
 
-    county_type_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    county_type_id = models.UUIDField('County Type ID', primary_key=True, default=uuid.uuid4, editable=False)
     county_fips = models.PositiveIntegerField('County FIPS', unique=True)
     county_name = models.CharField('County Name', max_length=20, unique=True)
     created = models.DateTimeField('Created', auto_now_add=True)
@@ -78,7 +82,7 @@ class QuadType(models.Model):
         verbose_name_plural = 'Quads'
         unique_together = ('usgs_doq_id', 'usgs_doq_name')
 
-    quad_type_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    quad_type_id = models.UUIDField('Quad Type ID', primary_key=True, default=uuid.uuid4, editable=False)
     usgs_doq_id = models.PositiveIntegerField('USGS DOQ ID', unique=True)
     usgs_doq_name = models.CharField('USGS DOQ Name', max_length=40)
     created = models.DateTimeField('Created', auto_now_add=True)
@@ -97,7 +101,7 @@ class QQuadType(models.Model):
         verbose_name_plural = 'QQuads'
         unique_together = ('q_quad_id', 'q_quad_name')
 
-    q_quad_type_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    q_quad_type_id = models.UUIDField('QQuad Type ID', primary_key=True, default=uuid.uuid4, editable=False)
     q_quad_id = models.PositiveSmallIntegerField('QQuad ID', unique=True)
     q_quad_name = models.CharField('QQuad Name', max_length=2)
     created = models.DateTimeField('Created', auto_now_add=True)
@@ -116,7 +120,7 @@ class UsngType(models.Model):
         verbose_name_plural = 'US National Grids'
         unique_together = ('utm_grid_zone', 'hk_meter_square', 'grid_coordinates')
 
-    usng_1000_type_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    usng_1000_type_id = models.UUIDField('USNG 1000 Type ID', primary_key=True, default=uuid.uuid4, editable=False)
     utm_grid_zone = models.CharField('UTM Grid Zone', max_length=4)
     hk_meter_square = models.CharField('100000 Meter Square', max_length=2)
     grid_coordinates = models.PositiveIntegerField('Grid Coordinates')
@@ -136,7 +140,7 @@ class TemplateType(models.Model):
         verbose_name = 'Template'
         verbose_name_plural = 'Templates'
 
-    template_type_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    template_type_id = models.UUIDField('Template Type ID', primary_key=True, default=uuid.uuid4, editable=False)
     template = models.CharField('Template', max_length=100, unique=True)
     created = models.DateTimeField('Created', auto_now_add=True)
     last_modified = models.DateTimeField('Last Modified', auto_now=True)
@@ -154,10 +158,10 @@ class LicenseType(models.Model):
         verbose_name_plural = 'Licenses'
         unique_together = ('license_abbreviation', 'license_name', 'license_url')
 
-    license_type_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    license_type_id = models.UUIDField('License Type ID', primary_key=True, default=uuid.uuid4, editable=False)
     license_abbreviation = models.CharField('License Abbreviation', max_length=100)
     license_name = models.CharField('License Name', max_length=200)
-    license_url = models.URLField('License URL', max_length=200, null=True, blank=True)
+    license_url = models.URLField('License URL', max_length=255, null=True, blank=True)
     created = models.DateTimeField('Created', auto_now_add=True)
     last_modified = models.DateTimeField('Last Modified', auto_now=True)
 
@@ -173,7 +177,7 @@ class UseType(models.Model):
         verbose_name = 'Use type'
         verbose_name_plural = 'Use Types'
 
-    use_type_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    use_type_id = models.UUIDField('Use Type ID', primary_key=True, default=uuid.uuid4, editable=False)
     use_type = models.CharField('Use', max_length=100, unique=True)
     created = models.DateTimeField('Created', auto_now_add=True)
     last_modified = models.DateTimeField('Last Modified', auto_now=True)
@@ -190,7 +194,7 @@ class FileType(models.Model):
         verbose_name = 'File Type'
         verbose_name_plural = 'File Types'
 
-    file_type_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    file_type_id = models.UUIDField('File Type ID', primary_key=True, default=uuid.uuid4, editable=False)
     file_type = models.CharField('File Type', max_length=25, unique=True)
     created = models.DateTimeField('Created', auto_now_add=True)
     last_modified = models.DateTimeField('Last Modified', auto_now=True)
@@ -207,7 +211,7 @@ class DataType(models.Model):
         verbose_name = 'Data Type'
         verbose_name_plural = 'Data Types'
 
-    data_type_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    data_type_id = models.UUIDField('Data Type ID', primary_key=True, default=uuid.uuid4, editable=False)
     data_type = models.CharField('Data Type', max_length=20, unique=True)
     created = models.DateTimeField('Created', auto_now_add=True)
     last_modified = models.DateTimeField('Last Modified', auto_now=True)
@@ -224,7 +228,7 @@ class ResolutionType(models.Model):
         verbose_name = 'Resolution Type'
         verbose_name_plural = 'Resolution Types'
 
-    resolution_type_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    resolution_type_id = models.UUIDField('Resolution Type ID', primary_key=True, default=uuid.uuid4, editable=False)
     resolution = models.CharField('Resolution', max_length=20, unique=True)
     created = models.DateTimeField('Created', auto_now_add=True)
     last_modified = models.DateTimeField('Last Modified', auto_now=True)
@@ -241,7 +245,7 @@ class EpsgType(models.Model):
         verbose_name = 'EPSG Type'
         verbose_name_plural = 'EPSG Types'
 
-    epsg_type_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    epsg_type_id = models.UUIDField('EPSG Type ID', primary_key=True, default=uuid.uuid4, editable=False)
     epsg_code = models.PositiveIntegerField('EPSG Code', unique=True)
     created = models.DateTimeField('Created', auto_now_add=True)
     last_modified = models.DateTimeField('Last Modified', auto_now=True)
@@ -255,13 +259,120 @@ class CategoryType(models.Model):
 
     class Meta:
         db_table = 'category_type'
-        verbose_name = 'Category Type'
-        verbose_name_plural = 'Category Types'
+        verbose_name = 'Category'
+        verbose_name_plural = 'Categories'
 
-    category_type_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    category = resolution = models.CharField('Category', max_length=50, unique=True)
+    category_type_id = models.UUIDField('Category Type ID', primary_key=True, default=uuid.uuid4, editable=False)
+    category = models.CharField('Category', max_length=50, unique=True)
     created = models.DateTimeField('Created', auto_now_add=True)
     last_modified = models.DateTimeField('Last Modified', auto_now=True)
 
     def __str__(self):
         return self.category
+
+
+class SourceType(models.Model):
+    """Data sources domain table"""
+
+    class Meta:
+        db_table = 'source_type'
+        verbose_name = 'Source'
+        verbose_name_plural = 'Sources'
+        unique_together = ('source_name', 'source_abbreviation',)
+
+    source_type_id = models.UUIDField('Source Type ID', primary_key=True, default=uuid.uuid4, editable=False)
+    source_name = models.CharField('Source Name', max_length=100, unique=True, null=True, blank=True)
+    source_abbreviation = models.CharField('Source Abbreviation', max_length=10)
+    source_website = models.URLField('Source Website', max_length=255, null=True, blank=True)
+    source_contact = models.CharField('Source Contact', max_length=255, null=True, blank=True)
+    created = models.DateTimeField('Created', auto_now_add=True)
+    last_modified = models.DateTimeField('Last Modified', auto_now=True)
+
+    def __str__(self):
+        return self.source_name
+
+
+class BandType(models.Model):
+    """Available band types domain table"""
+
+    class Meta:
+        db_table = 'band_type'
+        verbose_name = 'Band'
+        verbose_name_plural = 'Bands'
+        unique_together = ('band_name', 'band_abbreviation',)
+
+    band_type_id = models.UUIDField('Band Type ID', primary_key=True, default=uuid.uuid4, editable=False)
+    band_name = models.CharField('Band Name', max_length=100, unique=True)
+    band_abbreviation = models.CharField('Band Abbreviation', max_length=10)
+    created = models.DateTimeField('Created', auto_now_add=True)
+    last_modified = models.DateTimeField('Last Modified', auto_now=True)
+
+    def __str__(self):
+        return self.band_abbreviation
+
+
+"""
+Relate tables
+"""
+
+class Collection(models.Model):
+    """Defines collections"""
+
+    pass
+
+
+class EpsgRelate(models.Model):
+    """
+    Defines the spatial references for collections in the data catalog.
+    Related to :model:`lcd.collection`.
+    """
+
+    class Meta:
+        db_table = 'epsg_relate'
+        verbose_name = 'EPSG Code'
+        verbose_name_plural = 'EPSG Codes'
+
+    epsg_relate_id = models.UUIDField('EPSG Relate ID', primary_key=True, default=uuid.uuid4, editable=False)
+    epsg_type_id = models.ForeignKey('EPSG Type', db_column='epsg_type_id', on_delete=models.CASCADE, related_name='epsg_types')
+    collection_id = models.ForeignKey('Collection ID', db_column='collection_id', on_delete=models.CASCADE, related_name='collections')
+    created = models.DateTimeField('Created', auto_now_add=True)
+    last_modified = models.DateTimeField('Last Modified', auto_now=True)
+
+    def __str__(self):
+        return self.epsg_type_id.epsg_code
+
+
+class UseRelate(models.Model):
+    """
+    Defines the reccommended uses for collections in the data catalog.
+    Related to :model:`lcd.collection`.
+    """
+
+    class Meta:
+        db_table = 'use_relate'
+        verbose_name = 'Use'
+        verbose_name_plural = 'Uses'
+
+    use_relate_id = models.UUIDField('Band Type ID', primary_key=True, default=uuid.uuid4, editable=False)
+    use_type_id = models.ForeignKey('Use Type ID', db_column='use_type_id', on_delete=models.CASCADE, related_name='use_types')
+    collection_id = models.ForeignKey('Collection ID', db_column='collection_id', on_delete=models.CASCADE, related_name='collections')
+    created = models.DateTimeField('Created', auto_now_add=True)
+    last_modified = models.DateTimeField('Last Modified', auto_now=True)
+
+    def __str__(self):
+        return self.use_type_id.use_type
+
+
+class ResolutionRelate(models.Model):
+    """
+    Defines the resolutions for collections in the data catalog.
+    Related to :model:`lcd.collection`.
+    """
+
+    class Meta:
+        db_table = 'resolution_relate'
+        verbose_name = 'Resolution'
+        verbose_name_plural = 'Resolutions'
+
+    resolution_relate_id = models.UUIDField('Band Type ID', primary_key=True, default=uuid.uuid4, editable=False)
+    resolution_type_id = models.ForeignKey('ResolutionType', db_column='use_type_id', on_delete=models.CASCADE, related_name='use_types')

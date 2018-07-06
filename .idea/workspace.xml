@@ -2,9 +2,19 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1300361b-2f3d-462f-95ae-0c007d3908c1" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/data_hub/lcd/fixtures/zipped_by_area_type_fixture.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/data_hub/lcd/migrations/0002_auto_20180702_1049.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/data_hub/lcd/migrations/0003_auto_20180702_1445.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/data_hub/lcd/migrations/0004_zippedbyareatype_orig_data_download_id.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/data_hub/lcd/migrations/0005_auto_20180703_1107.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/data_hub/lcd/migrations/0006_auto_20180703_1152.py" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/etl/source_data/data-download-area-processed.csv" afterPath="$PROJECT_DIR$/etl/source_data/data-download-area-processed.csv" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/etl/source_data/process_data_download_table.py" afterPath="$PROJECT_DIR$/etl/source_data/process_data_download_table.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/data_hub/data_hub/settings.py" afterPath="$PROJECT_DIR$/src/data_hub/data_hub/settings.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/data_hub/data_hub/urls.py" afterPath="$PROJECT_DIR$/src/data_hub/data_hub/urls.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/data_hub/lcd/admin.py" afterPath="$PROJECT_DIR$/src/data_hub/lcd/admin.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/data_hub/lcd/migrations/0001_initial.py" afterPath="$PROJECT_DIR$/src/data_hub/lcd/migrations/0001_initial.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/data_hub/lcd/models.py" afterPath="$PROJECT_DIR$/src/data_hub/lcd/models.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -16,45 +26,27 @@
   </component>
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/data.tnris.org$_pydev_execfile.coverage" NAME="_pydev_execfile Coverage Results" MODIFIED="1530556046633" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$APPLICATION_HOME_DIR$/helpers/pydev/_pydev_imps" />
-    <SUITE FILE_PATH="coverage/data.tnris.org$process_data_download_table.coverage" NAME="process_data_download_table Coverage Results" MODIFIED="1530622733758" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/etl/source_data" />
+    <SUITE FILE_PATH="coverage/data.tnris.org$process_data_download_table.coverage" NAME="process_data_download_table Coverage Results" MODIFIED="1530908329903" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/etl/source_data" />
   </component>
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="" />
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.5">
-      <split-first>
-        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file leaf-file-name="process_data_download_table.py" pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/etl/source_data/process_data_download_table.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="300">
-                  <caret line="20" column="26" lean-forward="true" selection-start-line="20" selection-start-column="26" selection-end-line="20" selection-end-column="26" />
-                  <folding>
-                    <element signature="e#0#9#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-        </leaf>
-      </split-first>
-      <split-second>
-        <leaf>
-          <file leaf-file-name="data-download-area-processed.csv" pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/etl/source_data/data-download-area-processed.csv">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="240">
-                  <caret line="16" column="12" lean-forward="false" selection-start-line="16" selection-start-column="12" selection-end-line="16" selection-end-column="12" />
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-        </leaf>
-      </split-second>
-    </splitter>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="process_data_download_table.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/etl/source_data/process_data_download_table.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="420">
+              <caret line="28" column="0" lean-forward="true" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
+              <folding>
+                <element signature="e#0#9#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -73,7 +65,7 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="37" />
+    <option name="x" value="36" />
     <option name="y" value="23" />
     <option name="width" value="2502" />
     <option name="height" value="1367" />
@@ -415,7 +407,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="37" y="23" width="2502" height="1367" extended-state="0" />
+    <frame x="36" y="23" width="2502" height="1367" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.13189448" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -491,8 +483,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/etl/source_data/process_data_download_table.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="20" column="26" lean-forward="true" selection-start-line="20" selection-start-column="26" selection-end-line="20" selection-end-column="26" />
+        <state relative-caret-position="420">
+          <caret line="28" column="0" lean-forward="true" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
           </folding>

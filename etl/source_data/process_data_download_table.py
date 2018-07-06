@@ -15,7 +15,7 @@ def transformAreaCsv(sourcefile, fieldnames):
             reader = csv.reader(infile)
             for row in reader:
                 print(datetime.datetime.now())
-                newrow = [uuid.uuid4(), row[1], row[2], datetime.datetime.now(), datetime.datetime.now(), row[0]]
+                newrow = [uuid.uuid4(), row[1], row[2], row[0], datetime.datetime.now(), datetime.datetime.now()]
                 writer.writerow(i for i in newrow)
 
 if __name__ == '__main__':

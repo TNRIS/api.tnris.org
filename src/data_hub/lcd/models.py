@@ -137,8 +137,8 @@ class TemplateType(models.Model):
 
     class Meta:
         db_table = 'template_type'
-        verbose_name = 'Template'
-        verbose_name_plural = 'Templates'
+        verbose_name = 'Template Type'
+        verbose_name_plural = 'Template Types'
 
     template_type_id = models.UUIDField('Template Type ID', primary_key=True, default=uuid.uuid4, editable=False)
     template = models.CharField('Template', max_length=100, unique=True)
@@ -154,8 +154,8 @@ class LicenseType(models.Model):
 
     class Meta:
         db_table = 'license_type'
-        verbose_name = 'License'
-        verbose_name_plural = 'Licenses'
+        verbose_name = 'License Type'
+        verbose_name_plural = 'License Types'
         unique_together = ('license_abbreviation', 'license_name', 'license_url')
 
     license_type_id = models.UUIDField('License Type ID', primary_key=True, default=uuid.uuid4, editable=False)
@@ -228,10 +228,25 @@ class ResolutionType(models.Model):
         verbose_name = 'Resolution Type'
         verbose_name_plural = 'Resolution Types'
 
-    resolution_type_id = models.UUIDField('Resolution Type ID', primary_key=True, default=uuid.uuid4, editable=False)
-    resolution = models.CharField('Resolution', max_length=20, unique=True)
-    created = models.DateTimeField('Created', auto_now_add=True)
-    last_modified = models.DateTimeField('Last Modified', auto_now=True)
+    resolution_type_id = models.UUIDField(
+        'Resolution Type ID',
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False
+    )
+    resolution = models.CharField(
+        'Resolution',
+        max_length=20,
+        unique=True
+    )
+    created = models.DateTimeField(
+        'Created',
+        auto_now_add=True
+    )
+    last_modified = models.DateTimeField(
+        'Last Modified',
+        auto_now=True
+    )
 
     def __str__(self):
         return self.resolution
@@ -245,10 +260,24 @@ class EpsgType(models.Model):
         verbose_name = 'EPSG Type'
         verbose_name_plural = 'EPSG Types'
 
-    epsg_type_id = models.UUIDField('EPSG Type ID', primary_key=True, default=uuid.uuid4, editable=False)
-    epsg_code = models.PositiveIntegerField('EPSG Code', unique=True)
-    created = models.DateTimeField('Created', auto_now_add=True)
-    last_modified = models.DateTimeField('Last Modified', auto_now=True)
+    epsg_type_id = models.UUIDField(
+        'EPSG Type ID',
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False
+    )
+    epsg_code = models.PositiveIntegerField(
+        'EPSG Code',
+        unique=True
+    )
+    created = models.DateTimeField(
+        'Created',
+        auto_now_add=True
+    )
+    last_modified = models.DateTimeField(
+        'Last Modified',
+        auto_now=True
+    )
 
     def __str__(self):
         return self.epsg_code
@@ -259,13 +288,28 @@ class CategoryType(models.Model):
 
     class Meta:
         db_table = 'category_type'
-        verbose_name = 'Category'
-        verbose_name_plural = 'Categories'
+        verbose_name = 'Category Type'
+        verbose_name_plural = 'Category Types'
 
-    category_type_id = models.UUIDField('Category Type ID', primary_key=True, default=uuid.uuid4, editable=False)
-    category = models.CharField('Category', max_length=50, unique=True)
-    created = models.DateTimeField('Created', auto_now_add=True)
-    last_modified = models.DateTimeField('Last Modified', auto_now=True)
+    category_type_id = models.UUIDField(
+        'Category Type ID',
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False
+    )
+    category = models.CharField(
+        'Category',
+        max_length=50,
+        unique=True
+    )
+    created = models.DateTimeField(
+        'Created',
+        auto_now_add=True
+    )
+    last_modified = models.DateTimeField(
+        'Last Modified',
+        auto_now=True
+    )
 
     def __str__(self):
         return self.category
@@ -276,17 +320,50 @@ class SourceType(models.Model):
 
     class Meta:
         db_table = 'source_type'
-        verbose_name = 'Source'
-        verbose_name_plural = 'Sources'
-        unique_together = ('source_name', 'source_abbreviation',)
+        verbose_name = 'Source Type
+        verbose_name_plural = 'Source Types'
+        unique_together = (
+            'source_name',
+            'source_abbreviation',
+        )
 
-    source_type_id = models.UUIDField('Source Type ID', primary_key=True, default=uuid.uuid4, editable=False)
-    source_name = models.CharField('Source Name', max_length=100, unique=True, null=True, blank=True)
-    source_abbreviation = models.CharField('Source Abbreviation', max_length=10)
-    source_website = models.URLField('Source Website', max_length=255, null=True, blank=True)
-    source_contact = models.CharField('Source Contact', max_length=255, null=True, blank=True)
-    created = models.DateTimeField('Created', auto_now_add=True)
-    last_modified = models.DateTimeField('Last Modified', auto_now=True)
+    source_type_id = models.UUIDField(
+        'Source Type ID',
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False
+    )
+    source_name = models.CharField(
+        'Source Name',
+        max_length=100,
+        unique=True,
+        null=True,
+        blank=True
+    )
+    source_abbreviation = models.CharField(
+        'Source Abbreviation',
+        max_length=10
+    )
+    source_website = models.URLField(
+        'Source Website',
+        max_length=255,
+        null=True,
+        blank=True
+    )
+    source_contact = models.CharField(
+        'Source Contact',
+        max_length=255,
+        null=True,
+        blank=True
+    )
+    created = models.DateTimeField(
+        'Created',
+        auto_now_add=True
+    )
+    last_modified = models.DateTimeField(
+        'Last Modified',
+        auto_now=True
+    )
 
     def __str__(self):
         return self.source_name
@@ -297,15 +374,36 @@ class BandType(models.Model):
 
     class Meta:
         db_table = 'band_type'
-        verbose_name = 'Band'
-        verbose_name_plural = 'Bands'
-        unique_together = ('band_name', 'band_abbreviation',)
+        verbose_name = 'Band Type'
+        verbose_name_plural = 'Band Types'
+        unique_together = (
+            'band_name',
+            'band_abbreviation',
+        )
 
-    band_type_id = models.UUIDField('Band Type ID', primary_key=True, default=uuid.uuid4, editable=False)
-    band_name = models.CharField('Band Name', max_length=100, unique=True)
-    band_abbreviation = models.CharField('Band Abbreviation', max_length=10)
-    created = models.DateTimeField('Created', auto_now_add=True)
-    last_modified = models.DateTimeField('Last Modified', auto_now=True)
+    band_type_id = models.UUIDField(
+        'Band Type ID',
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False
+    )
+    band_name = models.CharField(
+        'Band Name',
+        max_length=100,
+        unique=True
+    )
+    band_abbreviation = models.CharField(
+        'Band Abbreviation',
+        max_length=10
+    )
+    created = models.DateTimeField(
+        'Created',
+        auto_now_add=True
+    )
+    last_modified = models.DateTimeField(
+        'Last Modified',
+        auto_now=True
+    )
 
     def __str__(self):
         return self.band_abbreviation
@@ -315,28 +413,47 @@ class BandType(models.Model):
 Relate tables
 """
 
-class Collection(models.Model):
-    """Defines collections"""
-
-    pass
-
-
 class EpsgRelate(models.Model):
     """
     Defines the spatial references for collections in the data catalog.
-    Related to :model:`lcd.collection`.
+    Related to :model;`lcd.epsg_type` and :model:`lcd.collection`.
     """
 
     class Meta:
         db_table = 'epsg_relate'
         verbose_name = 'EPSG Code'
         verbose_name_plural = 'EPSG Codes'
+        unique_together = (
+            'epsg_type_id',
+            'collection_id',
+        )
 
-    epsg_relate_id = models.UUIDField('EPSG Relate ID', primary_key=True, default=uuid.uuid4, editable=False)
-    epsg_type_id = models.ForeignKey('EPSG Type', db_column='epsg_type_id', on_delete=models.CASCADE, related_name='epsg_types')
-    collection_id = models.ForeignKey('Collection ID', db_column='collection_id', on_delete=models.CASCADE, related_name='collections')
-    created = models.DateTimeField('Created', auto_now_add=True)
-    last_modified = models.DateTimeField('Last Modified', auto_now=True)
+    epsg_relate_id = models.UUIDField(
+        'EPSG Relate ID',
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False
+    )
+    epsg_type_id = models.ForeignKey(
+        'EpsgType',
+        db_column='epsg_type_id',
+        on_delete=models.CASCADE,
+        related_name='epsg_types'
+    )
+    collection_id = models.ForeignKey(
+        'Collection',
+        db_column='collection_id',
+        on_delete=models.CASCADE,
+        related_name='collections'
+    )
+    created = models.DateTimeField(
+        'Created',
+        auto_now_add=True
+    )
+    last_modified = models.DateTimeField(
+        'Last Modified',
+        auto_now=True
+    )
 
     def __str__(self):
         return self.epsg_type_id.epsg_code
@@ -345,19 +462,44 @@ class EpsgRelate(models.Model):
 class UseRelate(models.Model):
     """
     Defines the reccommended uses for collections in the data catalog.
-    Related to :model:`lcd.collection`.
+    Related to :model:`lcd.use_type` and :model:`lcd.collection`.
     """
 
     class Meta:
         db_table = 'use_relate'
         verbose_name = 'Use'
         verbose_name_plural = 'Uses'
+        unique_together = (
+            'use_type_id',
+            'collection_id',
+        )
 
-    use_relate_id = models.UUIDField('Band Type ID', primary_key=True, default=uuid.uuid4, editable=False)
-    use_type_id = models.ForeignKey('Use Type ID', db_column='use_type_id', on_delete=models.CASCADE, related_name='use_types')
-    collection_id = models.ForeignKey('Collection ID', db_column='collection_id', on_delete=models.CASCADE, related_name='collections')
-    created = models.DateTimeField('Created', auto_now_add=True)
-    last_modified = models.DateTimeField('Last Modified', auto_now=True)
+    use_relate_id = models.UUIDField(
+        'Use Relate ID',
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False
+    )
+    use_type_id = models.ForeignKey(
+        'UseType',
+        db_column='use_type_id',
+        on_delete=models.CASCADE,
+        related_name='use_types'
+    )
+    collection_id = models.ForeignKey(
+        'Collection',
+        db_column='collection_id',
+        on_delete=models.CASCADE,
+        related_name='collections'
+    )
+    created = models.DateTimeField(
+        'Created',
+        auto_now_add=True
+    )
+    last_modified = models.DateTimeField(
+        'Last Modified',
+        auto_now=True
+    )
 
     def __str__(self):
         return self.use_type_id.use_type
@@ -366,13 +508,192 @@ class UseRelate(models.Model):
 class ResolutionRelate(models.Model):
     """
     Defines the resolutions for collections in the data catalog.
-    Related to :model:`lcd.collection`.
+    Related to :model:`lcd.resolution_type` and :model:`lcd.collection`.
     """
 
     class Meta:
         db_table = 'resolution_relate'
         verbose_name = 'Resolution'
         verbose_name_plural = 'Resolutions'
+        unique_together = (
+            'resolution_type_id',
+            'collection_id',
+        )
 
-    resolution_relate_id = models.UUIDField('Band Type ID', primary_key=True, default=uuid.uuid4, editable=False)
-    resolution_type_id = models.ForeignKey('ResolutionType', db_column='use_type_id', on_delete=models.CASCADE, related_name='use_types')
+    resolution_relate_id = models.UUIDField(
+        'Resolution Relate ID',
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False
+    )
+    resolution_type_id = models.ForeignKey(
+        'ResolutionType',
+        db_column='resolution_type_id',
+        on_delete=models.CASCADE,
+        related_name='resolution_types'
+    )
+    collection_id = models.ForeignKey(
+        'Collection',
+        db_column='collection_id',
+        on_delete=models.CASCADE,
+        related_name='collections'
+    )
+    created = models.DateTimeField(
+        'Created',
+        auto_now_add=True
+    )
+    last_modified = models.DateTimeField(
+        'Last Modified',
+        auto_now=True
+    )
+
+    def __str__(self):
+        return self.resolution_type_id.resolution
+
+
+class FileTypeRelate(models.Model):
+    """
+    Defines the file types associated with collections in the data catalog.
+    Related to :model:`lcd.file_type` and :model:`lcd.collection`.
+    """
+
+    class Meta:
+        db_table = 'file_type_relate'
+        verbose_name = 'File Type'
+        verbose_name_plural = 'File Types'
+        unique_together = (
+            'file_type_id',
+            'collection_id',
+        )
+
+    file_type_relate_id = models.UUIDField(
+        'File Type Relate ID',
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False
+    )
+    file_type_id = models.ForeignKey(
+        'FileType',
+        db_column='file_type_id',
+        on_delete=models.CASCADE,
+        related_name='file_types'
+    )
+    collection_id = models.ForeignKey(
+        'Collection',
+        db_column='collection_id',
+        on_delete=models.CASCADE,
+        related_name='collections'
+    )
+    created = models.DateTimeField(
+        'Created',
+        auto_now_add=True
+    )
+    last_modified = models.DateTimeField(
+        'Last Modified',
+        auto_now=True
+    )
+
+    def __str__(self):
+        return self.file_type_id.file_type
+
+
+class DataTypeRelate(models.Model):
+    """
+    Defines the data types associated with collections in the data catalog.
+    Related to :model:`lcd.data_type` and :model:`lcd.collection`.
+    """
+
+    class Meta:
+        db_table = 'data_type_relate'
+        verbose_name = 'Data Type'
+        verbose_name_plural = 'Data Types'
+        unique_together = (
+            'data_type_id',
+            'collection_id',
+        )
+
+    data_type_relate_id = models.UUIDField(
+        'Data Type Relate ID',
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False
+    )
+    data_type_id = models.ForeignKey(
+        'DataType',
+        db_column='data_type_id',
+        on_delete=models.CASCADE,
+        related_name='data_types'
+    )
+    collection_id = models.ForeignKey(
+        'Collection',
+        db_column='collection_id',
+        on_delete=models.CASCADE,
+        related_name='collections'
+    )
+    created = models.DateTimeField(
+        'Created',
+        auto_now_add=True
+    )
+    last_modified = models.DateTimeField(
+        'Last Modified',
+        auto_now=True
+    )
+
+    def __str__(self):
+        return self.data_type_id.data_type
+
+
+class CategoryRelate(models.Model):
+    """
+    Defines categories that a collection in the data catalog is associated with.
+    Related to :model:`lcd.category_type` and :model:`lcd.collection`.
+    """
+
+    class Meta:
+        db_table = 'category_relate'
+        verbose_name = 'Category'
+        verbose_name_plural = 'Categories'
+        unique_together = (
+            'category_type_id',
+            'collection_id',
+        )
+
+    category_relate_id = models.UUIDField(
+        'Category Relate ID',
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False
+    )
+    category_type_id = models.ForeignKey(
+        'CategoryType',
+        db_column='category_type_id',
+        on_delete=models.CASCADE,
+        related_name='category_types'
+    )
+    collection_id = models.ForeignKey(
+        'Collection',
+        db_column='collection_id',
+        on_delete=models.CASCADE,
+        related_name='collections'
+    )
+    created = models.DateTimeField(
+        'Created',
+        auto_now_add=True
+    )
+    last_modified = models.DateTimeField(
+        'Last Modified',
+        auto_now=True
+    )
+
+    def __str__(self):
+        return self.category_type_id.category
+
+
+"""
+Primary tables
+"""
+
+class Collection(models.Model):
+    """Defines collections"""
+
+    pass

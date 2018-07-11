@@ -4,12 +4,7 @@ from django.contrib import admin
 #     CountyDropdownFilter
 # from .forms import CollectionForm, ProductForm
 from .models import (
-    ZippedByAreaType,
-    StateType,
-    CountyType,
-    QuadType,
-    QQuadType,
-    UsngType,
+    AreaType,
     TemplateType,
     LicenseType,
     UseType,
@@ -25,34 +20,34 @@ from .models import (
 )
 
 
-class ZippedByAreaTypeAdmin(admin.ModelAdmin):
-    model = ZippedByAreaType
-    ordering = ('zipped_by_area_type_name',)
+class AreaTypeAdmin(admin.ModelAdmin):
+    model = AreaType
+    ordering = ('area_type_name',)
 
 
-class StateTypeAdmin(admin.ModelAdmin):
-    model = StateType
-    ordering = ('state_fips', 'state_name',)
-
-
-class CountyTypeAdmin(admin.ModelAdmin):
-    model = CountyType
-    ordering = ('county_name',)
-
-
-class QuadTypeAdmin(admin.ModelAdmin):
-    model = QuadType
-    ordering = ('usgs_doq_name',)
-
-
-class QQuadTypeAdmin(admin.ModelAdmin):
-    model = QQuadType
-    ordering = ('q_quad_name',)
-
-
-class UsngTypeAdmin(admin.ModelAdmin):
-    model = UsngType
-    ordering = ('usng_name',)
+# class StateTypeAdmin(admin.ModelAdmin):
+#     model = StateType
+#     ordering = ('state_fips', 'state_name',)
+#
+#
+# class CountyTypeAdmin(admin.ModelAdmin):
+#     model = CountyType
+#     ordering = ('county_name',)
+#
+#
+# class QuadTypeAdmin(admin.ModelAdmin):
+#     model = QuadType
+#     ordering = ('usgs_doq_name',)
+#
+#
+# class QQuadTypeAdmin(admin.ModelAdmin):
+#     model = QQuadType
+#     ordering = ('q_quad_name',)
+#
+#
+# class UsngTypeAdmin(admin.ModelAdmin):
+#     model = UsngType
+#     ordering = ('usng_name',)
 
 
 class TemplateTypeAdmin(admin.ModelAdmin):
@@ -113,12 +108,7 @@ class EpsgRelateAdmin(admin.ModelAdmin):
 class CollectionAdmin(admin.ModelAdmin):
     model = Collection
 
-admin.site.register(ZippedByAreaType, ZippedByAreaTypeAdmin)
-admin.site.register(StateType, StateTypeAdmin)
-admin.site.register(CountyType, CountyTypeAdmin)
-admin.site.register(QuadType, QuadTypeAdmin)
-admin.site.register(QQuadType, QQuadTypeAdmin)
-admin.site.register(UsngType, UsngTypeAdmin)
+admin.site.register(AreaType, AreaTypeAdmin)
 admin.site.register(TemplateType, TemplateTypeAdmin)
 admin.site.register(LicenseType, LicenseTypeAdmin)
 admin.site.register(UseType, UseTypeAdmin)

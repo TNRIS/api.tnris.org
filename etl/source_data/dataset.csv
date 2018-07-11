@@ -1,0 +1,33 @@
+id,name,displayName,created_at,updated_at
+1,Stratmap_Bnd,Boundaries,2015-01-07 23:31:42,2015-01-15 22:50:10
+2,Geology,Geology,2015-01-07 23:31:52,2017-04-19 16:04:06
+4,Tx_Gazetteer,Cultural,2015-01-07 23:31:52,2015-05-13 21:26:29
+5,HUCs,Hydro,2015-01-07 23:31:52,2015-01-15 22:50:10
+6,Bathymetry,Bathymetry,2015-01-07 23:31:52,2015-07-20 20:56:53
+7,OTLS,Boundaries,2015-01-07 23:31:53,2015-01-15 22:50:10
+8,Census2k,Census,2015-01-07 23:31:53,2015-01-15 22:50:11
+9,StratMap_Hypso,Elevation,2015-01-07 23:31:53,2015-01-15 22:50:11
+10,Precip,Hydro,2015-01-07 23:31:53,2015-05-14 17:52:12
+11,NHD,Hydro,2015-01-07 23:31:53,2015-01-15 22:50:11
+12,Hydro,Hydro,2015-01-07 23:31:53,2016-10-04 16:18:18
+13,Indices,Indices,2015-01-07 23:31:53,2017-04-19 14:55:39
+14,NLCD,National Land Cover Dataset,2015-01-07 23:31:53,2015-05-14 17:52:11
+15,Transportation,Transportation,2015-01-07 23:31:53,2015-09-17 19:16:52
+16,StratMap_Transportation,Transportation,2015-01-07 23:31:53,2015-01-15 22:50:11
+17,Land Cover,National Land Cover Dataset,2015-01-07 23:31:53,2015-01-15 22:50:12
+18,Boundary,Boundary,2015-01-07 23:31:53,2015-12-10 19:34:41
+19,Compressed County Mosaics,Compressed County Mosaics,2015-01-07 23:31:53,2017-04-14 12:28:53
+20,Digital Raster Graphics,Digital Raster Graphics,2015-01-07 23:33:36,2016-10-04 13:55:42
+21,Elevation,Elevation,2015-01-07 23:33:36,2017-04-20 13:39:57
+22,National Wetlands Inventory,National Wetlands Inventory,2015-01-07 23:33:36,2015-06-04 15:42:53
+23,Satellite Imagery,Satellite Imagery,2015-01-07 23:33:36,2015-09-17 15:50:32
+24,High Priority Imagery Dataset,High Priority Imagery Dataset,2015-01-07 23:33:44,2015-06-04 18:41:54
+25,DOQQ,2 - NE Quarter-Quad,2015-01-07 23:41:10,2017-05-15 14:56:47
+26,DOQQ,3 - SW Quarter-Quad,2015-01-07 23:41:10,2017-05-15 14:56:46
+27,DOQQ,4 - SE Quarter-Quad,2015-01-07 23:41:10,2017-05-15 14:56:46
+28,DOQQ,1 - NW Quarter-Quad,2015-01-07 23:41:10,2017-05-15 14:56:45
+29,National Land Cover Dataset,National Land Cover Dataset,2015-05-14 18:32:11,2015-09-17 15:36:48
+30,Natural Features,Natural Features,2015-05-14 18:32:12,2015-07-09 19:28:14
+31,Cultural,Cultural,2015-05-14 18:41:18,2016-10-04 14:14:00
+32,Bexar Metro 911,Bexar Metro 911,2015-07-20 20:31:55,2016-10-04 13:54:43
+33,StratMap,StratMap,2016-07-21 15:55:07,2016-10-04 14:08:52

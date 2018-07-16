@@ -29,7 +29,7 @@ You will need to use your configured AWS CLI when working locally to manage the 
 
 ## Deployment Prep
 
-# Note: A deployment for this app has yet to be created
+### Note: A deployment for this app has yet to be created
 
 1. Make sure `DEBUG = False` in ~/data.tnris.org/src/data-hub/settings.py
 1. `cd ~/data.tnris.org/src/data-hub`

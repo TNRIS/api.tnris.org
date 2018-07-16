@@ -2,7 +2,7 @@
 
 ![data](https://vignette.wikia.nocookie.net/memoryalpha/images/9/9f/Data_with_pipe.jpg/revision/latest/scale-to-width-down/480?cb=20120823005940&path-prefix=en)
 
-### API and content management system for TNRIS data!
+## API and content management system for TNRIS data!
 * Check out the wiki to learn about the data model and other curiosities
 
 ## Setup

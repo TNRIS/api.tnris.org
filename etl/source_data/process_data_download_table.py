@@ -20,9 +20,10 @@ def transformAreaCsv(sourcefile, fieldnames):
 
 if __name__ == '__main__':
     transformAreaCsv('data-download-area.csv', [
-        'zipped_by_area_type_id',
-        'zipped_by_area_type',
-        'zipped_by_area_type_name',
+        'area_type_id',
+        'area_type',
+        'area_type_name',
+        'orig_data_download_id',
         'created',
-        'last_modified',
-        'orig_data_download_id'])
+        'last_modified'
+        ])

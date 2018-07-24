@@ -34,12 +34,12 @@ class AreaType(models.Model):
         ('qquad', 'qquad'),
         ('natgrid', 'natgrid'),
     )
-    area_type = models.CharField(
+    area_type = models.TextField(
         'Area Type',
         max_length=20,
         choices=AREA_TYPE_CHOICES
     )
-    area_type_name = models.CharField(
+    area_type_name = models.TextField(
         'Area Type Name',
         max_length=50
     )
@@ -78,12 +78,12 @@ class BandType(models.Model):
         default=uuid.uuid4,
         editable=False
     )
-    band_name = models.CharField(
+    band_name = models.TextField(
         'Band Name',
         max_length=100,
         unique=True
     )
-    band_abbreviation = models.CharField(
+    band_abbreviation = models.TextField(
         'Band Abbreviation',
         max_length=10
     )
@@ -114,7 +114,7 @@ class CategoryType(models.Model):
         default=uuid.uuid4,
         editable=False
     )
-    category = models.CharField(
+    category = models.TextField(
         'Category',
         max_length=50,
         unique=True
@@ -146,7 +146,7 @@ class DataType(models.Model):
         default=uuid.uuid4,
         editable=False
     )
-    data_type = models.CharField(
+    data_type = models.TextField(
         'Data Type',
         max_length=20,
         unique=True
@@ -209,7 +209,7 @@ class FileType(models.Model):
         default=uuid.uuid4,
         editable=False
     )
-    file_type = models.CharField(
+    file_type = models.TextField(
         'File Type',
         max_length=25,
         unique=True
@@ -246,11 +246,11 @@ class LicenseType(models.Model):
         default=uuid.uuid4,
         editable=False
     )
-    license_abbreviation = models.CharField(
+    license_abbreviation = models.TextField(
         'License Abbreviation',
         max_length=100
     )
-    license_name = models.CharField(
+    license_name = models.TextField(
         'License Name',
         max_length=200
     )
@@ -287,7 +287,7 @@ class ResolutionType(models.Model):
         default=uuid.uuid4,
         editable=False
     )
-    resolution = models.CharField(
+    resolution = models.TextField(
         'Resolution',
         max_length=20,
         unique=True
@@ -325,13 +325,13 @@ class SourceType(models.Model):
         default=uuid.uuid4,
         editable=False
     )
-    source_name = models.CharField(
+    source_name = models.TextField(
         'Source Name',
         max_length=100,
         null=True,
         blank=True
     )
-    source_abbreviation = models.CharField(
+    source_abbreviation = models.TextField(
         'Source Abbreviation',
         max_length=10
     )
@@ -341,7 +341,7 @@ class SourceType(models.Model):
         null=True,
         blank=True
     )
-    source_contact = models.CharField(
+    source_contact = models.TextField(
         'Source Contact',
         max_length=255,
         null=True,
@@ -374,7 +374,7 @@ class TemplateType(models.Model):
         default=uuid.uuid4,
         editable=False
     )
-    template = models.CharField(
+    template = models.TextField(
         'Template',
         max_length=100,
         unique=True
@@ -406,7 +406,7 @@ class UseType(models.Model):
         default=uuid.uuid4,
         editable=False
     )
-    use_type = models.CharField(
+    use_type = models.TextField(
         'Use',
         max_length=100,
         unique=True
@@ -424,225 +424,6 @@ class UseType(models.Model):
         return self.use_type
 
 
-# """
-# ********** Spatial Domain Tables **********
-# """
-#
-# class StateType(models.Model):
-#     """US and Mexican States domain table"""
-#
-#     class Meta:
-#         db_table = 'state_type'
-#         verbose_name = 'State'
-#         verbose_name_plural = 'States'
-#         unique_together = (
-#             'state_fips',
-#             'state_name'
-#         )
-#
-#     state_type_id = models.UUIDField(
-#         'State Type ID',
-#         primary_key=True,
-#         default=uuid.uuid4,
-#         editable=False
-#     )
-#     state_fips = models.PositiveIntegerField(
-#         'State FIPS',
-#         null=True
-#     )
-#     state_name = models.CharField(
-#         'State Name',
-#         max_length=25
-#     )
-#     created = models.DateTimeField(
-#         'Created',
-#         auto_now_add=True
-#     )
-#     last_modified = models.DateTimeField(
-#         'Last Modified',
-#         auto_now=True
-#     )
-#
-#     def __str__(self):
-#         return self.state_name
-#
-#
-# class CountyType(models.Model):
-#     """Texas Counties domain table"""
-#
-#     class Meta:
-#         db_table = 'county_type'
-#         verbose_name = 'County'
-#         verbose_name_plural = 'Counties'
-#         unique_together = (
-#             'county_fips',
-#             'county_name'
-#         )
-#
-#     county_type_id = models.UUIDField(
-#         'County Type ID',
-#         primary_key=True,
-#         default=uuid.uuid4,
-#         editable=False
-#     )
-#     county_fips = models.PositiveIntegerField(
-#         'County FIPS',
-#         unique=True
-#     )
-#     county_name = models.CharField(
-#         'County Name',
-#         max_length=20,
-#         unique=True
-#     )
-#     created = models.DateTimeField(
-#         'Created',
-#         auto_now_add=True
-#     )
-#     last_modified = models.DateTimeField(
-#         'Last Modified',
-#         auto_now=True
-#     )
-#
-#     def __str__(self):
-#         return self.county_name
-#
-#
-# class QuadType(models.Model):
-#     """Texas USGS Quad domain table"""
-#
-#     class Meta:
-#         db_table = 'quad_type'
-#         verbose_name = 'Quad'
-#         verbose_name_plural = 'Quads'
-#         unique_together = (
-#             'quad_id',
-#             'quad_name'
-#         )
-#
-#     quad_type_id = models.UUIDField(
-#         'Quad Type ID',
-#         primary_key=True,
-#         default=uuid.uuid4,
-#         editable=False
-#     )
-#     quad_id = models.PositiveIntegerField(
-#         'USGS Quad ID',
-#         unique=True
-#     )
-#     quad_name = models.CharField(
-#         'USGS Quad Name',
-#         max_length=50
-#     )
-#     created = models.DateTimeField(
-#         'Created',
-#         auto_now_add=True
-#     )
-#     last_modified = models.DateTimeField(
-#         'Last Modified',
-#         auto_now=True
-#     )
-#
-#     def __str__(self):
-#         return self.quad_name
-#
-#
-# class QQuadType(models.Model):
-#     """Texas USGS QQuad domain table"""
-#
-#     class Meta:
-#         db_table = 'q_quad_type'
-#         verbose_name = 'QQuad'
-#         verbose_name_plural = 'QQuads'
-#         unique_together = (
-#             'q_quad_id',
-#             'q_quad_name',
-#             'quad_name'
-#         )
-#
-#     q_quad_type_id = models.UUIDField(
-#         'QQuad Type ID',
-#         primary_key=True,
-#         default=uuid.uuid4,
-#         editable=False
-#     )
-#     q_quad_id = models.PositiveIntegerField(
-#         'USGS QQuad ID',
-#         unique=True
-#     )
-#     q_quad_name = models.CharField(
-#         'USGS QQuad Name',
-#         max_length=50
-#     )
-#     quad_name = models.CharField(
-#         'USGS Quad Name',
-#         max_length=50
-#     )
-#     created = models.DateTimeField(
-#         'Created',
-#         auto_now_add=True
-#     )
-#     last_modified = models.DateTimeField(
-#         'Last Modified',
-#         auto_now=True
-#     )
-#
-#     def __str__(self):
-#         return self.q_quad_name
-#
-#
-# class UsngType(models.Model):
-#     """Texas US National Grid domain table"""
-#
-#     class Meta:
-#         db_table = 'usng_type'
-#         verbose_name = 'US National Grid'
-#         verbose_name_plural = 'US National Grids'
-#         unique_together = (
-#             'northing',
-#             'easting',
-#             'utm_grid_zone',
-#             'grid_100k',
-#             'usng_name'
-#         )
-#
-#     usng_type_id = models.UUIDField(
-#         'USNG 1000 Type ID',
-#         primary_key=True,
-#         default=uuid.uuid4,
-#         editable=False
-#     )
-#     northing = models.PositiveIntegerField(
-#         'Northing'
-#     )
-#     easting = models.PositiveIntegerField(
-#         'Easting'
-#     )
-#     utm_grid_zone = models.CharField(
-#         'UTM Grid Zone',
-#         max_length=4
-#     )
-#     grid_100k = models.CharField(
-#         '100000 Meter Square',
-#         max_length=2
-#     )
-#     usng_name = models.CharField(
-#         'USNG Name',
-#         max_length=16,
-#         unique=True
-#     )
-#     created = models.DateTimeField(
-#         'Created',
-#         auto_now_add=True
-#     )
-#     last_modified = models.DateTimeField(
-#         'Last Modified',
-#         auto_now=True
-#     )
-#
-#     def __str__(self):
-#         return self.usng_name
-
-
 """
 ********** Lookup Tables **********
 """
@@ -655,8 +436,8 @@ class BandRelate(models.Model):
 
     class Meta:
         db_table = 'band_relate'
-        verbose_name = 'Band'
-        verbose_name_plural = 'Bands'
+        verbose_name = 'Band Lookup'
+        verbose_name_plural = 'Band Lookups'
 
     band_relate_id = models.UUIDField(
         'Band Relate ID',
@@ -697,8 +478,8 @@ class CategoryRelate(models.Model):
 
     class Meta:
         db_table = 'category_relate'
-        verbose_name = 'Category'
-        verbose_name_plural = 'Categories'
+        verbose_name = 'Category Lookup'
+        verbose_name_plural = 'Category Lookups'
         unique_together = (
             'category_type_id',
             'collection_id'
@@ -743,8 +524,8 @@ class DataTypeRelate(models.Model):
 
     class Meta:
         db_table = 'data_type_relate'
-        verbose_name = 'Data Type'
-        verbose_name_plural = 'Data Types'
+        verbose_name = 'Data Type Lookup'
+        verbose_name_plural = 'Data Type Lookups'
         unique_together = (
             'data_type_id',
             'collection_id'
@@ -789,8 +570,8 @@ class EpsgRelate(models.Model):
 
     class Meta:
         db_table = 'epsg_relate'
-        verbose_name = 'EPSG Code'
-        verbose_name_plural = 'EPSG Codes'
+        verbose_name = 'EPSG Code Lookup'
+        verbose_name_plural = 'EPSG Type Lookups'
         unique_together = (
             'epsg_type_id',
             'collection_id'
@@ -835,8 +616,8 @@ class FileTypeRelate(models.Model):
 
     class Meta:
         db_table = 'file_type_relate'
-        verbose_name = 'File Type'
-        verbose_name_plural = 'File Types'
+        verbose_name = 'File Type Lookup'
+        verbose_name_plural = 'File Type Lookups'
         unique_together = (
             'file_type_id',
             'collection_id'
@@ -881,8 +662,8 @@ class ResolutionRelate(models.Model):
 
     class Meta:
         db_table = 'resolution_relate'
-        verbose_name = 'Resolution'
-        verbose_name_plural = 'Resolutions'
+        verbose_name = 'Resolution Lookup'
+        verbose_name_plural = 'Resolution Lookups'
         unique_together = (
             'resolution_type_id',
             'collection_id'
@@ -927,8 +708,8 @@ class UseRelate(models.Model):
 
     class Meta:
         db_table = 'use_relate'
-        verbose_name = 'Use'
-        verbose_name_plural = 'Uses'
+        verbose_name = 'Use Lookup'
+        verbose_name_plural = 'Use Lookups'
         unique_together = (
             'use_type_id',
             'collection_id'
@@ -965,215 +746,6 @@ class UseRelate(models.Model):
         return self.use_type_id.use_type
 
 
-# """
-# ********** Spatial Lookup Tables **********
-# """
-#
-# class StateResource(models.Model):
-#     """
-#     Defines the state a downloadable resource intersects.
-#     Related to :model:`lcd.state_type` and :model:`lcd.resource`.
-#     """
-#
-#     class Meta:
-#         db_table = 'state_resource'
-#         verbose_name = 'State Resource'
-#         verbose_name_plural = 'State Resources'
-#
-#     state_resource_id = models.UUIDField(
-#         'State Resource ID',
-#         primary_key=True,
-#         default=uuid.uuid4,
-#         editable=False
-#     )
-#     state_type_id = models.ForeignKey(
-#         'StateType',
-#         db_column='state_type_id',
-#         on_delete=models.CASCADE,
-#         related_name='state_types'
-#     )
-#     resource_id = models.ForeignKey(
-#         'Resource',
-#         db_column='resource_id',
-#         on_delete=models.CASCADE,
-#         related_name='resources'
-#     )
-#     created = models.DateTimeField(
-#         'Created',
-#         auto_now_add=True
-#     )
-#     last_modified = models.DateTimeField(
-#         'Last Modified',
-#         auto_now=True
-#
-#     def __str__(self):
-#         return self.state_type_id.state_name
-#
-#
-# class CountyResource(models.Model):
-#     """
-#     Defines the county a downloadable resource intersects.
-#     Related to :model:`lcd.county_type` and :model:`lcd.resource`.
-#     """
-#
-#     class Meta:
-#         db_table = 'county_resource'
-#         verbose_name = 'County Resource'
-#         verbose_name_plural = 'County Resources'
-#
-#     county_resource_id = models.UUIDField(
-#         'County Resource ID',
-#         primary_key=True,
-#         default=uuid.uuid4,
-#         editable=False
-#     )
-#     county_type_id = models.ForeignKey(
-#         'CountyType',
-#         db_column='county_type_id',
-#         on_delete=models.CASCADE,
-#         related_name='county_types'
-#     )
-#     resource_id = models.ForeignKey(
-#         'Resource',
-#         db_column='resource_id',
-#         on_delete=models.CASCADE,
-#         related_name='resources'
-#     )
-#     created = models.DateTimeField(
-#         'Created',
-#         auto_now_add=True
-#     )
-#     last_modified = models.DateTimeField(
-#         'Last Modified',
-#         auto_now=True
-#
-#     def __str__(self):
-#         return self.county_type_id.county_name
-#
-#
-# class QuadResource(models.Model):
-#     """
-#     Defines the USGS quad a downloadable resource intersects.
-#     Related to :model:`lcd.quad_type` and :model:`lcd.resource`.
-#     """
-#
-#     class Meta:
-#         db_table = 'quad_resource'
-#         verbose_name = 'Quad Resource'
-#         verbose_name_plural = 'Quad Resources'
-#
-#     quad_resource_id = models.UUIDField(
-#         'Quad Resource ID',
-#         primary_key=True,
-#         default=uuid.uuid4,
-#         editable=False
-#     )
-#     quad_type_id = models.ForeignKey(
-#         'QuadType',
-#         db_column='quad_type_id',
-#         on_delete=models.CASCADE,
-#         related_name='quad_types'
-#     )
-#     resource_id = models.ForeignKey(
-#         'Resource',
-#         db_column='resource_id',
-#         on_delete=models.CASCADE,
-#         related_name='resources'
-#     )
-#     created = models.DateTimeField(
-#         'Created',
-#         auto_now_add=True
-#     )
-#     last_modified = models.DateTimeField(
-#         'Last Modified',
-#         auto_now=True
-#
-#     def __str__(self):
-#         return self.quad_type_id.quad_name
-#
-#
-# class QQuadResource(models.Model):
-#     """
-#     Defines the USGS qquad a downloadable resource intersects.
-#     Related to :model:`lcd.q_quad_type` and :model:'resource'.
-#     """
-#
-#     class Meta:
-#         db_table = 'q_quad_resource'
-#         verbose_name = 'QQuad Resource'
-#         verbose_name_plural = 'QQuad Resources'
-#
-#     q_quad_resource_id = models.UUIDField(
-#         'QQuad Resource ID',
-#         primary_key=True,
-#         default=uuid.uuid4,
-#         editable=False
-#     )
-#     q_quad_type_id = models.ForeignKey(
-#         'QQuadType',
-#         db_column='q_quad_type_id',
-#         on_delete=models.CASCADE,
-#         related_name='q_quad_types'
-#     )
-#     resource_id = models.ForeignKey(
-#         'Resource',
-#         db_column='resource_id',
-#         on_delete=models.CASCADE,
-#         related_name='resources'
-#     )
-#     created = models.DateTimeField(
-#         'Created',
-#         auto_now_add=True
-#     )
-#     last_modified = models.DateTimeField(
-#         'Last Modified',
-#         auto_now=True
-#
-#     def __str__(self):
-#         return self.q_quad_type_id.q_quad_name
-#
-#
-# class UsngResource(models.Model):
-#     """
-#     Defines the US National Grid a downloadable resource intersects.
-#     Related to :model:`lcd.usng_type` and :model:`lcd.resource`.
-#     """
-#
-#     class Meta:
-#         db_table = 'usng_resource'
-#         verbose_name = 'USNG Resource'
-#         verbose_name_plural = 'USNG Resources'
-#
-#     usng_resource_id = models.UUIDField(
-#         'USNG Resource ID',
-#         primary_key=True,
-#         default=uuid.uuid4,
-#         editable=False
-#     )
-#     usng_type_id = models.ForeignKey(
-#         'UsngType',
-#         db_column='usng_type_id',
-#         on_delete=models.CASCADE,
-#         related_name='usng_types'
-#     )
-#     resource_id = models.ForeignKey(
-#         'Resource',
-#         db_column='resource_id',
-#         on_delete=models.CASCADE,
-#         related_name='resources'
-#     )
-#     created = models.DateTimeField(
-#         'Created',
-#         auto_now_add=True
-#     )
-#     last_modified = models.DateTimeField(
-#         'Last Modified',
-#         auto_now=True
-#
-#     def __str__(self):
-#         return self.usng_type_id.usng_name
-
-
 """
 ********** Primary Tables **********
 """
@@ -1206,7 +778,7 @@ class Resource(models.Model):
         ('order', 'order'),
         ('website', 'website'),
     )
-    resource_type = models.CharField(
+    resource_type = models.TextField(
         'Resource Type',
         max_length=20,
         choices=RESOURCE_TYPE_CHOICES
@@ -1246,12 +818,39 @@ class Resource(models.Model):
 class Collection(models.Model):
     """
     Defines collections in the data catalog.
+    Related to :model:`lcd.license_type`, :model:`lcd.source_type`,
+    :model:`lcd.template_type`, and :model:`lcd.use_type`.
     """
 
     class Meta:
         db_table = 'collection'
         verbose_name = 'Collection'
         verbose_name_plural = 'Collections'
+        unique_together = (
+            'name',
+            'acquisition_date',
+            'short_description',
+            'description',
+            'authoritative',
+            'public',
+            'known_issues',
+            'md_filename',
+            'wms_link',
+            'popup_link',
+            'carto_map_id',
+            'overview_image',
+            'thumbnail_image',
+            'natural_image',
+            'urban_image',
+            'tile_index_url',
+            'supplemental_report_url',
+            'lidar_breaklines_url',
+            'coverage_extent',
+            'tags',
+            'license_type_id',
+            'source_type_id',
+            'template_type_id'
+        )
 
     collection_id = models.UUIDField(
         'Collection ID',
@@ -1259,16 +858,149 @@ class Collection(models.Model):
         default=uuid.uuid4,
         editable=False
     )
-    display_name = models.CharField(
-        'Display Name',
-        max_length=200
+    name = models.TextField(
+        'Name',
+        max_length=200,
+        null=True
     )
     acquisition_date = models.DateField(
         'Acquisiiton Date',
         null=True,
         blank=True
     )
-    short_description = models.CharField(
+    short_description = models.TextField(
         'Short Description',
-        
+        max_length=400,
+        null=True,
+        blank=True
     )
+    description = models.TextField(
+        'Description',
+        null=True,
+        blank=True
+    )
+    authoritative = models.BooleanField(
+        'Authoritative',
+        default=False
+    )
+    public = models.BooleanField(
+        'Public',
+        default=False
+    )
+    known_issues = models.TextField(
+        'Known Issues',
+        null=True,
+        blank=True
+    )
+    md_filename = models.TextField(
+        'Markdown Filename',
+        max_length=120,
+        null=True,
+        blank=True
+    )
+    wms_link = models.URLField(
+        'WMS Link',
+        max_length=255,
+        null=True,
+        blank=True
+    )
+    popup_link = models.URLField(
+        'Popup Link',
+        max_length=255,
+        null=True,
+        blank=True
+    )
+    carto_map_id = models.TextField(
+        'Carto Map ID',
+        max_length=100,
+        null=True,
+        blank=True
+    )
+    overview_image = models.TextField(
+        'Overview Image',
+        max_length=120,
+        null=True,
+        blank=True
+    )
+    thumbnail_image = models.TextField(
+        'Thumb Image',
+        max_length=120,
+        null=True,
+        blank=True
+    )
+    natural_image = models.TextField(
+        'Natural Image',
+        max_length=120,
+        null=True,
+        blank=True
+    )
+    urban_image = models.TextField(
+        'Urban Image',
+        max_length=120,
+        null=True,
+        blank=True
+    )
+    tile_index_url = models.URLField(
+        'Tile Index URL',
+        max_length=255,
+        null=True,
+        blank=True
+    )
+    supplemental_report_url = models.URLField(
+        'Supplemental Report URL',
+        max_length=255,
+        null=True,
+        blank=True
+    )
+    lidar_breaklines_url = models.URLField(
+        'Lidar Breaklines URL',
+        max_length=255,
+        null=True,
+        blank=True
+    )
+    coverage_extent = models.TextField(
+        'Coverage Extent',
+        max_length=255,
+        null=True,
+        blank=True
+    )
+    tags = models.TextField(
+        'Tags',
+        null=True,
+        blank=True
+    )
+    license_type_id = models.ForeignKey(
+        'LicenseType',
+        db_column='license_type_id',
+        on_delete=models.CASCADE,
+        related_name='license_types',
+        null=True,
+        blank=True
+    )
+    source_type_id = models.ForeignKey(
+        'SourceType',
+        db_column='Source_type_id',
+        on_delete=models.CASCADE,
+        related_name='source_types',
+        null=True,
+        blank=True
+    )
+    template_type_id = models.ForeignKey(
+        'TemplateType',
+        db_column='template_type_id',
+        on_delete=models.CASCADE,
+        related_name='template_types',
+        null=True,
+        blank=True
+    )
+    created = models.DateTimeField(
+        'Created',
+        auto_now_add=True
+    )
+    last_modified = models.DateTimeField(
+        'Last Modified',
+        auto_now=True
+    )
+
+    def __str__(self):
+        return self.display_name

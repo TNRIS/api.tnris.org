@@ -192,7 +192,7 @@ class EpsgType(models.Model):
     )
 
     def __str__(self):
-        return self.epsg_code
+        return str(self.epsg_code)
 
 
 class FileType(models.Model):
@@ -327,13 +327,13 @@ class SourceType(models.Model):
     )
     source_name = models.TextField(
         'Source Name',
-        max_length=100,
-        null=True,
-        blank=True
+        max_length=100
     )
     source_abbreviation = models.TextField(
         'Source Abbreviation',
-        max_length=10
+        max_length=100,
+        null=True,
+        blank=True
     )
     source_website = models.URLField(
         'Source Website',
@@ -750,71 +750,6 @@ class UseRelate(models.Model):
 ********** Primary Tables **********
 """
 
-class Resource(models.Model):
-    """
-    Defines available resources.
-    Related to :model:`lcd.area_type` and :model:`lcd.collection`.
-    """
-
-    class Meta:
-        db_table = 'resource'
-        verbose_name = 'Resource'
-        verbose_name_plural = 'Resources'
-        unique_together = (
-            'resource_type',
-            'resource',
-            'area_type_id',
-            'collection_id'
-        )
-
-    resource_id = models.UUIDField(
-        'Resource ID',
-        primary_key=True,
-        default=uuid.uuid4,
-        editable=False
-    )
-    RESOURCE_TYPE_CHOICES = (
-        ('download', 'download'),
-        ('order', 'order'),
-        ('website', 'website'),
-    )
-    resource_type = models.TextField(
-        'Resource Type',
-        max_length=20,
-        choices=RESOURCE_TYPE_CHOICES
-    )
-    resource = models.URLField(
-        'Resource URL',
-        max_length=255
-    )
-    filesize = models.PositiveIntegerField(
-        'Filesize'
-    )
-    area_type_id = models.ForeignKey(
-        'AreaType',
-        db_column='area_type_id',
-        on_delete=models.CASCADE,
-        related_name='area_types'
-    )
-    collection_id = models.ForeignKey(
-        'Collection',
-        db_column='collection_id',
-        on_delete=models.CASCADE,
-        related_name='collections'
-    )
-    created = models.DateTimeField(
-        'Created',
-        auto_now_add=True
-    )
-    last_modified = models.DateTimeField(
-        'Last Modified',
-        auto_now=True
-    )
-
-    def __str__(self):
-        return self.resource
-
-
 class Collection(models.Model):
     """
     Defines collections in the data catalog.
@@ -1004,3 +939,68 @@ class Collection(models.Model):
 
     def __str__(self):
         return self.display_name
+
+
+class Resource(models.Model):
+    """
+    Defines available resources.
+    Related to :model:`lcd.area_type` and :model:`lcd.collection`.
+    """
+
+    class Meta:
+        db_table = 'resource'
+        verbose_name = 'Resource'
+        verbose_name_plural = 'Resources'
+        unique_together = (
+            'resource_type',
+            'resource',
+            'area_type_id',
+            'collection_id'
+        )
+
+    resource_id = models.UUIDField(
+        'Resource ID',
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False
+    )
+    RESOURCE_TYPE_CHOICES = (
+        ('download', 'download'),
+        ('order', 'order'),
+        ('website', 'website'),
+    )
+    resource_type = models.TextField(
+        'Resource Type',
+        max_length=20,
+        choices=RESOURCE_TYPE_CHOICES
+    )
+    resource = models.URLField(
+        'Resource URL',
+        max_length=255
+    )
+    filesize = models.PositiveIntegerField(
+        'Filesize'
+    )
+    area_type_id = models.ForeignKey(
+        'AreaType',
+        db_column='area_type_id',
+        on_delete=models.CASCADE,
+        related_name='area_types'
+    )
+    collection_id = models.ForeignKey(
+        'Collection',
+        db_column='collection_id',
+        on_delete=models.CASCADE,
+        related_name='collections'
+    )
+    created = models.DateTimeField(
+        'Created',
+        auto_now_add=True
+    )
+    last_modified = models.DateTimeField(
+        'Last Modified',
+        auto_now=True
+    )
+
+    def __str__(self):
+        return self.resource

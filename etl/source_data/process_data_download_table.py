@@ -4,8 +4,8 @@ import datetime
 
 import uuid
 
-def transformAreaCsv(sourcefile, fieldnames):
-    outfile = os.path.splitext(sourcefile)[0] + '-processed.csv'
+def transform_area_csv(sourcefile, fieldnames):
+    outfile = os.path.splitext(sourcefile)[0] + '-processed2.csv'
     with open(outfile, 'w') as outcsv:
         writer = csv.writer(outcsv)
         print(fieldnames)
@@ -19,7 +19,7 @@ def transformAreaCsv(sourcefile, fieldnames):
                 writer.writerow(i for i in newrow)
 
 if __name__ == '__main__':
-    transformAreaCsv('data-download-area.csv', [
+    transform_area_csv('data-download-area.csv', [
         'area_type_id',
         'area_type',
         'area_type_name',

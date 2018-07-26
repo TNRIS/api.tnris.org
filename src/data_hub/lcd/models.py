@@ -914,7 +914,7 @@ class Collection(models.Model):
     )
     source_type_id = models.ForeignKey(
         'SourceType',
-        db_column='Source_type_id',
+        db_column='source_type_id',
         on_delete=models.CASCADE,
         related_name='source_types',
         null=True,

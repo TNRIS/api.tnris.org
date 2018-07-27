@@ -43,7 +43,7 @@ def create_collection(sourcefile, fieldnames):
                 newrow = [
                     row['collection_id'].strip(),
                     row['name'].strip(),
-                    parser.parse(row['date_added'].strip()),
+                    row['date_added'].strip(),
                     row['short_description'].strip(),
                     row['description'].strip(),
                     row['source'].strip(),
@@ -99,8 +99,6 @@ if __name__ == '__main__':
         'tags',
         'created',
         'last_modified',
-        'license',
-        'source',
         'license_type_id',
         'agency_type_id',
         'template_type_id'

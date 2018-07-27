@@ -799,8 +799,9 @@ class Collection(models.Model):
         max_length=200,
         null=True
     )
-    acquisition_date = models.DateField(
+    acquisition_date = models.TextField(
         'Acquisiiton Date',
+        max_length=200,
         null=True,
         blank=True
     )

@@ -305,44 +305,44 @@ class ResolutionType(models.Model):
         return self.resolution
 
 
-class SourceType(models.Model):
-    """Data sources domain table"""
+class AgencyType(models.Model):
+    """Agencies domain table"""
 
     class Meta:
-        db_table = 'source_type'
-        verbose_name = 'Source Type'
-        verbose_name_plural = 'Source Types'
+        db_table = 'agency_type'
+        verbose_name = 'Agency Type'
+        verbose_name_plural = 'Agency Types'
         unique_together = (
-            'source_name',
-            'source_abbreviation',
-            'source_website',
-            'source_contact'
+            'agency_name',
+            'agency_abbreviation',
+            'agency_website',
+            'agency_contact'
         )
 
-    source_type_id = models.UUIDField(
-        'Source Type ID',
+    agency_type_id = models.UUIDField(
+        'Agency Type ID',
         primary_key=True,
         default=uuid.uuid4,
         editable=False
     )
-    source_name = models.TextField(
-        'Source Name',
+    agency_name = models.TextField(
+        'Agency Name',
         max_length=100
     )
-    source_abbreviation = models.TextField(
-        'Source Abbreviation',
+    agency_abbreviation = models.TextField(
+        'Agency Abbreviation',
         max_length=100,
         null=True,
         blank=True
     )
-    source_website = models.URLField(
-        'Source Website',
+    agency_website = models.URLField(
+        'Agency Website',
         max_length=255,
         null=True,
         blank=True
     )
-    source_contact = models.TextField(
-        'Source Contact',
+    agency_contact = models.TextField(
+        'Agency Contact',
         max_length=255,
         null=True,
         blank=True
@@ -357,7 +357,7 @@ class SourceType(models.Model):
     )
 
     def __str__(self):
-        return self.source_name
+        return self.agency_name
 
 
 class TemplateType(models.Model):
@@ -766,6 +766,7 @@ class Collection(models.Model):
             'acquisition_date',
             'short_description',
             'description',
+            'source',
             'authoritative',
             'public',
             'known_issues',
@@ -783,7 +784,7 @@ class Collection(models.Model):
             'coverage_extent',
             'tags',
             'license_type_id',
-            'source_type_id',
+            'agency_type_id',
             'template_type_id'
         )
 
@@ -811,6 +812,12 @@ class Collection(models.Model):
     )
     description = models.TextField(
         'Description',
+        null=True,
+        blank=True
+    )
+    source = models.TextField(
+        'Source',
+        max_length=255,
         null=True,
         blank=True
     )
@@ -912,11 +919,11 @@ class Collection(models.Model):
         null=True,
         blank=True
     )
-    source_type_id = models.ForeignKey(
-        'SourceType',
-        db_column='source_type_id',
+    agency_type_id = models.ForeignKey(
+        'AgencyType',
+        db_column='agency_type_id',
         on_delete=models.CASCADE,
-        related_name='source_types',
+        related_name='agency_types',
         null=True,
         blank=True
     )

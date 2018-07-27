@@ -4,6 +4,7 @@ from django.contrib import admin
 #     CountyDropdownFilter
 # from .forms import CollectionForm, ProductForm
 from .models import (
+    AgencyType,
     AreaType,
     BandRelate,
     BandType,
@@ -20,11 +21,15 @@ from .models import (
     ResolutionRelate,
     ResolutionType,
     Resource,
-    SourceType,
     TemplateType,
     UseRelate,
     UseType
 )
+
+@admin.register(AgencyType)
+class AgencyTypeAdmin(admin.ModelAdmin):
+    model = AgencyType
+    ordering = ('agency_name',)
 
 
 @admin.register(AreaType)
@@ -115,12 +120,6 @@ class ResolutionRelateAdmin(admin.ModelAdmin):
 class ResolutionTypeAdmin(admin.ModelAdmin):
     model = ResolutionType
     ordering = ('resolution',)
-
-
-@admin.register(SourceType)
-class SourceTypeAdmin(admin.ModelAdmin):
-    model = SourceType
-    ordering = ('source_name',)
 
 
 @admin.register(TemplateType)

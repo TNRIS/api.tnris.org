@@ -5,7 +5,7 @@ import datetime
 import uuid
 
 def transform_area_csv(sourcefile, fieldnames):
-    outfile = os.path.splitext(sourcefile)[0] + '-processed2.csv'
+    outfile = os.path.splitext(sourcefile)[0] + '-processed.csv'
     with open(outfile, 'w') as outcsv:
         writer = csv.writer(outcsv)
         print(fieldnames)

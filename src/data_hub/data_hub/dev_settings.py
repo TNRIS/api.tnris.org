@@ -1,4 +1,4 @@
-from data_concierge.settings import *
+from data_hub.settings import *
 
 DEBUG = True
 

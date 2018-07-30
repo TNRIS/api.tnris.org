@@ -764,8 +764,6 @@ class Collection(models.Model):
         unique_together = (
             'name',
             'acquisition_date',
-            'short_description',
-            'description',
             'source',
             'authoritative',
             'public',
@@ -800,7 +798,7 @@ class Collection(models.Model):
         null=True
     )
     acquisition_date = models.TextField(
-        'Acquisiiton Date',
+        'Acquisition Date',
         max_length=200,
         null=True,
         blank=True

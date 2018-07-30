@@ -65,8 +65,8 @@ def create_collection(sourcefile, fieldnames):
                     row['tags'].strip(),
                     datetime.datetime.now(),
                     datetime.datetime.now(),
-                    license_dict[row['license'].strip()],
                     agency_dict[row['agency'].strip()],
+                    license_dict[row['license'].strip()],
                     '40d5e189-a34c-40f3-aa24-632bf1fab596'
                 ]
                 # newrow = [row[], row[0], row[2], row[0], datetime.datetime.now(), datetime.datetime.now()]
@@ -99,7 +99,7 @@ if __name__ == '__main__':
         'tags',
         'created',
         'last_modified',
-        'license_type_id',
         'agency_type_id',
+        'license_type_id',
         'template_type_id'
         ])

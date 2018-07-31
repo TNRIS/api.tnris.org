@@ -5,7 +5,7 @@ import datetime
 import uuid
 from dateutil import parser
 
-def create_collection(sourcefile, fieldnames):
+def create_relate(sourcefile, fieldnames):
     outfile = 'relate-band.csv'
 
     bandDict = {
@@ -32,6 +32,15 @@ def create_collection(sourcefile, fieldnames):
             reader = csv.DictReader(infile)
 
             for row in reader:
+                if row['name'].strip() == 'Coastal Impact Assistance Program':
+                    newrow = [
+                        uuid.uuid4(),
+                        datetime.datetime.now(),
+                        datetime.datetime.now(),
+                        bandDict['BW'],
+                        row['collection_id'].strip()
+                    ]
+                    writer.writerow(i for i in newrow)
                 if row['category'].strip() == 'Orthoimagery - Regional' or row['category'].strip() == 'Orthoimagery - Statewide':
                     # if 'CIR' not in row['name'].strip() and 'NC' not in row['name'].strip() and 'BW' not in row['name'].strip():
                         # print("OH SHIT", row['name'])
@@ -60,7 +69,7 @@ def create_collection(sourcefile, fieldnames):
 
 
 if __name__ == '__main__':
-    create_collection('master-processed.csv', [
+    create_relate('master-processed.csv', [
         'band_relate_id',
         'created',
         'last_modified',

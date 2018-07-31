@@ -39,7 +39,6 @@ def create_relate(sourcefile, fieldnames):
 
             for row in reader:
                 if row['category'].strip() == 'Orthoimagery - Regional' or row['category'].strip() == 'Orthoimagery - Statewide':
-                    # print(categoryDict['Orthoimagery'])
                     newrow = [
                         uuid.uuid4(),
                         datetime.datetime.now(),
@@ -49,12 +48,11 @@ def create_relate(sourcefile, fieldnames):
                     ]
                     writer.writerow(i for i in newrow)
                 else:
-                    # print(row['category'])
                     newrow = [
                         uuid.uuid4(),
                         datetime.datetime.now(),
                         datetime.datetime.now(),
-                        categoryDict[key],
+                        categoryDict[row['category'].strip()],
                         row['collection_id'].strip()
                     ]
                     writer.writerow(i for i in newrow)

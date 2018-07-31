@@ -14,6 +14,22 @@ def create_collection(sourcefile, fieldnames):
         'Raster':"7b4f9522-8080-422b-912e-a1d289a20dbe"
     }
 
+    one_off_rasters = ['National Elevation Dataset (NED) 2013',
+                       'National Elevation Dataset (NED) 2011',
+                       'Shuttle Radar Topography Mission',
+                       'National Elevation Dataset (NED) Hillshade',
+                       'Federal Emergency Management Agency D FIRM',
+                       'Geologic Atlas of Texas',
+                       'National Wetlands Inventory 062k',
+                       'National Wetlands Inventory 024k',
+                       'National Wetlands Inventory 100K',
+                       'National Land Cover Database 2006',
+                       'National Land Cover Database 2001',
+                       'National Land Cover Database 2011',
+                       'National Land Cover Database 1992']
+
+    raster_and_vector = ['Bathymetry TX Coast v0.1', 'TPWD Texas Ecological Systems Data']
+
     l = []
     v = []
     r = []
@@ -41,12 +57,12 @@ def create_collection(sourcefile, fieldnames):
                     value = 'Vector'
                     v.append(row['name'])
 
-                # handle exceptions to general applciation
-                # if row['name'].strip() == 'Coastal Impact Assistance Program':
-                #     value = 'Raster'
-                #     v.remove(row['name'])
-                #     r.append(row['name'])
-                #     print('CIAP handled')
+                # handle one off exceptions
+                if row['name'].strip() in one_off_rasters:
+                    value = 'Raster'
+                    v.remove(row['name'])
+                    r.append(row['name'])
+                    print('%s handled' % row['name'].strip())
 
                 newrow = [
                     uuid.uuid4(),
@@ -55,10 +71,22 @@ def create_collection(sourcefile, fieldnames):
                     row['collection_id'].strip(),
                     dataDict[value]
                 ]
-                # print(key, row['name'])
                 writer.writerow(i for i in newrow)
 
-    print(len(l), len(r), len(v))
+                # handle raster and vectors
+                if row['name'].strip() in raster_and_vector:
+                    newrow = [
+                        uuid.uuid4(),
+                        datetime.datetime.now(),
+                        datetime.datetime.now(),
+                        row['collection_id'].strip(),
+                        dataDict['Raster']
+                    ]
+                    writer.writerow(i for i in newrow)
+                    r.append(row['name'])
+                    print('%s also a raster' % row['name'].strip())
+
+    print(len(l), len(r), len(v), len(raster_and_vector))
 
 
 if __name__ == '__main__':

@@ -970,16 +970,6 @@ class Resource(models.Model):
         default=uuid.uuid4,
         editable=False
     )
-    RESOURCE_TYPE_CHOICES = (
-        ('download', 'download'),
-        ('order', 'order'),
-        ('website', 'website'),
-    )
-    resource_type = models.TextField(
-        'Resource Type',
-        max_length=20,
-        choices=RESOURCE_TYPE_CHOICES
-    )
     resource = models.URLField(
         'Resource URL',
         max_length=255

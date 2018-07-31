@@ -958,7 +958,6 @@ class Resource(models.Model):
         verbose_name = 'Resource'
         verbose_name_plural = 'Resources'
         unique_together = (
-            'resource_type',
             'resource',
             'area_type_id',
             'collection_id'

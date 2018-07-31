@@ -38,21 +38,26 @@ def create_relate(sourcefile, fieldnames):
             reader = csv.DictReader(infile)
 
             for row in reader:
-                for key in categoryDict.keys():
-                    if key in row['category'].strip():
-                        if key == 'Orthoimagery' and row['category'].strip() == 'Orthoimagery - Regional':
-                            continue
-                        if key == 'Orthoimagery' and row['category'].strip() == 'Orthoimagery - Statewide':
-                            continue
-                        newrow = [
-                            uuid.uuid4(),
-                            datetime.datetime.now(),
-                            datetime.datetime.now(),
-                            categoryDict[key],
-                            row['collection_id'].strip()
-                        ]
-                        print(key, row['category'])
-                        # writer.writerow(i for i in newrow)
+                if row['category'].strip() == 'Orthoimagery - Regional' or row['category'].strip() == 'Orthoimagery - Statewide':
+                    # print(categoryDict['Orthoimagery'])
+                    newrow = [
+                        uuid.uuid4(),
+                        datetime.datetime.now(),
+                        datetime.datetime.now(),
+                        categoryDict['Orthoimagery'],
+                        row['collection_id'].strip()
+                    ]
+                    writer.writerow(i for i in newrow)
+                else:
+                    # print(row['category'])
+                    newrow = [
+                        uuid.uuid4(),
+                        datetime.datetime.now(),
+                        datetime.datetime.now(),
+                        categoryDict[key],
+                        row['collection_id'].strip()
+                    ]
+                    writer.writerow(i for i in newrow)
 
 
 if __name__ == '__main__':

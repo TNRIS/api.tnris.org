@@ -11,6 +11,7 @@ from .models import (
     CategoryRelate,
     CategoryType,
     Collection,
+    CcrView,
     DataTypeRelate,
     DataType,
     EpsgRelate,
@@ -66,6 +67,12 @@ class CategoryTypeAdmin(admin.ModelAdmin):
 class CollectionAdmin(admin.ModelAdmin):
     model = Collection
     ordering = ('collection_id',)
+
+
+@admin.register(CcrView)
+class CcrViewAdmin(admin.ModelAdmin):
+    model = CcrView
+    ordering = ('name',)
 
 
 @admin.register(DataTypeRelate)

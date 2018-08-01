@@ -974,7 +974,9 @@ class Resource(models.Model):
         max_length=255
     )
     filesize = models.PositiveIntegerField(
-        'Filesize'
+        'Filesize',
+        null=True,
+        blank=True
     )
     area_type_id = models.ForeignKey(
         'AreaType',

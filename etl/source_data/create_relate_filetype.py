@@ -56,6 +56,8 @@ def create_relate(sourcefile, fieldnames):
             reader = csv.DictReader(infile)
 
             for row in reader:
+                if row['available_formats'] == '':
+                    continue
                 # handle formats with mutliple values separated by commas
                 if ',' in row['available_formats'].strip():
                     ftypes = row['available_formats'].split(',')

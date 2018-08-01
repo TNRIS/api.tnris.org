@@ -1001,3 +1001,134 @@ class Resource(models.Model):
 
     def __str__(self):
         return self.resource
+
+"""
+********** Database Views **********
+"""
+
+class CcrView(models.Model):
+    """
+    Collection Catalog Records view presents Collection table with all
+    associated relates joined
+    """
+
+    class Meta:
+        managed = False
+        db_table = "collection_catalog_record"
+        verbose_name = 'Collection Catalog Record'
+        verbose_name_plural = 'Collection Catalog Records'
+
+    collection_id = models.UUIDField(
+        'Collection ID',
+        primary_key=True
+    )
+    name = models.TextField(
+        'Name'
+    )
+    acquisition_date = models.TextField(
+        'Acquisition Date'
+    )
+    short_description = models.TextField(
+        'Short Description'
+    )
+    description = models.TextField(
+        'Description'
+    )
+    source = models.TextField(
+        'Source'
+    )
+    authoritative = models.BooleanField(
+        'Authoritative'
+    )
+    public = models.BooleanField(
+        'Public'
+    )
+    known_issues = models.TextField(
+        'Known Issues'
+    )
+    wms_link = models.URLField(
+        'WMS Link'
+    )
+    popup_link = models.URLField(
+        'Popup Link'
+    )
+    carto_map_id = models.TextField(
+        'Carto Map ID'
+    )
+    overview_image = models.TextField(
+        'Overview Image'
+    )
+    thumbnail_image = models.TextField(
+        'Thumb Image'
+    )
+    natural_image = models.TextField(
+        'Natural Image'
+    )
+    urban_image = models.TextField(
+        'Urban Image'
+    )
+    tile_index_url = models.URLField(
+        'Tile Index URL'
+    )
+    supplemental_report_url = models.URLField(
+        'Supplemental Report URL'
+    )
+    lidar_breaklines_url = models.URLField(
+        'Lidar Breaklines URL'
+    )
+    coverage_extent = models.TextField(
+        'Coverage Extent'
+    )
+    tags = models.TextField(
+        'Tags'
+    )
+    band = models.TextField(
+        'Band'
+    )
+    category = models.TextField(
+        'Category'
+    )
+    data_type = models.TextField(
+        'Data Type'
+    )
+    spatial_reference = models.TextField(
+        'Spatial Reference'
+    )
+    file_type = models.TextField(
+        'File Type'
+    )
+    resolution = models.TextField(
+        'Resolution'
+    )
+    recommended_use = models.TextField(
+        'Recommended Use'
+    )
+    agency_name = models.TextField(
+        'Agency Name'
+    )
+    agency_abbreviation = models.TextField(
+        'Agency Abbreviation'
+    )
+    agency_website = models.CharField(
+        'Agency Website',
+        max_length=255
+    )
+    agency_contact = models.TextField(
+        'Agency Contact'
+    )
+    license_name = models.TextField(
+        'License Name'
+    )
+    license_abbreviation = models.TextField(
+        'License Abbreviation'
+    )
+    license_url = models.CharField(
+        'License URL',
+        max_length=255
+    )
+    template = models.TextField(
+        'Template'
+    )
+
+    def __str__(self):
+        return self.name

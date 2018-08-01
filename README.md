@@ -23,7 +23,7 @@ Built with:
 1. Set up a local development db instance or use [local port forwarding](https://blog.trackets.com/2014/05/17/ssh-tunnel-local-and-remote-port-forwarding-explained-with-examples.html) to connect to a remote db instance
 1. Configure ~/data.tnris.org/src/data_hub/data_hub/dev_settings.py to point at your dev db. These settings are already setup if you're using local port forwarding to your port 9000.
 1. `cd ~/data.tnris.org/src/data_hub/`
-1. run `python manage.py runserver --settings=data_hub.dev_settings` to run the app locally, it will be available at `localhost:8000`. if you get a DB_PASSWORD env variable error, run the app locally with `. set-env-secrets.sh && python manage.py runserver-settings=data_hub.dev_settings` instead as it applies the env variable before startup of the server.
+1. run `python manage.py runserver --settings=data_hub.dev_settings` to run the app locally, it will be available at `localhost:8000`. if you get a DB_PASSWORD env variable error, run the app locally with `. set-env-secrets.sh && python manage.py runserver --settings=data_hub.dev_settings` instead as it applies the env variable before startup of the server.
 
 ## Deployment Prep
 

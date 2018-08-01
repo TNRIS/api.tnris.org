@@ -1,14 +1,16 @@
 -- Create collection_catalog_records view for API to hit. Aggregates values from all
 -- associated lookup tables. This SQL only needs to be run after initial database
 -- creation
-DROP VIEW IF EXISTS "collection_catalog_records";
-CREATE VIEW "collection_catalog_records" as
-SELECT collection.name,
+DROP VIEW IF EXISTS "collection_catalog_record";
+CREATE VIEW "collection_catalog_record" as
+SELECT collection.collection_id,
+  collection.name,
 	collection.acquisition_date,
 	collection.short_description,
 	collection.description,
 	collection.source,
 	collection.authoritative,
+	collection.public,
 	collection.known_issues,
 	collection.wms_link,
 	collection.popup_link,
@@ -25,10 +27,18 @@ SELECT collection.name,
 	string_agg(distinct band_type.band_abbreviation, ',' order by band_type.band_abbreviation) as bands,
 	string_agg(distinct category_type.category, ',' order by category_type.category) as categories,
 	string_agg(distinct data_type.data_type, ',' order by data_type.data_type) as data_type,
-	string_agg(distinct epsg_type.epsg_code, ',' order by epsg_type.epsg_code) as spatial_reference,
+	string_agg(distinct epsg_type.epsg_code::char(10), ',' order by epsg_type.epsg_code::char(10)) as spatial_reference,
 	string_agg(distinct file_type.file_type, ',' order by file_type.file_type) as file_type,
 	string_agg(distinct resolution_type.resolution, '/' order by resolution_type.resolution) as resolution,
-	string_agg(distinct use_type.use_type, ',' order by use_type.use_type) as uses
+	string_agg(distinct use_type.use_type, ',' order by use_type.use_type) as uses,
+	agency_type.agency_name,
+	agency_type.agency_abbreviation,
+	agency_type.agency_website,
+	agency_type.agency_contact,
+	license_type.license_name,
+	license_type.license_abbreviation,
+	license_type.license_url,
+	template_type.template
 FROM collection
 LEFT JOIN band_relate ON band_relate.collection_id=collection.collection_id
 LEFT JOIN band_type ON band_type.band_type_id=band_relate.band_type_id
@@ -51,5 +61,18 @@ LEFT JOIN resolution_type ON resolution_type.resolution_type_id=resolution_relat
 LEFT JOIN use_relate ON use_relate.collection_id=collection.collection_id
 LEFT JOIN use_type ON use_type.use_type_id=use_relate.use_type_id
 
-WHERE collection.public = True
-GROUP BY collection.collection_id;
+LEFT JOIN agency_type ON agency_type.agency_type_id=collection.agency_type_id
+
+LEFT JOIN license_type ON license_type.license_type_id=collection.license_type_id
+
+LEFT JOIN template_type ON template_type.template_type_id=collection.template_type_id
+
+GROUP BY collection.collection_id,
+				agency_type.agency_name,
+				agency_type.agency_abbreviation,
+				agency_type.agency_website,
+				agency_type.agency_contact,
+				license_type.license_name,
+				license_type.license_abbreviation,
+				license_type.license_url,
+				template_type.template;

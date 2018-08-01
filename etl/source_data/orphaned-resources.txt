@@ -1,21 +1,26 @@
-Texas Aquifers - will need to create, link to TWDB.
+These can be found by querying the original resource table for the name field
 
-Public Land Survey System - merge https://tnris.org/data-catalog/entry/plss-section and https://tnris.org/data-catalog/entry/plss-township
+Texas Aquifers - DELETED! will need to create, link to TWDB.
 
-2010 StratMap Smith 6in NC/CIR - https://tnris.org/data-catalog/entry/stratmap-smith-2010-1ft-nc-cir/
+Public Land Survey System - COMPLETED! Merged all to plss-section card
+  - merge https://tnris.org/data-catalog/entry/plss-section and https://tnris.org/data-catalog/entry/plss-township
+
+2010 StratMap Smith 6in NC/CIR - COMPLETED! Marked all with smith 1ft card
+  - https://tnris.org/data-catalog/entry/stratmap-smith-2010-1ft-nc-cir/
 
 
 To Be Removed:
-Texas A&M Bathymetry 2004
-Satellite Indices
-2007 CAPCOG 5ft Contours
-2008 CAPCOG 5ft Contours
-2013 FEMA 5ft Contours
-2007 LCRA 5ft Contours
-2011 FEMA 5ft Contours
-2014 TPWD 5ft Contours
-2011 USGS 5ft Contours
-2012 CAPCOG 5ft Contours
-2015 City of Georgetown 5ft Contours
-TxDOT Urban File 2003
-2015 HPIDS Palestine 6in NC/CIR - dup of https://tnris.org/data-catalog/entry/stratmap-brazos-and-palestine-2015-6in-nc-cir/
+Texas A&M Bathymetry 2004 - DELETED!
+Satellite Indices - DELETED!
+2007 CAPCOG 5ft Contours - DELETED!
+2008 CAPCOG 5ft Contours - DELETED!
+2013 FEMA 5ft Contours - DELETED!
+2007 LCRA 5ft Contours - DELETED!
+2011 FEMA 5ft Contours - DELETED!
+2014 TPWD 5ft Contours - DELETED!
+2011 USGS 5ft Contours - DELETED!
+2012 CAPCOG 5ft Contours - DELETED!
+2015 City of Georgetown 5ft Contours - DELETED!
+TxDOT Urban File 2003 - DELETED!
+2015 HPIDS Palestine 6in NC/CIR - DELETED!
+  - dup of https://tnris.org/data-catalog/entry/stratmap-brazos-and-palestine-2015-6in-nc-cir/

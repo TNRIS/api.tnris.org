@@ -9,23 +9,23 @@ def create_collection(sourcefile, fieldnames):
     outfile = 'relate-resolution.csv'
 
     resolutionDict = {
-        "10m":"90a2f0a9-3a27-4595-8949-59d9855452d4",
-        "120cm":"5b7317d7-7e09-41bd-95c6-635dc2f92d68",
-        "140cm":"3a07d07c-b0ca-4fbb-9661-89a0cdb585e2",
-        "150cm":"3a9a2b04-4a59-4e4f-93ec-9e4779a07ef7",
+        "10m":"62ca721b-d639-44ff-9761-bbc4183727ee",
+        "120cm":"347be2de-0c01-4469-8bf2-ea8f22a5b384",
+        "140cm":"81bb3337-3052-4f5f-a84b-ff1098f90d41",
+        "150cm":"e806744f-f1d7-4c98-9907-e008589c091b",
         "1ft":"90857264-f804-46c8-89ee-ebdda95332cc",
         "1m":"528227f2-e1e1-4018-99f8-4ae62821436d",
-        "2m":"178bbb0e-64a4-46b3-98f3-0e9e02b861f4",
-        "30cm":"acfdbff6-7968-4d00-9858-0e6f1ae9c2ac",
+        "2m":"60eda1d7-83ed-4833-9478-6520d8423bb3",
+        "30cm":"5685ab92-079f-4ea9-85a2-c2844cfb51e7",
         "30m":"12b72fc3-6c89-43a3-8e94-772b676be9bc",
         "35cm":"dbcc5ab0-019c-4df3-b301-90eb149d8ebc",
         "3in":"52fe48c1-446c-49df-a8a6-7d38890938d0",
         "50cm":"1407c25b-40ec-4488-864f-d3c675b96282",
-        "60cm":"ec4d219d-adad-4521-9b6a-ef7b9e9d0c56",
-        "61cm":"024c0334-d841-4558-8bc7-4c921936bb2b",
+        "60cm":"a8ad536b-b8bc-42de-8ba1-155ab538aa32",
+        "61cm":"47bc11f3-fc93-4671-8df1-fe0c9aeef738",
         "6in":"856b8002-9da7-4d93-836f-97e14ec1f9ae",
-        "70cm":"f687a773-c56c-4763-a4e1-6bca28d28f09",
-        "9in":"a5b24325-c37e-4b3b-bb50-806711435736"
+        "70cm":"2f882368-218d-49d5-b307-52407f055e85",
+        "9in":"6450f6ce-95ec-4042-95a2-8a9c3fa41ede"
     }
 
     with open(outfile, 'w') as outcsv:

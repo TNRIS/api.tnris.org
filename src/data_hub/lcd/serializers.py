@@ -3,7 +3,7 @@ from rest_framework import serializers
 from .models import CcrView
 
 
-class CollectionSerializer(serializers.HyperlinkedModelSerializer):
+class CollectionSerializer(serializers.ModelSerializer):
     class Meta:
         model = CcrView
         fields = '__all__'

@@ -1,7 +1,9 @@
 from rest_framework import viewsets
 
-from .models import CcrView, Resource
-from .serializers import CollectionSerializer, ResourceSerializer
+from .models import CcrView, Resource, AcdcView
+from .serializers import (CollectionSerializer,
+                         ResourceSerializer,
+                         AreaSerializer)
 
 
 class CollectionViewSet(viewsets.ReadOnlyModelViewSet):
@@ -36,6 +38,23 @@ class ResourceViewSet(viewsets.ReadOnlyModelViewSet):
             args[field] = value
         print(args)
         queryset = Resource.objects.filter(**args)
+        return queryset
+
+class AreaViewSet(viewsets.ReadOnlyModelViewSet):
+    # queryset = AcdcView.objects.all()
+    serializer_class = AreaSerializer
+    http_method_names = ['get']
+
+    def get_queryset(self):
+        args = {}
+        null_list = ['null', 'Null', 'none', 'None']
+        for field in self.request.query_params.keys():
+            value = self.request.query_params.get(field)
+            if value in null_list:
+                value = None
+            args[field] = value
+        print(args)
+        queryset = AcdcView.objects.filter(**args)
         return queryset
 
 

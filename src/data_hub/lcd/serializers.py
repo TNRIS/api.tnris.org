@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import CcrView, Resource
+from .models import CcrView, Resource, AcdcView
 
 
 class CollectionSerializer(serializers.ModelSerializer):
@@ -14,6 +14,11 @@ class ResourceSerializer(serializers.ModelSerializer):
         fields = ('resource',
                   'area_type_id',
                   'collection_id')
+
+class AreaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AcdcView
+        fields = '__all__'
 
 # class ProductSerializer(serializers.ModelSerializer):
 #

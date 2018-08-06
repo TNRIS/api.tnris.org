@@ -28,10 +28,10 @@ from .models import (
     UseType
 )
 
-@admin.register(AcdcView)
-class AcdcViewAdmin(admin.ModelAdmin):
-    model = AcdcView
-    ordering = ('name',)
+# @admin.register(AcdcView)
+# class AcdcViewAdmin(admin.ModelAdmin):
+#     model = AcdcView
+#     ordering = ('name',)
 
 @admin.register(AgencyType)
 class AgencyTypeAdmin(admin.ModelAdmin):

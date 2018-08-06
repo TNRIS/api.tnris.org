@@ -17,12 +17,13 @@ from django.urls import path, include
 from rest_framework import routers
 from rest_framework_swagger.views import get_swagger_view
 from rest_framework.schemas import get_schema_view
-from .viewsets import CollectionViewSet, ResourceViewSet
+from .viewsets import CollectionViewSet, ResourceViewSet, AreaViewSet
 
 
 router = routers.DefaultRouter(trailing_slash=False)
 router.register(r'collections?', CollectionViewSet, base_name="Collections")
 router.register(r'resources?', ResourceViewSet, base_name="Resources")
+router.register(r'areas?', AreaViewSet, base_name="Areas")
 
 schema_view = get_swagger_view(title='TNRIS Data API')
 

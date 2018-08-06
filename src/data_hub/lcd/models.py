@@ -1147,6 +1147,7 @@ class AcdcView(models.Model):
 
     resource = models.CharField(
         'Resource',
+        primary_key=True,
         max_length=255
     )
     name = models.TextField(

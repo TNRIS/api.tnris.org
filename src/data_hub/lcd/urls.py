@@ -21,7 +21,7 @@ from .viewsets import CollectionViewSet
 
 
 router = routers.DefaultRouter(trailing_slash=False)
-router.register(r'collections?', CollectionViewSet)
+router.register(r'collections?', CollectionViewSet, base_name="Collections")
 # router.register(r'resources?', ResourceViewSet, base_name="Resource")
 
 schema_view = get_swagger_view(title='TNRIS Data API')

@@ -5,9 +5,26 @@ from .serializers import CollectionSerializer
 
 
 class CollectionViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = CcrView.objects.all()
+    # queryset = CcrView.objects.all()
     serializer_class = CollectionSerializer
     http_method_names = ['get']
+
+    def get_queryset(self):
+        print(self.request.query_params)
+        args = {'public': True}
+        null_list = ['null', 'Null', 'none', 'None']
+        for field in self.request.query_params.keys():
+            print(field)
+            value = self.request.query_params.get(field)
+            print(value)
+            if value in null_list:
+                value = None
+            args[field] = value
+        print(args)
+        queryset = CcrView.objects.filter(**args)
+        print(len(queryset))
+        return queryset
+
 
 
 # class ProductViewSet(viewsets.ReadOnlyModelViewSet):

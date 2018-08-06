@@ -4,6 +4,7 @@ from django.contrib import admin
 #     CountyDropdownFilter
 # from .forms import CollectionForm, ProductForm
 from .models import (
+    AcdcView,
     AgencyType,
     AreaType,
     BandRelate,
@@ -26,6 +27,11 @@ from .models import (
     UseRelate,
     UseType
 )
+
+@admin.register(AcdcView)
+class AcdcViewAdmin(admin.ModelAdmin):
+    model = AcdcView
+    ordering = ('name',)
 
 @admin.register(AgencyType)
 class AgencyTypeAdmin(admin.ModelAdmin):

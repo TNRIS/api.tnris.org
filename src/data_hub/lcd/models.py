@@ -1132,3 +1132,35 @@ class CcrView(models.Model):
 
     def __str__(self):
         return self.name
+
+class AcdcView(models.Model):
+    """
+    Area Collection Data Connection view presents Resource table with joins
+    for Collection name and Area_Type details
+    """
+
+    class Meta:
+        managed = False
+        db_table = "area_collection_data_connection"
+        verbose_name = 'Area Collection Data Connection'
+        verbose_name_plural = 'Area Collection Data Connections'
+
+    resource = models.CharField(
+        'Resource',
+        max_length=255
+    )
+    name = models.TextField(
+        'Name'
+    )
+    area_type = models.TextField(
+        'Area Type'
+    )
+    area_type_name = models.TextField(
+        'Area Type Name'
+    )
+    area_type_id = models.UUIDField(
+        'Area Type Id'
+    )
+
+    def __str__(self):
+        return self.name

@@ -39,10 +39,10 @@ class AgencyTypeAdmin(admin.ModelAdmin):
     ordering = ('agency_name',)
 
 
-@admin.register(AreaType)
-class AreaTypeAdmin(admin.ModelAdmin):
-    model = AreaType
-    ordering = ('area_type_name',)
+# @admin.register(AreaType)
+# class AreaTypeAdmin(admin.ModelAdmin):
+#     model = AreaType
+#     ordering = ('area_type_name',)
 
 
 # @admin.register(BandRelate)
@@ -75,7 +75,7 @@ class CollectionAdmin(admin.ModelAdmin):
     form = CollectionForm
     fieldsets = (
         ('Collection Information', {
-            'classes': ('grp-collapse',),
+            'classes': ('grp-collapse', 'grp-closed'),
             'fields': ('name',
                        'acquisition_date',
                        'short_description',
@@ -84,7 +84,6 @@ class CollectionAdmin(admin.ModelAdmin):
                        'authoritative',
                        'public',
                        'known_issues',
-                       'tile_index_url',
                        'coverage_extent',
                        'tags',
                        'agency_type_id',
@@ -93,11 +92,12 @@ class CollectionAdmin(admin.ModelAdmin):
         }),
         ('Links', {
             'classes': ('grp-collapse grp-closed',),
-            'fields': ('wms_link',
+            'fields': ('carto_map_id',
+                       'wms_link',
                        'popup_link',
-                       'carto_map_id',
                        'supplemental_report_url',
-                       'lidar_breaklines_url')
+                       'lidar_breaklines_url',
+                       'tile_index_url',)
         }),
         ('Images', {
             'classes': ('grp-collapse grp-closed',),
@@ -105,9 +105,22 @@ class CollectionAdmin(admin.ModelAdmin):
                        'thumbnail_image',
                        'natural_image',
                        'urban_image')
+        }),
+        ('Lookup/Relate Associations', {
+            'classes': ('grp-collapse grp-closed',),
+            'fields': ('bands', )
         })
     )
     ordering = ('name',)
+    list_display = (
+        'name', 'public'
+    )
+    search_fields = ('name',)
+    list_filter = (
+        'public',
+        # CollectionAgencyNameFilter,
+        # CollectionCountyFilter
+    )
 
 
 # @admin.register(CcrView)

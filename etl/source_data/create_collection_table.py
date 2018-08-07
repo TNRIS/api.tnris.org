@@ -58,7 +58,7 @@ def create_collection(sourcefile, fieldnames):
                     row['thumb_url'].strip(),
                     row['natural_image_url'].strip(),
                     row['urban_image_url'].strip(),
-                    row['tile_index'].strip(),
+                    row['tile_index_url'].strip(),
                     row['supplemental_report_url'].strip(),
                     row['lidar_breaklines_url'].strip(),
                     row['coverage_extent'].strip(),

@@ -2,7 +2,7 @@ from django.contrib import admin
 
 # from .filters import CollectionAgencyNameFilter, CollectionCountyFilter, \
 #     CountyDropdownFilter
-# from .forms import CollectionForm, ProductForm
+from .forms import CollectionForm
 from .models import (
     AcdcView,
     AgencyType,
@@ -72,13 +72,48 @@ class CategoryTypeAdmin(admin.ModelAdmin):
 @admin.register(Collection)
 class CollectionAdmin(admin.ModelAdmin):
     model = Collection
-    ordering = ('collection_id',)
-
-
-@admin.register(CcrView)
-class CcrViewAdmin(admin.ModelAdmin):
-    model = CcrView
+    form = CollectionForm
+    fieldsets = (
+        ('Collection Information', {
+            'classes': ('grp-collapse',),
+            'fields': ('name',
+                       'acquisition_date',
+                       'short_description',
+                       'description',
+                       'source',
+                       'authoritative',
+                       'public',
+                       'known_issues',
+                       'tile_index_url',
+                       'coverage_extent',
+                       'tags',
+                       'agency_type_id',
+                       'license_type_id',
+                       'template_type_id'),
+        }),
+        ('Links', {
+            'classes': ('grp-collapse grp-closed',),
+            'fields': ('wms_link',
+                       'popup_link',
+                       'carto_map_id',
+                       'supplemental_report_url',
+                       'lidar_breaklines_url')
+        }),
+        ('Images', {
+            'classes': ('grp-collapse grp-closed',),
+            'fields': ('overview_image',
+                       'thumbnail_image',
+                       'natural_image',
+                       'urban_image')
+        })
+    )
     ordering = ('name',)
+
+
+# @admin.register(CcrView)
+# class CcrViewAdmin(admin.ModelAdmin):
+#     model = CcrView
+#     ordering = ('name',)
 
 
 # @admin.register(DataTypeRelate)

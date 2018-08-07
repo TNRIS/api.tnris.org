@@ -45,10 +45,10 @@ class AreaTypeAdmin(admin.ModelAdmin):
     ordering = ('area_type_name',)
 
 
-@admin.register(BandRelate)
-class BandRelateAdmin(admin.ModelAdmin):
-    model = BandRelate
-    ordering = ('band_type_id',)
+# @admin.register(BandRelate)
+# class BandRelateAdmin(admin.ModelAdmin):
+#     model = BandRelate
+#     ordering = ('band_type_id',)
 
 
 @admin.register(BandType)
@@ -57,10 +57,10 @@ class BandTypeAdmin(admin.ModelAdmin):
     ordering = ('band_abbreviation',)
 
 
-@admin.register(CategoryRelate)
-class CategoryRelateAdmin(admin.ModelAdmin):
-    model = CategoryRelate
-    ordering = ('category_type_id',)
+# @admin.register(CategoryRelate)
+# class CategoryRelateAdmin(admin.ModelAdmin):
+#     model = CategoryRelate
+#     ordering = ('category_type_id',)
 
 
 @admin.register(CategoryType)
@@ -81,10 +81,10 @@ class CcrViewAdmin(admin.ModelAdmin):
     ordering = ('name',)
 
 
-@admin.register(DataTypeRelate)
-class DataTypeRelateAdmin(admin.ModelAdmin):
-    model = DataTypeRelate
-    ordering = ('data_type_id',)
+# @admin.register(DataTypeRelate)
+# class DataTypeRelateAdmin(admin.ModelAdmin):
+#     model = DataTypeRelate
+#     ordering = ('data_type_id',)
 
 
 @admin.register(DataType)
@@ -93,10 +93,10 @@ class DataTypeAdmin(admin.ModelAdmin):
     ordering = ('data_type',)
 
 
-@admin.register(EpsgRelate)
-class EpsgRelateAdmin(admin.ModelAdmin):
-    model = EpsgRelate
-    ordering = ('epsg_type_id',)
+# @admin.register(EpsgRelate)
+# class EpsgRelateAdmin(admin.ModelAdmin):
+#     model = EpsgRelate
+#     ordering = ('epsg_type_id',)
 
 
 @admin.register(EpsgType)
@@ -105,10 +105,10 @@ class EpsgTypeAdmin(admin.ModelAdmin):
     ordering = ('epsg_code',)
 
 
-@admin.register(FileTypeRelate)
-class FileTypeRelateAdmin(admin.ModelAdmin):
-    model = FileTypeRelate
-    ordering = ('file_type_id',)
+# @admin.register(FileTypeRelate)
+# class FileTypeRelateAdmin(admin.ModelAdmin):
+#     model = FileTypeRelate
+#     ordering = ('file_type_id',)
 
 
 @admin.register(FileType)
@@ -123,10 +123,10 @@ class LicenseTypeAdmin(admin.ModelAdmin):
     ordering = ('license_abbreviation',)
 
 
-@admin.register(ResolutionRelate)
-class ResolutionRelateAdmin(admin.ModelAdmin):
-    model = ResolutionRelate
-    ordering = ('resolution_type_id',)
+# @admin.register(ResolutionRelate)
+# class ResolutionRelateAdmin(admin.ModelAdmin):
+#     model = ResolutionRelate
+#     ordering = ('resolution_type_id',)
 
 
 @admin.register(ResolutionType)
@@ -147,10 +147,10 @@ class UseTypeAdmin(admin.ModelAdmin):
     ordering = ('use_type',)
 
 
-@admin.register(UseRelate)
-class UseRelateAdmin(admin.ModelAdmin):
-    model = UseRelate
-    ordering = ('use_type_id',)
+# @admin.register(UseRelate)
+# class UseRelateAdmin(admin.ModelAdmin):
+#     model = UseRelate
+#     ordering = ('use_type_id',)
 
 
 # admin.site.register(AreaType, AreaTypeAdmin)

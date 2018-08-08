@@ -117,7 +117,10 @@ class CollectionAdmin(admin.ModelAdmin):
         }),
         ('Lookup/Relate Associations', {
             'classes': ('grp-collapse grp-closed',),
-            'fields': ('bands', )
+            'fields': (('bands', 'categories'),
+                       ('data_types', 'projections'),
+                       ('file_types', 'resolutions'),
+                       'uses')
         })
     )
     ordering = ('name',)

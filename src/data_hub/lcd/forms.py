@@ -7,11 +7,17 @@ from .models import (Collection,
                      BandRelate,
                      BandType,
                      CategoryRelate,
+                     CategoryType,
                      DataTypeRelate,
+                     DataType,
                      EpsgRelate,
+                     EpsgType,
                      FileTypeRelate,
+                     FileType,
                      ResolutionRelate,
-                     UseRelate)
+                     ResolutionType,
+                     UseRelate,
+                     UseType)
 
 
 class CollectionForm(forms.ModelForm):
@@ -49,6 +55,12 @@ class CollectionForm(forms.ModelForm):
 
     # fire function to create the relate form inputs
     bands = create_relate_field('band_type_id', 'band_name', BandType, 'band_name')
+    categories = create_relate_field('category_type_id', 'category', CategoryType, 'category')
+    data_types = create_relate_field('data_type_id', 'data_type', DataType, 'data_type')
+    projections = create_relate_field('epsg_type_id', 'epsg_code', EpsgType, 'epsg_code')
+    file_types = create_relate_field('file_type_id', 'file_type', FileType, 'file_type')
+    resolutions = create_relate_field('resolution_type_id', 'resolution', ResolutionType, 'resolution')
+    uses = create_relate_field('use_type_id', 'use_type', UseType, 'use_type')
 
     # generic function to retrieve the initial relate values from the relate table
     def attribute_initial_values(self, name, relate_table, id_field):
@@ -67,6 +79,12 @@ class CollectionForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         if self.instance:
             self.attribute_initial_values('bands', BandRelate, 'band_type_id')
+            self.attribute_initial_values('categories', CategoryRelate, 'category_type_id')
+            self.attribute_initial_values('data_types', DataTypeRelate, 'data_type_id')
+            self.attribute_initial_values('projections', EpsgRelate, 'epsg_type_id')
+            self.attribute_initial_values('file_types', FileTypeRelate, 'file_type_id')
+            self.attribute_initial_values('resolutions', ResolutionRelate, 'resolution_type_id')
+            self.attribute_initial_values('uses', UseRelate, 'use_type_id')
 
     # generic function to update relate table with form input changes
     def update_relate_table(self, name, relate_table, id_field, type_table):
@@ -102,6 +120,12 @@ class CollectionForm(forms.ModelForm):
     # on save fire function to apply updates to relate tables
     def save(self, commit=True):
         self.update_relate_table('bands', BandRelate, 'band_type_id', BandType)
+        self.update_relate_table('categories', CategoryRelate, 'category_type_id', CategoryType)
+        self.update_relate_table('data_types', DataTypeRelate, 'data_type_id', DataType)
+        self.update_relate_table('projections', EpsgRelate, 'epsg_type_id', EpsgType)
+        self.update_relate_table('file_types', FileTypeRelate, 'file_type_id', FileType)
+        self.update_relate_table('resolutions', ResolutionRelate, 'resolution_type_id', ResolutionType)
+        self.update_relate_table('uses', UseRelate, 'use_type_id', UseType)
         return super(CollectionForm, self).save(commit=commit)
 
 

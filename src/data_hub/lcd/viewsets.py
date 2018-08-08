@@ -7,57 +7,75 @@ from .serializers import (CollectionSerializer,
 
 
 class CollectionViewSet(viewsets.ReadOnlyModelViewSet):
-    # queryset = CcrView.objects.all()
     serializer_class = CollectionSerializer
     http_method_names = ['get']
 
     def get_queryset(self):
+        # only return public collection records from the catalog
         args = {'public': True}
         null_list = ['null', 'Null', 'none', 'None']
+        # create argument object of query clauses
         for field in self.request.query_params.keys():
             value = self.request.query_params.get(field)
+            # convert null queries
             if value in null_list:
                 value = None
             args[field] = value
         print(args)
+        # get records using query
         queryset = CcrView.objects.filter(**args)
         return queryset
 
+
 class ResourceViewSet(viewsets.ReadOnlyModelViewSet):
-    # queryset = Resource.objects.all()
     serializer_class = ResourceSerializer
     http_method_names = ['get']
 
     def get_queryset(self):
         args = {}
         null_list = ['null', 'Null', 'none', 'None']
+        # create argument object of query clauses
         for field in self.request.query_params.keys():
             value = self.request.query_params.get(field)
+            # convert null queries
             if value in null_list:
                 value = None
             args[field] = value
         print(args)
+        # get records using query
         queryset = Resource.objects.filter(**args)
         return queryset
 
+
 class AreaViewSet(viewsets.ReadOnlyModelViewSet):
-    # queryset = AcdcView.objects.all()
     serializer_class = AreaSerializer
     http_method_names = ['get']
 
     def get_queryset(self):
         args = {}
         null_list = ['null', 'Null', 'none', 'None']
+        # create argument object of query clauses
         for field in self.request.query_params.keys():
             value = self.request.query_params.get(field)
+            # convert null queries
             if value in null_list:
                 value = None
             args[field] = value
         print(args)
+        # get records using query
         queryset = AcdcView.objects.filter(**args)
         return queryset
 
 
+#
+# -------------------------------------
+#
+# EVEYTHING BELOW THIS LINE CAN BE DELETED.
+# Reminents from data concierge
+#
+# -------------------------------------
+#
+#
 
 # class ProductViewSet(viewsets.ReadOnlyModelViewSet):
 #     serializer_class = ProductSerializer

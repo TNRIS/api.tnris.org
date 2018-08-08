@@ -28,10 +28,13 @@ from .models import (
     UseType
 )
 
+
+# views not compiled from joined tables. not managed in admin console
 # @admin.register(AcdcView)
 # class AcdcViewAdmin(admin.ModelAdmin):
 #     model = AcdcView
 #     ordering = ('name',)
+
 
 @admin.register(AgencyType)
 class AgencyTypeAdmin(admin.ModelAdmin):
@@ -39,12 +42,16 @@ class AgencyTypeAdmin(admin.ModelAdmin):
     ordering = ('agency_name',)
 
 
+# AreaType is solidified as statewide, counties, quads, qquads, & national grid
+# not managed in admin console as it shouldn't be changing
 # @admin.register(AreaType)
 # class AreaTypeAdmin(admin.ModelAdmin):
 #     model = AreaType
 #     ordering = ('area_type_name',)
 
 
+# Relate tables managed through 'Collection' form as collection records are
+# required to create/manage relate records
 # @admin.register(BandRelate)
 # class BandRelateAdmin(admin.ModelAdmin):
 #     model = BandRelate
@@ -57,6 +64,8 @@ class BandTypeAdmin(admin.ModelAdmin):
     ordering = ('band_abbreviation',)
 
 
+# Relate tables managed through 'Collection' form as collection records are
+# required to create/manage relate records
 # @admin.register(CategoryRelate)
 # class CategoryRelateAdmin(admin.ModelAdmin):
 #     model = CategoryRelate
@@ -123,12 +132,15 @@ class CollectionAdmin(admin.ModelAdmin):
     )
 
 
+# views not compiled from joined tables. not managed in admin console
 # @admin.register(CcrView)
 # class CcrViewAdmin(admin.ModelAdmin):
 #     model = CcrView
 #     ordering = ('name',)
 
 
+# Relate tables managed through 'Collection' form as collection records are
+# required to create/manage relate records
 # @admin.register(DataTypeRelate)
 # class DataTypeRelateAdmin(admin.ModelAdmin):
 #     model = DataTypeRelate
@@ -141,6 +153,8 @@ class DataTypeAdmin(admin.ModelAdmin):
     ordering = ('data_type',)
 
 
+# Relate tables managed through 'Collection' form as collection records are
+# required to create/manage relate records
 # @admin.register(EpsgRelate)
 # class EpsgRelateAdmin(admin.ModelAdmin):
 #     model = EpsgRelate
@@ -153,6 +167,8 @@ class EpsgTypeAdmin(admin.ModelAdmin):
     ordering = ('epsg_code',)
 
 
+# Relate tables managed through 'Collection' form as collection records are
+# required to create/manage relate records
 # @admin.register(FileTypeRelate)
 # class FileTypeRelateAdmin(admin.ModelAdmin):
 #     model = FileTypeRelate
@@ -171,6 +187,8 @@ class LicenseTypeAdmin(admin.ModelAdmin):
     ordering = ('license_abbreviation',)
 
 
+# Relate tables managed through 'Collection' form as collection records are
+# required to create/manage relate records
 # @admin.register(ResolutionRelate)
 # class ResolutionRelateAdmin(admin.ModelAdmin):
 #     model = ResolutionRelate
@@ -195,26 +213,22 @@ class UseTypeAdmin(admin.ModelAdmin):
     ordering = ('use_type',)
 
 
+# Relate tables managed through 'Collection' form as collection records are
+# required to create/manage relate records
 # @admin.register(UseRelate)
 # class UseRelateAdmin(admin.ModelAdmin):
 #     model = UseRelate
 #     ordering = ('use_type_id',)
 
-
-# admin.site.register(AreaType, AreaTypeAdmin)
-# admin.site.register(TemplateType, TemplateTypeAdmin)
-# admin.site.register(LicenseType, LicenseTypeAdmin)
-# admin.site.register(UseType, UseTypeAdmin)
-# admin.site.register(FileType, FileTypeAdmin)
-# admin.site.register(DataType, DataTypeAdmin)
-# admin.site.register(ResolutionType, ResolutionTypeAdmin)
-# admin.site.register(EpsgType, EpsgTypeAdmin)
-# admin.site.register(CategoryType, CategoryTypeAdmin)
-# admin.site.register(SourceType, SourceTypeAdmin)
-# admin.site.register(BandType, BandTypeAdmin)
-# admin.site.register(EpsgRelate, EpsgRelateAdmin)
-# admin.site.register(Collection, CollectionAdmin)
-
+#
+# -------------------------------------
+#
+# EVEYTHING BELOW THIS LINE CAN BE DELETED.
+# Reminents from data concierge
+#
+# -------------------------------------
+#
+#
 
 #
 # class PhotoIndexInlineAdmin(admin.StackedInline):

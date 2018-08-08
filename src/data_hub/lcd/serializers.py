@@ -20,6 +20,17 @@ class AreaSerializer(serializers.ModelSerializer):
         model = AcdcView
         fields = '__all__'
 
+
+#
+# -------------------------------------
+#
+# EVEYTHING BELOW THIS LINE CAN BE DELETED.
+# Reminents from data concierge
+#
+# -------------------------------------
+#
+#
+
 # class ProductSerializer(serializers.ModelSerializer):
 #
 #     """This serializer is the main class for creating the API

@@ -1004,6 +1004,7 @@ class Resource(models.Model):
 
 """
 ********** Database Views **********
+**** Used as the API endpoints ****
 """
 
 class CcrView(models.Model):

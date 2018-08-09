@@ -1,6 +1,7 @@
 from django.db import models
 
 import uuid
+import boto3
 
 from django.db import models
 
@@ -942,6 +943,27 @@ class Collection(models.Model):
         'Last Modified',
         auto_now=True
     )
+
+    def delete_s3_files(self):
+        d_files = ['overview.jpg',
+                   'thumbnail.jpg',
+                   'natural.jpg',
+                   'urban.jpg']
+        key_list = []
+        for f in d_files:
+            key = "%s/assets/%s" % (self.collection_id, f)
+            key_list.append({'Key':key})
+        client = boto3.client('s3')
+        response = client.delete_objects(
+            Bucket='data.tnris.org',
+            Delete={'Objects': key_list}
+        )
+        print('%s s3 images: delete success!' % self.name)
+        return
+
+    def delete(self, *args, **kwargs):
+        self.delete_s3_files()
+        super().delete(*args, **kwargs)
 
     def __str__(self):
         return self.name

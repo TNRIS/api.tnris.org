@@ -111,9 +111,13 @@ class CollectionAdmin(admin.ModelAdmin):
         ('Images', {
             'classes': ('grp-collapse grp-closed',),
             'fields': ('overview_image',
+                       'delete_overview_image',
                        'thumbnail_image',
+                       'delete_thumbnail_image',
                        'natural_image',
-                       'urban_image')
+                       'delete_natural_image',
+                       'urban_image',
+                       'delete_urban_image')
         }),
         ('Lookup/Relate Associations', {
             'classes': ('grp-collapse grp-closed',),
@@ -125,7 +129,7 @@ class CollectionAdmin(admin.ModelAdmin):
     )
     ordering = ('name',)
     list_display = (
-        'name', 'public'
+        'name', 'collection_id', 'public'
     )
     search_fields = ('name',)
     list_filter = (
@@ -133,6 +137,14 @@ class CollectionAdmin(admin.ModelAdmin):
         # CollectionAgencyNameFilter,
         # CollectionCountyFilter
     )
+    # override default delete_selected option on admin list page to fire
+    # individual record deletion calls vs group queryset deletion. This is
+    # to handle the deletion of their files in s3
+    actions = ['delete_selected']
+    def delete_selected(self, request, obj):
+        for o in obj.all():
+            o.delete()
+    delete_selected.short_description = 'Delete selected Collections (DANGEROUS: No Confirmation!)'
 
 
 # views not compiled from joined tables. not managed in admin console

@@ -1,6 +1,9 @@
 from django import forms
 from django.contrib.admin.widgets import AdminDateWidget
 
+from string import Template
+from django.utils.safestring import mark_safe
+
 # from django.core.exceptions import ValidationError
 from django.db.utils import ProgrammingError
 from .models import (Collection,
@@ -19,6 +22,12 @@ from .models import (Collection,
                      UseRelate,
                      UseType)
 
+import boto3
+
+class PictureWidget(forms.widgets.Widget):
+    def render(self, name, value, attrs=None):
+        html = Template("""<input type="file" name="$name" id="id_$name"><label for="img_$name">Current: $link</label><img id="img_$name" src="$link" style="max-width:500px;"/>""")
+        return mark_safe(html.substitute(link=value,name=name))
 
 class CollectionForm(forms.ModelForm):
     # base model is Collection
@@ -32,10 +41,18 @@ class CollectionForm(forms.ModelForm):
     known_issues = forms.CharField(required=False, widget=forms.Textarea(), initial='None')
     carto_map_id = forms.CharField(required=False, widget=forms.TextInput(attrs={'style':'width:758px'}),max_length=50)
 
-    overview_image = forms.CharField(required=False, widget=forms.TextInput(attrs={'style':'width:758px'}), initial='images/placeholder.png')
-    thumbnail_image = forms.CharField(required=False, widget=forms.TextInput(attrs={'style':'width:758px'}), initial='images/placeholder.png')
-    natural_image = forms.CharField(required=False, widget=forms.TextInput(attrs={'style':'width:758px'}))
-    urban_image = forms.CharField(required=False, widget=forms.TextInput(attrs={'style':'width:758px'}))
+    overview_image = forms.FileField(required=False, widget=PictureWidget)
+    thumbnail_image = forms.FileField(required=False, widget=PictureWidget)
+    natural_image = forms.FileField(required=False, widget=PictureWidget)
+    urban_image = forms.FileField(required=False, widget=PictureWidget)
+
+    delete_overview_image = forms.BooleanField(required=False)
+    delete_thumbnail_image = forms.BooleanField(required=False)
+    delete_natural_image = forms.BooleanField(required=False)
+    delete_urban_image = forms.BooleanField(required=False)
+
+    # boto3 s3 object
+    client = boto3.client('s3')
 
     # generic function to create a form input for a relate table
     def create_relate_field(id_field, label_field, type_table, order_field):
@@ -117,8 +134,34 @@ class CollectionForm(forms.ModelForm):
             relate_table(**args).save()
         return
 
-    # on save fire function to apply updates to relate tables
+    # generic function to upload image and update dbase link
+    def handle_image(self, field, file):
+        key = "%s/assets/%s" % (self.instance.collection_id, field.replace('_image', '.jpg'))
+        response = self.client.put_object(
+            Bucket='data.tnris.org',
+            ACL='public-read',
+            Key=key,
+            Body=file
+        )
+        print('%s upload success!' % key)
+        setattr(self.instance, field, "https://s3.amazonaws.com/data.tnris.org/" + key)
+        return
+
+    # generic function to delete images fired by check of checkboxes on adminform
+    def delete_image(self, field):
+        key = "%s/assets/%s" % (self.instance.collection_id, field.replace('delete_', '').replace('_image', '.jpg'))
+        response = self.client.delete_object(
+            Bucket='data.tnris.org',
+            Key=key
+        )
+        print('%s delete success!' % key)
+        field = field.replace('delete_', '')
+        setattr(self.instance, field, None)
+        return
+
+    # custom handling of various relationships on save method
     def save(self, commit=True):
+        # on save fire function to apply updates to relate tables
         self.update_relate_table('bands', BandRelate, 'band_type_id', BandType)
         self.update_relate_table('categories', CategoryRelate, 'category_type_id', CategoryType)
         self.update_relate_table('data_types', DataTypeRelate, 'data_type_id', DataType)
@@ -126,6 +169,24 @@ class CollectionForm(forms.ModelForm):
         self.update_relate_table('file_types', FileTypeRelate, 'file_type_id', FileType)
         self.update_relate_table('resolutions', ResolutionRelate, 'resolution_type_id', ResolutionType)
         self.update_relate_table('uses', UseRelate, 'use_type_id', UseType)
+        # check for files
+        files = self.files
+        image_fields = ['overview_image', 'thumbnail_image', 'natural_image', 'urban_image']
+        # if files and field not marked for deletion then upload to s3
+        for f in files:
+            delete_checkbox = 'delete_' + f
+            if f in image_fields and self.cleaned_data[delete_checkbox] is False:
+                self.handle_image(f, files[f])
+        # iterate deletion checkboxes and if checked then delete associated
+        # file from s3
+        deletion_flags = ['delete_overview_image',
+                          'delete_thumbnail_image',
+                          'delete_natural_image',
+                          'delete_urban_image']
+        for d in deletion_flags:
+            if self.cleaned_data[d] is True:
+                self.delete_image(d)
+
         return super(CollectionForm, self).save(commit=commit)
 
 

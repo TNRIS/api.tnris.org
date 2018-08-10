@@ -105,8 +105,11 @@ class CollectionAdmin(admin.ModelAdmin):
                        'wms_link',
                        'popup_link',
                        'supplemental_report_url',
+                       'delete_supplemental_report_url',
                        'lidar_breaklines_url',
-                       'tile_index_url',)
+                       'delete_lidar_breaklines_url',
+                       'tile_index_url',
+                       'delete_tile_index_url')
         }),
         ('Images', {
             'classes': ('grp-collapse grp-closed',),

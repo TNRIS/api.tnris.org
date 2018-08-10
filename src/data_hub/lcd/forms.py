@@ -291,9 +291,6 @@ class CollectionForm(forms.ModelForm):
         if self.og_name != self.instance.name and self.og_name is not None:
             self.update_s3_names(self.og_name)
 
-        print(self.og_name)
-        print(self.instance.name)
-
         return super(CollectionForm, self).save(commit=commit)
 
 

@@ -132,7 +132,7 @@ class CollectionAdmin(admin.ModelAdmin):
     )
     ordering = ('name',)
     list_display = (
-        'name', 'collection_id', 'public'
+        'name', 'collection_id', 'last_modified', 'public'
     )
     search_fields = ('name',)
     list_filter = (
@@ -140,14 +140,14 @@ class CollectionAdmin(admin.ModelAdmin):
         # CollectionAgencyNameFilter,
         # CollectionCountyFilter
     )
-    # override default delete_selected option on admin list page to fire
-    # individual record deletion calls vs group queryset deletion. This is
-    # to handle the deletion of their files in s3
-    actions = ['delete_selected']
-    def delete_selected(self, request, obj):
-        for o in obj.all():
-            o.delete()
-    delete_selected.short_description = 'Delete selected Collections (DANGEROUS: No Confirmation!)'
+    # remove default action 'delete_selected' so s3 files will be deleted by the
+    # model's overridden delete method. also so user permissions don't have to be
+    # handled. **No logical scenario calls for Collections to be bulk deleted
+    def get_actions(self, request):
+        actions = super(CollectionAdmin, self).get_actions(request)
+        if 'delete_selected' in actions:
+            del actions['delete_selected']
+        return actions
 
 
 # views not compiled from joined tables. not managed in admin console

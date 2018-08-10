@@ -945,22 +945,36 @@ class Collection(models.Model):
     )
 
     def delete_s3_files(self):
+        # set aside list for compiling keys
+        key_list = []
+        # add image keys to list
         d_files = ['overview.jpg',
                    'thumbnail.jpg',
                    'natural.jpg',
                    'urban.jpg']
-        key_list = []
         for f in d_files:
             key = "%s/assets/%s" % (self.collection_id, f)
             key_list.append({'Key':key})
+        # add zipfile keys to list
+        z_files = ['-supplemental-report.zip',
+                   '-lidar-breaklines.zip',
+                   '-tile-index.zip']
+        urlized_nm = self.name.lower().replace(', ', '-').replace(' & ', '-').replace(' ', '-').replace('(', '').replace(')', '').replace('\\', '-').replace('/', '-').replace('&', '').replace(',', '-')
+        for f in z_files:
+            f = urlized_nm + f
+            key = "%s/assets/%s" % (self.collection_id, f)
+            key_list.append({'Key':key})
+        # do that boto dance
         client = boto3.client('s3')
         response = client.delete_objects(
             Bucket='data.tnris.org',
             Delete={'Objects': key_list}
         )
-        print('%s s3 images: delete success!' % self.name)
+        print('%s s3 files: delete success!' % self.name)
         return
 
+    # overwrite default model delete method so that all associated
+    # s3 files get deleted as well
     def delete(self, *args, **kwargs):
         self.delete_s3_files()
         super().delete(*args, **kwargs)

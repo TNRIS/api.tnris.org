@@ -21,7 +21,7 @@ from .models import (Collection,
                      ResolutionType,
                      UseRelate,
                      UseType)
-
+import os
 import boto3
 
 class PictureWidget(forms.widgets.Widget):
@@ -65,7 +65,11 @@ class CollectionForm(forms.ModelForm):
     delete_tile_index_url = forms.BooleanField(required=False)
 
     # boto3 s3 object
-    client = boto3.client('s3')
+    client = boto3.client(
+        's3',
+        aws_access_key_id=os.environ.get('AWS_ACCESS_KEY_ID'),
+        aws_secret_access_key=os.environ.get('AWS_SECRET_ACCESS_KEY')
+    )
 
     # generic function to create a form input for a relate table
     def create_relate_field(id_field, label_field, type_table, order_field):

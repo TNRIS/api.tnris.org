@@ -606,7 +606,7 @@ class EpsgRelate(models.Model):
     )
 
     def __str__(self):
-        return self.epsg_type_id.epsg_code
+        return str(self.epsg_type_id.epsg_code)
 
 
 class FileTypeRelate(models.Model):

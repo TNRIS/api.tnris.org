@@ -137,8 +137,6 @@ class CollectionAdmin(admin.ModelAdmin):
     search_fields = ('name',)
     list_filter = (
         'public',
-        # CollectionAgencyNameFilter,
-        # CollectionCountyFilter
     )
     # remove default action 'delete_selected' so s3 files will be deleted by the
     # model's overridden delete method. also so user permissions don't have to be

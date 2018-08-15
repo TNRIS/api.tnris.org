@@ -238,41 +238,33 @@ class ResourceAdmin(admin.ModelAdmin):
         'area_type_id'
     )
 
-    #
+    # override the /resource/add/ form
     def add_view(self,request,extra_context=None):
-        print(self.form.declared_fields)
-        # print(self.opts.__dict__.keys())
+        # reset the declared_fields attr to be what it was on load
         self.form.declared_fields = self.original_declared_fields
+        # set custom flag attributes for admin templates
         self.opts.resource_change_flag = False
         self.opts.resource_add_flag = True
-
+        # turn off alternative save buttons
         extra_context = extra_context or {}
         extra_context['show_save_and_continue'] = False
-        extra_context['show_save_and_add_another'] = False
-
         return super(ResourceAdmin,self).add_view(request, extra_context=extra_context)
 
+    # override the /resource/change/ form
     def change_view(self,request,object_id,extra_context=None):
-        print(self.opts.__dict__.keys())
-        # self.original_declared_fields = self.form.declared_fields
+        # clear declared_fields attr so 'collection' dropdown doesn't
+        # appear on change form
         self.form.declared_fields = {}
+        # set custom flag attributes for admin templates
         self.opts.resource_change_flag = True
         self.opts.resource_add_flag = False
         return super(ResourceAdmin,self).change_view(request,object_id)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        # on initialization, set aside declared_fields attribute
+        # so it can be re-applied based on form view
         self.original_declared_fields = self.form.declared_fields
-
-
-    # remove default action 'delete_selected' so s3 files will be deleted by the
-    # model's overridden delete method. also so user permissions don't have to be
-    # handled. **No logical scenario calls for Collections to be bulk deleted
-    # def get_actions(self, request):
-    #     actions = super(CollectionAdmin, self).get_actions(request)
-    #     if 'delete_selected' in actions:
-    #         del actions['delete_selected']
-    #     return actions
 
 
 @admin.register(TemplateType)

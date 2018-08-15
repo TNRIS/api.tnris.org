@@ -7,6 +7,7 @@ from django.utils.safestring import mark_safe
 # from django.core.exceptions import ValidationError
 from django.db.utils import ProgrammingError
 from .models import (Collection,
+                     AreaType,
                      BandRelate,
                      BandType,
                      CategoryRelate,
@@ -331,8 +332,40 @@ class ResourceForm(forms.ModelForm):
     # fire function to create the Collection field dropdown
     collection = create_collection_field()
 
-    # custom handling of various relationships on save method
-    def save(self, commit=True):
-        print('saving...')
+    # generic function to retrieve the associated Collection object
+    def get_collection_obj(self, collection_id):
+        record = Collection.objects.get(collection_id=collection_id)
+        return record
 
+    # generic function to retrieve the associated AreaType object
+    def get_area_obj(self, area_name):
+        record = AreaType.objects.get(area_type_name=area_name)
+        return record
+
+    # custom handling in save method for adding multiple new records
+    def save(self, commit=False):
+        # get the collection
+        collection_obj = self.get_collection_obj(self.cleaned_data['collection'])
+        # get the area
+        area_obj = self.get_area_obj('Texas')
+        # delete all current resource records for this collection
+        Resource.objects.filter(collection_id=self.cleaned_data['collection']).delete()
+        # TODO go get s3 zipfile links
+        # TODO area realtionship based on zipfile name?
+        # iterate all (except last) s3 links adding each as new record in resource table
+        for i in range(0, 8):
+            print("range", i)
+            self.instance.pk = None
+            self.instance.collection_id = collection_obj
+            self.instance.area_type_id = area_obj
+            self.instance.resource = 'testt'
+            self.instance.filesize = 666
+            args = {
+                'collection_id': collection_obj,
+                'area_type_id': area_obj,
+                'resource': 'testtterr',
+                'filesize': 666
+            }
+            Resource(**args).save()
+        # return last record for form to validate and commit all new records
         return super(ResourceForm, self).save(commit=commit)

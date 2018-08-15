@@ -40,6 +40,7 @@ APPEND_SLASH = False
 
 INSTALLED_APPS = [
     'lcd',
+    'lore',
     'corsheaders',
     'django_admin_listfilter_dropdown',
     'django.contrib.contenttypes',

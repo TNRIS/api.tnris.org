@@ -19,6 +19,7 @@ from .models import (Collection,
                      FileType,
                      ResolutionRelate,
                      ResolutionType,
+                     Resource,
                      UseRelate,
                      UseType)
 import os
@@ -298,31 +299,40 @@ class CollectionForm(forms.ModelForm):
         return super(CollectionForm, self).save(commit=commit)
 
 
-#
-# -------------------------------------
-#
-# EVEYTHING BELOW THIS LINE CAN BE DELETED.
-# Reminents from data concierge
-#
-# -------------------------------------
-#
-#
+class ResourceForm(forms.ModelForm):
+    # base model is Collection
+    class Meta:
+        model = Resource
+        fields = ('__all__')
 
-#
-#
-# class ProductForm(forms.ModelForm):
-#     class Meta:
-#         model = Product
-#         fields = '__all__'
-#
-#     def clean(self):
-#         try:
-#             if (self.cleaned_data.get('number_of_frames')
-#                     < self.cleaned_data.get('scanned')):
-#                 raise ValidationError("Scanned must be >= number of frames")
-#         except Exception:
-#             raise ValidationError("Scanned must be >= number of frames")
-#         return self.cleaned_data
-# class CharTextInput(forms.widgets.TextInput):
-#     """Subclass TextInput since there's no direct way to override its type attribute"""
-#     input_type ='email'
+    # boto3 s3 object
+    client = boto3.client(
+        's3',
+        aws_access_key_id=os.environ.get('AWS_ACCESS_KEY_ID'),
+        aws_secret_access_key=os.environ.get('AWS_SECRET_ACCESS_KEY')
+    )
+
+    # specific function to create the Collection field dropdown
+    def create_collection_field():
+        # get the Collection choices from the Collection table
+        try:
+            choices = (
+                (b.collection_id, b.name) for b in Collection.objects.all().order_by('name'))
+        except ProgrammingError:
+            choices = ()
+        # create the input
+        input = forms.ChoiceField(
+            required=True,
+            label="Collection",
+            choices=choices
+        )
+        return input
+
+    # fire function to create the Collection field dropdown
+    collection = create_collection_field()
+
+    # custom handling of various relationships on save method
+    def save(self, commit=True):
+        print('saving...')
+
+        return super(ResourceForm, self).save(commit=commit)

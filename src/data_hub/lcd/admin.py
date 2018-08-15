@@ -2,7 +2,7 @@ from django.contrib import admin
 
 # from .filters import CollectionAgencyNameFilter, CollectionCountyFilter, \
 #     CountyDropdownFilter
-from .forms import CollectionForm
+from .forms import CollectionForm, ResourceForm
 from .models import (
     AcdcView,
     AgencyType,
@@ -215,6 +215,64 @@ class LicenseTypeAdmin(admin.ModelAdmin):
 class ResolutionTypeAdmin(admin.ModelAdmin):
     model = ResolutionType
     ordering = ('resolution',)
+
+
+@admin.register(Resource)
+class ResourceAdmin(admin.ModelAdmin):
+    model = Resource
+    form = ResourceForm
+
+    readonly_fields = ('resource',
+                       'filesize',
+                       'last_modified',
+                       'collection_id',
+                       'area_type_id')
+
+    ordering = ('collection_id',)
+    list_display = (
+        'collection_id', 'area_type_id', 'resource', 'last_modified'
+    )
+    search_fields = ('collection_id', 'area_type_id', 'resource')
+    list_filter = (
+        'collection_id',
+        'area_type_id'
+    )
+
+    #
+    def add_view(self,request,extra_context=None):
+        print(self.form.declared_fields)
+        # print(self.opts.__dict__.keys())
+        self.form.declared_fields = self.original_declared_fields
+        self.opts.resource_change_flag = False
+        self.opts.resource_add_flag = True
+
+        extra_context = extra_context or {}
+        extra_context['show_save_and_continue'] = False
+        extra_context['show_save_and_add_another'] = False
+
+        return super(ResourceAdmin,self).add_view(request, extra_context=extra_context)
+
+    def change_view(self,request,object_id,extra_context=None):
+        print(self.opts.__dict__.keys())
+        # self.original_declared_fields = self.form.declared_fields
+        self.form.declared_fields = {}
+        self.opts.resource_change_flag = True
+        self.opts.resource_add_flag = False
+        return super(ResourceAdmin,self).change_view(request,object_id)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.original_declared_fields = self.form.declared_fields
+
+
+    # remove default action 'delete_selected' so s3 files will be deleted by the
+    # model's overridden delete method. also so user permissions don't have to be
+    # handled. **No logical scenario calls for Collections to be bulk deleted
+    # def get_actions(self, request):
+    #     actions = super(CollectionAdmin, self).get_actions(request)
+    #     if 'delete_selected' in actions:
+    #         del actions['delete_selected']
+    #     return actions
 
 
 @admin.register(TemplateType)

@@ -42,10 +42,11 @@ INSTALLED_APPS = [
     'lcd',
     'corsheaders',
     'django_admin_listfilter_dropdown',
+    'django.contrib.contenttypes',
+    'grappelli.dashboard',
     'grappelli',
     'django.contrib.admin',
     'django.contrib.auth',
-    'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
@@ -68,7 +69,6 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'data_hub.urls'
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -139,6 +139,7 @@ USE_TZ = True
 # Grappelli Settings
 GRAPPELLI_ADMIN_TITLE = "TNRIS Data Hub"
 GRAPPELLI_SWITCH_USER = True
+GRAPPELLI_INDEX_DASHBOARD = 'dashboard.CustomIndexDashboard'
 
 
 # Static files (CSS, JavaScript, Images)

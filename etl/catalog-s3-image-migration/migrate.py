@@ -111,6 +111,12 @@ for c in response:
                 bad_keys.append(src_key)
             url_counter += 1
             # update url path in collection table
+
+            # TODO: update 'filesize' attribute as well
+            #
+            #
+            # 
+
             new_path = "https://s3.amazonaws.com/data.tnris.org/" + key
             query = "UPDATE %s SET %s = '%s' WHERE collection_id = '%s';" % (tablename, fld_nm, new_path, id)
             # print(query)

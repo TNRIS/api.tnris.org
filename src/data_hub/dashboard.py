@@ -31,7 +31,7 @@ class CustomIndexDashboard(Dashboard):
 
         # append an app list module for "Applications"
         self.children.append(modules.AppList(
-            title='Domains',
+            title='Collection Domains',
             collapsible=True,
             column=1,
             css_classes=('grp-collapse grp-closed',),
@@ -51,7 +51,7 @@ class CustomIndexDashboard(Dashboard):
             collapsible=True,
             column=1,
             css_classes=('grp-collapse grp-closed',),
-            models=('lcd.models.Resource',),
+            models=('lcd.models.Resource','lcd.models.ResourceType'),
         ))
 
         # append a recent actions module

@@ -23,6 +23,7 @@ from .models import (
     ResolutionRelate,
     ResolutionType,
     Resource,
+    ResourceType,
     TemplateType,
     UseRelate,
     UseType
@@ -226,16 +227,18 @@ class ResourceAdmin(admin.ModelAdmin):
                        'filesize',
                        'last_modified',
                        'collection_id',
-                       'area_type_id')
+                       'area_type_id',
+                       'resource_type')
 
     ordering = ('collection_id',)
     list_display = (
-        'collection_id', 'area_type_id', 'resource', 'last_modified'
+        'collection_id', 'area_type_id', 'resource', 'resource_type', 'last_modified'
     )
-    search_fields = ('collection_id', 'area_type_id', 'resource')
+    search_fields = ('collection_id', 'area_type_id', 'resource', 'resource_type')
     list_filter = (
         'collection_id',
-        'area_type_id'
+        'area_type_id',
+        'resource_type'
     )
 
     # override the /resource/add/ form
@@ -271,6 +274,15 @@ class ResourceAdmin(admin.ModelAdmin):
 class TemplateTypeAdmin(admin.ModelAdmin):
     model = TemplateType
     ordering = ('template',)
+
+
+@admin.register(ResourceType)
+class ResourceTypeAdmin(admin.ModelAdmin):
+    model = ResourceType
+    ordering = ('resource_type_name',)
+    list_display = (
+        'resource_type_name', 'resource_type_abbreviation'
+    )
 
 
 @admin.register(UseType)

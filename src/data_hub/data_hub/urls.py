@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.views.generic import TemplateView
 
 from .views import HealthCheckView
 
@@ -23,5 +24,6 @@ urlpatterns = [
     path('admin/doc/', include('django.contrib.admindocs.urls')), # django admindocs
     path('admin/', admin.site.urls), # admin site
     path('api/v1/', include('lcd.urls')),
-    path('health/', HealthCheckView.as_view())
+    path('health/', HealthCheckView.as_view()),
+    path('', TemplateView.as_view(template_name='index.html')),
 ]

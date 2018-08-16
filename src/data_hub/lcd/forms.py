@@ -388,14 +388,14 @@ class ResourceForm(forms.ModelForm):
             self.instance.collection_id = collection_obj
             self.instance.area_type_id = area_obj
             self.instance.resource = link
-            self.instance.filesize = 666
+            self.instance.filesize = f['Size']
             # if not the last file in the list, we'll just save it
             if idx != last_idx:
                 args = {
                     'collection_id': collection_obj,
                     'area_type_id': area_obj,
                     'resource': link,
-                    'filesize': 666
+                    'filesize': f['Size']
                 }
                 Resource(**args).save()
         # return last record for form to validate and commit all new records

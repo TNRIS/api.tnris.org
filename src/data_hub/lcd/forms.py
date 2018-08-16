@@ -342,6 +342,27 @@ class ResourceForm(forms.ModelForm):
         record = AreaType.objects.get(area_type_name=area_name)
         return record
 
+    # generic function to list s3 bucket zipfiles
+    def get_s3_zipfiles(self, prefix, token='', list=[]):
+        if token == '':
+            s3_zipfiles = self.client.list_objects_v2(
+                Bucket='data.tnris.org',
+                Prefix=prefix,
+                MaxKeys=1000
+            )
+        else:
+            s3_zipfiles = self.client.list_objects_v2(
+                Bucket='data.tnris.org',
+                Prefix=prefix,
+                MaxKeys=1000,
+                ConintuationToken=token
+            )
+        list = list + s3_zipfiles['Contents']
+        if s3_zipfiles['IsTruncated'] is True:
+            get_s3_zipfiles(prefix, s3_zipfiles['NextContinuationToken'], list)
+        else:
+            return list
+
     # custom handling in save method for adding multiple new records
     def save(self, commit=False):
         # get the collection
@@ -350,22 +371,32 @@ class ResourceForm(forms.ModelForm):
         area_obj = self.get_area_obj('Texas')
         # delete all current resource records for this collection
         Resource.objects.filter(collection_id=self.cleaned_data['collection']).delete()
-        # TODO go get s3 zipfile links
-        # TODO area realtionship based on zipfile name?
-        # iterate all (except last) s3 links adding each as new record in resource table
-        for i in range(0, 8):
-            print("range", i)
+        # go get all associated s3 zipfiles and compile them into single list
+        prefix = "%s/assets/resources/" % (self.cleaned_data['collection'])
+        s3_zipfiles = get_s3_zipfiles(prefix)
+        print(s3_zipfiles)
+        # set aside list length so we know when we are on the last one
+        total = len(s3_zipfiles)
+        last_idx = total - 1
+        print(total, last_idx)
+        # iterate all (except last) s3 keys adding each as new record in resource table
+        for idx, f in s3_zipfiles:
+            print(f)
+            link = "https://s3.amazonaws.com/data.tnris.org/" + f['Key']
+            # self attribute the file in case it is the last one
             self.instance.pk = None
             self.instance.collection_id = collection_obj
             self.instance.area_type_id = area_obj
-            self.instance.resource = 'testt'
+            self.instance.resource = link
             self.instance.filesize = 666
-            args = {
-                'collection_id': collection_obj,
-                'area_type_id': area_obj,
-                'resource': 'testtterr',
-                'filesize': 666
-            }
-            Resource(**args).save()
+            # if not the last file in the list, we'll just save it
+            if idx != last_idx:
+                args = {
+                    'collection_id': collection_obj,
+                    'area_type_id': area_obj,
+                    'resource': link,
+                    'filesize': 666
+                }
+                Resource(**args).save()
         # return last record for form to validate and commit all new records
         return super(ResourceForm, self).save(commit=commit)

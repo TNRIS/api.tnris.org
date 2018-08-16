@@ -11,6 +11,61 @@ from django.db import models
 ********** Domain Tables **********
 """
 
+class AgencyType(models.Model):
+    """Agencies domain table"""
+
+    class Meta:
+        db_table = 'agency_type'
+        verbose_name = 'Agency Type'
+        verbose_name_plural = 'Agency Types'
+        unique_together = (
+            'agency_name',
+            'agency_abbreviation',
+            'agency_website',
+            'agency_contact'
+        )
+
+    agency_type_id = models.UUIDField(
+        'Agency Type ID',
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False
+    )
+    agency_name = models.TextField(
+        'Agency Name',
+        max_length=100
+    )
+    agency_abbreviation = models.TextField(
+        'Agency Abbreviation',
+        max_length=100,
+        null=True,
+        blank=True
+    )
+    agency_website = models.URLField(
+        'Agency Website',
+        max_length=255,
+        null=True,
+        blank=True
+    )
+    agency_contact = models.TextField(
+        'Agency Contact',
+        max_length=255,
+        null=True,
+        blank=True
+    )
+    created = models.DateTimeField(
+        'Created',
+        auto_now_add=True
+    )
+    last_modified = models.DateTimeField(
+        'Last Modified',
+        auto_now=True
+    )
+
+    def __str__(self):
+        return self.agency_name
+
+
 class AreaType(models.Model):
     """Domain table defining areas that resources intersect"""
 
@@ -48,6 +103,10 @@ class AreaType(models.Model):
     orig_data_download_id = models.PositiveIntegerField(
         'Original Data Download ID',
         null=True
+    )
+    area_code = models.TextField(
+        'Area Code',
+        max_length=11
     )
     created = models.DateTimeField(
         'Created',
@@ -307,47 +366,35 @@ class ResolutionType(models.Model):
         return self.resolution
 
 
-class AgencyType(models.Model):
-    """Agencies domain table"""
+class ResourceType(models.Model):
+    """Available resource download types domain table"""
 
     class Meta:
-        db_table = 'agency_type'
-        verbose_name = 'Agency Type'
-        verbose_name_plural = 'Agency Types'
-        unique_together = (
-            'agency_name',
-            'agency_abbreviation',
-            'agency_website',
-            'agency_contact'
-        )
+        db_table = 'resource_type'
+        verbose_name = 'Resource Type'
+        verbose_name_plural = 'Resource Types'
 
-    agency_type_id = models.UUIDField(
-        'Agency Type ID',
+    unique_together = (
+        'resource_type_id',
+        'resource_type_name',
+        'resource_type_abbreviation'
+    )
+
+    resource_type_id = models.UUIDField(
+        'Resource Type ID',
         primary_key=True,
         default=uuid.uuid4,
         editable=False
     )
-    agency_name = models.TextField(
-        'Agency Name',
-        max_length=100
+    resource_type_name = models.TextField(
+        'Resource Type Name',
+        max_length=50,
+        unique=True
     )
-    agency_abbreviation = models.TextField(
-        'Agency Abbreviation',
-        max_length=100,
-        null=True,
-        blank=True
-    )
-    agency_website = models.URLField(
-        'Agency Website',
-        max_length=255,
-        null=True,
-        blank=True
-    )
-    agency_contact = models.TextField(
-        'Agency Contact',
-        max_length=255,
-        null=True,
-        blank=True
+    resource_type_abbreviation = models.TextField(
+        'Resource Type Abbreviation',
+        max_length=10,
+        unique=True
     )
     created = models.DateTimeField(
         'Created',
@@ -359,7 +406,7 @@ class AgencyType(models.Model):
     )
 
     def __str__(self):
-        return self.agency_name
+        return self.resource_type_name
 
 
 class TemplateType(models.Model):
@@ -1031,6 +1078,13 @@ class Resource(models.Model):
         db_column='collection_id',
         on_delete=models.CASCADE,
         related_name='collections'
+    )
+    resource_type = models.ForeignKey(
+        'ResourceType',
+        db_column='resource_type_id',
+        on_delete=models.CASCADE,
+        related_name='resource_types',
+        default='eb7741f9-e527-46e9-bb0e-a25de7babab0'
     )
     created = models.DateTimeField(
         'Created',

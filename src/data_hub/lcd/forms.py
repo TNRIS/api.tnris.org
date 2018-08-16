@@ -21,6 +21,7 @@ from .models import (Collection,
                      ResolutionRelate,
                      ResolutionType,
                      Resource,
+                     ResourceType,
                      UseRelate,
                      UseType)
 import os
@@ -338,8 +339,13 @@ class ResourceForm(forms.ModelForm):
         return record
 
     # generic function to retrieve the associated AreaType object
-    def get_area_obj(self, area_name):
-        record = AreaType.objects.get(area_type_name=area_name)
+    def get_area_obj(self, area_code):
+        record = AreaType.objects.get(area_code=area_code)
+        return record
+
+    # generic function to retrieve the associated ResourceType object
+    def get_resource_type_obj(self, abbreviation):
+        record = ResourceType.objects.get(resource_type_abbreviation=abbreviation)
         return record
 
     # generic function to list s3 bucket zipfiles
@@ -367,8 +373,6 @@ class ResourceForm(forms.ModelForm):
     def save(self, commit=False):
         # get the collection
         collection_obj = self.get_collection_obj(self.cleaned_data['collection'])
-        # get the area
-        area_obj = self.get_area_obj('Texas')
         # delete all current resource records for this collection
         Resource.objects.filter(collection_id=self.cleaned_data['collection']).delete()
         # go get all associated s3 zipfiles and compile them into single list
@@ -383,10 +387,19 @@ class ResourceForm(forms.ModelForm):
         for idx, f in s3_zipfiles:
             print(f)
             link = "https://s3.amazonaws.com/data.tnris.org/" + f['Key']
+            # disassemble filename
+            filename = f['Key'].split("/")[-1]
+            area_code = filename.split("_")[-1].replace('.zip', '')
+            resource_type_abbr = filename.split("_")[-2].upper()
+            # get the area_type
+            area_obj = self.get_area_obj(area_code)
+            # get the resource_type
+            resource_type_obj = self.get_resource_type_obj(resource_type_abbr)
             # self attribute the file in case it is the last one
             self.instance.pk = None
             self.instance.collection_id = collection_obj
             self.instance.area_type_id = area_obj
+            self.instance.resouce_type_id = resource_type_obj
             self.instance.resource = link
             self.instance.filesize = f['Size']
             # if not the last file in the list, we'll just save it
@@ -394,6 +407,7 @@ class ResourceForm(forms.ModelForm):
                 args = {
                     'collection_id': collection_obj,
                     'area_type_id': area_obj,
+                    'resource_type_id': resource_type_obj,
                     'resource': link,
                     'filesize': f['Size']
                 }

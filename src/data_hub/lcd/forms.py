@@ -21,6 +21,7 @@ from .models import (Collection,
                      ResolutionType,
                      Resource,
                      ResourceType,
+                     ResourceTypeRelate,
                      UseRelate,
                      UseType)
 import os
@@ -372,8 +373,9 @@ class ResourceForm(forms.ModelForm):
     def save(self, commit=False):
         # get the collection
         collection_obj = self.get_collection_obj(self.cleaned_data['collection'])
-        # delete all current resource records for this collection
+        # delete all current resource and resource_type_relate records for this collection
         Resource.objects.filter(collection_id=self.cleaned_data['collection']).delete()
+        ResourceTypeRelate.objects.filter(collection_id=self.cleaned_data['collection']).delete()
         # go get all associated s3 zipfiles and compile them into single list
         prefix = "%s/assets/resources/" % (self.cleaned_data['collection'])
         s3_zipfiles = get_s3_zipfiles(prefix)
@@ -382,6 +384,8 @@ class ResourceForm(forms.ModelForm):
         total = len(s3_zipfiles)
         last_idx = total - 1
         print(total, last_idx)
+        # set aside list for tracking relate entries
+        relates = []
         # iterate all (except last) s3 keys adding each as new record in resource table
         for idx, f in s3_zipfiles:
             print(f)
@@ -411,5 +415,14 @@ class ResourceForm(forms.ModelForm):
                     'filesize': f['Size']
                 }
                 Resource(**args).save()
+            # if this resource type abbr isn't in the list, add it to the relate
+            # table and then the list
+            if resource_type_abbr not in relates:
+                args = {
+                    'collection_id': collection_obj,
+                    'resource_type_id': resource_type_obj
+                }
+                ResourceTypeRelate(**args).save()
+            relates.append(resource_type_abbr)
         # return last record for form to validate and commit all new records
         return super(ResourceForm, self).save(commit=commit)

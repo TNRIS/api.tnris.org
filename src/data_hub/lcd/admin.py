@@ -24,6 +24,7 @@ from .models import (
     ResolutionType,
     Resource,
     ResourceType,
+    ResourceTypeRelate,
     TemplateType,
     UseRelate,
     UseType
@@ -268,6 +269,14 @@ class ResourceAdmin(admin.ModelAdmin):
         # on initialization, set aside declared_fields attribute
         # so it can be re-applied based on form view
         self.original_declared_fields = self.form.declared_fields
+
+
+# Resource Type Relate table managed through 'Resource' form as s3 zipfiles are
+# required to create/manage relate records
+# @admin.register(ResourceTypeRelate)
+# class ResourceTypeRelateAdmin(admin.ModelAdmin):
+#     model = ResourceTypeRelate
+#     ordering = ('collection_id',)
 
 
 @admin.register(ResourceType)

@@ -392,8 +392,8 @@ class ResourceForm(forms.ModelForm):
             link = "https://s3.amazonaws.com/data.tnris.org/" + f['Key']
             # disassemble filename
             filename = f['Key'].split("/")[-1]
-            area_code = filename.split("_")[-1].replace('.zip', '')
-            resource_type_abbr = filename.split("_")[-2].upper()
+            area_code = filename.split("_")[-2]
+            resource_type_abbr = filename.split("_")[-1].replace('.zip', '').upper()
             # get the area_type
             area_obj = self.get_area_obj(area_code)
             # get the resource_type

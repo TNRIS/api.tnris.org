@@ -270,12 +270,6 @@ class ResourceAdmin(admin.ModelAdmin):
         self.original_declared_fields = self.form.declared_fields
 
 
-@admin.register(TemplateType)
-class TemplateTypeAdmin(admin.ModelAdmin):
-    model = TemplateType
-    ordering = ('template',)
-
-
 @admin.register(ResourceType)
 class ResourceTypeAdmin(admin.ModelAdmin):
     model = ResourceType
@@ -283,6 +277,12 @@ class ResourceTypeAdmin(admin.ModelAdmin):
     list_display = (
         'resource_type_name', 'resource_type_abbreviation'
     )
+
+
+@admin.register(TemplateType)
+class TemplateTypeAdmin(admin.ModelAdmin):
+    model = TemplateType
+    ordering = ('template',)
 
 
 @admin.register(UseType)

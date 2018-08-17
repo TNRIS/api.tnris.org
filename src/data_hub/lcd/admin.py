@@ -196,17 +196,17 @@ class ResourceAdmin(admin.ModelAdmin):
                        'last_modified',
                        'collection_id',
                        'area_type_id',
-                       'resource_type')
+                       'resource_type_id')
 
     ordering = ('collection_id',)
     list_display = (
-        'collection_id', 'area_type_id', 'resource', 'resource_type', 'last_modified'
+        'collection_id', 'area_type_id', 'resource', 'resource_type_id', 'last_modified'
     )
     search_fields = ('collection_id', 'area_type_id', 'resource', 'resource_type')
     list_filter = (
         'collection_id',
         'area_type_id',
-        'resource_type'
+        'resource_type_id'
     )
 
     # override the /resource/add/ form

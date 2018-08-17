@@ -966,12 +966,11 @@ class Resource(models.Model):
         on_delete=models.CASCADE,
         related_name='collections'
     )
-    resource_type = models.ForeignKey(
+    resource_type_id = models.ForeignKey(
         'ResourceType',
         db_column='resource_type_id',
         on_delete=models.CASCADE,
-        related_name='resource_types',
-        default='eb7741f9-e527-46e9-bb0e-a25de7babab0'
+        related_name='resource_types'
     )
     created = models.DateTimeField(
         'Created',

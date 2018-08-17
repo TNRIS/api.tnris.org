@@ -1,3 +1,6 @@
+@import url("css/normalize.css");
+@import url("css/sakura.css");
+
 body {
   margin: 0;
   padding: 0;

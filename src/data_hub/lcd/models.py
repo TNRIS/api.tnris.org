@@ -121,46 +121,6 @@ class AreaType(models.Model):
         return self.area_type_name + ' ' + self.area_type
 
 
-class BandType(models.Model):
-    """Available band types domain table"""
-
-    class Meta:
-        db_table = 'band_type'
-        verbose_name = 'Band Type'
-        verbose_name_plural = 'Band Types'
-        unique_together = (
-            'band_name',
-            'band_abbreviation'
-        )
-
-    band_type_id = models.UUIDField(
-        'Band Type ID',
-        primary_key=True,
-        default=uuid.uuid4,
-        editable=False
-    )
-    band_name = models.TextField(
-        'Band Name',
-        max_length=100,
-        unique=True
-    )
-    band_abbreviation = models.TextField(
-        'Band Abbreviation',
-        max_length=10
-    )
-    created = models.DateTimeField(
-        'Created',
-        auto_now_add=True
-    )
-    last_modified = models.DateTimeField(
-        'Last Modified',
-        auto_now=True
-    )
-
-    def __str__(self):
-        return self.band_abbreviation
-
-
 class CategoryType(models.Model):
     """Data categories domain table"""
 
@@ -191,38 +151,6 @@ class CategoryType(models.Model):
 
     def __str__(self):
         return self.category
-
-
-class DataType(models.Model):
-    """Available data types domain table"""
-
-    class Meta:
-        db_table = 'data_type'
-        verbose_name = 'Data Type'
-        verbose_name_plural = 'Data Types'
-
-    data_type_id = models.UUIDField(
-        'Data Type ID',
-        primary_key=True,
-        default=uuid.uuid4,
-        editable=False
-    )
-    data_type = models.TextField(
-        'Data Type',
-        max_length=20,
-        unique=True
-    )
-    created = models.DateTimeField(
-        'Created',
-        auto_now_add=True
-    )
-    last_modified = models.DateTimeField(
-        'Last Modified',
-        auto_now=True
-    )
-
-    def __str__(self):
-        return self.data_type
 
 
 class EpsgType(models.Model):
@@ -477,47 +405,6 @@ class UseType(models.Model):
 ********** Lookup Tables **********
 """
 
-class BandRelate(models.Model):
-    """
-    Defines the spectral bands that a collection in the data catalog is associated with.
-    Related to :model:`lcd.band_type` and :model:`lcd.collection`.
-    """
-
-    class Meta:
-        db_table = 'band_relate'
-        verbose_name = 'Band Lookup'
-        verbose_name_plural = 'Band Lookups'
-
-    band_relate_id = models.UUIDField(
-        'Band Relate ID',
-        primary_key=True,
-        default=uuid.uuid4,
-        editable=False
-    )
-    band_type_id = models.ForeignKey(
-        'BandType',
-        db_column='band_type_id',
-        on_delete=models.CASCADE,
-        related_name='band_types'
-    )
-    collection_id = models.ForeignKey(
-        'Collection',
-        db_column='collection_id',
-        on_delete=models.CASCADE,
-        related_name='band_collections'
-    )
-    created = models.DateTimeField(
-        'Created',
-        auto_now_add=True
-    )
-    last_modified = models.DateTimeField(
-        'Last Modified',
-        auto_now=True
-    )
-
-    def __str__(self):
-        return self.band_type_id.band_abbreviation
-
 
 class CategoryRelate(models.Model):
     """
@@ -563,52 +450,6 @@ class CategoryRelate(models.Model):
 
     def __str__(self):
         return self.category_type_id.category
-
-
-class DataTypeRelate(models.Model):
-    """
-    Defines the data types associated with collections in the data catalog.
-    Related to :model:`lcd.data_type` and :model:`lcd.collection`.
-    """
-
-    class Meta:
-        db_table = 'data_type_relate'
-        verbose_name = 'Data Type Lookup'
-        verbose_name_plural = 'Data Type Lookups'
-        unique_together = (
-            'data_type_id',
-            'collection_id'
-        )
-
-    data_type_relate_id = models.UUIDField(
-        'Data Type Relate ID',
-        primary_key=True,
-        default=uuid.uuid4,
-        editable=False
-    )
-    data_type_id = models.ForeignKey(
-        'DataType',
-        db_column='data_type_id',
-        on_delete=models.CASCADE,
-        related_name='data_types'
-    )
-    collection_id = models.ForeignKey(
-        'Collection',
-        db_column='collection_id',
-        on_delete=models.CASCADE,
-        related_name='data_type_collections'
-    )
-    created = models.DateTimeField(
-        'Created',
-        auto_now_add=True
-    )
-    last_modified = models.DateTimeField(
-        'Last Modified',
-        auto_now=True
-    )
-
-    def __str__(self):
-        return self.data_type_id.data_type
 
 
 class EpsgRelate(models.Model):

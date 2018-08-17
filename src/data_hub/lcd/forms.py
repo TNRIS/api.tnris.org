@@ -7,12 +7,8 @@ from django.utils.safestring import mark_safe
 from django.db.utils import ProgrammingError
 from .models import (Collection,
                      AreaType,
-                     BandRelate,
-                     BandType,
                      CategoryRelate,
                      CategoryType,
-                     DataTypeRelate,
-                     DataType,
                      EpsgRelate,
                      EpsgType,
                      FileTypeRelate,
@@ -91,9 +87,7 @@ class CollectionForm(forms.ModelForm):
         return input
 
     # fire function to create the relate form inputs
-    bands = create_relate_field('band_type_id', 'band_name', BandType, 'band_name')
     categories = create_relate_field('category_type_id', 'category', CategoryType, 'category')
-    data_types = create_relate_field('data_type_id', 'data_type', DataType, 'data_type')
     projections = create_relate_field('epsg_type_id', 'epsg_code', EpsgType, 'epsg_code')
     file_types = create_relate_field('file_type_id', 'file_type', FileType, 'file_type')
     resolutions = create_relate_field('resolution_type_id', 'resolution', ResolutionType, 'resolution')
@@ -115,9 +109,7 @@ class CollectionForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if self.instance:
-            self.attribute_initial_values('bands', BandRelate, 'band_type_id')
             self.attribute_initial_values('categories', CategoryRelate, 'category_type_id')
-            self.attribute_initial_values('data_types', DataTypeRelate, 'data_type_id')
             self.attribute_initial_values('projections', EpsgRelate, 'epsg_type_id')
             self.attribute_initial_values('file_types', FileTypeRelate, 'file_type_id')
             self.attribute_initial_values('resolutions', ResolutionRelate, 'resolution_type_id')
@@ -262,9 +254,7 @@ class CollectionForm(forms.ModelForm):
     # custom handling of various relationships on save method
     def save(self, commit=True):
         # on save fire function to apply updates to relate tables
-        self.update_relate_table('bands', BandRelate, 'band_type_id', BandType)
         self.update_relate_table('categories', CategoryRelate, 'category_type_id', CategoryType)
-        self.update_relate_table('data_types', DataTypeRelate, 'data_type_id', DataType)
         self.update_relate_table('projections', EpsgRelate, 'epsg_type_id', EpsgType)
         self.update_relate_table('file_types', FileTypeRelate, 'file_type_id', FileType)
         self.update_relate_table('resolutions', ResolutionRelate, 'resolution_type_id', ResolutionType)

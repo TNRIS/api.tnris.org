@@ -4,7 +4,6 @@ from django.contrib.admin.widgets import AdminDateWidget
 from string import Template
 from django.utils.safestring import mark_safe
 
-# from django.core.exceptions import ValidationError
 from django.db.utils import ProgrammingError
 from .models import (Collection,
                      AreaType,

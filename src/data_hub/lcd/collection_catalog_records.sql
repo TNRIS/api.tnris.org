@@ -31,6 +31,7 @@ SELECT collection.collection_id,
 	string_agg(distinct file_type.file_type, ',' order by file_type.file_type) as file_type,
 	string_agg(distinct resolution_type.resolution, '/' order by resolution_type.resolution) as resolution,
 	string_agg(distinct use_type.use_type, ',' order by use_type.use_type) as recommended_use,
+  string_agg(distinct resource_type.resource_type_abbreviation, ',' order by resource_type.resource_type_abbreviation) as resource_types,
 	agency_type.agency_name,
 	agency_type.agency_abbreviation,
 	agency_type.agency_website,
@@ -60,6 +61,9 @@ LEFT JOIN resolution_type ON resolution_type.resolution_type_id=resolution_relat
 
 LEFT JOIN use_relate ON use_relate.collection_id=collection.collection_id
 LEFT JOIN use_type ON use_type.use_type_id=use_relate.use_type_id
+
+LEFT JOIN resource ON resource.collection_id=collection.collection_id
+LEFT JOIN resource_type ON resource_type.resource_type_id=resource.resource_type_id
 
 LEFT JOIN agency_type ON agency_type.agency_type_id=collection.agency_type_id
 

@@ -1066,14 +1066,8 @@ class CcrView(models.Model):
     tags = models.TextField(
         'Tags'
     )
-    band = models.TextField(
-        'Band'
-    )
     category = models.TextField(
         'Category'
-    )
-    data_type = models.TextField(
-        'Data Type'
     )
     spatial_reference = models.TextField(
         'Spatial Reference'

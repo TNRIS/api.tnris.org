@@ -7,14 +7,10 @@ from .models import (
     AcdcView,
     AgencyType,
     AreaType,
-    BandRelate,
-    BandType,
     CategoryRelate,
     CategoryType,
     Collection,
     CcrView,
-    DataTypeRelate,
-    DataType,
     EpsgRelate,
     EpsgType,
     FileTypeRelate,
@@ -50,20 +46,6 @@ class AgencyTypeAdmin(admin.ModelAdmin):
 # class AreaTypeAdmin(admin.ModelAdmin):
 #     model = AreaType
 #     ordering = ('area_type_name',)
-
-
-# Relate tables managed through 'Collection' form as collection records are
-# required to create/manage relate records
-# @admin.register(BandRelate)
-# class BandRelateAdmin(admin.ModelAdmin):
-#     model = BandRelate
-#     ordering = ('band_type_id',)
-
-
-@admin.register(BandType)
-class BandTypeAdmin(admin.ModelAdmin):
-    model = BandType
-    ordering = ('band_abbreviation',)
 
 
 # Relate tables managed through 'Collection' form as collection records are
@@ -126,8 +108,7 @@ class CollectionAdmin(admin.ModelAdmin):
         }),
         ('Lookup/Relate Associations', {
             'classes': ('grp-collapse grp-closed',),
-            'fields': (('bands', 'categories'),
-                       ('data_types', 'projections'),
+            'fields': (('projections', 'categories'),
                        ('file_types', 'resolutions'),
                        'uses')
         })
@@ -155,20 +136,6 @@ class CollectionAdmin(admin.ModelAdmin):
 # class CcrViewAdmin(admin.ModelAdmin):
 #     model = CcrView
 #     ordering = ('name',)
-
-
-# Relate tables managed through 'Collection' form as collection records are
-# required to create/manage relate records
-# @admin.register(DataTypeRelate)
-# class DataTypeRelateAdmin(admin.ModelAdmin):
-#     model = DataTypeRelate
-#     ordering = ('data_type_id',)
-
-
-@admin.register(DataType)
-class DataTypeAdmin(admin.ModelAdmin):
-    model = DataType
-    ordering = ('data_type',)
 
 
 # Relate tables managed through 'Collection' form as collection records are

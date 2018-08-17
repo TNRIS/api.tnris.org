@@ -62,8 +62,8 @@ LEFT JOIN resolution_type ON resolution_type.resolution_type_id=resolution_relat
 LEFT JOIN use_relate ON use_relate.collection_id=collection.collection_id
 LEFT JOIN use_type ON use_type.use_type_id=use_relate.use_type_id
 
-LEFT JOIN resource ON resource.collection_id=collection.collection_id
-LEFT JOIN resource_type ON resource_type.resource_type_id=resource.resource_type_id
+LEFT JOIN resource_type_relate ON resource_type_relate.collection_id=collection.collection_id
+LEFT JOIN resource_type ON resource_type.resource_type_id=resource_type_relate.resource_type_id
 
 LEFT JOIN agency_type ON agency_type.agency_type_id=collection.agency_type_id
 

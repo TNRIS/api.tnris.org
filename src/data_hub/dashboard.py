@@ -35,7 +35,10 @@ class CustomIndexDashboard(Dashboard):
             collapsible=True,
             column=1,
             css_classes=('grp-collapse grp-closed',),
-            exclude=('django.contrib.*','lcd.models.Collection'),
+            exclude=('django.contrib.*',
+                     'lcd.models.Collection',
+                     'lcd.models.ResourceType',
+                     'lcd.models.Resource'),
         ))
 
         self.children.append(modules.AppList(

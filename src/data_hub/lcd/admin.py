@@ -7,14 +7,10 @@ from .models import (
     AcdcView,
     AgencyType,
     AreaType,
-    BandRelate,
-    BandType,
     CategoryRelate,
     CategoryType,
     Collection,
     CcrView,
-    DataTypeRelate,
-    DataType,
     EpsgRelate,
     EpsgType,
     FileTypeRelate,
@@ -23,6 +19,8 @@ from .models import (
     ResolutionRelate,
     ResolutionType,
     Resource,
+    ResourceType,
+    ResourceTypeRelate,
     TemplateType,
     UseRelate,
     UseType
@@ -48,20 +46,6 @@ class AgencyTypeAdmin(admin.ModelAdmin):
 # class AreaTypeAdmin(admin.ModelAdmin):
 #     model = AreaType
 #     ordering = ('area_type_name',)
-
-
-# Relate tables managed through 'Collection' form as collection records are
-# required to create/manage relate records
-# @admin.register(BandRelate)
-# class BandRelateAdmin(admin.ModelAdmin):
-#     model = BandRelate
-#     ordering = ('band_type_id',)
-
-
-@admin.register(BandType)
-class BandTypeAdmin(admin.ModelAdmin):
-    model = BandType
-    ordering = ('band_abbreviation',)
 
 
 # Relate tables managed through 'Collection' form as collection records are
@@ -124,8 +108,7 @@ class CollectionAdmin(admin.ModelAdmin):
         }),
         ('Lookup/Relate Associations', {
             'classes': ('grp-collapse grp-closed',),
-            'fields': (('bands', 'categories'),
-                       ('data_types', 'projections'),
+            'fields': (('projections', 'categories'),
                        ('file_types', 'resolutions'),
                        'uses')
         })
@@ -153,20 +136,6 @@ class CollectionAdmin(admin.ModelAdmin):
 # class CcrViewAdmin(admin.ModelAdmin):
 #     model = CcrView
 #     ordering = ('name',)
-
-
-# Relate tables managed through 'Collection' form as collection records are
-# required to create/manage relate records
-# @admin.register(DataTypeRelate)
-# class DataTypeRelateAdmin(admin.ModelAdmin):
-#     model = DataTypeRelate
-#     ordering = ('data_type_id',)
-
-
-@admin.register(DataType)
-class DataTypeAdmin(admin.ModelAdmin):
-    model = DataType
-    ordering = ('data_type',)
 
 
 # Relate tables managed through 'Collection' form as collection records are
@@ -226,16 +195,18 @@ class ResourceAdmin(admin.ModelAdmin):
                        'filesize',
                        'last_modified',
                        'collection_id',
-                       'area_type_id')
+                       'area_type_id',
+                       'resource_type')
 
     ordering = ('collection_id',)
     list_display = (
-        'collection_id', 'area_type_id', 'resource', 'last_modified'
+        'collection_id', 'area_type_id', 'resource', 'resource_type', 'last_modified'
     )
-    search_fields = ('collection_id', 'area_type_id', 'resource')
+    search_fields = ('collection_id', 'area_type_id', 'resource', 'resource_type')
     list_filter = (
         'collection_id',
-        'area_type_id'
+        'area_type_id',
+        'resource_type'
     )
 
     # override the /resource/add/ form
@@ -267,6 +238,23 @@ class ResourceAdmin(admin.ModelAdmin):
         self.original_declared_fields = self.form.declared_fields
 
 
+# Resource Type Relate table managed through 'Resource' form as s3 zipfiles are
+# required to create/manage relate records
+# @admin.register(ResourceTypeRelate)
+# class ResourceTypeRelateAdmin(admin.ModelAdmin):
+#     model = ResourceTypeRelate
+#     ordering = ('collection_id',)
+
+
+@admin.register(ResourceType)
+class ResourceTypeAdmin(admin.ModelAdmin):
+    model = ResourceType
+    ordering = ('resource_type_name',)
+    list_display = (
+        'resource_type_name', 'resource_type_abbreviation'
+    )
+
+
 @admin.register(TemplateType)
 class TemplateTypeAdmin(admin.ModelAdmin):
     model = TemplateType
@@ -285,74 +273,3 @@ class UseTypeAdmin(admin.ModelAdmin):
 # class UseRelateAdmin(admin.ModelAdmin):
 #     model = UseRelate
 #     ordering = ('use_type_id',)
-
-#
-# -------------------------------------
-#
-# EVEYTHING BELOW THIS LINE CAN BE DELETED.
-# Reminents from data concierge
-#
-# -------------------------------------
-#
-#
-
-#
-# class PhotoIndexInlineAdmin(admin.StackedInline):
-#     classes = ('grp-collapse grp-closed',)
-#     inline_classes = ('grp-collapse grp-closed',)
-#     model = PhotoIndex
-#     extra = 0
-#
-#
-# class CountyRelateInlineAdmin(admin.StackedInline):
-#     classes = ('grp-collapse grp-closed',)
-#     inline_classes = ('grp-collapse grp-closed',)
-#     model = CountyRelate
-#     extra = 0
-#     ordering = ('county__name',)
-#
-#
-# class CollectionAdmin(admin.ModelAdmin):
-#     model = Collection
-#     form = CollectionForm
-#     fieldsets = (
-#         ('Collection Information', {
-#             'fields': ('collection', 'agency', 'from_date', 'to_date', 'counties', 'public'),
-#         }),
-#         ('Remarks', {
-#             'fields': ('remarks',)
-#         })
-#     )
-#     inlines = [PhotoIndexInlineAdmin, LineIndexInlineAdmin,
-#                MicroficheIndexInlineAdmin, ProductInlineAdmin]
-#     list_display = (
-#         'collection', 'agency', 'from_date', 'to_date', 'county_names', 'public'
-#     )
-#     ordering = ('agency__name', 'from_date')
-#     search_fields = ('collection',)
-#     list_filter = (
-#         'public',
-#         CollectionAgencyNameFilter,
-#         CollectionCountyFilter
-#     )
-#
-#     def county_names(self, collection):
-#         county_relates = (
-#             CountyRelate.objects.filter(collection=collection)
-#                 .select_related('county').values_list("county__name")
-#         )
-#         counties = sorted([c[0] for c in county_relates])
-#         return "{}".format(", ".join(name for name in counties))
-#
-#     county_names.short_description = "Counties in Collection"
-#
-#
-# # Register your models here.
-# class CountyAdmin(admin.ModelAdmin):
-#     list_filter = (
-#         ('name', CountyDropdownFilter),
-#     )
-#     list_per_page = 25
-#     ordering = ('name',)
-#     list_display = ('name', 'fips')
-#     # search_fields = ['name', 'fips']

@@ -11,6 +11,61 @@ from django.db import models
 ********** Domain Tables **********
 """
 
+class AgencyType(models.Model):
+    """Agencies domain table"""
+
+    class Meta:
+        db_table = 'agency_type'
+        verbose_name = 'Agency Type'
+        verbose_name_plural = 'Agency Types'
+        unique_together = (
+            'agency_name',
+            'agency_abbreviation',
+            'agency_website',
+            'agency_contact'
+        )
+
+    agency_type_id = models.UUIDField(
+        'Agency Type ID',
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False
+    )
+    agency_name = models.TextField(
+        'Agency Name',
+        max_length=100
+    )
+    agency_abbreviation = models.TextField(
+        'Agency Abbreviation',
+        max_length=100,
+        null=True,
+        blank=True
+    )
+    agency_website = models.URLField(
+        'Agency Website',
+        max_length=255,
+        null=True,
+        blank=True
+    )
+    agency_contact = models.TextField(
+        'Agency Contact',
+        max_length=255,
+        null=True,
+        blank=True
+    )
+    created = models.DateTimeField(
+        'Created',
+        auto_now_add=True
+    )
+    last_modified = models.DateTimeField(
+        'Last Modified',
+        auto_now=True
+    )
+
+    def __str__(self):
+        return self.agency_name
+
+
 class AreaType(models.Model):
     """Domain table defining areas that resources intersect"""
 
@@ -49,6 +104,10 @@ class AreaType(models.Model):
         'Original Data Download ID',
         null=True
     )
+    area_code = models.TextField(
+        'Area Code',
+        max_length=11
+    )
     created = models.DateTimeField(
         'Created',
         auto_now_add=True
@@ -60,46 +119,6 @@ class AreaType(models.Model):
 
     def __str__(self):
         return self.area_type_name + ' ' + self.area_type
-
-
-class BandType(models.Model):
-    """Available band types domain table"""
-
-    class Meta:
-        db_table = 'band_type'
-        verbose_name = 'Band Type'
-        verbose_name_plural = 'Band Types'
-        unique_together = (
-            'band_name',
-            'band_abbreviation'
-        )
-
-    band_type_id = models.UUIDField(
-        'Band Type ID',
-        primary_key=True,
-        default=uuid.uuid4,
-        editable=False
-    )
-    band_name = models.TextField(
-        'Band Name',
-        max_length=100,
-        unique=True
-    )
-    band_abbreviation = models.TextField(
-        'Band Abbreviation',
-        max_length=10
-    )
-    created = models.DateTimeField(
-        'Created',
-        auto_now_add=True
-    )
-    last_modified = models.DateTimeField(
-        'Last Modified',
-        auto_now=True
-    )
-
-    def __str__(self):
-        return self.band_abbreviation
 
 
 class CategoryType(models.Model):
@@ -132,38 +151,6 @@ class CategoryType(models.Model):
 
     def __str__(self):
         return self.category
-
-
-class DataType(models.Model):
-    """Available data types domain table"""
-
-    class Meta:
-        db_table = 'data_type'
-        verbose_name = 'Data Type'
-        verbose_name_plural = 'Data Types'
-
-    data_type_id = models.UUIDField(
-        'Data Type ID',
-        primary_key=True,
-        default=uuid.uuid4,
-        editable=False
-    )
-    data_type = models.TextField(
-        'Data Type',
-        max_length=20,
-        unique=True
-    )
-    created = models.DateTimeField(
-        'Created',
-        auto_now_add=True
-    )
-    last_modified = models.DateTimeField(
-        'Last Modified',
-        auto_now=True
-    )
-
-    def __str__(self):
-        return self.data_type
 
 
 class EpsgType(models.Model):
@@ -307,47 +294,35 @@ class ResolutionType(models.Model):
         return self.resolution
 
 
-class AgencyType(models.Model):
-    """Agencies domain table"""
+class ResourceType(models.Model):
+    """Available resource download types domain table"""
 
     class Meta:
-        db_table = 'agency_type'
-        verbose_name = 'Agency Type'
-        verbose_name_plural = 'Agency Types'
-        unique_together = (
-            'agency_name',
-            'agency_abbreviation',
-            'agency_website',
-            'agency_contact'
-        )
+        db_table = 'resource_type'
+        verbose_name = 'Resource Type'
+        verbose_name_plural = 'Resource Types'
 
-    agency_type_id = models.UUIDField(
-        'Agency Type ID',
+    unique_together = (
+        'resource_type_id',
+        'resource_type_name',
+        'resource_type_abbreviation'
+    )
+
+    resource_type_id = models.UUIDField(
+        'Resource Type ID',
         primary_key=True,
         default=uuid.uuid4,
         editable=False
     )
-    agency_name = models.TextField(
-        'Agency Name',
-        max_length=100
+    resource_type_name = models.TextField(
+        'Resource Type Name',
+        max_length=50,
+        unique=True
     )
-    agency_abbreviation = models.TextField(
-        'Agency Abbreviation',
-        max_length=100,
-        null=True,
-        blank=True
-    )
-    agency_website = models.URLField(
-        'Agency Website',
-        max_length=255,
-        null=True,
-        blank=True
-    )
-    agency_contact = models.TextField(
-        'Agency Contact',
-        max_length=255,
-        null=True,
-        blank=True
+    resource_type_abbreviation = models.TextField(
+        'Resource Type Abbreviation',
+        max_length=10,
+        unique=True
     )
     created = models.DateTimeField(
         'Created',
@@ -359,7 +334,7 @@ class AgencyType(models.Model):
     )
 
     def __str__(self):
-        return self.agency_name
+        return self.resource_type_name
 
 
 class TemplateType(models.Model):
@@ -430,47 +405,6 @@ class UseType(models.Model):
 ********** Lookup Tables **********
 """
 
-class BandRelate(models.Model):
-    """
-    Defines the spectral bands that a collection in the data catalog is associated with.
-    Related to :model:`lcd.band_type` and :model:`lcd.collection`.
-    """
-
-    class Meta:
-        db_table = 'band_relate'
-        verbose_name = 'Band Lookup'
-        verbose_name_plural = 'Band Lookups'
-
-    band_relate_id = models.UUIDField(
-        'Band Relate ID',
-        primary_key=True,
-        default=uuid.uuid4,
-        editable=False
-    )
-    band_type_id = models.ForeignKey(
-        'BandType',
-        db_column='band_type_id',
-        on_delete=models.CASCADE,
-        related_name='band_types'
-    )
-    collection_id = models.ForeignKey(
-        'Collection',
-        db_column='collection_id',
-        on_delete=models.CASCADE,
-        related_name='band_collections'
-    )
-    created = models.DateTimeField(
-        'Created',
-        auto_now_add=True
-    )
-    last_modified = models.DateTimeField(
-        'Last Modified',
-        auto_now=True
-    )
-
-    def __str__(self):
-        return self.band_type_id.band_abbreviation
-
 
 class CategoryRelate(models.Model):
     """
@@ -516,52 +450,6 @@ class CategoryRelate(models.Model):
 
     def __str__(self):
         return self.category_type_id.category
-
-
-class DataTypeRelate(models.Model):
-    """
-    Defines the data types associated with collections in the data catalog.
-    Related to :model:`lcd.data_type` and :model:`lcd.collection`.
-    """
-
-    class Meta:
-        db_table = 'data_type_relate'
-        verbose_name = 'Data Type Lookup'
-        verbose_name_plural = 'Data Type Lookups'
-        unique_together = (
-            'data_type_id',
-            'collection_id'
-        )
-
-    data_type_relate_id = models.UUIDField(
-        'Data Type Relate ID',
-        primary_key=True,
-        default=uuid.uuid4,
-        editable=False
-    )
-    data_type_id = models.ForeignKey(
-        'DataType',
-        db_column='data_type_id',
-        on_delete=models.CASCADE,
-        related_name='data_types'
-    )
-    collection_id = models.ForeignKey(
-        'Collection',
-        db_column='collection_id',
-        on_delete=models.CASCADE,
-        related_name='data_type_collections'
-    )
-    created = models.DateTimeField(
-        'Created',
-        auto_now_add=True
-    )
-    last_modified = models.DateTimeField(
-        'Last Modified',
-        auto_now=True
-    )
-
-    def __str__(self):
-        return self.data_type_id.data_type
 
 
 class EpsgRelate(models.Model):
@@ -700,6 +588,52 @@ class ResolutionRelate(models.Model):
 
     def __str__(self):
         return self.resolution_type_id.resolution
+
+
+class ResourceTypeRelate(models.Model):
+    """
+    Defines the Resource Types for collections in the data catalog.
+    Related to :model:`lcd.resource_type` and :model:`lcd.collection`.
+    """
+
+    class Meta:
+        db_table = 'resource_type_relate'
+        verbose_name = 'Resource Type Lookup'
+        verbose_name_plural = 'Resource Type Lookups'
+        unique_together = (
+            'resource_type_id',
+            'collection_id'
+        )
+
+    resource_type_relate_id = models.UUIDField(
+        'Resource Type Relate ID',
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False
+    )
+    resource_type_id = models.ForeignKey(
+        'ResourceType',
+        db_column='resource_type_id',
+        on_delete=models.CASCADE,
+        related_name='resource_type'
+    )
+    collection_id = models.ForeignKey(
+        'Collection',
+        db_column='collection_id',
+        on_delete=models.CASCADE,
+        related_name='resource_type_collections'
+    )
+    created = models.DateTimeField(
+        'Created',
+        auto_now_add=True
+    )
+    last_modified = models.DateTimeField(
+        'Last Modified',
+        auto_now=True
+    )
+
+    def __str__(self):
+        return self.resource_type_id.resource_type_name
 
 
 class UseRelate(models.Model):
@@ -1032,6 +966,13 @@ class Resource(models.Model):
         on_delete=models.CASCADE,
         related_name='collections'
     )
+    resource_type = models.ForeignKey(
+        'ResourceType',
+        db_column='resource_type_id',
+        on_delete=models.CASCADE,
+        related_name='resource_types',
+        default='eb7741f9-e527-46e9-bb0e-a25de7babab0'
+    )
     created = models.DateTimeField(
         'Created',
         auto_now_add=True
@@ -1125,14 +1066,8 @@ class CcrView(models.Model):
     tags = models.TextField(
         'Tags'
     )
-    band = models.TextField(
-        'Band'
-    )
     category = models.TextField(
         'Category'
-    )
-    data_type = models.TextField(
-        'Data Type'
     )
     spatial_reference = models.TextField(
         'Spatial Reference'

@@ -749,6 +749,52 @@ class ResolutionRelate(models.Model):
         return self.resolution_type_id.resolution
 
 
+class ResourceTypeRelate(models.Model):
+    """
+    Defines the Resource Types for collections in the data catalog.
+    Related to :model:`lcd.resource_type` and :model:`lcd.collection`.
+    """
+
+    class Meta:
+        db_table = 'resource_type_relate'
+        verbose_name = 'Resource Type Lookup'
+        verbose_name_plural = 'Resource Type Lookups'
+        unique_together = (
+            'resource_type_id',
+            'collection_id'
+        )
+
+    resource_type_relate_id = models.UUIDField(
+        'Resource Type Relate ID',
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False
+    )
+    resource_type_id = models.ForeignKey(
+        'ResourceType',
+        db_column='resource_type_id',
+        on_delete=models.CASCADE,
+        related_name='resource_type'
+    )
+    collection_id = models.ForeignKey(
+        'Collection',
+        db_column='collection_id',
+        on_delete=models.CASCADE,
+        related_name='resource_type_collections'
+    )
+    created = models.DateTimeField(
+        'Created',
+        auto_now_add=True
+    )
+    last_modified = models.DateTimeField(
+        'Last Modified',
+        auto_now=True
+    )
+
+    def __str__(self):
+        return self.resource_type_id.resource_type_name
+
+
 class UseRelate(models.Model):
     """
     Defines the reccommended uses for collections in the data catalog.

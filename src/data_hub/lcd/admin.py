@@ -202,7 +202,7 @@ class ResourceAdmin(admin.ModelAdmin):
     list_display = (
         'collection_id', 'area_type_id', 'resource', 'resource_type_id', 'last_modified'
     )
-    search_fields = ('collection_id', 'area_type_id', 'resource', 'resource_type_id')
+    search_fields = ('collection_id__name', 'area_type_id__area_type_name', 'resource', 'resource_type_id__resource_type_name')
     list_filter = (
         'collection_id',
         'area_type_id',

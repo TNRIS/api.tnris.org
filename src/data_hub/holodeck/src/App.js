@@ -6,7 +6,8 @@ import thunk from 'redux-thunk';
 
 import rootReducer from './reducers';
 
-import Catalog from './components/Catalog';
+// import ProductList from './components/ProductList';
+import CollectionList from './components/CollectionList';
 import NotFound from './components/NotFound';
 
 let store = createStore(rootReducer, applyMiddleware(thunk));
@@ -17,7 +18,7 @@ class App extends Component {
       <Provider store={store}>
         <BrowserRouter>
           <Switch>
-            <Route exact path="/" component={Catalog} />
+            <Route exact path="/" component={CollectionList} />
             <Route component={NotFound} />
           </Switch>
         </BrowserRouter>

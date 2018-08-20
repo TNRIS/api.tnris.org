@@ -1,3 +1,4 @@
-import * as collections from './collections';
+import * as productActions from './productActions';
+import * as collectionActions from './collectionActions';
 
-export {collections};
+export {collectionActions, productActions};

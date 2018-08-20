@@ -326,20 +326,16 @@ class ResourceForm(forms.ModelForm):
     # generic function to retrieve the associated Collection object
     def get_collection_obj(self, collection_id):
         record = Collection.objects.get(collection_id=collection_id)
-        print('collection', record)
         return record
 
     # generic function to retrieve the associated AreaType object
     def get_area_obj(self, area_code):
         record = AreaType.objects.get(area_code=area_code)
-        print('area', record)
         return record
 
     # generic function to retrieve the associated ResourceType object
     def get_resource_type_obj(self, abbreviation):
-        print('getting resource type object')
         record = ResourceType.objects.get(resource_type_abbreviation=abbreviation)
-        print('resource type', record)
         return record
 
     # generic function to list s3 bucket zipfiles
@@ -373,16 +369,14 @@ class ResourceForm(forms.ModelForm):
         # go get all associated s3 zipfiles and compile them into single list
         prefix = "%s/resources/" % (self.cleaned_data['collection'])
         s3_zipfiles = self.get_s3_zipfiles(prefix)
-        print(s3_zipfiles)
         # set aside list length so we know when we are on the last one
         total = len(s3_zipfiles)
         last_idx = total - 1
-        print(total, last_idx)
         # set aside list for tracking relate entries
         relates = []
         # iterate all (except last) s3 keys adding each as new record in resource table
         for idx, f in enumerate(s3_zipfiles):
-            print(f)
+            print(f['Key'])
             link = "https://s3.amazonaws.com/data.tnris.org/" + f['Key']
             # disassemble filename
             filename = f['Key'].split("/")[-1]
@@ -393,25 +387,22 @@ class ResourceForm(forms.ModelForm):
             # get the resource_type
             resource_type_obj = self.get_resource_type_obj(resource_type_abbr)
             # self attribute the file in case it is the last one
-            print('applying to self')
             self.instance.pk = None
             self.instance.collection_id = collection_obj
             self.instance.area_type_id = area_obj
-            self.instance.resource_type_id = resource_type_obj.resource_type_id
+            self.instance.resource_type_id = resource_type_obj
             self.instance.resource = link
             self.instance.filesize = f['Size']
             # if not the last file in the list, we'll just save it
             if idx != last_idx:
-                print('not last')
                 args = {
                     'collection_id': collection_obj,
                     'area_type_id': area_obj,
-                    'resource_type_id': resource_type_obj.resource_type_id,
+                    'resource_type_id': resource_type_obj,
                     'resource': link,
                     'filesize': f['Size']
                 }
                 Resource(**args).save()
-            print('saved')
             # if this resource type abbr isn't in the list, add it to the relate
             # table and then the list
             if resource_type_abbr not in relates:

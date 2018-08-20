@@ -30,6 +30,27 @@ SELECT collection.collection_id,
 	string_agg(distinct resolution_type.resolution, '/' order by resolution_type.resolution) as resolution,
 	string_agg(distinct use_type.use_type, ',' order by use_type.use_type) as recommended_use,
   string_agg(distinct resource_type.resource_type_abbreviation, ',' order by resource_type.resource_type_abbreviation) as resource_types,
+  CASE
+    WHEN (
+      (string_agg(distinct resource_type.resource_type_abbreviation, ',' order by resource_type.resource_type_abbreviation)
+      ~ '.*(HYPSO|LPC|VECTOR).*')
+      AND (string_agg(distinct resource_type.resource_type_abbreviation, ',' order by resource_type.resource_type_abbreviation)
+      ~ '.*(BW|NC|CIR|NC-CIR|DEM).*')
+      ) THEN 'Raster,Vector'
+    WHEN (
+      (string_agg(distinct resource_type.resource_type_abbreviation, ',' order by resource_type.resource_type_abbreviation)
+      ~ '.*(BW|NC|CIR|NC-CIR|DEM).*')
+      AND (string_agg(distinct resource_type.resource_type_abbreviation, ',' order by resource_type.resource_type_abbreviation)
+      !~ '.*(HYPSO|LPC|VECTOR).*')
+      ) THEN 'Raster'
+    WHEN (
+      (string_agg(distinct resource_type.resource_type_abbreviation, ',' order by resource_type.resource_type_abbreviation)
+      ~ '.*(HYPSO|LPC|VECTOR).*')
+      AND (string_agg(distinct resource_type.resource_type_abbreviation, ',' order by resource_type.resource_type_abbreviation)
+      !~ '.*(BW|NC|CIR|NC-CIR|DEM).*')
+      ) THEN 'Vector'
+    ELSE NULL
+  END AS data_types,
 	agency_type.agency_name,
 	agency_type.agency_abbreviation,
 	agency_type.agency_website,

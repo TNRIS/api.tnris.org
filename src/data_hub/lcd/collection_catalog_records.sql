@@ -51,6 +51,65 @@ SELECT collection.collection_id,
       ) THEN 'Vector'
     ELSE NULL
   END AS data_types,
+  CASE
+    WHEN (
+      (string_agg(distinct resource_type.resource_type_abbreviation, ',' order by resource_type.resource_type_abbreviation)
+      ~ '.*BW.*')
+      AND (string_agg(distinct resource_type.resource_type_abbreviation, ',' order by resource_type.resource_type_abbreviation)
+      ~ '.*NC.*')
+      AND (string_agg(distinct resource_type.resource_type_abbreviation, ',' order by resource_type.resource_type_abbreviation)
+      ~ '.*CIR.*')
+    ) THEN 'BW,NC,CIR'
+    WHEN (
+      (string_agg(distinct resource_type.resource_type_abbreviation, ',' order by resource_type.resource_type_abbreviation)
+      ~ '.*BW.*')
+      AND (string_agg(distinct resource_type.resource_type_abbreviation, ',' order by resource_type.resource_type_abbreviation)
+      ~ '.*NC.*')
+      AND (string_agg(distinct resource_type.resource_type_abbreviation, ',' order by resource_type.resource_type_abbreviation)
+      !~ '.*CIR.*')
+    ) THEN 'BW,NC'
+    WHEN (
+      (string_agg(distinct resource_type.resource_type_abbreviation, ',' order by resource_type.resource_type_abbreviation)
+      ~ '.*BW.*')
+      AND (string_agg(distinct resource_type.resource_type_abbreviation, ',' order by resource_type.resource_type_abbreviation)
+      !~ '.*NC.*')
+      AND (string_agg(distinct resource_type.resource_type_abbreviation, ',' order by resource_type.resource_type_abbreviation)
+      ~ '.*CIR.*')
+    ) THEN 'BW,CIR'
+    WHEN (
+      (string_agg(distinct resource_type.resource_type_abbreviation, ',' order by resource_type.resource_type_abbreviation)
+      !~ '.*BW.*')
+      AND (string_agg(distinct resource_type.resource_type_abbreviation, ',' order by resource_type.resource_type_abbreviation)
+      ~ '.*NC.*')
+      AND (string_agg(distinct resource_type.resource_type_abbreviation, ',' order by resource_type.resource_type_abbreviation)
+      ~ '.*CIR.*')
+    ) THEN 'NC,CIR'
+    WHEN (
+      (string_agg(distinct resource_type.resource_type_abbreviation, ',' order by resource_type.resource_type_abbreviation)
+      ~ '.*BW.*')
+      AND (string_agg(distinct resource_type.resource_type_abbreviation, ',' order by resource_type.resource_type_abbreviation)
+      !~ '.*NC.*')
+      AND (string_agg(distinct resource_type.resource_type_abbreviation, ',' order by resource_type.resource_type_abbreviation)
+      !~ '.*CIR.*')
+    ) THEN 'BW'
+    WHEN (
+      (string_agg(distinct resource_type.resource_type_abbreviation, ',' order by resource_type.resource_type_abbreviation)
+      !~ '.*BW.*')
+      AND (string_agg(distinct resource_type.resource_type_abbreviation, ',' order by resource_type.resource_type_abbreviation)
+      ~ '.*NC.*')
+      AND (string_agg(distinct resource_type.resource_type_abbreviation, ',' order by resource_type.resource_type_abbreviation)
+      !~ '.*CIR.*')
+    ) THEN 'NC'
+    WHEN (
+      (string_agg(distinct resource_type.resource_type_abbreviation, ',' order by resource_type.resource_type_abbreviation)
+      !~ '.*BW.*')
+      AND (string_agg(distinct resource_type.resource_type_abbreviation, ',' order by resource_type.resource_type_abbreviation)
+      !~ '.*NC.*')
+      AND (string_agg(distinct resource_type.resource_type_abbreviation, ',' order by resource_type.resource_type_abbreviation)
+      ~ '.*CIR.*')
+    ) THEN 'CIR'
+    ELSE NULL
+  END AS band_types,
 	agency_type.agency_name,
 	agency_type.agency_abbreviation,
 	agency_type.agency_website,

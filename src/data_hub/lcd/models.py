@@ -73,6 +73,7 @@ class AreaType(models.Model):
         db_table = 'area_type'
         verbose_name = 'Area Type'
         verbose_name_plural = 'Area Types'
+        ordering = ('area_type', 'area_type_name',)
         unique_together = (
             'area_type',
             'area_type_name'
@@ -301,6 +302,7 @@ class ResourceType(models.Model):
         db_table = 'resource_type'
         verbose_name = 'Resource Type'
         verbose_name_plural = 'Resource Types'
+        ordering = ('resource_type_name',)
 
     unique_together = (
         'resource_type_id',
@@ -697,6 +699,7 @@ class Collection(models.Model):
         db_table = 'collection'
         verbose_name = 'Collection'
         verbose_name_plural = 'Collections'
+        ordering = ('name',)
         unique_together = (
             'name',
             'acquisition_date',

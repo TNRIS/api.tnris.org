@@ -5,6 +5,11 @@ import {collections} from '../actions';
 
 
 class Catalog extends Component {
+  componentDidMount() {
+    this.props.fetchCollections();
+    console.log(this.props);
+  }
+
   render() {
     return (
       <div>
@@ -16,7 +21,7 @@ class Catalog extends Component {
           <tbody>
             {this.props.collections.map(collection => (
               <tr>
-                <td>{collection.text}</td>
+                <td>{collection.name}</td>
               </tr>
             ))}
           </tbody>
@@ -35,7 +40,9 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-
+    fetchCollections: () => {
+      dispatch(collections.fetchCollections());
+    }
   }
 }
 

@@ -59,8 +59,15 @@
                 </div>
             {% endif %}
           {% endfor %}
-
-
         {% endfor %}
     </fieldset>
+    <!-- CHUNK FOR RESOURCE TABLE UPDATE PROGRESS BAR -->
+    <div id='progress-bar'>
+      <p id='progress-state'></p>
+    </div>
+    <p id='progress-note'>
+      <span id='progress-numbers'></span>
+      <br />
+      Note: Database changes occuring in memory and will not be permanently commited until all files have been updated and this process is 100% successful.
+    </p>
 {% endspaceless %}

@@ -18,6 +18,7 @@ from rest_framework import routers
 from rest_framework_swagger.views import get_swagger_view
 from rest_framework.schemas import get_schema_view
 from .viewsets import CollectionViewSet, ResourceViewSet, AreaViewSet
+from .views import resource_update_progress
 
 
 router = routers.DefaultRouter(trailing_slash=False)
@@ -30,5 +31,6 @@ schema_view = get_swagger_view(title='TNRIS Data API')
 urlpatterns = [
     path('', include(router.urls)),
     path('schema/', schema_view),
-    path('data_hub-auth/?', include('rest_framework.urls', namespace='rest_framework'))
+    path('data_hub-auth/?', include('rest_framework.urls', namespace='rest_framework')),
+    path('resource-update-progress/', resource_update_progress, name='resource-update-progress')
 ]

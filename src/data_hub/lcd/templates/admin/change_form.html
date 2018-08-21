@@ -6,6 +6,38 @@
 <!-- STYLESHEETS -->
 {% block stylesheets %}
     {{ block.super }}
+    {% if opts.resource_add_flag %}
+        <!-- CSS FOR RESOURCE TABLE SAVE FORM PROGRESS BAR -->
+        <style>
+          #progress-bar {
+            width: 80%;
+            background-color: #EDEDED;
+            text-align: center;
+            line-height: 30px;
+            margin: 0 auto;
+            margin-top: 50px;
+            display: none;
+            box-shadow: 0px 0px 6px 1px #303030;
+          }
+          #progress-state {
+            width: 0;
+            height: 30px;
+            background-color: #16da00;
+            text-align: center;
+            font-weight: bold;
+            line-height: 30px;
+          }
+          #progress-note {
+            background-color: white;
+            display: none;
+            text-align: center;
+            margin-top: 25px;
+          }
+          #progress-numbers {
+            font-weight: bold;
+          }
+        </style>
+    {% endif %}
 {% endblock %}
 
 <!-- JAVASCRIPTS -->
@@ -127,6 +159,39 @@
             {% if adminform and add %}
                 $('form#{{ opts.model_name }}_form :input:visible:enabled:first').focus()
             {% endif %}
+
+            {% if opts.resource_add_flag %}
+            // WIRE SAVE BUTTON TO FIRE RECURSIVE AJAX FOR PROGRESS BAR MANAGEMENT
+            // ON SAVE OF THE RESOURCE 'ADD' FORM
+                var progressUrl = "{% url 'resource-update-progress' %}";
+                function getProgressStatus() {
+
+                  $.ajax({
+                      url : progressUrl,
+                      dataType: "json",
+                      success : function (data) {
+                               $("#progress-bar").css("display", "block");
+                               $("#progress-note").css("display", "block");
+                               if (data['total'] === 0) {
+                                 $("#progress-numbers").html("Preparing update. Retrieving file list from s3...");
+                               }
+                               else {
+                                 var progressMath = parseFloat((data['current'] / data['total']) * 100).toFixed(2);
+                                 var progressPercentage = progressMath + '%';
+                                 $("#progress-state").html(progressPercentage);
+                                 $("#progress-state").css('width', progressPercentage);
+
+                                 var displayNumbers = data['current'] + " of " + data['total'] + " updated.";
+                                 $("#progress-numbers").html(displayNumbers);
+                               }
+                               $("footer").hide();
+                               setTimeout(getProgressStatus, 2000);
+                             }
+                      });
+                }
+                $('[name="_save"]').on('click', getProgressStatus);
+            {% endif %}
+
             });
         })(grp.jQuery);
     </script>

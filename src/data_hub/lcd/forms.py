@@ -290,6 +290,9 @@ class CollectionForm(forms.ModelForm):
 
         return super(CollectionForm, self).save(commit=commit)
 
+global progress_tracker
+progress_tracker = [0, 0]
+
 
 class ResourceForm(forms.ModelForm):
     # base model is Collection
@@ -372,6 +375,8 @@ class ResourceForm(forms.ModelForm):
         # set aside list length so we know when we are on the last one
         total = len(s3_zipfiles)
         last_idx = total - 1
+        global progress_tracker
+        progress_tracker = [0, total]
         # set aside list for tracking relate entries
         relates = []
         # iterate all (except last) s3 keys adding each as new record in resource table
@@ -411,6 +416,9 @@ class ResourceForm(forms.ModelForm):
                     'resource_type_id': resource_type_obj
                 }
                 ResourceTypeRelate(**args).save()
+
+            progress_tracker = [idx + 1, total]
             relates.append(resource_type_abbr)
         # return last record for form to validate and commit all new records
+        progress_tracker = [0, 0]
         return super(ResourceForm, self).save(commit=commit)

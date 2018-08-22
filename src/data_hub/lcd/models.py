@@ -1083,6 +1083,15 @@ class CcrView(models.Model):
     recommended_use = models.TextField(
         'Recommended Use'
     )
+    resource_types = models.TextField(
+        'Resource Types'
+    )
+    data_types = models.TextField(
+        'Data Types'
+    )
+    band_types = models.TextField(
+        'Band Types'
+    )
     agency_name = models.TextField(
         'Agency Name'
     )

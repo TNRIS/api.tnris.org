@@ -23,7 +23,7 @@ from .viewsets import CountyViewSet, ProductViewSet, MapserverViewSet
 router = routers.DefaultRouter(trailing_slash=False)
 router.register(r'counties/?', CountyViewSet)
 router.register(r'records/?', ProductViewSet, base_name="Product")
-router.register(r'mapserver/', MapserverViewSet, base_name="Mapserver")
+router.register(r'mapserver/?', MapserverViewSet, base_name="Mapserver")
 
 schema_view = get_swagger_view(title='Historical Imagery API')
 

@@ -342,7 +342,8 @@ class ResourceForm(forms.ModelForm):
         return record
 
     # generic function to list s3 bucket zipfiles
-    def get_s3_zipfiles(self, prefix, token='', list=[]):
+    list = []
+    def get_s3_zipfiles(self, prefix, token=''):
         if token == '':
             s3_zipfiles = self.client.list_objects_v2(
                 Bucket='data.tnris.org',
@@ -354,13 +355,13 @@ class ResourceForm(forms.ModelForm):
                 Bucket='data.tnris.org',
                 Prefix=prefix,
                 MaxKeys=1000,
-                ConintuationToken=token
+                ContinuationToken=token
             )
-        list = list + s3_zipfiles['Contents']
+        self.list = self.list + s3_zipfiles['Contents']
         if s3_zipfiles['IsTruncated'] is True:
-            self.get_s3_zipfiles(prefix, s3_zipfiles['NextContinuationToken'], list)
+            self.get_s3_zipfiles(prefix, s3_zipfiles['NextContinuationToken'])
         else:
-            return list
+            return
 
     # custom handling in save method for adding multiple new records
     def save(self, commit=False):
@@ -373,14 +374,14 @@ class ResourceForm(forms.ModelForm):
         prefix = "%s/resources/" % (self.cleaned_data['collection'])
         s3_zipfiles = self.get_s3_zipfiles(prefix)
         # set aside list length so we know when we are on the last one
-        total = len(s3_zipfiles)
+        total = len(self.list)
         last_idx = total - 1
         global progress_tracker
         progress_tracker = [0, total]
         # set aside list for tracking relate entries
         relates = []
         # iterate all (except last) s3 keys adding each as new record in resource table
-        for idx, f in enumerate(s3_zipfiles):
+        for idx, f in enumerate(self.list):
             print(f['Key'])
             link = "https://s3.amazonaws.com/data.tnris.org/" + f['Key']
             # disassemble filename

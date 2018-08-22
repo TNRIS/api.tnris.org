@@ -64,15 +64,15 @@ for c in response:
                 raise
             key = "%s/assets/%s" % (id, key_nm)
             # s3 upload
-            # s3.meta.client.upload_file(local, 'data.tnris.org', key)
-            # print("%s upload success!" % key)
+            s3.meta.client.upload_file(local, 'data.tnris.org', key)
+            print("%s upload success!" % key)
             img_counter += 1
             # update image path in collection table
             new_path = "https://s3.amazonaws.com/data.tnris.org/" + key
             query = "UPDATE %s SET %s = '%s' WHERE collection_id = '%s';" % (tablename, fld_nm, new_path, id)
-            # print(query)
-            # cur.execute(query)
-            # conn.commit()
+            print(query)
+            cur.execute(query)
+            conn.commit()
 
     # handle urls
     for idx, u in enumerate(urls):
@@ -111,17 +111,11 @@ for c in response:
                 bad_keys.append(src_key)
             url_counter += 1
             # update url path in collection table
-
-            # TODO: update 'filesize' attribute as well
-            #
-            #
-            # 
-
             new_path = "https://s3.amazonaws.com/data.tnris.org/" + key
             query = "UPDATE %s SET %s = '%s' WHERE collection_id = '%s';" % (tablename, fld_nm, new_path, id)
-            # print(query)
-            # cur.execute(query)
-            # conn.commit()
+            print(query)
+            cur.execute(query)
+            conn.commit()
 
 
 cur.close()

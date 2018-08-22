@@ -4,15 +4,11 @@ from django.contrib.admin.widgets import AdminDateWidget
 from string import Template
 from django.utils.safestring import mark_safe
 
-# from django.core.exceptions import ValidationError
 from django.db.utils import ProgrammingError
 from .models import (Collection,
-                     BandRelate,
-                     BandType,
+                     AreaType,
                      CategoryRelate,
                      CategoryType,
-                     DataTypeRelate,
-                     DataType,
                      EpsgRelate,
                      EpsgType,
                      FileTypeRelate,
@@ -20,6 +16,8 @@ from .models import (Collection,
                      ResolutionRelate,
                      ResolutionType,
                      Resource,
+                     ResourceType,
+                     ResourceTypeRelate,
                      UseRelate,
                      UseType)
 import os
@@ -89,9 +87,7 @@ class CollectionForm(forms.ModelForm):
         return input
 
     # fire function to create the relate form inputs
-    bands = create_relate_field('band_type_id', 'band_name', BandType, 'band_name')
     categories = create_relate_field('category_type_id', 'category', CategoryType, 'category')
-    data_types = create_relate_field('data_type_id', 'data_type', DataType, 'data_type')
     projections = create_relate_field('epsg_type_id', 'epsg_code', EpsgType, 'epsg_code')
     file_types = create_relate_field('file_type_id', 'file_type', FileType, 'file_type')
     resolutions = create_relate_field('resolution_type_id', 'resolution', ResolutionType, 'resolution')
@@ -113,9 +109,7 @@ class CollectionForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if self.instance:
-            self.attribute_initial_values('bands', BandRelate, 'band_type_id')
             self.attribute_initial_values('categories', CategoryRelate, 'category_type_id')
-            self.attribute_initial_values('data_types', DataTypeRelate, 'data_type_id')
             self.attribute_initial_values('projections', EpsgRelate, 'epsg_type_id')
             self.attribute_initial_values('file_types', FileTypeRelate, 'file_type_id')
             self.attribute_initial_values('resolutions', ResolutionRelate, 'resolution_type_id')
@@ -260,9 +254,7 @@ class CollectionForm(forms.ModelForm):
     # custom handling of various relationships on save method
     def save(self, commit=True):
         # on save fire function to apply updates to relate tables
-        self.update_relate_table('bands', BandRelate, 'band_type_id', BandType)
         self.update_relate_table('categories', CategoryRelate, 'category_type_id', CategoryType)
-        self.update_relate_table('data_types', DataTypeRelate, 'data_type_id', DataType)
         self.update_relate_table('projections', EpsgRelate, 'epsg_type_id', EpsgType)
         self.update_relate_table('file_types', FileTypeRelate, 'file_type_id', FileType)
         self.update_relate_table('resolutions', ResolutionRelate, 'resolution_type_id', ResolutionType)
@@ -298,6 +290,9 @@ class CollectionForm(forms.ModelForm):
 
         return super(CollectionForm, self).save(commit=commit)
 
+global progress_tracker
+progress_tracker = [0, 0]
+
 
 class ResourceForm(forms.ModelForm):
     # base model is Collection
@@ -331,8 +326,99 @@ class ResourceForm(forms.ModelForm):
     # fire function to create the Collection field dropdown
     collection = create_collection_field()
 
-    # custom handling of various relationships on save method
-    def save(self, commit=True):
-        print('saving...')
+    # generic function to retrieve the associated Collection object
+    def get_collection_obj(self, collection_id):
+        record = Collection.objects.get(collection_id=collection_id)
+        return record
 
+    # generic function to retrieve the associated AreaType object
+    def get_area_obj(self, area_code):
+        record = AreaType.objects.get(area_code=area_code)
+        return record
+
+    # generic function to retrieve the associated ResourceType object
+    def get_resource_type_obj(self, abbreviation):
+        record = ResourceType.objects.get(resource_type_abbreviation=abbreviation)
+        return record
+
+    # generic function to list s3 bucket zipfiles
+    def get_s3_zipfiles(self, prefix, token='', list=[]):
+        if token == '':
+            s3_zipfiles = self.client.list_objects_v2(
+                Bucket='data.tnris.org',
+                Prefix=prefix,
+                MaxKeys=1000
+            )
+        else:
+            s3_zipfiles = self.client.list_objects_v2(
+                Bucket='data.tnris.org',
+                Prefix=prefix,
+                MaxKeys=1000,
+                ConintuationToken=token
+            )
+        list = list + s3_zipfiles['Contents']
+        if s3_zipfiles['IsTruncated'] is True:
+            self.get_s3_zipfiles(prefix, s3_zipfiles['NextContinuationToken'], list)
+        else:
+            return list
+
+    # custom handling in save method for adding multiple new records
+    def save(self, commit=False):
+        # get the collection
+        collection_obj = self.get_collection_obj(self.cleaned_data['collection'])
+        # delete all current resource and resource_type_relate records for this collection
+        Resource.objects.filter(collection_id=self.cleaned_data['collection']).delete()
+        ResourceTypeRelate.objects.filter(collection_id=self.cleaned_data['collection']).delete()
+        # go get all associated s3 zipfiles and compile them into single list
+        prefix = "%s/resources/" % (self.cleaned_data['collection'])
+        s3_zipfiles = self.get_s3_zipfiles(prefix)
+        # set aside list length so we know when we are on the last one
+        total = len(s3_zipfiles)
+        last_idx = total - 1
+        global progress_tracker
+        progress_tracker = [0, total]
+        # set aside list for tracking relate entries
+        relates = []
+        # iterate all (except last) s3 keys adding each as new record in resource table
+        for idx, f in enumerate(s3_zipfiles):
+            print(f['Key'])
+            link = "https://s3.amazonaws.com/data.tnris.org/" + f['Key']
+            # disassemble filename
+            filename = f['Key'].split("/")[-1]
+            area_code = filename.split("_")[-2]
+            resource_type_abbr = filename.split("_")[-1].replace('.zip', '').upper()
+            # get the area_type
+            area_obj = self.get_area_obj(area_code)
+            # get the resource_type
+            resource_type_obj = self.get_resource_type_obj(resource_type_abbr)
+            # self attribute the file in case it is the last one
+            self.instance.pk = None
+            self.instance.collection_id = collection_obj
+            self.instance.area_type_id = area_obj
+            self.instance.resource_type_id = resource_type_obj
+            self.instance.resource = link
+            self.instance.filesize = f['Size']
+            # if not the last file in the list, we'll just save it
+            if idx != last_idx:
+                args = {
+                    'collection_id': collection_obj,
+                    'area_type_id': area_obj,
+                    'resource_type_id': resource_type_obj,
+                    'resource': link,
+                    'filesize': f['Size']
+                }
+                Resource(**args).save()
+            # if this resource type abbr isn't in the list, add it to the relate
+            # table and then the list
+            if resource_type_abbr not in relates:
+                args = {
+                    'collection_id': collection_obj,
+                    'resource_type_id': resource_type_obj
+                }
+                ResourceTypeRelate(**args).save()
+
+            progress_tracker = [idx + 1, total]
+            relates.append(resource_type_abbr)
+        # return last record for form to validate and commit all new records
+        progress_tracker = [0, 0]
         return super(ResourceForm, self).save(commit=commit)

@@ -23,6 +23,5 @@ urlpatterns = [
     path('admin/doc/', include('django.contrib.admindocs.urls')), # django admindocs
     path('admin/', admin.site.urls), # admin site
     path('api/v1/', include('lcd.urls')),
-    path('historical/', include('lore.urls')),
     path('health/', HealthCheckView.as_view())
 ]

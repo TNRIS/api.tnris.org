@@ -57,6 +57,18 @@ class CustomIndexDashboard(Dashboard):
             models=('lcd.models.Resource','lcd.models.ResourceType'),
         ))
 
+        self.children.append(modules.AppList(
+            title='Historical Aerials',
+            collapsible=True,
+            column=1,
+            css_classes=('grp-collapse grp-closed',),
+            models=('lore.models.Agency',
+                    'lore.models.FrameSize',
+                    'lore.models.Scale',
+                    'lore.models.County',
+                    'lore.models.Collection'),
+        ))
+
         # append a recent actions module
         self.children.append(modules.RecentActions(
             title='Recent Actions',

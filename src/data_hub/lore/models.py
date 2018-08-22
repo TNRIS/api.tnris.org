@@ -163,7 +163,7 @@ class Product(models.Model):
 
     class Meta:
         db_table = 'product'
-        verbose_name = ''
+        verbose_name = 'Product'
         verbose_name_plural = 'Products'
         unique_together = ("collection", "scale", "frame_size",
                            "number_of_frames", "scanned", "medium",

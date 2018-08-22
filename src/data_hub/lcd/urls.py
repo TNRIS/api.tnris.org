@@ -30,5 +30,5 @@ schema_view = get_swagger_view(title='TNRIS Data API')
 urlpatterns = [
     path('', include(router.urls)),
     path('schema/', schema_view),
-    path('data_hub-auth/?', include('rest_framework.urls', namespace='rest_framework'))
+    path('data_hub-auth/?', include('rest_framework.urls', namespace='lcd_rest_framework'))
 ]

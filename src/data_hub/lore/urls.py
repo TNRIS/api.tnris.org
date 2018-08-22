@@ -26,10 +26,9 @@ router.register(r'records/?', ProductViewSet, base_name="Product")
 router.register(r'mapserver/', MapserverViewSet, base_name="Mapserver")
 
 schema_view = get_swagger_view(title='Historical Imagery API')
-# schema_view = get_schema_view(title='Historical Imagery API')
 
 urlpatterns = [
     path('', include(router.urls)),
     path('schema/', schema_view),
-    path('historical_aerials-auth/?', include('rest_framework.urls', namespace='rest_framework'))
+    path('historical_aerials-auth/?', include('rest_framework.urls', namespace='lore_rest_framework'))
 ]

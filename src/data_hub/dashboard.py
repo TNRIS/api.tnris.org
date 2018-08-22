@@ -38,7 +38,12 @@ class CustomIndexDashboard(Dashboard):
             exclude=('django.contrib.*',
                      'lcd.models.Collection',
                      'lcd.models.ResourceType',
-                     'lcd.models.Resource'),
+                     'lcd.models.Resource',
+                     'lore.models.Agency',
+                     'lore.models.FrameSize',
+                     'lore.models.Scale',
+                     'lore.models.County',
+                     'lore.models.Collection'),
         ))
 
         self.children.append(modules.AppList(

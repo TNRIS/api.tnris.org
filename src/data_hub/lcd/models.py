@@ -697,8 +697,8 @@ class Collection(models.Model):
 
     class Meta:
         db_table = 'collection'
-        verbose_name = 'Collection'
-        verbose_name_plural = 'Collections'
+        verbose_name = 'Dataset Collection'
+        verbose_name_plural = 'Dataset Collections'
         ordering = ('name',)
         unique_together = (
             'name',

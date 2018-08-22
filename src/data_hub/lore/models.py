@@ -212,6 +212,7 @@ class Collection(models.Model):
 
     class Meta:
         db_table = 'historical_collection'
+        verbose_name = 'Historical Collection'
         verbose_name_plural = 'Historical Collections'
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

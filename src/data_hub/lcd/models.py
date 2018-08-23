@@ -903,11 +903,7 @@ class Collection(models.Model):
             key = "%s/assets/%s" % (self.collection_id, f)
             key_list.append({'Key':key})
         # do that boto dance
-        client = boto3.client(
-            's3',
-            aws_access_key_id=os.environ.get('AWS_ACCESS_KEY_ID'),
-            aws_secret_access_key=os.environ.get('AWS_SECRET_ACCESS_KEY')
-        )
+        client = boto3.client('s3')
         response = client.delete_objects(
             Bucket='data.tnris.org',
             Delete={'Objects': key_list}

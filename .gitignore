@@ -160,3 +160,5 @@ fabric.properties
 
 # tnrisis ignores
 src/data_hub/set-env-secrets.sh
+
+src/data_hub/static/*

@@ -15,7 +15,7 @@ RUN pip3 install -U pip
 RUN python3 --version
 RUN pip3 --version
 # install wheel
-RUN pip install wheel
+RUN pip3 install wheel
 
 # set aws region
 ENV AWS_REGION us-east-1

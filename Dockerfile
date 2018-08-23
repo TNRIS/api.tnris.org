@@ -1,5 +1,5 @@
 
-FROM ubuntu:xenial
+FROM ubuntu:bionic
 
 ENV DEBIAN_FRONTEND noninteractive
 
@@ -45,7 +45,7 @@ COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY gunicorn.conf /etc/supervisor/conf.d/gunicorn.conf
 
 # Expose port
-EXPOSE 6002
+EXPOSE 1968
 
 # Run entrypoint script
 ENTRYPOINT ["/docker-entrypoint.sh"]

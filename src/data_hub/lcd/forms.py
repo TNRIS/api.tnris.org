@@ -290,6 +290,9 @@ class CollectionForm(forms.ModelForm):
 
         return super(CollectionForm, self).save(commit=commit)
 
+global progress_tracker
+progress_tracker = [0, 0]
+
 
 class ResourceForm(forms.ModelForm):
     # base model is Collection
@@ -339,7 +342,8 @@ class ResourceForm(forms.ModelForm):
         return record
 
     # generic function to list s3 bucket zipfiles
-    def get_s3_zipfiles(self, prefix, token='', list=[]):
+    list = []
+    def get_s3_zipfiles(self, prefix, token=''):
         if token == '':
             s3_zipfiles = self.client.list_objects_v2(
                 Bucket='data.tnris.org',
@@ -351,13 +355,13 @@ class ResourceForm(forms.ModelForm):
                 Bucket='data.tnris.org',
                 Prefix=prefix,
                 MaxKeys=1000,
-                ConintuationToken=token
+                ContinuationToken=token
             )
-        list = list + s3_zipfiles['Contents']
+        self.list = self.list + s3_zipfiles['Contents']
         if s3_zipfiles['IsTruncated'] is True:
-            get_s3_zipfiles(prefix, s3_zipfiles['NextContinuationToken'], list)
+            self.get_s3_zipfiles(prefix, s3_zipfiles['NextContinuationToken'])
         else:
-            return list
+            return
 
     # custom handling in save method for adding multiple new records
     def save(self, commit=False):
@@ -367,18 +371,18 @@ class ResourceForm(forms.ModelForm):
         Resource.objects.filter(collection_id=self.cleaned_data['collection']).delete()
         ResourceTypeRelate.objects.filter(collection_id=self.cleaned_data['collection']).delete()
         # go get all associated s3 zipfiles and compile them into single list
-        prefix = "%s/assets/resources/" % (self.cleaned_data['collection'])
-        s3_zipfiles = get_s3_zipfiles(prefix)
-        print(s3_zipfiles)
+        prefix = "%s/resources/" % (self.cleaned_data['collection'])
+        s3_zipfiles = self.get_s3_zipfiles(prefix)
         # set aside list length so we know when we are on the last one
-        total = len(s3_zipfiles)
+        total = len(self.list)
         last_idx = total - 1
-        print(total, last_idx)
+        global progress_tracker
+        progress_tracker = [0, total]
         # set aside list for tracking relate entries
         relates = []
         # iterate all (except last) s3 keys adding each as new record in resource table
-        for idx, f in s3_zipfiles:
-            print(f)
+        for idx, f in enumerate(self.list):
+            print(f['Key'])
             link = "https://s3.amazonaws.com/data.tnris.org/" + f['Key']
             # disassemble filename
             filename = f['Key'].split("/")[-1]
@@ -392,7 +396,7 @@ class ResourceForm(forms.ModelForm):
             self.instance.pk = None
             self.instance.collection_id = collection_obj
             self.instance.area_type_id = area_obj
-            self.instance.resouce_type_id = resource_type_obj
+            self.instance.resource_type_id = resource_type_obj
             self.instance.resource = link
             self.instance.filesize = f['Size']
             # if not the last file in the list, we'll just save it
@@ -413,6 +417,9 @@ class ResourceForm(forms.ModelForm):
                     'resource_type_id': resource_type_obj
                 }
                 ResourceTypeRelate(**args).save()
+
+            progress_tracker = [idx + 1, total]
             relates.append(resource_type_abbr)
         # return last record for form to validate and commit all new records
+        progress_tracker = [0, 0]
         return super(ResourceForm, self).save(commit=commit)

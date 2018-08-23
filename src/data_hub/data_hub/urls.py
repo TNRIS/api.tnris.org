@@ -26,4 +26,5 @@ urlpatterns = [
     path('api/v1/', include('lcd.urls')),
     path('health/', HealthCheckView.as_view()),
     path('', TemplateView.as_view(template_name='index.html')),
+    path('map', TemplateView.as_view(template_name='index.html')),
 ]

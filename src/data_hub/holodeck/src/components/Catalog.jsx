@@ -1,49 +1,23 @@
-import React, { Component } from 'react';
-import {connect} from 'react-redux';
+import React from 'react';
+import {Link} from 'react-router-dom';
 
-import {collections} from '../actions';
+import CollectionList from './CollectionList';
 
-
-class Catalog extends Component {
-  componentDidMount() {
-    this.props.fetchCollections();
-    console.log(this.props);
-  }
-
+export default class Catalog extends React.Component {
   render() {
     return (
       <div>
-        <h2>Welcome to the holodeck catalog!</h2>
-        <hr />
-
-        <h3>Collections</h3>
-        <table>
-          <tbody>
-            {this.props.collections.map(collection => (
-              <tr>
-                <td>{collection.name}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <h1>Welcome to the holodeck!</h1>
+        <h2>i'm the catalog</h2>
+        <img
+          src='https://cdn-images-1.medium.com/max/800/1*z-jt1KCPbEFCaPBDOpSBrQ.gif'
+          alt=''
+        />
+        <p>
+          <Link to='/map'>Click Here</Link> to see the map!
+        </p>
+        <CollectionList />
       </div>
-    )
+    );
   }
 }
-
-
-const mapStateToProps = state => {
-  return {
-    collections: state.collections,
-  }
-}
-
-const mapDispatchToProps = dispatch => {
-  return {
-    fetchCollections: () => {
-      dispatch(collections.fetchCollections());
-    }
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Catalog);

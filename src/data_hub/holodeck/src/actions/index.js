@@ -1,4 +1,7 @@
-import * as productActions from './productActions';
-import * as collectionActions from './collectionActions';
+import * as collectionActions from "./collectionActions";
+import * as resourceActions from "./resourceActions";
 
-export {collectionActions, productActions};
+export {
+  collectionActions,
+  resourceActions,
+};

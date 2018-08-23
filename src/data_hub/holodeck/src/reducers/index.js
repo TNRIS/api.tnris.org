@@ -1,11 +1,11 @@
-import { combineReducers } from 'redux';
+import { combineReducers } from "redux";
 
-import products from './productReducer';
-import collections from './collectionReducer';
+import collections from "./collectionReducer";
+import resources from "./resourceReducer"
 
 const rootReducer = combineReducers({
   collections,
-  products
+  resources,
 })
 
 export default rootReducer;

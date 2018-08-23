@@ -10,6 +10,12 @@ RUN apt-get install -y python3 python3-pip python3-venv nginx supervisor curl
 RUN mkdir /envs/
 RUN python3 -m venv /envs/data_hub
 ENV PATH /envs/data_hub/bin:$PATH
+# upgrade pip
+RUN pip3 install -U pip
+RUN python3 --version
+RUN pip3 --version
+# install wheel
+RUN pip install wheel
 
 # set aws region
 ENV AWS_REGION us-east-1

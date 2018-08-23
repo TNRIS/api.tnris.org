@@ -161,3 +161,4 @@ fabric.properties
 # tnrisis ignores
 src/data_hub/set-env-secrets.sh
 src/data_hub/assets/
+src/data_hub/webpack-stats.dev.json

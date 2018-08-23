@@ -1,5 +1,7 @@
 from .settings import *
 
+DEBUG = False
+
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "assets"),
 ]

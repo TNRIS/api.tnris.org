@@ -1,3 +1,5 @@
+import { normalize, schema } from 'normalizr';
+
 export const FETCH_COLLECTIONS_BEGIN   = 'FETCH_COLLECTIONS_BEGIN';
 export const FETCH_COLLECTIONS_SUCCESS = 'FETCH_COLLECTIONS_SUCCESS';
 export const FETCH_COLLECTIONS_FAILURE = 'FETCH_PRODUCTS_FAILURE';
@@ -6,12 +8,12 @@ export const fetchCollectionsBegin = () => ({
   type: FETCH_COLLECTIONS_BEGIN
 });
 
-export const fetchCollectionsSuccess = collections => ({
+export const fetchCollectionsSuccess = (collections) => ({
   type: FETCH_COLLECTIONS_SUCCESS,
   payload: { collections }
 });
 
-export const fetchCollectionsFailure = error => ({
+export const fetchCollectionsFailure = (error) => ({
   type: FETCH_COLLECTIONS_FAILURE,
   payload: { error }
 });
@@ -24,6 +26,17 @@ function handleErrors(response) {
   return response;
 }
 
+// Normalize the api response json to a flattened state
+function normalizeCollections(originalData) {
+  // Define collections schema
+  const collectionSchema = new schema.Entity(
+    'collectionsById',
+    undefined,
+    { idAttribute: 'collection_id'}
+  );
+  return normalize(originalData, [collectionSchema]);
+}
+
 export function fetchCollections() {
   return dispatch => {
     dispatch(fetchCollectionsBegin());
@@ -31,8 +44,9 @@ export function fetchCollections() {
       .then(handleErrors)
       .then(res => res.json())
       .then(json => {
-        dispatch(fetchCollectionsSuccess(json.results));
-        return json.results;
+        let normalizedJson = normalizeCollections(json.results);
+        dispatch(fetchCollectionsSuccess(normalizedJson));
+        return normalizedJson;
       })
       .catch(error => dispatch(fetchCollectionsFailure(error)));
   };

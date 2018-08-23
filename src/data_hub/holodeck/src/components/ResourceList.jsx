@@ -3,38 +3,33 @@ import { connect } from 'react-redux';
 
 import { collectionActions, resourceActions } from '../actions';
 
-class CollectionList extends React.Component {
+class ResourceList extends React.Component {
 
   componentDidMount() {
+    console.log(this.props);
     this.props.fetchCollections();
-    // this.props.fetchResources();
+    this.props.fetchResources();
   }
 
   render() {
     console.log(this.props);
-    const { error, loading, collections } = this.props;
-    const loadingMessage = <div>Loading...</div>;
+    const { error, loading, resources } = this.props;
 
     if (error) {
       return <div>Error! {error.message}</div>;
     }
 
     if (loading) {
-      return loadingMessage;
+      return <div>Loading...</div>;
     }
 
     return (
       <div>
-        <h3>Collections</h3>
+        <h3>Resources</h3>
         <ul style={{listStyleType:'none'}}>
-          {collections.result ? collections.result.map(collectionId =>
-            <li key={collectionId}><h6>{collections.entities.collectionsById[collectionId]['name']}</h6>
-            <ul>
-              {Object.entries(collections.entities.collectionsById[collectionId])
-                .map(([key, value], i) => <li key={i}><strong>{key}: </strong>{value}</li>)}
-            </ul>
-            </li>
-          ) : loadingMessage}
+          {resources.map((resource, i) =>
+            <li key={i}><h6>{resource.resource}</h6></li>
+          )}
         </ul>
       </div>
     );
@@ -57,4 +52,4 @@ const mapDispatchToProps = dispatch => ({
   }
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(CollectionList);
+export default connect(mapStateToProps, mapDispatchToProps)(ResourceList);

@@ -22,9 +22,10 @@ export default class Map extends React.Component {
           />
         </div>
         <div className='row'>
-          <p className='col text-center'>
-            <Link to='/'>Click Here</Link> to see the catalog!
-          </p>
+          <h4
+            className='col text-center'
+            style={{paddingTop: '10px'}}><Link to='/'>Click Here</Link> to see the catalog!
+          </h4>
         </div>
         <ResourceList className='row' />
       </div>

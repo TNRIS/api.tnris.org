@@ -21,9 +21,10 @@ export default class Catalog extends React.Component {
           />
         </div>
         <div className='row'>
-          <p className='col text-center'>
-            <Link to='/map'>Click Here</Link> to see the map!
-          </p>
+          <h4
+            className='col text-center'
+            style={{paddingTop: '10px'}}><Link to='/map'>Click Here</Link> to see the map!
+          </h4>
         </div>
         <CollectionList className='row'/>
       </div>

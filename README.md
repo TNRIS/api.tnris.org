@@ -30,7 +30,7 @@ Built with:
 ### Note: A deployment for this app has yet to be created
 
 1. Make sure `DEBUG = False` in ~/data.tnris.org/src/data-hub/settings.py
-1. `cd ~/data.tnris.org/src/data-hub`
+1. `cd ~/data.tnris.org/src/data_hub`
 1. run `python manage.py collectstatic` to compile all static files
 1. `cd ~/data.tnris.org/src`
 1. `pip freeze > requirements.txt` to save dependencies

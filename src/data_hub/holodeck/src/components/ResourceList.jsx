@@ -24,11 +24,13 @@ class ResourceList extends React.Component {
     }
 
     return (
-      <div>
-        <h3>Resources</h3>
-        <ul style={{listStyleType:'none'}}>
+      <div className='container'>
+        <div className='row'>
+          <h3 className='col text-left'>Resources</h3>
+        </div>
+        <ul className='list-group'>
           {resources.map((resource, i) =>
-            <li key={i}><h6>{resource.resource}</h6></li>
+            <li className='list-group-item' key={i}><h6>{resource.resource}</h6></li>
           )}
         </ul>
       </div>

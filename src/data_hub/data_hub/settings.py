@@ -24,7 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.environ.get('SECRET_KEY', 'emla71m=n&u^4_=@07&i8@oyw1thl%bc7x9dqjx7=l1r^d77+=')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     'data.tnris.org',
@@ -40,6 +40,7 @@ APPEND_SLASH = False
 
 INSTALLED_APPS = [
     'lcd',
+    'lore',
     'corsheaders',
     'django_admin_listfilter_dropdown',
     'django.contrib.contenttypes',
@@ -147,6 +148,9 @@ GRAPPELLI_INDEX_DASHBOARD = 'dashboard.CustomIndexDashboard'
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]
 
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,

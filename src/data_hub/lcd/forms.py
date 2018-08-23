@@ -64,11 +64,7 @@ class CollectionForm(forms.ModelForm):
     delete_tile_index_url = forms.BooleanField(required=False)
 
     # boto3 s3 object
-    client = boto3.client(
-        's3',
-        aws_access_key_id=os.environ.get('AWS_ACCESS_KEY_ID'),
-        aws_secret_access_key=os.environ.get('AWS_SECRET_ACCESS_KEY')
-    )
+    client = boto3.client('s3')
 
     # generic function to create a form input for a relate table
     def create_relate_field(id_field, label_field, type_table, order_field):
@@ -301,11 +297,7 @@ class ResourceForm(forms.ModelForm):
         fields = ('__all__')
 
     # boto3 s3 object
-    client = boto3.client(
-        's3',
-        aws_access_key_id=os.environ.get('AWS_ACCESS_KEY_ID'),
-        aws_secret_access_key=os.environ.get('AWS_SECRET_ACCESS_KEY')
-    )
+    client = boto3.client('s3')
 
     # specific function to create the Collection field dropdown
     def create_collection_field():

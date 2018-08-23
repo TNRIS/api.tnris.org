@@ -6,17 +6,26 @@ import CollectionList from './CollectionList';
 export default class Catalog extends React.Component {
   render() {
     return (
-      <div>
-        <h1>Welcome to the holodeck!</h1>
-        <h2>i'm the catalog</h2>
-        <img
-          src='https://cdn-images-1.medium.com/max/800/1*z-jt1KCPbEFCaPBDOpSBrQ.gif'
-          alt=''
-        />
-        <p>
-          <Link to='/map'>Click Here</Link> to see the map!
-        </p>
-        <CollectionList />
+      <div className='container'>
+        <div className='row'>
+          <h1 className='col text-center'>Welcome to the holodeck!</h1>
+        </div>
+        <div className='row'>
+          <h2 className='col text-center'>i'm the catalog</h2>
+        </div>
+        <div className='row'>
+          <img
+            className='col'
+            src='https://cdn-images-1.medium.com/max/800/1*z-jt1KCPbEFCaPBDOpSBrQ.gif'
+            alt=''
+          />
+        </div>
+        <div className='row'>
+          <p className='col text-center'>
+            <Link to='/map'>Click Here</Link> to see the map!
+          </p>
+        </div>
+        <CollectionList className='row'/>
       </div>
     );
   }

@@ -1,5 +1,5 @@
 
-FROM ubuntu:xenial
+FROM ubuntu:bionic
 
 ENV DEBIAN_FRONTEND noninteractive
 
@@ -10,6 +10,12 @@ RUN apt-get install -y python3 python3-pip python3-venv nginx supervisor curl
 RUN mkdir /envs/
 RUN python3 -m venv /envs/data_hub
 ENV PATH /envs/data_hub/bin:$PATH
+# upgrade pip
+RUN pip3 install -U pip
+RUN python3 --version
+RUN pip3 --version
+# install wheel
+RUN pip3 install wheel
 
 # set aws region
 ENV AWS_REGION us-east-1
@@ -31,7 +37,10 @@ RUN pip3 install awscli --upgrade
 
 # Setup Django environment
 ENV PYTHONPATH $PYTHONPATH: /src/data_hub
-ENV DJANGO_SETTINGS_MODULE data_hub.settings
+ENV DJANGO_SETTINGS_MODULE data_hub.production_settings
+
+# Setup staticfiles
+RUN chmod -R 777 /src/data_hub/static
 
 # Setup nginx
 RUN rm /etc/nginx/sites-enabled/default
@@ -45,7 +54,7 @@ COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY gunicorn.conf /etc/supervisor/conf.d/gunicorn.conf
 
 # Expose port
-EXPOSE 6002
+EXPOSE 1968
 
 # Run entrypoint script
 ENTRYPOINT ["/docker-entrypoint.sh"]

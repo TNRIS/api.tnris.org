@@ -38,12 +38,12 @@ Built with:
 
 ## Deployment Prep
 
-1. `cd ~/data.tnris.org/src/data_hub`
-1. run `python manage.py collectstatic` to compile all static files
+<!-- 1. `cd ~/data.tnris.org/src/data_hub`
+1. run `python manage.py collectstatic` to compile all static files -->
 1. `cd ~/data.tnris.org/src`
 1. `pip freeze > requirements.txt` to save dependencies
-1. `cd ~/data.tnris.org/src/data_hub/holodeck`
-1. `npm run build`
+<!-- 1. `cd ~/data.tnris.org/src/data_hub/holodeck`
+1. `npm run build` -->
 1. save and commit all changes. push to github appropriately.
 1. head over to the deployments repo to execute the actual application deployment and make it so
 

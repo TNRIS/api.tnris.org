@@ -14,11 +14,12 @@ export default class Catalog extends React.Component {
           <h2 className='col text-center'>i'm the catalog</h2>
         </div>
         <div className='row'>
-          <img
+          {/*<img
             className='col'
             src='https://cdn-images-1.medium.com/max/800/1*z-jt1KCPbEFCaPBDOpSBrQ.gif'
             alt=''
-          />
+          />*/}
+          IMAGE
         </div>
         <div className='row'>
           <h4

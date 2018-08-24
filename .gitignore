@@ -164,3 +164,5 @@ src/data_hub/assets/
 src/data_hub/webpack-stats.dev.json
 
 src/data_hub/static/*
+
+src/data_hub/webpack-stats\.prod\.json

@@ -54,7 +54,8 @@ INSTALLED_APPS = [
     'django.contrib.admindocs',
     'rest_framework',
     'rest_framework_swagger',
-    'storages'
+    'storages',
+    'webpack_loader'
 ]
 
 MIDDLEWARE = [
@@ -73,7 +74,7 @@ ROOT_URLCONF = 'data_hub.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates'), ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -160,4 +161,11 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 1000
+}
+
+WEBPACK_LOADER = {
+    'DEFAULT': {
+        'BUNDLE_DIR_NAME': 'bundles/',
+        'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats.dev.json'),
+    }
 }

@@ -40,19 +40,22 @@ APPEND_SLASH = False
 
 INSTALLED_APPS = [
     'lcd',
+    'lore',
     'corsheaders',
     'django_admin_listfilter_dropdown',
+    'django.contrib.contenttypes',
+    'grappelli.dashboard',
     'grappelli',
     'django.contrib.admin',
     'django.contrib.auth',
-    'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admindocs',
     'rest_framework',
     'rest_framework_swagger',
-    'storages'
+    'storages',
+    'webpack_loader'
 ]
 
 MIDDLEWARE = [
@@ -68,11 +71,10 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'data_hub.urls'
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates'), ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -94,7 +96,7 @@ WSGI_APPLICATION = 'data_hub.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DB_NAME', 'data_tnris_org'),
+        'NAME': os.environ.get('DB_NAME', 'data_hub'),
         'USER': os.environ.get('DB_USER', 'tnris'),
         'PASSWORD': os.environ.get('DB_PASSWORD'),
         'HOST': os.environ.get('DB_HOST', '127.0.0.1'),
@@ -139,12 +141,14 @@ USE_TZ = True
 # Grappelli Settings
 GRAPPELLI_ADMIN_TITLE = "TNRIS Data Hub"
 GRAPPELLI_SWITCH_USER = True
+GRAPPELLI_INDEX_DASHBOARD = 'dashboard.CustomIndexDashboard'
 
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
@@ -154,6 +158,14 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_RENDERER_CLASSES': (
         'rest_framework.renderers.JSONRenderer',
-    )
+    ),
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 1000
+}
 
+WEBPACK_LOADER = {
+    'DEFAULT': {
+        'BUNDLE_DIR_NAME': 'bundles/',
+        'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats.dev.json'),
+    }
 }

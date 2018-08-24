@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.views.generic.base import RedirectView
 
 from .views import HealthCheckView
 
@@ -22,6 +23,7 @@ urlpatterns = [
     path('grappelli/', include('grappelli.urls')), # grappelli URLS
     path('admin/doc/', include('django.contrib.admindocs.urls')), # django admindocs
     path('admin/', admin.site.urls), # admin site
+    path('admin', RedirectView.as_view(url='admin/', permanent=False)), # admin site
     path('api/v1/', include('lcd.urls')),
     path('health/', HealthCheckView.as_view())
 ]

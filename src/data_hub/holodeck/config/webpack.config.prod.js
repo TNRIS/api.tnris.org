@@ -167,7 +167,7 @@ module.exports = {
           // use the "style" loader inside the async code so CSS from them won't be
           // in the main CSS file.
           {
-            test: /\.css$/,
+            test: /\.(css|scss)$/,
             loader: ExtractTextPlugin.extract(
               Object.assign(
                 {
@@ -185,6 +185,9 @@ module.exports = {
                         minimize: true,
                         sourceMap: shouldUseSourceMap,
                       },
+                    },
+                    {
+                      loader: require.resolve('sass-loader')
                     },
                     {
                       loader: require.resolve('postcss-loader'),
@@ -212,16 +215,6 @@ module.exports = {
               )
             ),
             // Note: this won't work without `new ExtractTextPlugin()` in `plugins`.
-          },{
-            // added sass loader
-             test: /\.scss$/,
-             loader: ExtractTextPlugin.extract({
-              use: [
-                require.resolve('style-loader'),
-                require.resolve('css-loader'),
-                require.resolve('sass-loader')
-              ],
-             }),
           },
           // "file" loader makes sure assets end up in the `build` folder.
           // When you `import` an asset, you get its filename.

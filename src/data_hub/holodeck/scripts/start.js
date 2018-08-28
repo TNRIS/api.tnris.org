@@ -89,7 +89,7 @@ choosePort(HOST, DEFAULT_PORT)
         clearConsole();
       }
       console.log(chalk.cyan('Starting the development server...\n'));
-      openBrowser(urls.localUrlForBrowser);
+      openBrowser('http://localhost:8000');
     });
 
     ['SIGINT', 'SIGTERM'].forEach(function(sig) {

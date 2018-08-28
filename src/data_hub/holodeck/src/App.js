@@ -20,7 +20,6 @@ class App extends Component {
           <Switch>
             <Route exact path='/' component={Catalog} />
             <Route path='/map'component={Map} />
-            <Route component={NotFound} />
           </Switch>
         </BrowserRouter>
       </Provider>

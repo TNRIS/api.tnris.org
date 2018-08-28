@@ -8,7 +8,6 @@ import rootReducer from './reducers/rootReducer';
 
 import Catalog from './components/Catalog';
 import Map from './components/Map';
-import NotFound from './components/NotFound';
 
 const store = createStore(rootReducer, applyMiddleware(thunk));
 
@@ -20,7 +19,6 @@ class App extends Component {
           <Switch>
             <Route exact path='/' component={Catalog} />
             <Route path='/map'component={Map} />
-            <Route component={NotFound} />
           </Switch>
         </BrowserRouter>
       </Provider>

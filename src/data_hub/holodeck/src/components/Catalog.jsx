@@ -6,7 +6,7 @@ import CollectionList from './CollectionList';
 export default class Catalog extends React.Component {
   render() {
     return (
-      <div className='container'>
+      <div className='container catalog-component'>
         <div className='row'>
           <h1 className='col text-center'>Welcome to the holodeck!</h1>
         </div>

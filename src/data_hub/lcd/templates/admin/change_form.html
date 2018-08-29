@@ -170,12 +170,10 @@
                       url : progressUrl,
                       dataType: "json",
                       success : function (data) {
+                               console.log(data);
                                $("#progress-bar").css("display", "block");
                                $("#progress-note").css("display", "block");
-                               if (data['total'] === 0) {
-                                 $("#progress-numbers").html("Preparing update. Retrieving file list from s3...");
-                               }
-                               else {
+                               if (data['total'] != 0) {
                                  var progressMath = parseFloat((data['current'] / data['total']) * 100).toFixed(2);
                                  var progressPercentage = progressMath + '%';
                                  $("#progress-state").html(progressPercentage);

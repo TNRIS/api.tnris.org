@@ -1,10 +1,28 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
 
-import ResourceList from './ResourceList';
+import CollectionList from './CollectionList';
 
 export default class Map extends React.Component {
+
+  componentDidMount() {
+    this.props.fetchCollections();
+    this.props.fetchResources();
+  }
+
   render() {
+    console.log(this.props);
+    const { error, loading } = this.props;
+    const loadingMessage = <div>Loading...</div>;
+
+    if (error) {
+      return <div>Error! {error.message}</div>;
+    }
+
+    if (loading) {
+      return loadingMessage;
+    }
+
     return (
       <div className='container'>
         <div className='row'>
@@ -27,7 +45,7 @@ export default class Map extends React.Component {
             style={{paddingTop: '10px'}}><Link to='/'>Click Here</Link> to see the catalog!
           </h4>
         </div>
-        <ResourceList className='row' />
+        <CollectionList className='row' collections={this.props.collections}/>
       </div>
     );
   }

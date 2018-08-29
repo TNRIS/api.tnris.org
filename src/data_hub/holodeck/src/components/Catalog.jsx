@@ -4,7 +4,25 @@ import {Link} from 'react-router-dom';
 import CollectionList from './CollectionList';
 
 export default class Catalog extends React.Component {
+
+  componentDidMount() {
+    this.props.fetchCollections();
+    this.props.fetchResources();
+  }
+
   render() {
+    console.log(this.props);
+    const { error, loading } = this.props;
+    const loadingMessage = <div>Loading...</div>;
+
+    if (error) {
+      return <div>Error! {error.message}</div>;
+    }
+
+    if (loading) {
+      return loadingMessage;
+    }
+
     return (
       <div className='container catalog-component'>
         <div className='row'>
@@ -27,7 +45,7 @@ export default class Catalog extends React.Component {
             style={{paddingTop: '10px'}}><Link to='/map'>Click Here</Link> to see the map!
           </h4>
         </div>
-        <CollectionList className='row'/>
+        <CollectionList className='row' collections={this.props.collections}/>
       </div>
     );
   }

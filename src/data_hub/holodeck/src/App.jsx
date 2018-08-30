@@ -7,6 +7,7 @@ import thunk from 'redux-thunk';
 import rootReducer from './reducers/rootReducer';
 
 import Main from './components/Main';
+import NotFound from './components/NotFound';
 
 const store = createStore(rootReducer, applyMiddleware(thunk));
 
@@ -17,6 +18,7 @@ class App extends Component {
         <BrowserRouter>
           <Switch>
             <Route exact path='/' component={Main} />
+            <Route path='*' component={NotFound} />} />
           </Switch>
         </BrowserRouter>
       </Provider>

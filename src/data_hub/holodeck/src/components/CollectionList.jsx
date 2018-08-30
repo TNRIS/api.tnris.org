@@ -1,7 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
-
-import { collectionActions, resourceActions } from '../actions';
 
 class CollectionList extends React.Component {
 

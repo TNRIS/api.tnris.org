@@ -3,9 +3,6 @@ import Header from './Header';
 import Footer from './Footer';
 
 class NotFound extends Component {
-  constructor(props) {
-    super(props);
-  }
 
   render() {
     return (

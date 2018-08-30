@@ -2,7 +2,7 @@ import {
   FETCH_COLLECTIONS_BEGIN,
   FETCH_COLLECTIONS_SUCCESS,
   FETCH_COLLECTIONS_FAILURE
-} from '../actions/collectionActions';
+} from '../constants/collectionActionTypes';
 
 const initialState = {
   items: [],

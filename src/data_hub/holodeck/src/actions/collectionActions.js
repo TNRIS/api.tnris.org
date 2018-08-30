@@ -1,8 +1,10 @@
 import { normalize, schema } from 'normalizr';
 
-export const FETCH_COLLECTIONS_BEGIN   = 'FETCH_COLLECTIONS_BEGIN';
-export const FETCH_COLLECTIONS_SUCCESS = 'FETCH_COLLECTIONS_SUCCESS';
-export const FETCH_COLLECTIONS_FAILURE = 'FETCH_PRODUCTS_FAILURE';
+import {
+  FETCH_COLLECTIONS_BEGIN,
+  FETCH_COLLECTIONS_SUCCESS,
+  FETCH_COLLECTIONS_FAILURE
+} from '../constants/collectionActionTypes';
 
 export const fetchCollectionsBegin = () => ({
   type: FETCH_COLLECTIONS_BEGIN

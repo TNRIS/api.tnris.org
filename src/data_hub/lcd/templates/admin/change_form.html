@@ -165,29 +165,36 @@
             // ON SAVE OF THE RESOURCE 'ADD' FORM
                 var progressUrl = "{% url 'resource-update-progress' %}";
                 function getProgressStatus() {
+                  // cyclical ajax call to retrieve Add Resource admin form save progress
+                  // for updating the displayed progress bar. Works locally in development
+                  // but not when deployed. Needs further investigation...
+                  // turned off for now. uncomment to re-enable but comment out the class
+                  // changes below if you do.
+                  // $.ajax({
+                  //     url : progressUrl,
+                  //     dataType: "json",
+                  //     success : function (data) {
+                  //              console.log(data);
+                  //              $("#progress-bar").css("display", "block");
+                  //              $("#progress-note").css("display", "block");
+                  //              if (data['total'] != 0) {
+                  //                var progressMath = parseFloat((data['current'] / data['total']) * 100).toFixed(2);
+                  //                var progressPercentage = progressMath + '%';
+                  //                $("#progress-state").html(progressPercentage);
+                  //                $("#progress-state").css('width', progressPercentage);
+                  //
+                  //                var displayNumbers = data['current'] + " of " + data['total'] + " updated.";
+                  //                $("#progress-numbers").html(displayNumbers);
+                  //              }
+                  //              $("footer").hide();
+                  //              setTimeout(getProgressStatus, 2000);
+                  //            }
+                  // });
 
-                  $.ajax({
-                      url : progressUrl,
-                      dataType: "json",
-                      success : function (data) {
-                               $("#progress-bar").css("display", "block");
-                               $("#progress-note").css("display", "block");
-                               if (data['total'] === 0) {
-                                 $("#progress-numbers").html("Preparing update. Retrieving file list from s3...");
-                               }
-                               else {
-                                 var progressMath = parseFloat((data['current'] / data['total']) * 100).toFixed(2);
-                                 var progressPercentage = progressMath + '%';
-                                 $("#progress-state").html(progressPercentage);
-                                 $("#progress-state").css('width', progressPercentage);
-
-                                 var displayNumbers = data['current'] + " of " + data['total'] + " updated.";
-                                 $("#progress-numbers").html(displayNumbers);
-                               }
-                               $("footer").hide();
-                               setTimeout(getProgressStatus, 2000);
-                             }
-                      });
+                  // comment out these css changes if you uncomment/re-enable the
+                  // form progress bar
+                  $("#progress-note").css("display", "block");
+                  $("footer").hide();
                 }
                 $('[name="_save"]').on('click', getProgressStatus);
             {% endif %}

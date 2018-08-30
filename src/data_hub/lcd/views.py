@@ -4,6 +4,9 @@ import json
 
 from lcd import forms
 
+# this route is normally called to manage the progress bar on the Add Resource
+# admin form but is not used in production because the forms global variable
+# "progress_tracker" does not update during Save() when deployed. Works locally though
 def resource_update_progress(request):
     progress_tracker = forms.progress_tracker
     progress = {

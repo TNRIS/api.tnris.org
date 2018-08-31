@@ -1,0 +1,28 @@
+/*
+styles for component: CatalogCard
+*/
+
+@import "@material/card/mdc-card";
+@import "@material/button/mdc-button";
+
+.catalog-card {
+  color: #000000;
+  max-width: 300px;
+  height: 400px;
+
+  .catalog-card__headline {
+    -webkit-margin-before: 1em;
+    -webkit-margin-after: 1em;
+    padding-left: 10px;
+  }
+
+  .catalog-card__body {
+    color: #767676;
+    padding-left: 10px;
+    -webkit-margin-before: 0;
+  }
+
+  .catalog-card__actions {
+    margin-top: auto;
+  }
+}

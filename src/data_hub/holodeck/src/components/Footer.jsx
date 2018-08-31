@@ -4,7 +4,7 @@ export default class Footer extends React.Component {
 
   render() {
     return (
-      <div>how about a footer?</div>
+      <div className='footer'>isn't this a big footer?</div>
     );
   }
 }

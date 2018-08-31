@@ -6,18 +6,23 @@ styles for component: Catalog
 @import "@material/image-list/mdc-image-list";
 
 .catalog-component {
+
   h1 {
-    color: green;
+    color: #68EFE8;
     text-align: center;
   }
 
   h2 {
-    color: green;
+    color: #68EFE8;
     text-align: center;
   }
 
   a {
     color: red;
+  }
+
+  ul {
+    list-style-type: none;
   }
 
 

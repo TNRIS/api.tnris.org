@@ -1,5 +1,9 @@
 import React from 'react';
 
+import CatalogCard from './CatalogCard';
+import Header from './Header';
+import Footer from './Footer';
+
 export default class Catalog extends React.Component {
 
   componentDidMount() {
@@ -10,7 +14,7 @@ export default class Catalog extends React.Component {
   render() {
     console.log(this.props);
     const { error, loading } = this.props;
-    const loadingMessage = <div>Loading...</div>;
+    const loadingMessage = <div className='loading-message'>Loading...</div>;
 
     if (error) {
       return <div>Error! {error.message}</div>;
@@ -21,24 +25,25 @@ export default class Catalog extends React.Component {
     }
 
     return (
-      <div className='catalog-component'>
-        <h1 className='mdc-typography--headline1'>Welcome to the holodeck!</h1>
-        <h2
-          className='mdc-typography--headline2'>i'm the catalog</h2>
-          <div className='mdc-layout-grid'>
-          <ul className='catalog-list mdc-layout-grid__inner'>
-            {this.props.collections.result ? this.props.collections.result.map(collectionId =>
-              <li
-                className='mdc-layout-grid__cell'
-                key={collectionId}><h5>{this.props.collections.entities.collectionsById[collectionId]['name']}</h5>
-                <ul>
-                  {Object.entries(this.props.collections.entities.collectionsById[collectionId])
-                    .map(([key, value], i) => <li key={i}><strong>{key}: </strong>{value}</li>)}
-                </ul>
-              </li>
-            ) : 'loadingMessage'}
-          </ul>
+      <div>
+        <Header />
+        <div className='catalog-component'>
+          <h1 className='mdc-typography--headline1'>Welcome to the holodeck!</h1>
+            <div className='mdc-layout-grid'>
+            <ul className='catalog-list mdc-layout-grid__inner'>
+              {this.props.collections.result ? this.props.collections.result.map(collectionId =>
+                <li
+                  className='mdc-layout-grid__cell mdc-layout-grid__cell--span-2'
+                  key={collectionId}>
+                  <CatalogCard
+                    collection={this.props.collections.entities.collectionsById[collectionId]}
+                  />
+                </li>
+              ) : loadingMessage}
+            </ul>
+          </div>
         </div>
+        <Footer />
       </div>
     );
   }

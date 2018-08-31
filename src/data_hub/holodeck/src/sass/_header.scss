@@ -1,10 +1,37 @@
 /*
-styles for component: Catalog
+styles for component: Header
 */
 
-@import "@material/button/mdc-button";
+.header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #222;
 
-.foo-button {
-  @include mdc-button-ink-color(teal);
-  @include mdc-states(teal);
+  .header-title {
+    background: #1e8dc1;
+    color: #d2f1ff;
+    font-family: pragmatica-web-condensed,sans-serif;
+    font-size: 16px;
+    font-weight: 100;
+    height: auto;
+    letter-spacing: 3px;
+    // overflow: auto;
+    text-transform: uppercase;
+    // width: 100%;
+    // z-index: 1000;
+
+    .header-title__twdb {
+      float: right;
+      text-decoration: none;
+      color: inherit;
+      font-size: 12px;
+    }
+  }
+
+  .header-nav {
+    color: #d2f1ff;
+  }
+
 }

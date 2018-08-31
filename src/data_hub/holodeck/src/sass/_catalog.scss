@@ -2,14 +2,22 @@
 styles for component: Catalog
 */
 
+@import "@material/layout-grid/mdc-layout-grid";
+@import "@material/image-list/mdc-image-list";
+
 .catalog-component {
-
-  .text-center {
+  h1 {
     color: green;
+    text-align: center;
+  }
 
-    a {
-      color: red;
-    }
+  h2 {
+    color: green;
+    text-align: center;
+  }
+
+  a {
+    color: red;
   }
 
 

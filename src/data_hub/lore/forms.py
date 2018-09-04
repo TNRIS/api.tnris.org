@@ -51,6 +51,37 @@ class CollectionForm(forms.ModelForm):
         choices=county_choices
     )
 
+    def clean(self):
+        index = self.cleaned_data['index_service_url']
+        frames = self.cleaned_data['frames_service_url']
+        mosaic = self.cleaned_data['mosaic_service_url']
+
+        links = []
+        if index is not None: 
+            if '_index' not in index:
+                raise forms.ValidationError('That is not an Index Service URL!')
+            idx_link = index.split('/')[-1].replace('.map', '').replace('_index', '').replace('_', ' ').upper()
+            if idx_link not in links:
+                links.append(idx_link)
+        if frames is not None:
+            if '_frames' not in index:
+                raise forms.ValidationError('That is not an Frames Service URL!')
+            frm_link = frames.split('/')[-1].replace('.map', '').replace('_frames', '').replace('_', ' ').upper()
+            if frm_link not in links:
+                links.append(frm_link)
+        if mosaic is not None:
+            if '_mosaic' not in index:
+                raise forms.ValidationError('That is not an Mosaic Service URL!')
+            msc_link = index.split('/')[-1].replace('.map', '').replace('_mosaic', '').replace('_', ' ').upper()
+            if msc_link not in links:
+                links.append(msc_link)
+        if len(links) > 1:
+            raise forms.ValidationError('Index, Frames, and Mosaic Service URLs have inconsistent collections!')
+        elif len(links) == 1:
+            self.instance.ls4_link = links[0]
+        else:
+            self.instance.ls4_link = None
+
     def save(self, commit=True):
         updated_counties = self.cleaned_data['counties']
         initial_counties_str = [

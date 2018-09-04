@@ -72,7 +72,6 @@ class PhotoIndex(models.Model):
     scanned = models.PositiveIntegerField('Scanned', default=0)
     scanned_location = models.CharField('Scanned Location', max_length=254, null=True, blank=True)
     physical_location = models.CharField('Physical Location', max_length=50, null=True, blank=True)
-    service_url = models.URLField('Service URL', max_length=256, null=True, blank=True)
     remarks = models.TextField(null=True, blank=True)
     created = models.DateTimeField('Created', auto_now_add=True)
     last_modified = models.DateTimeField('Last Modified', auto_now=True)
@@ -224,6 +223,78 @@ class Collection(models.Model):
     remarks = models.TextField(null=True, blank=True)
     created = models.DateTimeField('Created', auto_now_add=True)
     last_modified = models.DateTimeField('Last Modified', auto_now=True)
+    index_service_url = models.URLField('Index Service URL', max_length=256, null=True, blank=True)
+    frames_service_url = models.URLField('Frames Service URL', max_length=256, null=True, blank=True)
+    mosaic_service_url = models.URLField('Mosaic Service URL', max_length=256, null=True, blank=True)
+    ls4_link = models.CharField(max_length=200, null=True, blank=True)
 
     def __str__(self):
         return self.collection
+
+"""
+********** Database Views **********
+**** Used as the API endpoints ****
+"""
+
+class ChcView(models.Model):
+    """
+    Compiled Historical Collection view presents Collection table with all
+    associated relates joined
+    """
+
+    class Meta:
+        managed = False
+        db_table = "compiled_historical_collection"
+        verbose_name = 'Compiled Historical Collection'
+        verbose_name_plural = 'Compiled Historical Collections'
+
+    id = models.UUIDField(
+        'Historical Collection ID',
+        primary_key=True
+    )
+    collection = models.CharField(
+        'Collection',
+        max_length=24
+    )
+    from_date = models.DateField(
+        'From Date'
+    )
+    to_date = models.DateField(
+        'To Date'
+    )
+    public = models.BooleanField(
+        'Public'
+    )
+    index_service_url = models.CharField(
+        'Index Service URL',
+        max_length=256
+    )
+    frames_service_url = models.CharField(
+        'Frames Service URL',
+        max_length=256
+    )
+    mosaic_service_url = models.CharField(
+        'Mosaic Service URL',
+        max_length=256
+    )
+    ls4_link = models.CharField(
+        'LS4 Link Identifer',
+        max_length=200
+    )
+    counties = models.TextField(
+        'Counties'
+    )
+    name = models.CharField(
+        'Acquiring Agency Name',
+        max_length=254
+    )
+    abbreviation = models.CharField(
+        'Acquiring Agency Abbreviation',
+        max_length=20
+    )
+    products = models.TextField(
+        'Products'
+    )
+
+    def __str__(self):
+        return self.name + str(self.from_date)

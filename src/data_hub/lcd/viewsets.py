@@ -16,11 +16,12 @@ class CollectionViewSet(viewsets.ReadOnlyModelViewSet):
         null_list = ['null', 'Null', 'none', 'None']
         # create argument object of query clauses
         for field in self.request.query_params.keys():
-            value = self.request.query_params.get(field)
-            # convert null queries
-            if value in null_list:
-                value = None
-            args[field] = value
+            if field != 'limit' and field != 'offset':
+                value = self.request.query_params.get(field)
+                # convert null queries
+                if value in null_list:
+                    value = None
+                args[field] = value
         print(args)
         # get records using query
         queryset = CcrView.objects.filter(**args)
@@ -36,11 +37,12 @@ class ResourceViewSet(viewsets.ReadOnlyModelViewSet):
         null_list = ['null', 'Null', 'none', 'None']
         # create argument object of query clauses
         for field in self.request.query_params.keys():
-            value = self.request.query_params.get(field)
-            # convert null queries
-            if value in null_list:
-                value = None
-            args[field] = value
+            if field != 'limit' and field != 'offset':
+                value = self.request.query_params.get(field)
+                # convert null queries
+                if value in null_list:
+                    value = None
+                args[field] = value
         print(args)
         # get records using query
         queryset = Resource.objects.filter(**args)
@@ -56,11 +58,12 @@ class AreaViewSet(viewsets.ReadOnlyModelViewSet):
         null_list = ['null', 'Null', 'none', 'None']
         # create argument object of query clauses
         for field in self.request.query_params.keys():
-            value = self.request.query_params.get(field)
-            # convert null queries
-            if value in null_list:
-                value = None
-            args[field] = value
+            if field != 'limit' and field != 'offset':
+                value = self.request.query_params.get(field)
+                # convert null queries
+                if value in null_list:
+                    value = None
+                args[field] = value
         print(args)
         # get records using query
         queryset = AcdcView.objects.filter(**args)

@@ -18,11 +18,13 @@ from rest_framework import routers
 from rest_framework_swagger.views import get_swagger_view
 from rest_framework.schemas import get_schema_view
 
-from .viewsets import CountyViewSet, ProductViewSet, MapserverViewSet
+from .viewsets import (CountyViewSet, ProductViewSet,
+                       CollectionViewSet, MapserverViewSet)
 
 router = routers.DefaultRouter(trailing_slash=False)
 router.register(r'counties/?', CountyViewSet)
 router.register(r'records/?', ProductViewSet, base_name="Product")
+router.register(r'collections/?', CollectionViewSet, base_name="Collection")
 router.register(r'mapserver/?', MapserverViewSet, base_name="Mapserver")
 
 schema_view = get_swagger_view(title='Historical Imagery API')

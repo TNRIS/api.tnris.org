@@ -1,4 +1,5 @@
 from django import forms
+from django.core.exceptions import ValidationError
 from django.contrib.admin.widgets import AdminDateWidget
 
 from string import Template
@@ -356,15 +357,21 @@ class ResourceForm(forms.ModelForm):
             return
 
     # custom handling in save method for adding multiple new records
-    def save(self, commit=False):
+    def clean(self):
         # get the collection
-        collection_obj = self.get_collection_obj(self.cleaned_data['collection'])
+        try:
+            collection_obj = self.get_collection_obj(self.cleaned_data['collection'])
+        except:
+            raise forms.ValidationError('Could not retrieve "%s" from the collection table. This is extremely peculiar... What did you do???' % (self.cleaned_data['collection']))
         # delete all current resource and resource_type_relate records for this collection
         Resource.objects.filter(collection_id=self.cleaned_data['collection']).delete()
         ResourceTypeRelate.objects.filter(collection_id=self.cleaned_data['collection']).delete()
         # go get all associated s3 zipfiles and compile them into single list
         prefix = "%s/resources/" % (self.cleaned_data['collection'])
-        s3_zipfiles = self.get_s3_zipfiles(prefix)
+        try:
+            s3_zipfiles = self.get_s3_zipfiles(prefix)
+        except:
+            raise forms.ValidationError('Uh oh, Master! There was trouble retrieving the S3 zipfile list!')
         # set aside list length so we know when we are on the last one
         total = len(self.list)
         last_idx = total - 1
@@ -381,9 +388,15 @@ class ResourceForm(forms.ModelForm):
             area_code = filename.split("_")[-2]
             resource_type_abbr = filename.split("_")[-1].replace('.zip', '').upper()
             # get the area_type
-            area_obj = self.get_area_obj(area_code)
+            try:
+                area_obj = self.get_area_obj(area_code)
+            except:
+                raise forms.ValidationError('Bad area code! Verify area code in key: %s' % (f['Key']))
             # get the resource_type
-            resource_type_obj = self.get_resource_type_obj(resource_type_abbr)
+            try:
+                resource_type_obj = self.get_resource_type_obj(resource_type_abbr)
+            except:
+                raise forms.ValidationError('Bad resource type abbreviation! "%s" is invalid in key "%s" and must be added to the ResourceTypes table before continuing.' % (resource_type_abbr, f['Key']))
             # self attribute the file in case it is the last one
             self.instance.pk = None
             self.instance.collection_id = collection_obj
@@ -414,4 +427,5 @@ class ResourceForm(forms.ModelForm):
             relates.append(resource_type_abbr)
         # return last record for form to validate and commit all new records
         progress_tracker = [0, 0]
-        return super(ResourceForm, self).save(commit=commit)
+        super(ResourceForm, self).save(commit=False)
+        return

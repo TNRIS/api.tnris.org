@@ -1,6 +1,7 @@
 import React from 'react';
 
-import CatalogCard from './CatalogCard';
+import CatalogCardContainer from '../containers/CatalogCardContainer';
+import DialogContainer from '../containers/DialogContainer';
 import Header from './Header';
 import Footer from './Footer';
 
@@ -29,18 +30,19 @@ export default class Catalog extends React.Component {
         <Header />
         <div className='catalog-component'>
           <h1 className='mdc-typography--headline1'>Welcome to the holodeck!</h1>
+          <DialogContainer />
             <div className='mdc-layout-grid'>
-            <ul className='catalog-list mdc-layout-grid__inner'>
-              {this.props.collections.result ? this.props.collections.result.map(collectionId =>
-                <li
-                  className='mdc-layout-grid__cell mdc-layout-grid__cell--span-2'
-                  key={collectionId}>
-                  <CatalogCard
-                    collection={this.props.collections.entities.collectionsById[collectionId]}
-                  />
-                </li>
-              ) : loadingMessage}
-            </ul>
+              <ul className='catalog-list mdc-layout-grid__inner'>
+                {this.props.collections.result ? this.props.collections.result.map(collectionId =>
+                  <li
+                    className='mdc-layout-grid__cell mdc-layout-grid__cell--span-2'
+                    key={collectionId}>
+                    <CatalogCardContainer
+                      collection={this.props.collections.entities.collectionsById[collectionId]}
+                    />
+                  </li>
+                ) : loadingMessage}
+              </ul>
           </div>
         </div>
         <Footer />

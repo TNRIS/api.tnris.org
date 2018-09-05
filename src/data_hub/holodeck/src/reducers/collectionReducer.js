@@ -1,13 +1,16 @@
 import {
   FETCH_COLLECTIONS_BEGIN,
   FETCH_COLLECTIONS_SUCCESS,
-  FETCH_COLLECTIONS_FAILURE
+  FETCH_COLLECTIONS_FAILURE,
+  SELECT_COLLECTION,
+  CLEAR_SELECTED_COLLECTION,
 } from '../constants/collectionActionTypes';
 
 const initialState = {
   items: [],
   loading: false,
-  error: null
+  error: null,
+  selectedColllection: null
 };
 
 export default function collectionReducer(state = initialState, action) {
@@ -39,6 +42,21 @@ export default function collectionReducer(state = initialState, action) {
         loading: false,
         error: action.payload.error,
         items: []
+      };
+
+    case SELECT_COLLECTION:
+      // Set the selectedCollection to the collection_id of the
+      // collection a user chooses from the catalog
+      return {
+        ...state,
+        selectedCollection: action.payload.collectionId
+      };
+
+    case CLEAR_SELECTED_COLLECTION:
+      // Clear selectedCollection setting it back to null
+      return {
+        ...state,
+        selectedCollection: null
       };
 
     default:

@@ -5,6 +5,7 @@
   "dependencies": {
     "@material/button": "^0.39.0",
     "@material/card": "^0.39.0",
+    "@material/dialog": "^0.39.1",
     "@material/image-list": "^0.39.0",
     "@material/layout-grid": "^0.39.0",
     "@material/typography": "^0.39.0",

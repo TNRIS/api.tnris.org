@@ -4,9 +4,9 @@ styles for component: Header
 
 .footer {
   background: #222;
-  clear: both;
   color: #f5f5f5;
+  position: absolute;
   min-height: 375px;
-  position: relative;
-  z-index: 500;
+  width: 100%;
+  left: 0;
 }

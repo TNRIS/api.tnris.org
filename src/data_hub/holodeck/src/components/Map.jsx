@@ -1,37 +1,14 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
 
-import CollectionList from './CollectionList';
-
 export default class Map extends React.Component {
 
-  componentDidMount() {
-    this.props.fetchCollections();
-    this.props.fetchResources();
-  }
-
   render() {
-    console.log(this.props);
-    const { error, loading } = this.props;
-    const loadingMessage = <div>Loading...</div>;
-
-    if (error) {
-      return <div>Error! {error.message}</div>;
-    }
-
-    if (loading) {
-      return loadingMessage;
-    }
 
     return (
-      <div className='container'>
-        <div className='row'>
-          <h1 className='col text-center'>Welcome to the holodeck!</h1>
-        </div>
-        <div className='row'>
-          <h2 className='col text-center'>i'm the map</h2>
-        </div>
-        <div className='row'>
+      <div className='map-selector'>
+        <h1 className='mdc-typography--headline1'>map</h1>
+        <div className=''>
           <img
             className='col'
             style={{height: '500px'}}
@@ -39,13 +16,6 @@ export default class Map extends React.Component {
             alt=''
           />
         </div>
-        <div className='row'>
-          <h4
-            className='col text-center'
-            style={{paddingTop: '10px'}}><Link to='/'>Click Here</Link> to see the catalog!
-          </h4>
-        </div>
-        <CollectionList className='row' collections={this.props.collections}/>
       </div>
     );
   }

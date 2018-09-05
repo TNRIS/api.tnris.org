@@ -3,7 +3,9 @@ import { normalize, schema } from 'normalizr';
 import {
   FETCH_COLLECTIONS_BEGIN,
   FETCH_COLLECTIONS_SUCCESS,
-  FETCH_COLLECTIONS_FAILURE
+  FETCH_COLLECTIONS_FAILURE,
+  SELECT_COLLECTION,
+  CLEAR_SELECTED_COLLECTION,
 } from '../constants/collectionActionTypes';
 
 export const fetchCollectionsBegin = () => ({
@@ -18,6 +20,19 @@ export const fetchCollectionsSuccess = (collections) => ({
 export const fetchCollectionsFailure = (error) => ({
   type: FETCH_COLLECTIONS_FAILURE,
   payload: { error }
+});
+
+export const selectCollection = (collectionId) => {
+  return (dispatch) => {
+    dispatch({
+      type: SELECT_COLLECTION,
+      payload: { collectionId }
+    })
+  }
+};
+
+export const clearSelectedCollection = () => ({
+  type: CLEAR_SELECTED_COLLECTION
 });
 
 // Handle HTTP errors since fetch won't.

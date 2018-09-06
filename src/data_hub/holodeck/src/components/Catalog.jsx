@@ -54,7 +54,6 @@ export default class Catalog extends React.Component {
               </ul>
           </div>
         </div>
-        </div>
         <Footer />
       </div>
     );

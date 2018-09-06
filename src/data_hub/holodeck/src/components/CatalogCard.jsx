@@ -16,7 +16,7 @@ export default class CatalogCard extends React.Component {
 
   render() {
     return (
-      <div className='catalog-card mdc-card mdc-card__primary-action'
+      <div className='catalog-card-component mdc-card mdc-card__primary-action'
            onClick={this.cardClicked}>
         <div
           className='catalog-card__media mdc-card__media mdc-card__media--16-9'

@@ -1,13 +1,20 @@
 import { connect } from 'react-redux';
 
-import { collectionActions, resourceActions } from '../actions';
+import {
+  collectionActions,
+  resourceActions,
+  collectionDialogActions,
+  mapDialogActions } from '../actions';
+
 import Catalog from '../components/Catalog';
 
 const mapStateToProps = state => ({
   collections: state.collections.items,
   resources: state.resources.items,
   loading: state.collections.loading,
-  error: state.collections.error
+  error: state.collections.error,
+  showCollectionDialog: state.collectionDialog.showCollectionDialog,
+  showMapDialog: state.mapDialog.showMapDialog,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -16,6 +23,12 @@ const mapDispatchToProps = dispatch => ({
   },
   fetchResources: () => {
     dispatch(resourceActions.fetchResources());
+  },
+  openCollectionDialog: () => {
+    dispatch(collectionDialogActions.openCollectionDialog());
+  },
+  openMapDialog: () => {
+    dispatch(mapDialogActions.openMapDialog());
   }
 })
 

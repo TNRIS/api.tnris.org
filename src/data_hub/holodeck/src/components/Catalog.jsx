@@ -1,7 +1,8 @@
 import React from 'react';
 
 import CatalogCardContainer from '../containers/CatalogCardContainer';
-import DialogContainer from '../containers/DialogContainer';
+import CollectionDialogContainer from '../containers/CollectionDialogContainer';
+import MapDialogContainer from '../containers/MapDialogContainer';
 import Header from './Header';
 import Footer from './Footer';
 
@@ -30,7 +31,9 @@ export default class Catalog extends React.Component {
         <Header />
         <div className='catalog'>
           <h1 className='mdc-typography--headline1'>Welcome to the holodeck!</h1>
-          <DialogContainer />
+          <button onClick={this.props.openMapDialog} style={{float: 'right'}}>show map</button>
+          <CollectionDialogContainer />
+          <MapDialogContainer />
             <div className='mdc-layout-grid'>
               <ul className='catalog-list mdc-layout-grid__inner'>
                 {this.props.collections.result ? this.props.collections.result.map(collectionId =>

@@ -165,5 +165,6 @@ src/data_hub/webpack-stats.dev.json
 
 src/data_hub/static/*
 !src/data_hub/static/.gitkeep
+!src/data_hub/static/favicon.ico
 
 src/data_hub/webpack-stats\.prod\.json

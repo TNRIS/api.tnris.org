@@ -5,6 +5,8 @@ import DialogContainer from '../containers/DialogContainer';
 import Header from './Header';
 import Footer from './Footer';
 
+import loadingImage from '../images/loading.jpg';
+
 export default class Catalog extends React.Component {
 
   componentDidMount() {
@@ -15,7 +17,11 @@ export default class Catalog extends React.Component {
   render() {
     console.log(this.props);
     const { error, loading } = this.props;
-    const loadingMessage = <div className='loading-message'>Loading...</div>;
+    const loadingMessage = (
+        <div className="catalog-component">
+          <img src={loadingImage} alt="Holodeck Loading..." className="holodeck-loading-image" />
+        </div>
+      );
 
     if (error) {
       return <div>Error! {error.message}</div>;
@@ -29,21 +35,20 @@ export default class Catalog extends React.Component {
       <div className="catalog-component">
         <Header />
         <div className='catalog'>
-          <h1 className='mdc-typography--headline1'>Welcome to the holodeck!</h1>
           <DialogContainer />
-            <div className='mdc-layout-grid'>
-              <ul className='catalog-list mdc-layout-grid__inner'>
-                {this.props.collections.result ? this.props.collections.result.map(collectionId =>
-                  <li
-                    className='mdc-layout-grid__cell mdc-layout-grid__cell--span-2'
-                    key={collectionId}>
-                    <CatalogCardContainer
-                      collection={this.props.collections.entities.collectionsById[collectionId]}
-                    />
-                  </li>
-                ) : loadingMessage}
-              </ul>
-          </div>
+          <div className='mdc-layout-grid'>
+            <ul className='catalog-list mdc-layout-grid__inner'>
+              {this.props.collections.result ? this.props.collections.result.map(collectionId =>
+                <li
+                  className='mdc-layout-grid__cell mdc-layout-grid__cell--span-2'
+                  key={collectionId}>
+                  <CatalogCardContainer
+                    collection={this.props.collections.entities.collectionsById[collectionId]}
+                  />
+                </li>
+              ) : loadingMessage}
+            </ul>
+        </div>
         </div>
         <Footer />
       </div>

@@ -6,22 +6,26 @@ styles for component: Catalog
 
 .catalog-component {
 
-  h1 {
-    color: #68EFE8;
-    text-align: center;
-  }
+  .catalog {
 
-  h2 {
-    color: #68EFE8;
-    text-align: center;
-  }
+    h1 {
+      color: #68EFE8;
+      text-align: center;
+    }
 
-  a {
-    color: red;
-  }
+    h2 {
+      color: #68EFE8;
+      text-align: center;
+    }
 
-  ul {
-    list-style-type: none;
+    a {
+      color: red;
+    }
+
+    ul {
+      list-style-type: none;
+    }
+
   }
 
 

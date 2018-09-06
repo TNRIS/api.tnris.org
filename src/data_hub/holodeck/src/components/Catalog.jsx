@@ -26,9 +26,9 @@ export default class Catalog extends React.Component {
     }
 
     return (
-      <div>
+      <div className="catalog-component">
         <Header />
-        <div className='catalog-component'>
+        <div className='catalog'>
           <h1 className='mdc-typography--headline1'>Welcome to the holodeck!</h1>
           <DialogContainer />
             <div className='mdc-layout-grid'>

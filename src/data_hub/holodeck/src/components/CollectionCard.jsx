@@ -3,7 +3,7 @@ import React from 'react';
 export default class DialogContent extends React.Component {
   render() {
     return (
-      <div className='collection-card mdc-layout-grid'>
+      <div className='collection-card-component mdc-layout-grid'>
         <div className='mdc-layout-grid__inner'>
           <h4 className='mdc-typography--headline4 mdc-layout-grid__cell mdc-layout-grid__cell--span12'>
             {this.props.collection.name}

@@ -1,20 +1,20 @@
 import { connect } from 'react-redux';
 
 import { collectionActions } from '../actions';
-import { dialogActions } from '../actions';
+import { collectionDialogActions } from '../actions';
 import CatalogCard from '../components/CatalogCard';
 
 const mapStateToProps = state => ({
-  showDialog: state.dialog.showDialog,
+  showCollectionDialog: state.collectionDialog.showCollectionDialog,
   selectedCollection: state.collections.selectedCollection
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    openDialog: () => {
-      dispatch(dialogActions.openDialog());
+    openCollectionDialog: () => {
+      dispatch(collectionDialogActions.openCollectionDialog());
     },
-    closeDialog: () => {
-      dispatch(dialogActions.closeDialog());
+    closeCollectionDialog: () => {
+      dispatch(collectionDialogActions.closeCollectionDialog());
     },
     selectCollection: (collectionId) => {
       dispatch(collectionActions.selectCollection(collectionId));

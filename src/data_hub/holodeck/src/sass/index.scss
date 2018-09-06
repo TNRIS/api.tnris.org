@@ -5,8 +5,9 @@ available to the app
 
 @import '@material/typography/mdc-typography';
 
-@import 'header';
 @import 'catalog';
-@import 'catalog-card';
-@import 'footer';
+@import 'catalogCard';
+@import 'collectionCard';
 @import 'dialog';
+@import 'footer';
+@import 'header';

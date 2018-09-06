@@ -1,19 +1,28 @@
 import React from 'react';
 
+import mapboxgl from 'mapbox-gl';
+
 export default class Map extends React.Component {
+
+  componentDidMount() {
+    // define mapbox map
+    mapboxgl.accessToken = 'undefined';
+    const map = new mapboxgl.Map({
+        container: 'map', // container id
+        style: 'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json',
+        center: [-99.341389, 31.330000],
+        zoom: 6.1
+    });
+
+    map.addControl(new mapboxgl.NavigationControl(), 'top-left');
+  }
 
   render() {
 
     return (
-      <div className='map-selector'>
+      <div className='map-component'>
         <h1 className='mdc-typography--headline1'>map</h1>
-        <div className=''>
-          <img
-            className='col'
-            style={{height: '500px'}}
-            src='https://i.kym-cdn.com/photos/images/original/000/895/634/08a.gif'
-            alt=''
-          />
+        <div id='map'>
         </div>
       </div>
     );

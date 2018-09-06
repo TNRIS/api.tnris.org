@@ -1,0 +1,2 @@
+export const OPEN_MAP_DIALOG = 'OPEN_MAP_DIALOG';
+export const CLOSE_MAP_DIALOG = 'CLOSE_MAP_DIALOG';

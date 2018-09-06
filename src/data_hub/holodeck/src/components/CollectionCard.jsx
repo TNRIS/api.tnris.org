@@ -9,10 +9,8 @@ export default class DialogContent extends React.Component {
             {this.props.collection.name}
           </h4>
         </div>
-        <div className='collection-card__image mdc-layout-grid__inner'>
           <img src={this.props.collection.overview_image} alt=''
-               className='mdc-layout-grid__cell'/>
-        </div>
+               className='collection-card__image mdc-layout-grid__cell'/>
         <div className='mdc-layout-grid__inner'>
           <p className='mdc-typography__body2 mdc-layout-grid__cell'>
             {this.props.collection.description}

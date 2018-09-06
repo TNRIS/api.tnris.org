@@ -3,3 +3,7 @@ styles for component: CollectionCard
 */
 
 @import "@material/layout-grid/mdc-layout-grid";
+
+.collection-card__image {
+  max-width: 1000px;
+}

@@ -1,0 +1,23 @@
+/*
+styles for component: CollectionCard
+*/
+
+@import "@material/layout-grid/mdc-layout-grid";
+@import '@material/dialog/mdc-dialog';
+
+#collection_dialog {
+
+  .mdc-dialog__surface {
+    max-width: none;
+  }
+
+  .mdc-dialog__body {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+}
+
+.collection-dialog__image {
+  max-width: 1000px;
+}

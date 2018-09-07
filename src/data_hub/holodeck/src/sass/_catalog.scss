@@ -6,10 +6,6 @@ styles for component: Catalog
 
 .catalog-component {
 
-  .holodeck-loading-image {
-    width: 100%;
-  }
-
   .catalog {
     padding-top: 60px;
 
@@ -33,5 +29,16 @@ styles for component: Catalog
 
   }
 
+}
 
+.catalog-component__loading {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+
+  .holodeck-loading-image {
+    width: 100%;
+    height: 100%;
+  }
 }

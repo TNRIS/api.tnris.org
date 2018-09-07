@@ -6,7 +6,12 @@ styles for component: Catalog
 
 .catalog-component {
 
+  .holodeck-loading-image {
+    width: 100%;
+  }
+
   .catalog {
+    padding-top: 60px;
 
     h1 {
       color: #68EFE8;

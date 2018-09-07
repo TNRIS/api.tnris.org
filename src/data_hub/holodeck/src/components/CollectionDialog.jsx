@@ -31,14 +31,14 @@ class CollectionDialog extends React.Component {
         return (
           <div className='collection-dialog mdc-layout-grid'>
             <div className='mdc-layout-grid__inner'>
-              <h4 className='mdc-typography--headline4 mdc-layout-grid__cell mdc-layout-grid__cell--span12'>
+              <h4 className='mdc-typography--headline4 mdc-layout-grid__cell mdc-layout-grid__cell--span-12'>
                 {collection.name}
               </h4>
             </div>
               <img src={collection.overview_image} alt=''
-                    className='collection-dialog__image mdc-layout-grid__cell'/>
+                    className='collection-dialog__image mdc-layout-grid__cell--span-12'/>
             <div className='mdc-layout-grid__inner'>
-              <p className='mdc-typography__body2 mdc-layout-grid__cell'>
+              <p className='mdc-typography__body2 mdc-layout-grid__cell--span-12'>
                 {collection.description}
               </p>
             </div>

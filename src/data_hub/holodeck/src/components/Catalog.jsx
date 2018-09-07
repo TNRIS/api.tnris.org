@@ -19,7 +19,7 @@ export default class Catalog extends React.Component {
     console.log(this.props);
     const { error, loading } = this.props;
     const loadingMessage = (
-        <div className="catalog-component">
+        <div className="catalog-component__loading">
           <img src={loadingImage} alt="Holodeck Loading..." className="holodeck-loading-image" />
         </div>
       );
@@ -36,7 +36,6 @@ export default class Catalog extends React.Component {
       <div className="catalog-component">
         <Header />
         <div className='catalog'>
-          <h1 className='mdc-typography--headline1'>Welcome to the holodeck!</h1>
           <button onClick={this.props.openMapDialog} style={{float: 'right'}}>show map</button>
           <CollectionDialogContainer />
           <MapDialogContainer />

@@ -18,12 +18,14 @@ styles for component: Header
     height: auto;
     letter-spacing: 3px;
     text-transform: uppercase;
+    padding: 4px;
 
     .header-title__twdb {
       float: right;
       text-decoration: none;
       color: inherit;
       font-size: 12px;
+      line-height: 20px;
     }
   }
 

@@ -6,6 +6,8 @@ import MapDialogContainer from '../containers/MapDialogContainer';
 import Header from './Header';
 import Footer from './Footer';
 
+import loadingImage from '../images/loading.jpg';
+
 export default class Catalog extends React.Component {
 
   componentDidMount() {
@@ -16,7 +18,11 @@ export default class Catalog extends React.Component {
   render() {
     console.log(this.props);
     const { error, loading } = this.props;
-    const loadingMessage = <div className='loading-message'>Loading...</div>;
+    const loadingMessage = (
+        <div className="catalog-component">
+          <img src={loadingImage} alt="Holodeck Loading..." className="holodeck-loading-image" />
+        </div>
+      );
 
     if (error) {
       return <div>Error! {error.message}</div>;

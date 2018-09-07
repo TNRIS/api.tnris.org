@@ -21,7 +21,6 @@ export default class Map extends React.Component {
 
     return (
       <div className='map-component'>
-        <h1 className='mdc-typography--headline1'>map</h1>
         <div id='map'>
         </div>
       </div>

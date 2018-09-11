@@ -1,4 +1,7 @@
 import React from 'react';
+import SortContainer from '../containers/SortContainer';
+
+import logo from '../images/tnris_logo_white.png'
 
 export default class Header extends React.Component {
 
@@ -10,7 +13,12 @@ export default class Header extends React.Component {
           <a className='header-title__twdb' href="">A Division of the Texas Water Development Board</a>
         </div>
         <div className='header-nav'>
-          Look at this nav!
+          <div className='logo-container'>
+            <img src={logo} alt="TNRIS.org Logo" className="tnris-logo" />
+          </div>
+          <div className='buttons-container'>
+            <SortContainer />
+          </div>
         </div>
       </div>
     );

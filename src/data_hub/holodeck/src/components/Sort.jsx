@@ -8,14 +8,27 @@ class Sort extends Component {
       this.state = {
         sortOrder: this.props.sortOrder
       }
-      console.log(this.state);
+      this.showSortMenu = this.showSortMenu.bind(this);
+      this.setSort = this.setSort.bind(this);
   }
 
   showSortMenu() {
-    console.log(document.querySelector('.mdc-menu'));
-    const menu = new MDCMenu(document.querySelector('.mdc-menu'));
-    console.log(menu);
+    const menu = new MDCMenu(this.refs.sort_menu);
     menu.open = true;
+  }
+
+  setSort(order) {
+    this.setState({sortOrder: order});
+    switch(order) {
+      case 'AZ':
+        this.props.sortAZ();
+        break;
+      case 'ZA':
+        this.props.sortZA();
+        break;
+      default:
+        this.props.sortAZ();
+    }
   }
 
   render() {
@@ -32,15 +45,17 @@ class Sort extends Component {
     }
 
     return (
-      <div className="sort-component">
-        <button id="menu-button" onClick={this.showSortMenu} className="mdc-button mdc-button--raised sort-button">{label}</button>
-        <div className="mdc-menu mdc-menu-surface">
+      <div className="sort-component mdc-menu-surface--anchor">
+        <button id="menu-button" onClick={this.showSortMenu} className="mdc-button mdc-button--raised sort-button">
+          {label}
+        </button>
+        <div ref="sort_menu" className="mdc-menu mdc-menu-surface">
           <ul className="mdc-list mdc-menu__items" role="menu" aria-hidden="true">
-            <li className="mdc-list-item" role="menuitem" tabIndex="0">
-              A Menu Item
+            <li className="mdc-list-item" role="menuitem" tabIndex="0" onClick={() => this.setSort("AZ")}>
+              A to Z
             </li>
-            <li className="mdc-list-item" role="menuitem" tabIndex="0">
-              Another Menu Item
+            <li className="mdc-list-item" role="menuitem" tabIndex="1" onClick={() => this.setSort("ZA")}>
+              Z to A
             </li>
           </ul>
         </div>

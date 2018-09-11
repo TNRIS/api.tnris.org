@@ -65,7 +65,7 @@ class CollectionDialog extends React.Component {
           <div className="mdc-dialog__surface">
             {this.collectionDialogContent()}
               <footer className="mdc-dialog__footer">
-                  <button onClick={this.closeCollectionDialog}>CLOSE</button>
+                  <button className="mdc-button mdc-button--raised" onClick={this.closeCollectionDialog}>CLOSE</button>
               </footer>
           </div>
           <div className="mdc-dialog__backdrop"></div>

@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 
-import { collectionActions, mapDialogActions } from '../actions';
+import { mapDialogActions } from '../actions';
 import MapDialog from '../components/MapDialog';
 
 const mapStateToProps = state => ({

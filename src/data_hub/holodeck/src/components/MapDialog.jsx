@@ -11,12 +11,10 @@ class MapDialog extends React.Component {
     }
 
     componentDidMount() {
-      console.log(this.props);
       this.dialog = new MDCDialog(this.refs.map_dialog);
     }
 
     componentDidUpdate() {
-      console.log(this.props);
       this.props.showMapDialog ? this.dialog.show() : this.dialog.close()
 
     }
@@ -42,13 +40,20 @@ class MapDialog extends React.Component {
               id="map_dialog"
               className="mdc-dialog"
               role="alertdialog"
-              aria-labelledby="test_dialog-label"
-              aria-describedby="test_dialog-description">
+              aria-labelledby="map_dialog-label"
+              aria-describedby="map_dialog-description">
               <div className="mdc-dialog__surface">
-                {this.dialogContent()}
-                  <footer className="mdc-dialog__footer">
-                      <button onClick={this.closeMapDialog}>CLOSE</button>
-                  </footer>
+                <header className='mdc-dialog__header'>
+                  <h2 className='mdc-dialog__header__title'>
+                    map
+                  </h2>
+                </header>
+                <section className='mdc-dialog__body'>
+                  {this.dialogContent()}
+                </section>
+                <footer className="mdc-dialog__footer">
+                    <button onClick={this.closeMapDialog}>CLOSE</button>
+                </footer>
               </div>
               <div className="mdc-dialog__backdrop"></div>
           </aside>

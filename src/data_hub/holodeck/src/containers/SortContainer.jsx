@@ -4,7 +4,7 @@ import { sortActions } from '../actions';
 import Sort from '../components/Sort';
 
 const mapStateToProps = state => ({
-  sortOrder: state.sorter.sorter
+  sortOrder: state.sorter.sortOrder
 });
 
 const mapDispatchToProps = dispatch => ({

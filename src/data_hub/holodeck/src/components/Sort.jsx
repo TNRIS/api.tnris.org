@@ -51,10 +51,10 @@ class Sort extends Component {
         </button>
         <div ref="sort_menu" className="mdc-menu mdc-menu-surface">
           <ul className="mdc-list mdc-menu__items" role="menu" aria-hidden="true">
-            <li className="mdc-list-item" role="menuitem" tabIndex="0" onClick={() => this.setSort("AZ")}>
+            <li className={this.state.sortOrder === 'AZ' ? 'mdc-list-item  active' : 'mdc-list-item'} role="menuitem" tabIndex="0" onClick={() => this.setSort("AZ")}>
               A to Z
             </li>
-            <li className="mdc-list-item" role="menuitem" tabIndex="1" onClick={() => this.setSort("ZA")}>
+            <li className={this.state.sortOrder === 'ZA' ? 'mdc-list-item  active' : 'mdc-list-item'} role="menuitem" tabIndex="1" onClick={() => this.setSort("ZA")}>
               Z to A
             </li>
           </ul>

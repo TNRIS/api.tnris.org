@@ -31,6 +31,18 @@ styles for component: Header
 
   .header-nav {
     color: #d2f1ff;
+    padding: 7px 7px 7px 7px;
+
+    .logo-container {
+      float: left;
+      margin-left: 3px;
+      margin-right: 3px;
+    }
+
+    .buttons-container {
+      float: left;
+      padding: 0 5px 0 5px;
+    }
   }
 
 }

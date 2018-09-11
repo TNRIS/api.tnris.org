@@ -7,4 +7,12 @@ styles for component: Sort
   margin-left: 3px;
   margin-right: 3px;
 
+  .sort-button {
+    background-color: #248CC0;
+  }
+
+  .active {
+    background-color: #248CC0;
+    color: white;
+  }
 }

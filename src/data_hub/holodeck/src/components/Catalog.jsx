@@ -41,7 +41,7 @@ export default class Catalog extends React.Component {
           <MapDialogContainer />
             <div className='mdc-layout-grid'>
               <ul className='catalog-list mdc-layout-grid__inner'>
-                {this.props.collections.result ? this.props.collections.result.map(collectionId =>
+                {this.props.visibleCollections !== [] ? this.props.visibleCollections.map(collectionId =>
                   <li
                     className='mdc-layout-grid__cell mdc-layout-grid__cell--span-2'
                     key={collectionId}>

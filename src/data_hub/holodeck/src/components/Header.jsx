@@ -13,10 +13,12 @@ export default class Header extends React.Component {
           <a className='header-title__twdb' href="">A Division of the Texas Water Development Board</a>
         </div>
         <div className='header-nav'>
-          <div className='logo-container'>
-            <img src={logo} alt="TNRIS.org Logo" className="tnris-logo" />
+          <div className='header-nav__logos'>
+            <a href="https://tnris.org">
+              <img src={logo} alt="TNRIS.org Logo" className="tnris-logo" />
+            </a>
           </div>
-          <div className='buttons-container'>
+          <div className='header-nav__buttons'>
             <SortContainer />
           </div>
         </div>

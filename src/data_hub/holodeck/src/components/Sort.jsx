@@ -26,6 +26,12 @@ class Sort extends Component {
       case 'ZA':
         this.props.sortZA();
         break;
+      case 'NEW':
+        this.props.sortNew();
+        break;
+      case 'OLD':
+        this.props.sortOld();
+        break;
       default:
         this.props.sortAZ();
     }
@@ -40,13 +46,19 @@ class Sort extends Component {
       case 'ZA':
         label = 'Z to A';
         break;
+      case 'NEW':
+        label = 'Newest';
+        break;
+      case 'OLD':
+        label = 'Oldest';
+        break;
       default:
         label = 'A to Z';
     }
 
     return (
       <div className="sort-component mdc-menu-surface--anchor">
-        <button id="menu-button" onClick={this.showSortMenu} className="mdc-button mdc-button--raised sort-button">
+        <button onClick={this.showSortMenu} className="mdc-button mdc-button--raised sort-button">
           {label}
         </button>
         <div ref="sort_menu" className="mdc-menu mdc-menu-surface">
@@ -56,6 +68,12 @@ class Sort extends Component {
             </li>
             <li className={this.state.sortOrder === 'ZA' ? 'mdc-list-item  active' : 'mdc-list-item'} role="menuitem" tabIndex="1" onClick={() => this.setSort("ZA")}>
               Z to A
+            </li>
+            <li className={this.state.sortOrder === 'NEW' ? 'mdc-list-item  active' : 'mdc-list-item'} role="menuitem" tabIndex="1" onClick={() => this.setSort("NEW")}>
+              Newest
+            </li>
+            <li className={this.state.sortOrder === 'OLD' ? 'mdc-list-item  active' : 'mdc-list-item'} role="menuitem" tabIndex="1" onClick={() => this.setSort("OLD")}>
+              Oldest
             </li>
           </ul>
         </div>

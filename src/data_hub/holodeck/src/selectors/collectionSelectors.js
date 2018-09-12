@@ -14,8 +14,6 @@ export const getVisibleCollections = createSelector(
 export const sortCollections = createSelector(
   [ getVisibleCollections, sortOrder ],
   (collections, order) => {
-    console.log(collections);
-    console.log(order);
     let collectionIds = collections !== {} ? Object.keys(collections) : [];
     if (collectionIds !== []) {
       switch(order) {
@@ -37,6 +35,28 @@ export const sortCollections = createSelector(
             if (one.name > two.name)
               return -1;
             if (one.name < two.name)
+              return 1;
+            return 0;
+          });
+          break;
+        case 'NEW':
+          collectionIds.sort((a,b) => {
+            const one = collections[a]
+            const two = collections[b]
+            if (one.acquisition_date > two.acquisition_date)
+              return -1;
+            if (one.acquisition_date < two.acquisition_date)
+              return 1;
+            return 0;
+          });
+          break;
+        case 'OLD':
+          collectionIds.sort((a,b) => {
+            const one = collections[a]
+            const two = collections[b]
+            if (one.acquisition_date < two.acquisition_date)
+              return -1;
+            if (one.acquisition_date > two.acquisition_date)
               return 1;
             return 0;
           });

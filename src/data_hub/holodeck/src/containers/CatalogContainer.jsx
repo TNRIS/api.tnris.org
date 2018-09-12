@@ -12,7 +12,7 @@ import {
 import Catalog from '../components/Catalog';
 
 const mapStateToProps = (state) => ({
-  collections: state.collections.items,
+  collections: getVisibleCollections(state),
   visibleCollections: sortCollections(state),
   resources: state.resources.items,
   loading: state.collections.loading,

@@ -19,9 +19,35 @@ styles for component: CatalogCard
     -webkit-margin-before: 0;
   }
 
-  .catalog-card__actions {
+  .catalog-card__footer {
     margin-top: auto;
+    height: 30px;
+    width: 100%;
+    bottom: 0;
+    position: absolute;
   }
 
   @include mdc-card-outline(lightgray, 1px);
+}
+
+.tnris-download {
+  // background-color: purple;
+}
+
+.tnris-order {
+  .catalog-card__footer {
+    background-color: #DCBD7B;
+  }
+}
+
+.historical-aerial {
+  .catalog-card__footer {
+    background-color: #C2E1F4;
+  }
+}
+
+.outside-entity {
+  .catalog-card__footer {
+    background-color: #8B6C2A;
+  }
 }

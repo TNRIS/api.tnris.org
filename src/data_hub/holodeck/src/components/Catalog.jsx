@@ -46,7 +46,7 @@ export default class Catalog extends React.Component {
                     className='mdc-layout-grid__cell mdc-layout-grid__cell--span-2'
                     key={collectionId}>
                     <CatalogCardContainer
-                      collection={this.props.collections.entities.collectionsById[collectionId]}
+                      collection={this.props.collections[collectionId]}
                     />
                   </li>
                 ) : loadingMessage}

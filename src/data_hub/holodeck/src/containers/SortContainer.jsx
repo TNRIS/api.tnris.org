@@ -13,6 +13,12 @@ const mapDispatchToProps = dispatch => ({
   },
   sortZA: () => {
     dispatch(sortActions.setSortZA());
+  },
+  sortNew: () => {
+    dispatch(sortActions.setSortNew());
+  },
+  sortOld: () => {
+    dispatch(sortActions.setSortOld());
   }
 })
 

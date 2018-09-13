@@ -20,29 +20,30 @@ styles for component: Header
     text-transform: uppercase;
     padding: 4px;
 
-    .header-title__twdb {
-      float: right;
-      text-decoration: none;
-      color: inherit;
-      font-size: 12px;
-      line-height: 20px;
+    section {
+      padding: 0;
+
+      .header-title__twdb {
+        text-decoration: none;
+        color: inherit;
+        font-size: 12px;
+      }
     }
+
   }
 
   .header-nav {
     color: #d2f1ff;
-    padding: 7px 7px 7px 7px;
 
-    .header-nav__logos {
-      float: left;
+    .mdc-top-app-bar__action-item {
       margin-left: 3px;
       margin-right: 3px;
+
+      .logo {
+        max-height: 100%;
+      }
     }
 
-    .header-nav__buttons {
-      float: left;
-      padding: 0 5px 0 5px;
-    }
   }
 
 }

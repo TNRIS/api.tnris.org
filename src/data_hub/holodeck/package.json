@@ -11,6 +11,7 @@
     "@material/layout-grid": "^0.39.0",
     "@material/menu": "^0.39.1",
     "@material/menu-surface": "^0.39.1",
+    "@material/top-app-bar": "^0.39.3",
     "@material/typography": "^0.39.0",
     "autoprefixer": "7.1.6",
     "babel-core": "6.26.0",

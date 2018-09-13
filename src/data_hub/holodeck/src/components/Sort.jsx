@@ -13,8 +13,8 @@ class Sort extends Component {
   }
 
   showSortMenu() {
-    const menu = new MDCMenu(this.refs.sort_menu);
-    menu.open = true;
+    this.menu = new MDCMenu(this.refs.sort_menu);
+    this.menu.open = true;
   }
 
   setSort(order) {

@@ -6,6 +6,7 @@
     "@material/button": "^0.39.1",
     "@material/card": "^0.39.0",
     "@material/dialog": "^0.39.1",
+    "@material/drawer": "^0.39.3",
     "@material/image-list": "^0.39.0",
     "@material/layout-grid": "^0.39.0",
     "@material/menu": "^0.39.1",

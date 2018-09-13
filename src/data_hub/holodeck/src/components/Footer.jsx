@@ -35,7 +35,7 @@ export default class Footer extends React.Component {
         </div>
         <div className="mdc-layout-grid">
           <div className="mdc-layout-grid__inner">
-            <div className="mdc-layout-grid__cell--span-3">
+            <div className="mdc-layout-grid__cell--span-3-desktop mdc-layout-grid__cell--span-4-tablet  mdc-layout-grid__cell--span-2-phone">
               <h4>
                 <a href="https://tnris.org/maps-and-data">Maps &amp; Data</a>
               </h4>
@@ -50,7 +50,7 @@ export default class Footer extends React.Component {
                 </li>
               </ul>
             </div>
-            <div className="mdc-layout-grid__cell--span-3">
+            <div className="mdc-layout-grid__cell--span-3-desktop mdc-layout-grid__cell--span-4-tablet  mdc-layout-grid__cell--span-2-phone">
               <h4>Programs</h4>
               <ul>
                 <li><a href="https://tnris.org/stratmap">StratMap</a>
@@ -69,7 +69,7 @@ export default class Footer extends React.Component {
                 <li><a href="texas-imagery-service">Texas Imagery Service</a></li>
               </ul>
             </div>
-            <div className="mdc-layout-grid__cell--span-3">
+            <div className="mdc-layout-grid__cell--span-3-desktop mdc-layout-grid__cell--span-4-tablet  mdc-layout-grid__cell--span-2-phone">
               <h4>Site</h4>
               <ul>
                 <li><a href="https://tnris.org/about">About Us</a></li>
@@ -77,14 +77,14 @@ export default class Footer extends React.Component {
                 <li><a href="https://tnris.org/order-data">Order Data</a></li>
               </ul>
             </div>
-            <div className="mdc-layout-grid__cell--span-3">
+            <div className="mdc-layout-grid__cell--span-3-desktop mdc-layout-grid__cell--span-4-tablet  mdc-layout-grid__cell--span-2-phone">
               <h4>Location</h4>
               <address>
                 1700 N. Congress, Room B-40<br />
                 Austin, Texas, 78701
               </address>
               <small>
-                <a href="https://goo.gl/maps/RE5BC" target="_blank">
+                <a href="https://goo.gl/maps/RE5BC" target="_blank" rel="noopener noreferrer">
                   <i className="material-icons">open_in_new</i>View Map
                 </a>
               </small>

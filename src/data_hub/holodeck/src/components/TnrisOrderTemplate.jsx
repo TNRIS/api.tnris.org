@@ -16,7 +16,7 @@ export default class TnrisOrderTemplate extends React.Component {
         </div>
           <img
             src={this.props.collection.overview_image}
-            alt='Dataset Overview Image'
+            alt='Dataset Overview'
             className='collection-dialog__image mdc-layout-grid__cell--span-12'/>
         <div className='mdc-layout-grid__inner'>
           <p className='mdc-typography__body2 mdc-layout-grid__cell--span-12'>

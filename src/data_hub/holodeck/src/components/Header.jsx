@@ -10,7 +10,7 @@ export default class Header extends React.Component {
       <div className='header-component'>
         <div className='header-title'>
           <span className='header-title__tnris'>Texas Natural Resources Information System</span>
-          <a className='header-title__twdb' href="">A Division of the Texas Water Development Board</a>
+          <a className='header-title__twdb' href="http://www.twdb.texas.gov/">A Division of the Texas Water Development Board</a>
         </div>
         <div className='header-nav'>
           <div className='header-nav__logos'>

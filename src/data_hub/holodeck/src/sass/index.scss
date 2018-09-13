@@ -4,16 +4,19 @@ available to the app
 */
 
 @import '@material/typography/mdc-typography';
-@import "@material/card/mdc-card";
 @import "@material/button/mdc-button";
-@import "@material/list/mdc-list";
-@import "@material/menu-surface/mdc-menu-surface";
-@import "@material/menu/mdc-menu";
-@import "@material/layout-grid/mdc-layout-grid";
+@import "@material/card/mdc-card";
 @import '@material/dialog/mdc-dialog';
+@import "@material/drawer/mdc-drawer";
 
-@import '@material/layout-grid/variables';
+@import "@material/layout-grid/mdc-layout-grid";
 @import '@material/layout-grid/mixins';
+@import '@material/layout-grid/variables';
+
+@import "@material/list/mdc-list";
+@import "@material/menu/mdc-menu";
+@import "@material/menu-surface/mdc-menu-surface";
+
 
 @import 'catalog';
 @import 'catalogCard';
@@ -28,3 +31,7 @@ available to the app
 @import 'sort';
 @import 'tnrisDownloadTemplate';
 @import 'tnrisOrderTemplate';
+
+body {
+  margin: 0;
+}

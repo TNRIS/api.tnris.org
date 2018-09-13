@@ -1,5 +1,5 @@
 /*
-styles for component: CollectionCard
+styles for component: CollectionDialog
 */
 
 #collection_dialog {
@@ -8,13 +8,4 @@ styles for component: CollectionCard
     max-width: none;
   }
 
-  .mdc-dialog__body {
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-}
-
-.collection-dialog__image {
-  max-width: 1000px;
 }

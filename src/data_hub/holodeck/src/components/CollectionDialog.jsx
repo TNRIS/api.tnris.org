@@ -1,6 +1,11 @@
 import React from 'react';
 import { MDCDialog } from '@material/dialog';
 
+import TnrisDownloadTemplate from './TnrisDownloadTemplate';
+import TnrisOrderTemplate from './TnrisOrderTemplate';
+import HistoricalAerialTemplate from './HistoricalAerialTemplate';
+import OutsideEntityTemplate from './OutsideEntityTemplate';
+
 class CollectionDialog extends React.Component {
     constructor(props) {
         super(props);
@@ -9,12 +14,10 @@ class CollectionDialog extends React.Component {
     }
 
     componentDidMount() {
-      console.log(this.props);
       this.dialog = new MDCDialog(this.refs.collection_dialog);
     }
 
     componentDidUpdate() {
-      console.log(this.props);
       this.props.showCollectionDialog ? this.dialog.show() : this.dialog.close()
 
     }
@@ -27,23 +30,20 @@ class CollectionDialog extends React.Component {
 
     collectionDialogContent() {
       if (this.props.showCollectionDialog) {
-        let collection = this.props.collections.entities.collectionsById[this.props.selectedCollection];
-        return (
-          <div className='collection-dialog mdc-layout-grid'>
-            <div className='mdc-layout-grid__inner'>
-              <h4 className='mdc-typography--headline4 mdc-layout-grid__cell mdc-layout-grid__cell--span-12'>
-                {collection.name}
-              </h4>
-            </div>
-              <img src={collection.overview_image} alt=''
-                    className='collection-dialog__image mdc-layout-grid__cell--span-12'/>
-            <div className='mdc-layout-grid__inner'>
-              <p className='mdc-typography__body2 mdc-layout-grid__cell--span-12'>
-                {collection.description}
-              </p>
-            </div>
-          </div>
-        )
+        let collection = this.props.collections[this.props.selectedCollection];
+        switch(collection.template) {
+          case 'tnris-download':
+            return (<TnrisDownloadTemplate collection={collection} />);
+          case 'tnris-order':
+            return (<TnrisOrderTemplate collection={collection} />);
+          case 'historical-aerial':
+            return (<HistoricalAerialTemplate collection={collection} />);
+          case 'outside-entity':
+            return (<OutsideEntityTemplate collection={collection} />);
+          default:
+            return (<TnrisDownloadTemplate collection={collection} />);
+        }
+
       }
     }
 
@@ -53,7 +53,6 @@ class CollectionDialog extends React.Component {
     }
 
     render() {
-      console.log(this.props);
       return (
         <aside
           ref="collection_dialog"

@@ -6,9 +6,13 @@ styles for component: Footer
   background-color: #222;
   color: #f5f5f5;
   position: absolute;
-  min-height: 375px;
   width: 100%;
   left: 0;
+
+  @media (min-width: mdc-layout-grid-breakpoint-min(desktop)) {
+    min-height: 375px;
+  }
+
 
   .footer-component__legal {
     background-color: #444;
@@ -20,6 +24,8 @@ styles for component: Footer
     .legal-links {
       margin-top: 0;
       margin-bottom: 0;
+      padding-left: 20px;
+      padding-right: 20px;
 
       li {
         display: inline-block;
@@ -43,7 +49,11 @@ styles for component: Footer
     padding-bottom: 0;
     font-weight: 400;
 
-    .mdc-layout-grid__cell--span-3 {
+    @media (min-width: mdc-layout-grid-breakpoint-min(desktop)) {
+      max-width: 1170px;
+    }
+
+    .mdc-layout-grid__cell--span-3-desktop {
       padding-left: 15px;
       padding-right: 15px;
 
@@ -102,15 +112,18 @@ styles for component: Footer
   }
 
   .footer-component__copyright {
-    bottom: 0;
     font-size: 12px;
-    left: 0;
     padding-bottom: 25px;
-    position: absolute;
     text-align: center;
-    width: 100%;
     color: #eee;
 
+    @media (min-width: mdc-layout-grid-breakpoint-min(desktop)) {
+      bottom: 0;
+      left: 0;
+      right: 0;
+      margin: auto;
+      position: absolute;
+    }
   }
 
 }

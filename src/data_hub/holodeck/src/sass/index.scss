@@ -12,6 +12,9 @@ available to the app
 @import "@material/layout-grid/mdc-layout-grid";
 @import '@material/dialog/mdc-dialog';
 
+@import '@material/layout-grid/variables';
+@import '@material/layout-grid/mixins';
+
 @import 'catalog';
 @import 'catalogCard';
 @import 'collectionDialog';

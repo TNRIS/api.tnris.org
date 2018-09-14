@@ -38,44 +38,31 @@ class Sort extends Component {
   }
 
   render() {
-    let label;
-    switch(this.state.sortOrder) {
-      case 'AZ':
-        label = 'A to Z';
-        break;
-      case 'ZA':
-        label = 'Z to A';
-        break;
-      case 'NEW':
-        label = 'Newest';
-        break;
-      case 'OLD':
-        label = 'Oldest';
-        break;
-      default:
-        label = 'A to Z';
-    }
 
     return (
       <div className="sort-component mdc-menu-surface--anchor">
-        <button onClick={this.showSortMenu} className="mdc-button mdc-button--raised sort-button">
-          {label}
-        </button>
+        <a onClick={this.showSortMenu} className="mdc-top-app-bar__action-item">
+          <i className="material-icons mdc-top-app-bar__navigation-icon">sort_by_alpha</i>
+        </a>
         <div ref="sort_menu" className="mdc-menu mdc-menu-surface">
-          <ul className="mdc-list mdc-menu__items" role="menu" aria-hidden="true">
-            <li className={this.state.sortOrder === 'AZ' ? 'mdc-list-item  active' : 'mdc-list-item'} role="menuitem" tabIndex="0" onClick={() => this.setSort("AZ")}>
-              A to Z
-            </li>
-            <li className={this.state.sortOrder === 'ZA' ? 'mdc-list-item  active' : 'mdc-list-item'} role="menuitem" tabIndex="1" onClick={() => this.setSort("ZA")}>
-              Z to A
-            </li>
-            <li className={this.state.sortOrder === 'NEW' ? 'mdc-list-item  active' : 'mdc-list-item'} role="menuitem" tabIndex="1" onClick={() => this.setSort("NEW")}>
-              Newest
-            </li>
-            <li className={this.state.sortOrder === 'OLD' ? 'mdc-list-item  active' : 'mdc-list-item'} role="menuitem" tabIndex="1" onClick={() => this.setSort("OLD")}>
-              Oldest
-            </li>
-          </ul>
+          <nav className="mdc-list">
+            <a className={this.state.sortOrder === 'AZ' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
+               onClick={() => this.setSort("AZ")}>
+               A to Z
+            </a>
+            <a className={this.state.sortOrder === 'ZA' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
+               onClick={() => this.setSort("ZA")}>
+               Z to A
+            </a>
+            <a className={this.state.sortOrder === 'NEW' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
+               onClick={() => this.setSort("NEW")}>
+               Newest
+            </a>
+            <a className={this.state.sortOrder === 'OLD' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
+               onClick={() => this.setSort("OLD")}>
+               Oldest
+            </a>
+          </nav>
         </div>
       </div>
     )

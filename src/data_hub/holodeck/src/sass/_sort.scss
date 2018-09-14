@@ -3,16 +3,16 @@ styles for component: Sort
 */
 
 .sort-component {
-  float: left;
   margin-left: 3px;
   margin-right: 3px;
 
-  .sort-button {
-    background-color: #248CC0;
-  }
+  .mdc-list {
+    text-align: center;
 
-  .active {
-    background-color: #248CC0;
-    color: white;
+    .mdc-list-item {
+      margin: 2px 8px 8px 8px;
+      border-radius: 4px;
+    }
+
   }
 }

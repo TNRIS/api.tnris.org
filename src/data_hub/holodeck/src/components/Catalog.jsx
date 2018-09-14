@@ -10,17 +10,10 @@ import Footer from './Footer';
 import loadingImage from '../images/loading.jpg';
 
 export default class Catalog extends React.Component {
-  constructor(props) {
-    super(props);
-  }
 
   componentDidMount() {
     this.props.fetchCollections();
     this.props.fetchResources();
-  }
-
-  componentWillReceiveProps(nextProps) {
-    console.log(nextProps);
   }
 
   render() {
@@ -50,7 +43,7 @@ export default class Catalog extends React.Component {
           <MapDialogContainer />
             <div className='mdc-layout-grid'>
               <ul className='catalog-list mdc-layout-grid__inner'>
-                {this.props.collections ? this.props.visibleCollections.map(collectionId =>
+                {this.props.visibleCollections ? this.props.visibleCollections.map(collectionId =>
                   <li
                     className='mdc-layout-grid__cell mdc-layout-grid__cell--span-2'
                     key={collectionId}>

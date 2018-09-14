@@ -10,14 +10,21 @@ import Footer from './Footer';
 import loadingImage from '../images/loading.jpg';
 
 export default class Catalog extends React.Component {
+  constructor(props) {
+    super(props);
+  }
 
   componentDidMount() {
     this.props.fetchCollections();
     this.props.fetchResources();
   }
 
+  componentWillReceiveProps(nextProps) {
+    console.log(nextProps);
+  }
+
   render() {
-    console.log(this.props);
+    console.log(this.props.visibleCollections);
     const { error, loading } = this.props;
     const loadingMessage = (
         <div className="catalog-component__loading">

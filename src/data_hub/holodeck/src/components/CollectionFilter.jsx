@@ -3,14 +3,24 @@ import React from 'react';
 export default class CollectionFilter extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      filter: false
+    }
     this.handleSetFilter = this.handleSetFilter.bind(this);
   }
 
   handleSetFilter() {
-    this.props.setCollectionFilter({
-      category: 'Environmental',
-      recommended_use: 'General Large Scale Geologic Information and Mapping'
-    });
+    this.setState({filter: !this.state.filter});
+    console.log(this.state);
+    if (this.state.filter) {
+      console.log('filter');
+      this.props.setCollectionFilter({
+        category: 'Environmental',
+        recommended_use: 'General Large Scale Geologic Information and Mapping'
+      });
+    } else {
+      this.props.setCollectionFilter({});
+    }
   }
 
   render() {

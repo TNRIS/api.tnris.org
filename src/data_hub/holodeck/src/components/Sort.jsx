@@ -55,7 +55,7 @@ class Sort extends Component {
       default:
         label = 'A to Z';
     }
-
+    console.log(this.props);
     return (
       <div className="sort-component mdc-menu-surface--anchor">
         <button onClick={this.showSortMenu} className="mdc-button mdc-button--raised sort-button">

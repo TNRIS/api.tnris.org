@@ -13,7 +13,7 @@ const rootReducer = combineReducers({
   collectionFilter,
   mapDialog,
   resources,
-  sorter
+  sorter,
 })
 
 export default rootReducer;

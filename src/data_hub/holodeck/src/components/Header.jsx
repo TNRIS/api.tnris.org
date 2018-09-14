@@ -1,5 +1,6 @@
 import React from 'react';
 import {MDCTopAppBar} from '@material/top-app-bar/index';
+import {MDCDrawer} from "@material/drawer";
 import SortContainer from '../containers/SortContainer';
 
 import tnrisLogo from '../images/tnris.png'
@@ -7,8 +8,14 @@ import tnrisLogo from '../images/tnris.png'
 export default class Header extends React.Component {
 
   componentDidMount() {
+    this.drawer = MDCDrawer.attachTo(document.querySelector('.mdc-drawer'));
+
     this.topAppBarElement = document.querySelector('.mdc-top-app-bar');
     this.topAppBar = new MDCTopAppBar(this.topAppBarElement);
+
+    this.topAppBar.listen('MDCTopAppBar:nav', () => {
+        this.drawer.open = !this.drawer.open;
+    });
   }
 
   render() {

@@ -17,7 +17,6 @@ export default class Catalog extends React.Component {
   }
 
   render() {
-    console.log(this.props.visibleCollections);
     const { error, loading } = this.props;
     const loadingMessage = (
         <div className="catalog-component__loading">

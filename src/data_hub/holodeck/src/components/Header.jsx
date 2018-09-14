@@ -3,7 +3,6 @@ import {MDCTopAppBar} from '@material/top-app-bar/index';
 import SortContainer from '../containers/SortContainer';
 
 import tnrisLogo from '../images/tnris.png'
-import twdbLogo from '../images/twdb_splash.png'
 
 export default class Header extends React.Component {
 
@@ -30,15 +29,9 @@ export default class Header extends React.Component {
               <img src={tnrisLogo} aria-label="TNRIS Logo" alt="TNRIS Logo" className="logo" />
             </a>
             <span className="mdc-top-app-bar__title">Data Holodeck</span>
-            <div className='header-nav__buttons'>
-              <SortContainer />
-            </div>
           </section>
           <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
-
-            <a href="http://www.twdb.texas.gov/" className="mdc-top-app-bar__action-item">
-              <img src={twdbLogo} aria-label="TWDB Logo" alt="TWDB Logo" className="logo" />
-            </a>
+            <SortContainer />
           </section>
         </div>
       </header>

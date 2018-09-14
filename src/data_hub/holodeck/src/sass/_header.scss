@@ -20,6 +20,10 @@ styles for component: Header
     text-transform: uppercase;
     padding: 4px;
 
+    @media (max-width: mdc-layout-grid-breakpoint-min(desktop)) {
+      display: none;
+    }
+
     section {
       padding: 0;
 

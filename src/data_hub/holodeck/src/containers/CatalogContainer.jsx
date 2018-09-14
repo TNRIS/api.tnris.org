@@ -17,6 +17,7 @@ const mapStateToProps = (state) => ({
   collections: getAllCollections(state),
   // visibleCollections: getVisibleCollections(state),
   visibleCollections: sortCollections(state),
+  sortOrder: state.sorter.sortOrder,
   resources: state.resources.items,
   loading: state.collections.loading,
   error: state.collections.error,

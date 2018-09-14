@@ -9,6 +9,7 @@ export const getAllCollections = createSelector(
   (collections) => {
     // Check if collections are in the state
     if (collections.result) {
+      // return just the collection details object; key'd by collection_id
       return collections.entities.collectionsById;
     }
   }
@@ -84,15 +85,18 @@ export const getCollectionFilterChoices = createSelector(
   }
 )
 
+
+// takes the filtered array of collection ids and reorders them based on the
+// sort order delcared in the store by the Sort component
 export const sortCollections = createSelector(
   [ getAllCollections, sortOrder, getVisibleCollections ],
   (collections, order, visibleCollections) => {
+    // if the collections are in the store
     if (collections) {
       let collectionIds = visibleCollections;
-
-      console.log(order);
-      // let collectionIds = collections !== {} ? Object.keys(collections) : [];
+      // do the order based on the declared field
       switch(order) {
+        // order by title/name alphabetically
         case 'AZ':
           collectionIds.sort((a,b) => {
             const one = collections[a]
@@ -104,6 +108,7 @@ export const sortCollections = createSelector(
             return 0;
           });
           break;
+        // order by title/name reverse alphabetically
         case 'ZA':
           collectionIds.sort((a,b) => {
             const one = collections[a]
@@ -115,6 +120,7 @@ export const sortCollections = createSelector(
             return 0;
           });
           break;
+        // order by the date of the collection newest to oldest
         case 'NEW':
           collectionIds.sort((a,b) => {
             const one = collections[a]
@@ -126,6 +132,7 @@ export const sortCollections = createSelector(
             return 0;
           });
           break;
+        // order by the date of the collection oldest to newest
         case 'OLD':
           collectionIds.sort((a,b) => {
             const one = collections[a]
@@ -137,6 +144,7 @@ export const sortCollections = createSelector(
             return 0;
           });
           break;
+        // default order is by title/name alphabetically
         default:
           collectionIds.sort((a,b) => {
             const one = collections[a]

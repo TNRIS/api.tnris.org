@@ -1,11 +1,11 @@
 import { connect } from 'react-redux';
 
 import { collectionActions, collectionDialogActions } from '../actions';
-import { getVisibleCollections } from '../selectors/collectionSelectors';
+import { getAllCollections } from '../selectors/collectionSelectors';
 import CollectionDialog from '../components/CollectionDialog';
 
 const mapStateToProps = state => ({
-  collections: getVisibleCollections(state),
+  collections: getAllCollections(state),
   selectedCollection: state.collections.selectedCollection,
   showCollectionDialog: state.collectionDialog.showCollectionDialog
 });

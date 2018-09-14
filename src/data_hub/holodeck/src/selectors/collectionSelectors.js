@@ -25,7 +25,6 @@ export const getAllCollections = createSelector(
 export const getVisibleCollections = createSelector(
   [ getCollections, getfilters ],
   (collections, filters) => {
-    console.log(collections);
     let filteredCollections = [];
     // Check if collections are in the state
     if (collections.result) {
@@ -86,10 +85,13 @@ export const getCollectionFilterChoices = createSelector(
 )
 
 export const sortCollections = createSelector(
-  [ getVisibleCollections, sortOrder ],
-  (collections, order) => {
-    let collectionIds = collections !== {} ? Object.keys(collections) : [];
-    if (collectionIds !== []) {
+  [ getAllCollections, sortOrder, getVisibleCollections ],
+  (collections, order, visibleCollections) => {
+    if (collections) {
+      let collectionIds = visibleCollections;
+
+      console.log(order);
+      // let collectionIds = collections !== {} ? Object.keys(collections) : [];
       switch(order) {
         case 'AZ':
           collectionIds.sort((a,b) => {
@@ -146,8 +148,7 @@ export const sortCollections = createSelector(
             return 0;
           });
       }
+      return collectionIds;
     }
-
-    return collectionIds;
   }
 )

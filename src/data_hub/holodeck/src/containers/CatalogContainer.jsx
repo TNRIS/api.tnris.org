@@ -1,5 +1,9 @@
 import { connect } from 'react-redux';
-import { getAllCollections, getVisibleCollections } from '../selectors/collectionSelectors';
+import {
+  getAllCollections,
+  // getVisibleCollections,
+  sortCollections
+} from '../selectors/collectionSelectors';
 
 import {
   collectionActions,
@@ -10,9 +14,9 @@ import {
 import Catalog from '../components/Catalog';
 
 const mapStateToProps = (state) => ({
-  // collections: state.collections.items,
   collections: getAllCollections(state),
-  visibleCollections: getVisibleCollections(state),
+  // visibleCollections: getVisibleCollections(state),
+  visibleCollections: sortCollections(state),
   resources: state.resources.items,
   loading: state.collections.loading,
   error: state.collections.error,

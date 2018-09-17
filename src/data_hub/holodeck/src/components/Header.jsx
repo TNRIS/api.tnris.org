@@ -3,7 +3,7 @@ import {MDCTopAppBar} from '@material/top-app-bar/index';
 import {MDCDrawer} from "@material/drawer";
 import SortContainer from '../containers/SortContainer';
 
-import tnrisLogo from '../images/tnris.png'
+import tnrisLogo from '../images/tnris.png';
 
 export default class Header extends React.Component {
 

@@ -3,6 +3,8 @@ styles for component: OutsideEntityTemplate
 */
 
 .outside-entity-template {
+  height: 100%;
+  overflow-y: auto;
 
   .collection-dialog__image {
     max-width: 100%;

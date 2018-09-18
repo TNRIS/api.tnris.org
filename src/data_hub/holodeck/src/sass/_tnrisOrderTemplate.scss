@@ -6,6 +6,10 @@ styles for component: TnrisOrderTemplate
   height: 100%;
   overflow-y: auto;
 
+  &:focus {
+    outline: none;
+  }
+
   .collection-dialog__image {
     max-width: 100%;
   }

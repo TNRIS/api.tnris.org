@@ -8,7 +8,7 @@ export default class HistoricalAerialTemplate extends React.Component {
 
   render() {
     return (
-      <div className='historical-aerial-template mdc-layout-grid'>
+      <div className='historical-aerial-template mdc-layout-grid' tabIndex='1'>
         <div className='mdc-layout-grid__inner'>
           <h4 className='mdc-typography--headline4 mdc-layout-grid__cell'>
             {this.props.collection.name}

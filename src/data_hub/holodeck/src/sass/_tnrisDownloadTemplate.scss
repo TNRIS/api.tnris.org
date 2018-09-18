@@ -3,6 +3,8 @@ styles for component: TnrisDownloadTemplate
 */
 
 .tnris-download-template {
+  height: 100%;
+  overflow-y: auto;
 
   .collection-dialog__image {
     max-width: 100%;

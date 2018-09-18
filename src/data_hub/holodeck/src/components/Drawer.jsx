@@ -83,10 +83,10 @@ export default class Drawer extends React.Component {
                 <i className="material-icons mdc-list-item__graphic" aria-hidden="true">contact_mail</i>Contact Us
               </a>
               <a className="mdc-list-item" href="https://tnris.org">
-                <img src={tnrisLogo} className="mdc-list-item__graphic tnris-logo" alt="TNRIS Logo" aria-hidden="true" />tnris.org
+                <img src={tnrisLogo} className="mdc-list-item__graphic tnris-logo" alt="TNRIS Logo" aria-hidden="true" />Texas Natural Resoources Information System
               </a>
               <a className="mdc-list-item" href="http://www.twdb.texas.gov/">
-                <img src={twdbLogo} className="mdc-list-item__graphic twdb-logo" alt="TWDB Logo" aria-hidden="true" />twdb.texas.gov
+                <img src={twdbLogo} className="mdc-list-item__graphic twdb-logo" alt="TWDB Logo" aria-hidden="true" />Texas Water Development Board
               </a>
               <a className="mdc-list-item mdc-list-item--activated close-button" onClick={() => this.closeDrawer()} aria-selected="true">
                 <i className="material-icons mdc-list-item__graphic" aria-hidden="true">close</i>Close

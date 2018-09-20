@@ -3,7 +3,6 @@ import React from 'react';
 import CatalogCardContainer from '../containers/CatalogCardContainer';
 import CollectionDialogContainer from '../containers/CollectionDialogContainer';
 import MapDialogContainer from '../containers/MapDialogContainer';
-import CollectionFilterContainer from '../containers/CollectionFilterContainer';
 import Header from './Header';
 import Footer from './Footer';
 
@@ -37,7 +36,6 @@ export default class Catalog extends React.Component {
       <div className="catalog-component">
         <Header />
         <div className='catalog'>
-          <CollectionFilterContainer />
           <button onClick={this.props.openMapDialog} style={{float: 'right'}}>show map</button>
           <CollectionDialogContainer />
           <MapDialogContainer />

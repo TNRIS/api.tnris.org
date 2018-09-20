@@ -2,9 +2,12 @@ import React from 'react';
 
 import CatalogCardContainer from '../containers/CatalogCardContainer';
 import CollectionDialogContainer from '../containers/CollectionDialogContainer';
+import CollectionFilterContainer from '../containers/CollectionFilterContainer';
+import Drawer from './Drawer';
+import Footer from './Footer';
 import MapDialogContainer from '../containers/MapDialogContainer';
 import Header from './Header';
-import Footer from './Footer';
+import MapDialogContainer from '../containers/MapDialogContainer';
 
 import loadingImage from '../images/loading.jpg';
 
@@ -16,7 +19,6 @@ export default class Catalog extends React.Component {
   }
 
   render() {
-    console.log(this.props.visibleCollections);
     const { error, loading } = this.props;
     const loadingMessage = (
         <div className="catalog-component__loading">
@@ -34,6 +36,7 @@ export default class Catalog extends React.Component {
 
     return (
       <div className="catalog-component">
+        <Drawer />
         <Header />
         <div className='catalog'>
           <button onClick={this.props.openMapDialog} style={{float: 'right'}}>show map</button>

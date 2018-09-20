@@ -63,10 +63,10 @@ class CollectionDialog extends React.Component {
           aria-describedby="test_dialog-description">
           <div className="mdc-dialog__surface">
             {this.collectionDialogContent()}
-              <footer className="mdc-dialog__footer">
-                  <button className="mdc-button mdc-button--raised" onClick={this.closeCollectionDialog}>CLOSE</button>
-              </footer>
           </div>
+          <button className="mdc-fab app-fab--absolute" aria-label="Close" onClick={this.closeCollectionDialog}>
+            <span className="mdc-fab__icon material-icons">close</span>
+          </button>
           <div className="mdc-dialog__backdrop"></div>
         </aside>
       );

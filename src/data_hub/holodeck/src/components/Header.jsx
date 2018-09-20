@@ -1,18 +1,22 @@
 import React from 'react';
-
-import { MDCTopAppBar } from '@material/top-app-bar/index';
-
+import {MDCTopAppBar} from '@material/top-app-bar/index';
+import {MDCDrawer} from "@material/drawer";
 import SortContainer from '../containers/SortContainer';
 import CollectionFilterContainer from '../containers/CollectionFilterContainer';
 
-import tnrisLogo from '../images/tnris.png'
-import twdbLogo from '../images/twdb_splash.png'
+import tnrisLogo from '../images/tnris.png';
 
 export default class Header extends React.Component {
 
   componentDidMount() {
+    this.drawer = MDCDrawer.attachTo(document.querySelector('.mdc-drawer'));
+
     this.topAppBarElement = document.querySelector('.mdc-top-app-bar');
     this.topAppBar = new MDCTopAppBar(this.topAppBarElement);
+
+    this.topAppBar.listen('MDCTopAppBar:nav', () => {
+        this.drawer.open = !this.drawer.open;
+    });
   }
 
   render() {
@@ -39,10 +43,7 @@ export default class Header extends React.Component {
             </div>
           </section>
           <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
-
-            <a href="http://www.twdb.texas.gov/" className="mdc-top-app-bar__action-item">
-              <img src={twdbLogo} aria-label="TWDB Logo" alt="TWDB Logo" className="logo" />
-            </a>
+            <SortContainer />
           </section>
         </div>
       </header>

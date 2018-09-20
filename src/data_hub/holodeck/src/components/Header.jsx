@@ -38,7 +38,6 @@ export default class Header extends React.Component {
             </a>
             <span className="mdc-top-app-bar__title">Data Holodeck</span>
             <div className='header-nav__buttons'>
-              <SortContainer />
               <CollectionFilterContainer />
             </div>
           </section>

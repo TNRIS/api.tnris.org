@@ -2,10 +2,8 @@ import React from 'react';
 
 import CatalogCardContainer from '../containers/CatalogCardContainer';
 import CollectionDialogContainer from '../containers/CollectionDialogContainer';
-import CollectionFilterContainer from '../containers/CollectionFilterContainer';
 import Drawer from './Drawer';
 import Footer from './Footer';
-import MapDialogContainer from '../containers/MapDialogContainer';
 import Header from './Header';
 import MapDialogContainer from '../containers/MapDialogContainer';
 

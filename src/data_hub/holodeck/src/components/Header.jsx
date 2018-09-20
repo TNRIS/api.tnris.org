@@ -1,6 +1,9 @@
 import React from 'react';
-import {MDCTopAppBar} from '@material/top-app-bar/index';
+
+import { MDCTopAppBar } from '@material/top-app-bar/index';
+
 import SortContainer from '../containers/SortContainer';
+import CollectionFilterContainer from '../containers/CollectionFilterContainer';
 
 import tnrisLogo from '../images/tnris.png'
 import twdbLogo from '../images/twdb_splash.png'
@@ -32,6 +35,7 @@ export default class Header extends React.Component {
             <span className="mdc-top-app-bar__title">Data Holodeck</span>
             <div className='header-nav__buttons'>
               <SortContainer />
+              <CollectionFilterContainer />
             </div>
           </section>
           <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">

@@ -1,0 +1,29 @@
+/*
+styles for component: CollectionFilter
+*/
+
+.filter-component {
+  float: left;
+  margin-left: 3px;
+  margin-right: 3px;
+
+  .filter-button {
+    background-color: #248CC0;
+  }
+
+  .active {
+    background-color: #248CC0;
+    color: white;
+  }
+
+  ul {
+    // width: 250px;
+    // margin-left: 7px;
+
+    li {
+      text-transform: capitalize;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+  }
+}

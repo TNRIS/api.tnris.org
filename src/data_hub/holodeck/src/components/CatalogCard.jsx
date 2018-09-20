@@ -14,19 +14,17 @@ export default class CatalogCard extends React.Component {
   }
 
   render() {
-    const cardClass = 'catalog-card-component mdc-card mdc-card__primary-action ' + this.props.collection.template;
+    const cardClass = 'catalog-card-component mdc-image-list__item ' + this.props.collection.template;
 
     return (
-      <div className={cardClass}
-           onClick={this.cardClicked}>
-        <div
-          className='catalog-card__media mdc-card__media mdc-card__media--square'
-          style={{backgroundImage: `url(${this.props.collection.thumbnail_image})`}}
-          alt="Dataset Thumbnail">
-          <p className='catalog-card__headline mdc-typography--body1'>{this.props.collection.name}</p>
+      <li className={cardClass} onClick={this.cardClicked}>
+        <div className="mdc-image-list__image-aspect-container">
+            <img className="mdc-image-list__image" src={this.props.collection.thumbnail_image} alt="Dataset Thumbnail" />
         </div>
-
-      </div>
+        <div className="mdc-image-list__supporting">
+          <span className="mdc-image-list__label">{this.props.collection.name}</span>
+        </div>
+      </li>
     );
   }
 }

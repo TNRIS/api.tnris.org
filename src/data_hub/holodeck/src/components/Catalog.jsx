@@ -39,22 +39,14 @@ export default class Catalog extends React.Component {
         <Header />
         <div className='catalog'>
           <CollectionFilterContainer />
-          <button onClick={this.props.openMapDialog} style={{float: 'right'}}>show map</button>
+          <button onClick={this.props.openMapDialog}>show map</button>
           <CollectionDialogContainer />
           <MapDialogContainer />
-            <div className='mdc-layout-grid'>
-              <ul className='catalog-list mdc-layout-grid__inner'>
-                {this.props.visibleCollections ? this.props.visibleCollections.map(collectionId =>
-                  <li
-                    className='mdc-layout-grid__cell mdc-layout-grid__cell--span-2'
-                    key={collectionId}>
-                    <CatalogCardContainer
-                      collection={this.props.collections[collectionId]}
-                    />
-                  </li>
-                ) : loadingMessage}
-              </ul>
-          </div>
+          <ul className='catalog-list mdc-image-list mdc-image-list--with-text-protection'>
+            {this.props.visibleCollections ? this.props.visibleCollections.map(collectionId =>
+              <CatalogCardContainer collection={this.props.collections[collectionId]} key={collectionId} />
+            ) : loadingMessage}
+          </ul>
         </div>
         <Footer />
       </div>

@@ -3,45 +3,37 @@ styles for component: CatalogCard
 */
 
 .catalog-card-component {
-  color: #000000;
-  max-width: 300px;
-  max-height: 300px;
+  width: calc(100% / 5 - 4.2px);
+  margin: 2px;
 
-  .catalog-card__headline {
-    -webkit-margin-before: 1em;
-    -webkit-margin-after: 1em;
-    padding-left: 10px;
-    color: white;
-    background: rgba(0, 0, 0, 0.5);
+  @media (max-width: mdc-layout-grid-breakpoint-max(tablet)) {
+    width: calc(100% / 3 - 4.2px);
   }
 
-  .catalog-card__body {
-    color: #767676;
-    padding-left: 10px;
-    -webkit-margin-before: 0;
+  @media (max-width: mdc-layout-grid-breakpoint-max(phone)) {
+    width: 100%;
   }
 
-  @include mdc-card-outline(lightgray, 1px);
-}
-
-.tnris-download {
-  // background-color: purple;
-}
-
-.tnris-order {
-  .catalog-card__footer {
-    background-color: #7F8C97;
+  &:hover {
+    cursor: pointer;
   }
-}
 
-.historical-aerial {
-  .catalog-card__footer {
-    background-color: #C2E1F4;
-  }
-}
+  // .mdc-image-list__image-aspect-container {
+  //   height: 10%;
+  //   width: 10%;
+  // }
 
-.outside-entity {
-  .catalog-card__footer {
-    background-color: #8B6C2A;
+  .mdc-image-list__supporting {
+    height: 25%;
+    text-align: center;
+
+    .mdc-image-list__label {
+      text-overflow: initial;
+      white-space: normal;
+      line-height: 1.3rem;
+    }
   }
+
+
+
 }

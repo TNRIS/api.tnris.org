@@ -11,7 +11,7 @@ export default class TnrisDownloadTemplateDetails extends React.Component {
     const acquisition = this.props.collection.acquisition_date.substring(0, 4);
 
     return (
-      <ul className='mdc-image-list mdc-image-list--masonry'>
+      <ul className='tnris-download-template-details mdc-image-list mdc-image-list--masonry'>
 
           <li className='mdc-image-list__item'>
             <div className='mdc-typography--headline4'>

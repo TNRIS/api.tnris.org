@@ -31,13 +31,13 @@ export default class TnrisDownloadTemplate extends React.Component {
         view = <TnrisDownloadTemplateDetails collection={this.props.collection} />;
         break;
       case 'images':
-        view = <div className='images'></div>
+        view = <div className='images'>images</div>
         break;
       case 'download':
-        view = <div className='download'></div>
+        view = <div className='download'>download</div>
         break;
       default:
-        view = <div className='default'></div>
+        view = <div className='default'>default</div>
     }
 
     return (

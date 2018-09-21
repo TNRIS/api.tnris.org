@@ -7,6 +7,7 @@ import Drawer from './Drawer';
 import Footer from './Footer';
 import Header from './Header';
 import MapDialogContainer from '../containers/MapDialogContainer';
+import ToolDrawer from './ToolDrawer';
 
 import loadingImage from '../images/loading.jpg';
 
@@ -36,6 +37,7 @@ export default class Catalog extends React.Component {
     return (
       <div className="catalog-component">
         <Drawer />
+        <ToolDrawer />
         <Header />
         <div className='catalog'>
           <CollectionFilterContainer />

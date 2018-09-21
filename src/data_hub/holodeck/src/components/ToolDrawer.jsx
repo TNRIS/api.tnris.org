@@ -3,7 +3,7 @@ import {MDCDrawer} from "@material/drawer";
 import tnrisLogo from '../images/tnris_globe.png';
 import twdbLogo from '../images/twdb_splash_icon.png';
 
-export default class Drawer extends React.Component {
+export default class ToolDrawer extends React.Component {
 
   constructor(props) {
       super(props);
@@ -11,17 +11,17 @@ export default class Drawer extends React.Component {
   }
 
   componentDidMount() {
-    this.menuDrawer = MDCDrawer.attachTo(document.querySelector('.menu-drawer'));
+    this.toolDrawer = MDCDrawer.attachTo(document.querySelector('.tool-drawer'));
   }
 
   closeDrawer () {
-    this.menuDrawer.open = false;
+    this.toolDrawer.open = false;
   }
 
   render() {
     return (
-      <div className="drawer-component">
-        <aside className="menu-drawer mdc-drawer mdc-drawer--modal">
+      <div className="tool-drawer-component">
+        <aside className="mdc-drawer mdc-drawer--modal tool-drawer">
 
           <div className="mdc-drawer__content">
             <nav className="mdc-list">

@@ -9,13 +9,15 @@ import tnrisLogo from '../images/tnris.png';
 export default class Header extends React.Component {
 
   componentDidMount() {
-    this.drawer = MDCDrawer.attachTo(document.querySelector('.mdc-drawer'));
+    this.menuDrawer = MDCDrawer.attachTo(document.querySelector('.menu-drawer'));
+    this.toolDrawer = MDCDrawer.attachTo(document.querySelector('.tool-drawer'));
 
     this.topAppBarElement = document.querySelector('.mdc-top-app-bar');
     this.topAppBar = new MDCTopAppBar(this.topAppBarElement);
 
     this.topAppBar.listen('MDCTopAppBar:nav', () => {
-        this.drawer.open = !this.drawer.open;
+        this.menuDrawer.open = !this.menuDrawer.open;
+        this.toolDrawer.open = !this.toolDrawer.open;
     });
   }
 
@@ -43,6 +45,7 @@ export default class Header extends React.Component {
           </section>
           <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
             <SortContainer />
+            <i className="material-icons mdc-top-app-bar__navigation-icon">menu</i>
           </section>
         </div>
       </header>

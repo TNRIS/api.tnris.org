@@ -3,6 +3,7 @@ import {MDCTopAppBar} from '@material/top-app-bar/index';
 import {MDCTabBar} from '@material/tab-bar';
 
 import TnrisDownloadTemplateDetails from './TnrisDownloadTemplateDetails';
+import TnrisDownloadTemplateImages from './TnrisDownloadTemplateImages';
 
 export default class TnrisDownloadTemplate extends React.Component {
   constructor(props) {
@@ -20,24 +21,25 @@ export default class TnrisDownloadTemplate extends React.Component {
     this.tabBar = new MDCTabBar(document.querySelector('.mdc-tab-bar'));
   }
 
-  setTemplateView(view) {
-    this.setState({view: view});
+  setTemplateView(viewString) {
+    console.log(viewString);
+    this.setState({view: viewString});
   }
 
   render() {
-    let view;
+    let showComponent;
     switch(this.state.view) {
       case 'details':
-        view = <TnrisDownloadTemplateDetails collection={this.props.collection} />;
+        showComponent = <TnrisDownloadTemplateDetails collection={this.props.collection} />;
         break;
       case 'images':
-        view = <div className='images'>images</div>
+        showComponent = <TnrisDownloadTemplateImages />;
         break;
       case 'download':
-        view = <div className='download'>download</div>
+        showComponent = <div className='download'>download</div>;
         break;
       default:
-        view = <div className='default'>default</div>
+        showComponent = <div className='default'>default</div>;
     }
 
     return (
@@ -89,7 +91,7 @@ export default class TnrisDownloadTemplate extends React.Component {
             </section>
           </div>
         </header>
-        {view}
+        {showComponent}
       </div>
     );
   }

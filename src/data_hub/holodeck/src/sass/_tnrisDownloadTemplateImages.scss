@@ -1,0 +1,21 @@
+/*
+styles for component: TnrisDownloadTemplateImages
+*/
+
+.tnris-download-template-images {
+  padding: 84px 20px 20px 20px;
+
+  .mdc-button {
+    border-radius: 40%;
+    width: 30px;
+    height: 55px;
+  }
+
+  .mdc-button-left {
+    float: left;
+  }
+
+  .mdc-button-right {
+    float: right;
+  }
+}

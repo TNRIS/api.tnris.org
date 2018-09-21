@@ -14,26 +14,36 @@ styles for component: CatalogCard
     width: 100%;
   }
 
-  &:hover {
+  &:hover, &:active {
     cursor: pointer;
+
+    .mdc-image-list__supporting {
+      height: 50%;
+
+      .mdc-image-list__label {
+        white-space: normal;
+      }
+    }
+
+    img {
+      outline: 3px solid black;
+      outline-offset: -2px;
+    }
+
   }
 
-  // .mdc-image-list__image-aspect-container {
-  //   height: 10%;
-  //   width: 10%;
-  // }
-
   .mdc-image-list__supporting {
-    height: 25%;
-    text-align: center;
+    height: 20%;
+    margin: auto;
+    text-overflow: hidden;
+    -webkit-transition: height 0.5s;
+    transition: height 0.5s;
 
     .mdc-image-list__label {
-      text-overflow: initial;
-      white-space: normal;
+      text-overflow: ellipsis;
+      white-space: nowrap;
       line-height: 1.3rem;
     }
   }
-
-
 
 }

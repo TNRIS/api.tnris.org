@@ -16,6 +16,10 @@ available to the app
 @import "@material/list/mdc-list";
 @import "@material/menu/mdc-menu";
 @import "@material/menu-surface/mdc-menu-surface";
+@import "@material/tab/mdc-tab";
+@import "@material/tab-bar/mdc-tab-bar";
+@import "@material/tab-indicator/mdc-tab-indicator";
+@import "@material/tab-scroller/mdc-tab-scroller";
 @import '@material/typography/mdc-typography';
 
 
@@ -33,6 +37,7 @@ available to the app
 @import 'outsideEntityTemplate';
 @import 'sort';
 @import 'tnrisDownloadTemplate';
+@import 'tnrisDownloadTemplateDetails';
 @import 'tnrisOrderTemplate';
 
 body {

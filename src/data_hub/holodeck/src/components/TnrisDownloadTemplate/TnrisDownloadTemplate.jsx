@@ -3,6 +3,7 @@ import {MDCTopAppBar} from '@material/top-app-bar/index';
 import {MDCTabBar} from '@material/tab-bar';
 
 import TnrisDownloadTemplateDetails from './TnrisDownloadTemplateDetails';
+import TnrisDownloadTemplateDownload from './TnrisDownloadTemplateDownload';
 import TnrisDownloadTemplateImages from './TnrisDownloadTemplateImages';
 
 export default class TnrisDownloadTemplate extends React.Component {
@@ -36,10 +37,10 @@ export default class TnrisDownloadTemplate extends React.Component {
         showComponent = <TnrisDownloadTemplateImages />;
         break;
       case 'download':
-        showComponent = <div className='download'>download</div>;
+        showComponent = <TnrisDownloadTemplateDownload />;
         break;
       default:
-        showComponent = <div className='default'>default</div>;
+        showComponent = <TnrisDownloadTemplateDetails collection={this.props.collection} />;
     }
 
     return (

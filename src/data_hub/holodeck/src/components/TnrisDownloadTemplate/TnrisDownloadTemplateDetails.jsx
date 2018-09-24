@@ -3,7 +3,6 @@ import React from 'react';
 export default class TnrisDownloadTemplateDetails extends React.Component {
   constructor(props) {
       super(props);
-      console.log(this.props);
   }
 
   render() {

@@ -16,4 +16,12 @@ styles for component: TnrisDownloadTemplateDownload
     }
   }
 
+  .tnris-download-template-download__loading {
+    overflow: hidden;
+
+    .holodeck-loading-image {
+      width: 100%;
+    }
+  }
+
 }

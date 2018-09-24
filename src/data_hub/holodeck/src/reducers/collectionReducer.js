@@ -4,13 +4,19 @@ import {
   FETCH_COLLECTIONS_FAILURE,
   SELECT_COLLECTION,
   CLEAR_SELECTED_COLLECTION,
+  FETCH_COLLECTION_RESOURCES_BEGIN,
+  FETCH_COLLECTION_RESOURCES_SUCCESS,
+  FETCH_COLLECTION_RESOURCES_FAILURE,
 } from '../constants/collectionActionTypes';
 
 const initialState = {
   items: [],
   loading: false,
   error: null,
-  selectedColllection: null
+  selectedCollection: null,
+  selectedCollectionResources: [],
+  loadingResources: false,
+  errorResources: null
 };
 
 export default function collectionReducer(state = initialState, action) {
@@ -56,7 +62,37 @@ export default function collectionReducer(state = initialState, action) {
       // Clear selectedCollection setting it back to null
       return {
         ...state,
-        selectedCollection: null
+        selectedCollection: null,
+        selectedCollectionResources: []
+      };
+
+    case FETCH_COLLECTION_RESOURCES_BEGIN:
+      // Mark the state as "loading" so we can show a spinner or something
+      // Also, reset any errors. We're starting fresh.
+      return {
+        ...state,
+        loadingResources: true,
+        errorResources: null
+      };
+
+    case FETCH_COLLECTION_RESOURCES_SUCCESS:
+      // All done: set loadingResources "false".
+      // Also, replace the selectedCollectionResources with the ones from the server
+      return {
+        ...state,
+        loadingResources: false,
+        selectedCollectionResources: action.payload.resources
+      };
+
+    case FETCH_COLLECTION_RESOURCES_FAILURE:
+      // The request failed, but it did stop, so set loading to "false".
+      // Save the error, and we can display it somewhere
+      // Since it failed, we don't have selectedCollectionResources to display anymore, so set it empty.
+      return {
+        ...state,
+        loadingResources: false,
+        errorResources: action.payload.error,
+        selectedCollectionResources: []
       };
 
     default:

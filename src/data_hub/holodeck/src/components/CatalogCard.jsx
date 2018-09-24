@@ -9,8 +9,8 @@ export default class CatalogCard extends React.Component {
 
   cardClicked() {
     this.props.openCollectionDialog();
-    this.props.selectCollection(this.props.collection.collection_id)
-    console.log(this.props);
+    this.props.selectCollection(this.props.collection.collection_id);
+    this.props.fetchCollectionResources(this.props.collection.collection_id);
   }
 
   render() {

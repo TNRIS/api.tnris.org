@@ -3,13 +3,13 @@ import {MDCTopAppBar} from '@material/top-app-bar/index';
 import {MDCTabBar} from '@material/tab-bar';
 
 import TnrisDownloadTemplateDetails from './TnrisDownloadTemplateDetails';
-import TnrisDownloadTemplateDownload from './TnrisDownloadTemplateDownload';
 import TnrisDownloadTemplateImages from './TnrisDownloadTemplateImages';
+
+import TnrisDownloadTemplateDownloadContainer from '../../containers/TnrisDownloadTemplateDownloadContainer';
 
 export default class TnrisDownloadTemplate extends React.Component {
   constructor(props) {
       super(props);
-      console.log(this.props);
       this.state = {
         view:'details'
       };
@@ -23,7 +23,6 @@ export default class TnrisDownloadTemplate extends React.Component {
   }
 
   setTemplateView(viewString) {
-    console.log(viewString);
     this.setState({view: viewString});
   }
 
@@ -37,7 +36,7 @@ export default class TnrisDownloadTemplate extends React.Component {
         showComponent = <TnrisDownloadTemplateImages />;
         break;
       case 'download':
-        showComponent = <TnrisDownloadTemplateDownload />;
+        showComponent = <TnrisDownloadTemplateDownloadContainer />;
         break;
       default:
         showComponent = <TnrisDownloadTemplateDetails collection={this.props.collection} />;

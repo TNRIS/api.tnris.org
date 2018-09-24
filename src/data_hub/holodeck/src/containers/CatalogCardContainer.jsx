@@ -18,6 +18,9 @@ const mapDispatchToProps = (dispatch) => ({
     },
     selectCollection: (collectionId) => {
       dispatch(collectionActions.selectCollection(collectionId));
+    },
+    fetchCollectionResources: (collectionId) => {
+      dispatch(collectionActions.fetchCollectionResources(collectionId))
     }
 })
 

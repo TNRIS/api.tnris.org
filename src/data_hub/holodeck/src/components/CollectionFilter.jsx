@@ -39,7 +39,6 @@ export default class CollectionFilter extends React.Component {
   }
 
   render() {
-    console.log(this.props);
     return (
       <div className='filter-component mdc-menu-surface--anchor'>
         <button onClick={this.showFilterMenu} className='filter-button mdc-button mdc-button--raised'>

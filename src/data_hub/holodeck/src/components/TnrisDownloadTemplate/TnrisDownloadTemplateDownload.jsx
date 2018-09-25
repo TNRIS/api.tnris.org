@@ -94,6 +94,19 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
           },
           'filter': ['==', 'area_type_name', '']
       }, 'area_type');
+
+      map.addLayer({
+          id: 'area_type_label',
+          'type': 'symbol',
+          'source': 'area_type_source',
+          'source-layer': 'layer0',
+          'layout': {
+            "text-field": "{area_type_name}"
+          },
+          'paint': {
+            "text-color": "#FFFFFF"
+          }
+      });
     });
 
     const areaLookup = this.areaLookup;

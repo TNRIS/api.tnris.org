@@ -52,6 +52,7 @@
     "react-dev-utils": "^5.0.2",
     "react-dom": "^16.4.2",
     "react-redux": "^5.0.7",
+    "react-responsive-carousel": "^3.1.42",
     "react-router-dom": "^4.3.1",
     "redux": "^4.0.0",
     "redux-thunk": "^2.3.0",

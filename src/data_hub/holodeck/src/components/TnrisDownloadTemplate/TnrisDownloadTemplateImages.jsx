@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { Carousel } from 'react-responsive-carousel';
+
 export default class TnrisDownloadTemplateImages extends React.Component {
   constructor(props) {
       super(props);
@@ -8,16 +10,41 @@ export default class TnrisDownloadTemplateImages extends React.Component {
 
   render() {
 
+    // let renderedImages =
+    //   this.props.forEach(function () {
+    //     if (this.props.natural) {
+    //       return (<div><img src={this.props.natural} alt='natural' /></div>);
+    //     }
+    //     if (this.props.overview) {
+    //       return (<div><img src={this.props.overview} alt='overview' /></div>);
+    //     }
+    //     if (this.props.urban) {
+    //       return (<div><img src={this.props.urban} alt='urban' /></div>);
+    //     }
+    //     else {
+    //       return (<div><h3>No images available.</h3></div>);
+    //     }
+    //   })
+
     return (
 
-    <div className="tnris-download-template-images">
+      <div className="tnris-download-template-images">
 
-      <button className="mdc-button mdc-button-left mdc-button--raised"><i className="material-icons">chevron_left</i></button>
+        <Carousel>
 
-      <button className="mdc-button mdc-button-right mdc-button--raised"><i className="material-icons">chevron_right</i></button>
+          { if (this.props.natural) {
+            return <div><img src={this.props.natural} alt='natural' /></div>
+          }
 
-    </div>
+          // <div><img src={this.props.overview} alt='overview' /></div>
+          //
+          // <div><img src={this.props.urban} alt='urban' /></div>
+
+        </Carousel>
+
+      </div>
 
     );
   }
+
 }

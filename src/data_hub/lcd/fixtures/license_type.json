@@ -1,1 +1,13 @@
-[{"model": "lcd.licensetype", "pk": "593a35c8-9527-4e32-a3bf-c59c56173dd9", "fields": {"license_abbreviation": "CC0", "license_name": "Public Domain (Creative Commons CC0)", "license_url": "https://creativecommons.org/publicdomain/zero/1.0/", "created": "2018-07-25T12:48:11.813Z", "last_modified": "2018-07-25T12:48:11.813Z"}}]
+[
+  {
+    "model": "lcd.licensetype",
+    "pk": "593a35c8-9527-4e32-a3bf-c59c56173dd9",
+    "fields": {
+      "license_abbreviation": "CC0",
+      "license_name": "Public Domain (Creative Commons CC0)",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "created": "2018-07-25T12:48:11.813Z",
+      "last_modified": "2018-07-25T12:48:11.813Z"
+    }
+  }
+]

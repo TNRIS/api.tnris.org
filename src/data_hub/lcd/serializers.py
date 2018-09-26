@@ -13,7 +13,8 @@ class ResourceSerializer(serializers.ModelSerializer):
         model = Resource
         fields = ('resource',
                   'area_type_id',
-                  'collection_id')
+                  'collection_id',
+                  'filesize')
 
 class AreaSerializer(serializers.ModelSerializer):
     class Meta:

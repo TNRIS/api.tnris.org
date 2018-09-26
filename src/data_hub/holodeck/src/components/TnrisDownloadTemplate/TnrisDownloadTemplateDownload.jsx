@@ -17,6 +17,7 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
   componentDidMount() {
     // wait for the api response with the list of downloadable resources
     if (this.props.loadingResources === false) {
+      console.log(this.props.selectedCollectionResources);
       this.areaLookup = this.props.selectedCollectionResources.entities.resourcesByAreaId;
       this.createMap();
     }
@@ -71,7 +72,6 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
         let chunk = resourceList.slice(s, e);
         let chunkString = chunk.join("','");
         let chunkQuery = "SELECT * FROM area_type WHERE area_type_id IN ('" + chunkString + "')";
-        console.log(chunk.length);
         this.createLayers(chunkQuery, map, loop.toString());
         loop += 1;
         s += 1000;
@@ -154,17 +154,35 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
       const downloadUrl = areaLookup[clickedAreaId];
       window.location = downloadUrl.resource;
     });
+    // Create a popup, but don't add it to the map yet.
+    const popup = new mapboxgl.Popup({
+        closeButton: false,
+        closeOnClick: false
+    });
     // Change the cursor to a pointer when it enters a feature in the 'area_type' layer
     // Also, toggle the hover layer with a filter based on the cursor
+    // Also, get the filesize for that download and display it in the popup
     map.on('mousemove', 'area_type' + loop, function (e) {
       map.getCanvas().style.cursor = 'pointer';
       map.setFilter('area_type_hover' + loop, ['==', 'area_type_name', e.features[0].properties.area_type_name]);
+      // if a filesize is populated in the resource table so the popup,
+      // we don't want to display empty popups, right?
+      const hoverAreaId = e.features[0].properties.area_type_id;
+      if (areaLookup[hoverAreaId].filesize != null) {
+        const filesize = parseFloat(areaLookup[hoverAreaId].filesize / 1000000).toFixed(2).toString();
+        const popupContent = filesize + "MB";
+        popup.setLngLat(e.lngLat)
+              .setHTML(popupContent)
+              .addTo(map);
+      }
     });
     // Undo the cursor pointer when it leaves a feature in the 'area_type' layer
     // Also, untoggle the hover layer with a filter
+    // Also, remove the popup
     map.on('mouseleave', 'area_type' + loop, function () {
       map.getCanvas().style.cursor = '';
       map.setFilter('area_type_hover' + loop, ['==', 'area_type_name', '']);
+      popup.remove();
     });
   }
 

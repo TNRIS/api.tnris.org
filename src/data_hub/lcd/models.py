@@ -1150,3 +1150,46 @@ class AcdcView(models.Model):
 
     def __str__(self):
         return self.name
+
+class RemView(models.Model):
+    """
+    Resource Management view presents Resource table with joins
+    for Resource Type details
+    """
+
+    class Meta:
+        managed = False
+        db_table = "resource_management"
+        verbose_name = 'Resource Management'
+        verbose_name_plural = 'Resource Managements'
+
+    resource = models.CharField(
+        'Resource URL',
+        primary_key=True,
+        max_length=255
+    )
+    filesize = models.PositiveIntegerField(
+        'Filesize',
+        null=True,
+        blank=True
+    )
+    area_type_id = models.UUIDField(
+        'AreaType'
+    )
+    collection_id = models.UUIDField(
+        'Collection'
+    )
+    resource_type_id = models.UUIDField(
+        'ResourceType'
+    )
+    resource_type_name = models.TextField(
+        'Resource Type Name',
+        max_length=50
+    )
+    resource_type_abbreviation = models.TextField(
+        'Resource Type Abbreviation',
+        max_length=10
+    )
+
+    def __str__(self):
+        return self.resource

@@ -1,6 +1,6 @@
 from rest_framework import viewsets
 
-from .models import CcrView, Resource, AcdcView
+from .models import CcrView, RemView, AcdcView
 from .serializers import (CollectionSerializer,
                          ResourceSerializer,
                          AreaSerializer)
@@ -45,7 +45,7 @@ class ResourceViewSet(viewsets.ReadOnlyModelViewSet):
                 args[field] = value
         print(args)
         # get records using query
-        queryset = Resource.objects.filter(**args)
+        queryset = RemView.objects.filter(**args)
         return queryset
 
 

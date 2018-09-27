@@ -15,7 +15,6 @@ from .models import (
     EpsgType,
     FileTypeRelate,
     FileType,
-    Image,
     LicenseType,
     ResolutionRelate,
     ResolutionType,

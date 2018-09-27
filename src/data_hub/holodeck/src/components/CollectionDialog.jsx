@@ -31,7 +31,6 @@ class CollectionDialog extends React.Component {
     collectionDialogContent() {
       if (this.props.showCollectionDialog) {
         let collection = this.props.collections[this.props.selectedCollection];
-        console.log(collection);
         switch(collection['template']) {
           case 'tnris-download':
             return (<TnrisDownloadTemplate collection={collection} />);

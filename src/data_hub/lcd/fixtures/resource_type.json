@@ -1,0 +1,82 @@
+[
+  {
+    "model": "lcd.resourcetype",
+    "pk": "0efe3942-fbc9-4356-999f-87d5780c730c",
+    "fields": {
+      "resource_type_name": "Natural Color/Color Infrared (4 Band)",
+      "resource_type_abbreviation": "NC-CIR",
+      "created": "2018-08-17T19:29:16.493Z",
+      "last_modified": "2018-08-17T19:29:16.493Z"
+    }
+  },
+  {
+    "model": "lcd.resourcetype",
+    "pk": "0f5289d3-7a70-4914-936a-e4330d23bbca",
+    "fields": {
+      "resource_type_name": "Color Infrared (3 Band)",
+      "resource_type_abbreviation": "CIR",
+      "created": "2018-08-16T15:48:08.688Z",
+      "last_modified": "2018-08-17T19:28:34.629Z"
+    }
+  },
+  {
+    "model": "lcd.resourcetype",
+    "pk": "469c3b31-af18-4c43-9e95-0b2ed0735351",
+    "fields": {
+      "resource_type_name": "Digital Elevation Model",
+      "resource_type_abbreviation": "DEM",
+      "created": "2018-08-16T15:47:19.849Z",
+      "last_modified": "2018-08-16T15:47:26.182Z"
+    }
+  },
+  {
+    "model": "lcd.resourcetype",
+    "pk": "59c874d6-573b-47eb-adbe-06babf06bd11",
+    "fields": {
+      "resource_type_name": "Lidar Point Cloud",
+      "resource_type_abbreviation": "LPC",
+      "created": "2018-08-16T15:48:37.821Z",
+      "last_modified": "2018-08-16T15:48:37.821Z"
+    }
+  },
+  {
+    "model": "lcd.resourcetype",
+    "pk": "86028f6c-af02-464e-9c52-c8de9c23b5bd",
+    "fields": {
+      "resource_type_name": "Hypsography (Contours)",
+      "resource_type_abbreviation": "HYPSO",
+      "created": "2018-08-16T15:47:47.048Z",
+      "last_modified": "2018-08-16T15:47:47.048Z"
+    }
+  },
+  {
+    "model": "lcd.resourcetype",
+    "pk": "b96b76ba-d1c9-4749-9336-122396d15e72",
+    "fields": {
+      "resource_type_name": "Black & White (1 Band)",
+      "resource_type_abbreviation": "BW",
+      "created": "2018-08-16T15:47:06.481Z",
+      "last_modified": "2018-08-17T19:28:22.413Z"
+    }
+  },
+  {
+    "model": "lcd.resourcetype",
+    "pk": "eb7741f9-e527-46e9-bb0e-a25de7babab0",
+    "fields": {
+      "resource_type_name": "Vector",
+      "resource_type_abbreviation": "VECTOR",
+      "created": "2018-08-16T15:48:27.636Z",
+      "last_modified": "2018-08-17T19:27:46.743Z"
+    }
+  },
+  {
+    "model": "lcd.resourcetype",
+    "pk": "fb66afc9-8f20-4874-ad5e-a91839a25927",
+    "fields": {
+      "resource_type_name": "Natural Color (3 Band)",
+      "resource_type_abbreviation": "NC",
+      "created": "2018-08-16T15:47:56.187Z",
+      "last_modified": "2018-08-17T19:28:45.155Z"
+    }
+  }
+]

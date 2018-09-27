@@ -1,11 +1,6 @@
 import React from 'react';
 
 export default class TnrisDownloadTemplateDetails extends React.Component {
-  constructor(props) {
-      super(props);
-      console.log(this.props);
-  }
-
   render() {
     const epsgUrl = "https://epsg.io/" + this.props.collection.spatial_reference;
     const acquisition = this.props.collection.acquisition_date.substring(0, 4);

@@ -6,8 +6,16 @@ import {
   FETCH_COLLECTIONS_FAILURE,
   SELECT_COLLECTION,
   CLEAR_SELECTED_COLLECTION,
+  FETCH_COLLECTION_RESOURCES_BEGIN,
+  FETCH_COLLECTION_RESOURCES_SUCCESS,
+  FETCH_COLLECTION_RESOURCES_FAILURE,
 } from '../constants/collectionActionTypes';
 
+// -------------
+// Initial Store of all collections for display as cards
+// -------------
+
+// --- retrieval lifecycle actions ---
 export const fetchCollectionsBegin = () => ({
   type: FETCH_COLLECTIONS_BEGIN
 });
@@ -22,29 +30,17 @@ export const fetchCollectionsFailure = (error) => ({
   payload: { error }
 });
 
-export const selectCollection = (collectionId) => {
-  return (dispatch) => {
-    dispatch({
-      type: SELECT_COLLECTION,
-      payload: { collectionId }
-    })
-  }
-};
-
-export const clearSelectedCollection = () => ({
-  type: CLEAR_SELECTED_COLLECTION
-});
-
-// Handle HTTP errors since fetch won't.
+// --- retrieve and normalize collections actions ---
 function handleErrors(response) {
+  // Handle HTTP errors since fetch won't.
   if (!response.ok) {
     throw Error(response.statusText);
   }
   return response;
 }
 
-// Normalize the api response json to a flattened state
 function normalizeCollections(originalData) {
+  // Normalize the api response json to a flattened state
   // Define collections schema
   const collectionSchema = new schema.Entity(
     'collectionsById',
@@ -66,5 +62,83 @@ export function fetchCollections() {
         return normalizedJson;
       })
       .catch(error => dispatch(fetchCollectionsFailure(error)));
+  };
+}
+
+// -------------
+// Manage active collection when collection card is clicked
+// -------------
+
+export const selectCollection = (collectionId) => {
+  return (dispatch) => {
+    dispatch({
+      type: SELECT_COLLECTION,
+      payload: { collectionId }
+    })
+  }
+};
+
+export const clearSelectedCollection = () => ({
+  type: CLEAR_SELECTED_COLLECTION
+});
+
+// -------------
+// Manage active collection areas/resources when collection card is clicked
+// -------------
+
+// --- retrieval lifecycle actions ---
+export const fetchCollectionResourcesBegin = () => ({
+  type: FETCH_COLLECTION_RESOURCES_BEGIN
+});
+
+export const fetchCollectionResourcesSuccess = (resources) => ({
+  type: FETCH_COLLECTION_RESOURCES_SUCCESS,
+  payload: { resources }
+});
+
+export const fetchCollectionResourcesFailure = (error) => ({
+  type: FETCH_COLLECTION_RESOURCES_FAILURE,
+  payload: { error }
+});
+
+// --- retrieve and normalize collections actions ---
+
+function normalizeCollectionResources(originalData) {
+  // Normalize the api response json to a flattened state
+  // Define collectionAreas schema
+  const collectionResourcesSchema = new schema.Entity(
+    'resourcesByAreaId',
+    undefined,
+    { idAttribute: 'area_type_id'}
+  );
+  return normalize(originalData, [collectionResourcesSchema]);
+}
+
+function resourcesRecursiveFetcher(apiQuery, dispatch, response) {
+  // recursive api endpoint fetcher for handling pagination
+  fetch(apiQuery)
+  .then(handleErrors)
+  .then(res => res.json())
+  .then(json => {
+    console.log(json);
+    let allResults = response.concat(json.results);
+    if (json.next) {
+      resourcesRecursiveFetcher(json.next, dispatch, allResults);
+    }
+    else {
+      let normalizedJson = normalizeCollectionResources(allResults);
+      dispatch(fetchCollectionResourcesSuccess(normalizedJson));
+      return normalizedJson;
+    }
+  })
+  .catch(error => dispatch(fetchCollectionResourcesFailure(error)));
+}
+
+export function fetchCollectionResources(collectionId) {
+  const apiQuery = '/api/v1/resources?collection_id=' + collectionId;
+  console.log(apiQuery);
+  return dispatch => {
+    dispatch(fetchCollectionResourcesBegin());
+    return resourcesRecursiveFetcher(apiQuery, dispatch, []);
   };
 }

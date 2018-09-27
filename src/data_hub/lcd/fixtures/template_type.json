@@ -1,1 +1,38 @@
-[{"model": "lcd.templatetype", "pk": "40d5e189-a34c-40f3-aa24-632bf1fab596", "fields": {"template": "data-catalog-entry.html", "created": "2018-07-25T15:30:56.709Z", "last_modified": "2018-07-25T15:30:56.709Z"}}]
+[
+  {
+    "model": "lcd.templatetype",
+    "pk": "1c9b8ae8-6838-4ab9-811a-fcd24aa8989e",
+    "fields": {
+      "template": "tnris-download",
+      "created": "2018-09-12T20:31:39.388Z",
+      "last_modified": "2018-09-12T20:31:39.388Z"
+    }
+  },
+  {
+    "model": "lcd.templatetype",
+    "pk": "317d66ba-cbe8-4b78-8eb9-2aa923513169",
+    "fields": {
+      "template": "historical-aerial",
+      "created": "2018-09-12T20:32:10.568Z",
+      "last_modified": "2018-09-12T20:32:10.568Z"
+    }
+  },
+  {
+    "model": "lcd.templatetype",
+    "pk": "512dd411-336f-427c-a85b-8d07a6a95984",
+    "fields": {
+      "template": "outside-entity",
+      "created": "2018-09-12T20:31:54.187Z",
+      "last_modified": "2018-09-12T20:31:54.187Z"
+    }
+  },
+  {
+    "model": "lcd.templatetype",
+    "pk": "d16710fc-7bea-4f67-8040-41d83ba9ffaa",
+    "fields": {
+      "template": "tnris-order",
+      "created": "2018-09-12T20:31:45.205Z",
+      "last_modified": "2018-09-12T20:31:45.205Z"
+    }
+  }
+]

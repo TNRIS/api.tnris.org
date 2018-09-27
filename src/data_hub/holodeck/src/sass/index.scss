@@ -23,6 +23,7 @@ available to the app
 @import "@material/tab-scroller/mdc-tab-scroller";
 @import "@material/top-app-bar/mdc-top-app-bar";
 @import '@material/typography/mdc-typography';
+@import 'react-responsive-carousel/lib/styles/carousel';
 
 
 @import 'catalog';
@@ -41,6 +42,8 @@ available to the app
 @import 'sort';
 @import 'tnrisDownloadTemplate';
 @import 'tnrisDownloadTemplateDetails';
+@import 'tnrisDownloadTemplateDownload';
+@import 'tnrisDownloadTemplateImages';
 @import 'tnrisOrderTemplate';
 @import 'toolDrawer';
 

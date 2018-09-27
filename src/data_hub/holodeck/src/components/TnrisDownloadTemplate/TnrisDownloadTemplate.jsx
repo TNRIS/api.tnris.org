@@ -3,11 +3,13 @@ import {MDCTopAppBar} from '@material/top-app-bar/index';
 import {MDCTabBar} from '@material/tab-bar';
 
 import TnrisDownloadTemplateDetails from './TnrisDownloadTemplateDetails';
+import TnrisDownloadTemplateImages from './TnrisDownloadTemplateImages';
+
+import TnrisDownloadTemplateDownloadContainer from '../../containers/TnrisDownloadTemplateDownloadContainer';
 
 export default class TnrisDownloadTemplate extends React.Component {
   constructor(props) {
       super(props);
-      console.log(this.props);
       this.state = {
         view:'details'
       };
@@ -20,24 +22,27 @@ export default class TnrisDownloadTemplate extends React.Component {
     this.tabBar = new MDCTabBar(document.querySelector('.mdc-tab-bar'));
   }
 
-  setTemplateView(view) {
-    this.setState({view: view});
+  setTemplateView(viewString) {
+    this.setState({view: viewString});
   }
 
   render() {
-    let view;
+    let showComponent;
     switch(this.state.view) {
       case 'details':
-        view = <TnrisDownloadTemplateDetails collection={this.props.collection} />;
+        showComponent = <TnrisDownloadTemplateDetails collection={this.props.collection} />;
         break;
       case 'images':
-        view = <div className='images'>images</div>
+        showComponent = (<TnrisDownloadTemplateImages
+          overview={this.props.collection.overview_image}
+          natural={this.props.collection.natural_image}
+          urban={this.props.collection.urban_image}/>);
         break;
       case 'download':
-        view = <div className='download'>download</div>
+        showComponent = <TnrisDownloadTemplateDownloadContainer />;
         break;
       default:
-        view = <div className='default'>default</div>
+        showComponent = <TnrisDownloadTemplateDetails collection={this.props.collection} />;
     }
 
     return (
@@ -89,7 +94,7 @@ export default class TnrisDownloadTemplate extends React.Component {
             </section>
           </div>
         </header>
-        {view}
+        {showComponent}
       </div>
     );
   }

@@ -1,0 +1,82 @@
+[
+  {
+    "model": "lcd.resourcetyperelate",
+    "pk": "3ad6d4cb-5748-4ef2-af7c-00e97cbabd4a",
+    "fields": {
+      "resource_type_id": "fb66afc9-8f20-4874-ad5e-a91839a25927",
+      "collection_id": "c7aa3dae-3934-4d36-91a3-9f53526c9438",
+      "created": "2018-08-24T17:18:50.901Z",
+      "last_modified": "2018-08-24T17:18:50.901Z"
+    }
+  },
+  {
+    "model": "lcd.resourcetyperelate",
+    "pk": "468005f6-e379-4bba-9167-9de6bc34e3e7",
+    "fields": {
+      "resource_type_id": "59c874d6-573b-47eb-adbe-06babf06bd11",
+      "collection_id": "1f1d417a-26f2-41d5-9787-af392d0f09cf",
+      "created": "2018-08-24T17:20:22.283Z",
+      "last_modified": "2018-08-24T17:20:22.283Z"
+    }
+  },
+  {
+    "model": "lcd.resourcetyperelate",
+    "pk": "5d55e18e-7001-4a6d-85b9-7b03d3078f75",
+    "fields": {
+      "resource_type_id": "469c3b31-af18-4c43-9e95-0b2ed0735351",
+      "collection_id": "1f1d417a-26f2-41d5-9787-af392d0f09cf",
+      "created": "2018-08-24T17:20:22.267Z",
+      "last_modified": "2018-08-24T17:20:22.267Z"
+    }
+  },
+  {
+    "model": "lcd.resourcetyperelate",
+    "pk": "8412470c-5ae6-427f-90c4-3f9a2d46cc9d",
+    "fields": {
+      "resource_type_id": "86028f6c-af02-464e-9c52-c8de9c23b5bd",
+      "collection_id": "1f1d417a-26f2-41d5-9787-af392d0f09cf",
+      "created": "2018-08-24T17:20:22.275Z",
+      "last_modified": "2018-08-24T17:20:22.275Z"
+    }
+  },
+  {
+    "model": "lcd.resourcetyperelate",
+    "pk": "91075da3-4cc3-4f98-920f-bd6b9c9613c9",
+    "fields": {
+      "resource_type_id": "86028f6c-af02-464e-9c52-c8de9c23b5bd",
+      "collection_id": "8f1b8540-e68d-4141-baa0-3e5ceeeb54d7",
+      "created": "2018-08-29T21:01:52.475Z",
+      "last_modified": "2018-08-29T21:01:52.475Z"
+    }
+  },
+  {
+    "model": "lcd.resourcetyperelate",
+    "pk": "9db78717-b60e-49b9-9593-a7e305b9ffb2",
+    "fields": {
+      "resource_type_id": "59c874d6-573b-47eb-adbe-06babf06bd11",
+      "collection_id": "8f1b8540-e68d-4141-baa0-3e5ceeeb54d7",
+      "created": "2018-08-29T21:01:52.759Z",
+      "last_modified": "2018-08-29T21:01:52.759Z"
+    }
+  },
+  {
+    "model": "lcd.resourcetyperelate",
+    "pk": "c8f32321-e44b-4260-a68e-120a79df6f23",
+    "fields": {
+      "resource_type_id": "469c3b31-af18-4c43-9e95-0b2ed0735351",
+      "collection_id": "8f1b8540-e68d-4141-baa0-3e5ceeeb54d7",
+      "created": "2018-08-29T21:01:52.190Z",
+      "last_modified": "2018-08-29T21:01:52.190Z"
+    }
+  },
+  {
+    "model": "lcd.resourcetyperelate",
+    "pk": "f3a43c39-689a-48a5-9a5e-226582d2928b",
+    "fields": {
+      "resource_type_id": "fb66afc9-8f20-4874-ad5e-a91839a25927",
+      "collection_id": "cd77e3c0-58b5-4097-860d-81c9865ff0a8",
+      "created": "2018-09-05T20:30:32.415Z",
+      "last_modified": "2018-09-05T20:30:32.415Z"
+    }
+  }
+]

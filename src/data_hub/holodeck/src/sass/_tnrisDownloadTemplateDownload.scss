@@ -1,0 +1,27 @@
+/*
+styles for component: TnrisDownloadTemplateDownload
+*/
+
+.tnris-download-template-download {
+  padding: 64px 0 0 0;
+
+  #tnris-download-map {
+    position: absolute;
+    top: 64px;
+    bottom: 0;
+    width: 100%;
+
+    .mapboxgl-canvas {
+      height: 100%;
+    }
+  }
+
+  .tnris-download-template-download__loading {
+    overflow: hidden;
+
+    .holodeck-loading-image {
+      width: 100%;
+    }
+  }
+
+}

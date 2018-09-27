@@ -983,6 +983,48 @@ class Resource(models.Model):
     def __str__(self):
         return self.resource
 
+class Image(models.Model):
+    """
+    Defines available image resources.
+    Related to :model:`lcd.collection`.
+    """
+
+    class Meta:
+        db_table = 'image'
+        verbose_name = 'Image'
+        verbose_name_plural = 'Images'
+        unique_together = (
+            'collection_id',
+            'image_url'
+        )
+
+    image_id = models.UUIDField(
+        'Image ID',
+        primary_key=True,
+        editable=False
+    )
+    collection_id = models.ForeignKey(
+        'Collection',
+        db_column='collection_id',
+        on_delete=models.CASCADE,
+        related_name='image_collections'
+    )
+    image_url = models.URLField(
+        'Image URL',
+        max_length=255
+    )
+    created = models.DateTimeField(
+        'Created',
+        auto_now_add=True
+    )
+    last_modified = models.DateTimeField(
+        'Last Modified',
+        auto_now=True
+    )
+
+    def __str__(self):
+        return self.image_url
+
 """
 ********** Database Views **********
 **** Used as the API endpoints ****

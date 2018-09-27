@@ -14,6 +14,7 @@ from .models import (Collection,
                      EpsgType,
                      FileTypeRelate,
                      FileType,
+                     Image,
                      ResolutionRelate,
                      ResolutionType,
                      Resource,
@@ -33,6 +34,13 @@ class ZipfileWidget(forms.widgets.Widget):
     def render(self, name, value, attrs=None):
         html = Template("""<input type="file" name="$name" id="id_$name"><label for="img_$name">Current: $link</label>""")
         return mark_safe(html.substitute(link=value,name=name))
+
+class ImageForm(forms.ModelForm):
+    class Meta:
+        model = Image
+        fields = ('__all__')
+
+    image_url = forms.FileField(required=False, widget=PictureWidget)
 
 class CollectionForm(forms.ModelForm):
     # base model is Collection

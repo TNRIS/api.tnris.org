@@ -2,7 +2,7 @@ from django.contrib import admin
 
 # from .filters import CollectionAgencyNameFilter, CollectionCountyFilter, \
 #     CountyDropdownFilter
-from .forms import CollectionForm, ResourceForm
+from .forms import CollectionForm, ResourceForm, ImageForm
 from .models import (
     AcdcView,
     AgencyType,
@@ -15,6 +15,7 @@ from .models import (
     EpsgType,
     FileTypeRelate,
     FileType,
+    Image,
     LicenseType,
     ResolutionRelate,
     ResolutionType,
@@ -62,6 +63,14 @@ class CategoryTypeAdmin(admin.ModelAdmin):
     ordering = ('category',)
 
 
+class ImageInlineAdmin(admin.StackedInline):
+    classes = ('grp-collapse grp-closed',)
+    inline_classes = ('grp-collapse grp-open',)
+    model = Image
+    form = ImageForm
+    extra = 0
+
+
 @admin.register(Collection)
 class CollectionAdmin(admin.ModelAdmin):
     model = Collection
@@ -93,7 +102,8 @@ class CollectionAdmin(admin.ModelAdmin):
                        'lidar_breaklines_url',
                        'delete_lidar_breaklines_url',
                        'tile_index_url',
-                       'delete_tile_index_url')
+                       'delete_tile_index_url',
+                       'thumbnail_image',)
         }),
         ('Images', {
             'classes': ('grp-collapse grp-closed',),
@@ -113,6 +123,7 @@ class CollectionAdmin(admin.ModelAdmin):
                        'uses')
         })
     )
+    inlines = [ImageInlineAdmin]
     ordering = ('name',)
     list_display = (
         'name', 'collection_id', 'last_modified', 'public'
@@ -164,6 +175,9 @@ class EpsgTypeAdmin(admin.ModelAdmin):
 class FileTypeAdmin(admin.ModelAdmin):
     model = FileType
     ordering = ('file_type',)
+
+
+
 
 
 @admin.register(LicenseType)

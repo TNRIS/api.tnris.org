@@ -1,84 +1,95 @@
 import React from 'react';
 
-import { MDCMenu } from '@material/menu';
-
 export default class CollectionFilter extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      filter: false
+      filters: this.props.collectionFilter
     }
+    this.handleOpenFilterMenu = this.handleOpenFilterMenu.bind(this);
     this.handleSetFilter = this.handleSetFilter.bind(this);
-    this.showFilterMenu = this.showFilterMenu.bind(this);
-    this.showNestedMenu = this.showNestedMenu.bind(this);
   }
 
-  componentDidMount() {
-    this.menu = new MDCMenu(this.refs.filter_menu);
+  handleOpenFilterMenu(e) {
+    let filterName = e.target.id.split('-')[0];
+    let filterListElement = document.getElementById(`${filterName}-list`);
+    let filterListTitleIcon = document.getElementById(`${filterName}-expansion-icon`);
+
+    filterListElement.classList.contains('hide-filter-list') ?
+      filterListElement.classList.remove('hide-filter-list') :
+      filterListElement.classList.add('hide-filter-list');
+
+    filterListTitleIcon.innerHTML === 'expand_more' ?
+      filterListTitleIcon.innerHTML = 'expand_less' :
+      filterListTitleIcon.innerHTML = 'expand_more';
   }
 
-  showFilterMenu() {
-    this.menu.open = true;
-  }
+  handleSetFilter(target) {
+    let currentFilters = {...this.props.collectionFilter};
 
-  showNestedMenu() {
-    console.log("clicked");
-  }
-
-  handleSetFilter() {
-    this.setState({filter: !this.state.filter}, () => {
-      if (this.state.filter) {
-        this.props.setCollectionFilter({
-          category: 'Environmental',
-          recommended_use: 'General Large Scale Geologic Information and Mapping'
-        });
+    if (target.checked) {
+      if (currentFilters.hasOwnProperty(target.name) && currentFilters[target.name].indexOf(target.value) < 0) {
+        currentFilters[target.name].push(target.value);
       } else {
-        this.props.setCollectionFilter({});
+        currentFilters[target.name] = [target.value];
       }
-    });
+      this.props.setCollectionFilter(currentFilters);
+    } else {
+      if (currentFilters.hasOwnProperty(target.name) && currentFilters[target.name].indexOf(target.value) >= 0) {
+        currentFilters[target.name] = currentFilters[target.name].filter(item => item !== target.value)
+      }
+      this.props.setCollectionFilter(currentFilters);
+    }
   }
 
   render() {
     return (
-      <div className='filter-component mdc-menu-surface--anchor'>
-        <button onClick={this.showFilterMenu} className='filter-button mdc-button mdc-button--raised'>
-          filter
-        </button>
-        <div ref='filter_menu' className='mdc-menu mdc-menu-surface'>
-          <ul className='mdc-list mdc-menu__items' role='menu' aria-hidden='true'>
-            {
-              Object.keys(this.props.collectionFilterChoices).map(choice =>
-              <li
-                className='mdc-list-item'
-                key={choice}
-                role='menuitem'
-                onClick={this.showNestedMenu}>
-                <span className='mdc-list-item__text'>{choice.replace(/_/, ' ')}</span>
+      <div className='filter-component'>
+        <ul className='mdc-list'>
+          {
+            Object.keys(this.props.collectionFilterChoices).map(choice =>
+              <li key={choice}>
+                <a
+                  className='mdc-list-item filter-list-title'
+                  id={`${choice}-title`}
+                  onClick={e => this.handleOpenFilterMenu(e)}>
+                  {`by ${choice.replace(/_/, ' ')}`}
+                  <i
+                    className='mdc-list-item__meta material-icons'
+                    id={`${choice}-expansion-icon`}>expand_more</i>
+                </a>
+                  <ul className='mdc-list hide-filter-list' id={`${choice}-list`}>
+                    {
+                      this.props.collectionFilterChoices[choice].map((choiceValue, i) =>
+                      <li
+                        className='mdc-list-item'
+                        key={choiceValue}>
+                        <div className='mdc-form-field'>
+                          <div className='mdc-checkbox'>
+                            <input type='checkbox'
+                                   className='mdc-checkbox__native-control'
+                                   id={choiceValue}
+                                   name={choice}
+                                   value={choiceValue}
+                                   onChange={e => this.handleSetFilter(e.target)}/>
+                            <div className='mdc-checkbox__background'>
+                              <svg className='mdc-checkbox__checkmark'
+                                   viewBox='0 0 24 24'>
+                                <path className='mdc-checkbox__checkmark-path'
+                                      fill='none'
+                                      d='M1.73,12.91 8.1,19.28 22.79,4.59'/>
+                              </svg>
+                              <div className='mdc-checkbox__mixedmark'></div>
+                            </div>
+                          </div>
+                          <label htmlFor={choiceValue}>{choiceValue}</label>
+                        </div>
+                      </li>)}
+                  </ul>
               </li>
-              )
-            }
-            {/* {
-              Object.keys(this.props.collectionFilterChoices).map(choice =>
-              <li key={choice}><span className='mdc-list-item__text'>{choice.replace(/_/, ' ')}</span>
-                <ul className="mdc-menu__selection-group">
-                  <li className="mdc-list-item" role="menuitem"}>
-                    <span className="mdc-menu__selection-group-icon material-icons">
-                      check
-                    </span>
-                    <span className="mdc-list-item__text">Single</span>
-                  </li>
-                  <li className="mdc-list-item" role="menuitem">
-                    <span className="mdc-menu__selection-group-icon material-icons">
-                      check
-                    </span>
-                    <span className="mdc-list-item__text">double</span>
-                  </li>
-                </ul>
-              </li>
-              )
-            } */}
-          </ul>
-        </div>
+            )
+          }
+        </ul>
       </div>
     );
   }

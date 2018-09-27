@@ -2,11 +2,11 @@ import React from 'react';
 
 import CatalogCardContainer from '../containers/CatalogCardContainer';
 import CollectionDialogContainer from '../containers/CollectionDialogContainer';
-import CollectionFilterContainer from '../containers/CollectionFilterContainer';
 import Drawer from './Drawer';
 import Footer from './Footer';
 import Header from './Header';
 import MapDialogContainer from '../containers/MapDialogContainer';
+import ToolDrawer from './ToolDrawer';
 
 import loadingImage from '../images/loading.jpg';
 
@@ -36,9 +36,9 @@ export default class Catalog extends React.Component {
     return (
       <div className="catalog-component">
         <Drawer />
+        <ToolDrawer />
         <Header />
         <div className='catalog'>
-          <CollectionFilterContainer />
           <button onClick={this.props.openMapDialog}>show map</button>
           <CollectionDialogContainer />
           <MapDialogContainer />

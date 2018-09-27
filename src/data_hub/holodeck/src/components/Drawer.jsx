@@ -11,17 +11,17 @@ export default class Drawer extends React.Component {
   }
 
   componentDidMount() {
-    this.drawer = MDCDrawer.attachTo(document.querySelector('.mdc-drawer'));
+    this.menuDrawer = MDCDrawer.attachTo(document.querySelector('.menu-drawer'));
   }
 
   closeDrawer () {
-    this.drawer.open = false;
+    this.menuDrawer.open = false;
   }
 
   render() {
     return (
       <div className="drawer-component">
-        <aside className="mdc-drawer mdc-drawer--modal">
+        <aside className="menu-drawer mdc-drawer mdc-drawer--modal">
 
           <div className="mdc-drawer__content">
             <nav className="mdc-list">

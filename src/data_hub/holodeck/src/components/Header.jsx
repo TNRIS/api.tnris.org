@@ -1,12 +1,15 @@
 import React from 'react';
 import {MDCTopAppBar} from '@material/top-app-bar/index';
 import {MDCDrawer} from "@material/drawer";
-import SortContainer from '../containers/SortContainer';
-import CollectionFilterContainer from '../containers/CollectionFilterContainer';
+// import SortContainer from '../containers/SortContainer';
 
 import tnrisLogo from '../images/tnris.png';
 
 export default class Header extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleOpenToolDrawer = this.handleOpenToolDrawer.bind(this);
+  }
 
   componentDidMount() {
     this.menuDrawer = MDCDrawer.attachTo(document.querySelector('.menu-drawer'));
@@ -17,8 +20,11 @@ export default class Header extends React.Component {
 
     this.topAppBar.listen('MDCTopAppBar:nav', () => {
         this.menuDrawer.open = !this.menuDrawer.open;
-        this.toolDrawer.open = !this.toolDrawer.open;
     });
+  }
+
+  handleOpenToolDrawer() {
+    this.toolDrawer.open = !this.toolDrawer.open;
   }
 
   render() {
@@ -39,13 +45,12 @@ export default class Header extends React.Component {
               <img src={tnrisLogo} aria-label="TNRIS Logo" alt="TNRIS Logo" className="logo" />
             </a>
             <span className="mdc-top-app-bar__title">Data Holodeck</span>
-            <div className='header-nav__buttons'>
-              <CollectionFilterContainer />
-            </div>
           </section>
           <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
-            <SortContainer />
-            <i className="material-icons mdc-top-app-bar__navigation-icon">menu</i>
+            {/* <SortContainer /> */}
+            <a onClick={this.handleOpenToolDrawer} className="mdc-top-app-bar__action-item">
+              <i className="material-icons mdc-top-app-bar__navigation-icon">tune</i>
+            </a>
           </section>
         </div>
       </header>

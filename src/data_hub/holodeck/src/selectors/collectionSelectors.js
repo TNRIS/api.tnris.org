@@ -34,7 +34,7 @@ export const getVisibleCollections = createSelector(
           if (filters.hasOwnProperty(key)) {
             let collectionPropertyValues = collections.entities.collectionsById[collectionId][key].split(',');
             collectionPropertyValues.map(propertyValue => {
-              if (propertyValue === filters[key]) {
+              if (filters[key].indexOf(propertyValue) >= 0) {
                 if(filteredCollections.indexOf(collectionId) < 0) {
                   filteredCollections.push(collectionId);
                 }

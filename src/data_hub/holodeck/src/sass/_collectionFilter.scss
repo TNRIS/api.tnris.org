@@ -6,6 +6,7 @@ styles for component: CollectionFilter
   float: left;
   margin-left: 3px;
   margin-right: 3px;
+  width: 100%;
 
   .filter-button {
     background-color: #248CC0;
@@ -16,14 +17,28 @@ styles for component: CollectionFilter
     color: white;
   }
 
-  ul {
-    // width: 250px;
-    // margin-left: 7px;
+  .hide-filter-list {
+    display: none;
+  }
 
-    li {
+  .filter-list-title {
+    cursor: pointer;
+  }
+
+  .mdc-list {
+
+    .mdc-list-item {
       text-transform: capitalize;
       overflow: hidden;
-      white-space: nowrap;
+
+      .mdc-list-item__meta {
+        margin-left: auto;
+        margin-right: inherit;
+      }
+
+      label {
+        cursor: pointer;
+      }
     }
   }
 }

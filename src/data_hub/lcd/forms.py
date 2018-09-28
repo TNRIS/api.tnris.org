@@ -42,6 +42,8 @@ class ImageForm(forms.ModelForm):
 
     image_url = forms.FileField(required=False, widget=PictureWidget)
 
+    
+
 class CollectionForm(forms.ModelForm):
     # base model is Collection
     class Meta:

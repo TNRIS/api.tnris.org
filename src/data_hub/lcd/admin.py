@@ -103,7 +103,8 @@ class CollectionAdmin(admin.ModelAdmin):
                        'delete_lidar_breaklines_url',
                        'tile_index_url',
                        'delete_tile_index_url',
-                       'thumbnail_image',)
+                       'thumbnail_image',
+                       'delete_thumbnail_image')
         }),
         ('Images', {
             'classes': ('grp-collapse grp-closed',),

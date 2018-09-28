@@ -39,9 +39,9 @@ export default class Catalog extends React.Component {
         <ToolDrawer />
         <Header />
         <div className='catalog'>
-          <button onClick={this.props.openMapDialog}>show map</button>
+          {/* <button onClick={this.props.openMapDialog}>show map</button> */}
           <CollectionDialogContainer />
-          <MapDialogContainer />
+          {/* <MapDialogContainer /> */}
           <ul className='catalog-list mdc-image-list mdc-image-list--with-text-protection'>
             {this.props.visibleCollections ? this.props.visibleCollections.map(collectionId =>
               <CatalogCardContainer collection={this.props.collections[collectionId]} key={collectionId} />

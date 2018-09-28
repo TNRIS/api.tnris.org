@@ -1,0 +1,44 @@
+/*
+styles for component: CollectionFilter
+*/
+
+.filter-component {
+  float: left;
+  margin-left: 3px;
+  margin-right: 3px;
+  width: 100%;
+
+  .filter-button {
+    background-color: #248CC0;
+  }
+
+  .active {
+    background-color: #248CC0;
+    color: white;
+  }
+
+  .hide-filter-list {
+    display: none;
+  }
+
+  .filter-list-title {
+    cursor: pointer;
+  }
+
+  .mdc-list {
+
+    .mdc-list-item {
+      text-transform: capitalize;
+      overflow: hidden;
+
+      .mdc-list-item__meta {
+        margin-left: auto;
+        margin-right: inherit;
+      }
+
+      label {
+        cursor: pointer;
+      }
+    }
+  }
+}

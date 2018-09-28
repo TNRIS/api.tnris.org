@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import (County, CountyRelate, Product)
+from .models import (County, CountyRelate, Product, ChcView)
 
 
 class CountySerializer(serializers.HyperlinkedModelSerializer):
@@ -34,3 +34,9 @@ class ProductSerializer(serializers.ModelSerializer):
         model = Product
         fields = ('AcquiringAgency', 'CountyFIPS', 'Date', 'NumFrames',
                   'PrintType', 'Scale')
+
+
+class CollectionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ChcView
+        fields = '__all__' 

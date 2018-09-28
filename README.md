@@ -48,5 +48,5 @@ Built with:
 1. head over to the deployments repo to execute the actual application deployment and make it so
 
 
-<!-- ## Notes -->
-<!-- * [Django Tutorial](https://docs.djangoproject.com/en/1.11/intro/) -->
+<!-- ## Notes
+ *  -->

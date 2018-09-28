@@ -1,33 +1,28 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
 
-import ResourceList from './ResourceList';
+import mapboxgl from 'mapbox-gl';
 
 export default class Map extends React.Component {
+
+  componentDidMount() {
+    // define mapbox map
+    mapboxgl.accessToken = 'undefined';
+    const map = new mapboxgl.Map({
+        container: 'map', // container id
+        style: 'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json',
+        center: [-99.341389, 31.330000],
+        zoom: 6.1
+    });
+
+    map.addControl(new mapboxgl.NavigationControl(), 'top-left');
+  }
+
   render() {
+
     return (
-      <div className='container'>
-        <div className='row'>
-          <h1 className='col text-center'>Welcome to the holodeck!</h1>
+      <div className='map-component'>
+        <div id='map'>
         </div>
-        <div className='row'>
-          <h2 className='col text-center'>i'm the map</h2>
-        </div>
-        <div className='row'>
-          <img
-            className='col'
-            style={{height: '500px'}}
-            src='https://i.kym-cdn.com/photos/images/original/000/895/634/08a.gif'
-            alt=''
-          />
-        </div>
-        <div className='row'>
-          <h4
-            className='col text-center'
-            style={{paddingTop: '10px'}}><Link to='/'>Click Here</Link> to see the catalog!
-          </h4>
-        </div>
-        <ResourceList className='row' />
       </div>
     );
   }

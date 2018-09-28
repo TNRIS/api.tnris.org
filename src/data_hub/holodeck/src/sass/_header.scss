@@ -1,0 +1,53 @@
+/*
+styles for component: Header
+*/
+
+.header-component {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #222;
+
+  .header-title {
+    background: #1e8dc1;
+    color: #d2f1ff;
+    font-family: pragmatica-web-condensed,sans-serif;
+    font-size: 16px;
+    font-weight: 100;
+    height: auto;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 4px;
+
+    @media (max-width: mdc-layout-grid-breakpoint-min(desktop)) {
+      display: none;
+    }
+
+    section {
+      padding: 0;
+
+      .header-title__twdb {
+        text-decoration: none;
+        color: inherit;
+        font-size: 12px;
+      }
+    }
+
+  }
+
+  .header-nav {
+    color: #d2f1ff;
+
+    .mdc-top-app-bar__action-item {
+      margin-left: 3px;
+      margin-right: 3px;
+
+      .logo {
+        max-height: 100%;
+      }
+    }
+
+  }
+
+}

@@ -1,0 +1,17 @@
+/*
+styles for component: TnrisOrderTemplate
+*/
+
+.tnris-order-template {
+  height: 100%;
+  overflow-y: auto;
+
+  &:focus {
+    outline: none;
+  }
+
+  .collection-dialog__image {
+    max-width: 100%;
+  }
+
+}

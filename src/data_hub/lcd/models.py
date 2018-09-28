@@ -983,6 +983,48 @@ class Resource(models.Model):
     def __str__(self):
         return self.resource
 
+class Image(models.Model):
+    """
+    Defines available image resources.
+    Related to :model:`lcd.collection`.
+    """
+
+    class Meta:
+        db_table = 'image'
+        verbose_name = 'Image'
+        verbose_name_plural = 'Images'
+        unique_together = (
+            'collection_id',
+            'image_url'
+        )
+
+    image_id = models.UUIDField(
+        'Image ID',
+        primary_key=True,
+        editable=False
+    )
+    collection_id = models.ForeignKey(
+        'Collection',
+        db_column='collection_id',
+        on_delete=models.CASCADE,
+        related_name='image_collections'
+    )
+    image_url = models.URLField(
+        'Image URL',
+        max_length=255
+    )
+    created = models.DateTimeField(
+        'Created',
+        auto_now_add=True
+    )
+    last_modified = models.DateTimeField(
+        'Last Modified',
+        auto_now=True
+    )
+
+    def __str__(self):
+        return self.image_url
+
 """
 ********** Database Views **********
 **** Used as the API endpoints ****
@@ -1150,3 +1192,46 @@ class AcdcView(models.Model):
 
     def __str__(self):
         return self.name
+
+class RemView(models.Model):
+    """
+    Resource Management view presents Resource table with joins
+    for Resource Type details
+    """
+
+    class Meta:
+        managed = False
+        db_table = "resource_management"
+        verbose_name = 'Resource Management'
+        verbose_name_plural = 'Resource Managements'
+
+    resource = models.CharField(
+        'Resource URL',
+        primary_key=True,
+        max_length=255
+    )
+    filesize = models.PositiveIntegerField(
+        'Filesize',
+        null=True,
+        blank=True
+    )
+    area_type_id = models.UUIDField(
+        'AreaType'
+    )
+    collection_id = models.UUIDField(
+        'Collection'
+    )
+    resource_type_id = models.UUIDField(
+        'ResourceType'
+    )
+    resource_type_name = models.TextField(
+        'Resource Type Name',
+        max_length=50
+    )
+    resource_type_abbreviation = models.TextField(
+        'Resource Type Abbreviation',
+        max_length=10
+    )
+
+    def __str__(self):
+        return self.resource

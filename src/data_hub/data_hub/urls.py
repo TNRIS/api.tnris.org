@@ -18,6 +18,8 @@ from django.urls import path, include
 from django.views.generic import TemplateView
 from django.views.generic.base import RedirectView
 
+handler404 = TemplateView.as_view(template_name='index.html')
+
 from .views import HealthCheckView
 
 urlpatterns = [
@@ -28,5 +30,4 @@ urlpatterns = [
     path('api/v1/', include('lcd.urls')),
     path('health/', HealthCheckView.as_view()),
     path('', TemplateView.as_view(template_name='index.html')),
-    path('map', TemplateView.as_view(template_name='index.html')),
 ]

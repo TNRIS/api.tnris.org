@@ -1,0 +1,31 @@
+/*
+styles for component: TnrisDownloadTemplate
+*/
+
+.tnris-download-template {
+  overflow-y: auto;
+
+  &:focus {
+    outline: none;
+  }
+
+  .mdc-tab {
+    span {
+      color: white;
+    }
+
+    .mdc-tab-indicator--active {
+      .mdc-tab-indicator__content--underline {
+        background-color: white;
+      }
+    }
+
+    @media (max-width: mdc-layout-grid-breakpoint-max(tablet)) {
+      .mdc-tab__content {
+        .mdc-tab__text-label {
+          display: none;
+        }
+      }
+    }
+  }
+}

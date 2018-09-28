@@ -1,0 +1,49 @@
+/*
+styles for component: CatalogCard
+*/
+
+.catalog-card-component {
+  width: calc(100% / 5 - 4.2px);
+  margin: 2px;
+
+  @media (max-width: mdc-layout-grid-breakpoint-max(tablet)) {
+    width: calc(100% / 3 - 4.2px);
+  }
+
+  @media (max-width: mdc-layout-grid-breakpoint-max(phone)) {
+    width: 100%;
+  }
+
+  &:hover, &:active {
+    cursor: pointer;
+
+    .mdc-image-list__supporting {
+      height: 50%;
+
+      .mdc-image-list__label {
+        white-space: normal;
+      }
+    }
+
+    img {
+      outline: 3px solid black;
+      outline-offset: -2px;
+    }
+
+  }
+
+  .mdc-image-list__supporting {
+    height: 20%;
+    margin: auto;
+    text-overflow: hidden;
+    -webkit-transition: height 0.5s;
+    transition: height 0.5s;
+
+    .mdc-image-list__label {
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      line-height: 1.3rem;
+    }
+  }
+
+}

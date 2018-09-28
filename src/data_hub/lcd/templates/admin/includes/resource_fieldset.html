@@ -68,8 +68,9 @@
       <p id='progress-state'></p>
     </div>
     <p id='progress-note'>
-      <span id='progress-numbers'></span>
+      <span id='progress-numbers'>Preparing update. Retrieving file list from s3...<br />(Shouldn't take too long, thank you for your patience, Master.)</span>
       <br />
-      Note: Database changes are occuring in memory and will not be permanently committed until all files have been updated and this process is 100% successful.
+      <br />
+      Note: Database changes run on backend and <strong>WILL BE</strong> permanently committed regardless of changes in browser <strong>unless a validation error occurs</strong> (in which case all Resource records will be permanently cleared from the database with no new replacements until a successful completion of this process).
     </p>
 {% endspaceless %}

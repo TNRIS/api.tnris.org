@@ -67,7 +67,9 @@ class CollectionAdmin(admin.ModelAdmin):
     form = CollectionForm
     fieldsets = (
         ('Collection Information', {
-            'fields': ('collection', 'agency', 'from_date', 'to_date', 'counties', 'public'),
+             'fields': ('collection', 'agency', 'from_date', 'to_date',
+                       'index_service_url', 'frames_service_url', 'mosaic_service_url',
+                       'counties', 'public'),
         }),
         ('Remarks', {
             'fields': ('remarks',)

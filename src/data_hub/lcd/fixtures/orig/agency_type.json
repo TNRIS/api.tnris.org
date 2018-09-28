@@ -1,0 +1,760 @@
+[{
+  "model": "lcd.agencytype",
+  "pk": "023aa646-a084-40cd-bdac-cee9903b1a20",
+  "fields": {
+    "agency_name": "National Geospatial Intelligence Agency",
+    "agency_abbreviation": "NGA",
+    "agency_website": null,
+    "agency_contact": "",
+    "created": "2018-07-25T15:01:32.966Z",
+    "last_modified": "2018-07-25T15:01:32.966Z"
+  }
+}, {
+  "model": "lcd.agencytype",
+  "pk": "09bec38b-f69a-4aa6-bdd7-1cb5d36e1fa7",
+  "fields": {
+    "agency_name": "Texas Municipal Power Agency",
+    "agency_abbreviation": "TMPA",
+    "agency_website": null,
+    "agency_contact": "",
+    "created": "2018-07-25T15:27:47.190Z",
+    "last_modified": "2018-07-25T15:27:47.190Z"
+  }
+}, {
+  "model": "lcd.agencytype",
+  "pk": "13c9b09d-799b-49ab-851f-af6da5b52bea",
+  "fields": {
+    "agency_name": "City of College Station",
+    "agency_abbreviation": "College Station",
+    "agency_website": null,
+    "agency_contact": "",
+    "created": "2018-07-25T14:46:59.869Z",
+    "last_modified": "2018-07-25T14:46:59.869Z"
+  }
+}, {
+  "model": "lcd.agencytype",
+  "pk": "15820775-cbdb-40cf-ae9e-86024ce5bba4",
+  "fields": {
+    "agency_name": "United States Board on Geographic Names",
+    "agency_abbreviation": "BGN",
+    "agency_website": null,
+    "agency_contact": "",
+    "created": "2018-07-25T15:16:16.907Z",
+    "last_modified": "2018-07-25T15:19:03.021Z"
+  }
+}, {
+  "model": "lcd.agencytype",
+  "pk": "232534a6-e7a3-469a-8213-d9c07d5e8d86",
+  "fields": {
+    "agency_name": "Satellite Pour l\u2019Observation de la Terre",
+    "agency_abbreviation": "SPOT",
+    "agency_website": null,
+    "agency_contact": "",
+    "created": "2018-07-25T15:08:17.043Z",
+    "last_modified": "2018-07-25T15:08:17.043Z"
+  }
+}, {
+  "model": "lcd.agencytype",
+  "pk": "26a5ae1c-42b4-4e97-8226-613856d5c3ab",
+  "fields": {
+    "agency_name": "Capital Area Council of Governments",
+    "agency_abbreviation": "CAPCOG",
+    "agency_website": null,
+    "agency_contact": "",
+    "created": "2018-07-25T14:45:41.563Z",
+    "last_modified": "2018-07-25T14:45:41.563Z"
+  }
+}, {
+  "model": "lcd.agencytype",
+  "pk": "26ef38cb-6caa-4a47-96c0-d96723c77ffd",
+  "fields": {
+    "agency_name": "Brazos 9-1-1",
+    "agency_abbreviation": "Brazos 911",
+    "agency_website": null,
+    "agency_contact": "",
+    "created": "2018-07-25T14:43:29.866Z",
+    "last_modified": "2018-07-25T14:43:29.866Z"
+  }
+}, {
+  "model": "lcd.agencytype",
+  "pk": "28787134-2cb0-45f2-bc07-1d99e1bf53da",
+  "fields": {
+    "agency_name": "Brownsville Public Utilities Board",
+    "agency_abbreviation": "BPUB",
+    "agency_website": null,
+    "agency_contact": "",
+    "created": "2018-07-25T14:44:37.299Z",
+    "last_modified": "2018-07-25T14:44:37.299Z"
+  }
+}, {
+  "model": "lcd.agencytype",
+  "pk": "2a71c93c-cd32-4a3b-ac5b-0fa0cd3507e6",
+  "fields": {
+    "agency_name": "United States Census Bureau",
+    "agency_abbreviation": "USCB",
+    "agency_website": null,
+    "agency_contact": "",
+    "created": "2018-07-25T15:19:27.896Z",
+    "last_modified": "2018-07-25T15:19:27.896Z"
+  }
+}, {
+  "model": "lcd.agencytype",
+  "pk": "2ce83c28-bb06-4670-a29d-d93e343286a6",
+  "fields": {
+    "agency_name": "National Transportation Atlas Database",
+    "agency_abbreviation": "NTAD",
+    "agency_website": null,
+    "agency_contact": "",
+    "created": "2018-07-25T15:02:21.889Z",
+    "last_modified": "2018-07-25T15:02:21.889Z"
+  }
+}, {
+  "model": "lcd.agencytype",
+  "pk": "2ebfd5dc-152b-4332-82ac-a6570a0f1a4c",
+  "fields": {
+    "agency_name": "United States Geological Survey",
+    "agency_abbreviation": "USGS",
+    "agency_website": null,
+    "agency_contact": "",
+    "created": "2018-07-25T15:23:57.796Z",
+    "last_modified": "2018-07-25T15:23:57.796Z"
+  }
+}, {
+  "model": "lcd.agencytype",
+  "pk": "339b715b-38ef-4315-a0b3-414f1401727b",
+  "fields": {
+    "agency_name": "City of Palestine",
+    "agency_abbreviation": "Palestine",
+    "agency_website": null,
+    "agency_contact": "",
+    "created": "2018-07-25T14:49:07.934Z",
+    "last_modified": "2018-07-25T14:49:07.934Z"
+  }
+}, {
+  "model": "lcd.agencytype",
+  "pk": "397ec492-326b-4d7a-bbc3-26247024a523",
+  "fields": {
+    "agency_name": "City of Georgetown",
+    "agency_abbreviation": "Georgetown",
+    "agency_website": null,
+    "agency_contact": "",
+    "created": "2018-07-25T14:47:57.783Z",
+    "last_modified": "2018-07-25T14:47:57.783Z"
+  }
+}, {
+  "model": "lcd.agencytype",
+  "pk": "50ac5b0d-8082-4c2d-9e48-2ed0d9e21255",
+  "fields": {
+    "agency_name": "City of El Paso",
+    "agency_abbreviation": "El Paso",
+    "agency_website": null,
+    "agency_contact": "",
+    "created": "2018-07-25T14:47:42.264Z",
+    "last_modified": "2018-07-25T14:47:42.264Z"
+  }
+}, {
+  "model": "lcd.agencytype",
+  "pk": "520d75b3-a503-48df-ae8d-da9775fb84bf",
+  "fields": {
+    "agency_name": "Texas Natural Reagencys Information System",
+    "agency_abbreviation": "TNRIS",
+    "agency_website": null,
+    "agency_contact": "",
+    "created": "2018-07-25T15:14:41.381Z",
+    "last_modified": "2018-07-25T15:14:41.381Z"
+  }
+}, {
+  "model": "lcd.agencytype",
+  "pk": "53f2eeb2-5c77-4722-b6d6-d5c835579287",
+  "fields": {
+    "agency_name": "Laguna Madre Water District",
+    "agency_abbreviation": "LMWD",
+    "agency_website": null,
+    "agency_contact": "",
+    "created": "2018-07-25T14:58:10.089Z",
+    "last_modified": "2018-07-25T14:58:10.089Z"
+  }
+}, {
+  "model": "lcd.agencytype",
+  "pk": "5770ff51-af90-49a0-a5bb-f21c2e11a6b1",
+  "fields": {
+    "agency_name": "Texas A&M Forest Service",
+    "agency_abbreviation": "TFS",
+    "agency_website": null,
+    "agency_contact": "",
+    "created": "2018-07-25T15:18:29.610Z",
+    "last_modified": "2018-07-25T15:18:29.610Z"
+  }
+}, {
+  "model": "lcd.agencytype",
+  "pk": "5b84701f-4768-4c71-9688-fef3b85047df",
+  "fields": {
+    "agency_name": "Houston - Galveston Area Council",
+    "agency_abbreviation": "H-GAC",
+    "agency_website": null,
+    "agency_contact": "",
+    "created": "2018-07-25T14:53:59.895Z",
+    "last_modified": "2018-07-25T14:53:59.895Z"
+  }
+}, {
+  "model": "lcd.agencytype",
+  "pk": "5fcd2757-ec27-4c74-b512-1b8a6e43dfd9",
+  "fields": {
+    "agency_name": "Environmental Protection Agency",
+    "agency_abbreviation": "EPA",
+    "agency_website": null,
+    "agency_contact": "",
+    "created": "2018-07-25T14:52:19.320Z",
+    "last_modified": "2018-07-25T14:52:19.320Z"
+  }
+}, {
+  "model": "lcd.agencytype",
+  "pk": "610411bd-385c-4a00-99a1-80f571868b50",
+  "fields": {
+    "agency_name": "Brazos Central Appraisal District",
+    "agency_abbreviation": "BCAD",
+    "agency_website": "https://www.brazoscad.org/",
+    "agency_contact": "",
+    "created": "2018-07-25T12:53:12.411Z",
+    "last_modified": "2018-07-25T14:39:30.341Z"
+  }
+}, {
+  "model": "lcd.agencytype",
+  "pk": "61ec4579-8462-4260-9176-c627383bded8",
+  "fields": {
+    "agency_name": "Natural Reagencys Conservation Service",
+    "agency_abbreviation": "NRCS",
+    "agency_website": null,
+    "agency_contact": "",
+    "created": "2018-07-25T15:03:07.270Z",
+    "last_modified": "2018-07-25T15:03:07.270Z"
+  }
+}, {
+  "model": "lcd.agencytype",
+  "pk": "68e6407d-3839-4a77-8428-6913888c168a",
+  "fields": {
+    "agency_name": "United States Fish and Wildlife Service",
+    "agency_abbreviation": "USFWS",
+    "agency_website": null,
+    "agency_contact": "",
+    "created": "2018-07-25T15:21:17.926Z",
+    "last_modified": "2018-07-25T15:22:04.689Z"
+  }
+}, {
+  "model": "lcd.agencytype",
+  "pk": "6a03304e-ee3a-4955-8e19-52270894b13c",
+  "fields": {
+    "agency_name": "City of Houston",
+    "agency_abbreviation": "Houston",
+    "agency_website": null,
+    "agency_contact": "",
+    "created": "2018-07-25T14:48:24.845Z",
+    "last_modified": "2018-07-25T14:48:24.845Z"
+  }
+}, {
+  "model": "lcd.agencytype",
+  "pk": "6c2927a3-f52d-4948-b450-5bf075fc78d0",
+  "fields": {
+    "agency_name": "Smith County 9-1-1",
+    "agency_abbreviation": "Smith 911",
+    "agency_website": null,
+    "agency_contact": "",
+    "created": "2018-07-25T15:08:57.133Z",
+    "last_modified": "2018-07-25T15:08:57.133Z"
+  }
+}, {
+  "model": "lcd.agencytype",
+  "pk": "70817c70-7364-45a8-971a-00908a95a111",
+  "fields": {
+    "agency_name": "Texas Parks and Wildlife Department",
+    "agency_abbreviation": "TPWD",
+    "agency_website": null,
+    "agency_contact": "",
+    "created": "2018-07-25T15:14:53.424Z",
+    "last_modified": "2018-07-25T15:14:53.424Z"
+  }
+}, {
+  "model": "lcd.agencytype",
+  "pk": "77e1eb26-96d8-4415-bf70-a29d7f679ca9",
+  "fields": {
+    "agency_name": "United States Department of Agriculture",
+    "agency_abbreviation": "USDA",
+    "agency_website": null,
+    "agency_contact": "",
+    "created": "2018-07-25T15:19:42.738Z",
+    "last_modified": "2018-07-25T15:19:42.738Z"
+  }
+}, {
+  "model": "lcd.agencytype",
+  "pk": "7bacb0b7-332d-4580-95d1-72707101b437",
+  "fields": {
+    "agency_name": "Taylor County",
+    "agency_abbreviation": "Taylor",
+    "agency_website": null,
+    "agency_contact": "",
+    "created": "2018-07-25T15:10:10.595Z",
+    "last_modified": "2018-07-25T15:10:10.595Z"
+  }
+}, {
+  "model": "lcd.agencytype",
+  "pk": "7c38c717-f63a-470d-ae32-fc2ff02f1f28",
+  "fields": {
+    "agency_name": "Bexar County",
+    "agency_abbreviation": "Bexar",
+    "agency_website": "https://www.bexar.org/",
+    "agency_contact": "",
+    "created": "2018-07-25T12:56:03.333Z",
+    "last_modified": "2018-07-25T14:39:45.057Z"
+  }
+}, {
+  "model": "lcd.agencytype",
+  "pk": "80540bd3-5303-4fda-a437-d10a19178551",
+  "fields": {
+    "agency_name": "City of Edinburg",
+    "agency_abbreviation": "Edinburg",
+    "agency_website": null,
+    "agency_contact": "",
+    "created": "2018-07-25T14:47:15.014Z",
+    "last_modified": "2018-07-25T14:47:15.014Z"
+  }
+}, {
+  "model": "lcd.agencytype",
+  "pk": "817c68e0-97fe-49d5-be47-4611ac4737cc",
+  "fields": {
+    "agency_name": "Bureau of Economic Geology",
+    "agency_abbreviation": "BEG",
+    "agency_website": null,
+    "agency_contact": "",
+    "created": "2018-07-25T14:44:57.504Z",
+    "last_modified": "2018-07-25T14:45:26.809Z"
+  }
+}, {
+  "model": "lcd.agencytype",
+  "pk": "855f3cdc-e25d-4470-8e0d-8be483414792",
+  "fields": {
+    "agency_name": "Texas General Land Office",
+    "agency_abbreviation": "GLO",
+    "agency_website": null,
+    "agency_contact": "",
+    "created": "2018-07-25T15:14:22.134Z",
+    "last_modified": "2018-07-25T15:14:22.135Z"
+  }
+}, {
+  "model": "lcd.agencytype",
+  "pk": "87cb93e0-ed61-4ba3-a392-93b203e4d6a8",
+  "fields": {
+    "agency_name": "Lower Colorado River Authority",
+    "agency_abbreviation": "LCRA",
+    "agency_website": null,
+    "agency_contact": "",
+    "created": "2018-07-25T14:59:04.699Z",
+    "last_modified": "2018-07-25T14:59:04.699Z"
+  }
+}, {
+  "model": "lcd.agencytype",
+  "pk": "8a695f4e-46f4-430b-862d-2b352520a11d",
+  "fields": {
+    "agency_name": "Hidalgo County Regional Mobility Authority",
+    "agency_abbreviation": "HCRMA",
+    "agency_website": null,
+    "agency_contact": "",
+    "created": "2018-07-25T14:56:23.434Z",
+    "last_modified": "2018-07-25T14:56:23.434Z"
+  }
+}, {
+  "model": "lcd.agencytype",
+  "pk": "8ab1b8ba-ab53-40e9-86ec-fb804de6d938",
+  "fields": {
+    "agency_name": "Lower Rio Grande Valley Development Council",
+    "agency_abbreviation": "LRGVDC",
+    "agency_website": null,
+    "agency_contact": "",
+    "created": "2018-07-25T14:59:38.559Z",
+    "last_modified": "2018-07-25T14:59:38.559Z"
+  }
+}, {
+  "model": "lcd.agencytype",
+  "pk": "8cf5c57e-082a-4601-bdf3-ab415e27b5b0",
+  "fields": {
+    "agency_name": "International Boundary and Water Commission",
+    "agency_abbreviation": "IBWC",
+    "agency_website": null,
+    "agency_contact": "",
+    "created": "2018-07-25T14:57:00.327Z",
+    "last_modified": "2018-07-25T14:57:00.327Z"
+  }
+}, {
+  "model": "lcd.agencytype",
+  "pk": "8d69ab58-cf89-4995-9607-5b23e5178589",
+  "fields": {
+    "agency_name": "Smith County Appraisal District",
+    "agency_abbreviation": "Smith CAD",
+    "agency_website": null,
+    "agency_contact": "",
+    "created": "2018-07-25T15:09:57.500Z",
+    "last_modified": "2018-07-25T15:09:57.500Z"
+  }
+}, {
+  "model": "lcd.agencytype",
+  "pk": "91e42b44-11d9-49f1-868c-e00ff90e8717",
+  "fields": {
+    "agency_name": "City of Port Isabel",
+    "agency_abbreviation": "Port Isabel",
+    "agency_website": null,
+    "agency_contact": "",
+    "created": "2018-07-25T14:50:08.687Z",
+    "last_modified": "2018-07-25T14:50:08.687Z"
+  }
+}, {
+  "model": "lcd.agencytype",
+  "pk": "98f0b00f-9bd7-4c03-bdb9-60eb51584710",
+  "fields": {
+    "agency_name": "City of Alton",
+    "agency_abbreviation": "Alton",
+    "agency_website": null,
+    "agency_contact": "",
+    "created": "2018-07-25T14:46:13.260Z",
+    "last_modified": "2018-07-25T14:46:13.260Z"
+  }
+}, {
+  "model": "lcd.agencytype",
+  "pk": "9a1708d9-e040-42ba-b540-089451860944",
+  "fields": {
+    "agency_name": "Harris County Appraisal District",
+    "agency_abbreviation": "HCAD",
+    "agency_website": null,
+    "agency_contact": "",
+    "created": "2018-07-25T14:54:15.434Z",
+    "last_modified": "2018-07-25T14:54:15.434Z"
+  }
+}, {
+  "model": "lcd.agencytype",
+  "pk": "9e899633-08a3-4b7e-b064-21c6b9f27fc3",
+  "fields": {
+    "agency_name": "City of Lubbock",
+    "agency_abbreviation": "Lubbock",
+    "agency_website": null,
+    "agency_contact": "",
+    "created": "2018-07-25T14:48:40.472Z",
+    "last_modified": "2018-07-25T14:48:40.472Z"
+  }
+}, {
+  "model": "lcd.agencytype",
+  "pk": "a05d62d6-6ea1-4d14-aa66-a135147d672c",
+  "fields": {
+    "agency_name": "City of San Benito",
+    "agency_abbreviation": "San Benito",
+    "agency_website": null,
+    "agency_contact": "",
+    "created": "2018-07-25T14:51:02.885Z",
+    "last_modified": "2018-07-25T14:51:02.885Z"
+  }
+}, {
+  "model": "lcd.agencytype",
+  "pk": "a21bc745-61a5-4e5d-bfe1-6297aa369ee9",
+  "fields": {
+    "agency_name": "City of Grand Prairie",
+    "agency_abbreviation": "Grand Prairie",
+    "agency_website": null,
+    "agency_contact": "",
+    "created": "2018-07-25T14:48:13.653Z",
+    "last_modified": "2018-07-25T14:48:13.653Z"
+  }
+}, {
+  "model": "lcd.agencytype",
+  "pk": "a4f68dcf-a7e7-411a-a3cf-7cf13cbc4938",
+  "fields": {
+    "agency_name": "City of Bryan",
+    "agency_abbreviation": "Bryan",
+    "agency_website": null,
+    "agency_contact": "",
+    "created": "2018-07-25T14:46:42.717Z",
+    "last_modified": "2018-07-25T14:46:42.717Z"
+  }
+}, {
+  "model": "lcd.agencytype",
+  "pk": "a59aa983-de71-40b6-8c09-789508d46ada",
+  "fields": {
+    "agency_name": "Texas A&M University",
+    "agency_abbreviation": "TAMU",
+    "agency_website": null,
+    "agency_contact": "",
+    "created": "2018-07-25T15:11:20.348Z",
+    "last_modified": "2018-07-25T15:11:20.348Z"
+  }
+}, {
+  "model": "lcd.agencytype",
+  "pk": "a5ca4a67-07a3-4216-a5c6-5a6357318517",
+  "fields": {
+    "agency_name": "Smith County",
+    "agency_abbreviation": "Smith",
+    "agency_website": null,
+    "agency_contact": "",
+    "created": "2018-07-25T15:08:35.791Z",
+    "last_modified": "2018-07-25T15:08:35.791Z"
+  }
+}, {
+  "model": "lcd.agencytype",
+  "pk": "a91ede8b-e37e-43ad-9457-c4f1230c5b9a",
+  "fields": {
+    "agency_name": "Texas Commission on Environmental Quality",
+    "agency_abbreviation": "TCEQ",
+    "agency_website": null,
+    "agency_contact": "",
+    "created": "2018-07-25T15:11:36.388Z",
+    "last_modified": "2018-07-25T15:11:36.388Z"
+  }
+}, {
+  "model": "lcd.agencytype",
+  "pk": "a98b70a1-204b-46a3-9a13-65884c86e5a4",
+  "fields": {
+    "agency_name": "North Central Texas Council of Governments",
+    "agency_abbreviation": "NCTCOG",
+    "agency_website": null,
+    "agency_contact": "",
+    "created": "2018-07-25T15:03:28.977Z",
+    "last_modified": "2018-07-25T15:03:28.977Z"
+  }
+}, {
+  "model": "lcd.agencytype",
+  "pk": "aac4cd15-90bc-4e7d-a988-015448c26406",
+  "fields": {
+    "agency_name": "City of Pharr",
+    "agency_abbreviation": "Pharr",
+    "agency_website": null,
+    "agency_contact": "",
+    "created": "2018-07-25T14:49:55.279Z",
+    "last_modified": "2018-07-25T14:49:55.279Z"
+  }
+}, {
+  "model": "lcd.agencytype",
+  "pk": "add2d681-99a7-49dc-a6f3-e77ff64f7afc",
+  "fields": {
+    "agency_name": "Lynn County",
+    "agency_abbreviation": "Lynn",
+    "agency_website": null,
+    "agency_contact": "",
+    "created": "2018-07-25T15:01:09.524Z",
+    "last_modified": "2018-07-25T15:01:09.524Z"
+  }
+}, {
+  "model": "lcd.agencytype",
+  "pk": "c1e7ed1a-8bfa-44eb-980d-788bf66bed41",
+  "fields": {
+    "agency_name": "Texas Water Development Board",
+    "agency_abbreviation": "TWDB",
+    "agency_website": null,
+    "agency_contact": "",
+    "created": "2018-07-25T15:15:07.020Z",
+    "last_modified": "2018-07-25T15:15:07.020Z"
+  }
+}, {
+  "model": "lcd.agencytype",
+  "pk": "c3ebcc54-4ff6-4bde-b77c-3507f881a430",
+  "fields": {
+    "agency_name": "United States Forest Service",
+    "agency_abbreviation": "USFS",
+    "agency_website": null,
+    "agency_contact": "",
+    "created": "2018-07-25T15:21:46.949Z",
+    "last_modified": "2018-07-25T15:21:46.949Z"
+  }
+}, {
+  "model": "lcd.agencytype",
+  "pk": "c458a5fb-08a1-438e-af45-056a456fd9a9",
+  "fields": {
+    "agency_name": "Harris County Flood Control District",
+    "agency_abbreviation": "HCFCD",
+    "agency_website": null,
+    "agency_contact": "",
+    "created": "2018-07-25T14:54:36.209Z",
+    "last_modified": "2018-07-25T14:54:36.209Z"
+  }
+}, {
+  "model": "lcd.agencytype",
+  "pk": "c4acca28-4ce7-46e6-b5a4-d3a6f5c0b687",
+  "fields": {
+    "agency_name": "City of Weslaco",
+    "agency_abbreviation": "Weslaco",
+    "agency_website": null,
+    "agency_contact": "",
+    "created": "2018-07-25T14:52:07.548Z",
+    "last_modified": "2018-07-25T14:52:07.548Z"
+  }
+}, {
+  "model": "lcd.agencytype",
+  "pk": "c5bf003c-444d-4df1-b834-67347da62e3a",
+  "fields": {
+    "agency_name": "Bexar County Metro 911",
+    "agency_abbreviation": "Bexar 911",
+    "agency_website": null,
+    "agency_contact": "",
+    "created": "2018-07-25T14:42:47.609Z",
+    "last_modified": "2018-07-25T14:42:47.609Z"
+  }
+}, {
+  "model": "lcd.agencytype",
+  "pk": "c67ff1f5-f65b-424e-a0f2-5781df2415f1",
+  "fields": {
+    "agency_name": "Jet Propulsion Laboratory",
+    "agency_abbreviation": "JPL",
+    "agency_website": null,
+    "agency_contact": "",
+    "created": "2018-07-25T14:57:35.530Z",
+    "last_modified": "2018-07-25T14:57:35.530Z"
+  }
+}, {
+  "model": "lcd.agencytype",
+  "pk": "d02994b7-8a8e-440b-a558-5f08a4a770c0",
+  "fields": {
+    "agency_name": "National Oceanic and Atmospheric Administration",
+    "agency_abbreviation": "NOAA",
+    "agency_website": null,
+    "agency_contact": "",
+    "created": "2018-07-25T15:01:51.862Z",
+    "last_modified": "2018-07-25T15:01:51.862Z"
+  }
+}, {
+  "model": "lcd.agencytype",
+  "pk": "d1b48f9d-bbd9-4a72-bdc2-86220a5028b7",
+  "fields": {
+    "agency_name": "City of Tyler",
+    "agency_abbreviation": "Tyler",
+    "agency_website": null,
+    "agency_contact": "",
+    "created": "2018-07-25T14:51:30.603Z",
+    "last_modified": "2018-07-25T14:51:30.603Z"
+  }
+}, {
+  "model": "lcd.agencytype",
+  "pk": "d3bcda14-d484-4628-924b-d66c778ec254",
+  "fields": {
+    "agency_name": "Federal Emergency Management Agency",
+    "agency_abbreviation": "FEMA",
+    "agency_website": null,
+    "agency_contact": "",
+    "created": "2018-07-25T14:52:33.959Z",
+    "last_modified": "2018-07-25T14:52:33.959Z"
+  }
+}, {
+  "model": "lcd.agencytype",
+  "pk": "d4c1b17a-2842-40e6-8cdd-394cdfde871a",
+  "fields": {
+    "agency_name": "Federal Geographic Data Committee",
+    "agency_abbreviation": "FGDC",
+    "agency_website": null,
+    "agency_contact": "",
+    "created": "2018-07-25T14:52:58.224Z",
+    "last_modified": "2018-07-25T14:52:58.224Z"
+  }
+}, {
+  "model": "lcd.agencytype",
+  "pk": "d5c20a43-5b51-4c4a-8b48-629a2b87c3ee",
+  "fields": {
+    "agency_name": "Texas Department of Transportation",
+    "agency_abbreviation": "TXDOT",
+    "agency_website": null,
+    "agency_contact": "",
+    "created": "2018-07-25T15:11:49.333Z",
+    "last_modified": "2018-07-25T15:11:49.333Z"
+  }
+}, {
+  "model": "lcd.agencytype",
+  "pk": "d6ca0285-8b72-46a0-a005-b45ec9638032",
+  "fields": {
+    "agency_name": "Hidalgo County Metropolitan Planning Organization",
+    "agency_abbreviation": "HCMPO",
+    "agency_website": null,
+    "agency_contact": "",
+    "created": "2018-07-25T14:55:55.560Z",
+    "last_modified": "2018-07-25T14:55:55.560Z"
+  }
+}, {
+  "model": "lcd.agencytype",
+  "pk": "d71297d6-d75c-4cdb-8187-429e143a94fb",
+  "fields": {
+    "agency_name": "Brazos County",
+    "agency_abbreviation": "Brazos",
+    "agency_website": null,
+    "agency_contact": "",
+    "created": "2018-07-25T14:44:03.650Z",
+    "last_modified": "2018-07-25T14:44:03.650Z"
+  }
+}, {
+  "model": "lcd.agencytype",
+  "pk": "d871a178-c1cc-4173-b86d-57cba05b8760",
+  "fields": {
+    "agency_name": "Railroad Commission of Texas",
+    "agency_abbreviation": "RRC",
+    "agency_website": null,
+    "agency_contact": "",
+    "created": "2018-07-25T15:03:50.079Z",
+    "last_modified": "2018-07-25T15:03:50.079Z"
+  }
+}, {
+  "model": "lcd.agencytype",
+  "pk": "e527f9a8-8676-45bf-8390-0b9130b08ee0",
+  "fields": {
+    "agency_name": "Fort Bend County",
+    "agency_abbreviation": "Fort Bend",
+    "agency_website": null,
+    "agency_contact": "",
+    "created": "2018-07-25T14:53:12.203Z",
+    "last_modified": "2018-07-25T14:53:12.204Z"
+  }
+}, {
+  "model": "lcd.agencytype",
+  "pk": "e6c138b2-47f2-4d6e-ba42-2a9616a091d9",
+  "fields": {
+    "agency_name": "City of Abilene",
+    "agency_abbreviation": "Abilene",
+    "agency_website": null,
+    "agency_contact": "",
+    "created": "2018-07-25T14:45:59.151Z",
+    "last_modified": "2018-07-25T14:45:59.151Z"
+  }
+}, {
+  "model": "lcd.agencytype",
+  "pk": "e9b95847-6bbf-4261-925d-a51bc15c5064",
+  "fields": {
+    "agency_name": "City of McAllen",
+    "agency_abbreviation": "McAllen",
+    "agency_website": null,
+    "agency_contact": "",
+    "created": "2018-07-25T14:48:52.975Z",
+    "last_modified": "2018-07-25T14:48:52.975Z"
+  }
+}, {
+  "model": "lcd.agencytype",
+  "pk": "f26deacf-48e5-45c0-a371-1fb87c775227",
+  "fields": {
+    "agency_name": "Hidalgo County Drainage District No. 1",
+    "agency_abbreviation": "HCDD#1",
+    "agency_website": null,
+    "agency_contact": "",
+    "created": "2018-07-25T14:55:17.826Z",
+    "last_modified": "2018-07-25T14:55:17.826Z"
+  }
+}, {
+  "model": "lcd.agencytype",
+  "pk": "f547dab5-4df9-4f49-9e3a-7d050dffa87d",
+  "fields": {
+    "agency_name": "City of Austin",
+    "agency_abbreviation": "Austin",
+    "agency_website": null,
+    "agency_contact": "",
+    "created": "2018-07-25T14:46:27.035Z",
+    "last_modified": "2018-07-25T14:46:27.035Z"
+  }
+}, {
+  "model": "lcd.agencytype",
+  "pk": "f9655f09-35d7-4df1-8231-412d208d80b2",
+  "fields": {
+    "agency_name": "City of San Antonio",
+    "agency_abbreviation": "San Antonio",
+    "agency_website": null,
+    "agency_contact": "",
+    "created": "2018-07-25T14:50:43.059Z",
+    "last_modified": "2018-07-25T14:50:43.059Z"
+  }
+}]

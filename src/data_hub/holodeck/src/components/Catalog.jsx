@@ -5,7 +5,7 @@ import CollectionDialogContainer from '../containers/CollectionDialogContainer';
 import Drawer from './Drawer';
 import Footer from './Footer';
 import Header from './Header';
-import MapDialogContainer from '../containers/MapDialogContainer';
+// import MapDialogContainer from '../containers/MapDialogContainer';
 import ToolDrawer from './ToolDrawer';
 
 import loadingImage from '../images/loading.jpg';

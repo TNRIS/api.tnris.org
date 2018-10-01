@@ -29,7 +29,7 @@ export default class Header extends React.Component {
 
   render() {
     return (
-      <header className="header-component mdc-top-app-bar">
+      <header className="header-component mdc-top-app-bar mdc-top-app-bar--fixed">
         <div className="header-title mdc-top-app-bar__row">
           <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
             <span className='header-title__tnris'>Texas Natural Resources Information System</span>

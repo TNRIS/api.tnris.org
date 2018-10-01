@@ -35,7 +35,10 @@ export default class Header extends React.Component {
             <span className='header-title__tnris'>Texas Natural Resources Information System</span>
           </section>
           <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
-            <a className='header-title__twdb' href="http://www.twdb.texas.gov/">A Division of the Texas Water Development Board</a>
+            <a
+              className='header-title__twdb' href="http://www.twdb.texas.gov/">
+              A Division of the Texas Water Development Board
+            </a>
           </section>
         </div>
         <div className="header-nav mdc-top-app-bar__row">

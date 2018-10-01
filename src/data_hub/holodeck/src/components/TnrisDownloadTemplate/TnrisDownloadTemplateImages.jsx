@@ -18,11 +18,11 @@ export default class TnrisDownloadTemplateImages extends React.Component {
 
       <div className="tnris-download-template-images">
         <Carousel
-          autoPlay
-          infiniteLoop
-          useKeyboardArrows
+          autoPlay={true}
+          infiniteLoop={true}
           emulateTouch
-          className="presentation-mode"
+          useKeyboardArrows={true}
+          transitionTime={1000}
         >
           {
             imageUrls.map(url =>

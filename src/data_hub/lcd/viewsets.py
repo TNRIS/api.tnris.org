@@ -1,9 +1,10 @@
 from rest_framework import viewsets
 
-from .models import CcrView, RemView, AcdcView
+from .models import CcrView, RemView, AcdcView, RuaView
 from .serializers import (CollectionSerializer,
                          ResourceSerializer,
-                         AreaSerializer)
+                         AreaSerializer,
+                         RuaSerializer)
 
 
 class CollectionViewSet(viewsets.ReadOnlyModelViewSet):
@@ -67,6 +68,27 @@ class AreaViewSet(viewsets.ReadOnlyModelViewSet):
         print(args)
         # get records using query
         queryset = AcdcView.objects.filter(**args)
+        return queryset
+
+
+class RuaViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = RuaSerializer
+    http_method_names = ['get']
+
+    def get_queryset(self):
+        args = {}
+        null_list = ['null', 'Null', 'none', 'None']
+        # create argument object of query clauses
+        for field in self.request.query_params.keys():
+            if field != 'limit' and field != 'offset':
+                value = self.request.query_params.get(field)
+                # convert null queries
+                if value in null_list:
+                    value = None
+                args[field] = value
+        print(args)
+        # get records using query
+        queryset = RuaView.objects.filter(**args)
         return queryset
 
 

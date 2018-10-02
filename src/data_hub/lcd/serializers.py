@@ -1,6 +1,5 @@
 from rest_framework import serializers
-
-from .models import CcrView, RemView, AcdcView
+from .models import CcrView, RemView, AcdcView, RuaView
 
 
 class CollectionSerializer(serializers.ModelSerializer):
@@ -17,6 +16,11 @@ class AreaSerializer(serializers.ModelSerializer):
     class Meta:
         model = AcdcView
         fields = '__all__'
+
+class RuaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RuaView
+        fields = ('collection_id', 'area_type')
 
 
 #

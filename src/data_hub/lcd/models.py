@@ -1238,3 +1238,29 @@ class RemView(models.Model):
 
     def __str__(self):
         return self.resource_id
+
+class RuaView(models.Model):
+    """
+    Resource Unique Areas view presents unique list of Collection
+    and Area Type combination
+    """
+
+    class Meta:
+        managed = False
+        db_table = "resource_unique_areas"
+        verbose_name = 'Resource Unique Area'
+        verbose_name_plural = 'Resource Unique Areas'
+        unique_together = (
+            'collection_id',
+            'area_type'
+        )
+
+    collection_id = models.UUIDField(
+        'Collection ID'
+    )
+    area_type = models.TextField(
+        'Area Type'
+    )
+
+    def __str__(self):
+        return str(self.collection_id) + ":" + self.area_type

@@ -2,7 +2,8 @@
 -- of resources per collection with resource_type joins
 DROP VIEW IF EXISTS "resource_management";
 CREATE VIEW "resource_management" as
-SELECT resource.resource,
+SELECT resource.resource_id,
+  resource.resource,
   resource.filesize,
   resource.area_type_id,
   resource.collection_id,
@@ -12,9 +13,11 @@ SELECT resource.resource,
 
 FROM resource
 
+
 LEFT JOIN resource_type ON resource_type.resource_type_id=resource.resource_type_id
 
-GROUP BY resource.resource,
+GROUP BY resource.resource_id,
+         resource.resource,
          resource.filesize,
          resource.area_type_id,
          resource.collection_id,

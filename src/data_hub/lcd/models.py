@@ -1205,9 +1205,12 @@ class RemView(models.Model):
         verbose_name = 'Resource Management'
         verbose_name_plural = 'Resource Managements'
 
+    resource_id = models.UUIDField(
+        'Resource ID',
+        primary_key=True
+    )
     resource = models.CharField(
         'Resource URL',
-        primary_key=True,
         max_length=255
     )
     filesize = models.PositiveIntegerField(
@@ -1234,4 +1237,4 @@ class RemView(models.Model):
     )
 
     def __str__(self):
-        return self.resource
+        return self.resource_id

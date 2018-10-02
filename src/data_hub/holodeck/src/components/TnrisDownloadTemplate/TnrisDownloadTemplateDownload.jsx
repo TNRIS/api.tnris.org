@@ -25,6 +25,7 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
   componentDidUpdate () {
     // wait for the api response with the list of downloadable resources
     if (this.props.loadingResources === false) {
+      console.log(this.props);
       this.areaLookup = this.props.resourceAreas;
       this.createMap();
     }

@@ -25,7 +25,6 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
     }
   }
 
-
   componentDidUpdate () {
     // when the api response with the list of downloadable resources finally
     // returns, the component will update so we launch the map at that time
@@ -36,40 +35,31 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
   }
 
   toggleLayers (e, map, areaType) {
-    console.log(this.layerRef);
+    // if popup is open, close it
+    if (document.querySelector('.mapboxgl-popup')) {
+      document.querySelector('.mapboxgl-popup').remove();
+    }
+    // iterate layerRef for layers in map by areaType key
     Object.keys(this.layerRef).map(layer => {
+      // if iteration is looking at the clicked layer in the menu, turn that
+      // layer's layer id's on. otherwise, turn the that layer's layer id's off
       if (layer === areaType) {
         // iterate layer id's for clicked areaType and toggle their visibility
-        this.layerRef[areaType].map(layerName => {
-          // var visibility = map.getLayoutProperty(layerName, 'visibility');
-          // if (visibility === 'visible') {
-          //     return map.setLayoutProperty(layerName, 'visibility', 'none');
-          // } else {
-              return map.setLayoutProperty(layerName, 'visibility', 'visible');
-          // }
+        this.layerRef[layer].map(layerName => {
+          return map.setLayoutProperty(layerName, 'visibility', 'visible');
         }, this);
-
+        // make the layer's menu button active by classname
+        return document.querySelector('#dld-' + layer).className = 'mdc-list-item mdc-list-item--activated';
       }
-      // else {
-      //
-      // }
+      else {
+        // iterate layer id's for clicked areaType and toggle their visibility
+        this.layerRef[layer].map(layerName => {
+          return map.setLayoutProperty(layerName, 'visibility', 'none');
+        }, this);
+        // make the layer's menu button active by classname
+        return document.querySelector('#dld-' + layer).className = 'mdc-list-item';
+      }
     }, this);
-
-
-
-
-    // const menuList = document.querySelectorAll('.dld-map-layer-menu.mdc-list-item');
-    // console.log(menuList);
-    // menuList.forEach((l) => {
-    //   console.log(l.id);
-    //   if (l.id === areaType) {
-    //     l.className = 'dld-map-layer-menu mdc-list-item mdc-list-item--activated';
-    //   }
-    //   else {
-    //     l.className = 'dld-map-layer-menu mdc-list-item';
-    //   }
-    // });
-
   }
 
   createMap() {
@@ -101,19 +91,34 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
         // set aside array in layerRef object for populating with layer ids for
         // layers of this areaType
         this.layerRef[areaType] = [];
+        // set aside the api response with all available resources (downloads)
+        // for this areaType
+        const areasList = this.props.resourceAreaTypes[areaType];
         // create the layer control in the DOM
         var link = document.createElement('a');
         link.href = '#';
         link.id = 'dld-' + areaType;
         link.textContent = areaType.toUpperCase();
-        // determine if it is the active layer
+        // determine if it is the active layer. apply the correct classes and
+        // assign the visibility layoutProperty
         let linkClass;
+        let visibility;
         switch (areaType === startLayer) {
           case true:
             linkClass = 'mdc-list-item mdc-list-item--activated';
+            visibility = 'visible';
+            // since this is our initial layer on display, we'll zoom to the bounds
+            const areasString = areasList.join("','");
+            const boundsQuery = "SELECT * FROM area_type WHERE area_type_id IN ('" + areasString + "')";
+            const sql = new cartodb.SQL({ user: 'tnris-flood' });
+            sql.getBounds(boundsQuery).done(function(bounds) {
+              // set map to extent of download areas
+              map.fitBounds([[bounds[1][1],bounds[1][0]],[bounds[0][1],bounds[0][0]]],{padding: 20});
+            });
             break;
           default:
             linkClass = 'mdc-list-item';
+            visibility = 'none';
         }
         link.className = linkClass;
         link.onclick = (e) => {
@@ -124,23 +129,14 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
         var menuItems = document.getElementById('tnris-download-menu');
         menuItems.appendChild(link);
 
-        // get the api response with all available resources (downloads) for this dataset
-        // and query Carto for the bounds of area_types associated with the resources
-        const areasList = this.props.resourceAreaTypes[areaType];
-        const areasString = areasList.join("','");
-        const boundsQuery = "SELECT * FROM area_type WHERE area_type_id IN ('" + areasString + "')";
-        // const sql = new cartodb.SQL({ user: 'tnris-flood' });
-        // sql.getBounds(boundsQuery).done(function(bounds) {
-        //   // set map to extent of download areas
-        //   map.fitBounds([[bounds[1][1],bounds[1][0]],[bounds[0][1],bounds[0][0]]],{padding: 20});
-        // });
-
         // get total number of resources available for download
         const total = areasList.length;
         // if < 1000 downloads, we know the map can perform so we'll just get them
         // all at once
         if (total < 1000) {
-          this.createLayers(boundsQuery, map, "0", areaType);
+          const allAreasString = areasList.join("','");
+          const allAreasQuery = "SELECT * FROM area_type WHERE area_type_id IN ('" + allAreasString + "')";
+          this.createLayers(allAreasQuery, map, "0", areaType, visibility);
         }
         // if more than 1000, we will get area_types to display on the map in chunks
         // since the carto api payload has a maximum limit
@@ -154,7 +150,7 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
             let chunk = areasList.slice(s, e);
             let chunkString = chunk.join("','");
             let chunkQuery = "SELECT * FROM area_type WHERE area_type_id IN ('" + chunkString + "')";
-            this.createLayers(chunkQuery, map, loop.toString(), areaType);
+            this.createLayers(chunkQuery, map, loop.toString(), areaType, visibility);
             loop += 1;
             s += 1000;
             e += 1000;
@@ -164,7 +160,7 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
     }, this);
   }
 
-  createLayers(query, map, loop, areaType) {
+  createLayers(query, map, loop, areaType, visibility) {
     // prepare carto tile api information
     var layerData = {
         user_name: 'tnris-flood',
@@ -199,7 +195,7 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
           'type': 'fill',
           'source': layerSourceName,
           'source-layer': 'layer0',
-          'layout': {'visibility': 'visible'},
+          'layout': {'visibility': visibility},
           'paint': {
             'fill-color': 'rgba(97,12,239,0.3)',
             'fill-outline-color': '#FFFFFF'
@@ -211,7 +207,7 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
           'type': 'fill',
           'source': layerSourceName,
           'source-layer': 'layer0',
-          'layout': {'visibility': 'visible'},
+          'layout': {'visibility': visibility},
           'paint': {
             'fill-color': 'rgba(130,109,186,.7)',
             'fill-outline-color': '#FFFFFF'
@@ -224,11 +220,10 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
           'type': 'symbol',
           'source': layerSourceName,
           'source-layer': 'layer0',
-
           // 'minzoom': 10,
           'layout': {
             "text-field": "{area_type_name}",
-            'visibility': 'visible'
+            'visibility': visibility
           },
           'paint': {
             "text-color": "#FFFFFF"

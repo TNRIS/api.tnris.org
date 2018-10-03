@@ -35,20 +35,24 @@ class CollectionSorter extends React.Component {
     return (
       <div className='sort-component mdc-menu-surface--anchor'>
           <ul className='mdc-list'>
-            <li className={this.state.sortOrder === 'AZ' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
-               onClick={() => this.setSort("AZ")}>
+            <li
+              className={this.state.sortOrder === 'AZ' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
+              onClick={() => this.setSort("AZ")}>
                <span className='mdc-list-item__text'>A to Z</span>
             </li>
-            <li className={this.state.sortOrder === 'ZA' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
-               onClick={() => this.setSort("ZA")}>
+            <li
+              className={this.state.sortOrder === 'ZA' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
+              onClick={() => this.setSort("ZA")}>
                <span className='mdc-list-item__text'>Z to A</span>
             </li>
-            <li className={this.state.sortOrder === 'NEW' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
-               onClick={() => this.setSort("NEW")}>
+            <li
+              className={this.state.sortOrder === 'NEW' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
+              onClick={() => this.setSort("NEW")}>
                <span className='mdc-list-item__text'>Newest</span>
             </li>
-            <li className={this.state.sortOrder === 'OLD' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
-               onClick={() => this.setSort("OLD")}>
+            <li
+              className={this.state.sortOrder === 'OLD' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
+              onClick={() => this.setSort("OLD")}>
                <span className='mdc-list-item__text'>Oldest</span>
             </li>
           </ul>

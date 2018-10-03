@@ -107,9 +107,9 @@ function normalizeCollectionResources(originalData) {
   // Normalize the api response json to a flattened state
   // Define collectionAreas schema
   const collectionResourcesSchema = new schema.Entity(
-    'resourcesByAreaId',
-    undefined,
-    { idAttribute: 'area_type_id'}
+    'resourcesById',
+    {},
+    { idAttribute: 'resource_id'}
   );
   return normalize(originalData, [collectionResourcesSchema]);
 }
@@ -120,7 +120,6 @@ function resourcesRecursiveFetcher(apiQuery, dispatch, response) {
   .then(handleErrors)
   .then(res => res.json())
   .then(json => {
-    console.log(json);
     let allResults = response.concat(json.results);
     if (json.next) {
       resourcesRecursiveFetcher(json.next, dispatch, allResults);
@@ -136,7 +135,6 @@ function resourcesRecursiveFetcher(apiQuery, dispatch, response) {
 
 export function fetchCollectionResources(collectionId) {
   const apiQuery = '/api/v1/resources?collection_id=' + collectionId;
-  console.log(apiQuery);
   return dispatch => {
     dispatch(fetchCollectionResourcesBegin());
     return resourcesRecursiveFetcher(apiQuery, dispatch, []);

@@ -17,8 +17,7 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
   componentDidMount() {
     // wait for the api response with the list of downloadable resources
     if (this.props.loadingResources === false) {
-      console.log(this.props.selectedCollectionResources);
-      this.areaLookup = this.props.selectedCollectionResources.entities.resourcesByAreaId;
+      this.areaLookup = this.props.resourceAreas;
       this.createMap();
     }
   }
@@ -26,7 +25,7 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
   componentDidUpdate () {
     // wait for the api response with the list of downloadable resources
     if (this.props.loadingResources === false) {
-      this.areaLookup = this.props.selectedCollectionResources.entities.resourcesByAreaId;
+      this.areaLookup = this.props.resourceAreas;
       this.createMap();
     }
   }
@@ -44,9 +43,9 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
     map.addControl(new mapboxgl.NavigationControl(), 'top-left');
     // get the api response with all available resources (downloads) for this dataset
     // and query Carto for the bounds of area_types associated with the resources
-    const resourceList = this.props.selectedCollectionResources.result;
-    const resourcesString = resourceList.join("','");
-    const boundsQuery = "SELECT * FROM area_type WHERE area_type_id IN ('" + resourcesString + "')";
+    const areasList = Object.keys(this.props.resourceAreas);
+    const areasString = areasList.join("','");
+    const boundsQuery = "SELECT * FROM area_type WHERE area_type_id IN ('" + areasString + "')";
     const sql = new cartodb.SQL({ user: 'tnris-flood' });
     sql.getBounds(boundsQuery).done(function(bounds) {
       // set map to extent of download areas
@@ -54,7 +53,7 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
     });
 
     // get total number of resources available for download
-    const total = resourceList.length;
+    const total = areasList.length;
     // if < 1000 downloads, we know the map can perform so we'll just get them
     // all at once
     if (total < 1000) {
@@ -69,7 +68,7 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
       // iterate resources in 1000 record chunks creating the polygon, hover, and label
       // layers for each chunk as separate 'chunk layers'
       while (s < total) {
-        let chunk = resourceList.slice(s, e);
+        let chunk = areasList.slice(s, e);
         let chunkString = chunk.join("','");
         let chunkQuery = "SELECT * FROM area_type WHERE area_type_id IN ('" + chunkString + "')";
         this.createLayers(chunkQuery, map, loop.toString());
@@ -144,45 +143,47 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
           }
       });
     });
-    // wire an on-click event to the area_type polygons to fire their associated
-    // resource download url
+    // wire an on-click event to the area_type polygons show a popup of
+    // available resource downloads for clicked area
     const areaLookup = this.areaLookup;
     map.on('click', 'area_type' + loop, function (e) {
-      // console.log(e.features[0].properties);
       // console.log(e.lngLat);
       const clickedAreaId = e.features[0].properties.area_type_id;
-      const downloadUrl = areaLookup[clickedAreaId];
-      window.location = downloadUrl.resource;
+      const clickedAreaName = e.features[0].properties.area_type_name;
+      const downloads = areaLookup[clickedAreaId];
+      let popupContent = "";
+      // iterate available downloads for the area
+      Object.keys(downloads).sort().map(abbr => {
+        const dldInfo = downloads[abbr];
+        // if a filesize is populated in the resource table so the popup,
+        // we don't want to display empty popups, right?
+        let filesizeString = "";
+        if (dldInfo.filesize != null) {
+          const filesize = parseFloat(dldInfo.filesize / 1000000).toFixed(2).toString();
+          filesizeString = " - " + filesize + "MB";
+        }
+        // create html link and append to content string
+        const dld = `<li><a href="${dldInfo.link}" target="_blank">${dldInfo.name}${filesizeString}</a></li>`;
+        return popupContent += dld;
+      });
+      // create popup with constructed content string
+      new mapboxgl.Popup()
+        .setLngLat(e.lngLat)
+        .setHTML(`<strong>${clickedAreaName}</strong><ul>${popupContent}</ul>`)
+        .addTo(map);
     });
-    // Create a popup, but don't add it to the map yet.
-    const popup = new mapboxgl.Popup({
-        closeButton: false,
-        closeOnClick: false
-    });
+
     // Change the cursor to a pointer when it enters a feature in the 'area_type' layer
     // Also, toggle the hover layer with a filter based on the cursor
-    // Also, get the filesize for that download and display it in the popup
     map.on('mousemove', 'area_type' + loop, function (e) {
       map.getCanvas().style.cursor = 'pointer';
       map.setFilter('area_type_hover' + loop, ['==', 'area_type_name', e.features[0].properties.area_type_name]);
-      // if a filesize is populated in the resource table so the popup,
-      // we don't want to display empty popups, right?
-      const hoverAreaId = e.features[0].properties.area_type_id;
-      if (areaLookup[hoverAreaId].filesize != null) {
-        const filesize = parseFloat(areaLookup[hoverAreaId].filesize / 1000000).toFixed(2).toString();
-        const popupContent = filesize + "MB";
-        popup.setLngLat(e.lngLat)
-              .setHTML(popupContent)
-              .addTo(map);
-      }
     });
     // Undo the cursor pointer when it leaves a feature in the 'area_type' layer
     // Also, untoggle the hover layer with a filter
-    // Also, remove the popup
     map.on('mouseleave', 'area_type' + loop, function () {
       map.getCanvas().style.cursor = '';
       map.setFilter('area_type_hover' + loop, ['==', 'area_type_name', '']);
-      popup.remove();
     });
   }
 

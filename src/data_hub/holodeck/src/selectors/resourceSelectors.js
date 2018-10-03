@@ -59,13 +59,14 @@ export const getResourceAreaTypes = createSelector(
         const cur = map[rsc.area_type];
         // if area_type isn't present in parent object, create it.
         // otherwise, update current value
+        let n;
         if (!cur) {
-          var n = [];
+          n = [];
           n.push(rsc.area_type_id);
           map[rsc.area_type] = n;
         }
         else {
-          var n = cur;
+          n = cur;
           n.push(rsc.area_type_id);
           map[rsc.area_type] = n;
         }

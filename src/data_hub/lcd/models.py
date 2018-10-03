@@ -1040,7 +1040,7 @@ class CcrView(models.Model):
         managed = False
         db_table = "collection_catalog_record"
         verbose_name = 'Collection Catalog Record'
-        verbose_name_plural = 'Collection Catalog Records'
+        verbose_name_plural = 'Cthumbollection Catalog Records'
 
     collection_id = models.UUIDField(
         'Collection ID',

@@ -19,7 +19,6 @@ class CollectionDialog extends React.Component {
 
     componentDidUpdate() {
       this.props.showCollectionDialog ? this.dialog.show() : this.dialog.close()
-
     }
 
     componentWillReceiveProps() {

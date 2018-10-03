@@ -114,15 +114,15 @@ function normalizeCollectionResources(originalData) {
   return normalize(originalData, [collectionResourcesSchema]);
 }
 
-function resourcesRecursiveFetcher(apiQuery, dispatch, response) {
+function resourcesRecursiveFetcher(dispatch, getState, apiQuery, collectionId, response) {
   // recursive api endpoint fetcher for handling pagination
   fetch(apiQuery)
   .then(handleErrors)
   .then(res => res.json())
   .then(json => {
     let allResults = response.concat(json.results);
-    if (json.next) {
-      resourcesRecursiveFetcher(json.next, dispatch, allResults);
+    if (json.next && getState().collections.selectedCollection === collectionId) {
+      resourcesRecursiveFetcher(dispatch, getState, json.next, collectionId, allResults);
     }
     else {
       let normalizedJson = normalizeCollectionResources(allResults);
@@ -135,8 +135,8 @@ function resourcesRecursiveFetcher(apiQuery, dispatch, response) {
 
 export function fetchCollectionResources(collectionId) {
   const apiQuery = '/api/v1/resources?collection_id=' + collectionId;
-  return dispatch => {
+  return (dispatch, getState) => {
     dispatch(fetchCollectionResourcesBegin());
-    return resourcesRecursiveFetcher(apiQuery, dispatch, []);
+    return resourcesRecursiveFetcher(dispatch, getState, apiQuery, collectionId, []);
   };
 }

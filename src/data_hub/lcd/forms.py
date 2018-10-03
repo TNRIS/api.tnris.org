@@ -42,7 +42,7 @@ class ImageForm(forms.ModelForm):
 
     image_url = forms.FileField(required=False, widget=PictureWidget)
 
-    
+
 
 class CollectionForm(forms.ModelForm):
     # base model is Collection
@@ -78,27 +78,21 @@ class CollectionForm(forms.ModelForm):
     client = boto3.client('s3')
 
     # generic function to create a form input for a relate table
-    def create_relate_field(id_field, label_field, type_table, order_field):
+    def create_relate_field(self, id_field, label_field, type_table, order_field):
         # get the relate type choices from the type table
         try:
             choices = (
                 (getattr(b, id_field), getattr(b, label_field)) for b in type_table.objects.all().order_by(order_field))
         except ProgrammingError:
             choices = ()
-        # create the input
-        input = forms.MultipleChoiceField(
-            required=False,
-            widget=forms.SelectMultiple(attrs={'title': 'Hold down ctrl to select multiple values',}),
-            choices=choices
-        )
-        return input
+        return choices
 
     # fire function to create the relate form inputs
-    categories = create_relate_field('category_type_id', 'category', CategoryType, 'category')
-    projections = create_relate_field('epsg_type_id', 'epsg_code', EpsgType, 'epsg_code')
-    file_types = create_relate_field('file_type_id', 'file_type', FileType, 'file_type')
-    resolutions = create_relate_field('resolution_type_id', 'resolution', ResolutionType, 'resolution')
-    uses = create_relate_field('use_type_id', 'use_type', UseType, 'use_type')
+    categories = forms.MultipleChoiceField(required=False, widget=forms.SelectMultiple(attrs={'title': 'Hold down ctrl to select multiple values',}), choices=[])
+    projections = forms.MultipleChoiceField(required=False, widget=forms.SelectMultiple(attrs={'title': 'Hold down ctrl to select multiple values',}), choices=[])
+    file_types = forms.MultipleChoiceField(required=False, widget=forms.SelectMultiple(attrs={'title': 'Hold down ctrl to select multiple values',}), choices=[])
+    resolutions = forms.MultipleChoiceField(required=False, widget=forms.SelectMultiple(attrs={'title': 'Hold down ctrl to select multiple values',}), choices=[])
+    uses = forms.MultipleChoiceField(required=False, widget=forms.SelectMultiple(attrs={'title': 'Hold down ctrl to select multiple values',}), choices=[])
 
     # generic function to retrieve the initial relate values from the relate table
     def attribute_initial_values(self, name, relate_table, id_field):
@@ -116,6 +110,11 @@ class CollectionForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if self.instance:
+            self.fields['categories'].choices = self.create_relate_field('category_type_id', 'category', CategoryType, 'category')
+            self.fields['projections'].choices = self.create_relate_field('epsg_type_id', 'epsg_code', EpsgType, 'epsg_code')
+            self.fields['file_types'].choices = self.create_relate_field('file_type_id', 'file_type', FileType, 'file_type')
+            self.fields['resolutions'].choices = self.create_relate_field('resolution_type_id', 'resolution', ResolutionType, 'resolution')
+            self.fields['uses'].choices = self.create_relate_field('use_type_id', 'use_type', UseType, 'use_type')
             self.attribute_initial_values('categories', CategoryRelate, 'category_type_id')
             self.attribute_initial_values('projections', EpsgRelate, 'epsg_type_id')
             self.attribute_initial_values('file_types', FileTypeRelate, 'file_type_id')

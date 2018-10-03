@@ -42,3 +42,36 @@ export const getResourceAreas = createSelector(
     }
   }
 )
+
+// selector for building object of area_type key'd list of area_type_ids
+export const getResourceAreaTypes = createSelector(
+  [ getResources ],
+  (resources) => {
+    // Check if resources are in the state
+    if (resources.result) {
+      // build object of resources key'd by resource_type (subnested)
+      const byId = resources.entities.resourcesById;
+      // start with empty object
+      const map = {};
+      // iterate all resources
+      Object.keys(byId).forEach((id) => {
+        const rsc = byId[id];
+        const cur = map[rsc.area_type];
+        // if area_type isn't present in parent object, create it.
+        // otherwise, update current value
+        let n;
+        if (!cur) {
+          n = [];
+          n.push(rsc.area_type_id);
+          map[rsc.area_type] = n;
+        }
+        else {
+          n = cur;
+          n.push(rsc.area_type_id);
+          map[rsc.area_type] = n;
+        }
+      });
+      return map;
+    }
+  }
+)

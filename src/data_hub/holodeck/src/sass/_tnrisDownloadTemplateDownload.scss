@@ -5,6 +5,20 @@ styles for component: TnrisDownloadTemplateDownload
 .tnris-download-template-download {
   padding: 64px 0 0 0;
 
+  #tnris-download-menu {
+    background: #fff;
+    position: absolute;
+    z-index: 1;
+    top: 74px;
+    right: 10px;
+    border-radius: 3px;
+    border: 1px solid rgba(0,0,0,0.4);
+
+    .mdc-list-item {
+      margin: 3px 6px 3px 6px;
+    }
+  }
+
   #tnris-download-map {
     position: absolute;
     top: 64px;

@@ -1,4 +1,5 @@
 import React from 'react';
+import ContactTnrisForm from '../ContactTnrisForm';
 
 export default class TnrisDownloadTemplateDetails extends React.Component {
   render() {
@@ -94,6 +95,15 @@ export default class TnrisDownloadTemplateDetails extends React.Component {
             </div>
             <div>
               {this.props.collection.description}
+            </div>
+          </li>
+
+          <li className='mdc-image-list__item'>
+            <div className='mdc-typography--headline4'>
+              Contact
+            </div>
+            <div>
+              <ContactTnrisForm collection={this.props.collection} />
             </div>
           </li>
         </ul>

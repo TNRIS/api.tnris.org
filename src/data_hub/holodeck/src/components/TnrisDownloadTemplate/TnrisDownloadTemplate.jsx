@@ -1,6 +1,7 @@
 import React from 'react';
 import {MDCTopAppBar} from '@material/top-app-bar/index';
 import {MDCTabBar} from '@material/tab-bar';
+import { MDCMenu } from '@material/menu';
 
 import TnrisDownloadTemplateDetails from './TnrisDownloadTemplateDetails';
 import TnrisDownloadTemplateImages from './TnrisDownloadTemplateImages';
@@ -14,6 +15,7 @@ export default class TnrisDownloadTemplate extends React.Component {
         view:'details'
       };
       this.setTemplateView = this.setTemplateView.bind(this);
+      this.showTabMenu = this.showTabMenu.bind(this);
   }
 
   componentDidMount() {
@@ -24,6 +26,26 @@ export default class TnrisDownloadTemplate extends React.Component {
 
   setTemplateView(viewString) {
     this.setState({view: viewString});
+    let tabIndex;
+    switch(viewString) {
+      case 'details':
+        tabIndex = 0;
+        break;
+      case 'images':
+        tabIndex = 1;
+        break;
+      case 'download':
+        tabIndex = 2;
+        break;
+      default:
+        tabIndex = 0;
+    }
+    this.tabBar.activateTab(tabIndex);
+  }
+
+  showTabMenu() {
+    this.menu = new MDCMenu(this.refs.tab_menu);
+    this.menu.open = true;
   }
 
   render() {
@@ -89,6 +111,27 @@ export default class TnrisDownloadTemplate extends React.Component {
                       </button>
                     </div>
                   </div>
+                </div>
+              </div>
+              <div className="mdc-menu-surface--anchor">
+                <a onClick={this.showTabMenu} className="mdc-top-app-bar__action-item">
+                  <i className="material-icons mdc-top-app-bar__navigation-icon">more_vert</i>
+                </a>
+                <div ref="tab_menu" className="mdc-menu mdc-menu-surface">
+                  <nav className="mdc-list">
+                    <a className={this.state.view === 'details' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
+                       onClick={() => this.setTemplateView("details")}>
+                       <i className="mdc-tab__icon material-icons">details</i> Details
+                    </a>
+                    <a className={this.state.view === 'images' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
+                       onClick={() => this.setTemplateView("images")}>
+                       <i className="mdc-tab__icon material-icons">collections</i> Images
+                    </a>
+                    <a className={this.state.view === 'download' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
+                       onClick={() => this.setTemplateView("download")}>
+                       <i className="mdc-tab__icon material-icons">save_alt</i> Download
+                    </a>
+                  </nav>
                 </div>
               </div>
             </section>

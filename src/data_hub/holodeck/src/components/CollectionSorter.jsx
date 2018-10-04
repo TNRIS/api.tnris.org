@@ -33,7 +33,7 @@ class CollectionSorter extends React.Component {
   render() {
 
     return (
-      <div className='sort-component mdc-menu-surface--anchor'>
+      <div className='sort-component'>
           <ul className='mdc-list'>
             <li
               className={this.state.sortOrder === 'AZ' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}

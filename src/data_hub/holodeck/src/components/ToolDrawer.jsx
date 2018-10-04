@@ -2,6 +2,7 @@ import React from 'react';
 import { MDCDrawer } from "@material/drawer";
 
 import CollectionFilterContainer from '../containers/CollectionFilterContainer';
+import CollectionSearcher from './CollectionSearcher';
 import CollectionSorterContainer from '../containers/CollectionSorterContainer';
 
 export default class ToolDrawer extends React.Component {
@@ -25,6 +26,7 @@ export default class ToolDrawer extends React.Component {
         <aside className='mdc-drawer mdc-drawer--modal tool-drawer' dir='rtl'>
           <div className='mdc-drawer__content' dir='ltr'>
             <nav className='mdc-list-group'>
+              <CollectionSearcher className='mdc-list-item'/>
               <a className='sort-title mdc-list-group__subheader'>
                 Sort
               </a>

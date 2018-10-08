@@ -16,7 +16,7 @@ class ContactTnrisForm extends Component {
         email: '',
         software: '',
         question: '',
-        submitted: false
+        display: 'form'
       }
       this.submitForm = this.submitForm.bind(this);
       this.handleChange = this.handleChange.bind(this);
@@ -36,6 +36,23 @@ class ContactTnrisForm extends Component {
     new MDCSelect(document.querySelector('.mdc-select'));
   }
 
+  componentWillUpdate(nextProps) {
+    if (nextProps.submitStatus === false &&
+        nextProps.errorStatus !== null &&
+        this.state.display === 'submitting') {
+      this.setState({
+        display: 'error'
+      });
+    }
+    else if (nextProps.submitStatus === false &&
+             nextProps.errorStatus === null &&
+             this.state.display === 'submitting') {
+      this.setState({
+       display: 'success'
+      });
+    }
+  }
+
   handleChange(event) {
     const name = event.target.name
     const value = event.target.value
@@ -47,16 +64,30 @@ class ContactTnrisForm extends Component {
   submitForm (event) {
     event.preventDefault()
     this.setState({
-      submitted: true
+      display: 'submitting'
     });
     console.log('submitting');
+    const fullName = this.state.firstName + " " + this.state.lastName;
+
+    const formInfo = {
+      'Name': fullName,
+      'Email': this.state.email,
+      'Collection': this.props.collection.name,
+      'Category': this.props.collection.category,
+      'Software': this.state.software,
+      'Message': this.state.question,
+      'form_id': 'data-tnris-org-inquiry'
+    };
+
+    console.log(formInfo);
+    this.props.submitContactTnrisForm(formInfo);
 
   }
 
   render() {
     let showHTML;
 
-    if (this.state.submitted === false) {
+    if (this.state.display === 'form') {
       showHTML = (
         <div>
           <p>
@@ -133,13 +164,36 @@ class ContactTnrisForm extends Component {
         </div>
       );
     }
-    else {
+    else if (this.state.display === 'success') {
       showHTML = (
         <div className="contact-tnris-form-success">
           <p>
             <span><strong>Success!</strong></span>
             <br />
             Thank you for submitting your inquiry. We review submissions in a timely manner. (unless you are claiming our <strong>"data is corrupt"</strong>; in which case, we will NOT respond because our data is NOT corrupt. you are just a dumb-dumb.)
+          </p>
+        </div>
+      );
+    }
+    else if (this.state.display === 'error') {
+      showHTML = (
+        <div className="contact-tnris-form-error">
+          <p>
+            <span><strong>Error!</strong></span>
+            <br />
+            Unfortunately, we have encountered an error. Please wait a moment, refresh the page, and try again.
+            <br />
+            <br />
+            {this.props.errorStatus.toString()}
+          </p>
+        </div>
+      );
+    }
+    else if (this.state.display === 'submitting') {
+      showHTML = (
+        <div className="contact-tnris-form-submitting">
+          <p>
+            <span><strong>Submitting form...</strong></span>
           </p>
         </div>
       );

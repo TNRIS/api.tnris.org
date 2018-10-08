@@ -1,5 +1,5 @@
 import React from 'react';
-import ContactTnrisForm from '../ContactTnrisForm';
+import ContactContainer from '../../containers/ContactContainer';
 
 export default class TnrisDownloadTemplateDetails extends React.Component {
   render() {
@@ -103,7 +103,7 @@ export default class TnrisDownloadTemplateDetails extends React.Component {
               Contact
             </div>
             <div>
-              <ContactTnrisForm collection={this.props.collection} />
+              <ContactContainer collection={this.props.collection} />
             </div>
           </li>
         </ul>

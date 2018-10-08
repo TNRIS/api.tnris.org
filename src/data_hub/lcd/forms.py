@@ -40,8 +40,35 @@ class ImageForm(forms.ModelForm):
         model = Image
         fields = ('__all__')
 
-    image_url = forms.FileField(required=False, widget=PictureWidget)
+    image_url = forms.FileField(required=True, widget=PictureWidget)
 
+    def handle_image(self, field, file):
+        # upload image
+        key = "%s/assets/%s" % (self.instance.collection_id, field.replace('_image', '.jpg'))
+        response = self.client.put_object(
+            Bucket='data.tnris.org',
+            ACL='public-read',
+            Key=key,
+            Body=file
+        )
+        print('%s upload success!' % key)
+        # update link in database table
+        setattr(self.instance, field, "https://s3.amazonaws.com/data.tnris.org/" + key)
+        return
+
+    # def clean(self):
+    #     print('cleaning')
+    #     print(self.cleaned_data['collection_id'].collection_id)
+    #     print(self.cleaned_data)
+    #     print(self.cleaned_data['image_id'].image_id)
+    #     files = self.files
+    #     print(files)
+        # for f in files:
+        #     print(f)
+
+    def save(self, commit=True):
+        print('saving')
+        print(self.instance.image_id)
 
 
 class CollectionForm(forms.ModelForm):
@@ -145,7 +172,6 @@ class CollectionForm(forms.ModelForm):
         for add in adds:
             collection_record = Collection.objects.get(collection_id=self.instance.collection_id)
             args = {'collection_id': collection_record}
-
             type_arg = {}
             type_arg[id_field] = add
             type_record = type_table.objects.get(**type_arg)
@@ -276,6 +302,8 @@ class CollectionForm(forms.ModelForm):
                 self.handle_image(f, files[f])
             elif f in zipfile_fields and self.cleaned_data[delete_checkbox] is False:
                 self.handle_zipfile(f, files[f])
+            # elif 'image_collections' in f:
+            #     self.inline_image_handler(f)
             else:
                 print('New file uploaded but delete checkbox says "no!":', f)
         # iterate deletion checkboxes and if checked then delete associated

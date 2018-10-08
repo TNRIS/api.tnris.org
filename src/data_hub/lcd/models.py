@@ -983,6 +983,7 @@ class Resource(models.Model):
     def __str__(self):
         return self.resource
 
+
 class Image(models.Model):
     """
     Defines available image resources.
@@ -993,14 +994,11 @@ class Image(models.Model):
         db_table = 'image'
         verbose_name = 'Image'
         verbose_name_plural = 'Images'
-        unique_together = (
-            'collection_id',
-            'image_url'
-        )
 
     image_id = models.UUIDField(
         'Image ID',
         primary_key=True,
+        default=uuid.uuid4,
         editable=False
     )
     collection_id = models.ForeignKey(
@@ -1024,6 +1022,7 @@ class Image(models.Model):
 
     def __str__(self):
         return self.image_url
+
 
 """
 ********** Database Views **********

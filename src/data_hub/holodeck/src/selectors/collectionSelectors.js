@@ -65,22 +65,22 @@ export const getCollectionFilterChoices = createSelector(
     };
     // If collections are in the state, continue setting the value arrays in the
     // collectionFilterChoices object from above.
-    if (collections.result) {
-      collections.result.map(collectionId => {
-        for (let key in collectionFilterChoices) {
-          if (collectionFilterChoices.hasOwnProperty(key)) {
-            let collectionPropertyValues = collections.entities.collectionsById[collectionId][key].split(',');
-            collectionPropertyValues.map(propertyValue => {
-              if (collectionFilterChoices[key].indexOf(propertyValue) < 0) {
-                collectionFilterChoices[key].push(propertyValue);
-              }
-              return propertyValue;
-            })
-          }
-        }
-        return collectionId;
-      })
-    }
+    // if (collections.result) {
+    //   collections.result.map(collectionId => {
+    //     for (let key in collectionFilterChoices) {
+    //       if (collectionFilterChoices.hasOwnProperty(key)) {
+    //         let collectionPropertyValues = collections.entities.collectionsById[collectionId][key].split(',');
+    //         collectionPropertyValues.map(propertyValue => {
+    //           if (collectionFilterChoices[key].indexOf(propertyValue) < 0) {
+    //             collectionFilterChoices[key].push(propertyValue);
+    //           }
+    //           return propertyValue;
+    //         })
+    //       }
+    //     }
+    //     return collectionId;
+    //   })
+    // }
     return collectionFilterChoices;
   }
 )

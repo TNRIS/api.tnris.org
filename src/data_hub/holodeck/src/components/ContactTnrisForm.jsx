@@ -56,6 +56,11 @@ class ContactTnrisForm extends Component {
     }
   }
 
+  componentWillUnmount () {
+    // on umount, dispatch contact success to reset the store
+    this.props.submitContactSuccess();
+  }
+
   handleChange(event) {
     const name = event.target.name
     const value = event.target.value

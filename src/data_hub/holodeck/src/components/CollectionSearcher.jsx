@@ -3,10 +3,6 @@ import { MDCTextField } from '@material/textfield';
 
 export default class CollectionSearcher extends React.Component {
 
-  constructor(props) {
-    super(props);
-  }
-
   componentDidMount() {
     this.searchField = new MDCTextField(document.querySelector('.search-component'));
   }

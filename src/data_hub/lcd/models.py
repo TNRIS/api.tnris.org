@@ -1019,6 +1019,17 @@ class Image(models.Model):
         'Last Modified',
         auto_now=True
     )
+    # s3 files get deleted as well
+    def delete(self, *args, **kwargs):
+        client = boto3.client('s3')
+        key = str(self).replace('https://s3.amazonaws.com/data.tnris.org/', '')
+        print(key)
+        response = client.delete_object(
+            Bucket='data.tnris.org',
+            Key=key
+        )
+        print(self)
+        super().delete(*args, **kwargs)
 
     def __str__(self):
         return self.image_url

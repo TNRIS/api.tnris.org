@@ -23,7 +23,7 @@ from .models import (Collection,
                      UseRelate,
                      UseType)
 import os
-import boto3
+import boto3, uuid
 
 class PictureWidget(forms.widgets.Widget):
     def render(self, name, value, attrs=None):
@@ -41,34 +41,6 @@ class ImageForm(forms.ModelForm):
         fields = ('__all__')
 
     image_url = forms.FileField(required=True, widget=PictureWidget)
-
-    def handle_image(self, field, file):
-        # upload image
-        key = "%s/assets/%s" % (self.instance.collection_id, field.replace('_image', '.jpg'))
-        response = self.client.put_object(
-            Bucket='data.tnris.org',
-            ACL='public-read',
-            Key=key,
-            Body=file
-        )
-        print('%s upload success!' % key)
-        # update link in database table
-        setattr(self.instance, field, "https://s3.amazonaws.com/data.tnris.org/" + key)
-        return
-
-    # def clean(self):
-    #     print('cleaning')
-    #     print(self.cleaned_data['collection_id'].collection_id)
-    #     print(self.cleaned_data)
-    #     print(self.cleaned_data['image_id'].image_id)
-    #     files = self.files
-    #     print(files)
-        # for f in files:
-        #     print(f)
-
-    def save(self, commit=True):
-        print('saving')
-        print(self.instance.image_id)
 
 
 class CollectionForm(forms.ModelForm):
@@ -195,6 +167,28 @@ class CollectionForm(forms.ModelForm):
         setattr(self.instance, field, "https://s3.amazonaws.com/data.tnris.org/" + key)
         return
 
+    def inline_image_handler(self, file):
+        new_uuid = uuid.uuid4()
+        file_ext = str(file).split('.')[-1]
+        # upload image
+        key = "%s/assets/%s.%s" % (self.instance.collection_id, new_uuid, file_ext)
+        # print(key + file_ext)
+        response = self.client.put_object(
+            Bucket='data.tnris.org',
+            ACL='public-read',
+            Key=key,
+            Body=file
+        )
+        print('%s upload success!' % key)
+        # update link in database table
+        args = {
+            'image_id': new_uuid,
+            'image_url': "https://s3.amazonaws.com/data.tnris.org/" + key,
+            'collection_id': self.instance
+        }
+        Image(**args).save()
+        return
+
     # generic function to upload zipfile and update dbase link
     def handle_zipfile(self, field, file):
         # format filename
@@ -302,8 +296,8 @@ class CollectionForm(forms.ModelForm):
                 self.handle_image(f, files[f])
             elif f in zipfile_fields and self.cleaned_data[delete_checkbox] is False:
                 self.handle_zipfile(f, files[f])
-            # elif 'image_collections' in f:
-            #     self.inline_image_handler(f)
+            elif 'image_collections' in f:
+                self.inline_image_handler(files[f])
             else:
                 print('New file uploaded but delete checkbox says "no!":', f)
         # iterate deletion checkboxes and if checked then delete associated

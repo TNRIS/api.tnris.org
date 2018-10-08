@@ -53,16 +53,20 @@ styles for component: ContactTnrisForm
     @include mdc-text-field-line-ripple-color(red);
     @include mdc-text-field-textarea-stroke-color(red);
   }
-}
 
-.contact-tnris-form-success {
-  span {
-    color: green;
-  }
-}
-
-.contact-tnris-form-error {
-  span {
+  .invalid-prompt {
     color: red;
+  }
+
+  .contact-tnris-form-success {
+    span {
+      color: green;
+    }
+  }
+
+  .contact-tnris-form-error {
+    span {
+      color: red;
+    }
   }
 }

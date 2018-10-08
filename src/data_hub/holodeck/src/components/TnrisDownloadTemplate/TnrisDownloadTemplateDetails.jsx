@@ -100,6 +100,15 @@ export default class TnrisDownloadTemplateDetails extends React.Component {
 
           <li className='mdc-image-list__item'>
             <div className='mdc-typography--headline4'>
+              ORDER
+            </div>
+            <div>
+              Too large to download everything you're looking for? Every dataset is available for order directly from TNRIS by completing this <a href="https://tnris.org/order-data/">Order Form</a>.
+            </div>
+          </li>
+
+          <li className='mdc-image-list__item'>
+            <div className='mdc-typography--headline4'>
               Contact
             </div>
             <div>

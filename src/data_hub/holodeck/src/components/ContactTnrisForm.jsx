@@ -4,6 +4,7 @@ import {MDCFloatingLabel} from '@material/floating-label';
 import {MDCLineRipple} from '@material/line-ripple';
 import {MDCRipple} from '@material/ripple';
 import {MDCSelect} from '@material/select';
+import ReCAPTCHA from "react-google-recaptcha";
 
 class ContactTnrisForm extends Component {
 
@@ -16,10 +17,13 @@ class ContactTnrisForm extends Component {
         email: '',
         software: '',
         question: '',
-        display: 'form'
+        display: 'form',
+        recaptcha: '',
+        invalid: ''
       }
       this.submitForm = this.submitForm.bind(this);
       this.handleChange = this.handleChange.bind(this);
+      this.recaptchaChange = this.recaptchaChange.bind(this);
   }
 
   componentDidMount() {
@@ -61,26 +65,43 @@ class ContactTnrisForm extends Component {
     this.setState(nextState);
   }
 
+  recaptchaChange(value) {
+    console.log("Captcha value:", value);
+    this.setState({
+      recaptcha: value
+    });
+  }
+
   submitForm (event) {
     event.preventDefault()
-    this.setState({
-      display: 'submitting'
-    });
-    console.log('submitting');
-    const fullName = this.state.firstName + " " + this.state.lastName;
 
-    const formInfo = {
-      'Name': fullName,
-      'Email': this.state.email,
-      'Collection': this.props.collection.name,
-      'Category': this.props.collection.category,
-      'Software': this.state.software,
-      'Message': this.state.question,
-      'form_id': 'data-tnris-org-inquiry'
-    };
+    if (this.state.recaptcha !== '') {
+      this.setState({
+        display: 'submitting',
+        invalid: ''
+      });
+      console.log('submitting');
+      const fullName = this.state.firstName + " " + this.state.lastName;
 
-    console.log(formInfo);
-    this.props.submitContactTnrisForm(formInfo);
+      const formInfo = {
+        'Name': fullName,
+        'Email': this.state.email,
+        'Collection': this.props.collection.name,
+        'Category': this.props.collection.category,
+        'Software': this.state.software,
+        'Message': this.state.question,
+        'form_id': 'data-tnris-org-inquiry',
+        'recaptcha': this.state.recaptcha
+      };
+
+      console.log(formInfo);
+      this.props.submitContactTnrisForm(formInfo);
+    }
+    else {
+      this.setState({
+        invalid: 'Please confirm you are not a robot to proceed.'
+      });
+    }
 
   }
 
@@ -157,6 +178,9 @@ class ContactTnrisForm extends Component {
             <label className="mdc-floating-label" htmlFor="ct-question-input">Question</label>
             <div className="mdc-line-ripple"></div>
           </div>
+
+          <ReCAPTCHA sitekey="6Lf8GP8SAAAAAFx2H53RtfDO18x7S1q_0pGNdmbd" onChange={this.recaptchaChange} />
+          <p className="invalid-prompt">{this.state.invalid}</p>
 
           <div>
             <input type="submit" value="Submit" id="contact-tnris-submit" className="mdc-button mdc-button--raised"/>

@@ -6,7 +6,7 @@ available to the app
 @import "@material/button/mdc-button";
 @import "@material/card/mdc-card";
 @import "@material/checkbox/mdc-checkbox";
-@import '@material/dialog/mdc-dialog';
+@import "@material/dialog/mdc-dialog";
 @import "@material/drawer/mdc-drawer";
 @import "@material/fab/mdc-fab";
 @import "@material/floating-label/mdc-floating-label";
@@ -26,14 +26,15 @@ available to the app
 @import "@material/tab-scroller/mdc-tab-scroller";
 @import "@material/textfield/mdc-text-field";
 @import "@material/top-app-bar/mdc-top-app-bar";
-@import '@material/typography/mdc-typography';
-@import 'react-responsive-carousel/lib/styles/carousel';
+@import "@material/typography/mdc-typography";
+@import "react-responsive-carousel/lib/styles/carousel";
 
 
 @import 'catalog';
 @import 'catalogCard';
 @import 'collectionDialog';
 @import 'collectionFilter';
+@import 'collectionSearcher';
 @import 'collectionSorter';
 @import 'contactTnrisForm';
 @import 'drawer';

@@ -52,7 +52,7 @@ export default class Header extends React.Component {
           <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
             {/* <SortContainer /> */}
             <a onClick={this.handleOpenToolDrawer} className="mdc-top-app-bar__action-item">
-              <i className="material-icons mdc-top-app-bar__navigation-icon">tune</i>
+              <i className="material-icons mdc-top-app-bar__navigation-icon">search</i>
             </a>
           </section>
         </div>

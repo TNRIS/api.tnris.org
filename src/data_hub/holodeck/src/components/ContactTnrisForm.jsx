@@ -10,7 +10,6 @@ class ContactTnrisForm extends Component {
 
   constructor(props) {
       super(props);
-      console.log(this.props);
       this.state = {
         firstName: '',
         lastName: '',
@@ -66,7 +65,6 @@ class ContactTnrisForm extends Component {
   }
 
   recaptchaChange(value) {
-    console.log("Captcha value:", value);
     this.setState({
       recaptcha: value
     });

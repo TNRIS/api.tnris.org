@@ -41,9 +41,6 @@ export function submitContactTnrisForm(formInfo) {
         "Content-Type": "application/json; charset=utf-8",
         // "X-API-Key": process.env.OSTICKET_API_KEY
       },
-      // mode: 'no-cors',
-      // data: JSON.stringify(formInfo),
-      // dataType: 'json'
       body: JSON.stringify(formInfo)
     };
     console.log(payload);

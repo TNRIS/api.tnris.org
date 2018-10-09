@@ -1,9 +1,8 @@
 import { connect } from 'react-redux';
 
-import { getCollectionFilterChoices } from '../selectors/collectionSelectors';
-import { collectionFilterActions } from '../actions';
-
 import CollectionFilter from '../components/CollectionFilter';
+import { collectionFilterActions } from '../actions';
+import { getCollectionFilterChoices } from '../selectors/collectionSelectors';
 
 const mapStateToProps = (state) => ({
   collectionFilter: state.collectionFilter.collectionFilter,

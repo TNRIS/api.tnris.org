@@ -7,7 +7,6 @@ import Footer from './Footer';
 import Header from './Header';
 // import MapDialogContainer from '../containers/MapDialogContainer';
 import ToolDrawer from './ToolDrawer';
-
 import loadingImage from '../images/loading.jpg';
 
 export default class Catalog extends React.Component {
@@ -32,6 +31,8 @@ export default class Catalog extends React.Component {
     if (loading) {
       return loadingMessage;
     }
+
+    console.log(this.props);
 
     return (
       <div className="catalog-component">

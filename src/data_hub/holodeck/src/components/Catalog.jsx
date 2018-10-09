@@ -32,8 +32,6 @@ export default class Catalog extends React.Component {
       return loadingMessage;
     }
 
-    console.log(this.props);
-
     return (
       <div className="catalog-component">
         <Drawer />

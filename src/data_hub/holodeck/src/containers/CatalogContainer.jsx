@@ -1,28 +1,25 @@
 import { connect } from 'react-redux';
-import {
-  getAllCollections,
-  // getVisibleCollections,
-  sortCollections
-} from '../selectors/collectionSelectors';
 
+import Catalog from '../components/Catalog';
 import {
   collectionActions,
   resourceActions,
   collectionDialogActions,
   mapDialogActions } from '../actions';
-
-import Catalog from '../components/Catalog';
+import {
+  getAllCollections,
+  getSortedCollections
+} from '../selectors/collectionSelectors';
 
 const mapStateToProps = (state) => ({
   collections: getAllCollections(state),
-  // visibleCollections: getVisibleCollections(state),
-  visibleCollections: sortCollections(state),
-  sortOrder: state.sorter.sortOrder,
-  resources: state.resources.items,
-  loading: state.collections.loading,
   error: state.collections.error,
+  loading: state.collections.loading,
+  resources: state.resources.items,
   showCollectionDialog: state.collectionDialog.showCollectionDialog,
   showMapDialog: state.mapDialog.showMapDialog,
+  sortOrder: state.sorter.sortOrder,
+  visibleCollections: getSortedCollections(state),
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -5,8 +5,8 @@ export default class LidarBlurb extends React.Component {
   render() {
     return (
       <li className='mdc-image-list__item'>
-        <div className='mdc-typography--headline4'>
-          LIDAR DEETS
+        <div className='mdc-typography--headline5'>
+          Lidar Note
         </div>
         <p>
           Lidar data for Texas is made available online through the use of data compression using <a href="https://rapidlasso.com/lastools/" target="_blank" rel="noopener noreferrer">LASTools</a>. LASTools is an open-source collection of tools for lidar data viewing and manipulation. TNRIS uses the LASzip portion of LASTools for compression\decompression. LASTools provides a lossless compression of the data from las to laz formats.

@@ -5,12 +5,12 @@ export default class Description extends React.Component {
   render() {
     return (
       <li className='mdc-image-list__item'>
-        <div className='mdc-typography--headline4'>
-          DESCRIPTION
+        <div className='mdc-typography--headline5'>
+          Description
         </div>
-        <div>
+        <p>
           {this.props.collection.description}
-        </div>
+        </p>
       </li>
     )
   }

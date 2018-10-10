@@ -1,0 +1,72 @@
+/*
+styles for component: ContactTnrisForm
+*/
+
+.contact-tnris-form-component {
+  @include mdc-text-field-bottom-line-color(rgba(0,0,0,.42));
+  @include mdc-text-field-label-color(#6200ee);
+  @include mdc-text-field-line-ripple-color(#6200ee);
+  @include mdc-text-field-textarea-stroke-color(rgba(0,0,0,.42));
+
+  padding: 15px;
+
+  div.mdc-text-field {
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    margin-bottom: 16px;
+  }
+
+  .mdc-select:not(.mdc-select--disabled) {
+    background-color: initial;
+    margin-bottom: 16px;
+    @include mdc-select-label-color(#6200ee);
+    @include mdc-select-ink-color(#6200ee);
+    @include mdc-select-bottom-line-color(rgba(0, 0, 0, 0.12));
+    @include mdc-select-focused-bottom-line-color(#6200ee);
+
+
+    select {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+
+      option:not([disabled]) {
+        color: black;
+      }
+    }
+
+    select::-ms-expand {
+      display: none;
+    }
+
+  }
+
+  div.mdc-text-field--textarea {
+    label {
+
+    }
+  }
+
+  .mdc-text-field--invalid {
+    @include mdc-text-field-bottom-line-color(red);
+    @include mdc-text-field-label-color(red);
+    @include mdc-text-field-line-ripple-color(red);
+    @include mdc-text-field-textarea-stroke-color(red);
+  }
+
+  .invalid-prompt {
+    color: red;
+  }
+
+  .contact-tnris-form-success {
+    span {
+      color: green;
+    }
+  }
+
+  .contact-tnris-form-error {
+    span {
+      color: red;
+    }
+  }
+}

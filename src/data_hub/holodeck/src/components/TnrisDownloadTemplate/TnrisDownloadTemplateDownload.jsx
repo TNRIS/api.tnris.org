@@ -12,23 +12,54 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
       // bind our map builder functions
       this.createMap = this.createMap.bind(this);
       this.createLayers = this.createLayers.bind(this);
+      this.toggleLayers = this.toggleLayers.bind(this);
+      this.layerRef = {};
   }
 
   componentDidMount() {
-    // wait for the api response with the list of downloadable resources
+    // on mount/load, try and launch the map. if the api response with the list
+    // of downloadable resources hasn't returned we won't launch it
     if (this.props.loadingResources === false) {
-      console.log(this.props.selectedCollectionResources);
-      this.areaLookup = this.props.selectedCollectionResources.entities.resourcesByAreaId;
+      this.areaLookup = this.props.resourceAreas;
       this.createMap();
     }
   }
 
   componentDidUpdate () {
-    // wait for the api response with the list of downloadable resources
+    // when the api response with the list of downloadable resources finally
+    // returns, the component will update so we launch the map at that time
     if (this.props.loadingResources === false) {
-      this.areaLookup = this.props.selectedCollectionResources.entities.resourcesByAreaId;
+      this.areaLookup = this.props.resourceAreas;
       this.createMap();
     }
+  }
+
+  toggleLayers (e, map, areaType) {
+    // if popup is open, close it
+    if (document.querySelector('.mapboxgl-popup')) {
+      document.querySelector('.mapboxgl-popup').remove();
+    }
+    // iterate layerRef for layers in map by areaType key
+    Object.keys(this.layerRef).map(layer => {
+      // if iteration is looking at the clicked layer in the menu, turn that
+      // layer's layer id's on. otherwise, turn the that layer's layer id's off
+      if (layer === areaType) {
+        // iterate layer id's for clicked areaType and toggle their visibility
+        this.layerRef[layer].map(layerName => {
+          return map.setLayoutProperty(layerName, 'visibility', 'visible');
+        }, this);
+        // make the layer's menu button active by classname
+        return document.querySelector('#dld-' + layer).className = 'mdc-list-item mdc-list-item--activated';
+      }
+      else {
+        // iterate layer id's for clicked areaType and toggle their visibility
+        this.layerRef[layer].map(layerName => {
+          return map.setLayoutProperty(layerName, 'visibility', 'none');
+        }, this);
+        // make the layer's menu button active by classname
+        return document.querySelector('#dld-' + layer).className = 'mdc-list-item';
+      }
+    }, this);
   }
 
   createMap() {
@@ -42,45 +73,94 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
     });
     // add those controls!
     map.addControl(new mapboxgl.NavigationControl(), 'top-left');
-    // get the api response with all available resources (downloads) for this dataset
-    // and query Carto for the bounds of area_types associated with the resources
-    const resourceList = this.props.selectedCollectionResources.result;
-    const resourcesString = resourceList.join("','");
-    const boundsQuery = "SELECT * FROM area_type WHERE area_type_id IN ('" + resourcesString + "')";
-    const sql = new cartodb.SQL({ user: 'tnris-flood' });
-    sql.getBounds(boundsQuery).done(function(bounds) {
-      // set map to extent of download areas
-      map.fitBounds([[bounds[1][1],bounds[1][0]],[bounds[0][1],bounds[0][0]]],{padding: 20});
-    });
+    const areaTypesAry = Object.keys(this.props.resourceAreaTypes).sort();
+    // set the active areaType to be the one with the largest area polygons
+    // for faster initial load
+    let startLayer = 'qquad';
+    if (areaTypesAry.includes('state')) {
+      startLayer = 'state';
+    } else if (areaTypesAry.includes('county')) {
+      startLayer = 'county';
+    } else if (areaTypesAry.includes('quad')) {
+      startLayer = 'quad';
+    }
 
-    // get total number of resources available for download
-    const total = resourceList.length;
-    // if < 1000 downloads, we know the map can perform so we'll just get them
-    // all at once
-    if (total < 1000) {
-      this.createLayers(boundsQuery, map, "0");
-    }
-    // if more than 1000, we will get area_types to display on the map in chunks
-    // since the carto api payload has a maximum limit
-    else {
-      let loop = 0;
-      let s = 0;
-      let e = 1000;
-      // iterate resources in 1000 record chunks creating the polygon, hover, and label
-      // layers for each chunk as separate 'chunk layers'
-      while (s < total) {
-        let chunk = resourceList.slice(s, e);
-        let chunkString = chunk.join("','");
-        let chunkQuery = "SELECT * FROM area_type WHERE area_type_id IN ('" + chunkString + "')";
-        this.createLayers(chunkQuery, map, loop.toString());
-        loop += 1;
-        s += 1000;
-        e += 1000;
-      }
-    }
+    // iterate our area_types so we can add them to different layers for
+    // layer control in the map and prevent overlap of area polygons
+    areaTypesAry.map(areaType => {
+        // set aside array in layerRef object for populating with layer ids for
+        // layers of this areaType
+        this.layerRef[areaType] = [];
+        // set aside the api response with all available resources (downloads)
+        // for this areaType
+        const areasList = this.props.resourceAreaTypes[areaType];
+        // create the layer control in the DOM
+        var link = document.createElement('a');
+        link.href = '#';
+        link.id = 'dld-' + areaType;
+        link.textContent = areaType.toUpperCase();
+        // determine if it is the active layer. apply the correct classes and
+        // assign the visibility layoutProperty
+        let linkClass;
+        let visibility;
+        switch (areaType === startLayer) {
+          case true:
+            linkClass = 'mdc-list-item mdc-list-item--activated';
+            visibility = 'visible';
+            // since this is our initial layer on display, we'll zoom to the bounds
+            const areasString = areasList.join("','");
+            const boundsQuery = "SELECT * FROM area_type WHERE area_type_id IN ('" + areasString + "')";
+            const sql = new cartodb.SQL({ user: 'tnris-flood' });
+            sql.getBounds(boundsQuery).done(function(bounds) {
+              // set map to extent of download areas
+              map.fitBounds([[bounds[1][1],bounds[1][0]],[bounds[0][1],bounds[0][0]]],{padding: 20});
+            });
+            break;
+          default:
+            linkClass = 'mdc-list-item';
+            visibility = 'none';
+        }
+        link.className = linkClass;
+        link.onclick = (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            this.toggleLayers(e, map, areaType);
+        };
+        var menuItems = document.getElementById('tnris-download-menu');
+        menuItems.appendChild(link);
+
+        // get total number of resources available for download
+        const total = areasList.length;
+        // if < 1000 downloads, we know the map can perform so we'll just get them
+        // all at once
+        if (total < 1000) {
+          const allAreasString = areasList.join("','");
+          const allAreasQuery = "SELECT * FROM area_type WHERE area_type_id IN ('" + allAreasString + "')";
+          this.createLayers(allAreasQuery, map, "0", areaType, visibility);
+        }
+        // if more than 1000, we will get area_types to display on the map in chunks
+        // since the carto api payload has a maximum limit
+        else {
+          let loop = 0;
+          let s = 0;
+          let e = 1000;
+          // iterate resources in 1000 record chunks creating the polygon, hover, and label
+          // layers for each chunk as separate 'chunk layers'
+          while (s < total) {
+            let chunk = areasList.slice(s, e);
+            let chunkString = chunk.join("','");
+            let chunkQuery = "SELECT * FROM area_type WHERE area_type_id IN ('" + chunkString + "')";
+            this.createLayers(chunkQuery, map, loop.toString(), areaType, visibility);
+            loop += 1;
+            s += 1000;
+            e += 1000;
+          }
+        }
+        return areaType;
+    }, this);
   }
 
-  createLayers(query, map, loop) {
+  createLayers(query, map, loop, areaType, visibility) {
     // prepare carto tile api information
     var layerData = {
         user_name: 'tnris-flood',
@@ -90,6 +170,10 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
             }],
         maps_api_template: 'https://tnris-flood.carto.com'
     };
+    const layerSourceName = areaType + '__area_type_source' + loop;
+    const layerBaseName = areaType + '__area_type' + loop;
+    const layerHoverName = areaType + '__area_type_hover' + loop;
+    const layerLabelName = areaType + '__area_type_label' + loop;
     // get the raster tiles from the carto api
     cartodb.Tiles.getTiles(layerData, function (result, error) {
       if (result == null) {
@@ -104,14 +188,14 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
           .replace(/.png/, '.mvt');
       });
       // use the tiles from the response to add a source to the map
-      map.addSource('area_type_source' + loop, { type: 'vector', tiles: areaTiles });
+      map.addSource(layerSourceName, { type: 'vector', tiles: areaTiles });
       // add the polygon area_type layer
       map.addLayer({
-          id: 'area_type' + loop,
+          id: layerBaseName,
           'type': 'fill',
-          'source': 'area_type_source' + loop,
+          'source': layerSourceName,
           'source-layer': 'layer0',
-          'layout': {},
+          'layout': {'visibility': visibility},
           'paint': {
             'fill-color': 'rgba(97,12,239,0.3)',
             'fill-outline-color': '#FFFFFF'
@@ -119,70 +203,77 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
       });
       // add the polygon area_type hover layer. wired below to toggle on hover
       map.addLayer({
-          id: 'area_type_hover' + loop,
+          id: layerHoverName,
           'type': 'fill',
-          'source': 'area_type_source' + loop,
+          'source': layerSourceName,
           'source-layer': 'layer0',
+          'layout': {'visibility': visibility},
           'paint': {
             'fill-color': 'rgba(130,109,186,.7)',
             'fill-outline-color': '#FFFFFF'
           },
           'filter': ['==', 'area_type_name', '']
-      }, 'area_type' + loop);
+      }, layerBaseName);
       // add the labels layer for the area_type polygons
       map.addLayer({
-          id: 'area_type_label' + loop,
+          id: layerLabelName,
           'type': 'symbol',
-          'source': 'area_type_source' + loop,
+          'source': layerSourceName,
           'source-layer': 'layer0',
           // 'minzoom': 10,
           'layout': {
-            "text-field": "{area_type_name}"
+            "text-field": "{area_type_name}",
+            'visibility': visibility
           },
           'paint': {
             "text-color": "#FFFFFF"
           }
       });
     });
-    // wire an on-click event to the area_type polygons to fire their associated
-    // resource download url
+    // add the layer id's to the areaType's array in the layerRef for toggling
+    this.layerRef[areaType].push(layerBaseName, layerHoverName, layerLabelName);
+
+    // wire an on-click event to the area_type polygons to show a popup of
+    // available resource downloads for clicked area
     const areaLookup = this.areaLookup;
-    map.on('click', 'area_type' + loop, function (e) {
-      // console.log(e.features[0].properties);
+    map.on('click', layerBaseName, function (e) {
       // console.log(e.lngLat);
       const clickedAreaId = e.features[0].properties.area_type_id;
-      const downloadUrl = areaLookup[clickedAreaId];
-      window.location = downloadUrl.resource;
+      const clickedAreaName = e.features[0].properties.area_type_name;
+      const downloads = areaLookup[clickedAreaId];
+      let popupContent = "";
+      // iterate available downloads for the area
+      Object.keys(downloads).sort().map(abbr => {
+        const dldInfo = downloads[abbr];
+        // if a filesize is populated in the resource table so the popup,
+        // we don't want to display empty popups, right?
+        let filesizeString = "";
+        if (dldInfo.filesize != null) {
+          const filesize = parseFloat(dldInfo.filesize / 1000000).toFixed(2).toString();
+          filesizeString = " - " + filesize + "MB";
+        }
+        // create html link and append to content string
+        const dld = `<li><a href="${dldInfo.link}" target="_blank">${dldInfo.name}${filesizeString}</a></li>`;
+        return popupContent += dld;
+      });
+      // create popup with constructed content string
+      new mapboxgl.Popup()
+        .setLngLat(e.lngLat)
+        .setHTML(`<strong>${clickedAreaName}</strong><ul>${popupContent}</ul>`)
+        .addTo(map);
     });
-    // Create a popup, but don't add it to the map yet.
-    const popup = new mapboxgl.Popup({
-        closeButton: false,
-        closeOnClick: false
-    });
+
     // Change the cursor to a pointer when it enters a feature in the 'area_type' layer
     // Also, toggle the hover layer with a filter based on the cursor
-    // Also, get the filesize for that download and display it in the popup
-    map.on('mousemove', 'area_type' + loop, function (e) {
+    map.on('mousemove', layerBaseName, function (e) {
       map.getCanvas().style.cursor = 'pointer';
-      map.setFilter('area_type_hover' + loop, ['==', 'area_type_name', e.features[0].properties.area_type_name]);
-      // if a filesize is populated in the resource table so the popup,
-      // we don't want to display empty popups, right?
-      const hoverAreaId = e.features[0].properties.area_type_id;
-      if (areaLookup[hoverAreaId].filesize != null) {
-        const filesize = parseFloat(areaLookup[hoverAreaId].filesize / 1000000).toFixed(2).toString();
-        const popupContent = filesize + "MB";
-        popup.setLngLat(e.lngLat)
-              .setHTML(popupContent)
-              .addTo(map);
-      }
+      map.setFilter(layerHoverName, ['==', 'area_type_name', e.features[0].properties.area_type_name]);
     });
     // Undo the cursor pointer when it leaves a feature in the 'area_type' layer
     // Also, untoggle the hover layer with a filter
-    // Also, remove the popup
-    map.on('mouseleave', 'area_type' + loop, function () {
+    map.on('mouseleave', layerBaseName, function () {
       map.getCanvas().style.cursor = '';
-      map.setFilter('area_type_hover' + loop, ['==', 'area_type_name', '']);
-      popup.remove();
+      map.setFilter(layerHoverName, ['==', 'area_type_name', '']);
     });
   }
 
@@ -206,6 +297,7 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
 
     return (
       <div className='tnris-download-template-download'>
+        <nav id='tnris-download-menu' className='mdc-list'></nav>
         <div id='tnris-download-map'></div>
       </div>
     );

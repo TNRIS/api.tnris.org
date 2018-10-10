@@ -1040,7 +1040,7 @@ class CcrView(models.Model):
         managed = False
         db_table = "collection_catalog_record"
         verbose_name = 'Collection Catalog Record'
-        verbose_name_plural = 'Collection Catalog Records'
+        verbose_name_plural = 'Cthumbollection Catalog Records'
 
     collection_id = models.UUIDField(
         'Collection ID',
@@ -1205,9 +1205,12 @@ class RemView(models.Model):
         verbose_name = 'Resource Management'
         verbose_name_plural = 'Resource Managements'
 
+    resource_id = models.UUIDField(
+        'Resource ID',
+        primary_key=True
+    )
     resource = models.CharField(
         'Resource URL',
-        primary_key=True,
         max_length=255
     )
     filesize = models.PositiveIntegerField(
@@ -1221,9 +1224,6 @@ class RemView(models.Model):
     collection_id = models.UUIDField(
         'Collection'
     )
-    resource_type_id = models.UUIDField(
-        'ResourceType'
-    )
     resource_type_name = models.TextField(
         'Resource Type Name',
         max_length=50
@@ -1232,6 +1232,9 @@ class RemView(models.Model):
         'Resource Type Abbreviation',
         max_length=10
     )
+    area_type = models.TextField(
+        'Area Type'
+    )
 
     def __str__(self):
-        return self.resource
+        return self.resource_id

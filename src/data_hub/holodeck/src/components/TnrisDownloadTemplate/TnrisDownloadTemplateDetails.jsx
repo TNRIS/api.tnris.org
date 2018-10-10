@@ -29,7 +29,7 @@ export default class TnrisDownloadTemplateDetails extends React.Component {
                                         <Supplementals collection={this.props.collection} /> : "";
     const servicesCard = this.props.collection.wms_link ? <Services collection={this.props.collection} /> : "";
 
-    const contactIcon = this.state.showContact ? <i className="material-icons">expand_less</i> : <i className="material-icons">expand_more</i>;
+    const contactIcon = this.state.showContact ? <i className="mdc-list-item__meta material-icons">expand_less</i> : <i className="mdc-list-item__meta material-icons">expand_more</i>;
     const contactDisplay = this.state.showContact ? (
       <div>
         <ContactContainer collection={this.props.collection} />
@@ -47,16 +47,16 @@ export default class TnrisDownloadTemplateDetails extends React.Component {
 
           <li className='mdc-image-list__item'>
             <div className='mdc-typography--headline5'>
-              ORDER
+              Order
             </div>
             <p>
-              Everything you're looking for too large to download? Every dataset is available for order directly from TNRIS by completing this <a href="https://tnris.org/order-data/">Order Form</a>.
+              Everything you're looking for too large to download? Every dataset is available for order directly from TNRIS by completing this <a href="https://tnris.org/order-data/" rel="noopener noreferrer" target="_blank">Order Form</a>.
             </p>
           </li>
 
           <li className='mdc-image-list__item'>
             <div id="contact-header" className='mdc-typography--headline5' onClick={this.toggleContact}>
-              {contactIcon}Contact
+              Contact{contactIcon}
             </div>
             {contactDisplay}
           </li>

@@ -75,9 +75,19 @@ styles for component: TnrisDownloadTemplateDetails
 
     #contact-header {
       cursor: pointer;
+      text-align: initial;
+      padding-left: 10px;
+      padding-right: 10px;
+
+      &:hover {
+        background-color: #484848;
+      }
 
       i {
         vertical-align: middle;
+        color: #d2f1ff;
+        line-height: 36px;
+        float: right;
       }
     }
   }

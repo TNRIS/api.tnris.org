@@ -39,7 +39,7 @@ SELECT collection.collection_id,
       ) THEN 'Raster,Vector'
     WHEN (
       (string_agg(distinct resource_type.resource_type_abbreviation, ',' order by resource_type.resource_type_abbreviation)
-      ~ '.*(BW|NC|CIR|NC-CIR|DEM|MAP|LC)).*')
+      ~ '.*(BW|NC|CIR|NC-CIR|DEM|MAP|LC).*')
       AND (string_agg(distinct resource_type.resource_type_abbreviation, ',' order by resource_type.resource_type_abbreviation)
       !~ '.*(HYPSO|LPC|VECTOR).*')
       ) THEN 'Raster'
@@ -47,7 +47,7 @@ SELECT collection.collection_id,
       (string_agg(distinct resource_type.resource_type_abbreviation, ',' order by resource_type.resource_type_abbreviation)
       ~ '.*(HYPSO|LPC|VECTOR).*')
       AND (string_agg(distinct resource_type.resource_type_abbreviation, ',' order by resource_type.resource_type_abbreviation)
-      !~ '.*(BW|NC|CIR|NC-CIR|DEM|MAP|LC)).*')
+      !~ '.*(BW|NC|CIR|NC-CIR|DEM|MAP|LC).*')
       ) THEN 'Vector'
     ELSE NULL
   END AS data_types,

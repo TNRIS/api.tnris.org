@@ -17,7 +17,6 @@ export default class Services extends React.Component {
   }
 
   render() {
-    console.log(this.props.collection);
     const copied = this.state.copied ? "Copied!" : "Copy URL";
     const previewLink = this.props.collection.popup_link ? (
       <a className="mdc-button mdc-button--raised" href={this.props.collection.popup_link} target="_blank">

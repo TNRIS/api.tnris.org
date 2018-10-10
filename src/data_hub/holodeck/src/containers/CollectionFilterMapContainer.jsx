@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 
 import { collectionActions, resourceActions } from '../actions';
-import Map from '../components/Map';
+import CollectionFilterMap from '../components/CollectionFilterMap';
 
 const mapStateToProps = state => ({
   collections: state.collections.items,
@@ -19,9 +19,9 @@ const mapDispatchToProps = dispatch => ({
   }
 })
 
-const MapContainer = connect(
+const CollectionFilterMapContainer = connect(
   mapStateToProps,
   mapDispatchToProps
-)(Map);
+)(CollectionFilterMap);
 
-export default MapContainer;
+export default CollectionFilterMapContainer;

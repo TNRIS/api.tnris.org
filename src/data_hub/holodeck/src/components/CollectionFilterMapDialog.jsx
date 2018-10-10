@@ -1,43 +1,43 @@
 import React from 'react';
 import { MDCDialog } from '@material/dialog';
 
-import Map from './Map';
+import CollectionFilterMap from './CollectionFilterMap';
 
-class MapDialog extends React.Component {
+export default class CollectionFilterMapDialog extends React.Component {
     constructor(props) {
         super(props);
         this.dialogContent = this.dialogContent.bind(this);
-        this.closeMapDialog = this.closeMapDialog.bind(this);
+        this.closeCollectionFilterMapDialog = this.closeCollectionFilterMapDialog.bind(this);
     }
 
     componentDidMount() {
-      this.dialog = new MDCDialog(this.refs.map_dialog);
+      this.dialog = new MDCDialog(this.refs.filter_map_dialog);
     }
 
     componentDidUpdate() {
-      this.props.showMapDialog ? this.dialog.show() : this.dialog.close()
+      this.props.showCollectionFilterMapDialog ? this.dialog.show() : this.dialog.close()
 
     }
 
     componentWillReceiveProps() {
       this.dialog.listen('MDCDialog:cancel', () => {
-        this.closeMapDialog();
+        this.closeCollectionFilterMapDialog();
       })
     }
 
     dialogContent() {
-      return <Map />
+      return <CollectionFilterMap />
     }
 
-    closeMapDialog() {
-      this.props.closeMapDialog();
+    closeCollectionFilterMapDialog() {
+      this.props.closeCollectionFilterMapDialog();
     }
 
     render() {
       return (
           <aside
-              ref="map_dialog"
-              id="map_dialog"
+              ref="filter_map_dialog"
+              id="filter_map_dialog"
               className="mdc-dialog"
               role="alertdialog"
               aria-labelledby="map_dialog-label"
@@ -52,7 +52,7 @@ class MapDialog extends React.Component {
                   {this.dialogContent()}
                 </section>
                 <footer className="mdc-dialog__footer">
-                    <button onClick={this.closeMapDialog}>CLOSE</button>
+                    <button onClick={this.closeCollectionFilterMapDialog}>CLOSE</button>
                 </footer>
               </div>
               <div className="mdc-dialog__backdrop"></div>
@@ -60,5 +60,3 @@ class MapDialog extends React.Component {
       );
     }
 }
-
-export default MapDialog;

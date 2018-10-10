@@ -1,0 +1,10 @@
+#collection-filter-map {
+  position:absolute;
+  top:64px;
+  bottom:0;
+  width:100%;
+
+  .mapboxgl-canvas {
+    height: 100%;
+  }
+}

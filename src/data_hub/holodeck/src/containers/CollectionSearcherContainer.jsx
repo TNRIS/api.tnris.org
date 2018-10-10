@@ -2,7 +2,6 @@ import { connect } from 'react-redux';
 
 import CollectionSearcher from '../components/CollectionSearcher';
 import { collectionSearcherActions } from '../actions';
-import { getSearchIndex } from '../selectors/collectionSelectors';
 
 const mapStateToProps = (state) => ({
   collectionSearchQuery: state.collectionSearcher.collectionSearchQuery

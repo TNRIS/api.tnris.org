@@ -8,8 +8,6 @@ import {
   mapDialogActions } from '../actions';
 import {
   getAllCollections,
-  getFilteredCollections,
-  getSearchedCollections,
   getSortedCollections
 } from '../selectors/collectionSelectors';
 

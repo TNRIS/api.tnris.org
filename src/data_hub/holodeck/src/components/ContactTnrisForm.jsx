@@ -76,7 +76,7 @@ class ContactTnrisForm extends Component {
   }
 
   submitForm (event) {
-    event.preventDefault()
+    event.preventDefault();
 
     if (this.state.recaptcha !== '') {
       this.setState({

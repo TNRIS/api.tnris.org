@@ -3,8 +3,13 @@ import {
   CLOSE_ORDER_CART_DIALOG
 } from '../constants/orderCartDialogActionTypes';
 
+// import {
+//
+// } from '../constants/orderCartActionTypes';
+
 const initialState = {
-  showOrderCartDialog: false
+  showOrderCartDialog: false,
+  orders: {}
 };
 
 export default function contactReducer(state = initialState, action) {

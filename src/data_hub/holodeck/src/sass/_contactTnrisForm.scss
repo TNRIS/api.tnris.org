@@ -14,11 +14,13 @@ styles for component: ContactTnrisForm
     border-bottom-width: 1px;
     border-bottom-style: solid;
     margin-bottom: 16px;
+    display: flex;
   }
 
   .mdc-select:not(.mdc-select--disabled) {
     background-color: initial;
     margin-bottom: 16px;
+    display: flex;
     @include mdc-select-label-color(#6200ee);
     @include mdc-select-ink-color(#6200ee);
     @include mdc-select-bottom-line-color(rgba(0, 0, 0, 0.12));
@@ -61,6 +63,12 @@ styles for component: ContactTnrisForm
 
   .invalid-prompt {
     color: red;
+  }
+
+  .submit-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   .contact-tnris-form-success {

@@ -8,7 +8,7 @@ export const getResourceAreas = createSelector(
   [ getResources ],
   (resources) => {
     // Check if resources are in the state
-    if (resources.result) {
+    if (resources.result && resources.result.length > 0) {
       // build object of resources key'd by resource_type (subnested)
       const byId = resources.entities.resourcesById;
       // start with empty object
@@ -48,7 +48,7 @@ export const getResourceAreaTypes = createSelector(
   [ getResources ],
   (resources) => {
     // Check if resources are in the state
-    if (resources.result) {
+    if (resources.result && resources.result.length > 0) {
       // build object of resources key'd by resource_type (subnested)
       const byId = resources.entities.resourcesById;
       // start with empty object

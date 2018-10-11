@@ -22,7 +22,7 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
   componentDidMount() {
     // on mount/load, try and launch the map. if the api response with the list
     // of downloadable resources hasn't returned we won't launch it
-    if (this.props.loadingResources === false) {
+    if (this.props.loadingResources === false && this.props.selectedCollectionResources.result.length > 0) {
       this.areaLookup = this.props.resourceAreas;
       this.createMap();
     }
@@ -31,7 +31,7 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
   componentDidUpdate () {
     // when the api response with the list of downloadable resources finally
     // returns, the component will update so we launch the map at that time
-    if (this.props.loadingResources === false) {
+    if (this.props.loadingResources === false && this.props.selectedCollectionResources.result.length > 0) {
       this.areaLookup = this.props.resourceAreas;
       this.createMap();
     }

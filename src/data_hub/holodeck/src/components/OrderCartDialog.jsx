@@ -1,12 +1,10 @@
 import React from 'react';
 import { MDCDialog } from '@material/dialog';
-import OrderCart from './OrderCart';
+import OrderCartContainer from '../containers/OrderCartContainer';
 
 class OrderCartDialog extends React.Component {
     constructor(props) {
         super(props);
-        console.log(this.props);
-
         this.OrderCartDialogContent = this.OrderCartDialogContent.bind(this);
         this.closeOrderCartDialog = this.closeOrderCartDialog.bind(this);
     }
@@ -26,7 +24,7 @@ class OrderCartDialog extends React.Component {
     }
 
     OrderCartDialogContent() {
-      return <OrderCart />;
+      return <OrderCartContainer />;
     }
 
     closeOrderCartDialog() {

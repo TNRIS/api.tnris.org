@@ -6,6 +6,7 @@ import * as mapDialogActions from './mapDialogActions';
 import * as resourceActions from './resourceActions';
 import * as sortActions from './sortActions';
 import * as contactActions from './contactActions';
+import * as orderCartDialogActions from './orderCartDialogActions';
 
 export {
   collectionActions,
@@ -15,5 +16,6 @@ export {
   mapDialogActions,
   resourceActions,
   sortActions,
-  contactActions
+  contactActions,
+  orderCartDialogActions
 };

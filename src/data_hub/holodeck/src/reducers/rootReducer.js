@@ -8,6 +8,7 @@ import mapDialog from './mapDialogReducer';
 import resources from './resourceReducer';
 import sorter from './sortReducer';
 import contact from './contactReducer';
+import orderCart from './orderCartReducer';
 
 const rootReducer = combineReducers({
   collections,
@@ -17,7 +18,8 @@ const rootReducer = combineReducers({
   mapDialog,
   resources,
   sorter,
-  contact
+  contact,
+  orderCart
 })
 
 export default rootReducer;

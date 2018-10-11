@@ -76,7 +76,7 @@ class ContactTnrisForm extends Component {
   }
 
   submitForm (event) {
-    event.preventDefault()
+    event.preventDefault();
 
     if (this.state.recaptcha !== '') {
       this.setState({
@@ -185,7 +185,7 @@ class ContactTnrisForm extends Component {
           <ReCAPTCHA className="recaptcha-container" sitekey="6Lf8GP8SAAAAAFx2H53RtfDO18x7S1q_0pGNdmbd" onChange={this.recaptchaChange} />
           <p className="invalid-prompt">{this.state.invalid}</p>
 
-          <div>
+          <div className="submit-button">
             <input type="submit" value="Submit" id="contact-tnris-submit" className="mdc-button mdc-button--raised"/>
           </div>
         </div>

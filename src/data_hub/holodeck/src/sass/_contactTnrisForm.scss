@@ -54,6 +54,11 @@ styles for component: ContactTnrisForm
     @include mdc-text-field-textarea-stroke-color(red);
   }
 
+  .recaptcha-container {
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
   .invalid-prompt {
     color: red;
   }

@@ -56,6 +56,11 @@ class ContactTnrisForm extends Component {
     }
   }
 
+  componentWillUnmount () {
+    // on umount, dispatch contact success to reset the store
+    this.props.submitContactSuccess();
+  }
+
   handleChange(event) {
     const name = event.target.name
     const value = event.target.value
@@ -177,7 +182,7 @@ class ContactTnrisForm extends Component {
             <div className="mdc-line-ripple"></div>
           </div>
 
-          <ReCAPTCHA sitekey="6Lf8GP8SAAAAAFx2H53RtfDO18x7S1q_0pGNdmbd" onChange={this.recaptchaChange} />
+          <ReCAPTCHA className="recaptcha-container" sitekey="6Lf8GP8SAAAAAFx2H53RtfDO18x7S1q_0pGNdmbd" onChange={this.recaptchaChange} />
           <p className="invalid-prompt">{this.state.invalid}</p>
 
           <div>

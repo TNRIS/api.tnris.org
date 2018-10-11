@@ -9,6 +9,9 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
+  submitContactSuccess: () => {
+    dispatch(contactActions.submitContactSuccess());
+  },
   submitContactTnrisForm: (formInfo) => {
     dispatch(contactActions.submitContactTnrisForm(formInfo));
   }

@@ -90,7 +90,8 @@ class CollectionAdmin(admin.ModelAdmin):
                        'tags',
                        'agency_type_id',
                        'license_type_id',
-                       'template_type_id'),
+                       'template_type_id',
+                       'thumbnail_image'),
         }),
         ('Links', {
             'classes': ('grp-collapse grp-closed',),
@@ -103,17 +104,6 @@ class CollectionAdmin(admin.ModelAdmin):
                        'delete_lidar_breaklines_url',
                        'tile_index_url',
                        'delete_tile_index_url')
-        }),
-        ('Images', {
-            'classes': ('grp-collapse grp-closed',),
-            'fields': ('thumbnail_image',
-                       'delete_thumbnail_image',
-                       'overview_image',
-                       'delete_overview_image',
-                       'natural_image',
-                       'delete_natural_image',
-                       'urban_image',
-                       'delete_urban_image')
         }),
         ('Lookup/Relate Associations', {
             'classes': ('grp-collapse grp-closed',),

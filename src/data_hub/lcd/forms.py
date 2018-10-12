@@ -56,7 +56,7 @@ class CollectionForm(forms.ModelForm):
     carto_map_id = forms.CharField(required=False, widget=forms.TextInput(attrs={'style':'width:758px'}),max_length=50)
 
     overview_image = forms.FileField(required=False, widget=PictureWidget)
-    thumbnail_image = forms.FileField(required=False, widget=PictureWidget)
+    # thumbnail_image = forms.FileField(required=False, widget=PictureWidget)
     natural_image = forms.FileField(required=False, widget=PictureWidget)
     urban_image = forms.FileField(required=False, widget=PictureWidget)
 
@@ -92,6 +92,7 @@ class CollectionForm(forms.ModelForm):
     file_types = forms.MultipleChoiceField(required=False, widget=forms.SelectMultiple(attrs={'title': 'Hold down ctrl to select multiple values',}), choices=[])
     resolutions = forms.MultipleChoiceField(required=False, widget=forms.SelectMultiple(attrs={'title': 'Hold down ctrl to select multiple values',}), choices=[])
     uses = forms.MultipleChoiceField(required=False, widget=forms.SelectMultiple(attrs={'title': 'Hold down ctrl to select multiple values',}), choices=[])
+    thumbnail_image = forms.ChoiceField(required=False, choices=[])
 
     # generic function to retrieve the initial relate values from the relate table
     def attribute_initial_values(self, name, relate_table, id_field):
@@ -114,6 +115,7 @@ class CollectionForm(forms.ModelForm):
             self.fields['file_types'].choices = self.create_relate_field('file_type_id', 'file_type', FileType, 'file_type')
             self.fields['resolutions'].choices = self.create_relate_field('resolution_type_id', 'resolution', ResolutionType, 'resolution')
             self.fields['uses'].choices = self.create_relate_field('use_type_id', 'use_type', UseType, 'use_type')
+            self.fields['thumbnail_image'].choices = self.create_relate_field('image_url', 'image_id', Image, 'image_id')
             self.attribute_initial_values('categories', CategoryRelate, 'category_type_id')
             self.attribute_initial_values('projections', EpsgRelate, 'epsg_type_id')
             self.attribute_initial_values('file_types', FileTypeRelate, 'file_type_id')

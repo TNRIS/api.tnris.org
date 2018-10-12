@@ -14,6 +14,9 @@ class OrderTnrisDataForm extends Component {
       this.state = {
         orderType: '',
         portionDescription: '',
+        aoiUpload: '',
+        screenshotUpload: '',
+        textDescription: '',
         display: startDisplay
       }
       this.collection = this.props.collections[this.props.selectedCollection];
@@ -22,16 +25,18 @@ class OrderTnrisDataForm extends Component {
   }
 
   componentDidMount() {
-    // document.querySelectorAll('.mdc-floating-label').forEach((mdl) => {
-    //   new MDCFloatingLabel(mdl);
-    // });
-    // document.querySelectorAll('.mdc-line-ripple').forEach((mlr) => {
-    //   new MDCLineRipple(mlr);
-    // });
-    // document.querySelectorAll('.mdc-text-field').forEach((mtf) => {
-    //   new MDCTextField(mtf);
-    // });
-    // new MDCRipple(document.querySelector('#contact-tnris-submit'));
+    document.querySelectorAll('.mdc-floating-label').forEach((mdl) => {
+      new MDCFloatingLabel(mdl);
+    });
+    document.querySelectorAll('.mdc-line-ripple').forEach((mlr) => {
+      new MDCLineRipple(mlr);
+    });
+    document.querySelectorAll('.mdc-text-field').forEach((mtf) => {
+      new MDCTextField(mtf);
+    });
+    document.querySelectorAll('.mdc-button').forEach((mb) => {
+      new MDCRipple(mb);
+    });
     // new MDCSelect(document.querySelector('.mdc-select'));
   }
 
@@ -56,6 +61,17 @@ class OrderTnrisDataForm extends Component {
         input.checked = false;
       });
     }
+
+    if (this.state.portionDescription === 'Text Description') {
+      document.getElementsByName("textDescription").forEach((textarea) => {
+        textarea.required = true;
+      });
+    }
+    else {
+      document.getElementsByName("textDescription").forEach((textarea) => {
+        textarea.required = false;
+      });
+    }
   }
 
   handleChange(event) {
@@ -63,6 +79,9 @@ class OrderTnrisDataForm extends Component {
     const value = event.target.value
     const nextState = {};
     nextState[name] = value;
+    if (name === 'orderType' && value === 'Full') {
+      nextState['portionDescription'] = "";
+    }
     if (name === 'orderType' && value === 'Full') {
       nextState['portionDescription'] = "";
     }
@@ -98,6 +117,9 @@ class OrderTnrisDataForm extends Component {
 
   render() {
     const partialClass = this.state.orderType === 'Partial' ? "partial-description-field" : "hidden-field";
+    const uploadAoiClass = this.state.portionDescription === 'AOI' ? "file-upload-field" : "hidden-field";
+    const uploadScreenshotClass = this.state.portionDescription === 'Screenshot' ? "file-upload-field" : "hidden-field";
+    const textDescriptionClass = this.state.portionDescription === 'Text Description' ? "text-description-field" : "hidden-field";
     let showHTML;
     let formFields;
     if (this.collection.category === 'Lidar') {
@@ -175,6 +197,14 @@ class OrderTnrisDataForm extends Component {
               <label htmlFor="order-partial-aoi-input">Area of Interest Boundary File (TNRIS Preferred Option)</label>
             </div>
             <div className='mdc-typography--caption'>Select a zipped (.zip) Shapefile or KML to upload. Maximum allowed file size is 20 MB.</div>
+            <div className={uploadAoiClass}>
+              <input type="file"
+                     id="order-partial-aoi-file"
+                     name="aoiUpload"
+                     accept=".zip,application/octet-stream,application/zip,application/x-zip,application/x-zip-compressed"
+                     onChange={this.handleChange}
+              />
+            </div>
             <div id="order-partial-screenshot" className="mdc-form-field">
               <div className="mdc-radio">
                 <input className="mdc-radio__native-control"
@@ -188,7 +218,16 @@ class OrderTnrisDataForm extends Component {
                   <div className="mdc-radio__inner-circle"></div>
                 </div>
               </div>
-              <label htmlFor="order-partial-screenshot-input">Screenshot</label>
+              <label htmlFor="order-partial-screenshot-input">Screenshot with Text Description</label>
+            </div>
+            <div className='mdc-typography--caption'>Select a .png, .jpg, or .jpeg image to upload. Multiple images are accepted. Maximum allowed file size is 20 MB.</div>
+            <div className={uploadScreenshotClass}>
+              <input type="file"
+                     id="order-partial-screenshot-file"
+                     name="screenshotUpload"
+                     accept=".png, .jpg, .jpeg"
+                     onChange={this.handleChange}
+                     multiple />
             </div>
             <div id="order-partial-text" className="mdc-form-field">
               <div className="mdc-radio">
@@ -203,7 +242,21 @@ class OrderTnrisDataForm extends Component {
                   <div className="mdc-radio__inner-circle"></div>
                 </div>
               </div>
-              <label htmlFor="order-partial-text-input">Textual Description</label>
+              <label htmlFor="order-partial-text-input">Text Description</label>
+            </div>
+            <div className={textDescriptionClass}>
+              <div className='mdc-typography--caption'>Please describe the portion of data you need in the text box below. The more detail provided will vastly improve the response and turn around time of your order.</div>
+              <div id="order-partial-text-description" className="mdc-text-field mdc-text-field--textarea">
+                <textarea id="order-partial-text-description-input" className="mdc-text-field__input"
+                          rows="8" cols="40"
+                          placeholder="Latitude/Longitude Coordinates, USGS Quadrangle Names, City/Town Names, Cross Roads, Boundary Landmarks, etc."
+                          name="textDescription"
+                          onChange={this.handleChange}
+                          required>
+                </textarea>
+                <label className="mdc-floating-label" htmlFor="order-partial-text-description-input">Please describe the portion of data you need...</label>
+                <div className="mdc-line-ripple"></div>
+              </div>
             </div>
           </div>
 

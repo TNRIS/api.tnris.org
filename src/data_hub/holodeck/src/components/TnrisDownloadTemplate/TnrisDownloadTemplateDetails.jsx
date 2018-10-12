@@ -7,6 +7,7 @@ import Services from '../DialogTemplateListItems/Services'
 import Supplementals from '../DialogTemplateListItems/Supplementals'
 
 import ContactContainer from '../../containers/ContactContainer';
+import OrderTnrisDataFormContainer from '../../containers/OrderTnrisDataFormContainer';
 
 export default class TnrisDownloadTemplateDetails extends React.Component {
   constructor(props) {
@@ -49,9 +50,9 @@ export default class TnrisDownloadTemplateDetails extends React.Component {
             <div className='mdc-typography--headline5'>
               Order
             </div>
-            <p>
-              Everything you're looking for too large to download? Every dataset is available for order directly from TNRIS by completing this <a href="https://tnris.org/order-data/" rel="noopener noreferrer" target="_blank">Order Form</a>.
-            </p>
+            <div>
+              <OrderTnrisDataFormContainer />
+            </div>
           </li>
 
           <li className='mdc-image-list__item'>

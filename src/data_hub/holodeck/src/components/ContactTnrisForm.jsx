@@ -114,7 +114,7 @@ class ContactTnrisForm extends Component {
     if (this.state.display === 'form') {
       showHTML = (
         <div>
-          <p>
+          <p className="mdc-typography--body2">
             Complete the form below to inquire with TNRIS about the <strong>{this.props.collection.name}</strong> dataset...
           </p>
 
@@ -194,7 +194,7 @@ class ContactTnrisForm extends Component {
     else if (this.state.display === 'success') {
       showHTML = (
         <div className="contact-tnris-form-success">
-          <p>
+          <p className="mdc-typography--body2">
             <span><strong>Success!</strong></span>
             <br />
             Thank you for submitting your inquiry. We review submissions in a timely manner. (unless you are claiming our <strong>"data is corrupt"</strong>; in which case, we will NOT respond because our data is NOT corrupt. you are just a dumb-dumb.)
@@ -205,7 +205,7 @@ class ContactTnrisForm extends Component {
     else if (this.state.display === 'error') {
       showHTML = (
         <div className="contact-tnris-form-error">
-          <p>
+          <p className="mdc-typography--body2">
             <span><strong>Error!</strong></span>
             <br />
             Unfortunately, we have encountered an error. Please wait a moment, refresh the page, and try again.
@@ -219,7 +219,7 @@ class ContactTnrisForm extends Component {
     else if (this.state.display === 'submitting') {
       showHTML = (
         <div className="contact-tnris-form-submitting">
-          <p>
+          <p className="mdc-typography--body2">
             <span><strong>Submitting form...</strong></span>
           </p>
         </div>

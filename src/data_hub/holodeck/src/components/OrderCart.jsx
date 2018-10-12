@@ -28,6 +28,7 @@ class OrderCart extends Component {
         recaptcha: '',
         invalid: ''
       }
+      
       this.submitForm = this.submitForm.bind(this);
       this.handleChange = this.handleChange.bind(this);
       this.recaptchaChange = this.recaptchaChange.bind(this);

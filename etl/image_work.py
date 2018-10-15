@@ -14,11 +14,13 @@ import os
 import boto3, uuid
 import psycopg2
 
+# s3 variables used in all three functions
 old_names = ['overview.jpg', 'urban.jpg', 'thumbnail.jpg', 'natural.jpg']
+client = boto3.client('s3')
 
 # iterate through, copy existing images and rename with uuid
 # def get_s3_images(bucket, suffix=''):
-#     client = boto3.client('s3')
+#
 #     kwargs = {'Bucket': bucket}
 #     count = 0
 #
@@ -46,7 +48,7 @@ old_names = ['overview.jpg', 'urban.jpg', 'thumbnail.jpg', 'natural.jpg']
 
 # delete all images with old names
 # def delete_old(bucket, suffix=''):
-#     client = boto3.client('s3')
+#
 #     kwargs = {'Bucket': bucket}
 #     count = 0
 #
@@ -67,29 +69,62 @@ old_names = ['overview.jpg', 'urban.jpg', 'thumbnail.jpg', 'natural.jpg']
 #             break
 
 # update the aws postgres rds db with new image names/urls
-def update_db():
-    # Database Connection Info
-    database = 'data.tnris.org'
-    username = 'tnris'
-    password = os.environ.get('DB_PASSWORD')
-    host = 'localhost'
-    port = '9000'
+def update_db(bucket, suffix=''):
 
-    print(database, username, password, host, port)
+    # Database Connection Info
+    database = os.environ.get('DB_NAME')
+    username = os.environ.get('DB_USER')
+    password = os.environ.get('DB_PASSWORD')
+    host = os.environ.get('DB_HOST')
+    port = os.environ.get('DB_PORT')
 
     conn_string = "dbname='%s' user='%s' host='%s' password='%s' port='%s'" % (database, username, host, password, port)
+
+    tablename = 'collection'
+
+    print(conn_string)
+
+    # s3 stuff
+    kwargs = {'Bucket': bucket}
 
     # connect to database
     conn = psycopg2.connect(conn_string)
     cur = conn.cursor()
 
-    # s3 boto client
-    client = boto3.client('s3')
+    query = "SELECT collection_id, thumbnail_image FROM %s;" % tablename
+    cur.execute(query)
+
+    db_response = cur.fetchall()
+    count = 0
+
+    while True:
+        s3_resp = client.list_objects_v2(**kwargs)
+
+        for obj in s3_resp['Contents']:
+            if obj['Key'].endswith(suffix):
+                collection_obj = {}
+                collection = obj['Key'].split('/')[0]
+                image = obj['Key'].rsplit('/')[-1]
+                count += 1
+                # print(str(count) + ': ' + collection, image)
+                # db stuff
+                for item in db_response:
+                    id, thumb = item
+                    if thumb.find('thumbnail.jpg') and id == collection:
+                        # update_thumb = "UPDATE %s SET thumbnail_image = %s;" % tablename, thumb
+                        print(str(count) + ': ' + str(id) + ' == ' + str(collection) + '; updating with ' + str(image))
+                        # cur.execute(update_thumb)
 
 
+
+        try:
+            kwargs['ContinuationToken'] = s3_resp['NextContinuationToken']
+        except KeyError:
+            break
 
 
 # execute functions
 # get_s3_images('data.tnris.org', '.jpg')
 # delete_old('data.tnris.org', '.jpg')
-update_db()
+
+update_db('data.tnris.org', '.jpg')

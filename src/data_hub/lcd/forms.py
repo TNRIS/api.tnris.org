@@ -415,11 +415,16 @@ class ResourceForm(forms.ModelForm):
         # iterate all (except last) s3 keys adding each as new record in resource table
         for idx, f in enumerate(self.list):
             print(f['Key'])
+            if f['Key'] == prefix:
+                continue
             link = "https://s3.amazonaws.com/data.tnris.org/" + f['Key']
             # disassemble filename
-            filename = f['Key'].split("/")[-1]
-            area_code = filename.split("_")[-2]
-            resource_type_abbr = filename.split("_")[-1].replace('.zip', '').upper()
+            try:
+                filename = f['Key'].split("/")[-1]
+                area_code = filename.split("_")[-2]
+                resource_type_abbr = filename.split("_")[-1].replace('.zip', '').upper()
+            except:
+                raise forms.ValidationError('Uh oh, Master! This resource has a bad filename! ' + f['Key'])
             # get the area_type
             try:
                 area_obj = self.get_area_obj(area_code)

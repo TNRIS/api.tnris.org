@@ -1,14 +1,27 @@
+/*
+styles for component: CollectionFilterMapDialog
+*/
 
 #filter_map_dialog {
+  z-index: 6;
 
-  // .mdc-dialog__surface {
-  //   max-width: 75%;
-  //   height: 80%;
-  // }
+  .mdc-dialog__surface {
+    max-width: 75%;
+    height: 80%;
+  }
 
-  .mdc-dialog__body {
-    margin-left: auto;
-    margin-right: auto;
+  .app-fab--absolute {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    background-color: #7E39F1;
+  }
+
+  @media(min-width: 1024px) {
+    .app-fab--absolute {
+      top: 1.5rem;
+      right: 1.5rem;
+    }
   }
 
 }

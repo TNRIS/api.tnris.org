@@ -4,7 +4,6 @@ import Catalog from '../components/Catalog';
 import {
   collectionActions,
   collectionDialogActions,
-  collectionFilterMapDialogActions,
   resourceActions
 } from '../actions';
 import {
@@ -18,7 +17,6 @@ const mapStateToProps = (state) => ({
   loading: state.collections.loading,
   resources: state.resources.items,
   showCollectionDialog: state.collectionDialog.showCollectionDialog,
-  showCollectionFilterMapDialog: state.collectionFilterMapDialog.showCollectionFilterMapDialog,
   sortOrder: state.sorter.sortOrder,
   visibleCollections: getSortedCollections(state),
 });
@@ -32,9 +30,6 @@ const mapDispatchToProps = dispatch => ({
   },
   openCollectionDialog: () => {
     dispatch(collectionDialogActions.openCollectionDialog());
-  },
-  openCollectionFilterMapDialog: () => {
-    dispatch(collectionFilterMapDialogActions.openCollectionFilterMapDialog());
   }
 })
 

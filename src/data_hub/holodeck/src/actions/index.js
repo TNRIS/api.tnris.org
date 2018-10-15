@@ -1,6 +1,7 @@
 import * as collectionActions from './collectionActions';
 import * as collectionDialogActions from './collectionDialogActions';
 import * as collectionFilterActions from './collectionFilterActions';
+import * as collectionFilterMapActions from './collectionFilterMapActions';
 import * as collectionFilterMapDialogActions from './collectionFilterMapDialogActions';
 import * as collectionSearcherActions from './collectionSearcherActions';
 import * as resourceActions from './resourceActions';
@@ -11,6 +12,7 @@ export {
   collectionActions,
   collectionDialogActions,
   collectionFilterActions,
+  collectionFilterMapActions,
   collectionFilterMapDialogActions,
   collectionSearcherActions,
   resourceActions,

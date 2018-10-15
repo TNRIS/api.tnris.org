@@ -10,6 +10,10 @@ export default class CollectionFilter extends React.Component {
     this.handleSetFilter = this.handleSetFilter.bind(this);
   }
 
+  componentDidMount() {
+    this.props.setCollectionFilter(this.props.collectionFilterChoices);
+  }
+
   handleOpenFilterMenu(e) {
     let filterName = e.target.id.split('-')[0];
     let filterListElement = document.getElementById(`${filterName}-list`);
@@ -43,9 +47,18 @@ export default class CollectionFilter extends React.Component {
   }
 
   render() {
+    console.log(this.props);
     return (
       <div className='filter-component'>
         <ul className='mdc-list'>
+          <li key='filter-map-button'>
+            <a
+              className='mdc-list-item filter-list-title'
+              id='filter-map-button'
+              onClick={this.props.openCollectionFilterMapDialog}>
+              by geography
+            </a>
+          </li>
           {
             Object.keys(this.props.collectionFilterChoices).map(choice =>
               <li key={choice}>
@@ -71,7 +84,8 @@ export default class CollectionFilter extends React.Component {
                                    id={choiceValue}
                                    name={choice}
                                    value={choiceValue}
-                                   onChange={e => this.handleSetFilter(e.target)}/>
+                                   onChange={e => this.handleSetFilter(e.target)}
+                                   defaultChecked/>
                             <div className='mdc-checkbox__background'>
                               <svg className='mdc-checkbox__checkmark'
                                    viewBox='0 0 24 24'>

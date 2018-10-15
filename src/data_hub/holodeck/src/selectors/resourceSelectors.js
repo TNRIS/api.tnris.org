@@ -1,11 +1,22 @@
 import { createSelector } from 'reselect';
 
-const getResources = (state) => state.collections.selectedCollectionResources;
+const getResources = (state) => state.resources.items;
+const getSelectedResources = (state) => state.collections.selectedCollectionResources;
+
+export const getAllResources = createSelector(
+  [ getResources ],
+  (resources) => {
+    // Check if resources are ready in the state
+    if (resources) {
+      return resources;
+    }
+  }
+)
 
 // selector for building object of downloadable resources subnested within
 // object of area_type_ids
 export const getResourceAreas = createSelector(
-  [ getResources ],
+  [ getSelectedResources ],
   (resources) => {
     // Check if resources are in the state
     if (resources.result) {
@@ -45,7 +56,7 @@ export const getResourceAreas = createSelector(
 
 // selector for building object of area_type key'd list of area_type_ids
 export const getResourceAreaTypes = createSelector(
-  [ getResources ],
+  [ getSelectedResources ],
   (resources) => {
     // Check if resources are in the state
     if (resources.result) {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { MDCDialog } from '@material/dialog';
 
-import CollectionFilterMap from './CollectionFilterMap';
+import CollectionFilterMapContainer from '../containers/CollectionFilterMapContainer';
 
 export default class CollectionFilterMapDialog extends React.Component {
     constructor(props) {
@@ -26,7 +26,9 @@ export default class CollectionFilterMapDialog extends React.Component {
     }
 
     dialogContent() {
-      return <CollectionFilterMap />
+      if (this.props.showCollectionFilterMapDialog) {
+        return <CollectionFilterMapContainer />
+      }
     }
 
     closeCollectionFilterMapDialog() {
@@ -40,20 +42,23 @@ export default class CollectionFilterMapDialog extends React.Component {
               id="filter_map_dialog"
               className="mdc-dialog"
               role="alertdialog"
-              aria-labelledby="map_dialog-label"
-              aria-describedby="map_dialog-description">
+              aria-labelledby="filter_map_dialog-label"
+              aria-describedby="filter_map_dialog-description">
               <div className="mdc-dialog__surface">
                 <header className='mdc-dialog__header'>
                   <h2 className='mdc-dialog__header__title'>
-                    map
+                    filter map
                   </h2>
                 </header>
                 <section className='mdc-dialog__body'>
                   {this.dialogContent()}
                 </section>
-                <footer className="mdc-dialog__footer">
-                    <button onClick={this.closeCollectionFilterMapDialog}>CLOSE</button>
-                </footer>
+                <button
+                  className="mdc-fab app-fab--absolute"
+                  aria-label="Close"
+                  onClick={this.closeCollectionFilterMapDialog}>
+                  <span className="mdc-fab__icon material-icons">close</span>
+                </button>
               </div>
               <div className="mdc-dialog__backdrop"></div>
           </aside>

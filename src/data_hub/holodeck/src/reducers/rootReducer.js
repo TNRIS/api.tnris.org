@@ -3,6 +3,7 @@ import { combineReducers } from "redux";
 import collections from './collectionReducer';
 import collectionDialog from './collectionDialogReducer';
 import collectionFilter from './collectionFilterReducer';
+import collectionFilterMap from './collectionFilterMapReducer';
 import collectionFilterMapDialog from './collectionFilterMapDialogReducer';
 import collectionSearcher from './collectionSearcherReducer';
 import resources from './resourceReducer';
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
   collections,
   collectionDialog,
   collectionFilter,
+  collectionFilterMap,
   collectionFilterMapDialog,
   collectionSearcher,
   resources,

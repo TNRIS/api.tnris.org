@@ -38,7 +38,6 @@ export default class Catalog extends React.Component {
         <ToolDrawer />
         <Header />
         <div className='catalog'>
-          <button onClick={this.props.openCollectionFilterMapDialog}>show map</button>
           <CollectionDialogContainer />
           <CollectionFilterMapDialogContainer />
           <ul className='catalog-list mdc-image-list mdc-image-list--with-text-protection'>

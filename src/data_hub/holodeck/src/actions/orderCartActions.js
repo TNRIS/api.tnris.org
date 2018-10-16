@@ -82,17 +82,19 @@ export function uploadOrderFile(collectionId, cartInfo) {
   const url = process.env.CONTACT_URL;
   const bucket = 'https://' + process.env.CONTACT_UPLOAD_BUCKET + '.s3.amazonaws.com/';
   let policyUrl;
-  if (cartInfo.description === 'AOI') {
+  if (cartInfo.type === 'AOI') {
     policyUrl = process.env.ZIP_UPLOAD_POLICY_URL;
   }
-  else if (cartInfo.description === 'Screenshot') {
+  else if (cartInfo.type === 'Screenshot') {
     policyUrl = process.env.IMAGE_UPLOAD_POLICY_URL;
   }
   return (dispatch, getState) => {
     dispatch(uploadOrderBegin());
     return getPolicy(policyUrl, dispatch)
            .then((s3policy) => {
-             Array.from(cartInfo.files).forEach((file) => {
+             const cartFiles = Array.from(cartInfo.files);
+             const fileDetails = {};
+             cartFiles.forEach((file, index) => {
                console.log(file);
                console.log(bucket);
                console.log(file.name);
@@ -114,59 +116,36 @@ export function uploadOrderFile(collectionId, cartInfo) {
                formData.append('file', file, file.name);
 
                const payload = {
-                 // url: bucket,
                  method: 'POST',
-                 // headers: {
-                 //    // "Content-Type": "application/x-www-form-urlencoded",
-                 //    // "Content-Type": "multipart/form-data"
-                 //    "Content-Type": "application/json"
-                 //    // "Content-Type": 'image'
-                 //    // Accept: "application/json, text/plain, */*"
-                 // },
-                 // mode: 'no-cors',
                  body: formData
+               };
+
+               fileDetails[index] = {
+                 'filename': file.name,
+                 'link': "https://s3.amazonaws.com/contact-uploads/" + fileKey
                };
 
                fetch(bucket, payload)
                 .then(handleErrors)
-                // .then(res => res.json())
                 .then(res => {
-                  console.log(res);
-                  if (res.status === 201) {
-                    console.log(cartInfo);
-                    // addCollectionToCart(collectionId, )
+                  console.log(index);
+                  if (res.status === 201 && index === cartFiles.length - 1) {
+                    const newCart = {
+                      ...cartInfo,
+                      attachments: fileDetails
+                    };
+                    console.log(collectionId);
+                    console.log(newCart);
+                    dispatch(addCollectionToCart(collectionId, newCart));
                     dispatch(uploadOrderSuccess());
                   }
-                  else {
+                  else if (res.status !== 201) {
                     dispatch(uploadOrderFailure(res.statusText));
                   }
                 })
                 .catch(error => dispatch(uploadOrderFailure(error)));
-
              });
            })
            .catch(error => dispatch(uploadOrderFailure(error)));
-
-
-    // const payload = {
-    //   method: 'POST',
-    //   headers: {
-    //     "Content-Type": "application/json; charset=utf-8"
-    //   },
-    //   body: JSON.stringify(cartInfo)
-    // };
-    // fetch(url, payload)
-    // .then(handleErrors)
-    // .then(res => res.json())
-    // .then(json => {
-    //   console.log(json);
-    //   if (json.status === "success") {
-    //     dispatch(uploadOrderSuccess());
-    //   }
-    //   else if (json.status === "error") {
-    //     dispatch(uploadOrderFailure(json.message));
-    //   }
-    // })
-    // .catch(error => dispatch(uploadOrderFailure(error)));
   };
 }

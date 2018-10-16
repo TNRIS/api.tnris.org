@@ -3,6 +3,7 @@ import {MDCTextField} from '@material/textfield';
 import {MDCFloatingLabel} from '@material/floating-label';
 import {MDCLineRipple} from '@material/line-ripple';
 import {MDCRipple} from '@material/ripple';
+import {MDCSwitch} from '@material/switch';
 
 class OrderTnrisDataForm extends Component {
 
@@ -16,6 +17,11 @@ class OrderTnrisDataForm extends Component {
         aoiUpload: '',
         screenshotUpload: '',
         textDescription: '',
+        breaklines: false,
+        dem: false,
+        hypso: false,
+        laz: false,
+        las: false,
         display: startDisplay,
         invalid: null
       }
@@ -37,21 +43,12 @@ class OrderTnrisDataForm extends Component {
     document.querySelectorAll('.mdc-button').forEach((mb) => {
       new MDCRipple(mb);
     });
+    document.querySelectorAll('.mdc-switch').forEach((ms) => {
+      new MDCSwitch(ms);
+    })
   }
 
   componentWillReceiveProps(nextProps) {
-    // console.log(nextProps);
-    // console.log(this.state.display);
-    // if (nextProps.uploading) {
-    //   this.setState({
-    //     display: 'uploading'
-    //   });
-    // }
-    // else if (nextProps.orders.hasOwnProperty(nextProps.selectedCollection)) {
-    //   this.setState({
-    //     display: 'added'
-    //   });
-    // }
     if (nextProps.uploading === false &&
         nextProps.uploadError !== null &&
         this.state.display === 'uploading') {
@@ -71,8 +68,6 @@ class OrderTnrisDataForm extends Component {
   }
 
   componentDidUpdate () {
-    // console.log(this.state);
-    console.log(this.props);
     if (this.state.orderType === 'Partial') {
       document.getElementsByName("portionDescription").forEach((input) => {
         input.required = true;
@@ -112,15 +107,15 @@ class OrderTnrisDataForm extends Component {
         });
         break;
       default:
-        document.getElementsByName("textDescription").forEach((textarea) => {
-          textarea.required = true;
-        });
+        break;
     }
   }
 
   handleChange(event) {
     const name = event.target.name
     const value = event.target.value
+    console.log(name);
+    console.log(value);
     const nextState = {};
     nextState[name] = value;
     if (name === 'orderType' && value === 'Full') {
@@ -135,7 +130,7 @@ class OrderTnrisDataForm extends Component {
   submitForm (event) {
     event.preventDefault();
 
-    const cartInfo = { type: this.state.orderType };
+    const cartInfo = { coverage: this.state.orderType };
     if (this.state.orderType === 'Partial') {
       switch (this.state.portionDescription) {
         case 'AOI':
@@ -146,7 +141,7 @@ class OrderTnrisDataForm extends Component {
             });
           }
           else {
-            cartInfo['description'] = 'AOI';
+            cartInfo['type'] = 'AOI';
             cartInfo['files'] = document.getElementById('order-partial-aoi-file').files;
             this.setState({display: 'uploading'});
             this.props.uploadOrderFile(this.props.selectedCollection, cartInfo);
@@ -164,7 +159,7 @@ class OrderTnrisDataForm extends Component {
               return false;
             }
             else if (file.size <= 5242880 && index >= screenshotFileList.length - 1) {
-              cartInfo['description'] = 'Screenshot';
+              cartInfo['type'] = 'Screenshot';
               cartInfo['files'] = document.getElementById('order-partial-screenshot-file').files;
               this.setState({display: 'uploading'});
               this.props.uploadOrderFile(this.props.selectedCollection, cartInfo);
@@ -176,39 +171,31 @@ class OrderTnrisDataForm extends Component {
           });
           break;
         case 'Text Description':
-          cartInfo['description'] = 'Text';
+          cartInfo['type'] = 'Text';
           cartInfo['description'] = this.state.textDescription;
           this.props.addCollectionToCart(this.props.selectedCollection, cartInfo);
+          this.setState({
+            display: 'added',
+            invalid: null
+          });
           break;
         default:
-          cartInfo['description'] = 'Text';
+          cartInfo['type'] = 'Text';
           cartInfo['description'] = this.state.textDescription;
           this.props.addCollectionToCart(this.props.selectedCollection, cartInfo);
+          this.setState({
+            display: 'added',
+            invalid: null
+          });
       }
     }
-
-    // if (this.state.recaptcha !== '') {
-    //   this.setState({
-    //     display: 'submitting'
-    //   });
-    //   console.log('submitting');
-    //   const fullName = this.state.firstName + " " + this.state.lastName;
-    //
-    //   const formInfo = {
-    //     'Name': fullName,
-    //     'Email': this.state.email,
-    //     'Collection': this.props.collection.name,
-    //     'Category': this.props.collection.category,
-    //     'Software': this.state.software,
-    //     'Message': this.state.question,
-    //     'form_id': 'data-tnris-org-inquiry',
-    //     'recaptcha': this.state.recaptcha
-    //   };
-    //
-    //   console.log(formInfo);
-    //   this.props.submitContactTnrisForm(formInfo);
-    // }
-
+    else if (this.state.orderType === 'Full') {
+      this.props.addCollectionToCart(this.props.selectedCollection, cartInfo);
+      this.setState({
+        display: 'added',
+        invalid: null
+      });
+    }
   }
 
   render() {
@@ -218,11 +205,25 @@ class OrderTnrisDataForm extends Component {
     const textDescriptionClass = this.state.portionDescription === 'Text Description' ? "text-description-field" : "hidden-field";
     const invalid = this.state.invalid ? this.state.invalid : '';
     let showHTML;
-    let formFields;
-    if (this.collection.category === 'Lidar') {
-      formFields = (
+    let lidarFields;
+    if (this.collection.category.indexOf('Lidar') !== -1) {
+      lidarFields = (
         <div>
-
+          <div className="mdc-switch">
+            <div className="mdc-switch__track"></div>
+            <div className="mdc-switch__thumb-underlay">
+              <div className="mdc-switch__thumb">
+                <input type="checkbox"
+                       id="basic-switch"
+                       className="mdc-switch__native-control"
+                       name="breaklines"
+                       role="switch"
+                       aria-checked="false"
+                       onChange={this.handleChange} />
+              </div>
+            </div>
+          </div>
+          <label htmlFor="basic-switch">off/on</label>
         </div>
       )
     }
@@ -357,7 +358,7 @@ class OrderTnrisDataForm extends Component {
             </div>
           </div>
 
-          {formFields}
+          {lidarFields}
 
           <p className="invalid-prompt">{invalid}</p>
 

@@ -3,7 +3,6 @@ import {MDCTextField} from '@material/textfield';
 import {MDCFloatingLabel} from '@material/floating-label';
 import {MDCLineRipple} from '@material/line-ripple';
 import {MDCRipple} from '@material/ripple';
-import {MDCSelect} from '@material/select';
 
 class OrderTnrisDataForm extends Component {
 
@@ -17,7 +16,8 @@ class OrderTnrisDataForm extends Component {
         aoiUpload: '',
         screenshotUpload: '',
         textDescription: '',
-        display: startDisplay
+        display: startDisplay,
+        invalid: null
       }
       this.collection = this.props.collections[this.props.selectedCollection];
       this.submitForm = this.submitForm.bind(this);
@@ -37,19 +37,42 @@ class OrderTnrisDataForm extends Component {
     document.querySelectorAll('.mdc-button').forEach((mb) => {
       new MDCRipple(mb);
     });
-    // new MDCSelect(document.querySelector('.mdc-select'));
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.orders.hasOwnProperty(nextProps.selectedCollection)) {
+    // console.log(nextProps);
+    // console.log(this.state.display);
+    // if (nextProps.uploading) {
+    //   this.setState({
+    //     display: 'uploading'
+    //   });
+    // }
+    // else if (nextProps.orders.hasOwnProperty(nextProps.selectedCollection)) {
+    //   this.setState({
+    //     display: 'added'
+    //   });
+    // }
+    if (nextProps.uploading === false &&
+        nextProps.uploadError !== null &&
+        this.state.display === 'uploading') {
       this.setState({
-        display: 'added'
+        display: 'form',
+        invalid: 'There was a problem with your file upload. Please try again.'
+      });
+    }
+    else if (nextProps.uploading === false &&
+             nextProps.uploadError === null &&
+             this.state.display === 'uploading') {
+      this.setState({
+        display: 'added',
+        invalid: null
       });
     }
   }
 
   componentDidUpdate () {
-    console.log(this.state);
+    // console.log(this.state);
+    console.log(this.props);
     if (this.state.orderType === 'Partial') {
       document.getElementsByName("portionDescription").forEach((input) => {
         input.required = true;
@@ -62,15 +85,36 @@ class OrderTnrisDataForm extends Component {
       });
     }
 
-    if (this.state.portionDescription === 'Text Description') {
-      document.getElementsByName("textDescription").forEach((textarea) => {
-        textarea.required = true;
-      });
-    }
-    else {
-      document.getElementsByName("textDescription").forEach((textarea) => {
-        textarea.required = false;
-      });
+    document.getElementsByName("aoiUpload").forEach((fileInput) => {
+      fileInput.required = false;
+    });
+    document.getElementsByName("screenshotUpload").forEach((fileInput) => {
+      fileInput.required = false;
+    });
+    document.getElementsByName("textDescription").forEach((textarea) => {
+      textarea.required = false;
+    });
+
+    switch (this.state.portionDescription) {
+      case 'AOI':
+        document.getElementsByName("aoiUpload").forEach((fileInput) => {
+          fileInput.required = true;
+        });
+        break;
+      case 'Screenshot':
+        document.getElementsByName("screenshotUpload").forEach((fileInput) => {
+          fileInput.required = true;
+        });
+        break;
+      case 'Text Description':
+        document.getElementsByName("textDescription").forEach((textarea) => {
+          textarea.required = true;
+        });
+        break;
+      default:
+        document.getElementsByName("textDescription").forEach((textarea) => {
+          textarea.required = true;
+        });
     }
   }
 
@@ -90,7 +134,59 @@ class OrderTnrisDataForm extends Component {
 
   submitForm (event) {
     event.preventDefault();
-    this.props.addCollectionToCart(this.props.selectedCollection, this.props.collections[this.props.selectedCollection]);
+
+    const cartInfo = { type: this.state.orderType };
+    if (this.state.orderType === 'Partial') {
+      switch (this.state.portionDescription) {
+        case 'AOI':
+          if (document.getElementById('order-partial-aoi-file').files[0].size > 20971520) {
+            this.setState({
+              display: 'form',
+              invalid: 'Your zipfile exceeds the 20 MB limit. Please choose another zipfile.'
+            });
+          }
+          else {
+            cartInfo['description'] = 'AOI';
+            cartInfo['files'] = document.getElementById('order-partial-aoi-file').files;
+            this.setState({display: 'uploading'});
+            this.props.uploadOrderFile(this.props.selectedCollection, cartInfo);
+          }
+          break;
+        case 'Screenshot':
+          const screenshotFileList = document.getElementById('order-partial-screenshot-file').files;
+          Array.from(screenshotFileList).every((file, index) => {
+            console.log(file.size, index);
+            if (file.size > 5242880) {
+              this.setState({
+                display: 'form',
+                invalid: 'One or more of your screenshots exceeds the 5 MB limit. Please choose another image.'
+              });
+              return false;
+            }
+            else if (file.size <= 5242880 && index >= screenshotFileList.length - 1) {
+              cartInfo['description'] = 'Screenshot';
+              cartInfo['files'] = document.getElementById('order-partial-screenshot-file').files;
+              this.setState({display: 'uploading'});
+              this.props.uploadOrderFile(this.props.selectedCollection, cartInfo);
+              return true;
+            }
+            else {
+              return true;
+            }
+          });
+          break;
+        case 'Text Description':
+          cartInfo['description'] = 'Text';
+          cartInfo['description'] = this.state.textDescription;
+          this.props.addCollectionToCart(this.props.selectedCollection, cartInfo);
+          break;
+        default:
+          cartInfo['description'] = 'Text';
+          cartInfo['description'] = this.state.textDescription;
+          this.props.addCollectionToCart(this.props.selectedCollection, cartInfo);
+      }
+    }
+
     // if (this.state.recaptcha !== '') {
     //   this.setState({
     //     display: 'submitting'
@@ -120,6 +216,7 @@ class OrderTnrisDataForm extends Component {
     const uploadAoiClass = this.state.portionDescription === 'AOI' ? "file-upload-field" : "hidden-field";
     const uploadScreenshotClass = this.state.portionDescription === 'Screenshot' ? "file-upload-field" : "hidden-field";
     const textDescriptionClass = this.state.portionDescription === 'Text Description' ? "text-description-field" : "hidden-field";
+    const invalid = this.state.invalid ? this.state.invalid : '';
     let showHTML;
     let formFields;
     if (this.collection.category === 'Lidar') {
@@ -218,9 +315,9 @@ class OrderTnrisDataForm extends Component {
                   <div className="mdc-radio__inner-circle"></div>
                 </div>
               </div>
-              <label htmlFor="order-partial-screenshot-input">Screenshot with Text Description</label>
+              <label htmlFor="order-partial-screenshot-input">Screenshot Image(s)</label>
             </div>
-            <div className='mdc-typography--caption'>Select a .png, .jpg, or .jpeg image to upload. Multiple images are accepted. Maximum allowed file size is 20 MB.</div>
+            <div className='mdc-typography--caption'>Select a .png, .jpg, or .jpeg image to upload. Multiple images are accepted. Maximum allowed file size is 5 MB.</div>
             <div className={uploadScreenshotClass}>
               <input type="file"
                      id="order-partial-screenshot-file"
@@ -245,7 +342,7 @@ class OrderTnrisDataForm extends Component {
               <label htmlFor="order-partial-text-input">Text Description</label>
             </div>
             <div className={textDescriptionClass}>
-              <div className='mdc-typography--caption'>Please describe the portion of data you need in the text box below. The more detail provided will vastly improve the response and turn around time of your order.</div>
+              <div className='mdc-typography--caption'>Please describe the portion of data you need in the text box below. Providing as much detail as possible will vastly improve the response and turn around time of your order.</div>
               <div id="order-partial-text-description" className="mdc-text-field mdc-text-field--textarea">
                 <textarea id="order-partial-text-description-input" className="mdc-text-field__input"
                           rows="8" cols="40"
@@ -261,6 +358,8 @@ class OrderTnrisDataForm extends Component {
           </div>
 
           {formFields}
+
+          <p className="invalid-prompt">{invalid}</p>
 
           <div className="submit-button">
             <input type="submit" value="Add to Shopping Cart" id="order-tnris-data-submit" className="mdc-button mdc-button--raised"/>
@@ -289,6 +388,15 @@ class OrderTnrisDataForm extends Component {
           <p className="mdc-typography--body2">
             Please visit your shopping cart to finalize your order.
           </p>
+        </div>
+      );
+    }
+    else if (this.state.display === 'uploading') {
+      showHTML = (
+        <div className="order-tnris-data-cart">
+          <div className='mdc-typography--headline6'>
+            Uploading files...
+          </div>
         </div>
       );
     }

@@ -1263,30 +1263,30 @@ class RemView(models.Model):
         return self.resource_id
 
 
-  class AreasView(models.Model):
-      """
-      Areas view presents resource table with aggregated collection_id
-      """
+class AreasView(models.Model):
+  """
+  Areas view presents resource table with aggregated collection_id
+  """
 
-      class Meta:
-          managed = False
-          db_table = "areas"
-          verbose_name = 'Areas'
-          verbose_name_plural = 'Areas'
+  class Meta:
+      managed = False
+      db_table = "areas"
+      verbose_name = 'Areas'
+      verbose_name_plural = 'Areas'
 
-      area_type_id = models.UUIDField(
-          'Area Type ID',
-          primary_key=True
-      )
-      area_type_name = models.TextField(
-          'Area Type Name'
-      )
-      area_type = models.TextField(
-          'Area Type'
-      )
-      collections = models.TextField(
-          'Collections'
-      )
+  area_type_id = models.UUIDField(
+      'Area Type ID',
+      primary_key=True
+  )
+  area_type_name = models.TextField(
+      'Area Type Name'
+  )
+  area_type = models.TextField(
+      'Area Type'
+  )
+  collections = models.TextField(
+      'Collections'
+  )
 
-      def __str__(self):
-          return str(self.area_type_id)
+  def __str__(self):
+      return str(self.area_type_id)

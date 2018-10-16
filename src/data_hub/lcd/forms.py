@@ -23,7 +23,7 @@ from .models import (Collection,
                      UseRelate,
                      UseType)
 import os
-import boto3
+import boto3, uuid
 
 class PictureWidget(forms.widgets.Widget):
     def render(self, name, value, attrs=None):
@@ -40,8 +40,7 @@ class ImageForm(forms.ModelForm):
         model = Image
         fields = ('__all__')
 
-    image_url = forms.FileField(required=False, widget=PictureWidget)
-
+    image_url = forms.FileField(required=True, widget=PictureWidget)
 
 
 class CollectionForm(forms.ModelForm):
@@ -57,7 +56,7 @@ class CollectionForm(forms.ModelForm):
     carto_map_id = forms.CharField(required=False, widget=forms.TextInput(attrs={'style':'width:758px'}),max_length=50)
 
     overview_image = forms.FileField(required=False, widget=PictureWidget)
-    thumbnail_image = forms.FileField(required=False, widget=PictureWidget)
+    # thumbnail_image = forms.FileField(required=False, widget=PictureWidget)
     natural_image = forms.FileField(required=False, widget=PictureWidget)
     urban_image = forms.FileField(required=False, widget=PictureWidget)
 
@@ -93,6 +92,7 @@ class CollectionForm(forms.ModelForm):
     file_types = forms.MultipleChoiceField(required=False, widget=forms.SelectMultiple(attrs={'title': 'Hold down ctrl to select multiple values',}), choices=[])
     resolutions = forms.MultipleChoiceField(required=False, widget=forms.SelectMultiple(attrs={'title': 'Hold down ctrl to select multiple values',}), choices=[])
     uses = forms.MultipleChoiceField(required=False, widget=forms.SelectMultiple(attrs={'title': 'Hold down ctrl to select multiple values',}), choices=[])
+    thumbnail_image = forms.ChoiceField(required=False, choices=[])
 
     # generic function to retrieve the initial relate values from the relate table
     def attribute_initial_values(self, name, relate_table, id_field):
@@ -115,6 +115,7 @@ class CollectionForm(forms.ModelForm):
             self.fields['file_types'].choices = self.create_relate_field('file_type_id', 'file_type', FileType, 'file_type')
             self.fields['resolutions'].choices = self.create_relate_field('resolution_type_id', 'resolution', ResolutionType, 'resolution')
             self.fields['uses'].choices = self.create_relate_field('use_type_id', 'use_type', UseType, 'use_type')
+            self.fields['thumbnail_image'].choices = self.create_relate_field('image_url', 'image_id', Image, 'image_id')
             self.attribute_initial_values('categories', CategoryRelate, 'category_type_id')
             self.attribute_initial_values('projections', EpsgRelate, 'epsg_type_id')
             self.attribute_initial_values('file_types', FileTypeRelate, 'file_type_id')
@@ -145,7 +146,6 @@ class CollectionForm(forms.ModelForm):
         for add in adds:
             collection_record = Collection.objects.get(collection_id=self.instance.collection_id)
             args = {'collection_id': collection_record}
-
             type_arg = {}
             type_arg[id_field] = add
             type_record = type_table.objects.get(**type_arg)
@@ -167,6 +167,28 @@ class CollectionForm(forms.ModelForm):
         print('%s upload success!' % key)
         # update link in database table
         setattr(self.instance, field, "https://s3.amazonaws.com/data.tnris.org/" + key)
+        return
+
+    def inline_image_handler(self, file):
+        new_uuid = uuid.uuid4()
+        file_ext = str(file).split('.')[-1]
+        # upload image
+        key = "%s/assets/%s.%s" % (self.instance.collection_id, new_uuid, file_ext)
+        # print(key + file_ext)
+        response = self.client.put_object(
+            Bucket='data.tnris.org',
+            ACL='public-read',
+            Key=key,
+            Body=file
+        )
+        print('%s upload success!' % key)
+        # update link in database table
+        args = {
+            'image_id': new_uuid,
+            'image_url': "https://s3.amazonaws.com/data.tnris.org/" + key,
+            'collection_id': self.instance
+        }
+        Image(**args).save()
         return
 
     # generic function to upload zipfile and update dbase link
@@ -276,6 +298,8 @@ class CollectionForm(forms.ModelForm):
                 self.handle_image(f, files[f])
             elif f in zipfile_fields and self.cleaned_data[delete_checkbox] is False:
                 self.handle_zipfile(f, files[f])
+            elif 'image_collections' in f:
+                self.inline_image_handler(files[f])
             else:
                 print('New file uploaded but delete checkbox says "no!":', f)
         # iterate deletion checkboxes and if checked then delete associated
@@ -391,11 +415,16 @@ class ResourceForm(forms.ModelForm):
         # iterate all (except last) s3 keys adding each as new record in resource table
         for idx, f in enumerate(self.list):
             print(f['Key'])
+            if f['Key'] == prefix:
+                continue
             link = "https://s3.amazonaws.com/data.tnris.org/" + f['Key']
             # disassemble filename
-            filename = f['Key'].split("/")[-1]
-            area_code = filename.split("_")[-2]
-            resource_type_abbr = filename.split("_")[-1].replace('.zip', '').upper()
+            try:
+                filename = f['Key'].split("/")[-1]
+                area_code = filename.split("_")[-2]
+                resource_type_abbr = filename.split("_")[-1].replace('.zip', '').upper()
+            except:
+                raise forms.ValidationError('Uh oh, Master! This resource has a bad filename! ' + f['Key'])
             # get the area_type
             try:
                 area_obj = self.get_area_obj(area_code)

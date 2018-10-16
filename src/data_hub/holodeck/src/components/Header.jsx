@@ -9,6 +9,7 @@ export default class Header extends React.Component {
   constructor(props) {
     super(props);
     this.handleOpenToolDrawer = this.handleOpenToolDrawer.bind(this);
+    this.handleOpenOrderCartDialog = this.handleOpenOrderCartDialog.bind(this);
   }
 
   componentDidMount() {
@@ -25,6 +26,10 @@ export default class Header extends React.Component {
 
   handleOpenToolDrawer() {
     this.toolDrawer.open = !this.toolDrawer.open;
+  }
+
+  handleOpenOrderCartDialog() {
+    this.props.openOrderCartDialog();
   }
 
   render() {
@@ -51,6 +56,9 @@ export default class Header extends React.Component {
           </section>
           <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
             {/* <SortContainer /> */}
+            <a onClick={this.handleOpenOrderCartDialog} className="mdc-top-app-bar__action-item">
+              <i className="material-icons mdc-top-app-bar__navigation-icon">shopping_cart</i>
+            </a>
             <a onClick={this.handleOpenToolDrawer} className="mdc-top-app-bar__action-item">
               <i className="material-icons mdc-top-app-bar__navigation-icon">search</i>
             </a>

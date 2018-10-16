@@ -6,6 +6,9 @@ import Drawer from './Drawer';
 import Footer from './Footer';
 import Header from './Header';
 import CollectionFilterMapDialogContainer from '../containers/CollectionFilterMapDialogContainer';
+import HeaderContainer from '../containers/HeaderContainer';
+// import MapDialogContainer from '../containers/MapDialogContainer';
+import OrderCartDialogContainer from '../containers/OrderCartDialogContainer';
 import ToolDrawer from './ToolDrawer';
 import loadingImage from '../images/loading.jpg';
 
@@ -36,9 +39,11 @@ export default class Catalog extends React.Component {
       <div className="catalog-component">
         <Drawer />
         <ToolDrawer />
-        <Header />
+        <HeaderContainer />
         <div className='catalog'>
           <CollectionDialogContainer />
+          <OrderCartDialogContainer />
+          {/* <MapDialogContainer /> */}
           <CollectionFilterMapDialogContainer />
           <ul className='catalog-list mdc-image-list mdc-image-list--with-text-protection'>
             {this.props.visibleCollections ? this.props.visibleCollections.map(collectionId =>

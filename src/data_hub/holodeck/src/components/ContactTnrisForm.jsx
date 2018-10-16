@@ -56,6 +56,11 @@ class ContactTnrisForm extends Component {
     }
   }
 
+  componentWillUnmount () {
+    // on umount, dispatch contact success to reset the store
+    this.props.submitContactSuccess();
+  }
+
   handleChange(event) {
     const name = event.target.name
     const value = event.target.value
@@ -71,7 +76,7 @@ class ContactTnrisForm extends Component {
   }
 
   submitForm (event) {
-    event.preventDefault()
+    event.preventDefault();
 
     if (this.state.recaptcha !== '') {
       this.setState({
@@ -109,7 +114,7 @@ class ContactTnrisForm extends Component {
     if (this.state.display === 'form') {
       showHTML = (
         <div>
-          <p>
+          <p className="mdc-typography--body2">
             Complete the form below to inquire with TNRIS about the <strong>{this.props.collection.name}</strong> dataset...
           </p>
 
@@ -177,10 +182,10 @@ class ContactTnrisForm extends Component {
             <div className="mdc-line-ripple"></div>
           </div>
 
-          <ReCAPTCHA sitekey="6Lf8GP8SAAAAAFx2H53RtfDO18x7S1q_0pGNdmbd" onChange={this.recaptchaChange} />
+          <ReCAPTCHA className="recaptcha-container" sitekey="6Lf8GP8SAAAAAFx2H53RtfDO18x7S1q_0pGNdmbd" onChange={this.recaptchaChange} />
           <p className="invalid-prompt">{this.state.invalid}</p>
 
-          <div>
+          <div className="submit-button">
             <input type="submit" value="Submit" id="contact-tnris-submit" className="mdc-button mdc-button--raised"/>
           </div>
         </div>
@@ -189,7 +194,7 @@ class ContactTnrisForm extends Component {
     else if (this.state.display === 'success') {
       showHTML = (
         <div className="contact-tnris-form-success">
-          <p>
+          <p className="mdc-typography--body2">
             <span><strong>Success!</strong></span>
             <br />
             Thank you for submitting your inquiry. We review submissions in a timely manner. (unless you are claiming our <strong>"data is corrupt"</strong>; in which case, we will NOT respond because our data is NOT corrupt. you are just a dumb-dumb.)
@@ -200,7 +205,7 @@ class ContactTnrisForm extends Component {
     else if (this.state.display === 'error') {
       showHTML = (
         <div className="contact-tnris-form-error">
-          <p>
+          <p className="mdc-typography--body2">
             <span><strong>Error!</strong></span>
             <br />
             Unfortunately, we have encountered an error. Please wait a moment, refresh the page, and try again.
@@ -214,7 +219,7 @@ class ContactTnrisForm extends Component {
     else if (this.state.display === 'submitting') {
       showHTML = (
         <div className="contact-tnris-form-submitting">
-          <p>
+          <p className="mdc-typography--body2">
             <span><strong>Submitting form...</strong></span>
           </p>
         </div>

@@ -7,6 +7,8 @@ import * as collectionSearcherActions from './collectionSearcherActions';
 import * as resourceActions from './resourceActions';
 import * as sortActions from './sortActions';
 import * as contactActions from './contactActions';
+import * as orderCartDialogActions from './orderCartDialogActions';
+import * as orderCartActions from './orderCartActions';
 
 export {
   collectionActions,
@@ -17,5 +19,7 @@ export {
   collectionSearcherActions,
   resourceActions,
   sortActions,
-  contactActions
+  contactActions,
+  orderCartDialogActions,
+  orderCartActions
 };

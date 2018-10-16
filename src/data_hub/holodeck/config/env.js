@@ -13,6 +13,7 @@ if (!NODE_ENV) {
     'The NODE_ENV environment variable is required but was not specified.'
   );
 }
+const contactUrl = process.env.NODE_ENV === 'development' ? 'http://localhost:8001/' : 'https://contact.tnris.org/';
 
 // https://github.com/bkeepers/dotenv#what-other-env-files-can-i-use
 var dotenvFiles = [
@@ -76,7 +77,8 @@ function getClientEnvironment(publicUrl) {
         // For example, <img src={process.env.PUBLIC_URL + '/img/logo.png'} />.
         // This should only be used as an escape hatch. Normally you would put
         // images into the `src` and `import` them in code to get their paths.
-        PUBLIC_URL: publicUrl
+        PUBLIC_URL: publicUrl,
+        CONTACT_URL: contactUrl
         // OSTICKET_API_KEY: process.env.OSTICKET_API_KEY
       }
     );

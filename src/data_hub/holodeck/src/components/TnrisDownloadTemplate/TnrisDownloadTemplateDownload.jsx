@@ -14,12 +14,15 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
       this.createLayers = this.createLayers.bind(this);
       this.toggleLayers = this.toggleLayers.bind(this);
       this.layerRef = {};
+      this.stateMinZoom = 5;
+      this.quadMinZoom = 7;
+      this.qquadMinZoom = 8;
   }
 
   componentDidMount() {
     // on mount/load, try and launch the map. if the api response with the list
     // of downloadable resources hasn't returned we won't launch it
-    if (this.props.loadingResources === false) {
+    if (this.props.loadingResources === false && this.props.selectedCollectionResources.result.length > 0) {
       this.areaLookup = this.props.resourceAreas;
       this.createMap();
     }
@@ -28,7 +31,7 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
   componentDidUpdate () {
     // when the api response with the list of downloadable resources finally
     // returns, the component will update so we launch the map at that time
-    if (this.props.loadingResources === false) {
+    if (this.props.loadingResources === false && this.props.selectedCollectionResources.result.length > 0) {
       this.areaLookup = this.props.resourceAreas;
       this.createMap();
     }
@@ -38,6 +41,16 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
     // if popup is open, close it
     if (document.querySelector('.mapboxgl-popup')) {
       document.querySelector('.mapboxgl-popup').remove();
+    }
+
+    if (areaType === 'qquad') {
+      map.setMinZoom(this.qquadMinZoom);
+    }
+    else if (areaType === 'quad') {
+      map.setMinZoom(this.quadMinZoom);
+    }
+    else {
+      map.setMinZoom(this.stateMinZoom);
     }
     // iterate layerRef for layers in map by areaType key
     Object.keys(this.layerRef).map(layer => {
@@ -79,10 +92,15 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
     let startLayer = 'qquad';
     if (areaTypesAry.includes('state')) {
       startLayer = 'state';
+      map.setMinZoom(this.stateMinZoom);
     } else if (areaTypesAry.includes('county')) {
       startLayer = 'county';
+      map.setMinZoom(this.stateMinZoom);
     } else if (areaTypesAry.includes('quad')) {
       startLayer = 'quad';
+      map.setMinZoom(this.quadMinZoom);
+    } else {
+      map.setMinZoom(this.qquadMinZoom);
     }
 
     // iterate our area_types so we can add them to different layers for

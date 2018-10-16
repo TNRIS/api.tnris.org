@@ -32,7 +32,7 @@ function handleErrors(response) {
 
 export function submitContactTnrisForm(formInfo) {
   // const url = 'https://tnris.supportsystem.com/api/tickets.json';
-  const url = 'http://localhost:8001/';
+  const url = process.env.CONTACT_URL;
   return (dispatch, getState) => {
     dispatch(submitContactBegin());
     const payload = {
@@ -43,7 +43,6 @@ export function submitContactTnrisForm(formInfo) {
       },
       body: JSON.stringify(formInfo)
     };
-    console.log(payload);
     fetch(url, payload)
     .then(handleErrors)
     .then(res => res.json())

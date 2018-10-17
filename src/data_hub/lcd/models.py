@@ -867,32 +867,16 @@ class Collection(models.Model):
         # set aside list for compiling keys
         key_list = []
         # list Objects
+        collection_prefix = str(self.collection_id) + '/assets'
         response = client.list_objects_v2(
             Bucket='data.tnris.org',
-            Prefix='collection_id/assets'
+            Prefix=collection_prefix
         )
         print(response)
         # add image keys to list
-        # d_files = ['overview.jpg',
-        #            'thumbnail.jpg',
-        #            'natural.jpg',
-        #            'urban.jpg']
-        # for f in d_files:
-        #     key = "%s/assets/%s" % (self.collection_id, f)
-        #     key_list.append({'Key':key})
-
-        # add zipfile keys to list
-        z_files = ['-supplemental-report.zip',
-                   '-lidar-breaklines.zip',
-                   '-tile-index.zip']
-
-        urlized_nm = self.name.lower().replace(', ', '-').replace(' & ', '-').replace(' ', '-').replace('(', '').replace(')', '').replace('\\', '-').replace('/', '-').replace('&', '').replace(',', '-')
-
-        for f in z_files:
-            f = urlized_nm + f
-            key = "%s/assets/%s" % (self.collection_id, f)
-            key_list.append({'Key':key})
-
+        for image in response['Contents']:
+            key_list.append({'Key':image['Key']})
+        
         response = client.delete_objects(
             Bucket='data.tnris.org',
             Delete={'Objects': key_list}

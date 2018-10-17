@@ -711,10 +711,7 @@ class Collection(models.Model):
             'wms_link',
             'popup_link',
             'carto_map_id',
-            # 'overview_image',
             'thumbnail_image',
-            # 'natural_image',
-            # 'urban_image',
             'tile_index_url',
             'supplemental_report_url',
             'lidar_breaklines_url',
@@ -796,30 +793,12 @@ class Collection(models.Model):
         null=True,
         blank=True
     )
-    # overview_image = models.TextField(
-    #     'Overview Image',
-    #     max_length=120,
-    #     null=True,
-    #     blank=True
-    # )
     thumbnail_image = models.TextField(
         'Thumb Image',
         max_length=120,
         null=True,
         blank=True
     )
-    # natural_image = models.TextField(
-    #     'Natural Image',
-    #     max_length=120,
-    #     null=True,
-    #     blank=True
-    # )
-    # urban_image = models.TextField(
-    #     'Urban Image',
-    #     max_length=120,
-    #     null=True,
-    #     blank=True
-    # )
     tile_index_url = models.URLField(
         'Tile Index URL',
         max_length=255,
@@ -1100,17 +1079,11 @@ class CcrView(models.Model):
     carto_map_id = models.TextField(
         'Carto Map ID'
     )
-    overview_image = models.TextField(
-        'Overview Image'
-    )
     thumbnail_image = models.TextField(
         'Thumb Image'
     )
-    natural_image = models.TextField(
-        'Natural Image'
-    )
-    urban_image = models.TextField(
-        'Urban Image'
+    images = models.TextField(
+        'Image List'
     )
     tile_index_url = models.URLField(
         'Tile Index URL'

@@ -9,7 +9,6 @@ class OrderTnrisDataForm extends Component {
 
   constructor(props) {
       super(props);
-      console.log(this.props);
       const startDisplay = this.props.orders.hasOwnProperty(this.props.selectedCollection) ? 'cart' : 'form';
       this.state = {
         orderType: '',
@@ -20,7 +19,7 @@ class OrderTnrisDataForm extends Component {
         breaklines: false,
         dem: false,
         hypso: false,
-        laz: false,
+        laz: true,
         las: false,
         display: startDisplay,
         invalid: null
@@ -28,6 +27,7 @@ class OrderTnrisDataForm extends Component {
       this.collection = this.props.collections[this.props.selectedCollection];
       this.submitForm = this.submitForm.bind(this);
       this.handleChange = this.handleChange.bind(this);
+      this.handleSwitch = this.handleSwitch.bind(this);
   }
 
   componentDidMount() {
@@ -44,8 +44,14 @@ class OrderTnrisDataForm extends Component {
       new MDCRipple(mb);
     });
     document.querySelectorAll('.mdc-switch').forEach((ms) => {
-      new MDCSwitch(ms);
-    })
+      if (ms.id === 'order-lidar-laz') {
+        const lazSwitch = new MDCSwitch(ms);
+        lazSwitch.checked = true;
+      }
+      else {
+        new MDCSwitch(ms);
+      }
+    });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -114,8 +120,6 @@ class OrderTnrisDataForm extends Component {
   handleChange(event) {
     const name = event.target.name
     const value = event.target.value
-    console.log(name);
-    console.log(value);
     const nextState = {};
     nextState[name] = value;
     if (name === 'orderType' && value === 'Full') {
@@ -127,10 +131,40 @@ class OrderTnrisDataForm extends Component {
     this.setState(nextState);
   }
 
+  handleSwitch(event) {
+    const name = event.target.name
+    const nextState = {};
+    nextState[name] = !this.state[name];
+    this.setState(nextState);
+  }
+
   submitForm (event) {
     event.preventDefault();
-
     const cartInfo = { coverage: this.state.orderType };
+
+    if (this.collection.category.indexOf('Lidar') !== -1) {
+      if (!this.state.breaklines &&
+          !this.state.laz &&
+          !this.state.las &&
+          !this.state.dem &&
+          !this.state.hypso) {
+        this.setState({
+          invalid: 'At least one Lidar Format selection is required.'
+        });
+        return;
+      }
+      else {
+        if (this.state.breaklines) {cartInfo['Breaklines'] = this.state.breaklines;}
+        if (this.state.laz) {cartInfo['LAZ'] = this.state.laz;}
+        if (this.state.las) {cartInfo['LAS'] = this.state.las;}
+        if (this.state.dem) {cartInfo['DEM'] = this.state.dem;}
+        if (this.state.hypso) {cartInfo['Hypsography'] = this.state.hypso;}
+        this.setState({
+          invalid: null
+        });
+      }
+    }
+
     if (this.state.orderType === 'Partial') {
       switch (this.state.portionDescription) {
         case 'AOI':
@@ -150,7 +184,6 @@ class OrderTnrisDataForm extends Component {
         case 'Screenshot':
           const screenshotFileList = document.getElementById('order-partial-screenshot-file').files;
           Array.from(screenshotFileList).every((file, index) => {
-            console.log(file.size, index);
             if (file.size > 5242880) {
               this.setState({
                 display: 'form',
@@ -208,22 +241,87 @@ class OrderTnrisDataForm extends Component {
     let lidarFields;
     if (this.collection.category.indexOf('Lidar') !== -1) {
       lidarFields = (
-        <div>
-          <div className="mdc-switch">
-            <div className="mdc-switch__track"></div>
-            <div className="mdc-switch__thumb-underlay">
-              <div className="mdc-switch__thumb">
-                <input type="checkbox"
-                       id="basic-switch"
-                       className="mdc-switch__native-control"
-                       name="breaklines"
-                       role="switch"
-                       aria-checked="false"
-                       onChange={this.handleChange} />
+        <div className="order-lidar-switches">
+          <div className='mdc-typography--headline6'>
+            Lidar Format Options
+          </div>
+          <div className="mdc-switch-container">
+            <div className="mdc-switch">
+              <div className="mdc-switch__track"></div>
+              <div className="mdc-switch__thumb-underlay">
+                <div className="mdc-switch__thumb">
+                  <input type="checkbox"
+                         id="order-lidar-dem-input"
+                         className="mdc-switch__native-control"
+                         name="dem"
+                         onChange={this.handleSwitch} />
+                </div>
               </div>
             </div>
+            <label htmlFor="order-lidar-dem-input">Digital Elevation Model (DEM)</label>
           </div>
-          <label htmlFor="basic-switch">off/on</label>
+          <div className="mdc-switch-container">
+            <div className="mdc-switch">
+              <div className="mdc-switch__track"></div>
+              <div className="mdc-switch__thumb-underlay">
+                <div className="mdc-switch__thumb">
+                  <input type="checkbox"
+                         id="order-lidar-hypso-input"
+                         className="mdc-switch__native-control"
+                         name="hypso"
+                         onChange={this.handleSwitch} />
+                </div>
+              </div>
+            </div>
+            <label htmlFor="order-lidar-hypso-input">Hypsography (Contours)</label>
+          </div>
+          <div className="mdc-switch-container">
+            <div className="mdc-switch" id="order-lidar-laz">
+              <div className="mdc-switch__track"></div>
+              <div className="mdc-switch__thumb-underlay">
+                <div className="mdc-switch__thumb">
+                  <input type="checkbox"
+                         id="order-lidar-laz-input"
+                         className="mdc-switch__native-control"
+                         name="laz"
+                         onChange={this.handleSwitch} />
+                </div>
+              </div>
+            </div>
+            <label htmlFor="order-lidar-laz-input">LAZ Point Cloud (Compressed)</label>
+          </div>
+          <div className="mdc-switch-container">
+            <div className="mdc-switch">
+              <div className="mdc-switch__track"></div>
+              <div className="mdc-switch__thumb-underlay">
+                <div className="mdc-switch__thumb">
+                  <input type="checkbox"
+                         id="order-lidar-las-input"
+                         className="mdc-switch__native-control"
+                         name="las"
+                         onChange={this.handleSwitch} />
+                </div>
+              </div>
+            </div>
+            <label htmlFor="order-lidar-las-input">LAS Point Cloud (Uncompressed)</label>
+            <div className='mdc-typography--caption'>Selecting LAS will drastically increase cost and order turn around time</div>
+          </div>
+          <div className="mdc-switch-container">
+            <div className="mdc-switch">
+              <div className="mdc-switch__track"></div>
+              <div className="mdc-switch__thumb-underlay">
+                <div className="mdc-switch__thumb">
+                  <input type="checkbox"
+                         id="order-lidar-breaklines-input"
+                         className="mdc-switch__native-control"
+                         name="breaklines"
+                         onChange={this.handleSwitch} />
+                </div>
+              </div>
+            </div>
+            <label htmlFor="order-lidar-breaklines-input">Breaklines (if available)</label>
+            <div className='mdc-typography--caption'>Also available for direct download under 'Supplemental Downloads'</div>
+          </div>
         </div>
       )
     }

@@ -65,6 +65,28 @@ styles for component: OrderTnrisDataForm
 
   }
 
+  .order-lidar-switches {
+    .mdc-switch:not(.mdc-switch--disabled) {
+      @include mdc-switch-toggled-on-color(#6200ee);
+      @include mdc-switch-toggled-on-track-color(#6200ee);
+      @include mdc-switch-toggled-on-thumb-color(#6200ee);
+      @include mdc-switch-toggled-on-ripple-color(#6200ee);
+    }
+
+    .mdc-switch-container {
+      min-height: 40px;
+
+      .mdc-switch {
+        margin-right: 12px;
+      }
+
+      label {
+        cursor: pointer;
+      }
+    }
+
+  }
+
   .mdc-typography--headline6 {
     margin-bottom: 10px;
   }

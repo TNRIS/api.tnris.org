@@ -711,10 +711,7 @@ class Collection(models.Model):
             'wms_link',
             'popup_link',
             'carto_map_id',
-            'overview_image',
             'thumbnail_image',
-            'natural_image',
-            'urban_image',
             'tile_index_url',
             'supplemental_report_url',
             'lidar_breaklines_url',
@@ -796,26 +793,8 @@ class Collection(models.Model):
         null=True,
         blank=True
     )
-    overview_image = models.TextField(
-        'Overview Image',
-        max_length=120,
-        null=True,
-        blank=True
-    )
     thumbnail_image = models.TextField(
         'Thumb Image',
-        max_length=120,
-        null=True,
-        blank=True
-    )
-    natural_image = models.TextField(
-        'Natural Image',
-        max_length=120,
-        null=True,
-        blank=True
-    )
-    urban_image = models.TextField(
-        'Urban Image',
         max_length=120,
         null=True,
         blank=True
@@ -883,27 +862,21 @@ class Collection(models.Model):
     )
 
     def delete_s3_files(self):
-        # set aside list for compiling keys
-        key_list = []
-        # add image keys to list
-        d_files = ['overview.jpg',
-                   'thumbnail.jpg',
-                   'natural.jpg',
-                   'urban.jpg']
-        for f in d_files:
-            key = "%s/assets/%s" % (self.collection_id, f)
-            key_list.append({'Key':key})
-        # add zipfile keys to list
-        z_files = ['-supplemental-report.zip',
-                   '-lidar-breaklines.zip',
-                   '-tile-index.zip']
-        urlized_nm = self.name.lower().replace(', ', '-').replace(' & ', '-').replace(' ', '-').replace('(', '').replace(')', '').replace('\\', '-').replace('/', '-').replace('&', '').replace(',', '-')
-        for f in z_files:
-            f = urlized_nm + f
-            key = "%s/assets/%s" % (self.collection_id, f)
-            key_list.append({'Key':key})
         # do that boto dance
         client = boto3.client('s3')
+        # set aside list for compiling keys
+        key_list = []
+        # list Objects
+        collection_prefix = str(self.collection_id) + '/assets'
+        response = client.list_objects_v2(
+            Bucket='data.tnris.org',
+            Prefix=collection_prefix
+        )
+        print(response)
+        # add image keys to list
+        for image in response['Contents']:
+            key_list.append({'Key':image['Key']})
+        
         response = client.delete_objects(
             Bucket='data.tnris.org',
             Delete={'Objects': key_list}
@@ -939,6 +912,7 @@ class Resource(models.Model):
         )
 
     resource_id = models.UUIDField(
+
         'Resource ID',
         primary_key=True,
         default=uuid.uuid4,
@@ -983,6 +957,7 @@ class Resource(models.Model):
     def __str__(self):
         return self.resource
 
+
 class Image(models.Model):
     """
     Defines available image resources.
@@ -993,14 +968,11 @@ class Image(models.Model):
         db_table = 'image'
         verbose_name = 'Image'
         verbose_name_plural = 'Images'
-        unique_together = (
-            'collection_id',
-            'image_url'
-        )
 
     image_id = models.UUIDField(
         'Image ID',
         primary_key=True,
+        default=uuid.uuid4,
         editable=False
     )
     collection_id = models.ForeignKey(
@@ -1021,9 +993,21 @@ class Image(models.Model):
         'Last Modified',
         auto_now=True
     )
+    # delete s3 image files
+    def delete(self, *args, **kwargs):
+        client = boto3.client('s3')
+        key = str(self).replace('https://s3.amazonaws.com/data.tnris.org/', '')
+        print(key)
+        response = client.delete_object(
+            Bucket='data.tnris.org',
+            Key=key
+        )
+        print(self)
+        super().delete(*args, **kwargs)
 
     def __str__(self):
         return self.image_url
+
 
 """
 ********** Database Views **********
@@ -1079,17 +1063,11 @@ class CcrView(models.Model):
     carto_map_id = models.TextField(
         'Carto Map ID'
     )
-    overview_image = models.TextField(
-        'Overview Image'
-    )
     thumbnail_image = models.TextField(
         'Thumb Image'
     )
-    natural_image = models.TextField(
-        'Natural Image'
-    )
-    urban_image = models.TextField(
-        'Urban Image'
+    images = models.TextField(
+        'Image List'
     )
     tile_index_url = models.URLField(
         'Tile Index URL'
@@ -1160,6 +1138,7 @@ class CcrView(models.Model):
     def __str__(self):
         return self.name
 
+
 class AcdcView(models.Model):
     """
     Area Collection Data Connection view presents Resource table with joins
@@ -1192,6 +1171,7 @@ class AcdcView(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class RemView(models.Model):
     """
@@ -1238,3 +1218,32 @@ class RemView(models.Model):
 
     def __str__(self):
         return self.resource_id
+
+
+class AreasView(models.Model):
+  """
+  Areas view presents resource table with aggregated collection_id
+  """
+
+  class Meta:
+      managed = False
+      db_table = "areas"
+      verbose_name = 'Areas'
+      verbose_name_plural = 'Areas'
+
+  area_type_id = models.UUIDField(
+      'Area Type ID',
+      primary_key=True
+  )
+  area_type_name = models.TextField(
+      'Area Type Name'
+  )
+  area_type = models.TextField(
+      'Area Type'
+  )
+  collections = models.TextField(
+      'Collections'
+  )
+
+  def __str__(self):
+      return str(self.area_type_id)

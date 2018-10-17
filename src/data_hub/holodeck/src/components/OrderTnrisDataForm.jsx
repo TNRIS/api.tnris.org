@@ -245,7 +245,7 @@ class OrderTnrisDataForm extends Component {
           <div className='mdc-typography--headline6'>
             Lidar Format Options
           </div>
-          <div className="mdc-switch-container">
+          <div className="mdc-form-field mdc-switch-container">
             <div className="mdc-switch">
               <div className="mdc-switch__track"></div>
               <div className="mdc-switch__thumb-underlay">
@@ -260,7 +260,7 @@ class OrderTnrisDataForm extends Component {
             </div>
             <label htmlFor="order-lidar-dem-input">Digital Elevation Model (DEM)</label>
           </div>
-          <div className="mdc-switch-container">
+          <div className="mdc-form-field mdc-switch-container">
             <div className="mdc-switch">
               <div className="mdc-switch__track"></div>
               <div className="mdc-switch__thumb-underlay">
@@ -275,7 +275,7 @@ class OrderTnrisDataForm extends Component {
             </div>
             <label htmlFor="order-lidar-hypso-input">Hypsography (Contours)</label>
           </div>
-          <div className="mdc-switch-container">
+          <div className="mdc-form-field mdc-switch-container">
             <div className="mdc-switch" id="order-lidar-laz">
               <div className="mdc-switch__track"></div>
               <div className="mdc-switch__thumb-underlay">
@@ -290,7 +290,7 @@ class OrderTnrisDataForm extends Component {
             </div>
             <label htmlFor="order-lidar-laz-input">LAZ Point Cloud (Compressed)</label>
           </div>
-          <div className="mdc-switch-container">
+          <div className="mdc-form-field mdc-switch-container">
             <div className="mdc-switch">
               <div className="mdc-switch__track"></div>
               <div className="mdc-switch__thumb-underlay">
@@ -306,7 +306,7 @@ class OrderTnrisDataForm extends Component {
             <label htmlFor="order-lidar-las-input">LAS Point Cloud (Uncompressed)</label>
             <div className='mdc-typography--caption'>Selecting LAS will drastically increase cost and order turn around time</div>
           </div>
-          <div className="mdc-switch-container">
+          <div className="mdc-form-field mdc-switch-container">
             <div className="mdc-switch">
               <div className="mdc-switch__track"></div>
               <div className="mdc-switch__thumb-underlay">

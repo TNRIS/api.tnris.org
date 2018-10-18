@@ -108,6 +108,11 @@ styles for component: OrderTnrisDataForm
     }
   }
 
+  .mdc-text-field:not(.mdc-text-field--disabled) + .mdc-text-field-helper-text {
+    margin-bottom: 10px;
+    color: #6200ee;
+  }
+
   .invalid-prompt {
     color: red;
   }

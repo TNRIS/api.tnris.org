@@ -10,17 +10,6 @@ import ContactContainer from '../../containers/ContactContainer';
 import OrderTnrisDataFormContainer from '../../containers/OrderTnrisDataFormContainer';
 
 export default class TnrisDownloadTemplateDetails extends React.Component {
-  constructor(props) {
-      super(props);
-      this.state = {
-        showContact: false
-      };
-      this.toggleContact = this.toggleContact.bind(this);
-  }
-
-  toggleContact () {
-    this.setState({showContact: !this.state.showContact});
-  }
 
   render() {
     const lidarCard = this.props.collection.category === 'Lidar' ? <LidarBlurb /> : "";
@@ -30,38 +19,32 @@ export default class TnrisDownloadTemplateDetails extends React.Component {
                                         <Supplementals collection={this.props.collection} /> : "";
     const servicesCard = this.props.collection.wms_link ? <Services collection={this.props.collection} /> : "";
 
-    const contactIcon = this.state.showContact ? <i className="mdc-list-item__meta material-icons">expand_less</i> : <i className="mdc-list-item__meta material-icons">expand_more</i>;
-    const contactDisplay = this.state.showContact ? (
-      <div>
-        <ContactContainer collection={this.props.collection} />
-      </div>
-    ) : "";
-
     return (
-      <ul className='tnris-download-template-details mdc-image-list mdc-image-list--masonry'>
-
+      <div className='tnris-download-template-details'>
+        <ul className='tnris-download-template-cards mdc-image-list mdc-image-list--masonry'>
           <Metadata collection={this.props.collection} />
           {supplementalDownloadsCard}
           {servicesCard}
           <Description collection={this.props.collection} />
           {lidarCard}
-
-          <li className='mdc-image-list__item'>
-            <div className='mdc-typography--headline5'>
-              Order
-            </div>
-            <div>
-              <OrderTnrisDataFormContainer />
-            </div>
-          </li>
-
-          <li className='mdc-image-list__item'>
-            <div id="contact-header" className='mdc-typography--headline5' onClick={this.toggleContact}>
-              Contact{contactIcon}
-            </div>
-            {contactDisplay}
-          </li>
         </ul>
+        <div className="template-content-div">
+          <div className='mdc-typography--headline5 template-content-div-header' onClick={this.toggleOrder}>
+            Order
+          </div>
+          <div>
+            <OrderTnrisDataFormContainer />
+          </div>
+        </div>
+        <div className="template-content-div">
+          <div className='mdc-typography--headline5 template-content-div-header' onClick={this.toggleContact}>
+            Contact
+          </div>
+          <div>
+            <ContactContainer collection={this.props.collection} />
+          </div>
+        </div>
+      </div>
     );
   }
 }

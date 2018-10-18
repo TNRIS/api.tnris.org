@@ -4,6 +4,7 @@ import {MDCFloatingLabel} from '@material/floating-label';
 import {MDCLineRipple} from '@material/line-ripple';
 import {MDCRipple} from '@material/ripple';
 import {MDCSwitch} from '@material/switch';
+import {MDCTextFieldHelperText} from '@material/textfield/helper-text';
 
 class OrderTnrisDataForm extends Component {
 
@@ -51,6 +52,9 @@ class OrderTnrisDataForm extends Component {
       else {
         new MDCSwitch(ms);
       }
+    });
+    document.querySelectorAll('.mdc-text-field-helper-text').forEach((ht) => {
+      new MDCTextFieldHelperText(ht);
     });
   }
 
@@ -107,7 +111,7 @@ class OrderTnrisDataForm extends Component {
           fileInput.required = true;
         });
         break;
-      case 'Text Description':
+      case 'Text':
         document.getElementsByName("textDescription").forEach((textarea) => {
           textarea.required = true;
         });
@@ -203,7 +207,7 @@ class OrderTnrisDataForm extends Component {
             }
           });
           break;
-        case 'Text Description':
+        case 'Text':
           cartInfo['type'] = 'Text';
           cartInfo['description'] = this.state.textDescription;
           this.props.addCollectionToCart(this.props.selectedCollection, cartInfo);
@@ -213,13 +217,7 @@ class OrderTnrisDataForm extends Component {
           });
           break;
         default:
-          cartInfo['type'] = 'Text';
-          cartInfo['description'] = this.state.textDescription;
-          this.props.addCollectionToCart(this.props.selectedCollection, cartInfo);
-          this.setState({
-            display: 'added',
-            invalid: null
-          });
+          break;
       }
     }
     else if (this.state.orderType === 'Full') {
@@ -233,9 +231,9 @@ class OrderTnrisDataForm extends Component {
 
   render() {
     const partialClass = this.state.orderType === 'Partial' ? "partial-description-field" : "hidden-field";
-    const uploadAoiClass = this.state.portionDescription === 'AOI' ? "file-upload-field" : "hidden-field";
-    const uploadScreenshotClass = this.state.portionDescription === 'Screenshot' ? "file-upload-field" : "hidden-field";
-    const textDescriptionClass = this.state.portionDescription === 'Text Description' ? "text-description-field" : "hidden-field";
+    const uploadAoiClass = this.state.portionDescription === 'AOI' ? "mdc-form-field" : "mdc-form-field hidden-field";
+    const uploadScreenshotClass = this.state.portionDescription === 'Screenshot' ? "mdc-form-field" : "mdc-form-field hidden-field";
+    const textDescriptionClass = this.state.portionDescription === 'Text' ? "mdc-text-field mdc-text-field--textarea" : "mdc-text-field mdc-text-field--textarea hidden-field";
     const invalid = this.state.invalid ? this.state.invalid : '';
     let showHTML;
     let lidarFields;
@@ -245,7 +243,7 @@ class OrderTnrisDataForm extends Component {
           <div className='mdc-typography--headline6'>
             Lidar Format Options
           </div>
-          <div className="mdc-form-field mdc-switch-container">
+          <div className="mdc-form-field">
             <div className="mdc-switch">
               <div className="mdc-switch__track"></div>
               <div className="mdc-switch__thumb-underlay">
@@ -260,7 +258,7 @@ class OrderTnrisDataForm extends Component {
             </div>
             <label htmlFor="order-lidar-dem-input">Digital Elevation Model (DEM)</label>
           </div>
-          <div className="mdc-form-field mdc-switch-container">
+          <div className="mdc-form-field">
             <div className="mdc-switch">
               <div className="mdc-switch__track"></div>
               <div className="mdc-switch__thumb-underlay">
@@ -275,7 +273,7 @@ class OrderTnrisDataForm extends Component {
             </div>
             <label htmlFor="order-lidar-hypso-input">Hypsography (Contours)</label>
           </div>
-          <div className="mdc-form-field mdc-switch-container">
+          <div className="mdc-form-field">
             <div className="mdc-switch" id="order-lidar-laz">
               <div className="mdc-switch__track"></div>
               <div className="mdc-switch__thumb-underlay">
@@ -290,7 +288,7 @@ class OrderTnrisDataForm extends Component {
             </div>
             <label htmlFor="order-lidar-laz-input">LAZ Point Cloud (Compressed)</label>
           </div>
-          <div className="mdc-form-field mdc-switch-container">
+          <div className="mdc-form-field">
             <div className="mdc-switch">
               <div className="mdc-switch__track"></div>
               <div className="mdc-switch__thumb-underlay">
@@ -304,9 +302,9 @@ class OrderTnrisDataForm extends Component {
               </div>
             </div>
             <label htmlFor="order-lidar-las-input">LAS Point Cloud (Uncompressed)</label>
-            <div className='mdc-typography--caption'>Selecting LAS will drastically increase cost and order turn around time</div>
           </div>
-          <div className="mdc-form-field mdc-switch-container">
+          <div className='mdc-typography--caption'>Selecting LAS will drastically increase cost and order turn around time</div>
+          <div className="mdc-form-field">
             <div className="mdc-switch">
               <div className="mdc-switch__track"></div>
               <div className="mdc-switch__thumb-underlay">
@@ -320,8 +318,8 @@ class OrderTnrisDataForm extends Component {
               </div>
             </div>
             <label htmlFor="order-lidar-breaklines-input">Breaklines (if available)</label>
-            <div className='mdc-typography--caption'>Also available for direct download under 'Supplemental Downloads'</div>
           </div>
+          <div className='mdc-typography--caption'>Also available for direct download under 'Supplemental Downloads'</div>
         </div>
       )
     }
@@ -383,8 +381,7 @@ class OrderTnrisDataForm extends Component {
                        id="order-partial-aoi-input"
                        name="portionDescription"
                        value="AOI"
-                       onChange={this.handleChange}
-                       required />
+                       onChange={this.handleChange} />
                 <div className="mdc-radio__background">
                   <div className="mdc-radio__outer-circle"></div>
                   <div className="mdc-radio__inner-circle"></div>
@@ -431,7 +428,7 @@ class OrderTnrisDataForm extends Component {
                        type="radio"
                        id="order-partial-text-input"
                        name="portionDescription"
-                       value="Text Description"
+                       value="Text"
                        onChange={this.handleChange} />
                 <div className="mdc-radio__background">
                   <div className="mdc-radio__outer-circle"></div>
@@ -440,20 +437,19 @@ class OrderTnrisDataForm extends Component {
               </div>
               <label htmlFor="order-partial-text-input">Text Description</label>
             </div>
-            <div className={textDescriptionClass}>
-              <div className='mdc-typography--caption'>Please describe the portion of data you need in the text box below. Providing as much detail as possible will vastly improve the response and turn around time of your order.</div>
-              <div id="order-partial-text-description" className="mdc-text-field mdc-text-field--textarea">
-                <textarea id="order-partial-text-description-input" className="mdc-text-field__input"
-                          rows="8" cols="40"
-                          placeholder="Latitude/Longitude Coordinates, USGS Quadrangle Names, City/Town Names, Cross Roads, Boundary Landmarks, etc."
-                          name="textDescription"
-                          onChange={this.handleChange}
-                          required>
-                </textarea>
-                <label className="mdc-floating-label" htmlFor="order-partial-text-description-input">Please describe the portion of data you need...</label>
-                <div className="mdc-line-ripple"></div>
-              </div>
+            <div className='mdc-typography--caption'>Please describe the portion of data you need in the text box. Providing as much detail as possible will vastly improve the response and turn around time of your order.</div>
+            <div id="order-partial-text-description" className={textDescriptionClass}>
+              <textarea id="order-partial-text-description-input" className="mdc-text-field__input"
+                        rows="8" cols="40"
+                        name="textDescription"
+                        onChange={this.handleChange}>
+              </textarea>
+              <label className="mdc-floating-label" htmlFor="order-partial-text-description-input">Please describe the portion of data you need...</label>
+              <div className="mdc-line-ripple"></div>
             </div>
+            <p id="order-partial-text-description-helper-text" className="mdc-text-field-helper-text" aria-hidden="true">
+              <strong>Latitude/Longitude Coordinates, USGS Quadrangle Names, City/Town Names, Cross Roads, Boundary Landmarks, etc.</strong>
+            </p>
           </div>
 
           {lidarFields}
@@ -466,6 +462,7 @@ class OrderTnrisDataForm extends Component {
         </div>
       );
     }
+
     else if (this.state.display === 'cart') {
       showHTML = (
         <div className="order-tnris-data-cart">

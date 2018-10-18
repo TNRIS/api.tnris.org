@@ -21,13 +21,11 @@ export default class TnrisDownloadTemplateDetails extends React.Component {
 
     return (
       <div className='tnris-download-template-details'>
-        <ul className='tnris-download-template-cards mdc-image-list mdc-image-list--masonry'>
-          <Metadata collection={this.props.collection} />
-          {supplementalDownloadsCard}
-          {servicesCard}
-          <Description collection={this.props.collection} />
-          {lidarCard}
-        </ul>
+        <Metadata collection={this.props.collection} />
+        {supplementalDownloadsCard}
+        {servicesCard}
+        <Description collection={this.props.collection} />
+        {lidarCard}
         <div className="template-content-div">
           <div className='mdc-typography--headline5 template-content-div-header' onClick={this.toggleOrder}>
             Order

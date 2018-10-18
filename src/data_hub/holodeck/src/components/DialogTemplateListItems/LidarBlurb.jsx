@@ -4,8 +4,8 @@ export default class LidarBlurb extends React.Component {
 
   render() {
     return (
-      <li className='mdc-image-list__item'>
-        <div className='mdc-typography--headline5'>
+      <div className="template-content-div">
+        <div className='mdc-typography--headline5 template-content-div-header'>
           Lidar Note
         </div>
         <p>
@@ -23,7 +23,7 @@ export default class LidarBlurb extends React.Component {
           <li className="mdc-list-item">Voyager (1.3 and up) by Voyager GIS</li>
           <li className="mdc-list-item">GRASS GIS (7.0 and up) by Open Source Geospatial Foundation (OSGeo)</li>
         </ul>
-      </li>
+      </div>
     )
   }
 }

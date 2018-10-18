@@ -31,8 +31,8 @@ export default class Supplementals extends React.Component {
     ) : "";
 
     return (
-      <li className='mdc-image-list__item'>
-        <div className='mdc-typography--headline5'>
+      <div className="template-content-div">
+        <div className='mdc-typography--headline5 template-content-div-header'>
           Supplemental Downloads
         </div>
         <ul className="mdc-list supplemental-downloads">
@@ -40,7 +40,7 @@ export default class Supplementals extends React.Component {
           {supplementalReport}
           {lidarBreaklines}
         </ul>
-      </li>
+      </div>
     )
   }
 }

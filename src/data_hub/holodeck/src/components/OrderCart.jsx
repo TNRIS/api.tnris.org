@@ -28,7 +28,6 @@ class OrderCart extends Component {
         recaptcha: '',
         invalid: ''
       }
-
       this.submitForm = this.submitForm.bind(this);
       this.handleChange = this.handleChange.bind(this);
       this.recaptchaChange = this.recaptchaChange.bind(this);
@@ -73,7 +72,7 @@ class OrderCart extends Component {
   }
 
   componentDidUpdate() {
-    console.log(this.state);
+    console.log(this.props);
     if (this.state.industry !== '' && this.state.industry !== 'No Industry') {
       document.getElementById("order-cart-organization-input").required = true;
     }
@@ -179,12 +178,42 @@ class OrderCart extends Component {
     const hdClass = this.state.delivery !== '' && this.state.delivery !== 'Zipfile Download' ? "hard-drive-field" : "hidden-field";
     const zipfileDownloadLidarBlurb = this.state.delivery === 'Zipfile Download' ? <div className='mdc-typography--caption'><strong>Note:</strong> Lidar datasets are often very large, and TNRIS cannot offer digital downloads for datasets larger than 10 GB. If the ordered dataset is larger than 10 GB, you have the option of either providing a factory-sealed external hard drive (or multiple factory-sealed external hard drives) or purchasing them at cost from TNRIS.</div> : "";
 
+    const emptyCartMessage = (
+      <ul className="mdc-list">
+        There are no datasets in your cart.
+      </ul>
+    );
+    const cartItems = Object.keys(this.props.orders).length !== 0 ?
+      Object.keys(this.props.orders).map(collectionId => {
+        const name = this.props.collections[collectionId].name;
+        return (
+          <li key={collectionId} className="mdc-list-item">
+            <span className="mdc-list-item__graphic material-icons" aria-hidden="true">whatshot</span>
+            <span className="mdc-list-item__text">
+              <span className="mdc-list-item__primary-text">{name}</span>
+              <span className="mdc-list-item__secondary-text">{this.props.orders[collectionId].coverage} Coverage</span>
+            </span>
+            <span className="mdc-list-item__meta material-icons"
+                  aria-hidden="true"
+                  title="Remove from Shopping Cart"
+                  onClick={() => this.props.removeCollectionFromCart(collectionId)}>remove_circle</span>
+          </li>
+        );
+      }) : emptyCartMessage;
+
     if (this.state.display === 'form') {
       showHTML = (
         <div>
           <p className="mdc-typography--body1">
             Complete the form below to finalize and submit your data order...
           </p>
+
+          <div className='mdc-typography--headline6'>
+            Shopping Cart
+          </div>
+          <ul className="mdc-list mdc-list--two-line order-cart-data-items">
+            {cartItems}
+          </ul>
 
           <div className='mdc-typography--headline6'>
             Requestor Details

@@ -52,7 +52,6 @@ export default function contactReducer(state = initialState, action) {
 
     case REMOVE_COLLECTION_FROM_CART:
       const { [action.payload.collectionId]:value , ...removedOrders } = state.orders;
-      console.log(removedOrders);
       return {
         ...state,
         orders: removedOrders

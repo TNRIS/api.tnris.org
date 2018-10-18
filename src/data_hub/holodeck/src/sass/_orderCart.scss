@@ -16,6 +16,18 @@ styles for component: OrderCart
   overflow-y: auto;
   overflow-x: hidden;
 
+  .order-cart-data-items {
+    .mdc-list-item {
+      .mdc-list-item__meta {
+        cursor: pointer;
+
+        &:hover {
+          color: red;
+        }
+      }
+    }
+  }
+
   div.mdc-text-field {
     border-bottom-width: 1px;
     border-bottom-style: solid;

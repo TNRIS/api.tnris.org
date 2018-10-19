@@ -226,7 +226,13 @@ class OrderCart extends Component {
   }
 
   render() {
-    let showHTML = <div></div>;
+    let showHTML = (
+      <div className="default-order-cart-display">
+        <button className="mdc-button mdc-button--raised" onClick={() => this.props.closeOrderCartDialog()}>
+          Let's go shopping!
+        </button>
+      </div>
+    );
     const orgClass = this.state.industry !== '' && this.state.industry !== 'No Industry' ? "mdc-text-field mdc-text-field--outlined" : "mdc-text-field mdc-text-field--outlined hidden-field";
     const hdClass = this.state.delivery !== '' && this.state.delivery !== 'Zipfile Download' ? "hard-drive-field" : "hidden-field";
     const zipfileDownloadLidarBlurb = this.state.delivery === 'Zipfile Download' ? <div className='mdc-typography--caption'><strong>Note:</strong> Lidar datasets are often very large, and TNRIS cannot offer digital downloads for datasets larger than 10 GB. If the ordered dataset is larger than 10 GB, you have the option of either providing a factory-sealed external hard drive (or multiple factory-sealed external hard drives) or purchasing them at cost from TNRIS.</div> : "";

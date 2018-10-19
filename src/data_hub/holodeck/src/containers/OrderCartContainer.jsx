@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 
 import OrderCart from '../components/OrderCart';
 
-import { orderCartActions } from '../actions';
+import { orderCartActions, orderCartDialogActions } from '../actions';
 import { getAllCollections } from '../selectors/collectionSelectors';
 
 const mapStateToProps = state => ({
@@ -21,6 +21,9 @@ const mapDispatchToProps = dispatch => ({
   },
   submitOrderCartForm: (formInfo) => {
     dispatch(orderCartActions.submitOrderCartForm(formInfo));
+  },
+  closeOrderCartDialog: () => {
+    dispatch(orderCartDialogActions.closeOrderCartDialog());
   }
 })
 

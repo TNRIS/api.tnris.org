@@ -15,6 +15,7 @@ export default class Catalog extends React.Component {
   componentDidMount() {
     this.props.fetchCollections();
     this.props.fetchResources();
+    this.props.fetchStoredShoppingCart();
   }
 
   render() {

@@ -2,136 +2,139 @@
 styles for component: OrderCart
 */
 
-.order-cart-form-component {
-  @include mdc-text-field-bottom-line-color(rgba(0,0,0,.42));
-  @include mdc-text-field-label-color(#6200ee);
-  @include mdc-text-field-line-ripple-color(#6200ee);
-  @include mdc-text-field-textarea-stroke-color(rgba(0,0,0,.42));
-
-  @include mdc-radio-ink-color(#6200ee);
-  @include mdc-radio-checked-stroke-color(#6200ee);
-  @include mdc-radio-focus-indicator-color(#6200ee)
-
-  padding: 15px;
+.order-cart-form-component-container {
   overflow-y: auto;
   overflow-x: hidden;
-  margin-top: 64px;
 
-  .order-cart-data-items {
-    .mdc-list-item {
-      .mdc-list-item__meta {
-        cursor: pointer;
+  .order-cart-form-component {
+    @include mdc-text-field-bottom-line-color(rgba(0,0,0,.42));
+    @include mdc-text-field-label-color(#6200ee);
+    @include mdc-text-field-line-ripple-color(#6200ee);
+    @include mdc-text-field-textarea-stroke-color(rgba(0,0,0,.42));
 
-        &:hover {
-          color: red;
+    @include mdc-radio-ink-color(#6200ee);
+    @include mdc-radio-checked-stroke-color(#6200ee);
+    @include mdc-radio-focus-indicator-color(#6200ee)
+
+    padding: 15px;
+    margin-top: 64px;
+
+    .order-cart-data-items {
+      .mdc-list-item {
+        .mdc-list-item__meta {
+          cursor: pointer;
+
+          &:hover {
+            color: red;
+          }
         }
       }
     }
-  }
 
-  div.mdc-text-field {
-    border-bottom-width: 1px;
-    border-bottom-style: solid;
-    margin-bottom: 16px;
-    display: flex;
-  }
+    div.mdc-text-field {
+      border-bottom-width: 1px;
+      border-bottom-style: solid;
+      margin-bottom: 16px;
+      display: flex;
+    }
 
-  .mdc-text-field--invalid {
-    @include mdc-text-field-bottom-line-color(red);
-    @include mdc-text-field-label-color(red);
-    @include mdc-text-field-line-ripple-color(red);
-    @include mdc-text-field-textarea-stroke-color(red);
-  }
+    .mdc-text-field--invalid {
+      @include mdc-text-field-bottom-line-color(red);
+      @include mdc-text-field-label-color(red);
+      @include mdc-text-field-line-ripple-color(red);
+      @include mdc-text-field-textarea-stroke-color(red);
+    }
 
-  input[type='number'] {
-    -moz-appearance:textfield;
-  }
+    input[type='number'] {
+      -moz-appearance:textfield;
+    }
 
-  input::-webkit-outer-spin-button,
-  input::-webkit-inner-spin-button {
-      -webkit-appearance: none;
-  }
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+    }
 
-  .mdc-select:not(.mdc-select--disabled) {
-    background-color: initial;
-    margin-bottom: 16px;
-    display: flex;
-    @include mdc-select-label-color(#6200ee);
-    // @include mdc-select-ink-color(#6200ee);
-    @include mdc-select-bottom-line-color(rgba(0, 0, 0, 0.12));
-    @include mdc-select-focused-bottom-line-color(#6200ee);
+    .mdc-select:not(.mdc-select--disabled) {
+      background-color: initial;
+      margin-bottom: 16px;
+      display: flex;
+      @include mdc-select-label-color(#6200ee);
+      // @include mdc-select-ink-color(#6200ee);
+      @include mdc-select-bottom-line-color(rgba(0, 0, 0, 0.12));
+      @include mdc-select-focused-bottom-line-color(#6200ee);
 
 
-    select {
-      -webkit-appearance: none;
-      -moz-appearance: none;
-      appearance: none;
+      select {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
 
-      option:not([disabled]) {
-        color: black;
+        option:not([disabled]) {
+          color: black;
+        }
+      }
+
+      select::-ms-expand {
+        display: none;
+      }
+
+    }
+
+    .mdc-typography--headline6 {
+      margin-bottom: 10px;
+    }
+
+    .mdc-typography--body2 {
+      color: rgba(0, 0, 0, 0.6);
+    }
+
+    .mdc-typography--caption {
+      margin-left: 44px;
+      color: rgba(0, 0, 0, 0.6);
+    }
+
+    .mdc-form-field {
+      display: flex;
+
+      label {
+        cursor: pointer;
       }
     }
 
-    select::-ms-expand {
-      display: none;
+    .recaptcha-container {
+      margin-top: 10px;
+      overflow-x: auto;
+      overflow-y: hidden;
     }
 
-  }
-
-  .mdc-typography--headline6 {
-    margin-bottom: 10px;
-  }
-
-  .mdc-typography--body2 {
-    color: rgba(0, 0, 0, 0.6);
-  }
-
-  .mdc-typography--caption {
-    margin-left: 44px;
-    color: rgba(0, 0, 0, 0.6);
-  }
-
-  .mdc-form-field {
-    display: flex;
-
-    label {
-      cursor: pointer;
-    }
-  }
-
-  .recaptcha-container {
-    margin-top: 10px;
-    overflow-x: auto;
-    overflow-y: hidden;
-  }
-
-  .invalid-prompt {
-    color: red;
-  }
-
-  .submit-button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .default-order-cart-display {
-    text-align: center;
-  }
-
-  .order-cart-form-success {
-    span {
-      color: green;
-    }
-  }
-
-  .order-cart-form-error {
-    span {
+    .invalid-prompt {
       color: red;
     }
-  }
 
-  div.hidden-field {
-    display: none;
+    .submit-button {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .default-order-cart-display {
+      text-align: center;
+    }
+
+    .order-cart-form-success {
+      span {
+        color: green;
+      }
+    }
+
+    .order-cart-form-error {
+      span {
+        color: red;
+      }
+    }
+
+    div.hidden-field {
+      display: none;
+    }
   }
 }

@@ -74,8 +74,6 @@ class OrderCart extends Component {
   }
 
   componentDidUpdate() {
-    console.log(this.props);
-    console.log(this.state);
     if (this.state.display === 'form' && Object.keys(this.props.orders).length !== 0) {
       document.querySelectorAll('.mdc-floating-label').forEach((mdl) => {
         new MDCFloatingLabel(mdl);
@@ -247,7 +245,7 @@ class OrderCart extends Component {
       Object.keys(this.props.orders).map(collectionId => {
         const name = this.props.collections[collectionId].name;
         const partialType = this.props.orders[collectionId].type ? `, ${this.props.orders[collectionId].type}` : "";
-        const attachmentNum = this.props.orders[collectionId].files ? this.props.orders[collectionId].files.length : "";
+        const attachmentNum = this.props.orders[collectionId].attachments ? Object.keys(this.props.orders[collectionId].attachments).length : "";
         const attachments = this.props.orders[collectionId].attachments ? `, ${attachmentNum} attachment(s)`: "";
         const formats = this.props.orders[collectionId].formats ? `, Lidar Formats: ${this.props.orders[collectionId].formats}` : "";
 
@@ -701,7 +699,7 @@ class OrderCart extends Component {
     }
 
     return (
-      <div>
+      <div className="order-cart-form-component-container">
         <header className="mdc-top-app-bar">
           <div className="mdc-top-app-bar__row">
             <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">

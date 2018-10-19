@@ -470,10 +470,10 @@ class OrderTnrisDataForm extends Component {
       showHTML = (
         <div className="order-tnris-data-cart">
           <p className="mdc-typography--body2">
-            This dataset is already in your shopping cart.
+            This dataset is already in the shopping cart.
           </p>
           <p className="mdc-typography--body2">
-            Please visit your shopping cart to finalize your order.
+            Please visit the shopping cart to finalize your order.
           </p>
         </div>
       );
@@ -482,10 +482,10 @@ class OrderTnrisDataForm extends Component {
       showHTML = (
         <div className="order-tnris-data-cart">
           <p className="mdc-typography--body2">
-            This dataset has been added to your shopping cart.
+            This dataset has been added to the shopping cart.
           </p>
           <p className="mdc-typography--body2">
-            Please visit your shopping cart to finalize your order.
+            Please visit the shopping cart to finalize your order.
           </p>
         </div>
       );

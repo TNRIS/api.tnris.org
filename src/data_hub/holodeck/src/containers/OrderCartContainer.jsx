@@ -18,6 +18,9 @@ const mapDispatchToProps = dispatch => ({
   },
   submitOrderSuccess: () => {
     dispatch(orderCartActions.submitOrderSuccess());
+  },
+  submitOrderCartForm: (formInfo) => {
+    dispatch(orderCartActions.submitOrderCartForm(formInfo));
   }
 })
 

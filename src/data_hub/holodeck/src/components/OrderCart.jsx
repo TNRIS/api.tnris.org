@@ -46,72 +46,88 @@ class OrderCart extends Component {
     document.querySelectorAll('.mdc-select').forEach((ms) => {
       new MDCSelect(ms);
     });
-    new MDCRipple(document.querySelector('#order-cart-submit'));
+    document.querySelectorAll('.mdc-button').forEach((mb) => {
+      new MDCRipple(mb);
+    });
   }
 
   componentWillUpdate(nextProps) {
-    // if (nextProps.submitStatus === false &&
-    //     nextProps.errorStatus !== null &&
-    //     this.state.display === 'submitting') {
-    //   this.setState({
-    //     display: 'error'
-    //   });
-    // }
-    // else if (nextProps.submitStatus === false &&
-    //          nextProps.errorStatus === null &&
-    //          this.state.display === 'submitting') {
-    //   this.setState({
-    //    display: 'success'
-    //   });
-    // }
-
-    //delete
-    // if (this.state.industry !== '' && this.state.industry !== 'No Industry') {
-    //   document.querySelector('#order-cart-organization').
-    // }
+    if (nextProps.submitting === false &&
+        nextProps.submitError !== null &&
+        this.state.display === 'submitting') {
+      this.setState({
+        display: 'error'
+      });
+    }
+    else if (nextProps.submitting === false &&
+             nextProps.submitError === null &&
+             this.state.display === 'submitting') {
+      this.setState({
+       display: 'success'
+      });
+    }
+    else if (this.state.display === 'success' && Object.keys(nextProps.orders).length !== 0) {
+      this.setState({
+        display: 'form'
+      });
+    }
   }
 
   componentDidUpdate() {
     console.log(this.props);
-    if (this.state.industry !== '' && this.state.industry !== 'No Industry') {
-      document.getElementById("order-cart-organization-input").required = true;
-    }
-    else {
-      document.getElementById("order-cart-organization-input").required = false;
-    }
-
-    if (this.state.delivery !== '' && this.state.delivery !== 'Zipfile Download') {
-      document.getElementsByName("hardDrive").forEach((input) => {
-        input.required = true;
+    console.log(this.state);
+    if (this.state.display === 'form' && Object.keys(this.props.orders).length !== 0) {
+      document.querySelectorAll('.mdc-floating-label').forEach((mdl) => {
+        new MDCFloatingLabel(mdl);
       });
-    }
-    else {
-      document.getElementsByName("hardDrive").forEach((input) => {
-        input.required = false;
-        input.checked = false;
+      document.querySelectorAll('.mdc-line-ripple').forEach((mlr) => {
+        new MDCLineRipple(mlr);
       });
-    }
+      document.querySelectorAll('.mdc-text-field').forEach((mtf) => {
+        new MDCTextField(mtf);
+      });
+      document.querySelectorAll('.mdc-select').forEach((ms) => {
+        new MDCSelect(ms);
+      });
+      document.querySelectorAll('.mdc-button').forEach((mb) => {
+        new MDCRipple(mb);
+      });
 
-    if (this.state.delivery === 'Fedex') {
-      document.getElementById("payment-fedex-input").disabled = false;
-    }
-    else {
-      document.getElementById("payment-fedex-input").disabled = true;
-      document.getElementById("payment-fedex-input").checked = false;
-    }
+      if (this.state.industry !== '' && this.state.industry !== 'No Industry') {
+        document.getElementById("order-cart-organization-input").required = true;
+      }
+      else {
+        document.getElementById("order-cart-organization-input").required = false;
+      }
 
-    if (this.state.delivery === 'Pickup') {
-      document.getElementById("payment-pickup-input").disabled = false;
-    }
-    else {
-      document.getElementById("payment-pickup-input").disabled = true;
-      document.getElementById("payment-pickup-input").checked = false;
-    }
-  }
+      if (this.state.delivery !== '' && this.state.delivery !== 'Zipfile Download') {
+        document.getElementsByName("hardDrive").forEach((input) => {
+          input.required = true;
+        });
+      }
+      else {
+        document.getElementsByName("hardDrive").forEach((input) => {
+          input.required = false;
+          input.checked = false;
+        });
+      }
 
-  componentWillUnmount () {
-    // on umount, dispatch contact success to reset the store
-    // this.props.submitContactSuccess();
+      if (this.state.delivery === 'Fedex') {
+        document.getElementById("payment-fedex-input").disabled = false;
+      }
+      else {
+        document.getElementById("payment-fedex-input").disabled = true;
+        document.getElementById("payment-fedex-input").checked = false;
+      }
+
+      if (this.state.delivery === 'Pickup') {
+        document.getElementById("payment-pickup-input").disabled = false;
+      }
+      else {
+        document.getElementById("payment-pickup-input").disabled = true;
+        document.getElementById("payment-pickup-input").checked = false;
+      }
+    }
   }
 
   handleChange(event) {
@@ -140,40 +156,77 @@ class OrderCart extends Component {
   submitForm (event) {
     event.preventDefault();
 
-
-    if (this.state.recaptcha !== '') {
-      console.log(this.state);
-      // this.setState({
-      //   display: 'submitting',
-      //   invalid: ''
-      // });
-      // console.log('submitting');
-      // const fullName = this.state.firstName + " " + this.state.lastName;
-      //
-      // const formInfo = {
-      //   'Name': fullName,
-      //   'Email': this.state.email,
-      //   'Collection': this.props.collection.name,
-      //   'Category': this.props.collection.category,
-      //   'Software': this.state.software,
-      //   'Message': this.state.question,
-      //   'form_id': 'data-tnris-org-inquiry',
-      //   'recaptcha': this.state.recaptcha
-      // };
-      //
-      // console.log(formInfo);
-      // this.props.submitContactTnrisForm(formInfo);
-    }
-    else {
+    if (this.state.recaptcha === '') {
       this.setState({
         invalid: 'Please confirm you are not a robot to proceed.'
       });
+      return;
+    }
+
+    if (Object.keys(this.props.orders).length !== 0) {
+      console.log(this.state);
+      this.setState({
+        display: 'submitting',
+        invalid: ''
+      });
+      console.log('submitting');
+      const fullName = this.state.firstName + " " + this.state.lastName;
+      const address = this.state.address + " " + this.state.city + ", " + this.state.state + " " + this.state.zipcode;
+
+      let orders = "\n";
+      Object.keys(this.props.orders).map((collectionId, index) => {
+        console.log(index);
+        const dataName = this.props.collections[collectionId].name;
+        const dataNum = `(${index + 1}) ${dataName}`;
+        orders += dataNum;
+        orders += "\n";
+        const dataOrder = this.props.orders[collectionId];
+        orders += `   Coverage: ${dataOrder.coverage}\n`;
+        if (dataOrder.formats) {orders += `   Lidar Formats: ${dataOrder.formats}\n`;}
+        if (dataOrder.coverage === 'Partial') {orders += `   Identified By: ${dataOrder.type}\n`;}
+        if (dataOrder.description) {orders += `   Description: ${dataOrder.description}\n`;}
+        if (dataOrder.attachments) {
+          orders += `   Attachments:\n`
+          Object.keys(dataOrder.attachments).map(num => {
+            const attNumber = Number(num) + 1;
+            const att = dataOrder.attachments[num];
+            orders += `       #${attNumber} - ${att.filename}`;
+            orders += `       ${att.link}\n`;
+          });
+        }
+
+      });
+      console.log(orders);
+
+      const formInfo = {
+        'Name': fullName,
+        'Address': address,
+        'Phone': this.state.phone,
+        'Email': this.state.email,
+        'Industry': this.state.industry,
+        'Organization': this.state.organization,
+        'Delivery': this.state.delivery,
+        'HardDrive': this.state.hardDrive,
+        'Payment': this.state.payment,
+        'Order': orders,
+        'form_id': 'data-tnris-org-order',
+        'recaptcha': this.state.recaptcha
+      };
+
+      console.log(formInfo);
+      this.props.submitOrderCartForm(formInfo);
+    }
+    else {
+      this.setState({
+        invalid: 'The shopping cart is empty. You cannot order no data.'
+      });
+      return;
     }
 
   }
 
   render() {
-    let showHTML;
+    let showHTML = <div></div>;
     const orgClass = this.state.industry !== '' && this.state.industry !== 'No Industry' ? "mdc-text-field mdc-text-field--outlined" : "mdc-text-field mdc-text-field--outlined hidden-field";
     const hdClass = this.state.delivery !== '' && this.state.delivery !== 'Zipfile Download' ? "hard-drive-field" : "hidden-field";
     const zipfileDownloadLidarBlurb = this.state.delivery === 'Zipfile Download' ? <div className='mdc-typography--caption'><strong>Note:</strong> Lidar datasets are often very large, and TNRIS cannot offer digital downloads for datasets larger than 10 GB. If the ordered dataset is larger than 10 GB, you have the option of either providing a factory-sealed external hard drive (or multiple factory-sealed external hard drives) or purchasing them at cost from TNRIS.</div> : "";
@@ -206,19 +259,12 @@ class OrderCart extends Component {
         );
       }) : emptyCartMessage;
 
-    if (this.state.display === 'form') {
+    if (this.state.display === 'form' && Object.keys(this.props.orders).length !== 0) {
       showHTML = (
         <div>
           <p className="mdc-typography--body1">
             Complete the form below to finalize and submit your data order...
           </p>
-
-          <div className='mdc-typography--headline6'>
-            Shopping Cart
-          </div>
-          <ul className="mdc-list mdc-list--two-line order-cart-data-items">
-            {cartItems}
-          </ul>
 
           <div className='mdc-typography--headline6'>
             Requestor Details
@@ -612,43 +658,49 @@ class OrderCart extends Component {
         </div>
       );
     }
-    // else if (this.state.display === 'success') {
-    //   showHTML = (
-    //     <div className="order-cart-form-success">
-    //       <p>
-    //         <span><strong>Success!</strong></span>
-    //         <br />
-    //         Thank you for submitting your inquiry. We review submissions in a timely manner. (unless you are claiming our <strong>"data is corrupt"</strong>; in which case, we will NOT respond because our data is NOT corrupt. you are just a dumb-dumb.)
-    //       </p>
-    //     </div>
-    //   );
-    // }
-    // else if (this.state.display === 'error') {
-    //   showHTML = (
-    //     <div className="order-cart-form-error">
-    //       <p>
-    //         <span><strong>Error!</strong></span>
-    //         <br />
-    //         Unfortunately, we have encountered an error. Please wait a moment, refresh the page, and try again.
-    //         <br />
-    //         <br />
-    //         {this.props.errorStatus.toString()}
-    //       </p>
-    //     </div>
-    //   );
-    // }
-    // else if (this.state.display === 'submitting') {
-    //   showHTML = (
-    //     <div className="order-cart-form-submitting">
-    //       <p>
-    //         <span><strong>Submitting form...</strong></span>
-    //       </p>
-    //     </div>
-    //   );
-    // }
+    else if (this.state.display === 'success') {
+      showHTML = (
+        <div className="order-cart-form-success">
+          <p>
+            <span><strong>Success!</strong></span>
+            <br />
+            Your order has been submitted. TNRIS will contact you in a timely manner.
+          </p>
+        </div>
+      );
+    }
+    else if (this.state.display === 'error') {
+      showHTML = (
+        <div className="order-cart-form-error">
+          <p>
+            <span><strong>Error!</strong></span>
+            <br />
+            Unfortunately, we have encountered an error while submitting your order. Please wait a moment, refresh the page, and try again.
+            <br />
+            <br />
+            {this.props.errorStatus.toString()}
+          </p>
+        </div>
+      );
+    }
+    else if (this.state.display === 'submitting') {
+      showHTML = (
+        <div className="order-cart-form-submitting">
+          <p>
+            <span><strong>Submitting order...</strong></span>
+          </p>
+        </div>
+      );
+    }
 
     return (
       <form className="order-cart-form-component" onSubmit={ this.submitForm }>
+        <div className='mdc-typography--headline6'>
+          Shopping Cart
+        </div>
+        <ul className="mdc-list mdc-list--two-line order-cart-data-items">
+          {cartItems}
+        </ul>
         {showHTML}
       </form>
     )

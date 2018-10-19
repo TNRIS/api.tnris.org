@@ -1,6 +1,7 @@
 import {
   ADD_COLLECTION_TO_CART,
   REMOVE_COLLECTION_FROM_CART,
+  EMPTY_CART,
 
   UPLOAD_ORDER_BEGIN,
   UPLOAD_ORDER_SUCCESS,
@@ -11,6 +12,7 @@ import {
   SUBMIT_ORDER_FAILURE
 } from '../constants/orderCartActionTypes';
 
+//  --- cart item management ---
 export const addCollectionToCart = (collectionId, formInfo) => {
   return (dispatch) => {
     dispatch({
@@ -28,6 +30,14 @@ export const removeCollectionFromCart = (collectionId) => {
     })
   }
 };
+
+export const emptyCart = () => {
+  return (dispatch) => {
+    dispatch({
+      type: EMPTY_CART
+    })
+  }
+}
 
 // --- upload lifecycle actions ---
 export const uploadOrderBegin = () => ({
@@ -147,5 +157,36 @@ export function uploadOrderFile(collectionId, cartInfo) {
              });
            })
            .catch(error => dispatch(uploadOrderFailure(error)));
+  };
+}
+
+// --- submit order form actions ---
+export function submitOrderCartForm(formInfo) {
+  // const url = 'https://tnris.supportsystem.com/api/tickets.json';
+  const url = process.env.CONTACT_URL;
+  return (dispatch, getState) => {
+    dispatch(submitOrderBegin());
+    const payload = {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+        // "X-API-Key": process.env.OSTICKET_API_KEY
+      },
+      body: JSON.stringify(formInfo)
+    };
+    fetch(url, payload)
+    .then(handleErrors)
+    .then(res => res.json())
+    .then(json => {
+      console.log(json);
+      if (json.status === "success") {
+        dispatch(emptyCart());
+        dispatch(submitOrderSuccess());
+      }
+      else if (json.status === "error") {
+        dispatch(submitOrderFailure(json.message));
+      }
+    })
+    .catch(error => dispatch(submitOrderFailure(error)));
   };
 }

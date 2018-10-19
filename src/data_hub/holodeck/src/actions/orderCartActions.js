@@ -89,7 +89,6 @@ function getPolicy(policyUrl, dispatch) {
 }
 
 export function uploadOrderFile(collectionId, cartInfo) {
-  const url = process.env.CONTACT_URL;
   const bucket = 'https://' + process.env.CONTACT_UPLOAD_BUCKET + '.s3.amazonaws.com/';
   let policyUrl;
   if (cartInfo.type === 'AOI') {

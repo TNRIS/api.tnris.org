@@ -3,7 +3,7 @@ import {MDCTopAppBar} from '@material/top-app-bar/index';
 import {MDCDrawer} from "@material/drawer";
 // import SortContainer from '../containers/SortContainer';
 
-import tnrisLogo from '../images/tnris.png';
+import tnrisLogo from '../images/tnris_gray.png';
 
 export default class Header extends React.Component {
   constructor(props) {
@@ -33,6 +33,7 @@ export default class Header extends React.Component {
   }
 
   render() {
+    const shoppingCartClass = Object.keys(this.props.orders).length !== 0 ? "material-icons mdc-top-app-bar__navigation-icon shopping-cart-full" : "material-icons mdc-top-app-bar__navigation-icon";
     return (
       <header className="header-component mdc-top-app-bar mdc-top-app-bar--fixed">
         <div className="header-title mdc-top-app-bar__row">
@@ -57,7 +58,7 @@ export default class Header extends React.Component {
           <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
             {/* <SortContainer /> */}
             <a onClick={this.handleOpenOrderCartDialog} className="mdc-top-app-bar__action-item">
-              <i className="material-icons mdc-top-app-bar__navigation-icon">shopping_cart</i>
+              <i className={shoppingCartClass}>shopping_cart</i>
             </a>
             <a onClick={this.handleOpenToolDrawer} className="mdc-top-app-bar__action-item">
               <i className="material-icons mdc-top-app-bar__navigation-icon">search</i>

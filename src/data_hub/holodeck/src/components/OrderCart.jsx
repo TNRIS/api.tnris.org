@@ -192,9 +192,10 @@ class OrderCart extends Component {
             const att = dataOrder.attachments[num];
             orders += `       #${attNumber} - ${att.filename}`;
             orders += `       ${att.link}\n`;
+            return true;
           });
         }
-
+        return true;
       });
       console.log(orders);
 
@@ -700,15 +701,24 @@ class OrderCart extends Component {
     }
 
     return (
-      <form className="order-cart-form-component" onSubmit={ this.submitForm }>
-        <div className='mdc-typography--headline6'>
-          Shopping Cart
-        </div>
-        <ul className="mdc-list mdc-list--two-line order-cart-data-items">
-          {cartItems}
-        </ul>
-        {showHTML}
-      </form>
+      <div>
+        <header className="mdc-top-app-bar">
+          <div className="mdc-top-app-bar__row">
+            <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
+              <span className="mdc-top-app-bar__title">Order Data</span>
+            </section>
+          </div>
+        </header>
+        <form className="order-cart-form-component" onSubmit={ this.submitForm }>
+          <div className='mdc-typography--headline6'>
+            Shopping Cart
+          </div>
+          <ul className="mdc-list mdc-list--two-line order-cart-data-items">
+            {cartItems}
+          </ul>
+          {showHTML}
+        </form>
+      </div>
     )
   }
 }

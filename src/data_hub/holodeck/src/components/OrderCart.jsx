@@ -186,12 +186,17 @@ class OrderCart extends Component {
     const cartItems = Object.keys(this.props.orders).length !== 0 ?
       Object.keys(this.props.orders).map(collectionId => {
         const name = this.props.collections[collectionId].name;
+        const partialType = this.props.orders[collectionId].type ? `, ${this.props.orders[collectionId].type}` : "";
+        const attachmentNum = this.props.orders[collectionId].files ? this.props.orders[collectionId].files.length : "";
+        const attachments = this.props.orders[collectionId].attachments ? `, ${attachmentNum} attachment(s)`: "";
+        const formats = this.props.orders[collectionId].formats ? `, Lidar Formats: ${this.props.orders[collectionId].formats}` : "";
+
         return (
           <li key={collectionId} className="mdc-list-item">
             <span className="mdc-list-item__graphic material-icons" aria-hidden="true">whatshot</span>
             <span className="mdc-list-item__text">
               <span className="mdc-list-item__primary-text">{name}</span>
-              <span className="mdc-list-item__secondary-text">{this.props.orders[collectionId].coverage} Coverage</span>
+              <span className="mdc-list-item__secondary-text">{this.props.orders[collectionId].coverage} Coverage{partialType}{attachments}{formats}</span>
             </span>
             <span className="mdc-list-item__meta material-icons"
                   aria-hidden="true"

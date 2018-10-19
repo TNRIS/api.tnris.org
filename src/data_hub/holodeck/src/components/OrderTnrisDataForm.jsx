@@ -158,11 +158,14 @@ class OrderTnrisDataForm extends Component {
         return;
       }
       else {
-        if (this.state.breaklines) {cartInfo['Breaklines'] = this.state.breaklines;}
-        if (this.state.laz) {cartInfo['LAZ'] = this.state.laz;}
-        if (this.state.las) {cartInfo['LAS'] = this.state.las;}
-        if (this.state.dem) {cartInfo['DEM'] = this.state.dem;}
-        if (this.state.hypso) {cartInfo['Hypsography'] = this.state.hypso;}
+        const formats = [];
+
+        if (this.state.laz) {formats.push('LAZ');}
+        if (this.state.las) {formats.push('LAS');}
+        if (this.state.dem) {formats.push('DEM');}
+        if (this.state.hypso) {formats.push('Hypso');}
+        if (this.state.breaklines) {formats.push('Breaklines');}
+        cartInfo['formats'] = formats.join("/");
         this.setState({
           invalid: null
         });

@@ -6,6 +6,7 @@ import {
 import {
   ADD_COLLECTION_TO_CART,
   REMOVE_COLLECTION_FROM_CART,
+  EMPTY_CART,
 
   UPLOAD_ORDER_BEGIN,
   UPLOAD_ORDER_SUCCESS,
@@ -55,6 +56,12 @@ export default function contactReducer(state = initialState, action) {
       return {
         ...state,
         orders: removedOrders
+      };
+
+    case EMPTY_CART:
+      return {
+        ...state,
+        orders: {}
       };
 
     // AOI Upload

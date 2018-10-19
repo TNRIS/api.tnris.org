@@ -158,11 +158,14 @@ class OrderTnrisDataForm extends Component {
         return;
       }
       else {
-        if (this.state.breaklines) {cartInfo['Breaklines'] = this.state.breaklines;}
-        if (this.state.laz) {cartInfo['LAZ'] = this.state.laz;}
-        if (this.state.las) {cartInfo['LAS'] = this.state.las;}
-        if (this.state.dem) {cartInfo['DEM'] = this.state.dem;}
-        if (this.state.hypso) {cartInfo['Hypsography'] = this.state.hypso;}
+        const formats = [];
+
+        if (this.state.laz) {formats.push('LAZ');}
+        if (this.state.las) {formats.push('LAS');}
+        if (this.state.dem) {formats.push('DEM');}
+        if (this.state.hypso) {formats.push('Hypso');}
+        if (this.state.breaklines) {formats.push('Breaklines');}
+        cartInfo['formats'] = formats.join("/");
         this.setState({
           invalid: null
         });
@@ -467,10 +470,10 @@ class OrderTnrisDataForm extends Component {
       showHTML = (
         <div className="order-tnris-data-cart">
           <p className="mdc-typography--body2">
-            This dataset is already in your shopping cart.
+            This dataset is already in the shopping cart.
           </p>
           <p className="mdc-typography--body2">
-            Please visit your shopping cart to finalize your order.
+            Please visit the shopping cart to finalize your order.
           </p>
         </div>
       );
@@ -479,10 +482,10 @@ class OrderTnrisDataForm extends Component {
       showHTML = (
         <div className="order-tnris-data-cart">
           <p className="mdc-typography--body2">
-            This dataset has been added to your shopping cart.
+            This dataset has been added to the shopping cart.
           </p>
           <p className="mdc-typography--body2">
-            Please visit your shopping cart to finalize your order.
+            Please visit the shopping cart to finalize your order.
           </p>
         </div>
       );

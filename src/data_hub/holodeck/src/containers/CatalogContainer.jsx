@@ -2,6 +2,7 @@ import { connect } from 'react-redux';
 
 import Catalog from '../components/Catalog';
 import {
+  areaActions,
   collectionActions,
   collectionDialogActions,
   resourceActions
@@ -12,6 +13,7 @@ import {
 } from '../selectors/collectionSelectors';
 
 const mapStateToProps = (state) => ({
+  areas: state.areas.items,
   collections: getAllCollections(state),
   error: state.collections.error,
   loading: state.collections.loading,
@@ -22,6 +24,9 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
+  fetchAreas: () => {
+    dispatch(areaActions.fetchAreas());
+  },
   fetchCollections: () => {
     dispatch(collectionActions.fetchCollections());
   },

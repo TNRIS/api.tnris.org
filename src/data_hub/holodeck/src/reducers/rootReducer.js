@@ -1,5 +1,6 @@
 import { combineReducers } from "redux";
 
+import areas from './areaReducer';
 import collections from './collectionReducer';
 import collectionDialog from './collectionDialogReducer';
 import collectionFilter from './collectionFilterReducer';
@@ -12,6 +13,7 @@ import contact from './contactReducer';
 import orderCart from './orderCartReducer';
 
 const rootReducer = combineReducers({
+  areas,
   collections,
   collectionDialog,
   collectionFilter,

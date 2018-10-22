@@ -33,7 +33,6 @@ export default class Header extends React.Component {
   }
 
   render() {
-    console.log(this.props.orders);
     let shoppingCartClass = "material-icons mdc-top-app-bar__navigation-icon";
     if (this.props.orders) {
       shoppingCartClass = Object.keys(this.props.orders).length !== 0 ? "material-icons mdc-top-app-bar__navigation-icon shopping-cart-full" : "material-icons mdc-top-app-bar__navigation-icon";

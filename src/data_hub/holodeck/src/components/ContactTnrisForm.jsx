@@ -83,7 +83,6 @@ class ContactTnrisForm extends Component {
         display: 'submitting',
         invalid: ''
       });
-      console.log('submitting');
       const fullName = this.state.firstName + " " + this.state.lastName;
 
       const formInfo = {
@@ -96,8 +95,6 @@ class ContactTnrisForm extends Component {
         'form_id': 'data-tnris-org-inquiry',
         'recaptcha': this.state.recaptcha
       };
-
-      console.log(formInfo);
       this.props.submitContactTnrisForm(formInfo);
     }
     else {

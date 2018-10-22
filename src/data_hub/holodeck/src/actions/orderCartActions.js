@@ -185,17 +185,13 @@ export function uploadOrderFile(collectionId, cartInfo) {
                fetch(bucket, payload)
                 .then(handleErrors)
                 .then(res => {
-                  console.log(index);
                   if (res.status === 201 && index === cartFiles.length - 1) {
                     const filesKey = 'files';
                     const { [filesKey]:value , ...removedOrders } = cartInfo;
-                    console.log(removedOrders);
                     const newCart = {
                       ...removedOrders,
                       attachments: fileDetails
                     };
-                    console.log(collectionId);
-                    console.log(newCart);
                     dispatch(addCollectionToCart(collectionId, newCart));
                     dispatch(uploadOrderSuccess());
                   }
@@ -228,7 +224,6 @@ export function submitOrderCartForm(formInfo) {
     .then(handleErrors)
     .then(res => res.json())
     .then(json => {
-      console.log(json);
       if (json.status === "success") {
         dispatch(emptyCart());
         dispatch(submitOrderSuccess());

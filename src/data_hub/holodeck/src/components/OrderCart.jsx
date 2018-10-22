@@ -162,18 +162,15 @@ class OrderCart extends Component {
     }
 
     if (Object.keys(this.props.orders).length !== 0) {
-      console.log(this.state);
       this.setState({
         display: 'submitting',
         invalid: ''
       });
-      console.log('submitting');
       const fullName = this.state.firstName + " " + this.state.lastName;
       const address = this.state.address + " " + this.state.city + ", " + this.state.state + " " + this.state.zipcode;
 
       let orders = "\n";
       Object.keys(this.props.orders).map((collectionId, index) => {
-        console.log(index);
         const dataName = this.props.collections[collectionId].name;
         const dataNum = `(${index + 1}) ${dataName}`;
         orders += dataNum;
@@ -195,7 +192,6 @@ class OrderCart extends Component {
         }
         return true;
       });
-      console.log(orders);
 
       const formInfo = {
         'Name': fullName,
@@ -211,8 +207,6 @@ class OrderCart extends Component {
         'form_id': 'data-tnris-org-order',
         'recaptcha': this.state.recaptcha
       };
-
-      console.log(formInfo);
       this.props.submitOrderCartForm(formInfo);
     }
     else {

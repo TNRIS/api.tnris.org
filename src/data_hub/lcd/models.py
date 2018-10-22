@@ -872,16 +872,17 @@ class Collection(models.Model):
             Bucket='data.tnris.org',
             Prefix=collection_prefix
         )
-        print(response)
-        # add image keys to list
-        for image in response['Contents']:
-            key_list.append({'Key':image['Key']})
-        
-        response = client.delete_objects(
-            Bucket='data.tnris.org',
-            Delete={'Objects': key_list}
-        )
-        print('%s s3 files: delete success!' % self.name)
+
+        if 'Contents' in response.keys():
+            # add image keys to list
+            for image in response['Contents']:
+                key_list.append({'Key':image['Key']})
+
+            response = client.delete_objects(
+                Bucket='data.tnris.org',
+                Delete={'Objects': key_list}
+            )
+            print('%s s3 files: delete success!' % self.name)
         return
 
     # overwrite default model delete method so that all associated

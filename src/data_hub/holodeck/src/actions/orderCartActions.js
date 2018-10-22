@@ -47,7 +47,7 @@ export const fetchStoredShoppingCart = () => {
   return dispatch => {
     if (typeof(Storage) !== void(0)) {
       const current = localStorage.getItem("data_shopping_cart") ? JSON.parse(localStorage.getItem("data_shopping_cart")) : null;
-      console.log(current);
+      // console.log(current);
       if (current) {
         return Object.keys(current).map((collectionId) => {
           const formInfo = current[collectionId];

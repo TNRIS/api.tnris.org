@@ -60,10 +60,15 @@ available to the app
 @import 'tnrisOrderTemplate';
 @import 'toolDrawer';
 
-body {
-  margin: 0;
+html {
+  min-height: 100%;
+  position: relative;
 
-  a {
-    color: #6200ee;
+  body {
+    margin: 0;
+
+    a {
+      color: #6200ee;
+    }
   }
 }

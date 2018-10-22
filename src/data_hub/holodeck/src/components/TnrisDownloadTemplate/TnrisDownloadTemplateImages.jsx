@@ -5,7 +5,6 @@ import { Carousel } from 'react-responsive-carousel';
 export default class TnrisDownloadTemplateImages extends React.Component {
   constructor(props) {
       super(props);
-      console.log(this.props);
   }
 
   render() {

@@ -55,7 +55,6 @@ export default class TnrisDownloadTemplate extends React.Component {
         showComponent = <TnrisDownloadTemplateDetails collection={this.props.collection} />;
         break;
       case 'images':
-        console.log(this.props.collection);
         showComponent = (<TnrisDownloadTemplateImages
           images={this.props.collection.images}
           thumbnail={this.props.collection.thumbnail_image} />);

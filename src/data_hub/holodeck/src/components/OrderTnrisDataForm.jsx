@@ -144,7 +144,11 @@ class OrderTnrisDataForm extends Component {
 
   submitForm (event) {
     event.preventDefault();
-    const cartInfo = { coverage: this.state.orderType };
+    const cartDate = Date.now();
+    const cartInfo = {
+      coverage: this.state.orderType,
+      cartDate: cartDate
+    };
 
     if (this.collection.category.indexOf('Lidar') !== -1) {
       if (!this.state.breaklines &&

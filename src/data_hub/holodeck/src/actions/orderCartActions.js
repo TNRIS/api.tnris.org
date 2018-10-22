@@ -51,10 +51,21 @@ export const fetchStoredShoppingCart = () => {
       if (current) {
         return Object.keys(current).map((collectionId) => {
           const formInfo = current[collectionId];
-          return dispatch({
-            type: ADD_COLLECTION_TO_CART,
-            payload: { collectionId, formInfo }
-          });
+          const today = Date.now();
+          const diff = today - formInfo.cartDate;
+          // if today is more than 14 days after the cartDate (date the dataset
+          // was added to the shopping cart) then don't add it to the cart
+          // as the uploads have expired in s3
+          if (diff > 1209600000) {
+            removeCollectionFromLocalStorage(collectionId);
+            return true;
+          }
+          else {
+            return dispatch({
+              type: ADD_COLLECTION_TO_CART,
+              payload: { collectionId, formInfo }
+            });
+          }
         });
       }
     }

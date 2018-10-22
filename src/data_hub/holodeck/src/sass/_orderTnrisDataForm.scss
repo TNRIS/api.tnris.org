@@ -10,7 +10,7 @@ styles for component: OrderTnrisDataForm
 
   @include mdc-radio-ink-color(#6200ee);
   @include mdc-radio-checked-stroke-color(#6200ee);
-  @include mdc-radio-focus-indicator-color(#6200ee)
+  @include mdc-radio-focus-indicator-color(#6200ee);
 
   padding: 15px;
   overflow-y: auto;
@@ -65,6 +65,28 @@ styles for component: OrderTnrisDataForm
 
   }
 
+  .order-lidar-switches {
+    .mdc-form-field {
+      min-height: 40px;
+
+      .mdc-switch:not(.mdc-switch--disabled) {
+        @include mdc-switch-toggled-on-color(#6200ee);
+        @include mdc-switch-toggled-on-track-color(#6200ee);
+        @include mdc-switch-toggled-on-thumb-color(#6200ee);
+        @include mdc-switch-toggled-on-ripple-color(#6200ee);
+      }
+
+      .mdc-switch {
+        margin-right: 12px;
+      }
+
+      label {
+        cursor: pointer;
+      }
+    }
+
+  }
+
   .mdc-typography--headline6 {
     margin-bottom: 10px;
   }
@@ -84,6 +106,11 @@ styles for component: OrderTnrisDataForm
     label {
       cursor: pointer;
     }
+  }
+
+  .mdc-text-field:not(.mdc-text-field--disabled) + .mdc-text-field-helper-text {
+    margin-bottom: 10px;
+    color: #6200ee;
   }
 
   .invalid-prompt {

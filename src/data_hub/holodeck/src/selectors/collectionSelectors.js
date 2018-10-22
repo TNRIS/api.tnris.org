@@ -188,9 +188,9 @@ export const getSortedCollections = createSelector(
           sortedCollectionIds.sort((a,b) => {
             const one = collections[a]
             const two = collections[b]
-            if (one.name < two.name)
+            if (one.name.toLowerCase() < two.name.toLowerCase())
               return -1;
-            if (one.name > two.name)
+            if (one.name.toLowerCase() > two.name.toLowerCase())
               return 1;
             return 0;
           });
@@ -200,9 +200,9 @@ export const getSortedCollections = createSelector(
           sortedCollectionIds.sort((a,b) => {
             const one = collections[a]
             const two = collections[b]
-            if (one.name > two.name)
+            if (one.name.toLowerCase() > two.name.toLowerCase())
               return -1;
-            if (one.name < two.name)
+            if (one.name.toLowerCase() < two.name.toLowerCase())
               return 1;
             return 0;
           });

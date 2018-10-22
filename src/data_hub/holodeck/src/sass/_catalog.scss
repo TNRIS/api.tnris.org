@@ -6,6 +6,7 @@ styles for component: Catalog
 
   .catalog {
     padding-top: 100px;
+    margin-bottom: 375px;
 
     h1 {
       color: #68EFE8;
@@ -19,6 +20,15 @@ styles for component: Catalog
 
     .catalog-list {
       padding: 15px;
+      @include mdc-image-list-standard-columns(8);
+
+      @media (min-width: mdc-layout-grid-breakpoint-min(tablet)) and (max-width: mdc-layout-grid-breakpoint-min(desktop)) {
+        @include mdc-image-list-standard-columns(5);
+      }
+
+      @media (max-width: mdc-layout-grid-breakpoint-min(tablet)) {
+        @include mdc-image-list-standard-columns(2);
+      }
     }
 
   }

@@ -86,6 +86,16 @@ class CollectionForm(forms.ModelForm):
             choices = ()
         return choices
 
+    # generatl function to create a form dropdown for thumbnail image
+    def create_image_choices(self, id_field, label_field, type_table, order_field):
+        # get the relate type choices from the type table
+        try:
+            choices = (
+                (getattr(b, id_field), getattr(b, label_field)) for b in type_table.objects.filter(collection_id=self.instance.collection_id).order_by(order_field))
+        except ProgrammingError:
+            choices = ()
+        return choices
+
     # fire function to create the relate form inputs
     categories = forms.MultipleChoiceField(required=False, widget=forms.SelectMultiple(attrs={'title': 'Hold down ctrl to select multiple values',}), choices=[])
     projections = forms.MultipleChoiceField(required=False, widget=forms.SelectMultiple(attrs={'title': 'Hold down ctrl to select multiple values',}), choices=[])
@@ -115,7 +125,7 @@ class CollectionForm(forms.ModelForm):
             self.fields['file_types'].choices = self.create_relate_field('file_type_id', 'file_type', FileType, 'file_type')
             self.fields['resolutions'].choices = self.create_relate_field('resolution_type_id', 'resolution', ResolutionType, 'resolution')
             self.fields['uses'].choices = self.create_relate_field('use_type_id', 'use_type', UseType, 'use_type')
-            self.fields['thumbnail_image'].choices = self.create_relate_field('image_url', 'image_id', Image, 'image_id')
+            self.fields['thumbnail_image'].choices = self.create_image_choices('image_url', 'image_id', Image, 'image_id')
             self.attribute_initial_values('categories', CategoryRelate, 'category_type_id')
             self.attribute_initial_values('projections', EpsgRelate, 'epsg_type_id')
             self.attribute_initial_values('file_types', FileTypeRelate, 'file_type_id')

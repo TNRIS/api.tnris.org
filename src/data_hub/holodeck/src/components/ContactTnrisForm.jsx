@@ -83,7 +83,6 @@ class ContactTnrisForm extends Component {
         display: 'submitting',
         invalid: ''
       });
-      console.log('submitting');
       const fullName = this.state.firstName + " " + this.state.lastName;
 
       const formInfo = {
@@ -96,8 +95,6 @@ class ContactTnrisForm extends Component {
         'form_id': 'data-tnris-org-inquiry',
         'recaptcha': this.state.recaptcha
       };
-
-      console.log(formInfo);
       this.props.submitContactTnrisForm(formInfo);
     }
     else {
@@ -153,7 +150,7 @@ class ContactTnrisForm extends Component {
                     name="software"
                     onChange={this.handleChange}
                     required>
-              <option value="" disabled>Software Being Used...</option>
+              <option value="" disabled></option>
               <option value="ArcMap">ArcMap</option>
               <option value="ENVI">ENVI</option>
               <option value="ERDAS">ERDAS</option>
@@ -173,12 +170,11 @@ class ContactTnrisForm extends Component {
           <div id="ct-question" className="mdc-text-field mdc-text-field--textarea">
             <textarea id="ct-question-input" className="mdc-text-field__input"
                       rows="8" cols="40"
-                      placeholder="Question or Comment about this dataset..."
                       name="question"
                       onChange={this.handleChange}
                       required>
             </textarea>
-            <label className="mdc-floating-label" htmlFor="ct-question-input">Question</label>
+            <label className="mdc-floating-label" htmlFor="ct-question-input">Question or Comment about this dataset...</label>
             <div className="mdc-line-ripple"></div>
           </div>
 

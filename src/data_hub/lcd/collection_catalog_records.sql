@@ -15,10 +15,7 @@ SELECT collection.collection_id,
 	collection.wms_link,
 	collection.popup_link,
 	collection.carto_map_id,
-	collection.overview_image,
 	collection.thumbnail_image,
-	collection.natural_image,
-	collection.urban_image,
 	collection.tile_index_url,
 	collection.supplemental_report_url,
 	collection.lidar_breaklines_url,
@@ -30,6 +27,7 @@ SELECT collection.collection_id,
 	string_agg(distinct resolution_type.resolution, '/' order by resolution_type.resolution) as resolution,
 	string_agg(distinct use_type.use_type, ',' order by use_type.use_type) as recommended_use,
   string_agg(distinct resource_type.resource_type_abbreviation, ',' order by resource_type.resource_type_abbreviation) as resource_types,
+  string_agg(distinct image.image_url, ',') as images,
   CASE
     WHEN (
       (string_agg(distinct resource_type.resource_type_abbreviation, ',' order by resource_type.resource_type_abbreviation)
@@ -143,6 +141,8 @@ LEFT JOIN agency_type ON agency_type.agency_type_id=collection.agency_type_id
 LEFT JOIN license_type ON license_type.license_type_id=collection.license_type_id
 
 LEFT JOIN template_type ON template_type.template_type_id=collection.template_type_id
+
+LEFT JOIN image ON image.collection_id = collection.collection_id
 
 GROUP BY collection.collection_id,
 				agency_type.agency_name,

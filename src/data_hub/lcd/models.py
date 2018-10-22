@@ -711,10 +711,7 @@ class Collection(models.Model):
             'wms_link',
             'popup_link',
             'carto_map_id',
-            # 'overview_image',
             'thumbnail_image',
-            # 'natural_image',
-            # 'urban_image',
             'tile_index_url',
             'supplemental_report_url',
             'lidar_breaklines_url',
@@ -796,30 +793,12 @@ class Collection(models.Model):
         null=True,
         blank=True
     )
-    # overview_image = models.TextField(
-    #     'Overview Image',
-    #     max_length=120,
-    #     null=True,
-    #     blank=True
-    # )
     thumbnail_image = models.TextField(
         'Thumb Image',
         max_length=120,
         null=True,
         blank=True
     )
-    # natural_image = models.TextField(
-    #     'Natural Image',
-    #     max_length=120,
-    #     null=True,
-    #     blank=True
-    # )
-    # urban_image = models.TextField(
-    #     'Urban Image',
-    #     max_length=120,
-    #     null=True,
-    #     blank=True
-    # )
     tile_index_url = models.URLField(
         'Tile Index URL',
         max_length=255,
@@ -888,37 +867,22 @@ class Collection(models.Model):
         # set aside list for compiling keys
         key_list = []
         # list Objects
+        collection_prefix = str(self.collection_id) + '/assets'
         response = client.list_objects_v2(
             Bucket='data.tnris.org',
-            Prefix='collection_id/assets'
+            Prefix=collection_prefix
         )
-        print(response)
-        # add image keys to list
-        # d_files = ['overview.jpg',
-        #            'thumbnail.jpg',
-        #            'natural.jpg',
-        #            'urban.jpg']
-        # for f in d_files:
-        #     key = "%s/assets/%s" % (self.collection_id, f)
-        #     key_list.append({'Key':key})
 
-        # add zipfile keys to list
-        z_files = ['-supplemental-report.zip',
-                   '-lidar-breaklines.zip',
-                   '-tile-index.zip']
+        if 'Contents' in response.keys():
+            # add image keys to list
+            for image in response['Contents']:
+                key_list.append({'Key':image['Key']})
 
-        urlized_nm = self.name.lower().replace(', ', '-').replace(' & ', '-').replace(' ', '-').replace('(', '').replace(')', '').replace('\\', '-').replace('/', '-').replace('&', '').replace(',', '-')
-
-        for f in z_files:
-            f = urlized_nm + f
-            key = "%s/assets/%s" % (self.collection_id, f)
-            key_list.append({'Key':key})
-
-        response = client.delete_objects(
-            Bucket='data.tnris.org',
-            Delete={'Objects': key_list}
-        )
-        print('%s s3 files: delete success!' % self.name)
+            response = client.delete_objects(
+                Bucket='data.tnris.org',
+                Delete={'Objects': key_list}
+            )
+            print('%s s3 files: delete success!' % self.name)
         return
 
     # overwrite default model delete method so that all associated
@@ -1100,17 +1064,11 @@ class CcrView(models.Model):
     carto_map_id = models.TextField(
         'Carto Map ID'
     )
-    overview_image = models.TextField(
-        'Overview Image'
-    )
     thumbnail_image = models.TextField(
         'Thumb Image'
     )
-    natural_image = models.TextField(
-        'Natural Image'
-    )
-    urban_image = models.TextField(
-        'Urban Image'
+    images = models.TextField(
+        'Image List'
     )
     tile_index_url = models.URLField(
         'Tile Index URL'

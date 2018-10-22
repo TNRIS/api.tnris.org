@@ -10,6 +10,7 @@ class OrderCart extends Component {
 
   constructor(props) {
       super(props);
+      // form fields go in state to monitor changes
       this.state = {
         firstName: '',
         lastName: '',
@@ -34,6 +35,7 @@ class OrderCart extends Component {
   }
 
   componentDidMount() {
+    // create Material form objects
     document.querySelectorAll('.mdc-floating-label').forEach((mdl) => {
       new MDCFloatingLabel(mdl);
     });
@@ -52,6 +54,7 @@ class OrderCart extends Component {
   }
 
   componentWillUpdate(nextProps) {
+    // change display based on lifecycle of submitting order
     if (nextProps.submitting === false &&
         nextProps.submitError !== null &&
         this.state.display === 'submitting') {
@@ -74,6 +77,7 @@ class OrderCart extends Component {
   }
 
   componentDidUpdate() {
+    // if showing the form and datasets present in cart then adjust form inputs
     if (this.state.display === 'form' && Object.keys(this.props.orders).length !== 0) {
       document.querySelectorAll('.mdc-floating-label').forEach((mdl) => {
         new MDCFloatingLabel(mdl);
@@ -129,6 +133,7 @@ class OrderCart extends Component {
   }
 
   handleChange(event) {
+    // on form field change, update state
     const name = event.target.name
     const value = event.target.value
     const nextState = {};
@@ -153,22 +158,23 @@ class OrderCart extends Component {
 
   submitForm (event) {
     event.preventDefault();
-
+    // if the recaptcha hasn't been verified, invalidate the form
     if (this.state.recaptcha === '') {
       this.setState({
         invalid: 'Please confirm you are not a robot to proceed.'
       });
       return;
     }
-
+    // as long as there are orders in the cart, attempt to submit
     if (Object.keys(this.props.orders).length !== 0) {
       this.setState({
         display: 'submitting',
         invalid: ''
       });
+      // format name and address for pretty ticket
       const fullName = this.state.firstName + " " + this.state.lastName;
       const address = this.state.address + " " + this.state.city + ", " + this.state.state + " " + this.state.zipcode;
-
+      // format dataset details in order for pretty ticket
       let orders = "\n";
       Object.keys(this.props.orders).map((collectionId, index) => {
         const dataName = this.props.collections[collectionId].name;
@@ -192,7 +198,7 @@ class OrderCart extends Component {
         }
         return true;
       });
-
+      // create object of all form information and submit
       const formInfo = {
         'Name': fullName,
         'Address': address,
@@ -219,6 +225,7 @@ class OrderCart extends Component {
   }
 
   render() {
+    // default filler for empty cart
     let showHTML = (
       <div className="default-order-cart-display">
         <button className="mdc-button mdc-button--raised" onClick={() => this.props.closeOrderCartDialog()}>
@@ -226,15 +233,18 @@ class OrderCart extends Component {
         </button>
       </div>
     );
+    // toggle classes of inputs based on other form field selections
     const orgClass = this.state.industry !== '' && this.state.industry !== 'No Industry' ? "mdc-text-field mdc-text-field--outlined" : "mdc-text-field mdc-text-field--outlined hidden-field";
     const hdClass = this.state.delivery !== '' && this.state.delivery !== 'Zipfile Download' ? "hard-drive-field" : "hidden-field";
     const zipfileDownloadLidarBlurb = this.state.delivery === 'Zipfile Download' ? <div className='mdc-typography--caption'><strong>Note:</strong> Lidar datasets are often very large, and TNRIS cannot offer digital downloads for datasets larger than 10 GB. If the ordered dataset is larger than 10 GB, you have the option of either providing a factory-sealed external hard drive (or multiple factory-sealed external hard drives) or purchasing them at cost from TNRIS.</div> : "";
-
+    // empty cart html
     const emptyCartMessage = (
       <ul className="mdc-list">
         There are no datasets in your cart.
       </ul>
     );
+    // if cart not empty, iterate datasets and display their order details,
+    // otherwise show emptyCartMessage
     const cartItems = Object.keys(this.props.orders).length !== 0 ?
       Object.keys(this.props.orders).map(collectionId => {
         const name = this.props.collections[collectionId].name;
@@ -257,7 +267,7 @@ class OrderCart extends Component {
           </li>
         );
       }) : emptyCartMessage;
-
+      // if cart not empty and form not submitting/submitted, show form itself
     if (this.state.display === 'form' && Object.keys(this.props.orders).length !== 0) {
       showHTML = (
         <div>

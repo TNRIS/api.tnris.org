@@ -43,6 +43,9 @@ export const emptyCart = () => {
 }
 
 // --- local storage cart replication management ---
+
+// get the shopping cart out of local storage and update component/store
+// used on initial load
 export const fetchStoredShoppingCart = () => {
   return dispatch => {
     if (typeof(Storage) !== void(0)) {
@@ -75,6 +78,7 @@ export const fetchStoredShoppingCart = () => {
   }
 }
 
+// clear out the shopping cart in local storage
 export const emptyStoredShoppingCart = () => {
   if (typeof(Storage) !== void(0)) {
     if (localStorage.getItem("data_shopping_cart")) {
@@ -143,6 +147,9 @@ function handleErrors(response) {
 
 // --- upload order file actions ---
 
+// shared function for getting permissions from the contact app to do the upload
+// to s3. contact app lets the bucket know an upload is coming and returns
+// a key which expires after a few minutes
 function getPolicy(policyUrl, dispatch) {
   return fetch(policyUrl)
          .then(handleErrors)
@@ -156,6 +163,7 @@ function getPolicy(policyUrl, dispatch) {
 export function uploadOrderFile(collectionId, cartInfo) {
   const bucket = 'https://' + process.env.CONTACT_UPLOAD_BUCKET + '.s3.amazonaws.com/';
   let policyUrl;
+  // different policy permissions based on file type (zip vs image)
   if (cartInfo.type === 'AOI') {
     policyUrl = process.env.ZIP_UPLOAD_POLICY_URL;
   }
@@ -168,8 +176,9 @@ export function uploadOrderFile(collectionId, cartInfo) {
            .then((s3policy) => {
              const cartFiles = Array.from(cartInfo.files);
              const fileDetails = {};
+             // iterate all cart files since mulitple screenshot images permitted
              cartFiles.forEach((file, index) => {
-
+               // build fake form to do the upload. required to use the s3 rest api
                const fileKey = 'data-tnris-org-order/' + collectionId + '_' + Date.now() + '_' + file.name;
                let formData = new FormData();
                formData.append('key', fileKey);
@@ -192,17 +201,21 @@ export function uploadOrderFile(collectionId, cartInfo) {
                  'filename': file.name,
                  'link': "https://s3.amazonaws.com/contact-uploads/" + fileKey
                };
-
+               // do the upload
                fetch(bucket, payload)
                 .then(handleErrors)
                 .then(res => {
                   if (res.status === 201 && index === cartFiles.length - 1) {
+                    // if successful, remove the 'files' key from the form info
+                    // it is no longer needed since the upload was successful and
+                    // it just screws up the info saved in local storage
                     const filesKey = 'files';
                     const { [filesKey]:value , ...removedOrders } = cartInfo;
                     const newCart = {
                       ...removedOrders,
                       attachments: fileDetails
                     };
+                    // now that uploads are done, add to the store for components
                     dispatch(addCollectionToCart(collectionId, newCart));
                     dispatch(uploadOrderSuccess());
                   }

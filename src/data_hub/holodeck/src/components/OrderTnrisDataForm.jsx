@@ -10,7 +10,9 @@ class OrderTnrisDataForm extends Component {
 
   constructor(props) {
       super(props);
+      // if dataset already in cart, tell the user. otherwise, show the form
       const startDisplay = this.props.orders.hasOwnProperty(this.props.selectedCollection) ? 'cart' : 'form';
+      // form field values tracked in state
       this.state = {
         orderType: '',
         portionDescription: '',
@@ -32,6 +34,7 @@ class OrderTnrisDataForm extends Component {
   }
 
   componentDidMount() {
+    // initiate Material form inputs
     document.querySelectorAll('.mdc-floating-label').forEach((mdl) => {
       new MDCFloatingLabel(mdl);
     });
@@ -59,6 +62,7 @@ class OrderTnrisDataForm extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    // toggle form and dialogues of submission lifecycle
     if (nextProps.uploading === false &&
         nextProps.uploadError !== null &&
         this.state.display === 'uploading') {
@@ -78,6 +82,7 @@ class OrderTnrisDataForm extends Component {
   }
 
   componentDidUpdate () {
+    // alter form requirements and inputs displayed based on form input selections
     if (this.state.orderType === 'Partial') {
       document.getElementsByName("portionDescription").forEach((input) => {
         input.required = true;
@@ -122,6 +127,7 @@ class OrderTnrisDataForm extends Component {
   }
 
   handleChange(event) {
+    // on form field value change, update state
     const name = event.target.name
     const value = event.target.value
     const nextState = {};
@@ -136,6 +142,7 @@ class OrderTnrisDataForm extends Component {
   }
 
   handleSwitch(event) {
+    // form switches value changes need to update state
     const name = event.target.name
     const nextState = {};
     nextState[name] = !this.state[name];
@@ -144,12 +151,15 @@ class OrderTnrisDataForm extends Component {
 
   submitForm (event) {
     event.preventDefault();
+    // when adding dataset to cart, apply the current datetime so that they
+    // can be expired 14 days after adding to cart. this is because s3 uploads
+    // auto-delete in this time period
     const cartDate = Date.now();
     const cartInfo = {
       coverage: this.state.orderType,
       cartDate: cartDate
     };
-
+    // if a lidar dataset, they must select at least 1 format of data
     if (this.collection.category.indexOf('Lidar') !== -1) {
       if (!this.state.breaklines &&
           !this.state.laz &&
@@ -162,6 +172,7 @@ class OrderTnrisDataForm extends Component {
         return;
       }
       else {
+        // create pretty string from their selected formats
         const formats = [];
 
         if (this.state.laz) {formats.push('LAZ');}
@@ -175,7 +186,7 @@ class OrderTnrisDataForm extends Component {
         });
       }
     }
-
+    // if a partial dataset, handle the lifecycle of the uploads
     if (this.state.orderType === 'Partial') {
       switch (this.state.portionDescription) {
         case 'AOI':
@@ -228,6 +239,7 @@ class OrderTnrisDataForm extends Component {
       }
     }
     else if (this.state.orderType === 'Full') {
+      // if a full dataset, there are no uploads so just add to cart
       this.props.addCollectionToCart(this.props.selectedCollection, cartInfo);
       this.setState({
         display: 'added',
@@ -237,6 +249,7 @@ class OrderTnrisDataForm extends Component {
   }
 
   render() {
+    // toggle classes based on other form input selections
     const partialClass = this.state.orderType === 'Partial' ? "partial-description-field" : "hidden-field";
     const uploadAoiClass = this.state.portionDescription === 'AOI' ? "mdc-form-field" : "mdc-form-field hidden-field";
     const uploadScreenshotClass = this.state.portionDescription === 'Screenshot' ? "mdc-form-field" : "mdc-form-field hidden-field";
@@ -244,6 +257,7 @@ class OrderTnrisDataForm extends Component {
     const invalid = this.state.invalid ? this.state.invalid : '';
     let showHTML;
     let lidarFields;
+    // if a lidar dataset, add format switches
     if (this.collection.category.indexOf('Lidar') !== -1) {
       lidarFields = (
         <div className="order-lidar-switches">

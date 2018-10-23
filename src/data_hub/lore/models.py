@@ -306,6 +306,12 @@ class ChcView(models.Model):
     thumbnail_image = models.URLField(
         'Thumbnail Image URL'
     )
+    category = models.TextField(
+        'Category'
+    )
+    recommended_use = models.TextField(
+        'Recommended Use'
+    )
 
     def __str__(self):
         return self.name + str(self.to_date)

@@ -27,7 +27,9 @@ SELECT historical_collection.id as collection_id,
         WHERE product.collection_id=historical_collection.id), ',') as products,
   CONCAT(agency.abbreviation, ' ', 'Orthoimagery') as name,
   'historical-aerial' as template,
-  'https://s3.amazonaws.com/data.tnris.org/historical_thumbnail.jpg' as thumbnail_image
+  'https://s3.amazonaws.com/data.tnris.org/historical_thumbnail.jpg' as thumbnail_image,
+  'Historic Imagery,Orthoimagery' as category,
+  'Historical Use,Research' as recommended_use
 FROM historical_collection
 
 LEFT JOIN county_relate ON county_relate.collection_id=historical_collection.id

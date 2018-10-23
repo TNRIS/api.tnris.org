@@ -13,6 +13,9 @@ from .models import (Agency, Collection, County, CountyRelate, FrameSize,
 class AgencyAdmin(admin.ModelAdmin):
     model = Agency
     ordering = ('name',)
+    list_display = (
+        'name', 'abbreviation'
+    )
 
 
 class FrameSizeAdmin(admin.ModelAdmin):

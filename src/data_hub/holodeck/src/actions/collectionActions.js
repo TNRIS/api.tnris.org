@@ -50,16 +50,38 @@ function normalizeCollections(originalData) {
   return normalize(originalData, [collectionSchema]);
 }
 
+function historicalRecursiveFetcher(dispatch, getState, apiQuery, response) {
+  // recursive api endpoint fetcher for handling pagination
+  fetch(apiQuery)
+  .then(handleErrors)
+  .then(res => res.json())
+  .then(json => {
+    let allResults = response.concat(json.results);
+    if (json.next) {
+      historicalRecursiveFetcher(dispatch, getState, json.next, allResults);
+    }
+    else {
+      let normalizedJson = normalizeCollections(allResults);
+      dispatch(fetchCollectionsSuccess(normalizedJson));
+      return normalizedJson;
+    }
+  })
+  .catch(error => dispatch(fetchCollectionResourcesFailure(error)));
+}
+
+export function fetchHistorical(dispatch, getState, results) {
+  const apiQuery = '/api/v1/historical/collections';
+  return historicalRecursiveFetcher(dispatch, getState, apiQuery, results);
+}
+
 export function fetchCollections() {
-  return dispatch => {
+  return (dispatch, getState) => {
     dispatch(fetchCollectionsBegin());
     return fetch('/api/v1/collections')
       .then(handleErrors)
       .then(res => res.json())
       .then(json => {
-        let normalizedJson = normalizeCollections(json.results);
-        dispatch(fetchCollectionsSuccess(normalizedJson));
-        return normalizedJson;
+        return fetchHistorical(dispatch, getState, json.results);
       })
       .catch(error => dispatch(fetchCollectionsFailure(error)));
   };

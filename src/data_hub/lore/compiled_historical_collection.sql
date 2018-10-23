@@ -3,18 +3,18 @@
 -- creation
 DROP VIEW IF EXISTS "compiled_historical_collection";
 CREATE VIEW "compiled_historical_collection" as
-SELECT historical_collection.id,
+SELECT historical_collection.id as collection_id,
   historical_collection.collection,
   historical_collection.from_date,
-  historical_collection.to_date,
+  historical_collection.to_date as acquisition_date,
   historical_collection.public,
   historical_collection.index_service_url,
   historical_collection.frames_service_url,
   historical_collection.mosaic_service_url,
   historical_collection.ls4_link,
   string_agg(distinct county.name, ',' order by county.name) as counties,
-  agency.name,
-  agency.abbreviation,
+  agency.name as agency_name,
+  agency.abbreviation as agency_abbreviation,
   array_to_string(ARRAY(SELECT json_build_object('coverage', product.coverage,
                                  'number_of_frames', product.number_of_frames,
                                  'medium', product.medium,
@@ -24,7 +24,10 @@ SELECT historical_collection.id,
         FROM product
         LEFT JOIN scale ON scale.id=product.scale_id
         LEFT JOIN frame_size ON frame_size.id=product.frame_size_id
-        WHERE product.collection_id=historical_collection.id), ',') as products
+        WHERE product.collection_id=historical_collection.id), ',') as products,
+  CONCAT(agency.abbreviation, ' ', 'Orthoimagery') as name,
+  'historical-aerial' as template,
+  'https://s3.amazonaws.com/data.tnris.org/historical_thumbnail.jpg' as thumbnail_image
 FROM historical_collection
 
 LEFT JOIN county_relate ON county_relate.collection_id=historical_collection.id

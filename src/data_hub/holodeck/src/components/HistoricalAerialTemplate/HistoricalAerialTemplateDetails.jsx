@@ -5,7 +5,6 @@ import CountyCoverage from '../DialogTemplateListItems/CountyCoverage'
 import HistoricalProducts from '../DialogTemplateListItems/HistoricalProducts'
 
 import ContactContainer from '../../containers/ContactContainer';
-import OrderTnrisDataFormContainer from '../../containers/OrderTnrisDataFormContainer';
 
 export default class TnrisDownloadTemplateDetails extends React.Component {
 
@@ -19,14 +18,7 @@ export default class TnrisDownloadTemplateDetails extends React.Component {
         <Metadata collection={this.props.collection} />
         {countyCoverageCard}
         {productsCard}
-        <div className="template-content-div">
-          <div className='mdc-typography--headline5 template-content-div-header'>
-            Order
-          </div>
-          <div>
-            <OrderTnrisDataFormContainer />
-          </div>
-        </div>
+
         <div className="template-content-div">
           <div className='mdc-typography--headline5 template-content-div-header'>
             Contact

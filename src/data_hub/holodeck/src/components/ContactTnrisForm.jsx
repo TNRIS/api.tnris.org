@@ -91,6 +91,7 @@ class ContactTnrisForm extends Component {
         'Name': fullName,
         'Email': this.state.email,
         'Collection': this.compiledDisplayName,
+        'UUID': this.props.collection.collection_id,
         'Category': this.props.collection.category,
         'Software': this.state.software,
         'Message': this.state.question,

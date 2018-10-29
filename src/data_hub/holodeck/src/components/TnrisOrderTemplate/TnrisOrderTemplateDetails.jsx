@@ -3,8 +3,6 @@ import React from 'react';
 import Description from '../DialogTemplateListItems/Description'
 import LidarBlurb from '../DialogTemplateListItems/LidarBlurb'
 import Metadata from '../DialogTemplateListItems/Metadata'
-// import Services from '../DialogTemplateListItems/Services'
-// import Supplementals from '../DialogTemplateListItems/Supplementals'
 
 import ContactContainer from '../../containers/ContactContainer';
 // import OrderTnrisDataFormContainer from '../../containers/OrderTnrisDataFormContainer';

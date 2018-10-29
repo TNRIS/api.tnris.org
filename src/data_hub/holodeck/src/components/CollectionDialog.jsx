@@ -2,7 +2,7 @@ import React from 'react';
 import { MDCDialog } from '@material/dialog';
 
 import TnrisDownloadTemplate from './TnrisDownloadTemplate/TnrisDownloadTemplate';
-import TnrisOrderTemplate from './TnrisOrderTemplate';
+import TnrisOrderTemplate from './TnrisOrderTemplate/TnrisOrderTemplate';
 import HistoricalAerialTemplate from './HistoricalAerialTemplate';
 import OutsideEntityTemplate from './OutsideEntityTemplate';
 

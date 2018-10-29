@@ -350,7 +350,7 @@ class OrderTnrisDataForm extends Component {
       showHTML = (
         <div>
           <p className="mdc-typography--body2">
-            Everything you're looking for too large to download? Every dataset is available for order directly from TNRIS.
+            Is there no download option for this dataset? Or is everything you're looking for too large to directly download? Every dataset is available for order directly from TNRIS.
           </p>
 
           <div className='mdc-typography--headline6'>

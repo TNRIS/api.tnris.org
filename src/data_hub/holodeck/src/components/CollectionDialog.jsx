@@ -3,7 +3,7 @@ import { MDCDialog } from '@material/dialog';
 
 import TnrisDownloadTemplate from './TnrisDownloadTemplate/TnrisDownloadTemplate';
 import TnrisOrderTemplate from './TnrisOrderTemplate';
-import HistoricalAerialTemplate from './HistoricalAerialTemplate';
+import HistoricalAerialTemplate from './HistoricalAerialTemplate/HistoricalAerialTemplate';
 import OutsideEntityTemplate from './OutsideEntityTemplate';
 
 class CollectionDialog extends React.Component {

@@ -23,6 +23,8 @@ class ContactTnrisForm extends Component {
       this.submitForm = this.submitForm.bind(this);
       this.handleChange = this.handleChange.bind(this);
       this.recaptchaChange = this.recaptchaChange.bind(this);
+      const collectionYear = this.props.collection.acquisition_date && this.props.collection.template === 'historical-aerial' ? this.props.collection.acquisition_date.substring(0, 4) + ' ' : '';
+      this.compiledDisplayName = collectionYear + this.props.collection.name;
   }
 
   componentDidMount() {
@@ -88,7 +90,7 @@ class ContactTnrisForm extends Component {
       const formInfo = {
         'Name': fullName,
         'Email': this.state.email,
-        'Collection': this.props.collection.name,
+        'Collection': this.compiledDisplayName,
         'Category': this.props.collection.category,
         'Software': this.state.software,
         'Message': this.state.question,
@@ -112,7 +114,7 @@ class ContactTnrisForm extends Component {
       showHTML = (
         <div>
           <p className="mdc-typography--body2">
-            Complete the form below to inquire with TNRIS about the <strong>{this.props.collection.name}</strong> dataset...
+            Complete the form below to inquire with TNRIS about the <strong>{this.compiledDisplayName}</strong> dataset...
           </p>
 
           <div id="ct-first-name" className="mdc-text-field mdc-text-field--outlined">

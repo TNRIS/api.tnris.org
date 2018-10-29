@@ -28,7 +28,7 @@ SELECT historical_collection.id as collection_id,
   CONCAT(agency.abbreviation, ' ', 'Orthoimagery') as name,
   'historical-aerial' as template,
   'https://s3.amazonaws.com/data.tnris.org/historical_thumbnail.jpg' as thumbnail_image,
-  'Historic Imagery,Orthoimagery' as category,
+  'Historic Imagery' as category,
   'Historical Use,Research' as recommended_use
 FROM historical_collection
 

@@ -27,7 +27,7 @@ export default class TnrisDownloadTemplateDetails extends React.Component {
         <Description collection={this.props.collection} />
         {lidarCard}
         <div className="template-content-div">
-          <div className='mdc-typography--headline5 template-content-div-header' onClick={this.toggleOrder}>
+          <div className='mdc-typography--headline5 template-content-div-header'>
             Order
           </div>
           <div>
@@ -35,7 +35,7 @@ export default class TnrisDownloadTemplateDetails extends React.Component {
           </div>
         </div>
         <div className="template-content-div">
-          <div className='mdc-typography--headline5 template-content-div-header' onClick={this.toggleContact}>
+          <div className='mdc-typography--headline5 template-content-div-header'>
             Contact
           </div>
           <div>

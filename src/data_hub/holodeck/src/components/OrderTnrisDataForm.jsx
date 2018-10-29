@@ -410,7 +410,7 @@ class OrderTnrisDataForm extends Component {
               </div>
               <label htmlFor="order-partial-aoi-input">Area of Interest Boundary File (TNRIS Preferred Option)</label>
             </div>
-            <div className='mdc-typography--caption'>Select a zipped (.zip) Shapefile or KML to upload. Maximum allowed file size is 20 MB.</div>
+            <div className='mdc-typography--caption'>Select a zipped (.zip) Shapefile or KML to upload. Maximum allowed file size is 20 MB. <a href="http://geojson.io" target="_blank" rel="noopener noreferrer">Don't have a shapefile? Draw one here!</a></div>
             <div className={uploadAoiClass}>
               <input type="file"
                      id="order-partial-aoi-file"

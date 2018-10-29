@@ -5,8 +5,8 @@ import {
   areaActions,
   collectionActions,
   collectionDialogActions,
-  mapDialogActions,
-  orderCartActions } from '../actions';
+  orderCartActions,
+  resourceActions } from '../actions';
 import {
   getAllCollections,
   getSortedCollections
@@ -35,9 +35,6 @@ const mapDispatchToProps = dispatch => ({
   },
   openCollectionDialog: () => {
     dispatch(collectionDialogActions.openCollectionDialog());
-  },
-  openMapDialog: () => {
-    dispatch(mapDialogActions.openMapDialog());
   },
   fetchStoredShoppingCart: () => {
     dispatch(orderCartActions.fetchStoredShoppingCart());

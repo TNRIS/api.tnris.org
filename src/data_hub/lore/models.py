@@ -248,7 +248,7 @@ class ChcView(models.Model):
         verbose_name = 'Compiled Historical Collection'
         verbose_name_plural = 'Compiled Historical Collections'
 
-    id = models.UUIDField(
+    collection_id = models.UUIDField(
         'Historical Collection ID',
         primary_key=True
     )
@@ -259,8 +259,8 @@ class ChcView(models.Model):
     from_date = models.DateField(
         'From Date'
     )
-    to_date = models.DateField(
-        'To Date'
+    acquisition_date = models.DateField(
+        'To Date (Acquisition)'
     )
     public = models.BooleanField(
         'Public'
@@ -284,17 +284,34 @@ class ChcView(models.Model):
     counties = models.TextField(
         'Counties'
     )
-    name = models.CharField(
+    agency_name = models.CharField(
         'Acquiring Agency Name',
         max_length=254
     )
-    abbreviation = models.CharField(
+    agency_abbreviation = models.CharField(
         'Acquiring Agency Abbreviation',
         max_length=20
     )
     products = models.TextField(
         'Products'
     )
+    name = models.CharField(
+        'Display Name',
+        max_length=100
+    )
+    template = models.CharField(
+        'Display Template',
+        max_length=20
+    )
+    thumbnail_image = models.URLField(
+        'Thumbnail Image URL'
+    )
+    category = models.TextField(
+        'Category'
+    )
+    recommended_use = models.TextField(
+        'Recommended Use'
+    )
 
     def __str__(self):
-        return self.name + str(self.from_date)
+        return self.name + str(self.to_date)

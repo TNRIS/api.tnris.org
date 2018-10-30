@@ -7,7 +7,6 @@ import Services from '../DialogTemplateListItems/Services'
 import Supplementals from '../DialogTemplateListItems/Supplementals'
 
 import ContactContainer from '../../containers/ContactContainer';
-import OrderTnrisDataFormContainer from '../../containers/OrderTnrisDataFormContainer';
 
 export default class TnrisDownloadTemplateDetails extends React.Component {
 
@@ -26,14 +25,7 @@ export default class TnrisDownloadTemplateDetails extends React.Component {
         {servicesCard}
         <Description collection={this.props.collection} />
         {lidarCard}
-        <div className="template-content-div">
-          <div className='mdc-typography--headline5 template-content-div-header'>
-            Order
-          </div>
-          <div>
-            <OrderTnrisDataFormContainer />
-          </div>
-        </div>
+
         <div className="template-content-div">
           <div className='mdc-typography--headline5 template-content-div-header'>
             Contact

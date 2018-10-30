@@ -100,7 +100,7 @@ export default class TnrisOrderTemplate extends React.Component {
                       </button>
                       <button className="mdc-tab" role="tab" aria-selected="false" tabIndex="-1"  onClick={() => this.setTemplateView("order")}>
                         <span className="mdc-tab__content">
-                          <span className="mdc-tab__icon material-icons">save_alt</span>
+                          <span className="mdc-tab__icon material-icons">create</span>
                           <span className="mdc-tab__text-label">Order</span>
                         </span>
                         <span className="mdc-tab-indicator">
@@ -128,7 +128,7 @@ export default class TnrisOrderTemplate extends React.Component {
                     </a>
                     <a className={this.state.view === 'download' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
                        onClick={() => this.setTemplateView("download")}>
-                       <i className="mdc-tab__icon material-icons">save_alt</i> Download
+                       <i className="mdc-tab__icon material-icons">create</i> Download
                     </a>
                   </nav>
                 </div>

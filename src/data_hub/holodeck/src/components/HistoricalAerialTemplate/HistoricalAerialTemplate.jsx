@@ -114,7 +114,7 @@ export default class HistoricalAerialTemplate extends React.Component {
                       </button>
                       <button className="mdc-tab" role="tab" aria-selected="false" tabIndex="-1"  onClick={() => this.setTemplateView("order")}>
                         <span className="mdc-tab__content">
-                          <span className="mdc-tab__icon material-icons">save_alt</span>
+                          <span className="mdc-tab__icon material-icons">create</span>
                           <span className="mdc-tab__text-label">Order</span>
                         </span>
                         <span className="mdc-tab-indicator">
@@ -142,7 +142,7 @@ export default class HistoricalAerialTemplate extends React.Component {
                     </a>
                     <a className={this.state.view === 'order' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
                        onClick={() => this.setTemplateView("order")}>
-                       <i className="mdc-tab__icon material-icons">save_alt</i> Order
+                       <i className="mdc-tab__icon material-icons">create</i> Order
                     </a>
                   </nav>
                 </div>

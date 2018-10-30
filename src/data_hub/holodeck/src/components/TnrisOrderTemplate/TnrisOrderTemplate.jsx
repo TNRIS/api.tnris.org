@@ -126,9 +126,9 @@ export default class TnrisOrderTemplate extends React.Component {
                        onClick={() => this.setTemplateView("images")}>
                        <i className="mdc-tab__icon material-icons">collections</i> Images
                     </a>
-                    <a className={this.state.view === 'download' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
-                       onClick={() => this.setTemplateView("download")}>
-                       <i className="mdc-tab__icon material-icons">create</i> Download
+                    <a className={this.state.view === 'order' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
+                       onClick={() => this.setTemplateView("order")}>
+                       <i className="mdc-tab__icon material-icons">create</i> Order
                     </a>
                   </nav>
                 </div>

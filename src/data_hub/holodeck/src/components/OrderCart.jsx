@@ -186,7 +186,7 @@ class OrderCart extends Component {
         orders += `   Acquisition Date: ${dataDate}\n`;
         const dataOrder = this.props.orders[collectionId];
         orders += `   Coverage: ${dataOrder.coverage}\n`;
-        if (dataOrder.formats) {orders += `   Lidar Formats: ${dataOrder.formats}\n`;}
+        if (dataOrder.formats) {orders += `   Formats: ${dataOrder.formats}\n`;}
         if (dataOrder.coverage === 'Partial') {orders += `   Identified By: ${dataOrder.type}\n`;}
         if (dataOrder.description) {orders += `   Description: ${dataOrder.description}\n`;}
         if (dataOrder.attachments) {
@@ -255,7 +255,7 @@ class OrderCart extends Component {
         const partialType = this.props.orders[collectionId].type ? `, ${this.props.orders[collectionId].type}` : "";
         const attachmentNum = this.props.orders[collectionId].attachments ? Object.keys(this.props.orders[collectionId].attachments).length : "";
         const attachments = this.props.orders[collectionId].attachments ? `, ${attachmentNum} attachment(s)`: "";
-        const formats = this.props.orders[collectionId].formats ? `, Lidar Formats: ${this.props.orders[collectionId].formats}` : "";
+        const formats = this.props.orders[collectionId].formats ? `, Formats: ${this.props.orders[collectionId].formats}` : "";
 
         return (
           <li key={collectionId} className="mdc-list-item">

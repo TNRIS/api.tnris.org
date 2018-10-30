@@ -3,11 +3,6 @@ import React from 'react';
 import OrderTnrisDataFormContainer from '../../containers/OrderTnrisDataFormContainer';
 
 export default class TnrisOrderTemplateOrder extends React.Component {
-  constructor(props) {
-      super(props);
-  }
-
-
   render() {
 
     return (

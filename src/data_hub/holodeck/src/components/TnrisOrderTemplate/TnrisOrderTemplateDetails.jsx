@@ -7,7 +7,6 @@ import Services from '../DialogTemplateListItems/Services'
 import Supplementals from '../DialogTemplateListItems/Supplementals'
 
 import ContactContainer from '../../containers/ContactContainer';
-import OrderTnrisDataFormContainer from '../../containers/OrderTnrisDataFormContainer';
 
 export default class TnrisDownloadTemplateDetails extends React.Component {
 

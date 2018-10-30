@@ -398,7 +398,7 @@ class OrderTnrisDataForm extends Component {
             </div>
             <label htmlFor="order-lidar-breaklines-input">Breaklines (if available)</label>
           </div>
-          <div className='mdc-typography--caption'>Also available for direct download under 'Supplemental Downloads'</div>
+          <div className='mdc-typography--caption'>Also may be available for direct download under 'Supplemental Downloads'</div>
         </div>
       )
     }

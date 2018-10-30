@@ -78,14 +78,17 @@ export default class HistoricalAerialTemplate extends React.Component {
     }
 
     const collectionYear = this.props.collection.acquisition_date ? this.props.collection.acquisition_date.substring(0, 4) + ' ' : '';
-
+    let collectionCounty = '';
+    if (this.props.collection.template === 'historical-aerial') {
+      collectionCounty = this.props.collection.counties && !this.props.collection.counties.includes(",") ? this.props.collection.counties + ' ' : 'Multi-County ';
+    }
 
     return (
       <div className='historical-aerial-template' tabIndex='1'>
         <header className="mdc-top-app-bar">
           <div className="mdc-top-app-bar__row">
             <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
-              <span className="mdc-top-app-bar__title">{collectionYear}{this.props.collection.name}</span>
+              <span className="mdc-top-app-bar__title">{collectionYear}{collectionCounty}{this.props.collection.name}</span>
             </section>
             <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
               <div className="mdc-tab-bar" role="tablist">

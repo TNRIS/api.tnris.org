@@ -25,7 +25,13 @@ SELECT historical_collection.id as collection_id,
         LEFT JOIN scale ON scale.id=product.scale_id
         LEFT JOIN frame_size ON frame_size.id=product.frame_size_id
         WHERE product.collection_id=historical_collection.id), ',') as products,
-  CONCAT(agency.abbreviation, ' Historic Imagery') as name,
+  CASE
+    WHEN (
+      (string_agg(distinct county.name, ',' order by county.name)
+      ~ '.*(,).*')
+      ) THEN CONCAT('Multi-County ', agency.abbreviation, ' Historic Imagery')
+    ELSE CONCAT(string_agg(distinct county.name, ',' order by county.name), ' ', agency.abbreviation, ' Historic Imagery')
+  END AS name,
   'historical-aerial' as template,
   'https://s3.amazonaws.com/data.tnris.org/historical_thumbnail.jpg' as thumbnail_image,
   'Historic Imagery' as category,

@@ -251,11 +251,7 @@ class OrderCart extends Component {
     const cartItems = Object.keys(this.props.orders).length !== 0 ?
       Object.keys(this.props.orders).map(collectionId => {
         const collectionYear = this.props.collections[collectionId].acquisition_date && this.props.collections[collectionId].template === 'historical-aerial' ? this.props.collections[collectionId].acquisition_date.substring(0, 4) + ' ' : '';
-        let collectionCounty = '';
-        if (this.props.collections[collectionId].template === 'historical-aerial') {
-          collectionCounty = this.props.collections[collectionId].counties && !this.props.collections[collectionId].counties.includes(",") ? this.props.collections[collectionId].counties + ' ' : 'Multi-County ';
-        }
-        const compiledDisplayName = collectionYear + collectionCounty + this.props.collections[collectionId].name;
+        const compiledDisplayName = collectionYear + this.props.collections[collectionId].name;
         const partialType = this.props.orders[collectionId].type ? `, ${this.props.orders[collectionId].type}` : "";
         const attachmentNum = this.props.orders[collectionId].attachments ? Object.keys(this.props.orders[collectionId].attachments).length : "";
         const attachments = this.props.orders[collectionId].attachments ? `, ${attachmentNum} attachment(s)`: "";

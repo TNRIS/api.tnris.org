@@ -24,7 +24,7 @@ export default class HistoricalProducts extends React.Component {
           Historical Imagery Products
         </div>
         <p className="mdc-typography--body2">
-          Many historical imagery projects occasionally produced multiple printed photographs of the same imagery varying in scale and frame size. The available printed photograph products for this dataset are listed below.
+          Historical imagery projects occasionally produced multiple printed photographs of the same imagery varying in scale, frame size, medium, and print type. The available printed photograph products for this dataset are listed below.
         </p>
         <ul className="mdc-list product-table">
             <li className="mdc-list-item product-table-header">

@@ -115,7 +115,7 @@ class ContactTnrisForm extends Component {
       showHTML = (
         <div>
           <p className="mdc-typography--body2">
-            Complete the form below to inquire with TNRIS about the <strong>{this.compiledDisplayName}</strong> dataset...
+            For questions about the <strong>{this.compiledDisplayName}</strong> dataset, please complete the form below. Orders for this data cannot be submitted via this form. To order this dataset, please visit the <strong>Order</strong> tab.
           </p>
 
           <div id="ct-first-name" className="mdc-text-field mdc-text-field--outlined">

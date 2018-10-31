@@ -6,7 +6,7 @@ styles for component: TnrisDownloadTemplateImages
   // margin-bottom: 5px;
 
   .desktop-lg {
-    padding: 64px 0px 0px 0px;
+    padding: 0 20px 20px 20px;
     overflow-y: hidden;
 
     img {
@@ -21,15 +21,12 @@ styles for component: TnrisDownloadTemplateImages
 
   @media (max-width: 1350px) {
     .mobile {
+      max-width: 100%;
+      height: auto;
       display: block;
-      // background-color: #d9d9d9;
       overflow-x: hidden;
       -webkit-overflow-scrolling: touch;
     }
-    // hr {
-    //   background-color: #fff;
-	  //   border-top: 2px dashed #8c8b8b;
-    // }
     .desktop-lg {
       display: none;
     }

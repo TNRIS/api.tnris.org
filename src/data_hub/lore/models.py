@@ -99,7 +99,7 @@ class ScannedPhotoIndexLink(models.Model):
     last_modified = models.DateTimeField('Last Modified', auto_now=True)
 
     def __str__(self):
-        return link
+        return str(self.link)
 
 
 class LineIndex(models.Model):

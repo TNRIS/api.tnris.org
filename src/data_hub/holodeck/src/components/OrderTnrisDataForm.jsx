@@ -597,7 +597,7 @@ class OrderTnrisDataForm extends Component {
               <div className="mdc-line-ripple"></div>
             </div>
             <p id="order-partial-text-description-helper-text" className="mdc-text-field-helper-text" aria-hidden="true">
-              <strong>Latitude/Longitude Coordinates, USGS Quadrangle Names, City/Town Names, Cross Roads, Boundary Landmarks, etc.</strong>
+              <strong>Latitude/Longitude Coordinates, USGS Quadrangle Names, Historic Imagery Frame Numbers (from the index scans), City/Town Names, Cross Roads, Boundary Landmarks, etc. </strong>
             </p>
           </div>
 

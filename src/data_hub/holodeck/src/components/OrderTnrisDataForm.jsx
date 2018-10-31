@@ -24,6 +24,10 @@ class OrderTnrisDataForm extends Component {
         hypso: false,
         laz: true,
         las: false,
+        paper8x11: false,
+        paper11x17: false,
+        digital: true,
+        digitalGeoref: false,
         display: startDisplay,
         invalid: null
       }
@@ -31,6 +35,16 @@ class OrderTnrisDataForm extends Component {
       this.submitForm = this.submitForm.bind(this);
       this.handleChange = this.handleChange.bind(this);
       this.handleSwitch = this.handleSwitch.bind(this);
+      // set aside declaration of data type: Lidar, Historic Imagery, or all others
+      if (this.collection.category.indexOf('Lidar') !== -1) {
+        this.dataForm = 'lidar';
+      }
+      else if (this.collection.category.indexOf('Historic Imagery') !== -1) {
+        this.dataForm = 'historicImagery';
+      }
+      else {
+        this.dataForm = null;
+      }
   }
 
   componentDidMount() {
@@ -51,6 +65,13 @@ class OrderTnrisDataForm extends Component {
       if (ms.id === 'order-lidar-laz') {
         const lazSwitch = new MDCSwitch(ms);
         lazSwitch.checked = true;
+      }
+      else if (ms.id === 'order-historical-digital') {
+        const digitalSwitch = new MDCSwitch(ms);
+        digitalSwitch.checked = true;
+      }
+      else if (ms.id === 'order-historical-digitalGeoref') {
+        this.digitalGeoref = new MDCSwitch(ms);
       }
       else {
         new MDCSwitch(ms);
@@ -82,6 +103,7 @@ class OrderTnrisDataForm extends Component {
   }
 
   componentDidUpdate () {
+    console.log(this.state);
     // alter form requirements and inputs displayed based on form input selections
     if (this.state.orderType === 'Partial') {
       document.getElementsByName("portionDescription").forEach((input) => {
@@ -124,6 +146,13 @@ class OrderTnrisDataForm extends Component {
       default:
         break;
     }
+
+    if (this.dataForm === 'historicImagery' && this.state.digital) {
+      this.digitalGeoref.disabled = false;
+    }
+    else if (this.dataForm === 'historicImagery' && !this.state.digital) {
+      this.digitalGeoref.disabled = true;
+    }
   }
 
   handleChange(event) {
@@ -146,6 +175,10 @@ class OrderTnrisDataForm extends Component {
     const name = event.target.name
     const nextState = {};
     nextState[name] = !this.state[name];
+    if (name === 'digital' && this.state.digital) {
+      this.digitalGeoref.checked = false;
+      nextState['digitalGeoref'] = false;
+    }
     this.setState(nextState);
   }
 
@@ -160,7 +193,7 @@ class OrderTnrisDataForm extends Component {
       cartDate: cartDate
     };
     // if a lidar dataset, they must select at least 1 format of data
-    if (this.collection.category.indexOf('Lidar') !== -1) {
+    if (this.dataForm === 'lidar') {
       if (!this.state.breaklines &&
           !this.state.laz &&
           !this.state.las &&
@@ -180,6 +213,30 @@ class OrderTnrisDataForm extends Component {
         if (this.state.dem) {formats.push('DEM');}
         if (this.state.hypso) {formats.push('Hypso');}
         if (this.state.breaklines) {formats.push('Breaklines');}
+        cartInfo['formats'] = formats.join("/");
+        this.setState({
+          invalid: null
+        });
+      }
+    }
+    // if a historic imagery dataset, they must select at least 1 format of data
+    if (this.dataForm === 'historicImagery') {
+      if (!this.state.paper8x11 &&
+          !this.state.paper11x17 &&
+          !this.state.digital) {
+        this.setState({
+          invalid: 'At least one Historic Imagery Format selection is required.'
+        });
+        return;
+      }
+      else {
+        // create pretty string from their selected formats
+        const formats = [];
+
+        if (this.state.paper8x11) {formats.push('Paper 8.5x11');}
+        if (this.state.paper11x17) {formats.push('Paper 11x17');}
+        if (this.state.digital) {formats.push('Digital Scan');}
+        if (this.state.digitalGeoref) {formats.push('Georeferenced');}
         cartInfo['formats'] = formats.join("/");
         this.setState({
           invalid: null
@@ -257,8 +314,9 @@ class OrderTnrisDataForm extends Component {
     const invalid = this.state.invalid ? this.state.invalid : '';
     let showHTML;
     let lidarFields;
+    let historicalFields;
     // if a lidar dataset, add format switches
-    if (this.collection.category.indexOf('Lidar') !== -1) {
+    if (this.dataForm === 'lidar') {
       lidarFields = (
         <div className="order-lidar-switches">
           <div className='mdc-typography--headline6'>
@@ -340,7 +398,77 @@ class OrderTnrisDataForm extends Component {
             </div>
             <label htmlFor="order-lidar-breaklines-input">Breaklines (if available)</label>
           </div>
-          <div className='mdc-typography--caption'>Also available for direct download under 'Supplemental Downloads'</div>
+          <div className='mdc-typography--caption'>Also may be available for direct download under 'Supplemental Downloads'</div>
+        </div>
+      )
+    }
+
+    if (this.dataForm === 'historicImagery') {
+      historicalFields = (
+        <div className="order-historical-switches">
+          <div className='mdc-typography--headline6'>
+            Historic Imagery Format Options
+          </div>
+          <div className="mdc-form-field">
+            <div className="mdc-switch">
+              <div className="mdc-switch__track"></div>
+              <div className="mdc-switch__thumb-underlay">
+                <div className="mdc-switch__thumb">
+                  <input type="checkbox"
+                         id="order-historical-paper8x11-input"
+                         className="mdc-switch__native-control"
+                         name="paper8x11"
+                         onChange={this.handleSwitch} />
+                </div>
+              </div>
+            </div>
+            <label htmlFor="order-historical-paper8x11-input">Paper Laser Copy (8.5" x 11")</label>
+          </div>
+          <div className="mdc-form-field">
+            <div className="mdc-switch">
+              <div className="mdc-switch__track"></div>
+              <div className="mdc-switch__thumb-underlay">
+                <div className="mdc-switch__thumb">
+                  <input type="checkbox"
+                         id="order-historical-paper11x17-input"
+                         className="mdc-switch__native-control"
+                         name="paper11x17"
+                         onChange={this.handleSwitch} />
+                </div>
+              </div>
+            </div>
+            <label htmlFor="order-historical-paper11x17-input">Paper Laser Copy (11" x 17")</label>
+          </div>
+          <div className="mdc-form-field">
+            <div className="mdc-switch" id="order-historical-digital">
+              <div className="mdc-switch__track"></div>
+              <div className="mdc-switch__thumb-underlay">
+                <div className="mdc-switch__thumb">
+                  <input type="checkbox"
+                         id="order-historical-digital-input"
+                         className="mdc-switch__native-control"
+                         name="digital"
+                         onChange={this.handleSwitch} />
+                </div>
+              </div>
+            </div>
+            <label htmlFor="order-historical-digital-input">Digital Scan of Original Copy</label>
+          </div>
+          <div className="mdc-form-field">
+            <div className="mdc-switch" id="order-historical-digitalGeoref">
+              <div className="mdc-switch__track"></div>
+              <div className="mdc-switch__thumb-underlay">
+                <div className="mdc-switch__thumb">
+                  <input type="checkbox"
+                         id="order-historical-digitalGeoref-input"
+                         className="mdc-switch__native-control"
+                         name="digitalGeoref"
+                         onChange={this.handleSwitch} />
+                </div>
+              </div>
+            </div>
+            <label htmlFor="order-historical-digitalGeoref-input">Georeference the Digital Scan</label>
+          </div>
         </div>
       )
     }
@@ -350,7 +478,7 @@ class OrderTnrisDataForm extends Component {
       showHTML = (
         <div>
           <p className="mdc-typography--body2">
-            Is there no download option for this dataset? Or is everything you're looking for too large to directly download? Every dataset is available for order directly from TNRIS.
+            Is there no download option for this dataset? Is everything you're looking for too large to directly download? Every dataset is available for order directly from TNRIS.
           </p>
 
           <div className='mdc-typography--headline6'>
@@ -469,11 +597,12 @@ class OrderTnrisDataForm extends Component {
               <div className="mdc-line-ripple"></div>
             </div>
             <p id="order-partial-text-description-helper-text" className="mdc-text-field-helper-text" aria-hidden="true">
-              <strong>Latitude/Longitude Coordinates, USGS Quadrangle Names, City/Town Names, Cross Roads, Boundary Landmarks, etc.</strong>
+              <strong>Latitude/Longitude Coordinates, USGS Quadrangle Names, Historic Imagery Frame Numbers (from the index scans), City/Town Names, Cross Roads, Boundary Landmarks, etc. </strong>
             </p>
           </div>
 
           {lidarFields}
+          {historicalFields}
 
           <p className="invalid-prompt">{invalid}</p>
 

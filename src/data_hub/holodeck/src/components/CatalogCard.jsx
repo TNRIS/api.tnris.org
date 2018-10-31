@@ -18,10 +18,6 @@ export default class CatalogCard extends React.Component {
   render() {
     const cardClass = 'catalog-card-component mdc-image-list__item ' + this.props.collection.template;
     const collectionYear = this.props.collection.acquisition_date && this.props.collection.template === 'historical-aerial' ? this.props.collection.acquisition_date.substring(0, 4) + ' ' : '';
-    let collectionCounty = '';
-    if (this.props.collection.template === 'historical-aerial') {
-      collectionCounty = this.props.collection.counties && !this.props.collection.counties.includes(",") ? this.props.collection.counties + ' ' : 'Multi-County ';
-    }
 
     return (
       <li className={cardClass} onClick={this.cardClicked}>
@@ -29,7 +25,7 @@ export default class CatalogCard extends React.Component {
             <img className="mdc-image-list__image" src={this.props.collection.thumbnail_image} alt="Dataset Thumbnail" />
         </div>
         <div className="mdc-image-list__supporting">
-          <span className="mdc-image-list__label">{collectionYear}{collectionCounty}{this.props.collection.name}</span>
+          <span className="mdc-image-list__label">{collectionYear}{this.props.collection.name}</span>
         </div>
       </li>
     );

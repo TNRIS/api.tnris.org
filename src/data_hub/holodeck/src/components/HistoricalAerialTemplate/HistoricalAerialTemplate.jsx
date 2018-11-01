@@ -9,7 +9,6 @@ import OrderTnrisDataFormContainer from '../../containers/OrderTnrisDataFormCont
 export default class HistoricalAerialTemplate extends React.Component {
   constructor(props) {
       super(props);
-      console.log(this.props);
       this.state = {
         view:'details'
       };

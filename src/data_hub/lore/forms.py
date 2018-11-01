@@ -72,7 +72,7 @@ class CollectionForm(forms.ModelForm):
         if mosaic is not None:
             if '_mosaic' not in mosaic:
                 raise forms.ValidationError('That is not an Mosaic Service URL!')
-            msc_link = index.split('/')[-1].replace('.map', '').replace('_mosaic', '').replace('_', ' ').upper()
+            msc_link = mosaic.split('/')[-1].replace('.map', '').replace('_mosaic', '').replace('_', ' ').upper()
             if msc_link not in links:
                 links.append(msc_link)
         if len(links) > 1:

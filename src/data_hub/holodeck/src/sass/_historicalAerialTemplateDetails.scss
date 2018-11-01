@@ -73,7 +73,80 @@ styles for component: HistoricalAerialTemplateDetails
 
       @media (max-width: mdc-layout-grid-breakpoint-max(phone)) {
         font-size: 12px;
+      }
+    }
+  }
 
+  .template-content-div.ls4-links-container {
+    p.mdc-typography--body2 {
+      font-size: 16px;
+      padding: 10px;
+      text-align: center;
+    }
+
+    .ls4-scans {
+      .mdc-list {
+        margin: 0 auto;
+        display: table;
+
+        .mdc-list-item {
+          border: 1px solid rgba(0, 0, 0, 0.1);
+
+          div {
+            display: table-cell;
+            padding: 6px;
+
+            @media (max-width: mdc-layout-grid-breakpoint-max(phone)) {
+              width: 64px;
+              padding: 0;
+              height: 34px;
+              line-height: 34px;
+              overflow: scroll;
+            }
+          }
+        }
+
+        .mdc-list-item.odd {
+          background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        @media (max-width: mdc-layout-grid-breakpoint-max(phone)) {
+          font-size: 12px;
+        }
+      }
+    }
+
+    .ls4-links {
+      padding: 6px;
+
+      #ls4-links-index-input,
+      #ls4-links-mosaic-input,
+      #ls4-links-frames-input {
+        color: rgb(98, 0, 238);
+        border-bottom-color: rgba(0, 0, 0, 0.12);
+        margin-bottom: 10px;
+        text-align: center;
+      }
+
+      .ls4-links-buttons {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        button, a {
+          margin-left: 5px;
+          margin-right: 5px;
+          text-align: center;
+
+          i {
+            margin-right: 5px;
+          }
+        }
+      }
+
+      @media (min-width: mdc-layout-grid-breakpoint-max(tablet)) {
+        max-width: 70%;
+        margin: 0 auto;
       }
     }
   }

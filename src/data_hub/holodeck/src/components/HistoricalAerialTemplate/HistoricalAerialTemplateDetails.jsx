@@ -13,16 +13,15 @@ export default class TnrisDownloadTemplateDetails extends React.Component {
   render() {
     const productsCard = this.props.collection.products ? <HistoricalProducts products={this.props.collection.products} /> : "";
     const countyCoverageCard = this.props.collection.counties ? <CountyCoverage counties={this.props.collection.counties} /> : "";
-    // const ls4LinksCard = this.props.collection.index_service_url !== "" ||
-    //                      this.props.collection.mosaic_service_url !== "" ||
-    //                      this.props.collection.frames_service_url !== "" ||
-    //                      this.props.colleection.scanned_index_ls4_links !== "" ?
-    //                      <Ls4Links index={this.props.collection.index_service_url}
-    //                                mosaic={this.props.collection.mosaic_service_url}
-    //                                frames={this.props.collection.frames_service_url}
-    //                                scans={this.props.colleection.scanned_index_ls4_link}s />
-    //                              : "";
-    const ls4LinksCard = "";
+    const ls4LinksCard = (this.props.collection.index_service_url && this.props.collection.index_service_url !== "") ||
+                         (this.props.collection.mosaic_service_url && this.props.collection.mosaic_service_url !== "") ||
+                         (this.props.collection.frames_service_url && this.props.collection.frames_service_url !== "") ||
+                         (this.props.collection.scanned_index_ls4_links && this.props.collection.scanned_index_ls4_links) !== "" ?
+                         <Ls4Links index={this.props.collection.index_service_url}
+                                   mosaic={this.props.collection.mosaic_service_url}
+                                   frames={this.props.collection.frames_service_url}
+                                   scans={this.props.collection.scanned_index_ls4_links} />
+                                 : "";
 
     return (
       <div className='historical-aerial-template-details'>

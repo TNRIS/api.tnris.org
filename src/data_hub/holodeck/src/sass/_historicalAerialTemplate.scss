@@ -11,9 +11,11 @@ styles for component: HistoricalAerialTemplate
   }
 
   section.mdc-top-app-bar__section.mdc-top-app-bar__section--align-end {
+    max-width: 195px;
 
     div.mdc-tab-bar {
       .mdc-tab {
+        max-width: 25px;
         span {
           color: white;
         }

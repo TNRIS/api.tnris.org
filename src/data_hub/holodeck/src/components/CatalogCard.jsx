@@ -17,7 +17,7 @@ export default class CatalogCard extends React.Component {
 
   render() {
     const cardClass = 'catalog-card-component mdc-image-list__item ' + this.props.collection.template;
-    const collectionYear = this.props.collection.acquisition_date && this.props.collection.template === 'historical-aerial' ? this.props.collection.acquisition_date.substring(0, 4) + ' ' : '';
+    const collectionYear = this.props.collection.acquisition_date ? this.props.collection.acquisition_date.substring(0, 4) + ' ' : '';
 
     return (
       <li className={cardClass} onClick={this.cardClicked}>

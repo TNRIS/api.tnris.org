@@ -9,7 +9,6 @@ import OrderTnrisDataFormContainer from '../../containers/OrderTnrisDataFormCont
 export default class HistoricalAerialTemplate extends React.Component {
   constructor(props) {
       super(props);
-      console.log(this.props);
       this.state = {
         view:'details'
       };
@@ -30,9 +29,9 @@ export default class HistoricalAerialTemplate extends React.Component {
       case 'details':
         tabIndex = 0;
         break;
-      case 'images':
-        tabIndex = 1;
-        break;
+      // case 'explore':
+      //   tabIndex = 1;
+      //   break;
       case 'order':
         tabIndex = 2;
         break;
@@ -53,12 +52,9 @@ export default class HistoricalAerialTemplate extends React.Component {
       case 'details':
         showComponent = <HistoricalAerialTemplateDetails collection={this.props.collection} />;
         break;
-      case 'images':
-        // showComponent = (<TnrisDownloadTemplateImages
-        //   images={this.props.collection.images}
-        //   thumbnail={this.props.collection.thumbnail_image} />);
-        showComponent = (<div>images</div>);
-        break;
+      // case 'explore':
+      //   showComponent = (<div>Explore Map loaded with LS4 WMS Services</div>);
+      //   break;
       case 'order':
         showComponent = (
           <div className='historical-aerial-template-details'>
@@ -78,17 +74,34 @@ export default class HistoricalAerialTemplate extends React.Component {
     }
 
     const collectionYear = this.props.collection.acquisition_date ? this.props.collection.acquisition_date.substring(0, 4) + ' ' : '';
-    let collectionCounty = '';
-    if (this.props.collection.template === 'historical-aerial') {
-      collectionCounty = this.props.collection.counties && !this.props.collection.counties.includes(",") ? this.props.collection.counties + ' ' : 'Multi-County ';
-    }
+
+    // const exploreTab = this.props.collection.index_service_url || this.props.collection.mosaic_service_url || this.props.collection.frames_service_url ? (
+    //   <button className="mdc-tab" role="tab" aria-selected="false" tabIndex="-1"  onClick={() => this.setTemplateView("explore")}>
+    //     <span className="mdc-tab__content">
+    //       <span className="mdc-tab__icon material-icons">map</span>
+    //       <span className="mdc-tab__text-label">Explore</span>
+    //     </span>
+    //     <span className="mdc-tab-indicator">
+    //       <span className="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
+    //     </span>
+    //     <span className="mdc-tab__ripple"></span>
+    //   </button>
+    // ) : '';
+    const exploreTab = '';
+    // const exploreListItem = this.props.collection.index_service_url || this.props.collection.mosaic_service_url || this.props.collection.frames_service_url ? (
+    //   <a className={this.state.view === 'explore' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
+    //      onClick={() => this.setTemplateView("explore")}>
+    //      <i className="mdc-tab__icon material-icons">map</i> Explore
+    //   </a>
+    // ) : '';
+    const exploreListItem = '';
 
     return (
       <div className='historical-aerial-template' tabIndex='1'>
         <header className="mdc-top-app-bar">
           <div className="mdc-top-app-bar__row">
             <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
-              <span className="mdc-top-app-bar__title">{collectionYear}{collectionCounty}{this.props.collection.name}</span>
+              <span className="mdc-top-app-bar__title">{collectionYear}{this.props.collection.name}</span>
             </section>
             <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
               <div className="mdc-tab-bar" role="tablist">
@@ -105,16 +118,7 @@ export default class HistoricalAerialTemplate extends React.Component {
                         </span>
                         <span className="mdc-tab__ripple"></span>
                       </button>
-                      <button className="mdc-tab" role="tab" aria-selected="false" tabIndex="-1"  onClick={() => this.setTemplateView("images")}>
-                        <span className="mdc-tab__content">
-                          <span className="mdc-tab__icon material-icons">collections</span>
-                          <span className="mdc-tab__text-label">Images</span>
-                        </span>
-                        <span className="mdc-tab-indicator">
-                          <span className="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
-                        </span>
-                        <span className="mdc-tab__ripple"></span>
-                      </button>
+                      {exploreTab}
                       <button className="mdc-tab" role="tab" aria-selected="false" tabIndex="-1"  onClick={() => this.setTemplateView("order")}>
                         <span className="mdc-tab__content">
                           <span className="mdc-tab__icon material-icons">create</span>
@@ -139,10 +143,7 @@ export default class HistoricalAerialTemplate extends React.Component {
                        onClick={() => this.setTemplateView("details")}>
                        <i className="mdc-tab__icon material-icons">details</i> Details
                     </a>
-                    <a className={this.state.view === 'images' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
-                       onClick={() => this.setTemplateView("images")}>
-                       <i className="mdc-tab__icon material-icons">collections</i> Images
-                    </a>
+                    {exploreListItem}
                     <a className={this.state.view === 'order' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
                        onClick={() => this.setTemplateView("order")}>
                        <i className="mdc-tab__icon material-icons">create</i> Order

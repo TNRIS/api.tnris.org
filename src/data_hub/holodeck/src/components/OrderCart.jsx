@@ -186,7 +186,7 @@ class OrderCart extends Component {
         orders += `   Acquisition Date: ${dataDate}\n`;
         const dataOrder = this.props.orders[collectionId];
         orders += `   Coverage: ${dataOrder.coverage}\n`;
-        if (dataOrder.formats) {orders += `   Lidar Formats: ${dataOrder.formats}\n`;}
+        if (dataOrder.formats) {orders += `   Formats: ${dataOrder.formats}\n`;}
         if (dataOrder.coverage === 'Partial') {orders += `   Identified By: ${dataOrder.type}\n`;}
         if (dataOrder.description) {orders += `   Description: ${dataOrder.description}\n`;}
         if (dataOrder.attachments) {
@@ -251,15 +251,11 @@ class OrderCart extends Component {
     const cartItems = Object.keys(this.props.orders).length !== 0 ?
       Object.keys(this.props.orders).map(collectionId => {
         const collectionYear = this.props.collections[collectionId].acquisition_date && this.props.collections[collectionId].template === 'historical-aerial' ? this.props.collections[collectionId].acquisition_date.substring(0, 4) + ' ' : '';
-        let collectionCounty = '';
-        if (this.props.collections[collectionId].template === 'historical-aerial') {
-          collectionCounty = this.props.collections[collectionId].counties && !this.props.collections[collectionId].counties.includes(",") ? this.props.collections[collectionId].counties + ' ' : 'Multi-County ';
-        }
-        const compiledDisplayName = collectionYear + collectionCounty + this.props.collections[collectionId].name;
+        const compiledDisplayName = collectionYear + this.props.collections[collectionId].name;
         const partialType = this.props.orders[collectionId].type ? `, ${this.props.orders[collectionId].type}` : "";
         const attachmentNum = this.props.orders[collectionId].attachments ? Object.keys(this.props.orders[collectionId].attachments).length : "";
         const attachments = this.props.orders[collectionId].attachments ? `, ${attachmentNum} attachment(s)`: "";
-        const formats = this.props.orders[collectionId].formats ? `, Lidar Formats: ${this.props.orders[collectionId].formats}` : "";
+        const formats = this.props.orders[collectionId].formats ? `, Formats: ${this.props.orders[collectionId].formats}` : "";
 
         return (
           <li key={collectionId} className="mdc-list-item">

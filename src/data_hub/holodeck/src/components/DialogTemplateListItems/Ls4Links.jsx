@@ -31,7 +31,7 @@ export default class Ls4Links extends React.Component {
       scanLinks = (
         <div className="ls4-scans">
           <p className="mdc-typography--body2">
-            This Historic Imagery dataset has scanned indexes available for download.
+            This Historic Imagery dataset has scanned indexes (.tif format) available for download.
           </p>
           <ul className="mdc-list">
             {scans.map((scan, index) => {

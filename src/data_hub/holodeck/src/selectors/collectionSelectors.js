@@ -5,6 +5,7 @@ const getCollections = (state) => state.collections.items;
 const getFilters = (state) => state.collectionFilter.collectionFilter;
 const getSearchQuery = (state) => state.collectionSearcher.collectionSearchQuery;
 const getSortOrder = (state) => state.sorter.sortOrder;
+const getFilterMapFilter = (state) => state.collectionFilterMap.collectionFilterMapFilter;
 
 // ///////////////////////////////////////////////////////////////
 // Below are the selectors that pertain to filtering, sorting,
@@ -113,8 +114,8 @@ export const getCollectionFilterChoices = createSelector(
 // If a filter is set, returns only those collections that pass
 // through the filter.
 export const getFilteredCollections = createSelector(
-  [ getAllCollections, getAllCollectionIds, getFilters ],
-  (collections, collectionIds, filters) => {
+  [ getAllCollections, getAllCollectionIds, getFilters, getFilterMapFilter ],
+  (collections, collectionIds, filters, filterMapFilter) => {
     // Check if collections are ready in the state
     if (collections) {
       let filteredCollectionIds = [];
@@ -144,11 +145,29 @@ export const getFilteredCollections = createSelector(
   }
 );
 
+export const getMapFilteredCollections = createSelector(
+  [ getFilteredCollections, getFilterMapFilter ],
+  (collectionIds, filterMapFilter) => {
+    let mapFilteredCollectionIds = [];
+    if (filterMapFilter.length > 0) {
+      collectionIds.map(collectionId => {
+        if (filterMapFilter.indexOf(collectionId) >= 0) {
+          mapFilteredCollectionIds.push(collectionId);
+        }
+        return collectionId;
+      })
+      return mapFilteredCollectionIds;
+    }
+    mapFilteredCollectionIds = collectionIds;
+    return mapFilteredCollectionIds;
+  }
+)
+
 // Returns the array of collections to show in the catalog view.
 // If the user has entered a search query, returns only those collections
 // that return from the search.
 export const getSearchedCollections = createSelector(
-  [ getAllCollections, getFilteredCollections, getSearchQuery, getSearchIndex ],
+  [ getAllCollections, getMapFilteredCollections, getSearchQuery, getSearchIndex ],
   (collections, collectionIds, searchQuery, searchIndex) => {
     // Check if collections are ready in the state
     if (collections) {
@@ -165,9 +184,9 @@ export const getSearchedCollections = createSelector(
             return result;
           })
         }
-      } else {
-        searchedCollectionIds = collectionIds;
+        return searchedCollectionIds;
       }
+      searchedCollectionIds = collectionIds;
       return searchedCollectionIds;
     }
   }

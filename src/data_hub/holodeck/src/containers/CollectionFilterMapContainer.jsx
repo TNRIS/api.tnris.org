@@ -3,27 +3,30 @@ import { connect } from 'react-redux';
 import {
   collectionActions,
   collectionFilterMapActions,
-  resourceActions
 } from '../actions';
 import CollectionFilterMap from '../components/CollectionFilterMap';
-import { getAllCollections } from '../selectors/collectionSelectors';
-import { getAllResources } from '../selectors/resourceSelectors';
+import { getAllCollectionIds } from '../selectors/collectionSelectors';
 
 const mapStateToProps = state => ({
+  allCollectionIds: getAllCollectionIds(state),
+  collectionFilterMapCenter: state.collectionFilterMap.collectionFilterMapCenter,
   collectionFilterMapFilter: state.collectionFilterMap.collectionFilterMapFilter,
-  collections: getAllCollections(state),
-  resources: getAllResources(state),
+  collectionFilterMapZoom: state.collectionFilterMap.collectionFilterMapZoom,
+
 });
 
 const mapDispatchToProps = dispatch => ({
   fetchCollections: () => {
     dispatch(collectionActions.fetchCollections());
   },
-  fetchResources: () => {
-    dispatch(resourceActions.fetchResources());
+  setCollectionFilterMapCenter: (collectionFilterMapCenter) => {
+    dispatch(collectionFilterMapActions.setCollectionFilterMapCenter(collectionFilterMapCenter));
   },
   setCollectionFilterMapFilter: (collectionFilterMapFilter) => {
     dispatch(collectionFilterMapActions.setCollectionFilterMapFilter(collectionFilterMapFilter));
+  },
+  setCollectionFilterMapZoom: (collectionFilterMapZoom) => {
+    dispatch(collectionFilterMapActions.setCollectionFilterMapZoom(collectionFilterMapZoom));
   }
 })
 

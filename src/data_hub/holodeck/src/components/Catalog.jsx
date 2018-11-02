@@ -41,12 +41,12 @@ export default class Catalog extends React.Component {
         <HeaderContainer />
         <div className='catalog'>
           {/* <button onClick={this.props.openMapDialog}>show map</button> */}
-          <CollectionDialogContainer />
+          <CollectionDialogContainer history={this.props.history} />
           <OrderCartDialogContainer />
           {/* <MapDialogContainer /> */}
           <ul className='catalog-list mdc-image-list mdc-image-list--with-text-protection'>
             {this.props.visibleCollections ? this.props.visibleCollections.map(collectionId =>
-              <CatalogCardContainer collection={this.props.collections[collectionId]} key={collectionId} />
+              <CatalogCardContainer collection={this.props.collections[collectionId]} key={collectionId} match={this.props.match} history={this.props.history} />
             ) : loadingMessage}
           </ul>
         </div>

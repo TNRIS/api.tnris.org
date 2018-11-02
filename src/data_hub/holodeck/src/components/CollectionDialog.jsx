@@ -18,13 +18,7 @@ class CollectionDialog extends React.Component {
     }
 
     componentDidUpdate() {
-      this.props.showCollectionDialog ? this.dialog.show() : this.dialog.close()
-    }
-
-    componentWillReceiveProps() {
-      this.dialog.listen('MDCDialog:cancel', () => {
-        this.closeCollectionDialog();
-      })
+      this.props.showCollectionDialog ? this.dialog.show() : this.dialog.close();
     }
 
     collectionDialogContent() {
@@ -49,6 +43,7 @@ class CollectionDialog extends React.Component {
     closeCollectionDialog() {
       this.props.closeCollectionDialog();
       this.props.clearSelectedCollection();
+      this.props.history.push('/');
     }
 
     render() {

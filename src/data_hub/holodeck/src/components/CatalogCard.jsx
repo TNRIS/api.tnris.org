@@ -7,12 +7,20 @@ export default class CatalogCard extends React.Component {
     this.cardClicked = this.cardClicked.bind(this)
   }
 
+  componentDidMount () {
+    if (Object.keys(this.props.match.params).includes('collectionId') &&
+        this.props.match.params.collectionId === this.props.collection.collection_id) {
+      this.cardClicked();
+    }
+  }
+
   cardClicked() {
     this.props.openCollectionDialog();
     this.props.selectCollection(this.props.collection.collection_id);
     if (this.props.collection.template === 'tnris-download') {
       this.props.fetchCollectionResources(this.props.collection.collection_id);
     }
+    this.props.history.push('/collection/' + this.props.collection.collection_id);
   }
 
   render() {

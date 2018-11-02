@@ -1,5 +1,4 @@
 import React from 'react';
-import {MDCCheckbox} from '@material/checkbox';
 
 export default class CollectionFilter extends React.Component {
   constructor(props) {
@@ -24,8 +23,7 @@ export default class CollectionFilter extends React.Component {
           allFilters.filters[key].map(id => {
             const hashId = '#' + id;
             if (document.querySelector(hashId)) {
-              const checkbox = new MDCCheckbox(document.querySelector(hashId).parentNode);
-              checkbox.checked = true;
+              document.querySelector(hashId).checked = true;
             }
           });
         });
@@ -59,7 +57,11 @@ export default class CollectionFilter extends React.Component {
       this.props.setCollectionFilter(currentFilters);
     } else {
       if (currentFilters.hasOwnProperty(target.name) && currentFilters[target.name].indexOf(target.value) >= 0) {
-        currentFilters[target.name] = currentFilters[target.name].filter(item => item !== target.value)
+        currentFilters[target.name] = currentFilters[target.name].filter(item => item !== target.value);
+        // if all checkboxes unchecked, remove from the category's filter object completely
+        if (currentFilters[target.name].length === 0) {
+          delete currentFilters[target.name];
+        }
       }
       this.props.setCollectionFilter(currentFilters);
     }
@@ -69,9 +71,13 @@ export default class CollectionFilter extends React.Component {
                        JSON.parse(decodeURIComponent(this.props.history.location.pathname.replace('/catalog/', '')))
                        : {};
     const filterObj = {...prevFilter, filters: currentFilters};
+    // if all filters turned off, remove from the url completely
+    if (Object.keys(filterObj['filters']).length === 0) {
+      delete filterObj['filters'];
+    }
     const filterString = JSON.stringify(filterObj);
-    this.props.history.replace('/catalog/' + encodeURIComponent(filterString));
-
+    // if empty filter settings, use the base home url instead of the filter url
+    Object.keys(filterObj).length === 0 ? this.props.history.replace('/') : this.props.history.replace('/catalog/' + encodeURIComponent(filterString));
   }
 
   render() {

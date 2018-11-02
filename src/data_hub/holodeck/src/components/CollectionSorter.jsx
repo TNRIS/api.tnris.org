@@ -10,6 +10,19 @@ class CollectionSorter extends React.Component {
       this.setSort = this.setSort.bind(this);
   }
 
+  componentDidMount() {
+    // on component mount, check the URl to apply any necessary filters
+    // first, check if url has a 'filters' parameter
+    if (Object.keys(this.props.match.params).includes('filters')) {
+      const allFilters = JSON.parse(decodeURIComponent(this.props.match.params.filters));
+      // second, check if filters param includes sort key
+      if (Object.keys(allFilters).includes('sort')) {
+        // third, apply sort to store and component
+        this.setSort(allFilters.sort);
+      }
+    }
+  }
+
   setSort(order) {
     this.setState({sortOrder: order});
     switch(order) {
@@ -28,6 +41,19 @@ class CollectionSorter extends React.Component {
       default:
         this.props.sortAZ();
     }
+    // update URL to reflect new sort change
+    const prevFilter = this.props.history.location.pathname.includes('/catalog/') ?
+                       JSON.parse(decodeURIComponent(this.props.history.location.pathname.replace('/catalog/', '')))
+                       : {};
+    const filterObj = {...prevFilter, sort: order};
+    console.log(filterObj.sort);
+    // if the default sort 'AZ' then remove from the url
+    if (filterObj['sort'] === 'AZ') {
+      delete filterObj['sort'];
+    }
+    const filterString = JSON.stringify(filterObj);
+    // if empty filter settings, use the base home url instead of the filter url
+    Object.keys(filterObj).length === 0 ? this.props.history.replace('/') : this.props.history.replace('/catalog/' + encodeURIComponent(filterString));
   }
 
   render() {

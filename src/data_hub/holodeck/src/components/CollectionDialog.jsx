@@ -4,7 +4,7 @@ import { MDCDialog } from '@material/dialog';
 import TnrisDownloadTemplate from './TnrisDownloadTemplate/TnrisDownloadTemplate';
 import TnrisOrderTemplate from './TnrisOrderTemplate/TnrisOrderTemplate';
 import HistoricalAerialTemplate from './HistoricalAerialTemplate/HistoricalAerialTemplate';
-import OutsideEntityTemplate from './OutsideEntityTemplate';
+import OutsideEntityTemplate from './TnrisOutsideEntityTemplate/TnrisOutsideEntityTemplate';
 
 class CollectionDialog extends React.Component {
     constructor(props) {

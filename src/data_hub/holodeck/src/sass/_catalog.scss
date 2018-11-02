@@ -19,14 +19,19 @@ styles for component: Catalog
     }
 
     .catalog-list {
-      padding: 15px;
-      @include mdc-image-list-standard-columns(8);
+      padding: 2% 10% 2% 10%;
+      margin-bottom: 500px;
+      @include mdc-image-list-standard-columns(6);
 
       @media (min-width: mdc-layout-grid-breakpoint-min(tablet)) and (max-width: mdc-layout-grid-breakpoint-min(desktop)) {
-        @include mdc-image-list-standard-columns(5);
+        padding: 20px 50px 20px 50px;
+        margin-bottom: 600px;
+        @include mdc-image-list-standard-columns(4);
       }
 
       @media (max-width: mdc-layout-grid-breakpoint-min(tablet)) {
+        padding: 0px 20px 10px 20px;
+        margin-bottom: 750px;
         @include mdc-image-list-standard-columns(2);
       }
     }

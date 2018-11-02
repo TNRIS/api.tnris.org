@@ -18,7 +18,7 @@ styles for component: CatalogCard
     cursor: pointer;
 
     .mdc-image-list__supporting {
-      height: 50%;
+      height: 65%;
 
       .mdc-image-list__label {
         white-space: normal;
@@ -43,7 +43,8 @@ styles for component: CatalogCard
       text-overflow: ellipsis;
       white-space: nowrap;
       line-height: 1.3rem;
+      font-size: 14px;
     }
-  }
 
+  }
 }

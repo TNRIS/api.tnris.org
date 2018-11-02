@@ -26,16 +26,16 @@ export default class ToolDrawer extends React.Component {
         <aside className='mdc-drawer mdc-drawer--modal tool-drawer' dir='rtl'>
           <div className='mdc-drawer__content' dir='ltr'>
             <nav className='mdc-list-group'>
-              <CollectionSearcherContainer className='mdc-list-item'/>
+              <CollectionSearcherContainer className='mdc-list-item' match={this.props.match} history={this.props.history} />
               <a className='sort-title mdc-list-group__subheader'>
                 Sort
               </a>
-              <CollectionSorterContainer className='mdc-list-item' />
+              <CollectionSorterContainer className='mdc-list-item' match={this.props.match} history={this.props.history} />
               <hr className='mdc-list-divider'/>
               <a className='filter-title mdc-list-group__subheader'>
                 Filter
               </a>
-              <CollectionFilterContainer className='mdc-list-item' />
+              <CollectionFilterContainer className='mdc-list-item' match={this.props.match} history={this.props.history} />
             </nav>
           </div>
         </aside>

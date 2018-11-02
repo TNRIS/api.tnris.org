@@ -1,4 +1,5 @@
 import React from 'react';
+import {MDCCheckbox} from '@material/checkbox';
 
 export default class CollectionFilter extends React.Component {
   constructor(props) {
@@ -8,6 +9,28 @@ export default class CollectionFilter extends React.Component {
     }
     this.handleOpenFilterMenu = this.handleOpenFilterMenu.bind(this);
     this.handleSetFilter = this.handleSetFilter.bind(this);
+  }
+
+  componentDidMount () {
+    // on component mount, check the URl to apply any necessary filters
+    // first, check if url has a 'filters' parameter
+    if (Object.keys(this.props.match.params).includes('filters')) {
+      const allFilters = JSON.parse(decodeURIComponent(this.props.match.params.filters));
+      // second, check if filters param includes filters key
+      if (Object.keys(allFilters).includes('filters')) {
+        // third, apply all filters and check those associated checkboxes
+        this.props.setCollectionFilter(allFilters.filters);
+        Object.keys(allFilters.filters).map(key => {
+          allFilters.filters[key].map(id => {
+            const hashId = '#' + id;
+            if (document.querySelector(hashId)) {
+              const checkbox = new MDCCheckbox(document.querySelector(hashId).parentNode);
+              checkbox.checked = true;
+            }
+          });
+        });
+      }
+    }
   }
 
   handleOpenFilterMenu(e) {
@@ -40,6 +63,15 @@ export default class CollectionFilter extends React.Component {
       }
       this.props.setCollectionFilter(currentFilters);
     }
+
+    // update URL to reflect new filter changes
+    const prevFilter = this.props.history.location.pathname.includes('/catalog/') ?
+                       JSON.parse(decodeURIComponent(this.props.history.location.pathname.replace('/catalog/', '')))
+                       : {};
+    const filterObj = {...prevFilter, filters: currentFilters};
+    const filterString = JSON.stringify(filterObj);
+    this.props.history.replace('/catalog/' + encodeURIComponent(filterString));
+
   }
 
   render() {

@@ -37,7 +37,7 @@ export default class Catalog extends React.Component {
     return (
       <div className="catalog-component">
         <Drawer />
-        <ToolDrawer />
+        <ToolDrawer match={this.props.match} history={this.props.history} />
         <HeaderContainer />
         <div className='catalog'>
           {/* <button onClick={this.props.openMapDialog}>show map</button> */}

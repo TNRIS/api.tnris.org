@@ -43,7 +43,7 @@ class CollectionDialog extends React.Component {
     closeCollectionDialog() {
       this.props.closeCollectionDialog();
       this.props.clearSelectedCollection();
-      this.props.history.push('/');
+      this.props.history.replace('/');
     }
 
     render() {

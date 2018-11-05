@@ -80,6 +80,28 @@ class PhotoIndex(models.Model):
         return ''
 
 
+class ScannedPhotoIndexLink(models.Model):
+    """Manages LS4 uploaded photo index scan links"""
+
+    class Meta:
+        db_table = 'photo_index_scanned_ls4_link'
+        verbose_name = 'Photo Index Scanned LS4 Link'
+        verbose_name_plural = 'Photo Index Scanned LS4 Links'
+        unique_together = ('collection', 'link')
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    collection = models.ForeignKey('Collection', on_delete=models.CASCADE)
+    year = models.PositiveIntegerField('Designated Year', null=False)
+    size = models.CharField('Labeled Size', max_length=20, null=False)
+    sheet = models.CharField('Sheet Number', max_length=20, null=False)
+    link = models.URLField('Download Link', null=False)
+    created = models.DateTimeField('Created', auto_now_add=True)
+    last_modified = models.DateTimeField('Last Modified', auto_now=True)
+
+    def __str__(self):
+        return str(self.link)
+
+
 class LineIndex(models.Model):
     """Defines historical imagery collection photo indexes"""
 
@@ -248,7 +270,7 @@ class ChcView(models.Model):
         verbose_name = 'Compiled Historical Collection'
         verbose_name_plural = 'Compiled Historical Collections'
 
-    id = models.UUIDField(
+    collection_id = models.UUIDField(
         'Historical Collection ID',
         primary_key=True
     )
@@ -259,8 +281,8 @@ class ChcView(models.Model):
     from_date = models.DateField(
         'From Date'
     )
-    to_date = models.DateField(
-        'To Date'
+    acquisition_date = models.DateField(
+        'To Date (Acquisition)'
     )
     public = models.BooleanField(
         'Public'
@@ -277,24 +299,40 @@ class ChcView(models.Model):
         'Mosaic Service URL',
         max_length=256
     )
-    ls4_link = models.CharField(
-        'LS4 Link Identifer',
-        max_length=200
-    )
     counties = models.TextField(
         'Counties'
     )
-    name = models.CharField(
+    agency_name = models.CharField(
         'Acquiring Agency Name',
         max_length=254
     )
-    abbreviation = models.CharField(
+    agency_abbreviation = models.CharField(
         'Acquiring Agency Abbreviation',
         max_length=20
     )
     products = models.TextField(
         'Products'
     )
+    name = models.CharField(
+        'Display Name',
+        max_length=100
+    )
+    template = models.CharField(
+        'Display Template',
+        max_length=20
+    )
+    thumbnail_image = models.URLField(
+        'Thumbnail Image URL'
+    )
+    category = models.TextField(
+        'Category'
+    )
+    recommended_use = models.TextField(
+        'Recommended Use'
+    )
+    scanned_index_ls4_links = models.TextField(
+        'Scanned Index LS4 Links'
+    )
 
     def __str__(self):
-        return self.name + str(self.from_date)
+        return self.name + str(self.to_date)

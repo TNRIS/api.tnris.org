@@ -2,8 +2,8 @@ import React from 'react';
 import { MDCDialog } from '@material/dialog';
 
 import TnrisDownloadTemplate from './TnrisDownloadTemplate/TnrisDownloadTemplate';
-import TnrisOrderTemplate from './TnrisOrderTemplate';
-import HistoricalAerialTemplate from './HistoricalAerialTemplate';
+import TnrisOrderTemplate from './TnrisOrderTemplate/TnrisOrderTemplate';
+import HistoricalAerialTemplate from './HistoricalAerialTemplate/HistoricalAerialTemplate';
 import OutsideEntityTemplate from './OutsideEntityTemplate';
 
 class CollectionDialog extends React.Component {
@@ -18,13 +18,7 @@ class CollectionDialog extends React.Component {
     }
 
     componentDidUpdate() {
-      this.props.showCollectionDialog ? this.dialog.show() : this.dialog.close()
-    }
-
-    componentWillReceiveProps() {
-      this.dialog.listen('MDCDialog:cancel', () => {
-        this.closeCollectionDialog();
-      })
+      this.props.showCollectionDialog ? this.dialog.show() : this.dialog.close();
     }
 
     collectionDialogContent() {
@@ -49,6 +43,7 @@ class CollectionDialog extends React.Component {
     closeCollectionDialog() {
       this.props.closeCollectionDialog();
       this.props.clearSelectedCollection();
+      this.props.history.replace('/');
     }
 
     render() {

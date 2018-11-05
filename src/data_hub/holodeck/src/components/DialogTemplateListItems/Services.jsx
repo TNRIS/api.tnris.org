@@ -25,8 +25,8 @@ export default class Services extends React.Component {
     ) : ""
 
     return (
-      <li className='mdc-image-list__item'>
-        <div className='mdc-typography--headline5'>
+      <div className="template-content-div">
+        <div className='mdc-typography--headline5 template-content-div-header'>
           Services
         </div>
         <p>
@@ -47,7 +47,7 @@ export default class Services extends React.Component {
             {previewLink}
           </div>
         </div>
-      </li>
+      </div>
     )
   }
 }

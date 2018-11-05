@@ -47,7 +47,6 @@ export function submitContactTnrisForm(formInfo) {
     .then(handleErrors)
     .then(res => res.json())
     .then(json => {
-      console.log(json);
       if (json.status === "success") {
         dispatch(submitContactSuccess());
       }

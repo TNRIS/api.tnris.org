@@ -7,12 +7,16 @@ from .filters import CollectionAgencyNameFilter, CollectionCountyFilter, \
     CountyDropdownFilter
 from .forms import CollectionForm, ProductForm
 from .models import (Agency, Collection, County, CountyRelate, FrameSize,
-                     LineIndex, MicroficheIndex, PhotoIndex, Product, Scale)
+                     LineIndex, MicroficheIndex, PhotoIndex, Product, Scale,
+                     ScannedPhotoIndexLink)
 
 
 class AgencyAdmin(admin.ModelAdmin):
     model = Agency
     ordering = ('name',)
+    list_display = (
+        'name', 'abbreviation'
+    )
 
 
 class FrameSizeAdmin(admin.ModelAdmin):
@@ -29,6 +33,13 @@ class PhotoIndexInlineAdmin(admin.StackedInline):
     classes = ('grp-collapse grp-closed',)
     inline_classes = ('grp-collapse grp-closed',)
     model = PhotoIndex
+    extra = 0
+
+
+class ScannedPhotoIndexLinkInlineAdmin(admin.StackedInline):
+    classes = ('grp-collapse grp-closed',)
+    inline_classes = ('grp-collapse grp-closed',)
+    model = ScannedPhotoIndexLink
     extra = 0
 
 
@@ -76,12 +87,13 @@ class CollectionAdmin(admin.ModelAdmin):
         })
     )
     inlines = [PhotoIndexInlineAdmin, LineIndexInlineAdmin,
-               MicroficheIndexInlineAdmin, ProductInlineAdmin]
+               MicroficheIndexInlineAdmin, ProductInlineAdmin,
+               ScannedPhotoIndexLinkInlineAdmin]
     list_display = (
         'collection', 'agency', 'from_date', 'to_date', 'county_names', 'public'
     )
     ordering = ('agency__name', 'from_date')
-    search_fields = ('collection',)
+    search_fields = ('collection', 'id', 'to_date')
     list_filter = (
         'public',
         CollectionAgencyNameFilter,

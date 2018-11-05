@@ -22,7 +22,6 @@ styles for component: ContactTnrisForm
     margin-bottom: 16px;
     display: flex;
     @include mdc-select-label-color(#6200ee);
-    @include mdc-select-ink-color(#6200ee);
     @include mdc-select-bottom-line-color(rgba(0, 0, 0, 0.12));
     @include mdc-select-focused-bottom-line-color(#6200ee);
 

@@ -1,0 +1,154 @@
+/*
+styles for component: OrderTnrisDataForm
+*/
+
+.order-tnris-data-form-component {
+  @include mdc-text-field-bottom-line-color(rgba(0,0,0,.42));
+  @include mdc-text-field-label-color(#6200ee);
+  @include mdc-text-field-line-ripple-color(#6200ee);
+  @include mdc-text-field-textarea-stroke-color(rgba(0,0,0,.42));
+
+  @include mdc-radio-ink-color(#6200ee);
+  @include mdc-radio-checked-stroke-color(#6200ee);
+  @include mdc-radio-focus-indicator-color(#6200ee);
+
+  padding: 15px;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  div.mdc-text-field {
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    margin-bottom: 16px;
+    display: flex;
+  }
+
+  .mdc-text-field--invalid {
+    @include mdc-text-field-bottom-line-color(red);
+    @include mdc-text-field-label-color(red);
+    @include mdc-text-field-line-ripple-color(red);
+    @include mdc-text-field-textarea-stroke-color(red);
+  }
+
+  input[type='number'] {
+    -moz-appearance:textfield;
+  }
+
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+  }
+
+  .mdc-select:not(.mdc-select--disabled) {
+    background-color: initial;
+    margin-bottom: 16px;
+    display: flex;
+    @include mdc-select-label-color(#6200ee);
+    // @include mdc-select-ink-color(#6200ee);
+    @include mdc-select-bottom-line-color(rgba(0, 0, 0, 0.12));
+    @include mdc-select-focused-bottom-line-color(#6200ee);
+
+
+    select {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+
+      option:not([disabled]) {
+        color: black;
+      }
+    }
+
+    select::-ms-expand {
+      display: none;
+    }
+
+  }
+
+  .order-lidar-switches, .order-historical-switches {
+    .mdc-form-field {
+      min-height: 40px;
+
+      .mdc-switch:not(.mdc-switch--disabled) {
+        @include mdc-switch-toggled-on-color(#6200ee);
+        @include mdc-switch-toggled-on-track-color(#6200ee);
+        @include mdc-switch-toggled-on-thumb-color(#6200ee);
+        @include mdc-switch-toggled-on-ripple-color(#6200ee);
+      }
+
+      .mdc-switch {
+        margin-right: 12px;
+      }
+
+      label {
+        cursor: pointer;
+      }
+
+      .mdc-switch.mdc-switch--disabled {
+        .mdc-switch__native-control {
+          pointer-events: initial;
+          cursor: not-allowed;
+        }
+      }
+
+      .mdc-switch.mdc-switch--disabled + label {
+        cursor: not-allowed;
+      }
+    }
+
+  }
+
+  .mdc-typography--headline6 {
+    margin-bottom: 10px;
+  }
+
+  .mdc-typography--body2 {
+    color: rgba(0, 0, 0, 0.6);
+  }
+
+  .mdc-typography--caption {
+    margin-left: 44px;
+    color: rgba(0, 0, 0, 0.6);
+  }
+
+  .mdc-form-field {
+    display: flex;
+
+    label {
+      cursor: pointer;
+    }
+  }
+
+  .mdc-text-field:not(.mdc-text-field--disabled) + .mdc-text-field-helper-text {
+    margin-bottom: 10px;
+    color: #6200ee;
+  }
+
+  .invalid-prompt {
+    color: red;
+  }
+
+  .submit-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .order-cart-form-success {
+    span {
+      color: green;
+    }
+  }
+
+  .order-cart-form-error {
+    span {
+      color: red;
+    }
+  }
+
+  div.hidden-field {
+    display: none;
+  }
+
+
+}

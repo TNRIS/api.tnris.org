@@ -108,8 +108,8 @@ export default class Metadata extends React.Component {
     ) : "";
 
     return (
-      <li className='mdc-image-list__item metadata'>
-        <div className='mdc-typography--headline5'>
+      <div className="template-content-div metadata">
+        <div className='mdc-typography--headline5 template-content-div-header'>
           Metadata
         </div>
         <ul className="mdc-list">
@@ -132,7 +132,7 @@ export default class Metadata extends React.Component {
           {recommendedUse}
           {tags}
         </ul>
-      </li>
+      </div>
     )
   }
 }

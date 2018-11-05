@@ -3,17 +3,18 @@ import React from 'react';
 import { Carousel } from 'react-responsive-carousel';
 
 export default class TnrisDownloadTemplateImages extends React.Component {
-  constructor(props) {
-      super(props);
-      console.log(this.props);
-  }
-
   render() {
 
-    const imageUrls = [];
-    Object.keys(this.props).map(key => this.props[key] !== null ? imageUrls.push(this.props[key]) : '')
+    const all_images = this.props.images.split(',');
+    const thumbnail = this.props.thumbnail;
+    const carousel_images = [];
 
-    console.log(imageUrls);
+    all_images.map(function(url) {
+      if (url !== thumbnail) {
+        carousel_images.push(url);
+      }
+      return url;
+    });
 
     return (
 
@@ -27,26 +28,16 @@ export default class TnrisDownloadTemplateImages extends React.Component {
             useKeyboardArrows={true}
             transitionTime={700}
           >
+
             {
-              imageUrls.map(url =>
-                <div key={url}>
-                  <img src={url} alt='' />
-                </div>
-              )
+              carousel_images.map(url => ( <div key={url}><img src={url} alt='' /></div> ))
             }
           </Carousel>
         </div>
 
         <div className="mobile">
           {
-            imageUrls.map(url =>
-              <div key={url}>
-                <img src={url} alt='' />
-
-                  
-
-              </div>
-            )
+            carousel_images.map(url => ( <div key={url}><img src={url} alt='' /></div> ))
           }
         </div>
       </div>

@@ -43,6 +43,7 @@ export const getSearchIndex = createSelector(
     const searchFields = [
       'name',
       'description',
+      'counties'
     ];
     const searchIndex = elasticlunr(function() {
       searchFields.map(field => {
@@ -81,6 +82,7 @@ export const getCollectionFilterChoices = createSelector(
     const collectionFilterChoices = {
       category: [],
       recommended_use: [],
+      template: []
     };
     // If collections are in ready the state, continue setting the value arrays in the
     // collectionFilterChoices object from above.
@@ -188,9 +190,9 @@ export const getSortedCollections = createSelector(
           sortedCollectionIds.sort((a,b) => {
             const one = collections[a]
             const two = collections[b]
-            if (one.name < two.name)
+            if (one.name.toLowerCase() < two.name.toLowerCase())
               return -1;
-            if (one.name > two.name)
+            if (one.name.toLowerCase() > two.name.toLowerCase())
               return 1;
             return 0;
           });
@@ -200,9 +202,9 @@ export const getSortedCollections = createSelector(
           sortedCollectionIds.sort((a,b) => {
             const one = collections[a]
             const two = collections[b]
-            if (one.name > two.name)
+            if (one.name.toLowerCase() > two.name.toLowerCase())
               return -1;
-            if (one.name < two.name)
+            if (one.name.toLowerCase() < two.name.toLowerCase())
               return 1;
             return 0;
           });

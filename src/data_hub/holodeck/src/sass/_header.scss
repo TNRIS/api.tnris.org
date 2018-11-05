@@ -3,11 +3,14 @@ styles for component: Header
 */
 
 .header-component {
-  background-color: #222;
+  @include mdc-top-app-bar-ink-color(gray);
+  @include mdc-top-app-bar-icon-ink-color(gray);
+  @include mdc-top-app-bar-fill-color(white);
+  border-bottom: solid 1px gray;
 
   .header-title {
-    background: #1e8dc1;
-    color: #d2f1ff;
+    background: lightgray;
+    color: white;
     font-family: pragmatica-web-condensed,sans-serif;
     font-size: 16px;
     font-weight: 100;
@@ -33,7 +36,6 @@ styles for component: Header
   }
 
   .header-nav {
-    color: #d2f1ff;
 
     .mdc-top-app-bar__action-item {
       margin-left: 3px;
@@ -41,6 +43,10 @@ styles for component: Header
 
       .logo {
         max-height: 100%;
+      }
+
+      .shopping-cart-full {
+        color: #b088e8;
       }
     }
 

@@ -2,10 +2,29 @@ import { connect } from 'react-redux';
 
 import OrderCart from '../components/OrderCart';
 
+import { orderCartActions, orderCartDialogActions } from '../actions';
+import { getAllCollections } from '../selectors/collectionSelectors';
+
 const mapStateToProps = state => ({
+  collections: getAllCollections(state),
+  orders: state.orderCart.orders,
+  submitting: state.orderCart.submitting,
+  submitError: state.orderCart.submitError
 });
 
 const mapDispatchToProps = dispatch => ({
+  removeCollectionFromCart: (collectionId) => {
+    dispatch(orderCartActions.removeCollectionFromCart(collectionId));
+  },
+  submitOrderSuccess: () => {
+    dispatch(orderCartActions.submitOrderSuccess());
+  },
+  submitOrderCartForm: (formInfo) => {
+    dispatch(orderCartActions.submitOrderCartForm(formInfo));
+  },
+  closeOrderCartDialog: () => {
+    dispatch(orderCartDialogActions.closeOrderCartDialog());
+  }
 })
 
 const OrderCartContainer = connect(

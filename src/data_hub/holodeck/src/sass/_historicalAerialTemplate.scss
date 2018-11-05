@@ -10,8 +10,52 @@ styles for component: HistoricalAerialTemplate
     outline: none;
   }
 
-  .collection-dialog__image {
-    max-width: 100%;
+  section.mdc-top-app-bar__section.mdc-top-app-bar__section--align-end {
+    max-width: 200px;
+
+    div.mdc-tab-bar {
+      .mdc-tab {
+        max-width: 25px;
+        span {
+          color: white;
+        }
+
+        .mdc-tab-indicator--active {
+          .mdc-tab-indicator__content--underline {
+            background-color: white;
+          }
+        }
+      }
+    }
+
+    div.mdc-menu-surface--anchor {
+      .mdc-list {
+        i {
+          margin-right: 6px;
+        }
+      }
+    }
+
+    @media (max-width: mdc-layout-grid-breakpoint-max(tablet)) {
+      .mdc-tab-bar {
+        display: none;
+      }
+
+      .mdc-menu-surface--anchor {
+        display: flex;
+      }
+    }
+
+    @media (min-width: mdc-layout-grid-breakpoint-max(tablet)) {
+      .mdc-tab-bar {
+        display: block;
+      }
+
+      .mdc-menu-surface--anchor {
+        display: none;
+      }
+    }
+
   }
 
 }

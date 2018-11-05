@@ -13,10 +13,35 @@ export default class CollectionSearcher extends React.Component {
 
   componentDidMount() {
     this.searchField = new MDCTextField(document.querySelector('.search-component'));
+
+    // on component mount, check the URl to apply any necessary filters
+    // first, check if url has a 'filters' parameter
+    if (Object.keys(this.props.match.params).includes('filters')) {
+      const allFilters = JSON.parse(decodeURIComponent(this.props.match.params.filters));
+      // second, check if filters param includes search key
+      if (Object.keys(allFilters).includes('search')) {
+        // third, apply search text and then populate the input box
+        this.props.setCollectionSearchQuery(allFilters.search);
+        document.querySelector('#search-collections').value = allFilters.search;
+      }
+    }
   }
 
   handleSearch() {
     this.props.setCollectionSearchQuery(this.searchField.value);
+
+    // update URL to reflect new search change
+    const prevFilter = this.props.history.location.pathname.includes('/catalog/') ?
+                       JSON.parse(decodeURIComponent(this.props.history.location.pathname.replace('/catalog/', '')))
+                       : {};
+    const filterObj = {...prevFilter, search: this.searchField.value};
+    // if search is empty, remove from the url
+    if (filterObj['search'].length === 0) {
+      delete filterObj['search'];
+    }
+    const filterString = JSON.stringify(filterObj);
+    // if empty filter settings, use the base home url instead of the filter url
+    Object.keys(filterObj).length === 0 ? this.props.history.replace('/') : this.props.history.replace('/catalog/' + encodeURIComponent(filterString));
   }
 
   render() {

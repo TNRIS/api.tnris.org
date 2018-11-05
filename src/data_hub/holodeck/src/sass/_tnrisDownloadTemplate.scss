@@ -3,6 +3,7 @@ styles for component: TnrisDownloadTemplate
 */
 
 .tnris-download-template {
+  height: 100%;
   overflow-y: auto;
 
   &:focus {
@@ -10,9 +11,11 @@ styles for component: TnrisDownloadTemplate
   }
 
   section.mdc-top-app-bar__section.mdc-top-app-bar__section--align-end {
+    max-width: 200px;
 
     div.mdc-tab-bar {
       .mdc-tab {
+        max-width: 25px;
         span {
           color: white;
         }
@@ -55,4 +58,8 @@ styles for component: TnrisDownloadTemplate
 
   }
 
+}
+
+.tnris-download-template.dark-theme {
+  background-color: #121515;
 }

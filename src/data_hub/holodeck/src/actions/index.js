@@ -8,6 +8,7 @@ import * as sortActions from './sortActions';
 import * as contactActions from './contactActions';
 import * as orderCartDialogActions from './orderCartDialogActions';
 import * as orderCartActions from './orderCartActions';
+import * as urlTrackerActions from './urlTrackerActions';
 
 export {
   collectionActions,
@@ -19,5 +20,6 @@ export {
   sortActions,
   contactActions,
   orderCartDialogActions,
-  orderCartActions
+  orderCartActions,
+  urlTrackerActions
 };

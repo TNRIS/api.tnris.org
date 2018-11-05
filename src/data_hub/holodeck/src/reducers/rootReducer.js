@@ -9,6 +9,7 @@ import resources from './resourceReducer';
 import sorter from './sortReducer';
 import contact from './contactReducer';
 import orderCart from './orderCartReducer';
+import urlTracker from './urlTrackerReducer';
 
 const rootReducer = combineReducers({
   collections,
@@ -19,7 +20,8 @@ const rootReducer = combineReducers({
   resources,
   sorter,
   contact,
-  orderCart
+  orderCart,
+  urlTracker
 })
 
 export default rootReducer;

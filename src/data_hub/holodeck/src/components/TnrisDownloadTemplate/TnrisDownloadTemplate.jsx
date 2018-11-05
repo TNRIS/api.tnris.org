@@ -54,17 +54,21 @@ export default class TnrisDownloadTemplate extends React.Component {
 
   render() {
     let showComponent;
+    let templateClass;
     switch(this.state.view) {
       case 'details':
         showComponent = <TnrisDownloadTemplateDetails collection={this.props.collection} />;
+        templateClass = 'tnris-download-template';
         break;
       case 'images':
         showComponent = (<TnrisDownloadTemplateImages
           images={this.props.collection.images}
           thumbnail={this.props.collection.thumbnail_image} />);
+        templateClass = 'tnris-download-template';
         break;
       case 'download':
         showComponent = <TnrisDownloadTemplateDownloadContainer />;
+        templateClass = 'tnris-download-template dark-theme';
         break;
       case 'order':
         showComponent = (
@@ -79,13 +83,15 @@ export default class TnrisDownloadTemplate extends React.Component {
             </div>
           </div>
         )
+        templateClass = 'tnris-download-template';
         break;
       default:
         showComponent = <TnrisDownloadTemplateDetails collection={this.props.collection} />;
+        templateClass = 'tnris-download-template';
     }
 
     return (
-      <div className='tnris-download-template' tabIndex='1'>
+      <div className={templateClass} tabIndex='1'>
         <header className="mdc-top-app-bar">
           <div className="mdc-top-app-bar__row">
             <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">

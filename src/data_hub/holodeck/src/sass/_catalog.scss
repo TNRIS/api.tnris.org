@@ -45,6 +45,8 @@ styles for component: Catalog
   left: 0;
   top: 0;
   bottom: 0;
+  min-width: 100%;
+  background-color: #121515;
 
   @media (max-width: mdc-layout-grid-breakpoint-min(desktop)) {
     overflow: hidden;

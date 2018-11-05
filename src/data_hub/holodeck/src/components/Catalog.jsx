@@ -8,7 +8,7 @@ import HeaderContainer from '../containers/HeaderContainer';
 // import MapDialogContainer from '../containers/MapDialogContainer';
 import OrderCartDialogContainer from '../containers/OrderCartDialogContainer';
 import ToolDrawer from './ToolDrawer';
-import loadingImage from '../images/loading.jpg';
+import loadingImage from '../images/loading.gif';
 
 export default class Catalog extends React.Component {
 

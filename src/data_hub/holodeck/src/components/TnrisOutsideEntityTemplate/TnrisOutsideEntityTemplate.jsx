@@ -3,17 +3,12 @@ import {MDCTopAppBar} from '@material/top-app-bar/index';
 
 import TnrisOutsideEntityTemplateDetails from './TnrisOutsideEntityTemplateDetails';
 
-import OrderTnrisDataFormContainer from '../../containers/OrderTnrisDataFormContainer';
-
 export default class TnrisOutsideEntityTemplate extends React.Component {
   constructor(props) {
       super(props);
       this.state = {
         view:'details'
       };
-      this.setTemplateView = this.setTemplateView.bind(this);
-      this.showTabMenu = this.showTabMenu.bind(this);
-      console.log(this.props);
   }
 
   componentDidMount() {
@@ -21,9 +16,9 @@ export default class TnrisOutsideEntityTemplate extends React.Component {
     this.topAppBar = new MDCTopAppBar(this.topAppBarElement);
   }
 
-
   render() {
 
+    console.log(this.props);
 
     return (
       <div className='tnris-download-template' tabIndex='1'>
@@ -32,9 +27,11 @@ export default class TnrisOutsideEntityTemplate extends React.Component {
             <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
               <span className="mdc-top-app-bar__title">{this.props.collection.name}</span>
             </section>
-
           </div>
         </header>
+
+        <TnrisOutsideEntityTemplateDetails collection={this.props.collection} />
+
       </div>
     );
   }

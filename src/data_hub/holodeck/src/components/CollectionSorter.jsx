@@ -1,11 +1,13 @@
 import React from 'react';
+import { Redirect } from 'react-router';
 
 class CollectionSorter extends React.Component {
 
   constructor(props) {
       super(props);
       this.state = {
-        sortOrder: this.props.sortOrder
+        sortOrder: this.props.sortOrder,
+        badUrlFlag: false
       }
       this.setSort = this.setSort.bind(this);
   }
@@ -14,11 +16,18 @@ class CollectionSorter extends React.Component {
     // on component mount, check the URl to apply any necessary filters
     // first, check if url has a 'filters' parameter
     if (Object.keys(this.props.match.params).includes('filters')) {
-      const allFilters = JSON.parse(decodeURIComponent(this.props.match.params.filters));
-      // second, check if filters param includes sort key
-      if (Object.keys(allFilters).includes('sort')) {
-        // third, apply sort to store and component
-        this.setSort(allFilters.sort);
+      try {
+        const allFilters = JSON.parse(decodeURIComponent(this.props.match.params.filters));
+        // second, check if filters param includes sort key
+        if (Object.keys(allFilters).includes('sort')) {
+          // third, apply sort to store and component
+          this.setSort(allFilters.sort);
+        }
+      } catch (e) {
+        console.log(e);
+        this.setState({
+          badUrlFlag: true
+        });
       }
     }
   }
@@ -57,7 +66,10 @@ class CollectionSorter extends React.Component {
   }
 
   render() {
-
+    if (this.state.badUrlFlag) {
+      return <Redirect to='/404' />;
+    }
+    
     return (
       <div className='sort-component'>
           <ul className='mdc-list'>

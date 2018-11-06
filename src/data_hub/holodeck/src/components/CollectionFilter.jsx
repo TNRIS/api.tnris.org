@@ -1,10 +1,12 @@
 import React from 'react';
+import { Redirect } from 'react-router';
 
 export default class CollectionFilter extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      filters: this.props.collectionFilter
+      filters: this.props.collectionFilter,
+      badUrlFlag: false
     }
     this.handleOpenFilterMenu = this.handleOpenFilterMenu.bind(this);
     this.handleSetFilter = this.handleSetFilter.bind(this);
@@ -14,20 +16,27 @@ export default class CollectionFilter extends React.Component {
     // on component mount, check the URl to apply any necessary filters
     // first, check if url has a 'filters' parameter
     if (Object.keys(this.props.match.params).includes('filters')) {
-      const allFilters = JSON.parse(decodeURIComponent(this.props.match.params.filters));
-      // second, check if filters param includes filters key
-      if (Object.keys(allFilters).includes('filters')) {
-        // third, apply all filters and check those associated checkboxes
-        this.props.setCollectionFilter(allFilters.filters);
-        Object.keys(allFilters.filters).map(key => {
-          allFilters.filters[key].map(id => {
-            const hashId = '#' + id;
-            if (document.querySelector(hashId)) {
-              document.querySelector(hashId).checked = true;
-            }
-            return hashId;
+      try {
+        const allFilters = JSON.parse(decodeURIComponent(this.props.match.params.filters));
+        // second, check if filters param includes filters key
+        if (Object.keys(allFilters).includes('filters')) {
+          // third, apply all filters and check those associated checkboxes
+          this.props.setCollectionFilter(allFilters.filters);
+          Object.keys(allFilters.filters).map(key => {
+            allFilters.filters[key].map(id => {
+              const hashId = '#' + id;
+              if (document.querySelector(hashId)) {
+                document.querySelector(hashId).checked = true;
+              }
+              return hashId;
+            });
+            return key;
           });
-          return key;
+        }
+      } catch (e) {
+        console.log(e);
+        this.setState({
+          badUrlFlag: true
         });
       }
     }
@@ -83,6 +92,10 @@ export default class CollectionFilter extends React.Component {
   }
 
   render() {
+    if (this.state.badUrlFlag) {
+      return <Redirect to='/404' />;
+    }
+
     return (
       <div className='filter-component'>
         <ul className='mdc-list'>

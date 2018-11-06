@@ -25,7 +25,9 @@ export default class CollectionFilter extends React.Component {
             if (document.querySelector(hashId)) {
               document.querySelector(hashId).checked = true;
             }
+            return hashId;
           });
+          return key;
         });
       }
     }
@@ -77,7 +79,7 @@ export default class CollectionFilter extends React.Component {
     }
     const filterString = JSON.stringify(filterObj);
     // if empty filter settings, use the base home url instead of the filter url
-    Object.keys(filterObj).length === 0 ? this.props.history.replace('/') : this.props.history.replace('/catalog/' + encodeURIComponent(filterString));
+    Object.keys(filterObj).length === 0 ? this.props.setUrl('/', this.props.history) : this.props.setUrl('/catalog/' + encodeURIComponent(filterString), this.props.history);
   }
 
   render() {

@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 
 import CollectionFilter from '../components/CollectionFilter';
-import { collectionFilterActions } from '../actions';
+import { collectionFilterActions, urlTrackerActions } from '../actions';
 import { getCollectionFilterChoices } from '../selectors/collectionSelectors';
 
 const mapStateToProps = (state) => ({
@@ -12,6 +12,9 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = dispatch => ({
   setCollectionFilter: (collectionFilter) => {
     dispatch(collectionFilterActions.setCollectionFilter(collectionFilter));
+  },
+  setUrl: (newUrl, history) => {
+    dispatch(urlTrackerActions.setUrl(newUrl, history))
   }
 })
 

@@ -5,8 +5,6 @@ import {
 
 export const setUrl = (newUrl, history) => {
   const currentUrl = window.location.pathname;
-  console.log(currentUrl);
-  console.log(history);
   history.replace(newUrl);
   return (dispatch) => {
     dispatch({

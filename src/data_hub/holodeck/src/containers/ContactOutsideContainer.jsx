@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 
 import { contactActions } from '../actions';
-import ContactTnrisForm from '../components/OutsideEntityContactTnrisForm';
+import ContactOutsideForm from '../components/ContactOutsideForm';
 
 const mapStateToProps = state => ({
   submitStatus: state.contact.submitting,
@@ -17,9 +17,9 @@ const mapDispatchToProps = dispatch => ({
   }
 })
 
-const ContactContainer = connect(
+const ContactOutsideContainer = connect(
   mapStateToProps,
   mapDispatchToProps
-)(ContactTnrisForm);
+)(ContactOutsideForm);
 
-export default ContactContainer;
+export default ContactOutsideContainer;

@@ -45,7 +45,7 @@ export default class Metadata extends React.Component {
       </li>
     ) : "";
 
-    const acquisition = this.props.collection.acquisition_date.substring(0, 4);
+    const acquisition = this.props.collection.acquisition_date ? this.props.collection.acquisition_date.substring(0, 4) : '';
     const acq_year = this.props.collection.template !== 'outside-entity' && this.props.collection.acquisition_date ? (
       <li className="mdc-list-item">
         <strong>Acquisition:</strong>{acquisition}

@@ -6,7 +6,7 @@ import {MDCRipple} from '@material/ripple';
 import {MDCSelect} from '@material/select';
 import ReCAPTCHA from "react-google-recaptcha";
 
-class OutsideEntityContactTnrisForm extends Component {
+class ContactOutsideForm extends Component {
 
   constructor(props) {
       super(props);
@@ -90,16 +90,16 @@ class OutsideEntityContactTnrisForm extends Component {
       const formInfo = {
         'Name': fullName,
         'Email': this.state.email,
-        'Collection': this.compiledDisplayName,
-        'UUID': this.props.collection.collection_id,
         'Category': this.props.collection.category,
         'Software': this.state.software,
         'Message': this.state.question,
-        'form_id': 'data-tnris-org-inquiry',
+        'tnris_link': window.location.protocol + "//" + window.location.host + window.location.pathname,
+        'send_to_email': this.props.collection.agency_contact,
+        'send_to_name': this.props.collection.agency_name,
+        'form_id': 'data-tnris-org-outside-entity',
         'recaptcha': this.state.recaptcha
       };
-
-      this.props.submitOutsideContact(formInfo);
+      this.props.submitContactTnrisForm(formInfo);
     }
     else {
       this.setState({
@@ -109,20 +109,17 @@ class OutsideEntityContactTnrisForm extends Component {
 
   }
 
-
   render() {
-    console.log(this.props.collection.name);
-    console.log(this.props.collection.contact);
-
     let showHTML;
 
     if (this.state.display === 'form') {
       showHTML = (
         <div>
           <p className="mdc-typography--body2">
-            For questions or comments regarding <strong>{this.compiledDisplayName}</strong> datasets, please complete the contact form below. Orders
-            and/or downloads for this data should be acquired from the authoritative data source/agency. Please provide specific information and as much
-            detail as possible regarding your inquiry and it will be sent to the appropriate contact.
+            For questions about <strong>{this.compiledDisplayName}</strong> data, please complete the form below.
+            Contact submissions through this form are sent directly to the agency responsible for the data. 
+            <strong>{this.compiledDisplayName}</strong> data is not hosted by TNRIS and must be requested through
+            the data owner.
           </p>
           <br></br>
 
@@ -204,7 +201,7 @@ class OutsideEntityContactTnrisForm extends Component {
           <p className="mdc-typography--body2">
             <span><strong>Success!</strong></span>
             <br />
-            Thank you for your submission. Your data inquiry has been sent to the appropriate contact at <strong>{this.compiledDisplayName}</strong>.
+            Thank you for submitting your inquiry. We review submissions in a timely manner. (unless you are claiming our <strong>"data is corrupt"</strong>; in which case, we will NOT respond because our data is NOT corrupt. you are just a dumb-dumb.)
           </p>
         </div>
       );
@@ -241,4 +238,4 @@ class OutsideEntityContactTnrisForm extends Component {
   }
 }
 
-export default OutsideEntityContactTnrisForm
+export default ContactOutsideForm

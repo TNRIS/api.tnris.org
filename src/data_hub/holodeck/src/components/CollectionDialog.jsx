@@ -43,7 +43,12 @@ class CollectionDialog extends React.Component {
     closeCollectionDialog() {
       this.props.closeCollectionDialog();
       this.props.clearSelectedCollection();
-      this.props.setUrl(this.props.previousUrl, this.props.history);
+      if (this.props.previousUrl.includes('/collection/')) {
+        this.props.setUrl('/', this.props.history);
+      }
+      else {
+        this.props.setUrl(this.props.previousUrl, this.props.history);
+      }
     }
 
     render() {

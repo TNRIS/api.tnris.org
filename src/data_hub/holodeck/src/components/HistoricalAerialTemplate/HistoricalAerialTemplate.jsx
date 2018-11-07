@@ -100,13 +100,16 @@ export default class HistoricalAerialTemplate extends React.Component {
       <div className='historical-aerial-template' tabIndex='1'>
         <header className="mdc-top-app-bar">
           <div className="mdc-top-app-bar__row">
+
             <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
               <span className="mdc-top-app-bar__title">{collectionYear}{this.props.collection.name}</span>
             </section>
+
             <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
+
               <div className="mdc-tab-bar" role="tablist">
 
-                <div className="mdc-tab-scroller">
+                <div className="mdc-tab-scroller mdc-tab-scroller--align-end">
                   <div className="mdc-tab-scroller__scroll-area">
                     <div className="mdc-tab-scroller__scroll-content">
 
@@ -135,6 +138,7 @@ export default class HistoricalAerialTemplate extends React.Component {
                     </div>
                   </div>
                 </div>
+
               </div>
 
               <div className="mdc-menu-surface--anchor">

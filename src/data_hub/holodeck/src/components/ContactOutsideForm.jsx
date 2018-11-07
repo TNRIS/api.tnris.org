@@ -117,9 +117,8 @@ class ContactOutsideForm extends Component {
         <div>
           <p className="mdc-typography--body2">
             For questions about <strong>{this.compiledDisplayName}</strong> data, please complete the form below.
-            Contact submissions through this form are sent directly to the agency responsible for the data. 
-            <strong>{this.compiledDisplayName}</strong> data is not hosted by TNRIS and must be requested through
-            the data owner.
+            Contact submissions through this form are sent directly to the agency responsible for the data. <strong>{this.compiledDisplayName}</strong> data
+            is not hosted by TNRIS and must be requested through the data owner.
           </p>
           <br></br>
 

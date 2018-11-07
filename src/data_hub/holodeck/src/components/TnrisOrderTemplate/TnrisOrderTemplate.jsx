@@ -75,9 +75,10 @@ export default class TnrisOrderTemplate extends React.Component {
             </section>
 
             <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
+
               <div className="mdc-tab-bar" role="tablist">
 
-                <div className="mdc-tab-scroller">
+                <div className="mdc-tab-scroller mdc-tab-scroller--align-end">
                   <div className="mdc-tab-scroller__scroll-area">
                     <div className="mdc-tab-scroller__scroll-content">
 

@@ -344,23 +344,25 @@ class ResourceForm(forms.ModelForm):
     client = boto3.client('s3')
 
     # specific function to create the Collection field dropdown
-    def create_collection_field():
+    def create_collection_field(self):
         # get the Collection choices from the Collection table
         try:
             choices = (
                 (b.collection_id, b.name) for b in Collection.objects.all().order_by('name'))
         except ProgrammingError:
             choices = ()
-        # create the input
-        input = forms.ChoiceField(
-            required=True,
-            label="Collection",
-            choices=choices
-        )
-        return input
+        # return the choices
+        return choices
 
-    # fire function to create the Collection field dropdown
-    collection = create_collection_field()
+    # create collection dropdown with empty choices as placeholder
+    collection = forms.ChoiceField(required=True, label="Collection", choices=[])
+
+    # on instance construction fire functions to retrieve initial/dropdown values
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance:
+            # fire function to create the Collection field dropdown
+            self.fields['collection'].choices = self.create_collection_field()
 
     # generic function to retrieve the associated Collection object
     def get_collection_obj(self, collection_id):

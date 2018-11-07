@@ -17,6 +17,7 @@ export default class TnrisOutsideEntityTemplate extends React.Component {
   }
 
   render() {
+
     return (
       <div className='outside-entity-template' tabIndex='1'>
         <header className="mdc-top-app-bar">

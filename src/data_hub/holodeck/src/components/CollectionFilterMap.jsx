@@ -23,11 +23,18 @@ export default class CollectionFilterMap extends React.Component {
   componentDidMount() {
     // define mapbox map
     mapboxgl.accessToken = 'undefined';
+    // define the map bounds for Texas at the initial zoom and center,
+    // these will keep the map bounds centered around Texas
+    const bounds = [
+      [-108.83792172606844, 25.535364049344025], // Southwest coordinates
+      [-89.8448562738755, 36.78883840623598] // Northeast coordinates
+    ]
     this.map = new mapboxgl.Map({
         container: 'collection-filter-map', // container id
         style: 'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json',
         center: this.props.collectionFilterMapCenter,
-        zoom: this.props.collectionFilterMapZoom
+        zoom: this.props.collectionFilterMapZoom,
+        maxBounds: bounds // sets bounds as max to prevent panning
     });
     this.map.addControl(new mapboxgl.NavigationControl(), 'top-left');
 
@@ -45,6 +52,7 @@ export default class CollectionFilterMap extends React.Component {
       let center = _this.map.getCenter();
       let zoom = _this.map.getZoom();
       let bounds = _this.map.getBounds();
+      console.log(bounds);
       let query = `SELECT
                      areas.collections
                    FROM

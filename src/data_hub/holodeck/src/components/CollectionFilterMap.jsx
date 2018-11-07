@@ -15,49 +15,36 @@ export default class CollectionFilterMap extends React.Component {
       mapFilter: false,
     }
     // bind our map builder and other custom functions
-    this.createMap = this.createMap.bind(this);
+    this.enableUserInteraction = this.enableUserInteraction.bind(this);
+    this.disableUserInteraction = this.disableUserInteraction.bind(this);
     this.handleFilterButtonClick = this.handleFilterButtonClick.bind(this);
   }
 
   componentDidMount() {
-    this.createMap(this);
-  }
-
-  handleFilterButtonClick() {
-    // set the collection_ids array in the filter to drive the view and set the
-    // current map center and zoom in the state for the next time we open the map
-    if (!this.state.mapFilter) {
-      this.props.setCollectionFilterMapFilter(this.state.collectionIds);
-      this.props.setCollectionFilterMapCenter(this.state.center);
-      this.props.setCollectionFilterMapZoom(this.state.zoom);
-      this.setState({mapFilter: !this.state.mapFilter});
-    } else {
-      this.props.setCollectionFilterMapFilter([]);
-      this.props.setCollectionFilterMapCenter(this.state.initialCenter);
-      this.props.setCollectionFilterMapZoom(this.state.initialZoom);
-      this.setState({mapFilter: !this.state.mapFilter});
-    }
-  }
-
-  createMap(_this) {
     // define mapbox map
     mapboxgl.accessToken = 'undefined';
-    const map = new mapboxgl.Map({
+    this.map = new mapboxgl.Map({
         container: 'collection-filter-map', // container id
         style: 'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json',
-        center: _this.props.collectionFilterMapCenter,
-        zoom: _this.props.collectionFilterMapZoom
+        center: this.props.collectionFilterMapCenter,
+        zoom: this.props.collectionFilterMapZoom
     });
-    map.addControl(new mapboxgl.NavigationControl(), 'top-left');
+    this.map.addControl(new mapboxgl.NavigationControl(), 'top-left');
 
-    function getExtentIntersectedCollectionIds() {
+    if (this.props.collectionFilterMapFilter.length > 0) {
+      this.disableUserInteraction();
+    }
+
+    console.log(this.map);
+
+    function getExtentIntersectedCollectionIds(_this) {
       // get the map bounds from the current extent and query carto
       // to find the area_type polygons that intersect this mbr and
       // return the collection_ids associated with those areas
       const sql = new cartodb.SQL({user: 'tnris-flood'});
-      let center = map.getCenter();
-      let zoom = map.getZoom();
-      let bounds = map.getBounds();
+      let center = _this.map.getCenter();
+      let zoom = _this.map.getZoom();
+      let bounds = _this.map.getBounds();
       let query = `SELECT
                      areas.collections
                    FROM
@@ -77,21 +64,56 @@ export default class CollectionFilterMap extends React.Component {
         // combine all collection_id arrays into a single array of unique ids
         let uniqueCollectionIds = [...new Set([].concat(...collectionIds))];
         _this.setState({
-          collectionIds: uniqueCollectionIds,
-          center: center,
-          zoom: zoom
+          collectionIds: uniqueCollectionIds
         });
+        _this.props.setCollectionFilterMapCenter(center);
+        _this.props.setCollectionFilterMapZoom(zoom);
       }).error(function(errors) {
         // errors contains a list of errors
         console.log("errors:" + errors);
       })
     }
 
-    map.on('moveend', function() {
-      getExtentIntersectedCollectionIds();
+    const _this = this;
+    this.map.on('moveend', function() {
+      getExtentIntersectedCollectionIds(_this);
     })
+    getExtentIntersectedCollectionIds(this);
+  }
 
-    getExtentIntersectedCollectionIds();
+  enableUserInteraction() {
+    this.map.boxZoom.enable();
+    this.map.doubleClickZoom.enable();
+    this.map.dragPan.enable();
+    this.map.dragRotate.enable();
+    this.map.keyboard.enable();
+    this.map.scrollZoom.enable();
+    this.map.touchZoomRotate.enable();
+
+  }
+
+  disableUserInteraction() {
+    this.map.boxZoom.disable();
+    this.map.doubleClickZoom.disable();
+    this.map.dragPan.disable();
+    this.map.dragRotate.disable();
+    this.map.keyboard.disable();
+    this.map.scrollZoom.disable();
+    this.map.touchZoomRotate.disable();
+  }
+
+  handleFilterButtonClick() {
+    // set the collection_ids array in the filter to drive the view and set the
+    // current map center and zoom in the state for the next time we open the map
+    if (this.props.collectionFilterMapFilter.length > 0) {
+      this.props.setCollectionFilterMapFilter([]);
+      this.setState({mapFilter: !this.state.mapFilter})
+      this.enableUserInteraction();
+    } else {
+      this.props.setCollectionFilterMapFilter(this.state.collectionIds);
+      this.setState({mapFilter: !this.state.mapFilter});
+      this.disableUserInteraction();
+    }
   }
 
   render() {
@@ -101,9 +123,9 @@ export default class CollectionFilterMap extends React.Component {
       <div className='collection-filter-map-component'>
         <div id='collection-filter-map'></div>
         <button
-          className='clear-filter-button mdc-fab mdc-fab--extended'
+          className='map-filter-button mdc-fab mdc-fab--extended'
           onClick={this.handleFilterButtonClick}>
-          {this.state.mapFilter ? 'clear map filter' : 'set map filter'}
+          {this.props.collectionFilterMapFilter.length > 0 ? 'clear map filter' : 'set map filter'}
         </button>
       </div>
     );

@@ -5,6 +5,7 @@ const getCollections = (state) => state.collections.items;
 const getFilters = (state) => state.collectionFilter.collectionFilter;
 const getSearchQuery = (state) => state.collectionSearcher.collectionSearchQuery;
 const getSortOrder = (state) => state.sorter.sortOrder;
+const setTimeslider = (state) => state.collectionTimeslider.collectionTimeslider;
 
 // ///////////////////////////////////////////////////////////////
 // Below are the selectors that pertain to filtering, sorting,
@@ -111,6 +112,34 @@ export const getCollectionFilterChoices = createSelector(
   }
 );
 
+export const getCollectionTimesliderRange = createSelector(
+  [ getCollections ],
+  (collections) => {
+    // Check if collections are ready in the state
+    if (collections.result) {
+      let range = [0, 0];
+      collections.result.map(collectionId => {
+        const coll = collections.entities.collectionsById[collectionId];
+        const year = coll.acquisition_date ? parseInt(coll.acquisition_date.substring(0, 4), 10) : 0;
+        if (year !== 0) {
+          if (range[0] === 0 || year < range[0]) {
+            range[0] = year;
+          }
+          if (range[1] === 0 || year > range[1]) {
+            range[1] = year;
+          }
+        }
+        return year;
+      });
+      // return the range array [min year, max year]
+      return range;
+    }
+    else {
+      return setTimeslider;
+    }
+  }
+);
+
 // Returns the array of collections to show in the catalog view.
 // If a filter is set, returns only those collections that pass
 // through the filter.
@@ -175,10 +204,36 @@ export const getSearchedCollections = createSelector(
   }
 );
 
+// Takes the filtered and searched array of collection ids and reduces them
+// to an array of Ids whose collection acquisition_date year is within the
+// year range as designated by the CollectionTimeslider component
+export const getTimesliderCollections = createSelector(
+  [ getAllCollections, getSearchedCollections, setTimeslider ],
+  (collections, collectionIds, range) => {
+    // Check if collections are ready in the state
+    if (collections) {
+      let timesliderCollectionIds = [];
+      // iterate current searched collection Id list
+      collectionIds.map(collectionId => {
+        const coll = collections[collectionId];
+        const year = coll.acquisition_date ? parseInt(coll.acquisition_date.substring(0, 4), 10) : 0;
+        if (year !== 0) {
+          if (range[0] <= year && year <= range[1]) {
+            timesliderCollectionIds.push(collectionId);
+          }
+        }
+        return year;
+      });
+      return !Array.isArray(timesliderCollectionIds) || !timesliderCollectionIds.length ?
+        collectionIds : timesliderCollectionIds;
+    }
+  }
+);
+
 // Takes the filtered array of collection ids and reorders them based on the
 // sort order delcared in the store by the Sort component
 export const getSortedCollections = createSelector(
-  [ getAllCollections, getSearchedCollections, getSortOrder ],
+  [ getAllCollections, getTimesliderCollections, getSortOrder ],
   (collections, collectionIds, order) => {
     // Check if collections are ready in the state
     if (collections) {

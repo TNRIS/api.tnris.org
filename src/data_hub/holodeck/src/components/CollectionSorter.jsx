@@ -55,7 +55,6 @@ class CollectionSorter extends React.Component {
                        JSON.parse(decodeURIComponent(this.props.history.location.pathname.replace('/catalog/', '')))
                        : {};
     const filterObj = {...prevFilter, sort: order};
-    console.log(filterObj.sort);
     // if the default sort 'AZ' then remove from the url
     if (filterObj['sort'] === 'AZ') {
       delete filterObj['sort'];
@@ -69,7 +68,7 @@ class CollectionSorter extends React.Component {
     if (this.state.badUrlFlag) {
       return <Redirect to='/404' />;
     }
-    
+
     return (
       <div className='sort-component'>
           <ul className='mdc-list'>

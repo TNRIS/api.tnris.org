@@ -5,7 +5,7 @@ import { collectionTimesliderActions, urlTrackerActions } from '../actions';
 import { getCollectionTimesliderRange } from '../selectors/collectionSelectors';
 
 const mapStateToProps = (state) => ({
-  collectionTimeslider: state.collectionTimeslider.collectionTimeslider
+  collectionTimeslider: state.collectionTimeslider.collectionTimeslider,
   collectionTimesliderRange: getCollectionTimesliderRange(state)
 });
 

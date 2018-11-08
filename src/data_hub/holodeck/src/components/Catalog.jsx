@@ -20,9 +20,9 @@ export default class Catalog extends React.Component {
   }
 
   componentDidMount() {
-    this.props.fetchAreas();
+    // this.props.fetchAreas();
     this.props.fetchCollections();
-    this.props.fetchResources();
+    // this.props.fetchResources();
     this.props.fetchStoredShoppingCart();
   }
 

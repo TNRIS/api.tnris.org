@@ -1,4 +1,3 @@
-import * as areaActions from './areaActions';
 import * as collectionActions from './collectionActions';
 import * as collectionDialogActions from './collectionDialogActions';
 import * as collectionFilterActions from './collectionFilterActions';
@@ -14,7 +13,6 @@ import * as orderCartActions from './orderCartActions';
 import * as urlTrackerActions from './urlTrackerActions';
 
 export {
-  areaActions,
   collectionActions,
   collectionDialogActions,
   collectionFilterActions,

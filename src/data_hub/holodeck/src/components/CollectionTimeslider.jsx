@@ -24,8 +24,6 @@ export default class CollectionTimeslider extends React.Component {
         setMax: this.props.collectionTimesliderRange[1]
       });
     }
-    console.log(this.props.match);
-    console.log(this.props.history);
     // on component mount, check the URl to apply any necessary filters
     // first, check if url has a 'filters' parameter
     if (Object.keys(this.props.match.params).includes('filters')) {
@@ -75,16 +73,6 @@ export default class CollectionTimeslider extends React.Component {
       return <Redirect to='/404' />;
     }
 
-    const handleStyle = {
-      'border': 'solid 2px #8D4FF2',
-      'backgroundColor': '#E6D9FD',
-      'cursor': 'pointer'
-    };
-
-    const trackStyle = {
-      'backgroundColor': '#E6D9FD'
-    };
-
     return (
       <div className='timeslider-component'>
         <div className="mdc-typography--body2">{this.state.setMin} - {this.state.setMax}</div>
@@ -92,8 +80,6 @@ export default class CollectionTimeslider extends React.Component {
                max={this.state.range[1]}
                defaultValue={this.state.range}
                pushable={true}
-               handleStyle={[handleStyle,handleStyle]}
-               trackStyle={[trackStyle]}
                onChange={this.handleSetTimeslider} />
       </div>
     );

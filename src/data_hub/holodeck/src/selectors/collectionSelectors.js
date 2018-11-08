@@ -232,8 +232,7 @@ export const getTimesliderCollections = createSelector(
         }
         return year;
       });
-      return !Array.isArray(timesliderCollectionIds) || !timesliderCollectionIds.length ?
-        collectionIds : timesliderCollectionIds;
+      return timesliderCollectionIds;
     }
   }
 );

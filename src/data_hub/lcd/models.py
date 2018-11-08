@@ -923,7 +923,7 @@ class Resource(models.Model):
         'Resource URL',
         max_length=255
     )
-    filesize = models.PositiveIntegerField(
+    filesize = models.BigIntegerField(
         'Filesize',
         null=True,
         blank=True
@@ -1194,7 +1194,7 @@ class RemView(models.Model):
         'Resource URL',
         max_length=255
     )
-    filesize = models.PositiveIntegerField(
+    filesize = models.BigIntegerField(
         'Filesize',
         null=True,
         blank=True

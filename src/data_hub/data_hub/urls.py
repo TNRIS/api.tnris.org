@@ -29,5 +29,7 @@ urlpatterns = [
     path('admin', RedirectView.as_view(url='admin/', permanent=False)), # admin site
     path('api/v1/', include('lcd.urls')),
     path('health/', HealthCheckView.as_view()),
+    path('collection/<coll>', TemplateView.as_view(template_name='index.html')),
+    path('catalog/<filt>', TemplateView.as_view(template_name='index.html')),
     path('', TemplateView.as_view(template_name='index.html')),
 ]

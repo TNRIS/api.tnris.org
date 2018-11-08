@@ -80,6 +80,28 @@ class PhotoIndex(models.Model):
         return ''
 
 
+class ScannedPhotoIndexLink(models.Model):
+    """Manages LS4 uploaded photo index scan links"""
+
+    class Meta:
+        db_table = 'photo_index_scanned_ls4_link'
+        verbose_name = 'Photo Index Scanned LS4 Link'
+        verbose_name_plural = 'Photo Index Scanned LS4 Links'
+        unique_together = ('collection', 'link')
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    collection = models.ForeignKey('Collection', on_delete=models.CASCADE)
+    year = models.PositiveIntegerField('Designated Year', null=False)
+    size = models.CharField('Labeled Size', max_length=20, null=False)
+    sheet = models.CharField('Sheet Number', max_length=20, null=False)
+    link = models.URLField('Download Link', null=False)
+    created = models.DateTimeField('Created', auto_now_add=True)
+    last_modified = models.DateTimeField('Last Modified', auto_now=True)
+
+    def __str__(self):
+        return str(self.link)
+
+
 class LineIndex(models.Model):
     """Defines historical imagery collection photo indexes"""
 
@@ -277,10 +299,6 @@ class ChcView(models.Model):
         'Mosaic Service URL',
         max_length=256
     )
-    ls4_link = models.CharField(
-        'LS4 Link Identifer',
-        max_length=200
-    )
     counties = models.TextField(
         'Counties'
     )
@@ -311,6 +329,9 @@ class ChcView(models.Model):
     )
     recommended_use = models.TextField(
         'Recommended Use'
+    )
+    scanned_index_ls4_links = models.TextField(
+        'Scanned Index LS4 Links'
     )
 
     def __str__(self):

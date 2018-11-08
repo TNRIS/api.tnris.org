@@ -5,6 +5,7 @@ import {
   collectionFilterMapDialogActions
 } from '../actions';
 import CollectionFilter from '../components/CollectionFilter';
+import { collectionFilterActions, urlTrackerActions } from '../actions';
 import { getCollectionFilterChoices } from '../selectors/collectionSelectors';
 
 const mapStateToProps = (state) => ({
@@ -19,6 +20,9 @@ const mapDispatchToProps = dispatch => ({
   },
   openCollectionFilterMapDialog: () => {
     dispatch(collectionFilterMapDialogActions.openCollectionFilterMapDialog());
+  },
+  setUrl: (newUrl, history) => {
+    dispatch(urlTrackerActions.setUrl(newUrl, history))
   }
 })
 

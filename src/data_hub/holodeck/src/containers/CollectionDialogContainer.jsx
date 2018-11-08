@@ -1,13 +1,14 @@
 import { connect } from 'react-redux';
 
-import { collectionActions, collectionDialogActions } from '../actions';
+import { collectionActions, collectionDialogActions, urlTrackerActions } from '../actions';
 import { getAllCollections } from '../selectors/collectionSelectors';
 import CollectionDialog from '../components/CollectionDialog';
 
 const mapStateToProps = state => ({
   collections: getAllCollections(state),
   selectedCollection: state.collections.selectedCollection,
-  showCollectionDialog: state.collectionDialog.showCollectionDialog
+  showCollectionDialog: state.collectionDialog.showCollectionDialog,
+  previousUrl: state.urlTracker.previousUrl
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -16,6 +17,9 @@ const mapDispatchToProps = dispatch => ({
   },
   clearSelectedCollection: () => {
     dispatch(collectionActions.clearSelectedCollection());
+  },
+  setUrl: (newUrl, history) => {
+    dispatch(urlTrackerActions.setUrl(newUrl, history))
   }
 })
 

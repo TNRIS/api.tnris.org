@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 
 import CollectionSearcher from '../components/CollectionSearcher';
-import { collectionSearcherActions } from '../actions';
+import { collectionSearcherActions, urlTrackerActions } from '../actions';
 
 const mapStateToProps = (state) => ({
   collectionSearchQuery: state.collectionSearcher.collectionSearchQuery
@@ -10,6 +10,9 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = dispatch => ({
   setCollectionSearchQuery: (collectionSearchQuery) => {
     dispatch(collectionSearcherActions.setCollectionSearchQuery(collectionSearchQuery));
+  },
+  setUrl: (newUrl, history) => {
+    dispatch(urlTrackerActions.setUrl(newUrl, history))
   }
 })
 

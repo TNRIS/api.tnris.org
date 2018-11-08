@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 
-import { sortActions } from '../actions';
+import { sortActions, urlTrackerActions } from '../actions';
 import CollectionSorter from '../components/CollectionSorter';
 
 const mapStateToProps = state => ({
@@ -19,6 +19,9 @@ const mapDispatchToProps = dispatch => ({
   },
   sortOld: () => {
     dispatch(sortActions.setSortOld());
+  },
+  setUrl: (newUrl, history) => {
+    dispatch(urlTrackerActions.setUrl(newUrl, history))
   }
 })
 

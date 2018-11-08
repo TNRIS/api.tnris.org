@@ -2,9 +2,9 @@ import React from 'react';
 import { MDCDialog } from '@material/dialog';
 
 import TnrisDownloadTemplate from './TnrisDownloadTemplate/TnrisDownloadTemplate';
-import TnrisOrderTemplate from './TnrisOrderTemplate';
-import HistoricalAerialTemplate from './HistoricalAerialTemplate';
-import OutsideEntityTemplate from './OutsideEntityTemplate';
+import TnrisOrderTemplate from './TnrisOrderTemplate/TnrisOrderTemplate';
+import HistoricalAerialTemplate from './HistoricalAerialTemplate/HistoricalAerialTemplate';
+import OutsideEntityTemplate from './TnrisOutsideEntityTemplate/TnrisOutsideEntityTemplate';
 
 class CollectionDialog extends React.Component {
     constructor(props) {
@@ -18,13 +18,7 @@ class CollectionDialog extends React.Component {
     }
 
     componentDidUpdate() {
-      this.props.showCollectionDialog ? this.dialog.show() : this.dialog.close()
-    }
-
-    componentWillReceiveProps() {
-      this.dialog.listen('MDCDialog:cancel', () => {
-        this.closeCollectionDialog();
-      })
+      this.props.showCollectionDialog ? this.dialog.show() : this.dialog.close();
     }
 
     collectionDialogContent() {
@@ -49,6 +43,12 @@ class CollectionDialog extends React.Component {
     closeCollectionDialog() {
       this.props.closeCollectionDialog();
       this.props.clearSelectedCollection();
+      if (this.props.previousUrl.includes('/collection/')) {
+        this.props.setUrl('/', this.props.history);
+      }
+      else {
+        this.props.setUrl(this.props.previousUrl, this.props.history);
+      }
     }
 
     render() {

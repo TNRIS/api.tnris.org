@@ -23,6 +23,8 @@ class ContactTnrisForm extends Component {
       this.submitForm = this.submitForm.bind(this);
       this.handleChange = this.handleChange.bind(this);
       this.recaptchaChange = this.recaptchaChange.bind(this);
+      const collectionYear = this.props.collection.acquisition_date && this.props.collection.template === 'historical-aerial' ? this.props.collection.acquisition_date.substring(0, 4) + ' ' : '';
+      this.compiledDisplayName = collectionYear + this.props.collection.name;
   }
 
   componentDidMount() {
@@ -88,7 +90,8 @@ class ContactTnrisForm extends Component {
       const formInfo = {
         'Name': fullName,
         'Email': this.state.email,
-        'Collection': this.props.collection.name,
+        'Collection': this.compiledDisplayName,
+        'UUID': this.props.collection.collection_id,
         'Category': this.props.collection.category,
         'Software': this.state.software,
         'Message': this.state.question,
@@ -112,7 +115,7 @@ class ContactTnrisForm extends Component {
       showHTML = (
         <div>
           <p className="mdc-typography--body2">
-            Complete the form below to inquire with TNRIS about the <strong>{this.props.collection.name}</strong> dataset...
+            For questions about the <strong>{this.compiledDisplayName}</strong> dataset, please complete the form below. Orders for this data cannot be submitted via this form. To order this dataset, please visit the <strong>Order</strong> tab.
           </p>
 
           <div id="ct-first-name" className="mdc-text-field mdc-text-field--outlined">

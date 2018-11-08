@@ -7,17 +7,25 @@ export default class CatalogCard extends React.Component {
     this.cardClicked = this.cardClicked.bind(this)
   }
 
+  componentDidMount () {
+    if (Object.keys(this.props.match.params).includes('collectionId') &&
+        this.props.match.params.collectionId === this.props.collection.collection_id) {
+      this.cardClicked();
+    }
+  }
+
   cardClicked() {
     this.props.openCollectionDialog();
     this.props.selectCollection(this.props.collection.collection_id);
     if (this.props.collection.template === 'tnris-download') {
       this.props.fetchCollectionResources(this.props.collection.collection_id);
     }
+    this.props.setUrl('/collection/' + this.props.collection.collection_id, this.props.history);
   }
 
   render() {
     const cardClass = 'catalog-card-component mdc-image-list__item ' + this.props.collection.template;
-    const collectionYear = this.props.collection.acquisition_date && this.props.collection.template === 'historical-aerial' ? this.props.collection.acquisition_date.substring(0, 4) + ' ' : '';
+    const collectionYear = this.props.collection.acquisition_date && this.props.collection.template !== 'outside-entity' ? this.props.collection.acquisition_date.substring(0, 4) + ' ' : '';
 
     return (
       <li className={cardClass} onClick={this.cardClicked}>

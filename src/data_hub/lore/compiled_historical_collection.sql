@@ -11,7 +11,6 @@ SELECT historical_collection.id as collection_id,
   historical_collection.index_service_url,
   historical_collection.frames_service_url,
   historical_collection.mosaic_service_url,
-  historical_collection.ls4_link,
   string_agg(distinct county.name, ',' order by county.name) as counties,
   agency.name as agency_name,
   agency.abbreviation as agency_abbreviation,
@@ -25,11 +24,24 @@ SELECT historical_collection.id as collection_id,
         LEFT JOIN scale ON scale.id=product.scale_id
         LEFT JOIN frame_size ON frame_size.id=product.frame_size_id
         WHERE product.collection_id=historical_collection.id), ',') as products,
-  CONCAT(agency.abbreviation, ' ', 'Orthoimagery') as name,
+  CASE
+    WHEN (
+      (string_agg(distinct county.name, ',' order by county.name)
+      ~ '.*(,).*')
+      ) THEN CONCAT('Multi-County ', agency.abbreviation, ' Historic Imagery')
+    ELSE CONCAT(string_agg(distinct county.name, ',' order by county.name), ' ', agency.abbreviation, ' Historic Imagery')
+  END AS name,
   'historical-aerial' as template,
   'https://s3.amazonaws.com/data.tnris.org/historical_thumbnail.jpg' as thumbnail_image,
-  'Historic Imagery,Orthoimagery' as category,
-  'Historical Use,Research' as recommended_use
+  'Historic Imagery' as category,
+  'Historical Use,Research' as recommended_use,
+  array_to_string(ARRAY(SELECT json_build_object('year', photo_index_scanned_ls4_link.year,
+                                 'size', photo_index_scanned_ls4_link.size,
+                                 'sheet', photo_index_scanned_ls4_link.sheet,
+                                 'link', photo_index_scanned_ls4_link.link)
+        FROM photo_index_scanned_ls4_link
+        WHERE photo_index_scanned_ls4_link.collection_id=historical_collection.id), ',') as scanned_index_ls4_links
+
 FROM historical_collection
 
 LEFT JOIN county_relate ON county_relate.collection_id=historical_collection.id

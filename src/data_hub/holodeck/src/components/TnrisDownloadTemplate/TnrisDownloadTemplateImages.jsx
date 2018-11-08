@@ -3,10 +3,6 @@ import React from 'react';
 import { Carousel } from 'react-responsive-carousel';
 
 export default class TnrisDownloadTemplateImages extends React.Component {
-  constructor(props) {
-      super(props);
-  }
-
   render() {
 
     const all_images = this.props.images.split(',');
@@ -17,6 +13,7 @@ export default class TnrisDownloadTemplateImages extends React.Component {
       if (url !== thumbnail) {
         carousel_images.push(url);
       }
+      return url;
     });
 
     return (

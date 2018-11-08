@@ -181,9 +181,12 @@ class OrderCart extends Component {
         const dataNum = `(${index + 1}) ${dataName}`;
         orders += dataNum;
         orders += "\n";
+        orders += `   UUID: ${collectionId}\n`;
+        const dataDate = this.props.collections[collectionId].acquisition_date;
+        orders += `   Acquisition Date: ${dataDate}\n`;
         const dataOrder = this.props.orders[collectionId];
         orders += `   Coverage: ${dataOrder.coverage}\n`;
-        if (dataOrder.formats) {orders += `   Lidar Formats: ${dataOrder.formats}\n`;}
+        if (dataOrder.formats) {orders += `   Formats: ${dataOrder.formats}\n`;}
         if (dataOrder.coverage === 'Partial') {orders += `   Identified By: ${dataOrder.type}\n`;}
         if (dataOrder.description) {orders += `   Description: ${dataOrder.description}\n`;}
         if (dataOrder.attachments) {
@@ -247,17 +250,18 @@ class OrderCart extends Component {
     // otherwise show emptyCartMessage
     const cartItems = Object.keys(this.props.orders).length !== 0 ?
       Object.keys(this.props.orders).map(collectionId => {
-        const name = this.props.collections[collectionId].name;
+        const collectionYear = this.props.collections[collectionId].acquisition_date && this.props.collections[collectionId].template === 'historical-aerial' ? this.props.collections[collectionId].acquisition_date.substring(0, 4) + ' ' : '';
+        const compiledDisplayName = collectionYear + this.props.collections[collectionId].name;
         const partialType = this.props.orders[collectionId].type ? `, ${this.props.orders[collectionId].type}` : "";
         const attachmentNum = this.props.orders[collectionId].attachments ? Object.keys(this.props.orders[collectionId].attachments).length : "";
         const attachments = this.props.orders[collectionId].attachments ? `, ${attachmentNum} attachment(s)`: "";
-        const formats = this.props.orders[collectionId].formats ? `, Lidar Formats: ${this.props.orders[collectionId].formats}` : "";
+        const formats = this.props.orders[collectionId].formats ? `, Formats: ${this.props.orders[collectionId].formats}` : "";
 
         return (
           <li key={collectionId} className="mdc-list-item">
             <span className="mdc-list-item__graphic material-icons" aria-hidden="true">whatshot</span>
             <span className="mdc-list-item__text">
-              <span className="mdc-list-item__primary-text">{name}</span>
+              <span className="mdc-list-item__primary-text">{compiledDisplayName}</span>
               <span className="mdc-list-item__secondary-text">{this.props.orders[collectionId].coverage} Coverage{partialType}{attachments}{formats}</span>
             </span>
             <span className="mdc-list-item__meta material-icons"

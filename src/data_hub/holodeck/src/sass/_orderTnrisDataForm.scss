@@ -65,7 +65,7 @@ styles for component: OrderTnrisDataForm
 
   }
 
-  .order-lidar-switches {
+  .order-lidar-switches, .order-historical-switches {
     .mdc-form-field {
       min-height: 40px;
 
@@ -82,6 +82,17 @@ styles for component: OrderTnrisDataForm
 
       label {
         cursor: pointer;
+      }
+
+      .mdc-switch.mdc-switch--disabled {
+        .mdc-switch__native-control {
+          pointer-events: initial;
+          cursor: not-allowed;
+        }
+      }
+
+      .mdc-switch.mdc-switch--disabled + label {
+        cursor: not-allowed;
       }
     }
 

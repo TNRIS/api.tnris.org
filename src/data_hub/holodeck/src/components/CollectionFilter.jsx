@@ -1,17 +1,45 @@
 import React from 'react';
+import { Redirect } from 'react-router';
 
 export default class CollectionFilter extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      filters: this.props.collectionFilter
+      filters: this.props.collectionFilter,
+      badUrlFlag: false
     }
     this.handleOpenFilterMenu = this.handleOpenFilterMenu.bind(this);
     this.handleSetFilter = this.handleSetFilter.bind(this);
   }
 
-  componentDidMount() {
-    this.props.setCollectionFilter(this.props.collectionFilterChoices);
+  componentDidMount () {
+    // on component mount, check the URl to apply any necessary filters
+    // first, check if url has a 'filters' parameter
+    if (Object.keys(this.props.match.params).includes('filters')) {
+      try {
+        const allFilters = JSON.parse(decodeURIComponent(this.props.match.params.filters));
+        // second, check if filters param includes filters key
+        if (Object.keys(allFilters).includes('filters')) {
+          // third, apply all filters and check those associated checkboxes
+          this.props.setCollectionFilter(allFilters.filters);
+          Object.keys(allFilters.filters).map(key => {
+            allFilters.filters[key].map(id => {
+              const hashId = '#' + id;
+              if (document.querySelector(hashId)) {
+                document.querySelector(hashId).checked = true;
+              }
+              return hashId;
+            });
+            return key;
+          });
+        }
+      } catch (e) {
+        console.log(e);
+        this.setState({
+          badUrlFlag: true
+        });
+      }
+    }
   }
 
   handleOpenFilterMenu(e) {
@@ -40,14 +68,34 @@ export default class CollectionFilter extends React.Component {
       this.props.setCollectionFilter(currentFilters);
     } else {
       if (currentFilters.hasOwnProperty(target.name) && currentFilters[target.name].indexOf(target.value) >= 0) {
-        currentFilters[target.name] = currentFilters[target.name].filter(item => item !== target.value)
+        currentFilters[target.name] = currentFilters[target.name].filter(item => item !== target.value);
+        // if all checkboxes unchecked, remove from the category's filter object completely
+        if (currentFilters[target.name].length === 0) {
+          delete currentFilters[target.name];
+        }
       }
       this.props.setCollectionFilter(currentFilters);
     }
+
+    // update URL to reflect new filter changes
+    const prevFilter = this.props.history.location.pathname.includes('/catalog/') ?
+                       JSON.parse(decodeURIComponent(this.props.history.location.pathname.replace('/catalog/', '')))
+                       : {};
+    const filterObj = {...prevFilter, filters: currentFilters};
+    // if all filters turned off, remove from the url completely
+    if (Object.keys(filterObj['filters']).length === 0) {
+      delete filterObj['filters'];
+    }
+    const filterString = JSON.stringify(filterObj);
+    // if empty filter settings, use the base home url instead of the filter url
+    Object.keys(filterObj).length === 0 ? this.props.setUrl('/', this.props.history) : this.props.setUrl('/catalog/' + encodeURIComponent(filterString), this.props.history);
   }
 
   render() {
-    console.log(this.props);
+    if (this.state.badUrlFlag) {
+      return <Redirect to='/404' />;
+    }
+
     return (
       <div className='filter-component'>
         <ul className='mdc-list'>

@@ -8,7 +8,7 @@ SELECT collection.collection_id,
   CASE
     WHEN (
       (template_type.template ~ '.*outside-entity.*')
-    ) THEN CURRENT_DATE
+    ) THEN to_char(CURRENT_DATE ,'YYYY-MM-DD')
     ELSE collection.acquisition_date
   END AS acquisition_date,
 	collection.short_description,

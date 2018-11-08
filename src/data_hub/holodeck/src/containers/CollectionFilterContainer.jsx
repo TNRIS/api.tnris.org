@@ -2,10 +2,10 @@ import { connect } from 'react-redux';
 
 import {
   collectionFilterActions,
-  collectionFilterMapDialogActions
+  collectionFilterMapDialogActions,
+  urlTrackerActions
 } from '../actions';
 import CollectionFilter from '../components/CollectionFilter';
-import { collectionFilterActions, urlTrackerActions } from '../actions';
 import { getCollectionFilterChoices } from '../selectors/collectionSelectors';
 
 const mapStateToProps = (state) => ({

@@ -3,10 +3,9 @@ import { connect } from 'react-redux';
 import Catalog from '../components/Catalog';
 import {
   collectionActions,
-  resourceActions,
   collectionDialogActions,
-  mapDialogActions,
-  orderCartActions } from '../actions';
+  orderCartActions,
+  resourceActions } from '../actions';
 import {
   getAllCollections,
   getSortedCollections
@@ -18,7 +17,6 @@ const mapStateToProps = (state) => ({
   loading: state.collections.loading,
   resources: state.resources.items,
   showCollectionDialog: state.collectionDialog.showCollectionDialog,
-  showMapDialog: state.mapDialog.showMapDialog,
   sortOrder: state.sorter.sortOrder,
   visibleCollections: getSortedCollections(state),
 });
@@ -32,9 +30,6 @@ const mapDispatchToProps = dispatch => ({
   },
   openCollectionDialog: () => {
     dispatch(collectionDialogActions.openCollectionDialog());
-  },
-  openMapDialog: () => {
-    dispatch(mapDialogActions.openMapDialog());
   },
   fetchStoredShoppingCart: () => {
     dispatch(orderCartActions.fetchStoredShoppingCart());

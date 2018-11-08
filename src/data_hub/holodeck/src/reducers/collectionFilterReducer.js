@@ -15,8 +15,8 @@ export default function collectionFilterReducer(state = initialState, action) {
         collectionFilter: action.payload.collectionFilter
       };
 
-      default:
-        // ALWAYS have a default case in a reducer
-        return state;
+    default:
+      // ALWAYS have a default case in a reducer
+      return state;
   }
 }

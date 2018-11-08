@@ -5,8 +5,8 @@ import CatalogCardContainer from '../containers/CatalogCardContainer';
 import CollectionDialogContainer from '../containers/CollectionDialogContainer';
 import Drawer from './Drawer';
 import Footer from './Footer';
+import CollectionFilterMapDialogContainer from '../containers/CollectionFilterMapDialogContainer';
 import HeaderContainer from '../containers/HeaderContainer';
-// import MapDialogContainer from '../containers/MapDialogContainer';
 import OrderCartDialogContainer from '../containers/OrderCartDialogContainer';
 import ToolDrawer from './ToolDrawer';
 import loadingImage from '../images/loading.gif';
@@ -20,8 +20,9 @@ export default class Catalog extends React.Component {
   }
 
   componentDidMount() {
+    // this.props.fetchAreas();
     this.props.fetchCollections();
-    this.props.fetchResources();
+    // this.props.fetchResources();
     this.props.fetchStoredShoppingCart();
   }
 
@@ -65,7 +66,7 @@ export default class Catalog extends React.Component {
           {/* <button onClick={this.props.openMapDialog}>show map</button> */}
           <CollectionDialogContainer history={this.props.history} />
           <OrderCartDialogContainer />
-          {/* <MapDialogContainer /> */}
+          <CollectionFilterMapDialogContainer />
           <ul className='catalog-list mdc-image-list mdc-image-list--with-text-protection'>
             {this.props.visibleCollections ? this.props.visibleCollections.map(collectionId =>
               <CatalogCardContainer collection={this.props.collections[collectionId]} key={collectionId} match={this.props.match} history={this.props.history} />

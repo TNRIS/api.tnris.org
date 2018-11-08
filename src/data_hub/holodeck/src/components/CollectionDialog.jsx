@@ -58,8 +58,8 @@ class CollectionDialog extends React.Component {
           id="collection_dialog"
           className="mdc-dialog"
           role="alertdialog"
-          aria-labelledby="test_dialog-label"
-          aria-describedby="test_dialog-description">
+          aria-labelledby="collection_dialog-label"
+          aria-describedby="collection_dialog-description">
           <div className="mdc-dialog__surface">
             {this.collectionDialogContent()}
           </div>

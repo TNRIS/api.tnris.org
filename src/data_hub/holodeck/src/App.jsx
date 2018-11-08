@@ -3,7 +3,8 @@ import { Route, Switch, BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
-import withTracker from './withTracker';
+import ReactGA from "react-ga";
+import createBrowserHistory from "history/createBrowserHistory";
 
 import rootReducer from './reducers/rootReducer';
 import CatalogContainer from './containers/CatalogContainer';
@@ -12,6 +13,10 @@ import NotFound from './components/NotFound';
 const store = createStore(rootReducer, applyMiddleware(thunk));
 
 class App extends Component {
+
+  ReactGA.initialize("UA-491601-16");
+
+  ReactGA.pageview(window.location.pathname);
 
   render() {
 
@@ -28,7 +33,6 @@ class App extends Component {
       </Provider>
     );
   }
-
 }
 
 export default App;

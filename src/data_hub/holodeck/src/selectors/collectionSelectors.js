@@ -152,7 +152,7 @@ export const getCollectionTimesliderRange = createSelector(
 // catalog uses to display CollectionCards
 // ///////////////////////////////////////////////////////////////
 
-// Returns the array of collections to show in the catalog view.
+// Returns an array of collections to show in the catalog view.
 // If a filter is set, returns only those collections that pass
 // through the filter.
 export const getFilteredCollections = createSelector(
@@ -187,6 +187,9 @@ export const getFilteredCollections = createSelector(
   }
 );
 
+// Returns an array of collections to show in the catalog view.
+// If the user has set a map filter, returns only those collections
+// that pass through the map filter.
 export const getMapFilteredCollections = createSelector(
   [ getFilteredCollections, getFilterMapFilter ],
   (collectionIds, filterMapFilter) => {
@@ -205,7 +208,7 @@ export const getMapFilteredCollections = createSelector(
   }
 )
 
-// Returns the array of collections to show in the catalog view.
+// Returns an array of collections to show in the catalog view.
 // If the user has entered a search query, returns only those collections
 // that return from the search.
 export const getSearchedCollections = createSelector(

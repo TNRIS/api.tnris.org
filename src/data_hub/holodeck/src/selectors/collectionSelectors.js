@@ -44,6 +44,7 @@ export const getSearchIndex = createSelector(
     const searchFields = [
       'name',
       'description',
+      'counties'
     ];
     const searchIndex = elasticlunr(function() {
       searchFields.map(field => {
@@ -82,6 +83,7 @@ export const getCollectionFilterChoices = createSelector(
     const collectionFilterChoices = {
       category: [],
       recommended_use: [],
+      template: []
     };
     // If collections are in ready the state, continue setting the value arrays in the
     // collectionFilterChoices object from above.

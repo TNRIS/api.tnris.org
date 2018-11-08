@@ -128,8 +128,6 @@ export default class CollectionFilterMap extends React.Component {
   }
 
   render() {
-    console.log(this.props);
-    console.log(this.state);
     return (
       <div className='collection-filter-map-component'>
         <div id='collection-filter-map'></div>

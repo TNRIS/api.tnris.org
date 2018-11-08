@@ -9,10 +9,7 @@ export default class CollectionFilterMap extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      collectionIds: this.props.collectionFilterMapFilter,
-      initialCenter: this.props.collectionFilterMapCenter,
-      initialZoom: this.props.collectionFilterMapZoom,
-      mapFilter: false,
+      collectionIds: this.props.collectionFilterMapFilter
     }
     // bind our map builder and other custom functions
     this.enableUserInteraction = this.enableUserInteraction.bind(this);
@@ -29,30 +26,29 @@ export default class CollectionFilterMap extends React.Component {
       [-108.83792172606844, 25.535364049344025], // Southwest coordinates
       [-89.8448562738755, 36.78883840623598] // Northeast coordinates
     ]
-    this.map = new mapboxgl.Map({
+    this._map = new mapboxgl.Map({
         container: 'collection-filter-map', // container id
         style: 'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json',
         center: this.props.collectionFilterMapCenter,
         zoom: this.props.collectionFilterMapZoom,
-        maxBounds: bounds // sets bounds as max to prevent panning
+        maxBounds: bounds, // sets bounds as max to prevent panning
+        interactive: true
     });
-    this.map.addControl(new mapboxgl.NavigationControl(), 'top-left');
+    this._navControl = new mapboxgl.NavigationControl()
+    this._map.addControl(this._navControl, 'top-left');
 
     if (this.props.collectionFilterMapFilter.length > 0) {
       this.disableUserInteraction();
     }
-
-    console.log(this.map);
 
     function getExtentIntersectedCollectionIds(_this) {
       // get the map bounds from the current extent and query carto
       // to find the area_type polygons that intersect this mbr and
       // return the collection_ids associated with those areas
       const sql = new cartodb.SQL({user: 'tnris-flood'});
-      let center = _this.map.getCenter();
-      let zoom = _this.map.getZoom();
-      let bounds = _this.map.getBounds();
-      console.log(bounds);
+      let center = _this._map.getCenter();
+      let zoom = _this._map.getZoom();
+      let bounds = _this._map.getBounds();
       let query = `SELECT
                      areas.collections
                    FROM
@@ -83,43 +79,50 @@ export default class CollectionFilterMap extends React.Component {
     }
 
     const _this = this;
-    this.map.on('moveend', function() {
+    this._map.on('moveend', function() {
       getExtentIntersectedCollectionIds(_this);
     })
     getExtentIntersectedCollectionIds(this);
   }
 
   enableUserInteraction() {
-    this.map.boxZoom.enable();
-    this.map.doubleClickZoom.enable();
-    this.map.dragPan.enable();
-    this.map.dragRotate.enable();
-    this.map.keyboard.enable();
-    this.map.scrollZoom.enable();
-    this.map.touchZoomRotate.enable();
+    // enables panning, rotating, and zooming of the map
+    this._map.boxZoom.enable();
+    this._map.doubleClickZoom.enable();
+    this._map.dragPan.enable();
+    this._map.dragRotate.enable();
+    this._map.keyboard.enable();
+    this._map.scrollZoom.enable();
+    this._map.touchZoomRotate.enable();
+    this._navControl._compass.disabled = false;
+    this._navControl._zoomInButton.disabled = false;
+    this._navControl._zoomOutButton.disabled = false;
 
   }
 
   disableUserInteraction() {
-    this.map.boxZoom.disable();
-    this.map.doubleClickZoom.disable();
-    this.map.dragPan.disable();
-    this.map.dragRotate.disable();
-    this.map.keyboard.disable();
-    this.map.scrollZoom.disable();
-    this.map.touchZoomRotate.disable();
+    // disables panning, rotating, and zooming of the map
+    this._map.boxZoom.disable();
+    this._map.doubleClickZoom.disable();
+    this._map.dragPan.disable();
+    this._map.dragRotate.disable();
+    this._map.keyboard.disable();
+    this._map.scrollZoom.disable();
+    this._map.touchZoomRotate.disable();
+    this._navControl._compass.disabled = true;
+    this._navControl._zoomInButton.disabled = true;
+    this._navControl._zoomOutButton.disabled = true;
   }
 
   handleFilterButtonClick() {
-    // set the collection_ids array in the filter to drive the view and set the
-    // current map center and zoom in the state for the next time we open the map
+    // sets the collection_ids array in the filter to drive the view, sets the
+    // current map center and zoom in the state for the next time we open the map,
+    // and disables/enables the user interaction handlers and navigation controls
     if (this.props.collectionFilterMapFilter.length > 0) {
       this.props.setCollectionFilterMapFilter([]);
-      this.setState({mapFilter: !this.state.mapFilter})
       this.enableUserInteraction();
     } else {
       this.props.setCollectionFilterMapFilter(this.state.collectionIds);
-      this.setState({mapFilter: !this.state.mapFilter});
       this.disableUserInteraction();
     }
   }

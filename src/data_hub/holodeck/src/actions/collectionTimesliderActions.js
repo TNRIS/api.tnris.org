@@ -1,6 +1,5 @@
 import {
-  SET_COLLECTION_TIMESLIDER,
-  // SET_COLLECTION_TIMESLIDER_RANGE
+  SET_COLLECTION_TIMESLIDER
 } from '../constants/collectionTimesliderActionTypes';
 
 export const setCollectionTimeslider = (collectionTimeslider) => {
@@ -11,12 +10,3 @@ export const setCollectionTimeslider = (collectionTimeslider) => {
     })
   }
 };
-
-// export const setCollectionTimesliderRange = (collectionTimesliderRange) => {
-//   return (dispatch) => {
-//     dispatch({
-//       type: SET_COLLECTION_TIMESLIDER_RANGE,
-//       payload: { collectionTimesliderRange }
-//     })
-//   }
-// };

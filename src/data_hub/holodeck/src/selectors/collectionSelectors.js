@@ -9,8 +9,9 @@ const setTimeslider = (state) => state.collectionTimeslider.collectionTimeslider
 
 // ///////////////////////////////////////////////////////////////
 // Below are the selectors that pertain to filtering, sorting,
-// and searching the collections in the catalog. These are called
-// by collectionFilter, CollectionSorter, and CollectionSearcher.
+// and searching the collections in the catalog.
+// This group of selectors are more generic and used my multiple other
+// selectors & components, including the ToolDrawer filter chain
 // ///////////////////////////////////////////////////////////////
 
 export const getAllCollections = createSelector(
@@ -139,6 +140,13 @@ export const getCollectionTimesliderRange = createSelector(
     }
   }
 );
+
+// ///////////////////////////////////////////////////////////////
+// Below are the chained selectors which use the search, timeslider,
+// filter checkboxes, filter map, and sort components in then
+// ToolDrawer sidebar to change the visible collections array the
+// catalog uses to display CollectionCards
+// ///////////////////////////////////////////////////////////////
 
 // Returns the array of collections to show in the catalog view.
 // If a filter is set, returns only those collections that pass

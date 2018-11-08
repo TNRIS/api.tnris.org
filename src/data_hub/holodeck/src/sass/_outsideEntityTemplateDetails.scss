@@ -1,8 +1,8 @@
 /*
-styles for component: TnrisDownloadTemplateDetails
+styles for component: OutsideEntityTemplateDetails
 */
 
-.tnris-download-template-details {
+.outside-entity-template-details {
   padding: 84px 20px 20px 20px;
   overflow-x: hidden;
   overflow-y: auto;
@@ -35,43 +35,6 @@ styles for component: TnrisDownloadTemplateDetails
 
         strong {
           margin-right: 4px;
-        }
-      }
-    }
-
-    .mdc-list.supplemental-downloads {
-      .mdc-list-item {
-        a {
-          i {
-            vertical-align: text-bottom;
-          }
-
-        }
-      }
-    }
-
-    .services-link-details {
-      padding: 6px;
-
-      #service-link-details-input {
-        color: rgb(98, 0, 238);
-        border-bottom-color: rgba(0, 0, 0, 0.12);
-        margin-bottom: 10px;
-      }
-
-      .service-link-details-buttons {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        button, a {
-          margin-left: 5px;
-          margin-right: 5px;
-          text-align: center;
-
-          i {
-            margin-right: 5px;
-          }
         }
       }
     }

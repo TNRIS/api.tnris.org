@@ -32,7 +32,7 @@ export default class Metadata extends React.Component {
           {
             this.props.collection.spatial_reference.split(",").map((code,i) => {
               const epsgUrl = "https://epsg.io/" + code;
-              return (<span key={i}><a href={epsgUrl} target="_blank" rel="noopener noreferrer">EPSG {code}</a></span>);
+              return (<span key={i}><a href={epsgUrl} target="_blank" rel="noopener noreferrer">EPSG {code}</a>&nbsp;&nbsp;</span>);
             })
           }
       </li>

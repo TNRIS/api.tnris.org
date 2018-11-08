@@ -22,7 +22,7 @@ export default class TnrisOutsideEntityTemplateDetails extends React.Component {
 
     return (
 
-      <div className='tnris-download-template-details'>
+      <div className='outside-entity-template-details'>
 
         <Metadata collection={this.props.collection} />
         <Description collection={this.props.collection} />

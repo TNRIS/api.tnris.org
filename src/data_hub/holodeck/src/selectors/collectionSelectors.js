@@ -45,7 +45,10 @@ export const getSearchIndex = createSelector(
     const searchFields = [
       'name',
       'description',
-      'counties'
+      'counties',
+      'acquisition_date',
+      'agency_name',
+      'agency_abbreviation'
     ];
     const searchIndex = elasticlunr(function() {
       searchFields.map(field => {

@@ -4,7 +4,6 @@ import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import ReactGA from 'react-ga';
-import createBrowserHistory from 'history/createBrowserHistory';
 
 import rootReducer from './reducers/rootReducer';
 import CatalogContainer from './containers/CatalogContainer';
@@ -23,19 +22,13 @@ class App extends Component {
 
   render() {
 
-    const history = createBrowserHistory();
-
-    const fireTracking = () => {
-      ReactGA.pageview(window.location.pathname);
-    }
-
     return (
       <Provider store={store}>
         <BrowserRouter>
           <Switch>
-            <Route path='/' exact component={CatalogContainer} />
             <Route path='/collection/:collectionId' exact component={CatalogContainer} />
             <Route path='/catalog/:filters' exact component={CatalogContainer} />
+            <Route path='/' exact component={CatalogContainer} />
             <Route path='*' component={NotFound} />
           </Switch>
         </BrowserRouter>

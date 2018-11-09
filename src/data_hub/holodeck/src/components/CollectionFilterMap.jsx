@@ -1,6 +1,8 @@
 import React from 'react';
 
 import mapboxgl from 'mapbox-gl';
+import MapboxDraw from '@mapbox/mapbox-gl-draw';
+import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
 // the carto core api is a CDN in the app template HTML (not available as NPM package)
 // so we create a constant to represent it so it's available to the component
 const cartodb = window.cartodb;
@@ -37,9 +39,36 @@ export default class CollectionFilterMap extends React.Component {
     this._navControl = new mapboxgl.NavigationControl()
     this._map.addControl(this._navControl, 'top-left');
 
+    // create the draw control and define its functionality
+    const draw = new MapboxDraw({
+      displayControlsDefault: false,
+      controls: {'polygon': true, 'trash': true}
+    });
+    this._map.addControl(draw, 'top-left');
+    // Check if the draw mode is draw_polygon, if so, check if there
+    // are previously drawn features on the map and if so, delete them.
+    // We do this so there is only ever one aoi polygon in the map at a time.
+    this._map.on('draw.modechange', function(e) {
+      if (e.mode === 'draw_polygon') {
+        let features = draw.getAll();
+        if (features.features.length > 1) {
+          draw.delete(features.features[0].id);
+        }
+      }
+    })
+    this._map.on('draw.create', function(e) {
+      // console.log(e.features);
+    })
+
     if (this.props.collectionFilterMapFilter.length > 0) {
       this.disableUserInteraction();
     }
+
+    const _this = this;
+    this._map.on('moveend', function() {
+      getExtentIntersectedCollectionIds(_this);
+    })
+    getExtentIntersectedCollectionIds(this);
 
     function getExtentIntersectedCollectionIds(_this) {
       // get the map bounds from the current extent and query carto
@@ -74,15 +103,9 @@ export default class CollectionFilterMap extends React.Component {
         _this.props.setCollectionFilterMapZoom(zoom);
       }).error(function(errors) {
         // errors contains a list of errors
-        console.log("errors:" + errors);
+        // console.log("errors:" + errors);
       })
     }
-
-    const _this = this;
-    this._map.on('moveend', function() {
-      getExtentIntersectedCollectionIds(_this);
-    })
-    getExtentIntersectedCollectionIds(this);
   }
 
   enableUserInteraction() {

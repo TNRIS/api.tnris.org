@@ -86,9 +86,8 @@ export const getCollectionFilterChoices = createSelector(
     // The key must match a property of the collections object and
     // the value is an empty array.
     const collectionFilterChoices = {
-      category: [],
-      recommended_use: [],
-      template: []
+      template: [],
+      category: []
     };
     // If collections are in ready the state, continue setting the value arrays in the
     // collectionFilterChoices object from above.
@@ -156,8 +155,8 @@ export const getCollectionTimesliderRange = createSelector(
 // If a filter is set, returns only those collections that pass
 // through the filter.
 export const getFilteredCollections = createSelector(
-  [ getAllCollections, getAllCollectionIds, getFilters, getFilterMapFilter ],
-  (collections, collectionIds, filters, filterMapFilter) => {
+  [ getAllCollections, getAllCollectionIds, getFilters ],
+  (collections, collectionIds, filters) => {
     // Check if collections are ready in the state
     if (collections) {
       let filteredCollectionIds = [];

@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@mapbox/mapbox-gl-draw": "^1.0.9",
     "@material/button": "^0.39.3",
     "@material/card": "^0.39.3",
     "@material/checkbox": "^0.39.3",
@@ -129,5 +130,7 @@
   "eslintConfig": {
     "extends": "react-app"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "install-peers": "^1.0.3"
+  }
 }

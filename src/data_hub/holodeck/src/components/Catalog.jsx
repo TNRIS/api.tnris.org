@@ -20,7 +20,6 @@ export default class Catalog extends React.Component {
   }
 
   componentDidMount() {
-    // this.props.fetchAreas();
     this.props.fetchCollections();
     // this.props.fetchResources();
     this.props.fetchStoredShoppingCart();
@@ -63,7 +62,6 @@ export default class Catalog extends React.Component {
         <ToolDrawer match={this.props.match} history={this.props.history} />
         <HeaderContainer />
         <div className='catalog'>
-          {/* <button onClick={this.props.openMapDialog}>show map</button> */}
           <CollectionDialogContainer history={this.props.history} />
           <OrderCartDialogContainer />
           <CollectionFilterMapDialogContainer />

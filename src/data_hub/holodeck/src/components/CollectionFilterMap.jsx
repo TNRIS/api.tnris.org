@@ -1,7 +1,7 @@
 import React from 'react';
 
 import mapboxgl from 'mapbox-gl';
-import MapboxDraw from '@mapbox/mapbox-gl-draw';
+import MapboxDraw from '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.js';
 import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
 // the carto core api is a CDN in the app template HTML (not available as NPM package)
 // so we create a constant to represent it so it's available to the component

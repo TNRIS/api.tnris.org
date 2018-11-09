@@ -13,7 +13,7 @@ export default class Header extends React.Component {
   }
 
   componentDidMount() {
-    this.menuDrawer = MDCDrawer.attachTo(document.querySelector('.menu-drawer'));
+    // this.menuDrawer = MDCDrawer.attachTo(document.querySelector('.menu-drawer'));
     this.toolDrawer = MDCDrawer.attachTo(document.querySelector('.tool-drawer'));
 
     this.topAppBarElement = document.querySelector('.mdc-top-app-bar');
@@ -53,7 +53,7 @@ export default class Header extends React.Component {
         </div>
         <div className="header-nav mdc-top-app-bar__row">
           <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
-            <i className="material-icons mdc-top-app-bar__navigation-icon">menu</i>
+            {/*<i className="material-icons mdc-top-app-bar__navigation-icon">menu</i>*/}
             <a href="https://tnris.org" className="mdc-top-app-bar__action-item">
               <img src={tnrisLogo} aria-label="TNRIS Logo" alt="TNRIS Logo" className="logo" />
             </a>

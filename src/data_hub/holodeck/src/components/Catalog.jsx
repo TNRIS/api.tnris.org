@@ -3,7 +3,7 @@ import { Redirect } from 'react-router';
 
 import CatalogCardContainer from '../containers/CatalogCardContainer';
 import CollectionDialogContainer from '../containers/CollectionDialogContainer';
-import Drawer from './Drawer';
+// import Drawer from './Drawer';
 import Footer from './Footer';
 import CollectionFilterMapDialogContainer from '../containers/CollectionFilterMapDialogContainer';
 import HeaderContainer from '../containers/HeaderContainer';
@@ -58,7 +58,7 @@ export default class Catalog extends React.Component {
 
     return (
       <div className="catalog-component">
-        <Drawer />
+        {/*<Drawer />*/}
         <ToolDrawer match={this.props.match} history={this.props.history} />
         <HeaderContainer />
         <div className='catalog'>

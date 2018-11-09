@@ -138,7 +138,8 @@ for r in response:
                                 these_county_uuids.append(rcul)
                     except:
                         print('bad related quad: ' + related_quad)
-                        bad_areas.append(related_quad)
+                        if related_quad not in bad_areas:
+                            bad_areas.append(related_quad)
                 # if qquad, lookup related quad, then use it to lookup county
                 # and add it to the list
                 elif 'qquad':
@@ -152,7 +153,8 @@ for r in response:
                                 these_county_uuids.append(rcul)
                     except:
                         print('bad qquad related quad: ' + related_quad)
-                        bad_areas.append(related_quad)
+                        if related_quad not in bad_areas:
+                            bad_areas.append(related_quad)
                 else:
                     # not a county, quad, or qquad? that shouldn't be possible
                     print("WHAAAAA?????")

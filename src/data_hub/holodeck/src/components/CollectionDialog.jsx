@@ -4,7 +4,7 @@ import { MDCDialog } from '@material/dialog';
 import TnrisDownloadTemplate from './TnrisDownloadTemplate/TnrisDownloadTemplate';
 import TnrisOrderTemplate from './TnrisOrderTemplate/TnrisOrderTemplate';
 import HistoricalAerialTemplate from './HistoricalAerialTemplate/HistoricalAerialTemplate';
-import OutsideEntityTemplate from './OutsideEntityTemplate';
+import OutsideEntityTemplate from './TnrisOutsideEntityTemplate/TnrisOutsideEntityTemplate';
 
 class CollectionDialog extends React.Component {
     constructor(props) {
@@ -43,7 +43,12 @@ class CollectionDialog extends React.Component {
     closeCollectionDialog() {
       this.props.closeCollectionDialog();
       this.props.clearSelectedCollection();
-      this.props.history.replace('/');
+      if (this.props.previousUrl.includes('/collection/')) {
+        this.props.setUrl('/', this.props.history);
+      }
+      else {
+        this.props.setUrl(this.props.previousUrl, this.props.history);
+      }
     }
 
     render() {
@@ -53,8 +58,8 @@ class CollectionDialog extends React.Component {
           id="collection_dialog"
           className="mdc-dialog"
           role="alertdialog"
-          aria-labelledby="test_dialog-label"
-          aria-describedby="test_dialog-description">
+          aria-labelledby="collection_dialog-label"
+          aria-describedby="collection_dialog-description">
           <div className="mdc-dialog__surface">
             {this.collectionDialogContent()}
           </div>

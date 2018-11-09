@@ -1,7 +1,8 @@
 import { connect } from 'react-redux';
 
-import { collectionActions } from '../actions';
-import { collectionDialogActions } from '../actions';
+import { collectionActions,
+         collectionDialogActions,
+         urlTrackerActions } from '../actions';
 import CatalogCard from '../components/CatalogCard';
 
 const mapStateToProps = state => ({
@@ -21,6 +22,9 @@ const mapDispatchToProps = (dispatch) => ({
     },
     fetchCollectionResources: (collectionId) => {
       dispatch(collectionActions.fetchCollectionResources(collectionId))
+    },
+    setUrl: (newUrl, history) => {
+      dispatch(urlTrackerActions.setUrl(newUrl, history))
     }
 })
 

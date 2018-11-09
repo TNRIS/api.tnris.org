@@ -1,0 +1,33 @@
+/*
+styles for component: CollectionTimeslider
+*/
+
+.timeslider-component {
+  padding-left: 20px;
+  padding-right: 20px;
+
+  .mdc-typography--body2 {
+    text-align: center;
+    margin-top: 6px;
+    margin-bottom: 6px;
+  }
+
+  .rc-slider {
+    .rc-slider-handle {
+      border: solid 2px #8D4FF2;
+      background-color: #E6D9FD;
+      cursor: pointer;
+
+      &:active {
+        box-shadow: 0 0 10px #8D4FF2;
+        -webkit-box-shadow: 0 0 10px #8D4FF2;
+        cursor: grabbing;
+        cursor: -webkit-grabbing;
+      }
+    }
+
+    .rc-slider-track {
+      background-color: #E6D9FD;
+    }
+  }
+}

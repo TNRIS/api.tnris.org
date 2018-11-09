@@ -1,21 +1,39 @@
 import React from 'react';
+import { Redirect } from 'react-router';
 
 import CatalogCardContainer from '../containers/CatalogCardContainer';
 import CollectionDialogContainer from '../containers/CollectionDialogContainer';
 import Drawer from './Drawer';
 import Footer from './Footer';
+import CollectionFilterMapDialogContainer from '../containers/CollectionFilterMapDialogContainer';
 import HeaderContainer from '../containers/HeaderContainer';
-// import MapDialogContainer from '../containers/MapDialogContainer';
 import OrderCartDialogContainer from '../containers/OrderCartDialogContainer';
 import ToolDrawer from './ToolDrawer';
 import loadingImage from '../images/loading.gif';
 
 export default class Catalog extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      badUrlFlag: false
+    }
+  }
 
   componentDidMount() {
     this.props.fetchCollections();
-    this.props.fetchResources();
+    // this.props.fetchResources();
     this.props.fetchStoredShoppingCart();
+  }
+
+  componentDidUpdate() {
+    if (this.props.collections && Object.keys(this.props.match.params).includes('collectionId')) {
+      if (!Object.keys(this.props.collections).includes(this.props.match.params.collectionId)) {
+        console.log(this.props.match.params.collectionId);
+        this.setState({
+          badUrlFlag: true
+        });
+      }
+    }
   }
 
   render() {
@@ -34,16 +52,19 @@ export default class Catalog extends React.Component {
       return loadingMessage;
     }
 
+    if (this.state.badUrlFlag) {
+      return <Redirect to='/404' />;
+    }
+
     return (
       <div className="catalog-component">
         <Drawer />
         <ToolDrawer match={this.props.match} history={this.props.history} />
         <HeaderContainer />
         <div className='catalog'>
-          {/* <button onClick={this.props.openMapDialog}>show map</button> */}
           <CollectionDialogContainer history={this.props.history} />
           <OrderCartDialogContainer />
-          {/* <MapDialogContainer /> */}
+          <CollectionFilterMapDialogContainer />
           <ul className='catalog-list mdc-image-list mdc-image-list--with-text-protection'>
             {this.props.visibleCollections ? this.props.visibleCollections.map(collectionId =>
               <CatalogCardContainer collection={this.props.collections[collectionId]} key={collectionId} match={this.props.match} history={this.props.history} />

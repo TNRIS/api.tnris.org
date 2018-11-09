@@ -11,7 +11,7 @@ styles for component: TnrisDownloadTemplate
   }
 
   section.mdc-top-app-bar__section.mdc-top-app-bar__section--align-end {
-    max-width: 200px;
+    min-width: 200px;
 
     div.mdc-tab-bar {
       .mdc-tab {
@@ -19,7 +19,6 @@ styles for component: TnrisDownloadTemplate
         span {
           color: white;
         }
-
         .mdc-tab-indicator--active {
           .mdc-tab-indicator__content--underline {
             background-color: white;

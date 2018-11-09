@@ -1,10 +1,12 @@
 import React from 'react';
+import { Redirect } from 'react-router';
 
 export default class CollectionFilter extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      filters: this.props.collectionFilter
+      filters: this.props.collectionFilter,
+      badUrlFlag: false
     }
     this.handleOpenFilterMenu = this.handleOpenFilterMenu.bind(this);
     this.handleSetFilter = this.handleSetFilter.bind(this);
@@ -14,18 +16,27 @@ export default class CollectionFilter extends React.Component {
     // on component mount, check the URl to apply any necessary filters
     // first, check if url has a 'filters' parameter
     if (Object.keys(this.props.match.params).includes('filters')) {
-      const allFilters = JSON.parse(decodeURIComponent(this.props.match.params.filters));
-      // second, check if filters param includes filters key
-      if (Object.keys(allFilters).includes('filters')) {
-        // third, apply all filters and check those associated checkboxes
-        this.props.setCollectionFilter(allFilters.filters);
-        Object.keys(allFilters.filters).map(key => {
-          allFilters.filters[key].map(id => {
-            const hashId = '#' + id;
-            if (document.querySelector(hashId)) {
-              document.querySelector(hashId).checked = true;
-            }
+      try {
+        const allFilters = JSON.parse(decodeURIComponent(this.props.match.params.filters));
+        // second, check if filters param includes filters key
+        if (Object.keys(allFilters).includes('filters')) {
+          // third, apply all filters and check those associated checkboxes
+          this.props.setCollectionFilter(allFilters.filters);
+          Object.keys(allFilters.filters).map(key => {
+            allFilters.filters[key].map(id => {
+              const hashId = '#' + id;
+              if (document.querySelector(hashId)) {
+                document.querySelector(hashId).checked = true;
+              }
+              return hashId;
+            });
+            return key;
           });
+        }
+      } catch (e) {
+        console.log(e);
+        this.setState({
+          badUrlFlag: true
         });
       }
     }
@@ -77,10 +88,14 @@ export default class CollectionFilter extends React.Component {
     }
     const filterString = JSON.stringify(filterObj);
     // if empty filter settings, use the base home url instead of the filter url
-    Object.keys(filterObj).length === 0 ? this.props.history.replace('/') : this.props.history.replace('/catalog/' + encodeURIComponent(filterString));
+    Object.keys(filterObj).length === 0 ? this.props.setUrl('/', this.props.history) : this.props.setUrl('/catalog/' + encodeURIComponent(filterString), this.props.history);
   }
 
   render() {
+    if (this.state.badUrlFlag) {
+      return <Redirect to='/404' />;
+    }
+    // console.log(this.props);
     return (
       <div className='filter-component'>
         <ul className='mdc-list'>
@@ -127,6 +142,14 @@ export default class CollectionFilter extends React.Component {
               </li>
             )
           }
+          <li key='filter-map-button'>
+            <a
+              className='mdc-list-item filter-list-title'
+              id='filter-map-button'
+              onClick={this.props.openCollectionFilterMapDialog}>
+              by geography
+            </a>
+          </li>
         </ul>
       </div>
     );

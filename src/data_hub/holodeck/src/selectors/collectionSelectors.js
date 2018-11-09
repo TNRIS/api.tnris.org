@@ -5,11 +5,14 @@ const getCollections = (state) => state.collections.items;
 const getFilters = (state) => state.collectionFilter.collectionFilter;
 const getSearchQuery = (state) => state.collectionSearcher.collectionSearchQuery;
 const getSortOrder = (state) => state.sorter.sortOrder;
+const getFilterMapFilter = (state) => state.collectionFilterMap.collectionFilterMapFilter;
+const setTimeslider = (state) => state.collectionTimeslider.collectionTimeslider;
 
 // ///////////////////////////////////////////////////////////////
 // Below are the selectors that pertain to filtering, sorting,
-// and searching the collections in the catalog. These are called
-// by collectionFilter, CollectionSorter, and CollectionSearcher.
+// and searching the collections in the catalog.
+// This group of selectors are more generic and used my multiple other
+// selectors & components, including the ToolDrawer filter chain
 // ///////////////////////////////////////////////////////////////
 
 export const getAllCollections = createSelector(
@@ -43,7 +46,10 @@ export const getSearchIndex = createSelector(
     const searchFields = [
       'name',
       'description',
-      'counties'
+      'counties',
+      'acquisition_date',
+      'agency_name',
+      'agency_abbreviation'
     ];
     const searchIndex = elasticlunr(function() {
       searchFields.map(field => {
@@ -80,9 +86,8 @@ export const getCollectionFilterChoices = createSelector(
     // The key must match a property of the collections object and
     // the value is an empty array.
     const collectionFilterChoices = {
-      category: [],
-      recommended_use: [],
-      template: []
+      template: [],
+      category: []
     };
     // If collections are in ready the state, continue setting the value arrays in the
     // collectionFilterChoices object from above.
@@ -111,7 +116,42 @@ export const getCollectionFilterChoices = createSelector(
   }
 );
 
-// Returns the array of collections to show in the catalog view.
+export const getCollectionTimesliderRange = createSelector(
+  [ getCollections ],
+  (collections) => {
+    // Check if collections are ready in the state
+    if (collections.result) {
+      let range = [0, 0];
+      collections.result.map(collectionId => {
+        const coll = collections.entities.collectionsById[collectionId];
+        const year = coll.acquisition_date ? parseInt(coll.acquisition_date.substring(0, 4), 10) : 0;
+        if (year !== 0) {
+          if (range[0] === 0 || year < range[0]) {
+            range[0] = year;
+          }
+          if (range[1] === 0 || year > range[1]) {
+            range[1] = year;
+          }
+        }
+        return year;
+      });
+      // return the range array [min year, max year]
+      return range;
+    }
+    else {
+      return setTimeslider;
+    }
+  }
+);
+
+// ///////////////////////////////////////////////////////////////
+// Below are the chained selectors which use the search, timeslider,
+// filter checkboxes, filter map, and sort components in then
+// ToolDrawer sidebar to change the visible collections array the
+// catalog uses to display CollectionCards
+// ///////////////////////////////////////////////////////////////
+
+// Returns an array of collections to show in the catalog view.
 // If a filter is set, returns only those collections that pass
 // through the filter.
 export const getFilteredCollections = createSelector(
@@ -146,11 +186,32 @@ export const getFilteredCollections = createSelector(
   }
 );
 
-// Returns the array of collections to show in the catalog view.
+// Returns an array of collections to show in the catalog view.
+// If the user has set a map filter, returns only those collections
+// that pass through the map filter.
+export const getMapFilteredCollections = createSelector(
+  [ getFilteredCollections, getFilterMapFilter ],
+  (collectionIds, filterMapFilter) => {
+    let mapFilteredCollectionIds = [];
+    if (filterMapFilter.length > 0) {
+      collectionIds.map(collectionId => {
+        if (filterMapFilter.indexOf(collectionId) >= 0) {
+          mapFilteredCollectionIds.push(collectionId);
+        }
+        return collectionId;
+      })
+      return mapFilteredCollectionIds;
+    }
+    mapFilteredCollectionIds = collectionIds;
+    return mapFilteredCollectionIds;
+  }
+)
+
+// Returns an array of collections to show in the catalog view.
 // If the user has entered a search query, returns only those collections
 // that return from the search.
 export const getSearchedCollections = createSelector(
-  [ getAllCollections, getFilteredCollections, getSearchQuery, getSearchIndex ],
+  [ getAllCollections, getMapFilteredCollections, getSearchQuery, getSearchIndex ],
   (collections, collectionIds, searchQuery, searchIndex) => {
     // Check if collections are ready in the state
     if (collections) {
@@ -167,10 +228,35 @@ export const getSearchedCollections = createSelector(
             return result;
           })
         }
-      } else {
-        searchedCollectionIds = collectionIds;
+        return searchedCollectionIds;
       }
+      searchedCollectionIds = collectionIds;
       return searchedCollectionIds;
+    }
+  }
+);
+
+// Takes the filtered and searched array of collection ids and reduces them
+// to an array of Ids whose collection acquisition_date year is within the
+// year range as designated by the CollectionTimeslider component
+export const getTimesliderCollections = createSelector(
+  [ getAllCollections, getSearchedCollections, setTimeslider ],
+  (collections, collectionIds, range) => {
+    // Check if collections are ready in the state
+    if (collections) {
+      let timesliderCollectionIds = [];
+      // iterate current searched collection Id list
+      collectionIds.map(collectionId => {
+        const coll = collections[collectionId];
+        const year = coll.acquisition_date ? parseInt(coll.acquisition_date.substring(0, 4), 10) : 0;
+        if (year !== 0) {
+          if (range[0] <= year && year <= range[1]) {
+            timesliderCollectionIds.push(collectionId);
+          }
+        }
+        return year;
+      });
+      return timesliderCollectionIds;
     }
   }
 );
@@ -178,7 +264,7 @@ export const getSearchedCollections = createSelector(
 // Takes the filtered array of collection ids and reorders them based on the
 // sort order delcared in the store by the Sort component
 export const getSortedCollections = createSelector(
-  [ getAllCollections, getSearchedCollections, getSortOrder ],
+  [ getAllCollections, getTimesliderCollections, getSortOrder ],
   (collections, collectionIds, order) => {
     // Check if collections are ready in the state
     if (collections) {

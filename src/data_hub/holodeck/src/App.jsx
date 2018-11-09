@@ -16,9 +16,9 @@ class App extends Component {
       <Provider store={store}>
         <BrowserRouter>
           <Switch>
-            <Route path='/collection/:collectionId' component={CatalogContainer} />
-            <Route path='/catalog/:filters' component={CatalogContainer} />
-            <Route path='/' component={CatalogContainer} />
+            <Route path='/collection/:collectionId' exact component={CatalogContainer} />
+            <Route path='/catalog/:filters' exact component={CatalogContainer} />
+            <Route path='/' exact component={CatalogContainer} />
             <Route path='*' component={NotFound} />} />
           </Switch>
         </BrowserRouter>

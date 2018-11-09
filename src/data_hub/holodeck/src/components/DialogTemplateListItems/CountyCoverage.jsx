@@ -7,8 +7,6 @@ const cartodb = window.cartodb;
 export default class CountyCoverage extends React.Component {
   constructor(props) {
     super(props);
-    const re = new RegExp(",", 'g');
-    this.displayList = this.props.counties.replace(re, ", ");
     // bind our map builder functions
     this.createMap = this.createMap.bind(this);
   }
@@ -31,7 +29,7 @@ export default class CountyCoverage extends React.Component {
     // disable map zoom when using scroll
     map.scrollZoom.disable();
 
-    const re = new RegExp(",", 'g');
+    const re = new RegExp(", ", 'g');
     const quotedCounties = this.props.counties.replace(re, "','");
     const query = "SELECT * FROM area_type WHERE area_type = 'county' and area_type_name IN ('" + quotedCounties + "')";
 
@@ -101,7 +99,7 @@ export default class CountyCoverage extends React.Component {
           County Coverage
         </div>
         <p className="mdc-typography--body2">
-          This dataset either partly or completely covers the counties: <strong>{this.displayList}</strong>
+          This dataset either partly or completely covers the counties: <strong>{this.props.counties}</strong>
         </p>
         <div id='county-coverage-map'></div>
       </div>

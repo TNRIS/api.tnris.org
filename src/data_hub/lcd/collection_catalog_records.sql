@@ -33,7 +33,7 @@ SELECT collection.collection_id,
 	string_agg(distinct use_type.use_type, ',' order by use_type.use_type) as recommended_use,
   string_agg(distinct resource_type.resource_type_abbreviation, ',' order by resource_type.resource_type_abbreviation) as resource_types,
   string_agg(distinct image.image_url, ',') as images,
-  string_agg(distinct area_type.area_type_name, ',' order by area_type.area_type_name) as counties,
+  string_agg(distinct area_type.area_type_name, ', ' order by area_type.area_type_name) as counties,
   CASE
     WHEN (
       (string_agg(distinct resource_type.resource_type_abbreviation, ',' order by resource_type.resource_type_abbreviation)

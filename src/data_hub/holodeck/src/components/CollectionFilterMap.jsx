@@ -45,9 +45,11 @@ export default class CollectionFilterMap extends React.Component {
       controls: {'polygon': true, 'trash': true}
     });
     this._map.addControl(draw, 'top-left');
+    // Check if the draw mode is draw_polygon, if so, check if there
+    // are previously drawn features on the map and if so, delete them.
+    // We do this so there is only ever one aoi polygon in the map at a time.
     this._map.on('draw.modechange', function(e) {
       if (e.mode === 'draw_polygon') {
-        console.log(e);
         let features = draw.getAll();
         if (features.features.length > 1) {
           draw.delete(features.features[0].id);
@@ -55,7 +57,7 @@ export default class CollectionFilterMap extends React.Component {
       }
     })
     this._map.on('draw.create', function(e) {
-      console.log(e.features);
+      // console.log(e.features);
     })
 
     if (this.props.collectionFilterMapFilter.length > 0) {
@@ -101,7 +103,7 @@ export default class CollectionFilterMap extends React.Component {
         _this.props.setCollectionFilterMapZoom(zoom);
       }).error(function(errors) {
         // errors contains a list of errors
-        console.log("errors:" + errors);
+        // console.log("errors:" + errors);
       })
     }
   }

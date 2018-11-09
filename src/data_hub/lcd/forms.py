@@ -10,6 +10,7 @@ from .models import (Collection,
                      AreaType,
                      CategoryRelate,
                      CategoryType,
+                     CountyRelate,
                      EpsgRelate,
                      EpsgType,
                      FileTypeRelate,
@@ -86,6 +87,16 @@ class CollectionForm(forms.ModelForm):
             choices = ()
         return choices
 
+    # function to create a form input for related counties
+    def create_county_choices(self, id_field, label_field, type_table, order_field):
+        # get the relate type choices from the area_type table
+        try:
+            choices = (
+                (getattr(b, id_field), getattr(b, label_field)) for b in type_table.objects.filter(area_type='county').order_by(order_field))
+        except ProgrammingError:
+            choices = ()
+        return choices
+
     # generatl function to create a form dropdown for thumbnail image
     def create_image_choices(self, id_field, label_field, type_table, order_field):
         # get the relate type choices from the type table
@@ -102,6 +113,7 @@ class CollectionForm(forms.ModelForm):
     file_types = forms.MultipleChoiceField(required=False, widget=forms.SelectMultiple(attrs={'title': 'Hold down ctrl to select multiple values',}), choices=[])
     resolutions = forms.MultipleChoiceField(required=False, widget=forms.SelectMultiple(attrs={'title': 'Hold down ctrl to select multiple values',}), choices=[])
     uses = forms.MultipleChoiceField(required=False, widget=forms.SelectMultiple(attrs={'title': 'Hold down ctrl to select multiple values',}), choices=[])
+    counties = forms.MultipleChoiceField(required=False, widget=forms.SelectMultiple(attrs={'title': 'Hold down ctrl to select multiple values',}), choices=[])
     thumbnail_image = forms.ChoiceField(required=False, choices=[])
 
     # generic function to retrieve the initial relate values from the relate table
@@ -125,12 +137,14 @@ class CollectionForm(forms.ModelForm):
             self.fields['file_types'].choices = self.create_relate_field('file_type_id', 'file_type', FileType, 'file_type')
             self.fields['resolutions'].choices = self.create_relate_field('resolution_type_id', 'resolution', ResolutionType, 'resolution')
             self.fields['uses'].choices = self.create_relate_field('use_type_id', 'use_type', UseType, 'use_type')
+            self.fields['counties'].choices = self.create_county_choices('area_type_id', 'area_type_name', AreaType, 'area_type_name')
             self.fields['thumbnail_image'].choices = self.create_image_choices('image_url', 'image_id', Image, 'image_id')
             self.attribute_initial_values('categories', CategoryRelate, 'category_type_id')
             self.attribute_initial_values('projections', EpsgRelate, 'epsg_type_id')
             self.attribute_initial_values('file_types', FileTypeRelate, 'file_type_id')
             self.attribute_initial_values('resolutions', ResolutionRelate, 'resolution_type_id')
             self.attribute_initial_values('uses', UseRelate, 'use_type_id')
+            self.attribute_initial_values('counties', CountyRelate, 'area_type_id')
             # set aside name so we can monitor if it was edited when save() fires
             self.og_name = self.instance.name
 
@@ -297,6 +311,7 @@ class CollectionForm(forms.ModelForm):
         self.update_relate_table('file_types', FileTypeRelate, 'file_type_id', FileType)
         self.update_relate_table('resolutions', ResolutionRelate, 'resolution_type_id', ResolutionType)
         self.update_relate_table('uses', UseRelate, 'use_type_id', UseType)
+        self.update_relate_table('counties', CountyRelate, 'area_type_id', AreaType)
         # check for files
         files = self.files
         image_fields = ['overview_image', 'thumbnail_image', 'natural_image', 'urban_image']

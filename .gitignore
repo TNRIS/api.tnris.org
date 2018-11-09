@@ -168,3 +168,5 @@ src/data_hub/static/*
 !src/data_hub/static/favicon.ico
 
 src/data_hub/webpack-stats\.prod\.json
+
+*.csv#

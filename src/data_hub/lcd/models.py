@@ -119,7 +119,7 @@ class AreaType(models.Model):
     )
 
     def __str__(self):
-        return self.area_type_name + ' ' + self.area_type
+        return self.area_type_name
 
 
 class CategoryType(models.Model):
@@ -452,6 +452,25 @@ class CategoryRelate(models.Model):
 
     def __str__(self):
         return self.category_type_id.category
+
+
+class CountyRelate(models.Model):
+    """Defines which county a collection has coverage for
+    """
+
+    class Meta:
+        db_table = 'collection_county_relate'
+        verbose_name_plural = 'County Relate'
+        unique_together = ("collection_id", "area_type_id")
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    collection_id = models.ForeignKey('Collection', db_column='collection_id', on_delete=models.CASCADE, related_name='Collections')
+    area_type_id = models.ForeignKey('AreaType', db_column='area_type_id', on_delete=models.CASCADE, related_name='AreaType')
+    created = models.DateTimeField('Created', auto_now_add=True)
+    last_modified = models.DateTimeField('Last Modified', auto_now=True)
+
+    def __str__(self):
+        return self.area_type.area_type_name
 
 
 class EpsgRelate(models.Model):
@@ -1134,6 +1153,9 @@ class CcrView(models.Model):
     )
     template = models.TextField(
         'Template'
+    )
+    counties = models.TextField(
+        'Counties'
     )
 
     def __str__(self):

@@ -109,7 +109,7 @@ class CollectionAdmin(admin.ModelAdmin):
             'classes': ('grp-collapse grp-closed',),
             'fields': (('projections', 'categories'),
                        ('file_types', 'resolutions'),
-                       'uses')
+                       ('uses', 'counties'))
         })
     )
     inlines = [ImageInlineAdmin]
@@ -117,9 +117,9 @@ class CollectionAdmin(admin.ModelAdmin):
     list_display = (
         'name', 'collection_id', 'last_modified', 'public'
     )
-    search_fields = ('name',)
+    search_fields = ('name', 'collection_id')
     list_filter = (
-        'public',
+        'public', 'template_type_id'
     )
     # remove default action 'delete_selected' so s3 files will be deleted by the
     # model's overridden delete method. also so user permissions don't have to be

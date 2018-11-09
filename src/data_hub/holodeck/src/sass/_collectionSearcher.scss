@@ -8,4 +8,9 @@ styles for component: CollectionSearcher
     padding: 0 7px 0 16px !important;
     border-bottom-color: rgba(0,0,0,0.12) !important;
   }
+
+  input[type="search"]::-webkit-search-decoration:hover,
+  input[type="search"]::-webkit-search-cancel-button:hover {
+        cursor:pointer;
+    }
 }

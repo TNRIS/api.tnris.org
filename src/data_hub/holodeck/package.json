@@ -130,5 +130,7 @@
   "eslintConfig": {
     "extends": "react-app"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "install-peers": "^1.0.3"
+  }
 }

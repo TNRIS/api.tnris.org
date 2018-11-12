@@ -19,9 +19,9 @@ export default class Header extends React.Component {
     this.topAppBarElement = document.querySelector('.mdc-top-app-bar');
     this.topAppBar = new MDCTopAppBar(this.topAppBarElement);
 
-    this.topAppBar.listen('MDCTopAppBar:nav', () => {
-        this.menuDrawer.open = !this.menuDrawer.open;
-    });
+    // this.topAppBar.listen('MDCTopAppBar:nav', () => {
+    //     this.menuDrawer.open = !this.menuDrawer.open;
+    // });
   }
 
   handleOpenToolDrawer() {

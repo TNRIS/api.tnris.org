@@ -321,6 +321,9 @@ class ChcView(models.Model):
         'Display Template',
         max_length=20
     )
+    availability  = models.TextField(
+        'Availability'
+    )
     thumbnail_image = models.URLField(
         'Thumbnail Image URL'
     )

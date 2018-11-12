@@ -281,6 +281,7 @@ class ResourceTypeAdmin(admin.ModelAdmin):
 class TemplateTypeAdmin(admin.ModelAdmin):
     model = TemplateType
     ordering = ('template',)
+    list_display = ('template', 'filter_name')
 
 
 @admin.register(UseType)

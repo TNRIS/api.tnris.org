@@ -80,7 +80,7 @@ export default class CollectionTimeslider extends React.Component {
                max={this.state.range[1]}
                defaultValue={this.state.range}
                pushable={true}
-               onChange={this.handleSetTimeslider} />
+               onChange={() => this.handleSetTimeslider} />
       </div>
     );
   }

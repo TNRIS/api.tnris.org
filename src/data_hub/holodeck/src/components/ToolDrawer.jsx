@@ -10,21 +10,50 @@ export default class ToolDrawer extends React.Component {
 
   constructor(props) {
       super(props);
+
+      // let deviceWidth = window.innerWidth;
+
+      if (window.innerWidth >= 1000){
+        this.state = {
+          view: 'dismiss'
+        };
+      }
+      else {
+        this.state = {
+          view: 'modal'
+        };
+      }
+
+      console.log(this.state.view, window.innerWidth);
+
       this.handleCloseDrawer = this.handleCloseDrawer.bind(this);
+
   }
 
   componentDidMount() {
     this.toolDrawer = MDCDrawer.attachTo(document.querySelector('.tool-drawer'));
   }
 
-  handleCloseDrawer () {
+  handleCloseDrawer() {
     this.toolDrawer.open = false;
   }
 
   render() {
+    let classname = 'mdc-drawer mdc-drawer--modal tool-drawer';
+    // console.log(this.state.view);
+
+    window.addEventListener("resize", function() {
+      // console.log(window.innerWidth);
+      // if (this.state.view === 'dismiss') {
+      //   classname = 'mdc-drawer mdc-drawer--dismissible tool-drawer';
+      // }
+      console.log('resize is happening!!!', this.state.view);
+    });
+
     return (
+
       <div className='tool-drawer-component mdc-typography'>
-        <aside className='mdc-drawer mdc-drawer--modal tool-drawer' dir='rtl'>
+        <aside className={classname} dir='rtl'>
           <div className='mdc-drawer__content' dir='ltr'>
             <nav className='mdc-list-group'>
               <CollectionSearcherContainer className='mdc-list-item' match={this.props.match} history={this.props.history} />
@@ -41,7 +70,7 @@ export default class ToolDrawer extends React.Component {
                 <a className='timeslider-title mdc-list-group__subheader'>
                   Acquisition Date Range
                 </a>
-                <CollectionTimesliderContainer className='mdc-list-item' match={this.props.match} history={this.props.history} />
+              <CollectionTimesliderContainer className='mdc-list-item' match={this.props.match} history={this.props.history} />
             </nav>
           </div>
         </aside>

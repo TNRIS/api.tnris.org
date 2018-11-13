@@ -40,6 +40,10 @@ styles for component: CollectionFilter
         cursor: pointer;
       }
 
+      .filter-active {
+        color: rgba(98,0,238,0.87);
+      }
+
       @include mdc-checkbox-container-colors(#6E7777, white, #7932F1, #7932F1);
       @include mdc-checkbox-focus-indicator-color(#7932F1);
     }

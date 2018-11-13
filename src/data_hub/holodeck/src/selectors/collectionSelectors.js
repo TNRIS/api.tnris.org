@@ -86,7 +86,7 @@ export const getCollectionFilterChoices = createSelector(
     // The key must match a property of the collections object and
     // the value is an empty array.
     const collectionFilterChoices = {
-      template: [],
+      availability: [],
       category: []
     };
     // If collections are in ready the state, continue setting the value arrays in the

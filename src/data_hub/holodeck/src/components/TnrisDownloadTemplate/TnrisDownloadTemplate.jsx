@@ -139,7 +139,7 @@ export default class TnrisDownloadTemplate extends React.Component {
 
                       <button className="mdc-tab" role="tab" aria-selected="false" tabIndex="-1"  onClick={() => this.setTemplateView("order")} title="Order">
                         <span className="mdc-tab__content">
-                          <span className="mdc-tab__icon material-icons">create</span>
+                          <span className="mdc-tab__icon material-icons">shopping_basket</span>
                         </span>
                         <span className="mdc-tab-indicator">
                           <span className="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
@@ -173,7 +173,7 @@ export default class TnrisDownloadTemplate extends React.Component {
                     </a>
                     <a className={this.state.view === 'download' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
                        onClick={() => this.setTemplateView("order")}>
-                       <i className="mdc-tab__icon material-icons">create</i> Order
+                       <i className="mdc-tab__icon material-icons">shopping_basket</i> Order
                     </a>
                   </nav>
                 </div>

@@ -59,7 +59,7 @@ export default class Catalog extends React.Component {
     return (
       <div className="catalog-component">
         {/*<Drawer />*/}
-        <ToolDrawer match={this.props.match} history={this.props.history} />
+        <ToolDrawer match={this.props.match} history={this.props.history} total={this.props.visibleCollections ? this.props.visibleCollections.length : 0} />
         <HeaderContainer />
         <div className='catalog'>
           <CollectionDialogContainer history={this.props.history} />

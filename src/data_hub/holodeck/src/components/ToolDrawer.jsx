@@ -47,6 +47,9 @@ export default class ToolDrawer extends React.Component {
         <aside className={classname} dir='rtl'>
           <div className='mdc-drawer__content' dir='ltr'>
             <nav className='mdc-list-group'>
+              <div className='dataset-counter'>
+                Showing <span className="dataset-counter-count">{this.props.total}</span> Datasets
+              </div>
               <CollectionSearcherContainer className='mdc-list-item' match={this.props.match} history={this.props.history} />
               <a className='sort-title mdc-list-group__subheader'>
                 Sort

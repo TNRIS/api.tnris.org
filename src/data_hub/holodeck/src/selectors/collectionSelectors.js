@@ -152,14 +152,16 @@ export const getCollectionTimesliderRange = createSelector(
 // ///////////////////////////////////////////////////////////////
 
 // Returns an array of collections to show in the catalog view.
-// If a filter is set, returns only those collections that pass
-// through the filter.
+// If 1 or more filters are set, returns only those collections that pass
+// through the filters. If no filters are set, or on initial page load,
+// returns an array of all collection_ids available in the catalog.
 export const getFilteredCollections = createSelector(
   [ getAllCollections, getAllCollectionIds, getFilters ],
   (collections, collectionIds, filters) => {
     // Check if collections are ready in the state
     if (collections) {
       let filteredCollectionIds = [];
+      let multiFilteredCollectionIds = [];
       collectionIds.map(collectionId => {
         for (let key in filters) {
           if (filters.hasOwnProperty(key)) {
@@ -170,7 +172,13 @@ export const getFilteredCollections = createSelector(
               collectionPropertyValues.map(propertyValue => {
                 if (filters[key].indexOf(propertyValue) >= 0) {
                   if (filteredCollectionIds.indexOf(collectionId) < 0) {
+                    // set collection_ids that pass the filter conditions
+                    // into this array
                     filteredCollectionIds.push(collectionId);
+                  } else {
+                    // set any duplicate collection_ids from the conditional
+                    // above into this array to account for cross filtering
+                    multiFilteredCollectionIds.push(collectionId);
                   }
                 }
                 return propertyValue;
@@ -180,8 +188,15 @@ export const getFilteredCollections = createSelector(
         }
         return collectionId;
       })
-      return !Array.isArray(filteredCollectionIds) || !filteredCollectionIds.length ?
-        collectionIds : filteredCollectionIds;
+      // when no filters are set, return all collection_ids to make all
+      // collections available to the view
+      if (Object.keys(filters).length < 1) {
+        return collectionIds;
+      }
+      // when 1 or more filters are set, return the collection_ids that
+      // pass through those filters. The multiFilteredCollectionIds account
+      // for cross filtering scenarios.
+      return Object.keys(filters).length > 1 ? multiFilteredCollectionIds : filteredCollectionIds;
     }
   }
 );

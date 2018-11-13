@@ -36,10 +36,10 @@ class OrderTnrisDataForm extends Component {
       this.handleChange = this.handleChange.bind(this);
       this.handleSwitch = this.handleSwitch.bind(this);
       // set aside declaration of data type: Lidar, Historic Imagery, or all others
-      if (this.collection.category.indexOf('Lidar') !== -1) {
+      if (this.collection.category && this.collection.category.indexOf('Lidar') !== -1) {
         this.dataForm = 'lidar';
       }
-      else if (this.collection.category.indexOf('Historic Imagery') !== -1) {
+      else if (this.collection.category && this.collection.category.indexOf('Historic Imagery') !== -1) {
         this.dataForm = 'historicImagery';
       }
       else {
@@ -103,7 +103,6 @@ class OrderTnrisDataForm extends Component {
   }
 
   componentDidUpdate () {
-    console.log(this.state);
     // alter form requirements and inputs displayed based on form input selections
     if (this.state.orderType === 'Partial') {
       document.getElementsByName("portionDescription").forEach((input) => {

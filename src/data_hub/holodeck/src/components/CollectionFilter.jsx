@@ -5,7 +5,6 @@ export default class CollectionFilter extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      filters: this.props.collectionFilter,
       badUrlFlag: false
     }
     this.handleOpenFilterMenu = this.handleOpenFilterMenu.bind(this);
@@ -39,6 +38,16 @@ export default class CollectionFilter extends React.Component {
           badUrlFlag: true
         });
       }
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (Object.keys(nextProps.collectionFilter).length === 0) {
+      const filterComponent = document.getElementById('filter-component');
+      const inputArray = filterComponent.querySelectorAll("input");
+      inputArray.forEach(input => {
+        return input.checked = false;
+      });
     }
   }
 
@@ -96,7 +105,7 @@ export default class CollectionFilter extends React.Component {
       return <Redirect to='/404' />;
     }
     return (
-      <div className='filter-component'>
+      <div id='filter-component' className='filter-component'>
         <ul className='mdc-list'>
           {
             Object.keys(this.props.collectionFilterChoices).map(choice =>

@@ -8,7 +8,7 @@ import Footer from './Footer';
 import CollectionFilterMapDialogContainer from '../containers/CollectionFilterMapDialogContainer';
 import HeaderContainer from '../containers/HeaderContainer';
 import OrderCartDialogContainer from '../containers/OrderCartDialogContainer';
-import ToolDrawer from './ToolDrawer';
+import ToolDrawerContainer from '../containers/ToolDrawerContainer';
 import loadingImage from '../images/loading.gif';
 
 export default class Catalog extends React.Component {
@@ -59,7 +59,7 @@ export default class Catalog extends React.Component {
     return (
       <div className="catalog-component">
         {/*<Drawer />*/}
-        <ToolDrawer match={this.props.match} history={this.props.history} total={this.props.visibleCollections ? this.props.visibleCollections.length : 0} />
+        <ToolDrawerContainer match={this.props.match} history={this.props.history} total={this.props.visibleCollections ? this.props.visibleCollections.length : 0} />
         <HeaderContainer />
         <div className='catalog'>
           <CollectionDialogContainer history={this.props.history} />

@@ -11,14 +11,23 @@ export default class ToolDrawer extends React.Component {
   constructor(props) {
       super(props);
       this.handleCloseDrawer = this.handleCloseDrawer.bind(this);
+      this.clearAllFilters = this.clearAllFilters.bind(this);
   }
 
   componentDidMount() {
     this.toolDrawer = MDCDrawer.attachTo(document.querySelector('.tool-drawer'));
   }
 
-  handleCloseDrawer () {
+  handleCloseDrawer() {
     this.toolDrawer.open = false;
+  }
+
+  clearAllFilters() {
+    this.props.setCollectionSearchQuery('');
+    this.props.setCollectionFilter({});
+    this.props.sortAZ();
+    this.props.setCollectionTimeslider(this.props.collectionTimesliderRange);
+    this.props.setUrl('/', this.props.history);
   }
 
   render() {
@@ -40,11 +49,12 @@ export default class ToolDrawer extends React.Component {
                 Filter
               </a>
               <CollectionFilterContainer className='mdc-list-item' match={this.props.match} history={this.props.history} />
-                <hr className='mdc-list-divider'/>
-                <a className='timeslider-title mdc-list-group__subheader'>
-                  Acquisition Date Range
-                </a>
-                <CollectionTimesliderContainer className='mdc-list-item' match={this.props.match} history={this.props.history} />
+              <hr className='mdc-list-divider'/>
+              <a className='timeslider-title mdc-list-group__subheader'>
+                Acquisition Date Range
+              </a>
+              <CollectionTimesliderContainer className='mdc-list-item' match={this.props.match} history={this.props.history} />
+              <button className="mdc-button mdc-button--raised" onClick={this.clearAllFilters}>Clear All</button>
             </nav>
           </div>
         </aside>

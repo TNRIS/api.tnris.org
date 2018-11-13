@@ -117,7 +117,7 @@ class CollectionAdmin(admin.ModelAdmin):
     list_display = (
         'disp_name', 'collection_id', 'last_modified', 'public'
     )
-    search_fields = ('disp_name', 'collection_id')
+    search_fields = ('name', 'collection_id', 'acquisition_date')
     list_filter = (
         'public', 'template_type_id'
     )
@@ -215,7 +215,7 @@ class ResourceAdmin(admin.ModelAdmin):
     list_display = (
         'disp_name', 'area_type_id', 'resource', 'resource_type_id', 'last_modified'
     )
-    search_fields = ('disp_name', 'collection_id__name', 'area_type_id__area_type_name', 'resource', 'resource_type_id__resource_type_name')
+    search_fields = ('collection_id__name', 'area_type_id__area_type_name', 'resource', 'resource_type_id__resource_type_name')
     list_filter = (
         'collection_id',
         'area_type_id',

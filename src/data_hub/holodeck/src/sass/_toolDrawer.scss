@@ -7,6 +7,21 @@ styles for component: ToolDrawer
   .mdc-drawer {
 
     .mdc-drawer__content {
+      overflow-x: hidden;
+      overflow-y: auto;
+      padding-bottom: 30px;
+
+      .dataset-counter {
+        background: lightgray;
+        color: #8443F1;
+        text-align: center;
+        height: 26px;
+        line-height: 26px;
+
+        .dataset-counter-count {
+          font-weight: bold;
+        }
+      }
 
       .mdc-list-group__subheader {
         font-size: 1rem;

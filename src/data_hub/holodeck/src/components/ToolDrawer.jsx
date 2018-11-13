@@ -11,9 +11,9 @@ export default class ToolDrawer extends React.Component {
   constructor(props) {
       super(props);
 
-      // let deviceWidth = window.innerWidth;
+      let deviceWidth = window.innerWidth;
 
-      if (window.innerWidth >= 1000){
+      if (deviceWidth >= 1050){
         this.state = {
           view: 'dismiss'
         };
@@ -24,7 +24,7 @@ export default class ToolDrawer extends React.Component {
         };
       }
 
-      console.log(this.state.view, window.innerWidth);
+      console.log("initial state view is:", this.state.view);
 
       this.handleCloseDrawer = this.handleCloseDrawer.bind(this);
 
@@ -40,15 +40,15 @@ export default class ToolDrawer extends React.Component {
 
   render() {
     let classname = 'mdc-drawer mdc-drawer--modal tool-drawer';
-    // console.log(this.state.view);
+    console.log(this.state.view);
 
     window.addEventListener("resize", function() {
-      // console.log(window.innerWidth);
-      // if (this.state.view === 'dismiss') {
-      //   classname = 'mdc-drawer mdc-drawer--dismissible tool-drawer';
-      // }
-      console.log('resize is happening!!!', this.state.view);
+      console.log(window.innerWidth, 'resize happening! state view is:', this.state.view);
     });
+
+    // if (this.state.view === 'dismiss') {
+    //   classname = 'mdc-drawer mdc-drawer--dismissible tool-drawer';
+    // };
 
     return (
 

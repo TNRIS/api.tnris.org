@@ -362,8 +362,15 @@ class ResourceForm(forms.ModelForm):
     def create_collection_field(self):
         # get the Collection choices from the Collection table
         try:
-            choices = (
-                (b.collection_id, b.name) for b in Collection.objects.all().order_by('name'))
+            choices = []
+            for b in Collection.objects.all().order_by('name'):
+                if b.acquisition_date is not None and b.template_type_id.template != 'outside-entity':
+                    year = b.acquisition_date.split("-")[0] + " "
+                else:
+                    year = ""
+                disp_name = year + b.name
+                choices.append((b.collection_id, disp_name))
+
         except ProgrammingError:
             choices = ()
         # return the choices

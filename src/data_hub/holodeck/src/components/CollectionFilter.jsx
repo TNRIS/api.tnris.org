@@ -95,7 +95,6 @@ export default class CollectionFilter extends React.Component {
     if (this.state.badUrlFlag) {
       return <Redirect to='/404' />;
     }
-    // console.log(this.props);
     return (
       <div className='filter-component'>
         <ul className='mdc-list'>

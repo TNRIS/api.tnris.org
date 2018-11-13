@@ -12,16 +12,24 @@ export default class ToolDrawer extends React.Component {
       super(props);
 
       // set initial state view
-      window.innerWidth >= 1000 ? this.state = {view:'dismiss'} : this.state = {view: 'modal'};
-
-      console.log(this.state.view);
+      this.state = {view: 'dismiss'};
+      window.innerWidth >= 1052 ? this.state = {view:'dismiss'} : this.state = {view: 'modal'};
 
       this.handleCloseDrawer = this.handleCloseDrawer.bind(this);
+      this.handleResize = this.handleResize.bind(this);
+  }
 
+  handleResize() {
+    window.innerWidth >= 1052 ? this.setState({view:'dismiss'}) : this.setState({view:'modal'});
   }
 
   componentDidMount() {
     this.toolDrawer = MDCDrawer.attachTo(document.querySelector('.tool-drawer'));
+    window.addEventListener("resize", this.handleResize);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.handleResize);
   }
 
   handleCloseDrawer() {
@@ -29,17 +37,9 @@ export default class ToolDrawer extends React.Component {
   }
 
   render() {
-    let classname = 'mdc-drawer mdc-drawer--modal tool-drawer';
-
-    console.log(this.state.view);
+    let classname;
 
     this.state.view === 'dismiss' ? classname = 'mdc-drawer mdc-drawer--dismissible tool-drawer' : classname = 'mdc-drawer mdc-drawer--modal tool-drawer';
-
-    // window.addEventListener("resize", function() {
-    //   console.log(window.innerWidth, 'resize happening!');
-    //   window.innerWidth >= 1000 ? this.state.view = 'modal' : this.state.view = 'dismiss';
-    //   this.state.view === 'dismiss' ? classname = 'mdc-drawer mdc-drawer--dismissible tool-drawer' : classname = 'mdc-drawer mdc-drawer--modal tool-drawer';
-    // });
 
     return (
 

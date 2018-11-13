@@ -8,6 +8,9 @@ import tnrisLogo from '../images/tnris_gray.png';
 export default class Header extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      total: 0
+    }
     this.handleOpenToolDrawer = this.handleOpenToolDrawer.bind(this);
     this.handleOpenOrderCartDialog = this.handleOpenOrderCartDialog.bind(this);
   }
@@ -22,6 +25,10 @@ export default class Header extends React.Component {
     // this.topAppBar.listen('MDCTopAppBar:nav', () => {
     //     this.menuDrawer.open = !this.menuDrawer.open;
     // });
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({total: nextProps.visibleCollections.length})
   }
 
   handleOpenToolDrawer() {
@@ -61,6 +68,7 @@ export default class Header extends React.Component {
           </section>
           <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
             {/* <SortContainer /> */}
+            <div className="dataset-counter">{this.state.total}<br />Datasets</div>
             <a onClick={this.handleOpenOrderCartDialog} className="mdc-top-app-bar__action-item">
               <i className={shoppingCartClass}>shopping_cart</i>
             </a>

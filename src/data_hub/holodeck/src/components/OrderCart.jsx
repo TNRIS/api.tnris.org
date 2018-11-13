@@ -250,7 +250,7 @@ class OrderCart extends Component {
     // otherwise show emptyCartMessage
     const cartItems = Object.keys(this.props.orders).length !== 0 ?
       Object.keys(this.props.orders).map(collectionId => {
-        const collectionYear = this.props.collections[collectionId].acquisition_date && this.props.collections[collectionId].template === 'historical-aerial' ? this.props.collections[collectionId].acquisition_date.substring(0, 4) + ' ' : '';
+        const collectionYear = this.props.collections[collectionId].acquisition_date ? this.props.collections[collectionId].acquisition_date.substring(0, 4) + ' ' : '';
         const compiledDisplayName = collectionYear + this.props.collections[collectionId].name;
         const partialType = this.props.orders[collectionId].type ? `, ${this.props.orders[collectionId].type}` : "";
         const attachmentNum = this.props.orders[collectionId].attachments ? Object.keys(this.props.orders[collectionId].attachments).length : "";

@@ -32,6 +32,7 @@ SELECT historical_collection.id as collection_id,
     ELSE CONCAT(string_agg(distinct county.name, ',' order by county.name), ' ', agency.abbreviation, ' Historic Imagery')
   END AS name,
   'historical-aerial' as template,
+  'Order_Only' as availability,
   'https://s3.amazonaws.com/data.tnris.org/historical_thumbnail.jpg' as thumbnail_image,
   'Historic Imagery' as category,
   'Historical Use,Research' as recommended_use,

@@ -358,6 +358,10 @@ class TemplateType(models.Model):
         max_length=100,
         unique=True
     )
+    filter_name = models.TextField(
+        'Filter Name',
+        max_length=50
+    )
     created = models.DateTimeField(
         'Created',
         auto_now_add=True
@@ -1153,6 +1157,9 @@ class CcrView(models.Model):
     )
     template = models.TextField(
         'Template'
+    )
+    availability = models.TextField(
+        'Availability'
     )
     counties = models.TextField(
         'Counties'

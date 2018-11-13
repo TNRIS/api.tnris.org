@@ -121,7 +121,8 @@ SELECT collection.collection_id,
 	license_type.license_name,
 	license_type.license_abbreviation,
 	license_type.license_url,
-	template_type.template
+	template_type.template,
+  template_type.filter_name as availability
 FROM collection
 
 LEFT JOIN category_relate ON category_relate.collection_id=collection.collection_id
@@ -161,4 +162,5 @@ GROUP BY collection.collection_id,
 				license_type.license_name,
 				license_type.license_abbreviation,
 				license_type.license_url,
-				template_type.template;
+				template_type.template,
+        template_type.filter_name;

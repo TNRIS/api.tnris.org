@@ -24,8 +24,8 @@ export default class ToolDrawer extends React.Component {
 
   clearAllFilters() {
     this.props.setCollectionSearchQuery('');
-    this.props.setCollectionFilter({});
     this.props.sortAZ();
+    this.props.setCollectionFilter({});
     this.props.setCollectionTimeslider(this.props.collectionTimesliderRange);
     this.props.setUrl('/', this.props.history);
   }
@@ -54,7 +54,10 @@ export default class ToolDrawer extends React.Component {
                 Acquisition Date Range
               </a>
               <CollectionTimesliderContainer className='mdc-list-item' match={this.props.match} history={this.props.history} />
-              <button className="mdc-button mdc-button--raised" onClick={this.clearAllFilters}>Clear All</button>
+              <hr className='mdc-list-divider'/>
+              <div className='clear-all-filters-container'>
+                <button className="mdc-button mdc-button--raised" onClick={this.clearAllFilters}>Clear All</button>
+              </div>
             </nav>
           </div>
         </aside>

@@ -48,6 +48,20 @@ export default class CollectionFilter extends React.Component {
       inputArray.forEach(input => {
         return input.checked = false;
       });
+      const groupArray = filterComponent.querySelectorAll("ul[id$='-list']");
+      groupArray.forEach(group => {
+        if (!group.classList.contains('hide-filter-list')) {
+          group.classList.add('hide-filter-list');
+        }
+        return group;
+      });
+      const iconArray = filterComponent.querySelectorAll("i[id$='-expansion-icon']");
+      iconArray.forEach(icon => {
+        if (icon.innerHTML === 'expand_less') {
+          icon.innerHTML = 'expand_more';
+        }
+        return icon;
+      });
     }
   }
 

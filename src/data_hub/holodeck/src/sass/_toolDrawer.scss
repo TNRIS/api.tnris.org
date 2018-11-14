@@ -34,6 +34,12 @@ styles for component: ToolDrawer
       hr {
         clear: left;
       }
+
+      .clear-all-filters-container {
+        padding-top: 8px;
+        display: flex;
+        justify-content: center;
+      }
     }
   }
 }

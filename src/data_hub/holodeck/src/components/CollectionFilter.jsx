@@ -26,6 +26,7 @@ export default class CollectionFilter extends React.Component {
               const hashId = '#' + id;
               if (document.querySelector(hashId)) {
                 document.querySelector(hashId).checked = true;
+                document.querySelector(`${hashId}-label`).classList.add('filter-active');
               }
               return hashId;
             });
@@ -89,6 +90,7 @@ export default class CollectionFilter extends React.Component {
         currentFilters[target.name] = [target.value];
       }
       this.props.setCollectionFilter(currentFilters);
+      document.getElementById(`${target.value}-label`).classList.add("filter-active");
     } else {
       if (currentFilters.hasOwnProperty(target.name) && currentFilters[target.name].indexOf(target.value) >= 0) {
         currentFilters[target.name] = currentFilters[target.name].filter(item => item !== target.value);
@@ -98,6 +100,7 @@ export default class CollectionFilter extends React.Component {
         }
       }
       this.props.setCollectionFilter(currentFilters);
+      document.getElementById(`${target.value}-label`).classList.remove("filter-active");
     }
 
     // update URL to reflect new filter changes
@@ -158,7 +161,10 @@ export default class CollectionFilter extends React.Component {
                                 <div className='mdc-checkbox__mixedmark'></div>
                               </div>
                             </div>
-                            <label htmlFor={choiceValue}>{labelValue}</label>
+                            <label id={`${choiceValue}-label`}
+                                   htmlFor={choiceValue}>
+                                   {labelValue}
+                           </label>
                           </div>
                         </li>);
                     })}
@@ -167,11 +173,10 @@ export default class CollectionFilter extends React.Component {
             )
           }
           <li key='filter-map-button'>
-            <a
-              className='mdc-list-item filter-list-title'
-              id='filter-map-button'
-              onClick={this.props.openCollectionFilterMapDialog}>
-              by geography
+            <a className='mdc-list-item filter-list-title'
+               id='filter-map-button'
+               onClick={this.props.openCollectionFilterMapDialog}>
+               by geography
             </a>
           </li>
         </ul>

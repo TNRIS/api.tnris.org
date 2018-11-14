@@ -11,25 +11,11 @@ export default class ToolDrawer extends React.Component {
   constructor(props) {
       super(props);
 
-      // set initial state view
-      this.state = {view: 'dismiss'};
-      window.innerWidth >= 1052 ? this.state = {view:'dismiss'} : this.state = {view: 'modal'};
-
       this.handleCloseDrawer = this.handleCloseDrawer.bind(this);
-      this.handleResize = this.handleResize.bind(this);
-  }
-
-  handleResize() {
-    window.innerWidth >= 1052 ? this.setState({view:'dismiss'}) : this.setState({view:'modal'});
   }
 
   componentDidMount() {
     this.toolDrawer = MDCDrawer.attachTo(document.querySelector('.tool-drawer'));
-    window.addEventListener("resize", this.handleResize);
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener("resize", this.handleResize);
   }
 
   handleCloseDrawer() {
@@ -39,7 +25,8 @@ export default class ToolDrawer extends React.Component {
   render() {
     let classname;
 
-    this.state.view === 'dismiss' ? classname = 'mdc-drawer mdc-drawer--dismissible tool-drawer' : classname = 'mdc-drawer mdc-drawer--modal tool-drawer';
+    this.props.view === 'dismiss' ? classname = 'mdc-drawer mdc-drawer--dismissible mdc-drawer--open tool-drawer' : classname = 'mdc-drawer mdc-drawer--modal tool-drawer';
+    console.log(this.props.view);
 
     return (
 
@@ -47,7 +34,7 @@ export default class ToolDrawer extends React.Component {
         <aside className={classname} dir='rtl'>
           <div className='mdc-drawer__content' dir='ltr'>
             <nav className='mdc-list-group'>
-              <div className='dataset-counter'>
+              <div className='dataset-counter mdc-drawer__subtitle'>
                 Showing <span className="dataset-counter-count">{this.props.total}</span> Datasets
               </div>
               <CollectionSearcherContainer className='mdc-list-item' match={this.props.match} history={this.props.history} />
@@ -68,7 +55,9 @@ export default class ToolDrawer extends React.Component {
             </nav>
           </div>
         </aside>
-        <div className='mdc-drawer-scrim'></div>
+
+        {this.props.view === 'modal' ? <div className='mdc-drawer-scrim'></div> : ''}
+
       </div>
     );
   }

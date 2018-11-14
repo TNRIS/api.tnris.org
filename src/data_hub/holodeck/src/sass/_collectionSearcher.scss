@@ -3,10 +3,12 @@ styles for component: CollectionSearcher
 */
 
 .search-component {
+  margin-top: 9px;
+  margin-bottom: 10px;
 
   .mdc-text-field__input {
     padding: 0 7px 0 16px !important;
-    border-bottom-color: rgba(0,0,0,0.12) !important;
+    border-bottom-color: rgba(0,0,0,0.5) !important;
   }
 
   input[type="search"]::-webkit-search-decoration:hover,

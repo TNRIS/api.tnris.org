@@ -4,6 +4,17 @@ styles for component: Catalog
 
 .catalog-component {
 
+  .mdc-drawer-app-content {
+    flex: auto;
+    overflow: auto;
+    position: relative;
+
+    .main-content {
+      overflow: auto;
+      height: 100%;
+    }
+  }
+
   .catalog {
     padding-top: 100px;
     margin-bottom: 375px;

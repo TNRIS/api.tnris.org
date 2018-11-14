@@ -12,8 +12,8 @@ styles for component: ToolDrawer
       padding-bottom: 30px;
 
       .dataset-counter {
-        background: lightgray;
-        color: #8443F1;
+        background: $skin-tertiary;
+        color: $secondary-color;
         text-align: center;
         height: 26px;
         line-height: 26px;

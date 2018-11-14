@@ -17,11 +17,11 @@ styles for component: TnrisDownloadTemplate
       .mdc-tab {
         max-width: 25px;
         span {
-          color: white;
+          color: $text-color;
         }
         .mdc-tab-indicator--active {
           .mdc-tab-indicator__content--underline {
-            background-color: white;
+            background-color: $text-color;
           }
         }
       }

@@ -4,8 +4,8 @@ styles for component: ContactTnrisForm
 
 .contact-tnris-form-component {
   @include mdc-text-field-bottom-line-color(rgba(0,0,0,.42));
-  @include mdc-text-field-label-color(#6200ee);
-  @include mdc-text-field-line-ripple-color(#6200ee);
+  @include mdc-text-field-label-color($primary-color);
+  @include mdc-text-field-line-ripple-color($primary-color);
   @include mdc-text-field-textarea-stroke-color(rgba(0,0,0,.42));
 
   padding: 15px;
@@ -21,9 +21,9 @@ styles for component: ContactTnrisForm
     background-color: initial;
     margin-bottom: 16px;
     display: flex;
-    @include mdc-select-label-color(#6200ee);
+    @include mdc-select-label-color($primary-color);
     @include mdc-select-bottom-line-color(rgba(0, 0, 0, 0.12));
-    @include mdc-select-focused-bottom-line-color(#6200ee);
+    @include mdc-select-focused-bottom-line-color($primary-color);
 
 
     select {
@@ -49,10 +49,10 @@ styles for component: ContactTnrisForm
   }
 
   .mdc-text-field--invalid {
-    @include mdc-text-field-bottom-line-color(red);
-    @include mdc-text-field-label-color(red);
-    @include mdc-text-field-line-ripple-color(red);
-    @include mdc-text-field-textarea-stroke-color(red);
+    @include mdc-text-field-bottom-line-color($error-text);
+    @include mdc-text-field-label-color($error-text);
+    @include mdc-text-field-line-ripple-color($error-text);
+    @include mdc-text-field-textarea-stroke-color($error-text);
   }
 
   .recaptcha-container {
@@ -61,7 +61,7 @@ styles for component: ContactTnrisForm
   }
 
   .invalid-prompt {
-    color: red;
+    color: $error-text;
   }
 
   .submit-button {
@@ -72,13 +72,13 @@ styles for component: ContactTnrisForm
 
   .contact-tnris-form-success {
     span {
-      color: green;
+      color: $success-text;
     }
   }
 
   .contact-tnris-form-error {
     span {
-      color: red;
+      color: $error-text;
     }
   }
 }

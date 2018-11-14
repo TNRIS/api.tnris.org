@@ -4,13 +4,13 @@ styles for component: OrderTnrisDataForm
 
 .order-tnris-data-form-component {
   @include mdc-text-field-bottom-line-color(rgba(0,0,0,.42));
-  @include mdc-text-field-label-color(#6200ee);
-  @include mdc-text-field-line-ripple-color(#6200ee);
+  @include mdc-text-field-label-color($primary-color);
+  @include mdc-text-field-line-ripple-color($primary-color);
   @include mdc-text-field-textarea-stroke-color(rgba(0,0,0,.42));
 
-  @include mdc-radio-ink-color(#6200ee);
-  @include mdc-radio-checked-stroke-color(#6200ee);
-  @include mdc-radio-focus-indicator-color(#6200ee);
+  @include mdc-radio-ink-color($primary-color);
+  @include mdc-radio-checked-stroke-color($primary-color);
+  @include mdc-radio-focus-indicator-color($primary-color);
 
   padding: 15px;
   overflow-y: auto;
@@ -24,10 +24,10 @@ styles for component: OrderTnrisDataForm
   }
 
   .mdc-text-field--invalid {
-    @include mdc-text-field-bottom-line-color(red);
-    @include mdc-text-field-label-color(red);
-    @include mdc-text-field-line-ripple-color(red);
-    @include mdc-text-field-textarea-stroke-color(red);
+    @include mdc-text-field-bottom-line-color($error-text);
+    @include mdc-text-field-label-color($error-text);
+    @include mdc-text-field-line-ripple-color($error-text);
+    @include mdc-text-field-textarea-stroke-color($error-text);
   }
 
   input[type='number'] {
@@ -43,10 +43,9 @@ styles for component: OrderTnrisDataForm
     background-color: initial;
     margin-bottom: 16px;
     display: flex;
-    @include mdc-select-label-color(#6200ee);
-    // @include mdc-select-ink-color(#6200ee);
+    @include mdc-select-label-color($primary-color);
     @include mdc-select-bottom-line-color(rgba(0, 0, 0, 0.12));
-    @include mdc-select-focused-bottom-line-color(#6200ee);
+    @include mdc-select-focused-bottom-line-color($primary-color);
 
 
     select {
@@ -70,10 +69,10 @@ styles for component: OrderTnrisDataForm
       min-height: 40px;
 
       .mdc-switch:not(.mdc-switch--disabled) {
-        @include mdc-switch-toggled-on-color(#6200ee);
-        @include mdc-switch-toggled-on-track-color(#6200ee);
-        @include mdc-switch-toggled-on-thumb-color(#6200ee);
-        @include mdc-switch-toggled-on-ripple-color(#6200ee);
+        @include mdc-switch-toggled-on-color($primary-color);
+        @include mdc-switch-toggled-on-track-color($primary-color);
+        @include mdc-switch-toggled-on-thumb-color($primary-color);
+        @include mdc-switch-toggled-on-ripple-color($primary-color);
       }
 
       .mdc-switch {
@@ -121,11 +120,11 @@ styles for component: OrderTnrisDataForm
 
   .mdc-text-field:not(.mdc-text-field--disabled) + .mdc-text-field-helper-text {
     margin-bottom: 10px;
-    color: #6200ee;
+    color: $primary-color;
   }
 
   .invalid-prompt {
-    color: red;
+    color: $error-text;
   }
 
   .submit-button {
@@ -136,13 +135,13 @@ styles for component: OrderTnrisDataForm
 
   .order-cart-form-success {
     span {
-      color: green;
+      color: $success-text;
     }
   }
 
   .order-cart-form-error {
     span {
-      color: red;
+      color: $error-text;
     }
   }
 

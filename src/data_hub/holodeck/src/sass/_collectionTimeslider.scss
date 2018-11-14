@@ -15,20 +15,20 @@ styles for component: CollectionTimeslider
 
   .rc-slider {
     .rc-slider-handle {
-      border: solid 2px #8D4FF2;
-      background-color: #E6D9FD;
+      border: solid 2px $secondary-color;
+      background-color: $tertiary-color;
       cursor: pointer;
 
       &:active {
-        box-shadow: 0 0 10px #8D4FF2;
-        -webkit-box-shadow: 0 0 10px #8D4FF2;
+        box-shadow: 0 0 10px $secondary-color;
+        -webkit-box-shadow: 0 0 10px $secondary-color;
         cursor: grabbing;
         cursor: -webkit-grabbing;
       }
     }
 
     .rc-slider-track {
-      background-color: #E6D9FD;
+      background-color: $tertiary-color;
     }
   }
 }

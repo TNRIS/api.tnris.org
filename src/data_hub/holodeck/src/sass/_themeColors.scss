@@ -1,8 +1,25 @@
 /*
-Color Theme Variables
+Color Theme Classes
 */
 
-$primary-color: #6200ee;
+/*
+--------------------------------
+default theme colors and imported use of them
+default color set by Catalog component from
+colorThemeReducer in the redux store
+
+CURRENTLY: light
+--------------------------------
+*/
+
+// need to set the primary globally so the theme chooser has access to them all
+// these won't be overwritten
+$default-theme-primary: #6200ee;
+$green-theme-primary: green;
+
+// set the rest of them
+// these will all be overwritten
+$primary-color: $default-theme-primary;
 $secondary-color: #7E39F1;
 $tertiary-color: #E6D9FD;
 $text-color: white;
@@ -23,3 +40,37 @@ $skin-primary: #444;
 $skin-secondary: gray;
 $skin-tertiary: lightgray;
 $skin-text: #f5f5f5;
+
+@import 'componentSassImporter';
+
+/*
+--------------------------------
+optional theme colors and imported use of them
+--------------------------------
+*/
+
+.green-app-theme {
+  $primary-color: $green-theme-primary;
+  $secondary-color: lightgreen;
+  $tertiary-color: #E6D9FD;
+  $text-color: white;
+  // used for indicators
+  $alt-color: lightgreen;
+
+  //used to color dialog div headers
+  $template-dialog-header: green;
+  $template-dialog-header-script: white;
+
+  $empty-border: #6E7777;
+  $empty-fill: white;
+
+  $error-text: red;
+  $success-text: green;
+
+  $skin-primary: greenal;
+  $skin-secondary: lightgreen;
+  $skin-tertiary: aqua ;
+  $skin-text: #f5f5f5;
+
+  @import 'componentSassImporter';
+}

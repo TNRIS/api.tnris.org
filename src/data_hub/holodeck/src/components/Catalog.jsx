@@ -56,8 +56,10 @@ export default class Catalog extends React.Component {
       return <Redirect to='/404' />;
     }
 
+    const themedClass = "catalog-component " + this.props.theme + "-app-theme";
+
     return (
-      <div className="catalog-component">
+      <div className={themedClass}>
         {/*<Drawer />*/}
         <ToolDrawerContainer match={this.props.match} history={this.props.history} total={this.props.visibleCollections ? this.props.visibleCollections.length : 0} />
         <HeaderContainer />

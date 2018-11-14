@@ -1,0 +1,20 @@
+/*
+styles for component: ThemeChooser
+*/
+
+.theme-chooser-component {
+  .theme-chooser-option {
+    cursor: pointer;
+
+  }
+
+  // currently light is default
+  .theme-chooser-option.light-app-theme {
+    background-color: $default-theme-primary;
+  }
+
+  .theme-chooser-option.green-app-theme {
+    background-color: $green-theme-primary;
+  }
+
+}

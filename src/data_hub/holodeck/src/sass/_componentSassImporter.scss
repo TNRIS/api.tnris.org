@@ -1,0 +1,34 @@
+/*
+store all component scss files in sass folder and import
+them here to have them available to the app
+*/
+
+@import 'catalog';
+@import 'catalogCard';
+@import 'collectionDialog';
+@import 'collectionFilter';
+@import 'collectionFilterMap';
+@import 'collectionFilterMapDialog';
+@import 'collectionSearcher';
+@import 'collectionSorter';
+@import 'collectionTimeslider';
+@import 'contactTnrisForm';
+@import 'drawer';
+@import 'footer';
+@import 'header';
+@import 'historicalAerialTemplate';
+@import 'historicalAerialTemplateDetails';
+@import 'notfound';
+@import 'orderCart';
+@import 'orderCartDialog';
+@import 'orderTnrisDataForm';
+@import 'outsideEntityTemplate';
+@import 'outsideEntityTemplateDetails';
+@import 'sort';
+@import 'themeChooser';
+@import 'tnrisDownloadTemplate';
+@import 'tnrisDownloadTemplateDetails';
+@import 'tnrisDownloadTemplateDownload';
+@import 'tnrisDownloadTemplateImages';
+@import 'tnrisOrderTemplate';
+@import 'toolDrawer';

@@ -3,6 +3,9 @@ styles for component: Catalog
 */
 
 .catalog-component {
+  a {
+    color: $primary-color;
+  }
 
   .catalog {
     padding-top: 100px;

@@ -5,7 +5,7 @@ styles for component: Header
 .header-component {
   @include mdc-top-app-bar-ink-color($skin-secondary);
   @include mdc-top-app-bar-icon-ink-color($skin-secondary);
-  @include mdc-top-app-bar-fill-color($skin-text);
+  @include mdc-top-app-bar-fill-color($header-bar);
   border-bottom: solid 1px $skin-secondary;
 
   .header-title {

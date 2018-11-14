@@ -108,6 +108,10 @@ styles for component: OrderTnrisDataForm
   .mdc-typography--caption {
     margin-left: 44px;
     color: rgba(0, 0, 0, 0.6);
+
+    a {
+      color: $primary-color;
+    }
   }
 
   .mdc-form-field {
@@ -131,6 +135,12 @@ styles for component: OrderTnrisDataForm
     display: flex;
     justify-content: center;
     align-items: center;
+
+    .mdc-button--raised:not(:disabled),
+    .mdc-button--unelevated:not(:disabled) {
+      background-color: $primary-color;
+      color: $text-color;
+    }
   }
 
   .order-cart-form-success {

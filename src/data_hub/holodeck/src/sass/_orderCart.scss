@@ -3,6 +3,12 @@ styles for component: OrderCart
 */
 
 .order-cart-form-component-container {
+  header {
+    @include mdc-top-app-bar-ink-color($text-color);
+    @include mdc-top-app-bar-icon-ink-color($text-color);
+    @include mdc-top-app-bar-fill-color($primary-color);
+  }
+
   overflow-y: auto;
   overflow-x: hidden;
 
@@ -118,6 +124,12 @@ styles for component: OrderCart
       display: flex;
       justify-content: center;
       align-items: center;
+
+      .mdc-button--raised:not(:disabled),
+      .mdc-button--unelevated:not(:disabled) {
+        background-color: $primary-color;
+        color: $text-color;
+      }
     }
 
     .default-order-cart-display {

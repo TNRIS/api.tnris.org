@@ -40,6 +40,12 @@ styles for component: ToolDrawer
         padding-bottom: 8px;
         display: flex;
         justify-content: center;
+
+        .mdc-button--raised:not(:disabled),
+        .mdc-button--unelevated:not(:disabled) {
+          background-color: $primary-color;
+          color: $text-color;
+        }
       }
     }
   }

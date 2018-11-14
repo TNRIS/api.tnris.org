@@ -3,7 +3,8 @@ import {MDCTopAppBar} from '@material/top-app-bar/index';
 import {MDCDrawer} from "@material/drawer";
 // import SortContainer from '../containers/SortContainer';
 
-import tnrisLogo from '../images/tnris_gray.png';
+import tnrisGray from '../images/tnris_gray.png';
+import tnrisWhite from '../images/tnris_white.png';
 
 export default class Header extends React.Component {
   constructor(props) {
@@ -36,6 +37,18 @@ export default class Header extends React.Component {
     let shoppingCartClass = "material-icons mdc-top-app-bar__navigation-icon";
     if (this.props.orders) {
       shoppingCartClass = Object.keys(this.props.orders).length !== 0 ? "material-icons mdc-top-app-bar__navigation-icon shopping-cart-full" : "material-icons mdc-top-app-bar__navigation-icon";
+    }
+
+    let tnrisLogo;
+    switch(this.props.theme) {
+      case 'light':
+        tnrisLogo = tnrisGray;
+        break;
+      case 'green':
+        tnrisLogo = tnrisWhite;
+        break;
+      default:
+      tnrisLogo = tnrisGray;
     }
 
     return (

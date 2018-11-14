@@ -1,6 +1,6 @@
 import React from 'react';
 import mapboxgl from 'mapbox-gl';
-
+import styles from '../../sass/index.scss';
 import loadingImage from '../../images/loading.gif';
 // the carto core api is a CDN in the app template HTML (not available as NPM package)
 // so we create a constant to represent it so it's available to the component
@@ -208,6 +208,7 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
       // use the tiles from the response to add a source to the map
       map.addSource(layerSourceName, { type: 'vector', tiles: areaTiles });
       // add the polygon area_type layer
+      console.log(styles.fillColor, styles.textColor);
       map.addLayer({
           id: layerBaseName,
           'type': 'fill',
@@ -215,8 +216,9 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
           'source-layer': 'layer0',
           'layout': {'visibility': visibility},
           'paint': {
-            'fill-color': 'rgba(97,12,239,0.3)',
-            'fill-outline-color': '#FFFFFF'
+            'fill-color': styles.fillColor,
+            'fill-opacity': .3,
+            'fill-outline-color': styles.textColor
           }
       });
       // add the polygon area_type hover layer. wired below to toggle on hover
@@ -227,8 +229,9 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
           'source-layer': 'layer0',
           'layout': {'visibility': visibility},
           'paint': {
-            'fill-color': 'rgba(130,109,186,.7)',
-            'fill-outline-color': '#FFFFFF'
+            'fill-color': styles.fillColor,
+            'fill-opacity': .7,
+            'fill-outline-color': styles.textColor
           },
           'filter': ['==', 'area_type_name', '']
       }, layerBaseName);
@@ -244,7 +247,7 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
             'visibility': visibility
           },
           'paint': {
-            "text-color": "#FFFFFF"
+            "text-color": styles.textColor
           }
       });
     });

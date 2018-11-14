@@ -103,6 +103,10 @@ styles for component: HistoricalAerialTemplateDetails
               line-height: 34px;
               overflow: scroll;
             }
+
+            a {
+              color: $primary-color;
+            }
           }
         }
 

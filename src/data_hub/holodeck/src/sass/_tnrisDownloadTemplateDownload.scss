@@ -20,6 +20,11 @@ styles for component: TnrisDownloadTemplateDownload
       display: block;
       text-align: center;
     }
+
+    .mdc-list-item.mdc-list-item--activated {
+      background-color: $tertiary-color;
+      color: $primary-color;
+    }
   }
 
   #tnris-download-map {

@@ -68,6 +68,12 @@ styles for component: ContactTnrisForm
     display: flex;
     justify-content: center;
     align-items: center;
+
+    .mdc-button--raised:not(:disabled),
+    .mdc-button--unelevated:not(:disabled) {
+      background-color: $primary-color;
+      color: $text-color;
+    }
   }
 
   .contact-tnris-form-success {

@@ -4,7 +4,8 @@ import { orderCartDialogActions } from '../actions';
 import Header from '../components/Header';
 
 const mapStateToProps = state => ({
-  orders: state.orderCart.orders
+  orders: state.orderCart.orders,
+  theme: state.colorTheme.theme
 });
 
 const mapDispatchToProps = dispatch => ({

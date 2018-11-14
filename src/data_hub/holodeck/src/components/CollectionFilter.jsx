@@ -49,6 +49,10 @@ export default class CollectionFilter extends React.Component {
       inputArray.forEach(input => {
         return input.checked = false;
       });
+      const labelArray = filterComponent.querySelectorAll("label[class='filter-active']");
+      labelArray.forEach(label => {
+        return label.classList.remove('filter-active');
+      });
       const groupArray = filterComponent.querySelectorAll("ul[id$='-list']");
       groupArray.forEach(group => {
         if (!group.classList.contains('hide-filter-list')) {

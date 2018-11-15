@@ -16,7 +16,7 @@ export default class CollectionFilterMap extends React.Component {
       mapFilteredCollectionIds: this.props.collectionFilterMapFilter
     }
     // bind our map builder and other custom functions
-    this.cleanTheMap = this.cleanTheMap.bind(this);
+    this.resetTheMap = this.resetTheMap.bind(this);
     this.enableUserInteraction = this.enableUserInteraction.bind(this);
     this.disableUserInteraction = this.disableUserInteraction.bind(this);
     this.handleFilterButtonClick = this.handleFilterButtonClick.bind(this);
@@ -64,7 +64,7 @@ export default class CollectionFilterMap extends React.Component {
         let features = this._draw.getAll();
         if (features.features.length > 1) {
           this._draw.delete(features.features[0].id);
-          this.cleanTheMap();
+          this.resetTheMap();
         }
       }
     })
@@ -82,7 +82,7 @@ export default class CollectionFilterMap extends React.Component {
     })
 
     this._map.on('draw.delete', (e) => {
-      this.cleanTheMap();
+      this.resetTheMap();
     })
 
     if (this.props.collectionFilterMapFilter.length > 0) {
@@ -164,7 +164,7 @@ export default class CollectionFilterMap extends React.Component {
     this._navControl._zoomOutButton.disabled = true;
   }
 
-  cleanTheMap() {
+  resetTheMap() {
     // resets the map filter and aoi objects to empty, enables user
     // interaction controls, and hides the map filter button till
     // it is needed again
@@ -179,7 +179,7 @@ export default class CollectionFilterMap extends React.Component {
     // and disables/enables the user interaction handlers and navigation controls
     if (this.props.collectionFilterMapFilter.length > 0) {
       this.setState({mapFilteredCollectionIds: []});
-      this.cleanTheMap();
+      this.resetTheMap();
       this._draw.deleteAll();
     } else {
       this.props.setCollectionFilterMapFilter(this.state.mapFilteredCollectionIds);

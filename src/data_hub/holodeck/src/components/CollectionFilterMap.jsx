@@ -85,6 +85,11 @@ export default class CollectionFilterMap extends React.Component {
       this.resetTheMap();
     })
 
+    this._map.on('moveend', function() {
+      _this.props.setCollectionFilterMapCenter(_this._map.getCenter());
+      _this.props.setCollectionFilterMapZoom(_this._map.getZoom());
+    })
+
     if (this.props.collectionFilterMapFilter.length > 0) {
       if (Object.keys(this.props.collectionFilterMapAoi).length) {
         this._draw.add(this.props.collectionFilterMapAoi);
@@ -93,11 +98,6 @@ export default class CollectionFilterMap extends React.Component {
       document.getElementById('map-filter-button').classList.remove('mdc-fab--exited');
       this.disableUserInteraction();
     }
-
-    this._map.on('moveend', function() {
-      _this.props.setCollectionFilterMapCenter(_this._map.getCenter());
-      _this.props.setCollectionFilterMapZoom(_this._map.getZoom());
-    })
 
     function getExtentIntersectedCollectionIds(_this, aoiRectangle) {
       // get the bounds from the aoi rectangle and query carto
@@ -168,17 +168,16 @@ export default class CollectionFilterMap extends React.Component {
     // resets the map filter and aoi objects to empty, enables user
     // interaction controls, and hides the map filter button till
     // it is needed again
-    this.props.setCollectionFilterMapFilter([]);
     this.props.setCollectionFilterMapAoi({});
-    this.enableUserInteraction();
+    this.props.setCollectionFilterMapFilter([]);
     document.getElementById('map-filter-button').classList.add('mdc-fab--exited');
+    this.enableUserInteraction();
   }
 
   handleFilterButtonClick() {
     // sets the collection_ids array in the filter to drive the view
     // and disables/enables the user interaction handlers and navigation controls
     if (this.props.collectionFilterMapFilter.length > 0) {
-      this.setState({mapFilteredCollectionIds: []});
       this.resetTheMap();
       this._draw.deleteAll();
     } else {

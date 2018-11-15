@@ -4,6 +4,7 @@ import {
   collectionSearcherActions,
   sortActions,
   collectionFilterActions,
+  collectionFilterMapActions,
   collectionTimesliderActions,
   urlTrackerActions
 } from '../actions';
@@ -24,6 +25,18 @@ const mapDispatchToProps = dispatch => ({
   },
   setCollectionFilter: (collectionFilter) => {
     dispatch(collectionFilterActions.setCollectionFilter(collectionFilter));
+  },
+  setCollectionFilterMapAoi: (collectionFilterMapAoi) => {
+    dispatch(collectionFilterMapActions.setCollectionFilterMapAoi(collectionFilterMapAoi));
+  },
+  setCollectionFilterMapCenter: (collectionFilterMapCenter) => {
+    dispatch(collectionFilterMapActions.setCollectionFilterMapCenter(collectionFilterMapCenter));
+  },
+  setCollectionFilterMapFilter: (collectionFilterMapFilter) => {
+    dispatch(collectionFilterMapActions.setCollectionFilterMapFilter(collectionFilterMapFilter));
+  },
+  setCollectionFilterMapZoom: (collectionFilterMapZoom) => {
+    dispatch(collectionFilterMapActions.setCollectionFilterMapZoom(collectionFilterMapZoom));
   },
   setCollectionTimeslider: (collectionTimeslider) => {
     dispatch(collectionTimesliderActions.setCollectionTimeslider(collectionTimeslider));

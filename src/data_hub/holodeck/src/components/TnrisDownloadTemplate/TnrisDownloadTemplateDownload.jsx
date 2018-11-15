@@ -192,6 +192,8 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
     const layerBaseName = areaType + '__area_type' + loop;
     const layerHoverName = areaType + '__area_type_hover' + loop;
     const layerLabelName = areaType + '__area_type_label' + loop;
+    const filler = this.props.theme + "Fill";
+    const texter = this.props.theme + "Text";
     // get the raster tiles from the carto api
     cartodb.Tiles.getTiles(layerData, function (result, error) {
       if (result == null) {
@@ -208,7 +210,6 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
       // use the tiles from the response to add a source to the map
       map.addSource(layerSourceName, { type: 'vector', tiles: areaTiles });
       // add the polygon area_type layer
-      console.log(styles.fillColor, styles.textColor);
       map.addLayer({
           id: layerBaseName,
           'type': 'fill',
@@ -216,9 +217,9 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
           'source-layer': 'layer0',
           'layout': {'visibility': visibility},
           'paint': {
-            'fill-color': styles.fillColor,
+            'fill-color': styles[filler],
             'fill-opacity': .3,
-            'fill-outline-color': styles.textColor
+            'fill-outline-color': styles[texter]
           }
       });
       // add the polygon area_type hover layer. wired below to toggle on hover
@@ -229,9 +230,9 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
           'source-layer': 'layer0',
           'layout': {'visibility': visibility},
           'paint': {
-            'fill-color': styles.fillColor,
+            'fill-color': styles[filler],
             'fill-opacity': .7,
-            'fill-outline-color': styles.textColor
+            'fill-outline-color': styles[texter]
           },
           'filter': ['==', 'area_type_name', '']
       }, layerBaseName);
@@ -247,7 +248,7 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
             'visibility': visibility
           },
           'paint': {
-            "text-color": styles.textColor
+            "text-color": styles[texter]
           }
       });
     });

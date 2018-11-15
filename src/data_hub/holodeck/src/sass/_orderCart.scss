@@ -134,6 +134,11 @@ styles for component: OrderCart
 
     .default-order-cart-display {
       text-align: center;
+
+      button {
+        background-color: $primary-color;
+        color: $text-color;
+      }
     }
 
     .order-cart-form-success {

@@ -7,7 +7,6 @@ export default class CollectionSearcher extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      searchQuery: this.props.collectionSearchQuery,
       badUrlFlag: false
     }
     this.handleSearch = this.handleSearch.bind(this);
@@ -33,6 +32,12 @@ export default class CollectionSearcher extends React.Component {
           badUrlFlag: true
         });
       }
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.collectionSearchQuery === "") {
+      document.getElementById('search-collections').value = '';
     }
   }
 

@@ -5,7 +5,6 @@ export default class CollectionFilter extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      filters: this.props.collectionFilter,
       badUrlFlag: false
     }
     this.handleOpenFilterMenu = this.handleOpenFilterMenu.bind(this);
@@ -40,6 +39,34 @@ export default class CollectionFilter extends React.Component {
           badUrlFlag: true
         });
       }
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (Object.keys(nextProps.collectionFilter).length === 0) {
+      const filterComponent = document.getElementById('filter-component');
+      const inputArray = filterComponent.querySelectorAll("input");
+      inputArray.forEach(input => {
+        return input.checked = false;
+      });
+      const labelArray = filterComponent.querySelectorAll("label[class='filter-active']");
+      labelArray.forEach(label => {
+        return label.classList.remove('filter-active');
+      });
+      const groupArray = filterComponent.querySelectorAll("ul[id$='-list']");
+      groupArray.forEach(group => {
+        if (!group.classList.contains('hide-filter-list')) {
+          group.classList.add('hide-filter-list');
+        }
+        return group;
+      });
+      const iconArray = filterComponent.querySelectorAll("i[id$='-expansion-icon']");
+      iconArray.forEach(icon => {
+        if (icon.innerHTML === 'expand_less') {
+          icon.innerHTML = 'expand_more';
+        }
+        return icon;
+      });
     }
   }
 
@@ -99,7 +126,7 @@ export default class CollectionFilter extends React.Component {
       return <Redirect to='/404' />;
     }
     return (
-      <div className='filter-component'>
+      <div id='filter-component' className='filter-component'>
         <ul className='mdc-list'>
           {
             Object.keys(this.props.collectionFilterChoices).map(choice =>

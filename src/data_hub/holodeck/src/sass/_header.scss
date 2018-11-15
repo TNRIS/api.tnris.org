@@ -49,6 +49,13 @@ styles for component: Header
         color: $alt-color;
       }
     }
+
+    .tnris-logo-text {
+      font-style: italic;
+      font-family: crillee;
+      font-weight: 900;
+      letter-spacing: -1px;
+    }
   }
 
 }

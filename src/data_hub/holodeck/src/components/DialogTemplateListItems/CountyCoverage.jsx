@@ -82,19 +82,19 @@ export default class CountyCoverage extends React.Component {
             }
         });
         // add the labels layer for the area_type polygons
-        map.addLayer({
-            id: 'county-polygons-labels',
-            'type': 'symbol',
-            'source': 'county-polygons-source',
-            'source-layer': 'layer0',
-            // 'minzoom': 10,
-            'layout': {
-              "text-field": "{area_type_name}"
-            },
-            'paint': {
-              "text-color": styles[texter]
-            }
-        });
+        // map.addLayer({
+        //     id: 'county-polygons-labels',
+        //     'type': 'symbol',
+        //     'source': 'county-polygons-source',
+        //     'source-layer': 'layer0',
+        //     // 'minzoom': 10,
+        //     'layout': {
+        //       "text-field": "{area_type_name}"
+        //     },
+        //     'paint': {
+        //       "text-color": styles[texter]
+        //     }
+        // });
     });
   }
 

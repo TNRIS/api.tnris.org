@@ -5,6 +5,9 @@ styles for component: ToolDrawer
 .tool-drawer-component {
 
   .mdc-drawer {
+    @include mdc-drawer-surface-fill-color($main-background);
+    @include mdc-drawer-divider-color($empty-border);
+
 
     .mdc-drawer__content {
       overflow-x: hidden;
@@ -13,7 +16,7 @@ styles for component: ToolDrawer
 
       .dataset-counter {
         background: $skin-tertiary;
-        color: $secondary-color;
+        color: $skin-text;
         text-align: center;
         height: 26px;
         line-height: 26px;

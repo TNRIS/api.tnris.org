@@ -36,6 +36,12 @@ export default class Catalog extends React.Component {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    const themedClass = nextProps.theme + "-app-theme";
+    const html = document.querySelector('html');
+    html.className = themedClass;
+  }
+
   render() {
     const { error, loading } = this.props;
     const loadingMessage = (
@@ -56,10 +62,8 @@ export default class Catalog extends React.Component {
       return <Redirect to='/404' />;
     }
 
-    const themedClass = "catalog-component " + this.props.theme + "-app-theme";
-
     return (
-      <div className={themedClass}>
+      <div className="catalog-component ">
         {/*<Drawer />*/}
         <ToolDrawerContainer match={this.props.match} history={this.props.history} total={this.props.visibleCollections ? this.props.visibleCollections.length : 0} />
         <HeaderContainer />

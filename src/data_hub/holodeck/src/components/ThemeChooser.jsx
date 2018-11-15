@@ -4,7 +4,7 @@ class ThemeChooser extends Component {
   constructor(props) {
       super(props);
       this.setColorTheme = this.setColorTheme.bind(this);
-      this.themeOptions = ['light', 'green'];
+      this.themeOptions = ['light', 'earth'];
   }
 
   componentDidMount() {
@@ -29,14 +29,14 @@ class ThemeChooser extends Component {
   render() {
     return (
       <div className="theme-chooser-component">
-          <div onClick={() => this.setColorTheme('light')}
-               className="theme-chooser-option light-app-theme">
-               purple
-          </div>
-          <div onClick={() => this.setColorTheme('green')}
-               className="theme-chooser-option green-app-theme">
-               green
-          </div>
+        {this.themeOptions.map(theme => {
+          const label = theme.charAt(0).toUpperCase() + theme.slice(1);
+          const themeClass = `theme-chooser-option ${theme}-app-theme`;
+          return <div key={theme}
+                      onClick={() => this.setColorTheme(theme)}
+                      className={themeClass}
+                      title={label}></div>
+        })}
       </div>
     )
   }

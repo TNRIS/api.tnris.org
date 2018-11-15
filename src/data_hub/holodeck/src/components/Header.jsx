@@ -44,7 +44,7 @@ export default class Header extends React.Component {
       case 'light':
         tnrisLogo = tnrisGray;
         break;
-      case 'green':
+      case 'earth':
         tnrisLogo = tnrisWhite;
         break;
       default:
@@ -67,8 +67,9 @@ export default class Header extends React.Component {
         <div className="header-nav mdc-top-app-bar__row">
           <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
             {/*<i className="material-icons mdc-top-app-bar__navigation-icon">menu</i>*/}
-            <a href="https://tnris.org" className="mdc-top-app-bar__action-item">
+            <a href="https://tnris.org" className="mdc-top-app-bar__action-item tnris-logo-text">
               <img src={tnrisLogo} aria-label="TNRIS Logo" alt="TNRIS Logo" className="logo" />
+              {/*TNRIS*/}
             </a>
             <span className="mdc-top-app-bar__title">Data Holodeck</span>
           </section>

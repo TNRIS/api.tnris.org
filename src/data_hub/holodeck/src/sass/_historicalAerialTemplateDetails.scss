@@ -11,12 +11,8 @@ styles for component: HistoricalAerialTemplateDetails
     padding-bottom: 15px;
 
     .mdc-typography--body2 {
-        color: rgba(0, 0, 0, 0.6);
+        color: $nest-text;
         padding: 15px;
-
-        strong {
-          color: initial;
-        }
     }
 
     #county-coverage-map {
@@ -35,7 +31,7 @@ styles for component: HistoricalAerialTemplateDetails
     padding-bottom: 15px;
 
     .mdc-typography--body2 {
-        color: rgba(0, 0, 0, 0.6);
+        color: $nest-text;
         padding: 15px;
     }
 
@@ -141,6 +137,8 @@ styles for component: HistoricalAerialTemplateDetails
           margin-left: 5px;
           margin-right: 5px;
           text-align: center;
+          background-color: $primary-color;
+          color: $text-color;
 
           i {
             margin-right: 5px;
@@ -158,6 +156,8 @@ styles for component: HistoricalAerialTemplateDetails
   .template-content-div {
     box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
     margin-bottom: 15px;
+    background-color: $nest-background;
+    color: $nest-text;
 
     .template-content-div-header {
       color: $template-dialog-header-script;
@@ -165,9 +165,14 @@ styles for component: HistoricalAerialTemplateDetails
       text-align: center;
     }
 
+    a {
+      color: $primary-color;
+    }
+
     p {
       padding: 6px;
       margin: 0;
+      white-space: pre-line;
     }
 
     .mdc-list {
@@ -177,6 +182,7 @@ styles for component: HistoricalAerialTemplateDetails
         min-height: 34px;
         height: initial;
         border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        color: $nest-text;
 
         strong {
           margin-right: 4px;

@@ -7,17 +7,62 @@ styles for component: TnrisOrderTemplate
     @include mdc-top-app-bar-ink-color($text-color);
     @include mdc-top-app-bar-icon-ink-color($text-color);
     @include mdc-top-app-bar-fill-color($primary-color);
+    border-bottom: solid 1px $skin-secondary;
   }
-  
+
   height: 100%;
   overflow-y: auto;
+  background-color: $main-background;
 
   &:focus {
     outline: none;
   }
 
-  .collection-dialog__image {
-    max-width: 100%;
+  section.mdc-top-app-bar__section.mdc-top-app-bar__section--align-end {
+    min-width: 200px;
+
+    div.mdc-tab-bar {
+      .mdc-tab {
+        max-width: 25px;
+        span {
+          color: $text-color;
+        }
+        .mdc-tab-indicator--active {
+          .mdc-tab-indicator__content--underline {
+            background-color: $text-color;
+          }
+        }
+      }
+    }
+
+    div.mdc-menu-surface--anchor {
+      .mdc-list {
+        i {
+          margin-right: 6px;
+        }
+      }
+    }
+
+    @media (max-width: mdc-layout-grid-breakpoint-max(tablet)) {
+      .mdc-tab-bar {
+        display: none;
+      }
+
+      .mdc-menu-surface--anchor {
+        display: flex;
+      }
+    }
+
+    @media (min-width: mdc-layout-grid-breakpoint-max(tablet)) {
+      .mdc-tab-bar {
+        display: block;
+      }
+
+      .mdc-menu-surface--anchor {
+        display: none;
+      }
+    }
+
   }
 
 }

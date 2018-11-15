@@ -237,20 +237,20 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
           'filter': ['==', 'area_type_name', '']
       }, layerBaseName);
       // add the labels layer for the area_type polygons
-      map.addLayer({
-          id: layerLabelName,
-          'type': 'symbol',
-          'source': layerSourceName,
-          'source-layer': 'layer0',
-          // 'minzoom': 10,
-          'layout': {
-            "text-field": "{area_type_name}",
-            'visibility': visibility
-          },
-          'paint': {
-            "text-color": styles[texter]
-          }
-      });
+      // map.addLayer({
+      //     id: layerLabelName,
+      //     'type': 'symbol',
+      //     'source': layerSourceName,
+      //     'source-layer': 'layer0',
+      //     // 'minzoom': 10,
+      //     'layout': {
+      //       "text-field": "{area_type_name}",
+      //       'visibility': visibility
+      //     },
+      //     'paint': {
+      //       "text-color": styles[texter]
+      //     }
+      // });
     });
     // add the layer id's to the areaType's array in the layerRef for toggling
     this.layerRef[areaType].push(layerBaseName, layerHoverName, layerLabelName);

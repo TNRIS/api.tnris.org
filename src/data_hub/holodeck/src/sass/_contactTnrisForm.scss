@@ -15,6 +15,10 @@ styles for component: ContactTnrisForm
     border-bottom-style: solid;
     margin-bottom: 16px;
     display: flex;
+
+    input {
+      color: $nest-text;
+    }
   }
 
   .mdc-select:not(.mdc-select--disabled) {
@@ -30,9 +34,14 @@ styles for component: ContactTnrisForm
       -webkit-appearance: none;
       -moz-appearance: none;
       appearance: none;
+      color: $nest-text;
 
       option:not([disabled]) {
-        color: black;
+        color: $nest-text;
+      }
+
+      option {
+        background-color: $nest-background;
       }
     }
 
@@ -43,9 +52,17 @@ styles for component: ContactTnrisForm
   }
 
   div.mdc-text-field--textarea {
-    label {
-
+    textarea {
+      color: $nest-text;
     }
+
+    label {
+      background-color: $nest-background;
+    }
+  }
+
+  .mdc-text-field--focused {
+    border-color: $primary-color;
   }
 
   .mdc-text-field--invalid {

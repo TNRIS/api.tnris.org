@@ -7,10 +7,12 @@ styles for component: OrderCart
     @include mdc-top-app-bar-ink-color($text-color);
     @include mdc-top-app-bar-icon-ink-color($text-color);
     @include mdc-top-app-bar-fill-color($primary-color);
+    border-bottom: solid 1px $skin-secondary;
   }
 
   overflow-y: auto;
   overflow-x: hidden;
+  background-color: $main-background;
 
   .order-cart-form-component {
     @include mdc-text-field-bottom-line-color(rgba(0,0,0,.42));
@@ -24,6 +26,7 @@ styles for component: OrderCart
 
     padding: 15px;
     margin-top: 64px;
+    color: $nest-text;
 
     .order-cart-data-items {
       .mdc-list-item {
@@ -37,11 +40,36 @@ styles for component: OrderCart
       }
     }
 
+    .mdc-list {
+      color: $primary-color;
+      
+      .mdc-list-item {
+        .mdc-list-item__graphic {
+          color: $primary-color;
+        }
+
+        .mdc-list-item__text {
+          .mdc-list-item__primary-text {
+            color: $primary-color;
+          }
+
+          .mdc-list-item__secondary-text {
+            color: $nest-text;
+          }
+        }
+      }
+
+    }
+
     div.mdc-text-field {
       border-bottom-width: 1px;
       border-bottom-style: solid;
       margin-bottom: 16px;
       display: flex;
+
+      input {
+        color: $nest-text;
+      }
     }
 
     .mdc-text-field--invalid {
@@ -73,9 +101,14 @@ styles for component: OrderCart
         -webkit-appearance: none;
         -moz-appearance: none;
         appearance: none;
+        color: $nest-text;
 
         option:not([disabled]) {
           color: black;
+        }
+
+        option {
+          background-color: $nest-background;
         }
       }
 
@@ -85,17 +118,22 @@ styles for component: OrderCart
 
     }
 
+    .mdc-radio .mdc-radio__native-control:enabled:not(:checked) + .mdc-radio__background .mdc-radio__outer-circle {
+      border-color: $nest-text;
+    }
+
     .mdc-typography--headline6 {
       margin-bottom: 10px;
+      color: $nest-text;
     }
 
     .mdc-typography--body2 {
-      color: rgba(0, 0, 0, 0.6);
+      color: $nest-text;
     }
 
     .mdc-typography--caption {
       margin-left: 44px;
-      color: rgba(0, 0, 0, 0.6);
+      color: $nest-text;
     }
 
     .expiration-note {
@@ -107,6 +145,7 @@ styles for component: OrderCart
 
       label {
         cursor: pointer;
+        color: $nest-text;
       }
     }
 

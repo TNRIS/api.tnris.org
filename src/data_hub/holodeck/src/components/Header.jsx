@@ -26,6 +26,14 @@ export default class Header extends React.Component {
 
   handleOpenToolDrawer() {
     this.toolDrawer.open = !this.toolDrawer.open;
+
+    const headerElement = document.getElementById('master-header');
+    if (headerElement.classList.contains('open-drawer')) {
+      headerElement.classList.remove('open-drawer');
+    }
+    else {
+      headerElement.classList.add('open-drawer');
+    }
   }
 
   handleOpenOrderCartDialog() {
@@ -34,12 +42,19 @@ export default class Header extends React.Component {
 
   render() {
     let shoppingCartClass = "material-icons mdc-top-app-bar__navigation-icon";
+
     if (this.props.orders) {
       shoppingCartClass = Object.keys(this.props.orders).length !== 0 ? "material-icons mdc-top-app-bar__navigation-icon shopping-cart-full" : "material-icons mdc-top-app-bar__navigation-icon";
     }
 
+    let dismissClass;
+
+    if (this.props.view === 'dismiss') {
+      dismissClass = 'open-drawer';
+    }
+
     return (
-      <header className="header-component mdc-top-app-bar mdc-top-app-bar--fixed">
+      <header className={`header-component mdc-top-app-bar mdc-top-app-bar--fixed ${dismissClass}`} id="master-header">
         <div className="header-title mdc-top-app-bar__row">
           <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
             <span className='header-title__tnris'>Texas Natural Resources Information System</span>

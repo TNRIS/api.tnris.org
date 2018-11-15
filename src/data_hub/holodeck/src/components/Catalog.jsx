@@ -9,7 +9,7 @@ import CollectionFilterMapDialogContainer from '../containers/CollectionFilterMa
 import HeaderContainer from '../containers/HeaderContainer';
 import OrderCartDialogContainer from '../containers/OrderCartDialogContainer';
 import ToolDrawer from './ToolDrawer';
-// import { MDCDrawer } from "@material/drawer";
+import { MDCDrawer } from "@material/drawer";
 import loadingImage from '../images/loading.gif';
 
 export default class Catalog extends React.Component {
@@ -17,15 +17,29 @@ export default class Catalog extends React.Component {
     super(props);
     this.state = {
       badUrlFlag: false,
-      toolDrawerView: 'dismiss'
+      toolDrawerView: 'dismiss',
+      toolDrawerStatus: true
     }
 
-    window.innerWidth >= 1052 ? this.state = {toolDrawerView:'dismiss'} : this.state = {toolDrawerView: 'modal'};
+    window.innerWidth >= 1000 ? this.state = {toolDrawerView:'dismiss'} : this.state = {toolDrawerView: 'modal'};
+
     this.handleResize = this.handleResize.bind(this);
+    this.handleOpenToolDrawer = this.handleOpenToolDrawer.bind(this);
   }
 
   handleResize() {
-    window.innerWidth >= 1052 ? this.setState({toolDrawerView:'dismiss'}) : this.setState({toolDrawerView:'modal'});
+    window.innerWidth >= 1000 ? this.setState({toolDrawerView:'dismiss'}) : this.setState({toolDrawerView:'modal'});
+  }
+
+  handleOpenToolDrawer() {
+    const mainElement = document.getElementById('main');
+
+    // use MDC drawer methods such as open or closed to set state status as true or false
+    if (MDCDrawer) {
+      // console.log(window.getComputedStyle(mainElement));
+      console.log('handleOpenToolDrawer function just ran...');
+
+    }
   }
 
   componentDidMount() {
@@ -33,11 +47,13 @@ export default class Catalog extends React.Component {
     // this.props.fetchResources();
     this.props.fetchStoredShoppingCart();
     window.addEventListener("resize", this.handleResize);
+    window.addEventListener("click", this.handleOpenToolDrawer);
     // this.toolDrawer = MDCDrawer.attachTo(document.querySelector('.catalog-component'));
   }
 
   componentWillUnmount() {
     window.removeEventListener("resize", this.handleResize);
+    // window.removeEventListener("click", this.handleOpenToolDrawer);
   }
 
   componentDidUpdate() {
@@ -53,14 +69,22 @@ export default class Catalog extends React.Component {
 
   render() {
     const { error, loading } = this.props;
+
     const loadingMessage = (
         <div className="catalog-component__loading">
           <img src={loadingImage} alt="Holodeck Loading..." className="holodeck-loading-image" />
         </div>
       );
+
+    let dismissClass;
+
+    if (this.state.toolDrawerView === 'dismiss') {
+      dismissClass = 'open-drawer';
+    }
+
     const mainContent = (
-      <div className='main'>
-        <HeaderContainer />
+      <div className={dismissClass}>
+        <HeaderContainer view={this.state.toolDrawerView} />
         <div className='catalog'>
           <CollectionDialogContainer history={this.props.history} />
           <OrderCartDialogContainer />
@@ -88,21 +112,16 @@ export default class Catalog extends React.Component {
     }
 
     return (
-      <div className="catalog-component">
+      <div className="catalog-component" id="main">
 
         <ToolDrawer match={this.props.match}
           history={this.props.history}
           total={this.props.visibleCollections ? this.props.visibleCollections.length : 0}
           view={this.state.toolDrawerView}
+          status={this.state.toolDrawerStatus}
         />
 
-        {this.state.toolDrawerView === 'dismiss' ? <div className="mdc-drawer-app-content">{mainContent}</div> : mainContent}
-
-      {/*this.state.toolDrawerView === 'dismiss' ?
-        <div className="mdc-drawer-app-content">
-          <main className='main-content' id='main-content'>{mainContent}</main>
-        </div>
-        : mainContent*/}
+      {mainContent}
 
       </div>
     );

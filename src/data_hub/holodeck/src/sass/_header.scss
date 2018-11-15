@@ -30,12 +30,24 @@ styles for component: Header
         text-decoration: none;
         color: inherit;
         font-size: 12px;
+        text-align: right;
       }
-    }
 
+      .header-title__tnris {
+        text-decoration: none;
+        text-align: left;
+        color: inherit;
+      }
+
+    }
   }
 
   .header-nav {
+
+    .open-drawer {
+      width: calc(100% - 255px);
+      transition: width 0.3s;
+    }
 
     .mdc-top-app-bar__action-item {
       margin-left: 3px;

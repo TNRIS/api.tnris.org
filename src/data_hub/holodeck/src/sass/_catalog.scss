@@ -4,15 +4,9 @@ styles for component: Catalog
 
 .catalog-component {
 
-  .mdc-drawer-app-content {
-    flex: auto;
-    overflow: auto;
-    position: relative;
-
-    .main-content {
-      overflow: auto;
-      height: 100%;
-    }
+  .open-drawer {
+    width: calc(100% - 255px);
+    transition: width 0.3s;
   }
 
   .catalog {

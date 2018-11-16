@@ -98,20 +98,29 @@ export default class Catalog extends React.Component {
 
     return (
       <div className="catalog-component">
-        {/*<Drawer />*/}
-        <ToolDrawerContainer match={this.props.match} history={this.props.history} total={this.props.visibleCollections ? this.props.visibleCollections.length : 0} />
-        <HeaderContainer />
-        <div className='catalog'>
-          <CollectionDialogContainer history={this.props.history} />
-          <OrderCartDialogContainer />
-          <CollectionFilterMapDialogContainer />
-          <ul className='catalog-list mdc-image-list mdc-image-list--with-text-protection'>
-            {this.props.visibleCollections ? this.props.visibleCollections.map(collectionId =>
-              <CatalogCardContainer collection={this.props.collections[collectionId]} key={collectionId} match={this.props.match} history={this.props.history} />
-            ) : loadingMessage}
-          </ul>
-        </div>
 
+        <CollectionDialogContainer history={this.props.history} />
+        <OrderCartDialogContainer />
+        <CollectionFilterMapDialogContainer />
+
+        <ToolDrawerContainer
+          match={this.props.match}
+          history={this.props.history}
+          total={this.props.visibleCollections ? this.props.visibleCollections.length : 0}
+          view={this.state.toolDrawerView}
+        />
+
+        <HeaderContainer view={this.state.toolDrawerView}/>
+
+        <div className={dismissClass} id="dismiss-class">
+          <div className='catalog'>
+            <ul className='catalog-list mdc-image-list mdc-image-list--with-text-protection'>
+              {this.props.visibleCollections ? this.props.visibleCollections.map(collectionId =>
+                <CatalogCardContainer collection={this.props.collections[collectionId]} key={collectionId} match={this.props.match} history={this.props.history} />
+              ) : loadingMessage}
+            </ul>
+          </div>
+        </div>
       </div>
     );
   }

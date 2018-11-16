@@ -42,7 +42,7 @@ styles for component: OrderCart
 
     .mdc-list {
       color: $primary-color;
-      
+
       .mdc-list-item {
         .mdc-list-item__graphic {
           color: $primary-color;
@@ -54,8 +54,12 @@ styles for component: OrderCart
           }
 
           .mdc-list-item__secondary-text {
-            color: $nest-text;
+            color: $nest-text-subtle;
           }
+        }
+
+        .mdc-list-item__meta {
+          color: $nest-text-subtle;
         }
       }
 
@@ -109,6 +113,7 @@ styles for component: OrderCart
 
         option {
           background-color: $nest-background;
+          color: $nest-text !important;
         }
       }
 
@@ -133,7 +138,7 @@ styles for component: OrderCart
 
     .mdc-typography--caption {
       margin-left: 44px;
-      color: $nest-text;
+      color: $nest-text-subtle;
     }
 
     .expiration-note {

@@ -29,7 +29,8 @@ $alt-color: #b088e8;
 
 $main-background: white;
 $nest-background: white;
-$nest-text: initial;
+$nest-text: #444;
+$nest-text-subtle: #6E7777;
 
 //used to color dialog div headers
 $template-dialog-header: #272727;
@@ -71,11 +72,12 @@ When adding new themes you will also need to update:
   $text-color: white;
   $header-bar: green;
   // used for indicators
-  $alt-color: brown;
+  $alt-color: saddlebrown;
 
   $main-background: burlywood;
   $nest-background: bisque;
-  $nest-text: brown;
+  $nest-text: saddlebrown;
+  $nest-text-subtle: chocolate;
   background-color: $main-background;
 
   //used to color dialog div headers
@@ -83,7 +85,7 @@ When adding new themes you will also need to update:
   $template-dialog-header-script: white;
 
   $empty-border: #6E7777;
-  $empty-fill: white;
+  $empty-fill: $main-background;
 
   $error-text: red;
   $success-text: green;

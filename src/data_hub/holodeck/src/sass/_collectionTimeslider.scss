@@ -11,24 +11,29 @@ styles for component: CollectionTimeslider
     text-align: center;
     margin-top: 6px;
     margin-bottom: 6px;
+    color: $nest-text;
   }
 
   .rc-slider {
     .rc-slider-handle {
-      border: solid 2px $secondary-color;
-      background-color: $tertiary-color;
+      border: solid 2px $primary-color;
+      background-color: $secondary-color;
       cursor: pointer;
 
       &:active {
-        box-shadow: 0 0 10px $secondary-color;
-        -webkit-box-shadow: 0 0 10px $secondary-color;
+        box-shadow: 0 0 10px $primary-color;
+        -webkit-box-shadow: 0 0 10px $primary-color;
         cursor: grabbing;
         cursor: -webkit-grabbing;
       }
     }
 
+    .rc-slider-rail {
+      background-color: $nest-text-subtle;
+    }
+
     .rc-slider-track {
-      background-color: $tertiary-color;
+      background-color: $secondary-color;
     }
   }
 }

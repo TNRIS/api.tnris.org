@@ -4,10 +4,28 @@ styles for component: CollectionSearcher
 
 .search-component {
 
+  input:focus::-webkit-input-placeholder {
+    color: $primary-color;
+  }
+  input:focus:-moz-placeholder {
+    color: $primary-color;
+  }
+  input:focus::-moz-placeholder {
+    color: $primary-color;
+  }
+  input:focus:-ms-input-placeholder {
+    color: $primary-color;
+  }
+
   .mdc-text-field__input {
     padding: 0 7px 0 16px !important;
     border-bottom-color: rgba(0,0,0,0.12) !important;
     color: $nest-text;
+    caret-color: $primary-color;
+  }
+
+  .mdc-text-field__input::placeholder {
+    color: $nest-text-subtle;
   }
 
   input[type="search"]::-webkit-search-decoration:hover,

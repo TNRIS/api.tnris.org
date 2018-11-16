@@ -10,6 +10,10 @@ styles for component: ContactTnrisForm
 
   padding: 15px;
 
+  p.mdc-typography--body2 {
+    margin-bottom: 6px;
+  }
+
   div.mdc-text-field {
     border-bottom-width: 1px;
     border-bottom-style: solid;

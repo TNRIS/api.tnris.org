@@ -5,6 +5,7 @@ import {MDCDrawer} from "@material/drawer";
 
 import tnrisGray from '../images/tnris_gray.png';
 import tnrisWhite from '../images/tnris_white.png';
+import tnrisFuego from '../images/tnris_fuego.png';
 
 export default class Header extends React.Component {
   constructor(props) {
@@ -49,6 +50,9 @@ export default class Header extends React.Component {
         break;
       case 'earth':
         tnrisLogo = tnrisWhite;
+        break;
+      case 'fuego':
+        tnrisLogo = tnrisFuego;
         break;
       default:
       tnrisLogo = tnrisGray;

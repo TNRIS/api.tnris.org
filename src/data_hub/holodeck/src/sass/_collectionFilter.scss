@@ -44,6 +44,7 @@ styles for component: CollectionFilter
 
       @include mdc-checkbox-container-colors($nest-text-subtle, $empty-fill, $primary-color, $primary-color);
       @include mdc-checkbox-focus-indicator-color($primary-color);
+      @include mdc-checkbox-ink-color($slider-fill);
     }
   }
 }

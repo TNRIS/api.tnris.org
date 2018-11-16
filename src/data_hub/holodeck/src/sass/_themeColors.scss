@@ -15,8 +15,10 @@ CURRENTLY: light
 // need to set the primary globally so the theme chooser has access to them all
 // these won't be overwritten
 $default-theme-primary: white;
-$earth-theme-primary: green;
 $dark-theme-primary: #282828;
+$earth-theme-primary: green;
+$fuego-theme-primary: #60389F;
+
 
 // set the rest of them
 // these will all be overwritten
@@ -35,6 +37,8 @@ $nest-text-subtle: gray;
 //used to color dialog div headers
 $template-dialog-header: #272727;
 $template-dialog-header-script: #d2f1ff;
+
+$slider-fill: #dbc8f4;
 
 $empty-border: #6E7777;
 $empty-fill: white;
@@ -66,7 +70,6 @@ When adding new themes you will also need to update:
 */
 
 .dark-app-theme {
-
   $primary-color: $dark-theme-primary;
   $secondary-color: #6E7777;
   $text-color: lightgray;
@@ -84,6 +87,8 @@ When adding new themes you will also need to update:
   $template-dialog-header: $header-bar;
   $template-dialog-header-script: $text-color;
 
+  $slider-fill: $secondary-color;
+
   $empty-border: #6E7777;
   $empty-fill: $main-background;
 
@@ -99,7 +104,6 @@ When adding new themes you will also need to update:
 }
 
 .earth-app-theme {
-
   $primary-color: $earth-theme-primary;
   $secondary-color: lightgreen;
   $text-color: white;
@@ -117,6 +121,8 @@ When adding new themes you will also need to update:
   $template-dialog-header: green;
   $template-dialog-header-script: white;
 
+  $slider-fill: $secondary-color;
+
   $empty-border: #6E7777;
   $empty-fill: $main-background;
 
@@ -131,9 +137,45 @@ When adding new themes you will also need to update:
   @import 'componentSassImporter';
 }
 
+.fuego-app-theme {
+
+  $primary-color: $fuego-theme-primary;
+  $secondary-color: #D588FF;
+  $text-color: #FEEF00;
+  $header-bar: $primary-color;
+  // used for indicators
+  $alt-color: #FEEF00;
+
+  $main-background: #D487FF;
+  $nest-background: #e4c0fc;
+  $nest-text: #8D2522;
+  $nest-text-subtle: white;
+  background-color: $main-background;
+
+  //used to color dialog div headers
+  $template-dialog-header: $primary-color;
+  $template-dialog-header-script: #FEEF00;
+
+  $slider-fill: white;
+
+  $empty-border: #6E7777;
+  $empty-fill: $main-background;
+
+  $error-text: red;
+  $success-text: green;
+
+  $skin-primary: $primary-color;
+  $skin-secondary: #C1D756;
+  $skin-tertiary: #C1D756;
+  $skin-text: white;
+
+  @import 'componentSassImporter';
+}
+
 // export colors for use by jsx. specifically, tnrisDownloadTemplateDownload map
 :export {
   lightFill: #7E39F1; lightText: white;
   darkFill: #6E7777; darkText: lightgray;
   earthFill: lightgreen; earthText: white;
+  fuegoFill: #D588FF; fuegoText: #FEEF00;
         }

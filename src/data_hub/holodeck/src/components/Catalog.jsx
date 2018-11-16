@@ -8,8 +8,7 @@ import Footer from './Footer';
 import CollectionFilterMapDialogContainer from '../containers/CollectionFilterMapDialogContainer';
 import HeaderContainer from '../containers/HeaderContainer';
 import OrderCartDialogContainer from '../containers/OrderCartDialogContainer';
-import ToolDrawer from './ToolDrawer';
-// import { MDCDrawer } from "@material/drawer";
+import ToolDrawerContainer from '../containers/ToolDrawerContainer';
 import loadingImage from '../images/loading.gif';
 
 export default class Catalog extends React.Component {
@@ -98,28 +97,19 @@ export default class Catalog extends React.Component {
     }
 
     return (
-      <div className="catalog-component" id="main">
-
-        <CollectionDialogContainer history={this.props.history} />
-        <OrderCartDialogContainer />
-        <CollectionFilterMapDialogContainer />
-
-        <ToolDrawer match={this.props.match}
-          history={this.props.history}
-          total={this.props.visibleCollections ? this.props.visibleCollections.length : 0}
-          view={this.state.toolDrawerView}
-        />
-
-        <div className={dismissClass} id='dismiss-class'>
-          <HeaderContainer view={this.state.toolDrawerView} />
-          <div className='catalog'>
-            <ul className='catalog-list mdc-image-list mdc-image-list--with-text-protection'>
-              {this.props.visibleCollections ? this.props.visibleCollections.map(collectionId =>
-                <CatalogCardContainer collection={this.props.collections[collectionId]} key={collectionId} match={this.props.match} history={this.props.history} />
-              ) : loadingMessage}
-            </ul>
-          </div>
-          <Footer />
+      <div className="catalog-component">
+        {/*<Drawer />*/}
+        <ToolDrawerContainer match={this.props.match} history={this.props.history} total={this.props.visibleCollections ? this.props.visibleCollections.length : 0} />
+        <HeaderContainer />
+        <div className='catalog'>
+          <CollectionDialogContainer history={this.props.history} />
+          <OrderCartDialogContainer />
+          <CollectionFilterMapDialogContainer />
+          <ul className='catalog-list mdc-image-list mdc-image-list--with-text-protection'>
+            {this.props.visibleCollections ? this.props.visibleCollections.map(collectionId =>
+              <CatalogCardContainer collection={this.props.collections[collectionId]} key={collectionId} match={this.props.match} history={this.props.history} />
+            ) : loadingMessage}
+          </ul>
         </div>
 
       </div>

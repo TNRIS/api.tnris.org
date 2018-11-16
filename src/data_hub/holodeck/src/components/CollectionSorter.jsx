@@ -32,6 +32,12 @@ class CollectionSorter extends React.Component {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+      if (nextProps.sortOrder === 'AZ') {
+        this.setState({sortOrder: 'AZ'});
+      }
+  }
+
   setSort(order) {
     this.setState({sortOrder: order});
     switch(order) {

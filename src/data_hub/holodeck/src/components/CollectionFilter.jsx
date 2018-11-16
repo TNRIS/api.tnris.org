@@ -5,7 +5,6 @@ export default class CollectionFilter extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      filters: this.props.collectionFilter,
       badUrlFlag: false
     }
     this.handleOpenFilterMenu = this.handleOpenFilterMenu.bind(this);
@@ -27,6 +26,7 @@ export default class CollectionFilter extends React.Component {
               const hashId = '#' + id;
               if (document.querySelector(hashId)) {
                 document.querySelector(hashId).checked = true;
+                document.querySelector(`${hashId}-label`).classList.add('filter-active');
               }
               return hashId;
             });
@@ -39,6 +39,34 @@ export default class CollectionFilter extends React.Component {
           badUrlFlag: true
         });
       }
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (Object.keys(nextProps.collectionFilter).length === 0) {
+      const filterComponent = document.getElementById('filter-component');
+      const inputArray = filterComponent.querySelectorAll("input");
+      inputArray.forEach(input => {
+        return input.checked = false;
+      });
+      const labelArray = filterComponent.querySelectorAll("label[class='filter-active']");
+      labelArray.forEach(label => {
+        return label.classList.remove('filter-active');
+      });
+      const groupArray = filterComponent.querySelectorAll("ul[id$='-list']");
+      groupArray.forEach(group => {
+        if (!group.classList.contains('hide-filter-list')) {
+          group.classList.add('hide-filter-list');
+        }
+        return group;
+      });
+      const iconArray = filterComponent.querySelectorAll("i[id$='-expansion-icon']");
+      iconArray.forEach(icon => {
+        if (icon.innerHTML === 'expand_less') {
+          icon.innerHTML = 'expand_more';
+        }
+        return icon;
+      });
     }
   }
 
@@ -66,6 +94,7 @@ export default class CollectionFilter extends React.Component {
         currentFilters[target.name] = [target.value];
       }
       this.props.setCollectionFilter(currentFilters);
+      document.getElementById(`${target.value}-label`).classList.add("filter-active");
     } else {
       if (currentFilters.hasOwnProperty(target.name) && currentFilters[target.name].indexOf(target.value) >= 0) {
         currentFilters[target.name] = currentFilters[target.name].filter(item => item !== target.value);
@@ -75,6 +104,7 @@ export default class CollectionFilter extends React.Component {
         }
       }
       this.props.setCollectionFilter(currentFilters);
+      document.getElementById(`${target.value}-label`).classList.remove("filter-active");
     }
 
     // update URL to reflect new filter changes
@@ -96,7 +126,7 @@ export default class CollectionFilter extends React.Component {
       return <Redirect to='/404' />;
     }
     return (
-      <div className='filter-component'>
+      <div id='filter-component' className='filter-component'>
         <ul className='mdc-list'>
           {
             Object.keys(this.props.collectionFilterChoices).map(choice =>
@@ -135,7 +165,10 @@ export default class CollectionFilter extends React.Component {
                                 <div className='mdc-checkbox__mixedmark'></div>
                               </div>
                             </div>
-                            <label htmlFor={choiceValue}>{labelValue}</label>
+                            <label id={`${choiceValue}-label`}
+                                   htmlFor={choiceValue}>
+                                   {labelValue}
+                           </label>
                           </div>
                         </li>);
                     })}
@@ -144,11 +177,10 @@ export default class CollectionFilter extends React.Component {
             )
           }
           <li key='filter-map-button'>
-            <a
-              className='mdc-list-item filter-list-title'
-              id='filter-map-button'
-              onClick={this.props.openCollectionFilterMapDialog}>
-              by geography
+            <a className='mdc-list-item filter-list-title'
+               id='filter-map-button'
+               onClick={this.props.openCollectionFilterMapDialog}>
+               by geography
             </a>
           </li>
         </ul>

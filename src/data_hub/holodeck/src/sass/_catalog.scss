@@ -32,7 +32,7 @@ styles for component: Catalog
     }
 
     .catalog-list {
-      padding: 2% 10% 2% 10%;
+      padding: 20px 10% 2% 10%;
       margin-bottom: 500px;
       @include mdc-image-list-standard-columns(6);
 

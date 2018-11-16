@@ -1,23 +1,20 @@
 import { connect } from 'react-redux';
 
 import {
-  collectionActions,
   collectionFilterMapActions,
 } from '../actions';
 import CollectionFilterMap from '../components/CollectionFilterMap';
-import { getAllCollectionIds } from '../selectors/collectionSelectors';
 
 const mapStateToProps = state => ({
-  allCollectionIds: getAllCollectionIds(state),
+  collectionFilterMapAoi: state.collectionFilterMap.collectionFilterMapAoi,
   collectionFilterMapCenter: state.collectionFilterMap.collectionFilterMapCenter,
   collectionFilterMapFilter: state.collectionFilterMap.collectionFilterMapFilter,
   collectionFilterMapZoom: state.collectionFilterMap.collectionFilterMapZoom,
-
 });
 
 const mapDispatchToProps = dispatch => ({
-  fetchCollections: () => {
-    dispatch(collectionActions.fetchCollections());
+  setCollectionFilterMapAoi: (collectionFilterMapAoi) => {
+    dispatch(collectionFilterMapActions.setCollectionFilterMapAoi(collectionFilterMapAoi));
   },
   setCollectionFilterMapCenter: (collectionFilterMapCenter) => {
     dispatch(collectionFilterMapActions.setCollectionFilterMapCenter(collectionFilterMapCenter));

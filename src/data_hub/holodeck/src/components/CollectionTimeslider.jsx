@@ -47,6 +47,16 @@ export default class CollectionTimeslider extends React.Component {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.collectionTimeslider[0] === this.state.range[0] &&
+        nextProps.collectionTimeslider[1] === this.state.range[1]) {
+          this.setState({
+            setMin: nextProps.collectionTimeslider[0],
+            setMax: nextProps.collectionTimeslider[1]
+          });
+        }
+  }
+
   handleSetTimeslider(target) {
     this.setState({
       setMin: target[0],
@@ -78,9 +88,10 @@ export default class CollectionTimeslider extends React.Component {
     return (
       <div className='timeslider-component'>
         <div className="mdc-typography--body2">{this.state.setMin} - {this.state.setMax}</div>
-        <Range min={this.state.range[0]}
+        <Range id="timeslider-rc-slider"
+               min={this.state.range[0]}
                max={this.state.range[1]}
-               defaultValue={this.state.range}
+               value={[this.state.setMin, this.state.setMax]}
                pushable={true}
                onChange={this.handleSetTimeslider} />
       </div>

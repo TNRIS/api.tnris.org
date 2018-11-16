@@ -43,7 +43,7 @@ export default class ToolDrawer extends React.Component {
     return (
 
       <div className='tool-drawer-component mdc-typography'>
-        <aside className={classname} dir='rtl'>
+        <aside className={classname} dir='rtl' id='aside-drawer'>
           <div className='mdc-drawer__content' dir='ltr'>
             <nav className='mdc-list-group'>
               <div className='dataset-counter mdc-drawer__subtitle'>
@@ -72,7 +72,7 @@ export default class ToolDrawer extends React.Component {
           </div>
         </aside>
 
-        {this.props.view === 'modal' ? <div className='mdc-drawer-scrim'></div> : ''}
+        {this.props.view === 'modal' ? <div className='mdc-drawer-scrim' id='scrim'></div> : ''}
 
       </div>
     );

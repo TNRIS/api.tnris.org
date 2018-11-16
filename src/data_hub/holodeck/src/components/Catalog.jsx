@@ -30,18 +30,33 @@ export default class Catalog extends React.Component {
   }
 
   handleCatalog() {
+    const state = this.state.toolDrawerView;
     const tools = document.getElementById('tools');
     const drawer = document.getElementById('dismiss-class');
+    const scrim = document.getElementById('scrim');
+    const aside = document.getElementById('aside-drawer');
 
-    tools.onclick = () => {
-      console.log('you clicked');
-      if (this.state.toolDrawerView === 'dismiss') {
-        console.log('view = dismiss');
+    console.log(state);
+
+    if (state === 'dismiss') {
+      // console.log('view = dismiss');
+      tools.onclick = () => {
+        console.log('you clicked the tools');
         drawer.classList.contains('open-drawer') ? drawer.classList.remove('open-drawer') + console.log('removed') : drawer.classList.add('open-drawer') + console.log('added');
-      }
-      else {
-        console.log('in modal view, handleCatalog function disabled');
-      }
+        console.log(this.state.toolDrawerView);
+        // aside.classList.contains('mdc-drawer--open') ? aside.classList.remove('mdc-drawer--open') : aside.classList.remove('mdc-drawer--closing') && aside.classList.add('mdc-drawer--opening');
+      };
+    }
+
+    if (this.state.toolDrawerView === 'modal') {
+      // console.log('view = modal');
+      scrim.onclick = () => {
+        console.log('you clicked the scrim');
+        aside.classList.remove('mdc-drawer--open');
+      };
+      tools.onclick = () => {
+        aside.classList.contains('mdc-drawer--open') ? aside.classList.remove('mdc-drawer--open') : aside.classList.remove('mdc-drawer--closing') && aside.classList.add('mdc-drawer--opening');
+      };
     }
   }
 
@@ -120,6 +135,7 @@ export default class Catalog extends React.Component {
               ) : loadingMessage}
             </ul>
           </div>
+          <Footer />
         </div>
       </div>
     );

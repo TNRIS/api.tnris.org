@@ -14,6 +14,11 @@ styles for component: ThemeChooser
     border-radius: 10px;
     margin: 4px;
     border: 1px solid black;
+
+    i {
+      color: $alt-color;
+      font-size: 21px;
+    }
   }
 
   // currently light is default

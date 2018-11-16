@@ -32,10 +32,11 @@ class ThemeChooser extends Component {
         {this.themeOptions.map(theme => {
           const label = theme.replace("-", " ").replace(/\b\w/g, l => l.toUpperCase());
           const themeClass = `theme-chooser-option ${theme}-app-theme`;
+          const checked = this.props.theme === theme ? <i className='material-icons'>done</i> : '';
           return <div key={theme}
                       onClick={() => this.setColorTheme(theme)}
                       className={themeClass}
-                      title={label}></div>
+                      title={label}>{checked}</div>
         })}
       </div>
     )

@@ -31,15 +31,17 @@ export default class Catalog extends React.Component {
   }
 
   handleCatalog() {
-    console.log('you clicked');
     const tools = document.getElementById('tools');
     const drawer = document.getElementById('dismiss-class');
 
     tools.onclick = () => {
-      console.log('you clicked', tools);
+      console.log('you clicked');
       if (this.state.toolDrawerView === 'dismiss') {
         console.log('view = dismiss');
         drawer.classList.contains('open-drawer') ? drawer.classList.remove('open-drawer') + console.log('removed') : drawer.classList.add('open-drawer') + console.log('added');
+      }
+      else {
+        console.log('in modal view, handleCatalog function disabled');
       }
     }
   }
@@ -48,10 +50,8 @@ export default class Catalog extends React.Component {
     this.props.fetchCollections();
     // this.props.fetchResources();
     this.props.fetchStoredShoppingCart();
-    this.catalogComponent = document.querySelector('.catalog-component');
     window.addEventListener("resize", this.handleResize);
     window.addEventListener("click", this.handleCatalog);
-    // this.handleToolDrawer;
     // this.toolDrawer = MDCDrawer.attachTo(document.querySelector('.catalog-component'));
   }
 

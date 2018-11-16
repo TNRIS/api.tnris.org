@@ -16,7 +16,7 @@ CURRENTLY: light
 // these won't be overwritten
 $default-theme-primary: white;
 $earth-theme-primary: green;
-$dark-theme-primary: #444;
+$dark-theme-primary: #282828;
 
 // set the rest of them
 // these will all be overwritten
@@ -66,6 +66,7 @@ When adding new themes you will also need to update:
 */
 
 .dark-app-theme {
+
   $primary-color: $dark-theme-primary;
   $secondary-color: #6E7777;
   $text-color: lightgray;
@@ -98,6 +99,7 @@ When adding new themes you will also need to update:
 }
 
 .earth-app-theme {
+
   $primary-color: $earth-theme-primary;
   $secondary-color: lightgreen;
   $text-color: white;

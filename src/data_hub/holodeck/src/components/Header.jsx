@@ -8,14 +8,13 @@ import tnrisLogo from '../images/tnris_gray.png';
 export default class Header extends React.Component {
   constructor(props) {
     super(props);
-    this.handleOpenToolDrawer = this.handleOpenToolDrawer.bind(this);
+    this.handleToolDrawer = this.handleToolDrawer.bind(this);
     this.handleOpenOrderCartDialog = this.handleOpenOrderCartDialog.bind(this);
   }
 
   componentDidMount() {
     // this.menuDrawer = MDCDrawer.attachTo(document.querySelector('.menu-drawer'));
     this.toolDrawer = MDCDrawer.attachTo(document.querySelector('.tool-drawer'));
-
     this.topAppBarElement = document.querySelector('.mdc-top-app-bar');
     this.topAppBar = new MDCTopAppBar(this.topAppBarElement);
 
@@ -24,15 +23,13 @@ export default class Header extends React.Component {
     // });
   }
 
-  handleOpenToolDrawer() {
+  handleToolDrawer() {
     this.toolDrawer.open = !this.toolDrawer.open;
 
     const headerElement = document.getElementById('master-header');
-    if (headerElement.classList.contains('open-drawer')) {
-      headerElement.classList.remove('open-drawer');
-    }
-    else {
-      headerElement.classList.add('open-drawer');
+
+    if (this.props.view === 'dismiss') {
+      headerElement.classList.contains('open-drawer') ? headerElement.classList.remove('open-drawer') : headerElement.classList.add('open-drawer');
     }
   }
 
@@ -79,7 +76,7 @@ export default class Header extends React.Component {
             <a onClick={this.handleOpenOrderCartDialog} className="mdc-top-app-bar__action-item">
               <i className={shoppingCartClass}>shopping_cart</i>
             </a>
-            <a onClick={this.handleOpenToolDrawer} className="mdc-top-app-bar__action-item">
+            <a onClick={this.handleToolDrawer} className="mdc-top-app-bar__action-item" id="tools">
               <i className="material-icons mdc-top-app-bar__navigation-icon">search</i>
             </a>
           </section>

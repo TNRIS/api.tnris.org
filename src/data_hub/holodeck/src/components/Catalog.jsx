@@ -9,7 +9,7 @@ import CollectionFilterMapDialogContainer from '../containers/CollectionFilterMa
 import HeaderContainer from '../containers/HeaderContainer';
 import OrderCartDialogContainer from '../containers/OrderCartDialogContainer';
 import ToolDrawer from './ToolDrawer';
-import { MDCDrawer } from "@material/drawer";
+// import { MDCDrawer } from "@material/drawer";
 import loadingImage from '../images/loading.gif';
 
 export default class Catalog extends React.Component {
@@ -17,28 +17,30 @@ export default class Catalog extends React.Component {
     super(props);
     this.state = {
       badUrlFlag: false,
-      toolDrawerView: 'dismiss',
-      toolDrawerStatus: true
+      toolDrawerView: 'dismiss'
     }
 
     window.innerWidth >= 1000 ? this.state = {toolDrawerView:'dismiss'} : this.state = {toolDrawerView: 'modal'};
 
     this.handleResize = this.handleResize.bind(this);
-    this.handleOpenToolDrawer = this.handleOpenToolDrawer.bind(this);
+    this.handleCatalog = this.handleCatalog.bind(this);
   }
 
   handleResize() {
     window.innerWidth >= 1000 ? this.setState({toolDrawerView:'dismiss'}) : this.setState({toolDrawerView:'modal'});
   }
 
-  handleOpenToolDrawer() {
-    const mainElement = document.getElementById('main');
+  handleCatalog() {
+    console.log('you clicked');
+    const tools = document.getElementById('tools');
+    const drawer = document.getElementById('dismiss-class');
 
-    // use MDC drawer methods such as open or closed to set state status as true or false
-    if (MDCDrawer) {
-      // console.log(window.getComputedStyle(mainElement));
-      console.log('handleOpenToolDrawer function just ran...');
-
+    tools.onclick = () => {
+      console.log('you clicked', tools);
+      if (this.state.toolDrawerView === 'dismiss') {
+        console.log('view = dismiss');
+        drawer.classList.contains('open-drawer') ? drawer.classList.remove('open-drawer') + console.log('removed') : drawer.classList.add('open-drawer') + console.log('added');
+      }
     }
   }
 
@@ -46,14 +48,15 @@ export default class Catalog extends React.Component {
     this.props.fetchCollections();
     // this.props.fetchResources();
     this.props.fetchStoredShoppingCart();
+    this.catalogComponent = document.querySelector('.catalog-component');
     window.addEventListener("resize", this.handleResize);
-    window.addEventListener("click", this.handleOpenToolDrawer);
+    window.addEventListener("click", this.handleCatalog);
+    // this.handleToolDrawer;
     // this.toolDrawer = MDCDrawer.attachTo(document.querySelector('.catalog-component'));
   }
 
   componentWillUnmount() {
     window.removeEventListener("resize", this.handleResize);
-    // window.removeEventListener("click", this.handleOpenToolDrawer);
   }
 
   componentDidUpdate() {
@@ -82,22 +85,22 @@ export default class Catalog extends React.Component {
       dismissClass = 'open-drawer';
     }
 
-    const mainContent = (
-      <div className={dismissClass}>
-        <HeaderContainer view={this.state.toolDrawerView} />
-        <div className='catalog'>
-          <CollectionDialogContainer history={this.props.history} />
-          <OrderCartDialogContainer />
-          <CollectionFilterMapDialogContainer />
-          <ul className='catalog-list mdc-image-list mdc-image-list--with-text-protection'>
-            {this.props.visibleCollections ? this.props.visibleCollections.map(collectionId =>
-              <CatalogCardContainer collection={this.props.collections[collectionId]} key={collectionId} match={this.props.match} history={this.props.history} />
-            ) : loadingMessage}
-          </ul>
-        </div>
-        <Footer />
-      </div>
-    );
+    // const mainContent = (
+    //   <div className={dismissClass} id='dismiss-class'>
+    //     <HeaderContainer view={this.state.toolDrawerView} />
+    //     <div className='catalog'>
+    //       <CollectionDialogContainer history={this.props.history} />
+    //       <OrderCartDialogContainer />
+    //       <CollectionFilterMapDialogContainer />
+    //       <ul className='catalog-list mdc-image-list mdc-image-list--with-text-protection'>
+    //         {this.props.visibleCollections ? this.props.visibleCollections.map(collectionId =>
+    //           <CatalogCardContainer collection={this.props.collections[collectionId]} key={collectionId} match={this.props.match} history={this.props.history} />
+    //         ) : loadingMessage}
+    //       </ul>
+    //     </div>
+    //     <Footer />
+    //   </div>
+    // );
 
     if (error) {
       return <div>Error! {error.message}</div>;
@@ -118,10 +121,24 @@ export default class Catalog extends React.Component {
           history={this.props.history}
           total={this.props.visibleCollections ? this.props.visibleCollections.length : 0}
           view={this.state.toolDrawerView}
-          status={this.state.toolDrawerStatus}
         />
 
-      {mainContent}
+      {/*mainContent*/}
+
+      <div className={dismissClass} id='dismiss-class'>
+        <HeaderContainer view={this.state.toolDrawerView} />
+        <div className='catalog'>
+          <CollectionDialogContainer history={this.props.history} />
+          <OrderCartDialogContainer />
+          <CollectionFilterMapDialogContainer />
+          <ul className='catalog-list mdc-image-list mdc-image-list--with-text-protection'>
+            {this.props.visibleCollections ? this.props.visibleCollections.map(collectionId =>
+              <CatalogCardContainer collection={this.props.collections[collectionId]} key={collectionId} match={this.props.match} history={this.props.history} />
+            ) : loadingMessage}
+          </ul>
+        </div>
+        <Footer />
+      </div>
 
       </div>
     );

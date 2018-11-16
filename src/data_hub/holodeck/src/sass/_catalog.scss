@@ -4,6 +4,14 @@ styles for component: Catalog
 
 .catalog-component {
 
+  .mdc-dialog {
+    z-index: 1000;
+  }
+
+  #filter_map_dialog {
+    z-index: 999;
+  }
+
   .open-drawer {
     width: calc(100% - 255px);
     transition: width 0.3s;

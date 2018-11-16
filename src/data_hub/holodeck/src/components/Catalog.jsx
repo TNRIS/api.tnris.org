@@ -85,23 +85,6 @@ export default class Catalog extends React.Component {
       dismissClass = 'open-drawer';
     }
 
-    // const mainContent = (
-    //   <div className={dismissClass} id='dismiss-class'>
-    //     <HeaderContainer view={this.state.toolDrawerView} />
-    //     <div className='catalog'>
-    //       <CollectionDialogContainer history={this.props.history} />
-    //       <OrderCartDialogContainer />
-    //       <CollectionFilterMapDialogContainer />
-    //       <ul className='catalog-list mdc-image-list mdc-image-list--with-text-protection'>
-    //         {this.props.visibleCollections ? this.props.visibleCollections.map(collectionId =>
-    //           <CatalogCardContainer collection={this.props.collections[collectionId]} key={collectionId} match={this.props.match} history={this.props.history} />
-    //         ) : loadingMessage}
-    //       </ul>
-    //     </div>
-    //     <Footer />
-    //   </div>
-    // );
-
     if (error) {
       return <div>Error! {error.message}</div>;
     }
@@ -117,28 +100,27 @@ export default class Catalog extends React.Component {
     return (
       <div className="catalog-component" id="main">
 
+        <CollectionDialogContainer history={this.props.history} />
+        <OrderCartDialogContainer />
+        <CollectionFilterMapDialogContainer />
+
         <ToolDrawer match={this.props.match}
           history={this.props.history}
           total={this.props.visibleCollections ? this.props.visibleCollections.length : 0}
           view={this.state.toolDrawerView}
         />
 
-      {/*mainContent*/}
-
-      <div className={dismissClass} id='dismiss-class'>
-        <HeaderContainer view={this.state.toolDrawerView} />
-        <div className='catalog'>
-          <CollectionDialogContainer history={this.props.history} />
-          <OrderCartDialogContainer />
-          <CollectionFilterMapDialogContainer />
-          <ul className='catalog-list mdc-image-list mdc-image-list--with-text-protection'>
-            {this.props.visibleCollections ? this.props.visibleCollections.map(collectionId =>
-              <CatalogCardContainer collection={this.props.collections[collectionId]} key={collectionId} match={this.props.match} history={this.props.history} />
-            ) : loadingMessage}
-          </ul>
+        <div className={dismissClass} id='dismiss-class'>
+          <HeaderContainer view={this.state.toolDrawerView} />
+          <div className='catalog'>
+            <ul className='catalog-list mdc-image-list mdc-image-list--with-text-protection'>
+              {this.props.visibleCollections ? this.props.visibleCollections.map(collectionId =>
+                <CatalogCardContainer collection={this.props.collections[collectionId]} key={collectionId} match={this.props.match} history={this.props.history} />
+              ) : loadingMessage}
+            </ul>
+          </div>
+          <Footer />
         </div>
-        <Footer />
-      </div>
 
       </div>
     );

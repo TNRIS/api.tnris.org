@@ -16,12 +16,12 @@ CURRENTLY: light
 // these won't be overwritten
 $default-theme-primary: white;
 $earth-theme-primary: green;
+$dark-theme-primary: #444;
 
 // set the rest of them
 // these will all be overwritten
 $primary-color: #6200ee;
-$secondary-color: #7E39F1;
-$tertiary-color: #E6D9FD;
+$secondary-color: #b088e8;
 $text-color: white;
 $header-bar: white;
 // used for indicators
@@ -30,7 +30,7 @@ $alt-color: #b088e8;
 $main-background: white;
 $nest-background: white;
 $nest-text: #444;
-$nest-text-subtle: #6E7777;
+$nest-text-subtle: gray;
 
 //used to color dialog div headers
 $template-dialog-header: #272727;
@@ -56,21 +56,52 @@ optional theme colors and imported use of them
 --------------------------------
 When adding new themes you will also need to update:
   1. Header.jsx component logo Switch function to choose proper logo color
-  2. create new primary global sass variable to use in Step #3 (the next step). this is done above ~line 17
-  3. _themeChooser.scss sass file to set the themeChooser "background-color" for the new theme's class name
-  4. ThemeChooser.jsx component to add the new theme to the constructor theme options array
+  2. _themeChooser.scss sass file to set the themeChooser "background-color" for the new theme's class name
+  3. ThemeChooser.jsx component to add the new theme to the constructor themeOptions array
+  4. create new primary global sass variable to use in Step #3 (the next step). this is done above ~line 17
   5. create the new class below with the name "<theme name to be used by the store>-app-theme"
   6. update export (bottom of this file) to include fill and text colors for maps. keys should be
      <theme name>Fill and <theme name>Text, respectively with the theme name matching the one used in
      Step 5. fill is typically same as secondary-color while text is same as text-color
 */
 
+.dark-app-theme {
+  $primary-color: $dark-theme-primary;
+  $secondary-color: #6E7777;
+  $text-color: lightgray;
+  $header-bar: $primary-color;
+  // used for indicators
+  $alt-color: white;
+
+  $main-background: dimgray;
+  $nest-background: silver;
+  $nest-text: black;
+  $nest-text-subtle: lightgray;
+  background-color: $main-background;
+
+  //used to color dialog div headers
+  $template-dialog-header: $header-bar;
+  $template-dialog-header-script: $text-color;
+
+  $empty-border: #6E7777;
+  $empty-fill: $main-background;
+
+  $error-text: red;
+  $success-text: green;
+
+  $skin-primary: $primary-color;
+  $skin-secondary: $secondary-color;
+  $skin-tertiary: gray;
+  $skin-text: $text-color;
+
+  @import 'componentSassImporter';
+}
+
 .earth-app-theme {
   $primary-color: $earth-theme-primary;
   $secondary-color: lightgreen;
-  $tertiary-color: purple;
   $text-color: white;
-  $header-bar: green;
+  $header-bar: $primary-color;
   // used for indicators
   $alt-color: saddlebrown;
 
@@ -92,15 +123,15 @@ When adding new themes you will also need to update:
 
   $skin-primary: green;
   $skin-secondary: lightgreen;
-  $skin-tertiary: burlywood;
+  $skin-tertiary: #d3f8d3;
   $skin-text: black;
 
   @import 'componentSassImporter';
-
 }
 
 // export colors for use by jsx. specifically, tnrisDownloadTemplateDownload map
 :export {
   lightFill: #7E39F1; lightText: white;
+  darkFill: #6E7777; darkText: lightgray;
   earthFill: lightgreen; earthText: white;
         }

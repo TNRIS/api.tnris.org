@@ -21,6 +21,10 @@ styles for component: ThemeChooser
     background-color: $default-theme-primary;
   }
 
+  .theme-chooser-option.dark-app-theme {
+    background-color: $dark-theme-primary;
+  }
+
   .theme-chooser-option.earth-app-theme {
     background-color: $earth-theme-primary;
   }

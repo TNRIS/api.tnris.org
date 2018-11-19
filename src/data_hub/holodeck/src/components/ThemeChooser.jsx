@@ -4,7 +4,7 @@ class ThemeChooser extends Component {
   constructor(props) {
       super(props);
       this.setColorTheme = this.setColorTheme.bind(this);
-      this.themeOptions = ['light', 'dark', 'earth', 'fuego', 'vaporwave'];
+      this.themeOptions = ['light', 'dark', 'earth', 'fuego', 'vaporwave', 'america'];
   }
 
   componentDidMount() {

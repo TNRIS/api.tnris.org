@@ -57,6 +57,9 @@ export default class Header extends React.Component {
       case 'vaporwave':
         tnrisLogo = tnrisWhite;
         break;
+      case 'america':
+        tnrisLogo = tnrisWhite;
+        break;
       default:
       tnrisLogo = tnrisGray;
     }

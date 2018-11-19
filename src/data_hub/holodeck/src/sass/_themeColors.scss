@@ -19,7 +19,7 @@ $dark-theme-primary: #282828;
 $earth-theme-primary: green;
 $fuego-theme-primary: #60389F;
 $vaporwave-theme-primary: #EFBAF4;
-
+$america-theme-primary: red;
 
 // set the rest of them
 // these will all be overwritten
@@ -208,6 +208,41 @@ When adding new themes you will also need to update:
   @import 'componentSassImporter';
 }
 
+.america-app-theme {
+
+  $primary-color: $america-theme-primary;
+  $secondary-color: #C0F2F9;
+  $text-color: white;
+  $header-bar: $primary-color;
+  // used for indicators
+  $alt-color: blue;
+
+  $main-background: white;
+  $nest-background: whitesmoke;
+  $nest-text: lightred;
+  $nest-text-subtle: #444;
+  background-color: $main-background;
+
+  //used to color dialog div headers
+  $template-dialog-header: blue;
+  $template-dialog-header-script: white;
+
+  $slider-fill: lightgray;
+
+  $empty-border: #6E7777;
+  $empty-fill: $main-background;
+
+  $error-text: red;
+  $success-text: green;
+
+  $skin-primary: $primary-color;
+  $skin-secondary: lightblue;
+  $skin-tertiary: blue;
+  $skin-text: white;
+
+  @import 'componentSassImporter';
+}
+
 // export colors for use by jsx. specifically, tnrisDownloadTemplateDownload map
 :export {
   lightFill: #7E39F1; lightText: white;
@@ -215,4 +250,5 @@ When adding new themes you will also need to update:
   earthFill: lightgreen; earthText: white;
   fuegoFill: #D588FF; fuegoText: #FEEF00;
   vaporwaveFill: #D588FF; vaporwaveText: #7D57C3;
+  americaFill: red; americaText: blue;
         }

@@ -53,20 +53,23 @@ export default class CollectionFilter extends React.Component {
       labelArray.forEach(label => {
         return label.classList.remove('filter-active');
       });
-      const groupArray = filterComponent.querySelectorAll("ul[id$='-list']");
-      groupArray.forEach(group => {
-        if (!group.classList.contains('hide-filter-list')) {
-          group.classList.add('hide-filter-list');
-        }
-        return group;
-      });
-      const iconArray = filterComponent.querySelectorAll("i[id$='-expansion-icon']");
-      iconArray.forEach(icon => {
-        if (icon.innerHTML === 'expand_less') {
-          icon.innerHTML = 'expand_more';
-        }
-        return icon;
-      });
+      // THIS IS CODE TO COLLAPSE THE FILTER GROUP WHEN ALL FILTERS ARE TURNED OFF.
+      // WAS WRITTEN TO RUN AFTER USER CLICKS THE BUTTON TO CLEAR ALL BUT IT CAUSES
+      // GROUPS TO COLLAPSE WHEN USER MANUALLY UNCHECKS ALL WHICH IS NOT DESIRED
+      // const groupArray = filterComponent.querySelectorAll("ul[id$='-list']");
+      // groupArray.forEach(group => {
+      //   if (!group.classList.contains('hide-filter-list')) {
+      //     group.classList.add('hide-filter-list');
+      //   }
+      //   return group;
+      // });
+      // const iconArray = filterComponent.querySelectorAll("i[id$='-expansion-icon']");
+      // iconArray.forEach(icon => {
+      //   if (icon.innerHTML === 'expand_less') {
+      //     icon.innerHTML = 'expand_more';
+      //   }
+      //   return icon;
+      // });
     }
   }
 

@@ -12,6 +12,7 @@ import sorter from './sortReducer';
 import contact from './contactReducer';
 import orderCart from './orderCartReducer';
 import urlTracker from './urlTrackerReducer';
+import colorTheme from './colorThemeReducer';
 
 const rootReducer = combineReducers({
   collections,
@@ -25,7 +26,8 @@ const rootReducer = combineReducers({
   sorter,
   contact,
   orderCart,
-  urlTracker
+  urlTracker,
+  colorTheme
 })
 
 export default rootReducer;

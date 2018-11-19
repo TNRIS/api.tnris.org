@@ -274,7 +274,7 @@ class OrderCart extends Component {
       // if cart not empty and form not submitting/submitted, show form itself
     if (this.state.display === 'form' && Object.keys(this.props.orders).length !== 0) {
       showHTML = (
-        <div>
+        <div className="template-content-div">
           <p className="mdc-typography--body1">
             Complete the form below to finalize and submit your data order...
           </p>

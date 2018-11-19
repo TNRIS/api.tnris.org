@@ -7,15 +7,7 @@ styles for component: CollectionFilter
   margin-left: 3px;
   margin-right: 3px;
   width: 100%;
-
-  .filter-button {
-    background-color: #248CC0;
-  }
-
-  .active {
-    background-color: #248CC0;
-    color: white;
-  }
+  padding-bottom: 6px;
 
   .hide-filter-list {
     display: none;
@@ -30,6 +22,11 @@ styles for component: CollectionFilter
     .mdc-list-item {
       text-transform: capitalize;
       overflow: hidden;
+      color: $nest-text;
+
+      i {
+        color: $nest-text-subtle;
+      }
 
       .mdc-list-item__meta {
         margin-left: auto;
@@ -38,14 +35,16 @@ styles for component: CollectionFilter
 
       label {
         cursor: pointer;
+        color: $nest-text;
       }
 
       .filter-active {
-        color: rgba(98,0,238,0.87);
+        color: $primary-color;
       }
 
-      @include mdc-checkbox-container-colors(#6E7777, white, #7932F1, #7932F1);
-      @include mdc-checkbox-focus-indicator-color(#7932F1);
+      @include mdc-checkbox-container-colors($nest-text-subtle, $empty-fill, $primary-color, $primary-color);
+      @include mdc-checkbox-focus-indicator-color($primary-color);
+      @include mdc-checkbox-ink-color($slider-fill);
     }
   }
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 import mapboxgl from 'mapbox-gl';
-
+import styles from '../../sass/index.scss';
 import loadingImage from '../../images/loading.gif';
 // the carto core api is a CDN in the app template HTML (not available as NPM package)
 // so we create a constant to represent it so it's available to the component
@@ -192,6 +192,8 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
     const layerBaseName = areaType + '__area_type' + loop;
     const layerHoverName = areaType + '__area_type_hover' + loop;
     const layerLabelName = areaType + '__area_type_label' + loop;
+    const filler = this.props.theme + "Fill";
+    const texter = this.props.theme + "Text";
     // get the raster tiles from the carto api
     cartodb.Tiles.getTiles(layerData, function (result, error) {
       if (result == null) {
@@ -215,8 +217,9 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
           'source-layer': 'layer0',
           'layout': {'visibility': visibility},
           'paint': {
-            'fill-color': 'rgba(97,12,239,0.3)',
-            'fill-outline-color': '#FFFFFF'
+            'fill-color': styles[filler],
+            'fill-opacity': .3,
+            'fill-outline-color': styles[texter]
           }
       });
       // add the polygon area_type hover layer. wired below to toggle on hover
@@ -227,26 +230,27 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
           'source-layer': 'layer0',
           'layout': {'visibility': visibility},
           'paint': {
-            'fill-color': 'rgba(130,109,186,.7)',
-            'fill-outline-color': '#FFFFFF'
+            'fill-color': styles[filler],
+            'fill-opacity': .7,
+            'fill-outline-color': styles[texter]
           },
           'filter': ['==', 'area_type_name', '']
       }, layerBaseName);
       // add the labels layer for the area_type polygons
-      map.addLayer({
-          id: layerLabelName,
-          'type': 'symbol',
-          'source': layerSourceName,
-          'source-layer': 'layer0',
-          // 'minzoom': 10,
-          'layout': {
-            "text-field": "{area_type_name}",
-            'visibility': visibility
-          },
-          'paint': {
-            "text-color": "#FFFFFF"
-          }
-      });
+      // map.addLayer({
+      //     id: layerLabelName,
+      //     'type': 'symbol',
+      //     'source': layerSourceName,
+      //     'source-layer': 'layer0',
+      //     // 'minzoom': 10,
+      //     'layout': {
+      //       "text-field": "{area_type_name}",
+      //       'visibility': visibility
+      //     },
+      //     'paint': {
+      //       "text-color": styles[texter]
+      //     }
+      // });
     });
     // add the layer id's to the areaType's array in the layerRef for toggling
     this.layerRef[areaType].push(layerBaseName, layerHoverName, layerLabelName);

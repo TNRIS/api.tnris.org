@@ -14,7 +14,7 @@ styles for component: CollectionFilterMapDialog
     position: fixed;
     top: 1rem;
     right: 1rem;
-    background-color: #7E39F1;
+    background-color: $secondary-color;
   }
 
   @media(min-width: 1024px) {

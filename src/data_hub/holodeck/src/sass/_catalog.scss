@@ -21,14 +21,8 @@ styles for component: Catalog
     padding-top: 100px;
     margin-bottom: 375px;
 
-    h1 {
-      color: #68EFE8;
-      text-align: center;
-    }
-
-    h2 {
-      color: #68EFE8;
-      text-align: center;
+    .mdc-dialog__surface {
+      background-color: $main-background;
     }
 
     .catalog-list {
@@ -50,7 +44,6 @@ styles for component: Catalog
     }
 
   }
-
 }
 
 .catalog-component__loading {

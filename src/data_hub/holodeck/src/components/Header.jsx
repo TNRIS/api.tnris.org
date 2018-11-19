@@ -3,7 +3,9 @@ import {MDCTopAppBar} from '@material/top-app-bar/index';
 import {MDCDrawer} from "@material/drawer";
 // import SortContainer from '../containers/SortContainer';
 
-import tnrisLogo from '../images/tnris_gray.png';
+import tnrisGray from '../images/tnris_gray.png';
+import tnrisWhite from '../images/tnris_white.png';
+import tnrisFuego from '../images/tnris_fuego.png';
 
 export default class Header extends React.Component {
   constructor(props) {
@@ -58,6 +60,36 @@ export default class Header extends React.Component {
       dismissClass = 'open-drawer';
     }
 
+    let tnrisLogo;
+    switch(this.props.theme) {
+      case 'light':
+        tnrisLogo = tnrisGray;
+        break;
+      case 'dark':
+        tnrisLogo = tnrisGray;
+        break;
+      case 'earth':
+        tnrisLogo = tnrisWhite;
+        break;
+      case 'fuego':
+        tnrisLogo = tnrisFuego;
+        break;
+      case 'vaporwave':
+        tnrisLogo = tnrisWhite;
+        break;
+      case 'america':
+        tnrisLogo = tnrisWhite;
+        break;
+      case 'hulk':
+        tnrisLogo = tnrisWhite;
+        break;
+      case 'relax':
+        tnrisLogo = tnrisGray;
+        break;
+      default:
+      tnrisLogo = tnrisGray;
+    }
+
     return (
       <header className={`header-component mdc-top-app-bar mdc-top-app-bar--fixed ${dismissClass}`} id="master-header">
         <div className="header-title mdc-top-app-bar__row">
@@ -74,8 +106,9 @@ export default class Header extends React.Component {
         <div className="header-nav mdc-top-app-bar__row">
           <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
             {/*<i className="material-icons mdc-top-app-bar__navigation-icon">menu</i>*/}
-            <a href="https://tnris.org" className="mdc-top-app-bar__action-item">
+            <a href="https://tnris.org" className="mdc-top-app-bar__action-item tnris-logo-text">
               <img src={tnrisLogo} aria-label="TNRIS Logo" alt="TNRIS Logo" className="logo" />
+              {/*TNRIS*/}
             </a>
             <span className="mdc-top-app-bar__title">Data Holodeck</span>
           </section>

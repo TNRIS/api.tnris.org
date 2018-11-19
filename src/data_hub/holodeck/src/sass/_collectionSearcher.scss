@@ -6,9 +6,24 @@ styles for component: CollectionSearcher
   margin-top: 9px;
   margin-bottom: 10px;
 
+  input:focus::-webkit-input-placeholder {
+    color: $primary-color;
+  }
+  input:focus:-moz-placeholder {
+    color: $primary-color;
+  }
+  input:focus::-moz-placeholder {
+    color: $primary-color;
+  }
+  input:focus:-ms-input-placeholder {
+    color: $primary-color;
+  }
+
   .mdc-text-field__input {
     padding: 0 7px 7px 16px !important;
     border-bottom-color: rgba(0,0,0,0.5) !important;
+    color: $nest-text;
+    caret-color: $primary-color;
   }
 
   input[type="search"]::-webkit-search-decoration:hover,

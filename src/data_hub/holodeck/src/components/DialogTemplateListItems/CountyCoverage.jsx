@@ -1,5 +1,6 @@
 import React from 'react';
 import mapboxgl from 'mapbox-gl';
+import styles from '../../sass/index.scss';
 // the carto core api is a CDN in the app template HTML (not available as NPM package)
 // so we create a constant to represent it so it's available to the component
 const cartodb = window.cartodb;
@@ -49,6 +50,10 @@ export default class CountyCoverage extends React.Component {
       map.fitBounds([[bounds[1][1],bounds[1][0]],[bounds[0][1],bounds[0][0]]],{padding: 20});
     });
 
+    // get layer colors from sass styles export
+    const filler = this.props.theme + "Fill";
+    const texter = this.props.theme + "Text";
+
     // get the raster tiles from the carto api
     cartodb.Tiles.getTiles(layerData, function (result, error) {
         if (result == null) {
@@ -71,24 +76,25 @@ export default class CountyCoverage extends React.Component {
             'source': 'county-polygons-source',
             'source-layer': 'layer0',
             'paint': {
-              'fill-color': 'rgba(97,12,239,0.3)',
-              'fill-outline-color': '#FFFFFF'
+              'fill-color': styles[filler],
+              'fill-opacity': .3,
+              'fill-outline-color': styles[texter]
             }
         });
         // add the labels layer for the area_type polygons
-        map.addLayer({
-            id: 'county-polygons-labels',
-            'type': 'symbol',
-            'source': 'county-polygons-source',
-            'source-layer': 'layer0',
-            // 'minzoom': 10,
-            'layout': {
-              "text-field": "{area_type_name}"
-            },
-            'paint': {
-              "text-color": "#FFFFFF"
-            }
-        });
+        // map.addLayer({
+        //     id: 'county-polygons-labels',
+        //     'type': 'symbol',
+        //     'source': 'county-polygons-source',
+        //     'source-layer': 'layer0',
+        //     // 'minzoom': 10,
+        //     'layout': {
+        //       "text-field": "{area_type_name}"
+        //     },
+        //     'paint': {
+        //       "text-color": styles[texter]
+        //     }
+        // });
     });
   }
 

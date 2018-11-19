@@ -6,6 +6,8 @@ import CollectionSearcherContainer from '../containers/CollectionSearcherContain
 import CollectionSorterContainer from '../containers/CollectionSorterContainer';
 import CollectionTimesliderContainer from '../containers/CollectionTimesliderContainer';
 
+import ThemeChooserContainer from '../containers/ThemeChooserContainer';
+
 export default class ToolDrawer extends React.Component {
 
   constructor(props) {
@@ -68,6 +70,7 @@ export default class ToolDrawer extends React.Component {
               <div className='clear-all-filters-container'>
                 <button className="mdc-button mdc-button--raised" onClick={this.clearAllFilters}>Clear All</button>
               </div>
+              <ThemeChooserContainer />
             </nav>
           </div>
         </aside>

@@ -5,6 +5,9 @@ styles for component: ToolDrawer
 .tool-drawer-component {
 
   .mdc-drawer {
+    @include mdc-drawer-surface-fill-color($main-background);
+    @include mdc-drawer-divider-color($empty-border);
+
 
     .mdc-drawer__content {
       overflow-x: hidden;
@@ -12,8 +15,8 @@ styles for component: ToolDrawer
       padding-bottom: 30px;
 
       .dataset-counter {
-        background: lightgray;
-        color: #8443F1;
+        background: $skin-tertiary;
+        color: $skin-text;
         text-align: center;
         height: 26px;
         line-height: 26px;
@@ -30,6 +33,7 @@ styles for component: ToolDrawer
 
       .mdc-list-group__subheader {
         font-size: 1rem;
+        color: $nest-text-subtle;
       }
 
       ul {
@@ -42,8 +46,15 @@ styles for component: ToolDrawer
 
       .clear-all-filters-container {
         padding-top: 8px;
+        padding-bottom: 8px;
         display: flex;
         justify-content: center;
+
+        .mdc-button--raised:not(:disabled),
+        .mdc-button--unelevated:not(:disabled) {
+          background-color: $primary-color;
+          color: $text-color;
+        }
       }
     }
   }

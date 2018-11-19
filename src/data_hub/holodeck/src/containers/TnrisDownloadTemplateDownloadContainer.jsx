@@ -9,7 +9,8 @@ const mapStateToProps = state => ({
   errorResources: state.collections.errorResources,
   selectedCollectionResources: state.collections.selectedCollectionResources,
   resourceAreas: getResourceAreas(state),
-  resourceAreaTypes: getResourceAreaTypes(state)
+  resourceAreaTypes: getResourceAreaTypes(state),
+  theme: state.colorTheme.theme
 });
 
 const mapDispatchToProps = (dispatch) => ({

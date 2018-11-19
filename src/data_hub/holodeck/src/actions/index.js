@@ -11,6 +11,7 @@ import * as contactActions from './contactActions';
 import * as orderCartDialogActions from './orderCartDialogActions';
 import * as orderCartActions from './orderCartActions';
 import * as urlTrackerActions from './urlTrackerActions';
+import * as colorThemeActions from './colorThemeActions';
 
 export {
   collectionActions,
@@ -25,5 +26,6 @@ export {
   contactActions,
   orderCartDialogActions,
   orderCartActions,
-  urlTrackerActions
+  urlTrackerActions,
+  colorThemeActions
 };

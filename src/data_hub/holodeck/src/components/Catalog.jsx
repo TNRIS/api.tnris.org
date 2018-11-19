@@ -115,6 +115,12 @@ export default class Catalog extends React.Component {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    const themedClass = nextProps.theme + "-app-theme";
+    const html = document.querySelector('html');
+    html.className = themedClass;
+  }
+
   render() {
     const { error, loading } = this.props;
 

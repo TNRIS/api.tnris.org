@@ -66,7 +66,7 @@ export default class TnrisOrderTemplate extends React.Component {
     }
 
     return (
-      <div className='tnris-download-template' tabIndex='1'>
+      <div className='tnris-order-template' tabIndex='1'>
         <header className="mdc-top-app-bar">
           <div className="mdc-top-app-bar__row">
 

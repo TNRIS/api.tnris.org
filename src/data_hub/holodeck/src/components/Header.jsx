@@ -63,6 +63,9 @@ export default class Header extends React.Component {
       case 'hulk':
         tnrisLogo = tnrisWhite;
         break;
+      case 'relax':
+        tnrisLogo = tnrisGray;
+        break;
       default:
       tnrisLogo = tnrisGray;
     }

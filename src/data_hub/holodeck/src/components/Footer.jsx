@@ -1,10 +1,32 @@
 import React from 'react';
 
 export default class Footer extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.handleToolDrawer = this.handleToolDrawer.bind(this);
+  }
+
+  handleToolDrawer() {
+    // this.toolDrawer.open = !this.toolDrawer.open;
+
+    const footerElement = document.getElementById('master-footer');
+
+    if (this.props.view === 'dismiss') {
+      footerElement.classList.contains('open-drawer') ? footerElement.classList.remove('open-drawer') : footerElement.classList.add('open-drawer');
+    }
+  }
 
   render() {
+
+    let dismissClass;
+
+    if (this.props.view !== 'modal') {
+      dismissClass = 'open-drawer';
+    }
+
     return (
-      <div className="footer-component">
+      <div className={`footer-component ${dismissClass}`} id='master-footer'>
         <div className="footer-component__legal">
           <ul className="legal-links">
             <li>

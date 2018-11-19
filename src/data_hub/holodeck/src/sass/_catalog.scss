@@ -17,6 +17,11 @@ styles for component: Catalog
     transition: width 0.3s;
   }
 
+  .closed-drawer {
+    width: 100%;
+    transition: width 0.3s;
+  }
+
   .catalog {
     padding-top: 100px;
     margin-bottom: 375px;

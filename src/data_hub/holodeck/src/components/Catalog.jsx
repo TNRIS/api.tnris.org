@@ -16,10 +16,11 @@ export default class Catalog extends React.Component {
     super(props);
     this.state = {
       badUrlFlag: false,
-      toolDrawerView: 'dismiss'
+      toolDrawerView: 'dismiss',
+      toolDrawerStatus: 'open'
     }
 
-    window.innerWidth >= 1050 ? this.state = {toolDrawerView:'dismiss'} : this.state = {toolDrawerView:'modal'};
+    window.innerWidth >= 1050 ? this.state = {toolDrawerView:'dismiss', toolDrawerStatus: 'open'} : this.state = {toolDrawerView:'modal', toolDrawerStatus:'closed'};
 
     this.handleResize = this.handleResize.bind(this);
     this.handleDismissible = this.handleDismissible.bind(this);
@@ -56,14 +57,15 @@ export default class Catalog extends React.Component {
     if (this.state.toolDrawerView === 'dismiss') {
       tools.onclick = () => {
         console.log('you clicked the tools on dismiss view');
-        if (drawer.classList.contains('open-drawer')) {
-          drawer.classList.remove('open-drawer');
-          console.log('removed');
-        }
-        else {
-          drawer.classList.add('open-drawer');
-          console.log('added');
-        }
+        // if (drawer.classList.contains('open-drawer')) {
+        //   drawer.classList.remove('open-drawer');
+        //   console.log('removed');
+        // }
+        // else {
+        //   drawer.classList.add('open-drawer');
+        //   console.log('added');
+        // }
+        this.state.toolDrawerStatus === 'open' ? this.setState({toolDrawerStatus:'closed'}) : this.setState({toolDrawerStatus:'open'});
       };
     }
   }
@@ -71,7 +73,7 @@ export default class Catalog extends React.Component {
   handleModal() {
     const tools = document.getElementById('tools');
     const scrim = document.getElementById('scrim');
-    const aside = document.getElementById('aside-drawer');
+    // const aside = document.getElementById('aside-drawer');
 
     console.log('view :', this.state.toolDrawerView);
 
@@ -79,14 +81,15 @@ export default class Catalog extends React.Component {
       tools.onclick = () => {
         console.log('you clicked the tools on modal view');
         // aside.classList.add('mdc-drawer--open')
-        aside.classList.contains('mdc-drawer--open') ? aside.classList.remove('mdc-drawer--open') : aside.classList.remove('mdc-drawer--closing') && console.log('test') && aside.classList.add('mdc-drawer--opening');
+        this.state.toolDrawerStatus === 'open' ? this.setState({toolDrawerStatus:'closed'}) : this.setState({toolDrawerStatus:'open'});
+        // this.setState({toolDrawerStatus: !this.state.toolDrawerStatus})
+        // aside.classList.contains('mdc-drawer--open') ? aside.classList.remove('mdc-drawer--open') : aside.classList.remove('mdc-drawer--closing') && console.log('test') && aside.classList.add('mdc-drawer--opening');
         console.log('modal view tools function ran');
       };
 
       scrim.onclick = () => {
         console.log('you clicked the scrim to close');
-        aside.classList.remove('mdc-drawer--open');
-        // drawer.classList.add('op')
+        this.setState({toolDrawerStatus:'closed'});
       };
     }
   }
@@ -130,9 +133,9 @@ export default class Catalog extends React.Component {
         </div>
       );
 
-    let dismissClass;
+    let dismissClass = 'closed-drawer';
 
-    if (this.state.toolDrawerView !== 'modal') {
+    if (this.state.toolDrawerStatus === 'open' && this.state.toolDrawerView === 'dismiss') {
       dismissClass = 'open-drawer';
     }
 
@@ -160,11 +163,13 @@ export default class Catalog extends React.Component {
           history={this.props.history}
           total={this.props.visibleCollections ? this.props.visibleCollections.length : 0}
           view={this.state.toolDrawerView}
+          status={this.state.toolDrawerStatus}
         />
 
-        <HeaderContainer view={this.state.toolDrawerView} />
+        <HeaderContainer
+          view={this.state.toolDrawerView}
+          status={this.state.toolDrawerStaus} />
 
-        {/*<div className={dismissClass} id="dismiss-class">*/}
           <div className={`catalog ${dismissClass}`} id="dismiss-class">
             <ul className='catalog-list mdc-image-list mdc-image-list--with-text-protection'>
               {this.props.visibleCollections ? this.props.visibleCollections.map(collectionId =>
@@ -172,8 +177,9 @@ export default class Catalog extends React.Component {
               ) : loadingMessage}
             </ul>
           </div>
-          <Footer view={this.state.toolDrawerView} />
-        {/*</div>*/}
+
+        <Footer view={this.state.toolDrawerView} />
+
       </div>
     );
   }

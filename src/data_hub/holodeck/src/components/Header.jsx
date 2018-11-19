@@ -12,13 +12,8 @@ export default class Header extends React.Component {
     super(props);
 
     this.handleToolDrawer = this.handleToolDrawer.bind(this);
-    // this.handleResize = this.handleResize.bind(this);
     this.handleOpenOrderCartDialog = this.handleOpenOrderCartDialog.bind(this);
   }
-
-  // handleResize() {
-  //   window.innerWidth >= 1050 ? this.setState({toolDrawerView:'dismiss'}) : this.setState({toolDrawerView:'modal'});
-  // }
 
   handleToolDrawer() {
     this.toolDrawer.open = !this.toolDrawer.open;
@@ -54,9 +49,9 @@ export default class Header extends React.Component {
       shoppingCartClass = Object.keys(this.props.orders).length !== 0 ? "material-icons mdc-top-app-bar__navigation-icon shopping-cart-full" : "material-icons mdc-top-app-bar__navigation-icon";
     }
 
-    let dismissClass;
+    let dismissClass = 'closed-drawer';
 
-    if (this.props.view !== 'modal') {
+    if (this.props.status === 'open' && this.props.view === 'dismiss') {
       dismissClass = 'open-drawer';
     }
 

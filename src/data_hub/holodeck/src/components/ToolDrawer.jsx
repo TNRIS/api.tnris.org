@@ -38,14 +38,16 @@ export default class ToolDrawer extends React.Component {
   }
 
   render() {
-    let classname;
+    const classname = this.props.view === 'dismiss' ? 'mdc-drawer mdc-drawer--dismissible tool-drawer' : 'mdc-drawer mdc-drawer--modal tool-drawer';
+    const fullclass = this.props.status === 'open' ? ' mdc-drawer--open' : '';
 
-    this.props.view === 'dismiss' ? classname = 'mdc-drawer mdc-drawer--dismissible mdc-drawer--open tool-drawer' : classname = 'mdc-drawer mdc-drawer--modal tool-drawer';
+    console.log(this.props.view);
+    console.log(this.props.status);
 
     return (
 
       <div className='tool-drawer-component mdc-typography'>
-        <aside className={classname} dir='rtl' id='aside-drawer'>
+        <aside className={`${classname}${fullclass}`} dir='rtl' id='aside-drawer'>
           <div className='mdc-drawer__content' dir='ltr'>
             <nav className='mdc-list-group'>
               <div className='dataset-counter mdc-drawer__subtitle'>

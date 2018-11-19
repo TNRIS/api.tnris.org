@@ -8,20 +8,15 @@ import tnrisLogo from '../images/tnris_gray.png';
 export default class Header extends React.Component {
   constructor(props) {
     super(props);
+
     this.handleToolDrawer = this.handleToolDrawer.bind(this);
+    // this.handleResize = this.handleResize.bind(this);
     this.handleOpenOrderCartDialog = this.handleOpenOrderCartDialog.bind(this);
   }
 
-  componentDidMount() {
-    // this.menuDrawer = MDCDrawer.attachTo(document.querySelector('.menu-drawer'));
-    this.toolDrawer = MDCDrawer.attachTo(document.querySelector('.tool-drawer'));
-    this.topAppBarElement = document.querySelector('.mdc-top-app-bar');
-    this.topAppBar = new MDCTopAppBar(this.topAppBarElement);
-
-    // this.topAppBar.listen('MDCTopAppBar:nav', () => {
-    //     this.menuDrawer.open = !this.menuDrawer.open;
-    // });
-  }
+  // handleResize() {
+  //   window.innerWidth >= 1050 ? this.setState({toolDrawerView:'dismiss'}) : this.setState({toolDrawerView:'modal'});
+  // }
 
   handleToolDrawer() {
     this.toolDrawer.open = !this.toolDrawer.open;
@@ -31,6 +26,19 @@ export default class Header extends React.Component {
     if (this.props.view === 'dismiss') {
       headerElement.classList.contains('open-drawer') ? headerElement.classList.remove('open-drawer') : headerElement.classList.add('open-drawer');
     }
+  }
+
+  componentDidMount() {
+    // this.menuDrawer = MDCDrawer.attachTo(document.querySelector('.menu-drawer'));
+    this.toolDrawer = MDCDrawer.attachTo(document.querySelector('.tool-drawer'));
+    this.topAppBarElement = document.querySelector('.mdc-top-app-bar');
+    this.topAppBar = new MDCTopAppBar(this.topAppBarElement);
+
+    // window.addEventListener("resize", this.handleResize);
+
+    // this.topAppBar.listen('MDCTopAppBar:nav', () => {
+    //     this.menuDrawer.open = !this.menuDrawer.open;
+    // });
   }
 
   handleOpenOrderCartDialog() {
@@ -46,7 +54,7 @@ export default class Header extends React.Component {
 
     let dismissClass;
 
-    if (this.props.view === 'dismiss') {
+    if (this.props.view !== 'modal') {
       dismissClass = 'open-drawer';
     }
 

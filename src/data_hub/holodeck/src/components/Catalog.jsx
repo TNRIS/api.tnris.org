@@ -19,58 +19,89 @@ export default class Catalog extends React.Component {
       toolDrawerView: 'dismiss'
     }
 
-    window.innerWidth >= 1000 ? this.state = {toolDrawerView:'dismiss'} : this.state = {toolDrawerView: 'modal'};
+    window.innerWidth >= 1050 ? this.state = {toolDrawerView:'dismiss'} : this.state = {toolDrawerView:'modal'};
 
     this.handleResize = this.handleResize.bind(this);
-    this.handleCatalog = this.handleCatalog.bind(this);
+    this.handleDismissible = this.handleDismissible.bind(this);
+    this.handleModal = this.handleModal.bind(this);
   }
 
   handleResize() {
-    window.innerWidth >= 1000 ? this.setState({toolDrawerView:'dismiss'}) : this.setState({toolDrawerView:'modal'});
+    console.log(window.innerWidth);
+
+    if (window.innerWidth >= 1050) {
+      this.setState({toolDrawerView:'dismiss'});
+      console.log('dismiss view');
+      window.removeEventListener("click", this.handleModal);
+      window.addEventListener("click", this.handleDismissible);
+    }
+    else if (window.innerWidth < 1050) {
+      this.setState({toolDrawerView:'modal'});
+      console.log('modal view');
+      window.removeEventListener("click", this.handleDismissible);
+      window.addEventListener("click", this.handleModal);
+      console.log('log this to see if function ran');
+    }
+    else {
+      console.log('error');
+    }
   }
 
-  handleCatalog() {
-    const state = this.state.toolDrawerView;
+  handleDismissible() {
     const tools = document.getElementById('tools');
     const drawer = document.getElementById('dismiss-class');
+
+    console.log('view :', this.state.toolDrawerView);
+
+    if (this.state.toolDrawerView === 'dismiss') {
+      tools.onclick = () => {
+        console.log('you clicked the tools on dismiss view');
+        if (drawer.classList.contains('open-drawer')) {
+          drawer.classList.remove('open-drawer');
+          console.log('removed');
+        }
+        else {
+          drawer.classList.add('open-drawer');
+          console.log('added');
+        }
+      };
+    }
+  }
+
+  handleModal() {
+    const tools = document.getElementById('tools');
     const scrim = document.getElementById('scrim');
     const aside = document.getElementById('aside-drawer');
 
-    console.log(state);
-
-    if (state === 'dismiss') {
-      // console.log('view = dismiss');
-      tools.onclick = () => {
-        console.log('you clicked the tools');
-        drawer.classList.contains('open-drawer') ? drawer.classList.remove('open-drawer') + console.log('removed') : drawer.classList.add('open-drawer') + console.log('added');
-        console.log(this.state.toolDrawerView);
-        // aside.classList.contains('mdc-drawer--open') ? aside.classList.remove('mdc-drawer--open') : aside.classList.remove('mdc-drawer--closing') && aside.classList.add('mdc-drawer--opening');
-      };
-    }
+    console.log('view :', this.state.toolDrawerView);
 
     if (this.state.toolDrawerView === 'modal') {
-      // console.log('view = modal');
-      scrim.onclick = () => {
-        console.log('you clicked the scrim');
-        aside.classList.remove('mdc-drawer--open');
-      };
       tools.onclick = () => {
-        aside.classList.contains('mdc-drawer--open') ? aside.classList.remove('mdc-drawer--open') : aside.classList.remove('mdc-drawer--closing') && aside.classList.add('mdc-drawer--opening');
+        console.log('you clicked the tools on modal view');
+        // aside.classList.add('mdc-drawer--open')
+        aside.classList.contains('mdc-drawer--open') ? aside.classList.remove('mdc-drawer--open') : aside.classList.remove('mdc-drawer--closing') && console.log('test') && aside.classList.add('mdc-drawer--opening');
+        console.log('modal view tools function ran');
+      };
+
+      scrim.onclick = () => {
+        console.log('you clicked the scrim to close');
+        aside.classList.remove('mdc-drawer--open');
+        // drawer.classList.add('op')
       };
     }
   }
 
   componentDidMount() {
     this.props.fetchCollections();
-    // this.props.fetchResources();
     this.props.fetchStoredShoppingCart();
     window.addEventListener("resize", this.handleResize);
-    window.addEventListener("click", this.handleCatalog);
-    // this.toolDrawer = MDCDrawer.attachTo(document.querySelector('.catalog-component'));
+    this.state.toolDrawerView === 'dismiss' ? window.addEventListener("click", this.handleDismissible) : window.addEventListener("click", this.handleModal);
   }
 
   componentWillUnmount() {
     window.removeEventListener("resize", this.handleResize);
+    window.removeEventListener("click", this.handleDismissible);
+    window.removeEventListener("click", this.handleModal);
   }
 
   componentDidUpdate() {
@@ -95,7 +126,7 @@ export default class Catalog extends React.Component {
 
     let dismissClass;
 
-    if (this.state.toolDrawerView === 'dismiss') {
+    if (this.state.toolDrawerView !== 'modal') {
       dismissClass = 'open-drawer';
     }
 
@@ -125,18 +156,18 @@ export default class Catalog extends React.Component {
           view={this.state.toolDrawerView}
         />
 
-        <HeaderContainer view={this.state.toolDrawerView}/>
+        <HeaderContainer view={this.state.toolDrawerView} />
 
-        <div className={dismissClass} id="dismiss-class">
-          <div className='catalog'>
+        {/*<div className={dismissClass} id="dismiss-class">*/}
+          <div className={`catalog ${dismissClass}`} id="dismiss-class">
             <ul className='catalog-list mdc-image-list mdc-image-list--with-text-protection'>
               {this.props.visibleCollections ? this.props.visibleCollections.map(collectionId =>
                 <CatalogCardContainer collection={this.props.collections[collectionId]} key={collectionId} match={this.props.match} history={this.props.history} />
               ) : loadingMessage}
             </ul>
           </div>
-          <Footer />
-        </div>
+          <Footer view={this.state.toolDrawerView} />
+        {/*</div>*/}
       </div>
     );
   }

@@ -20,6 +20,7 @@ $earth-theme-primary: green;
 $fuego-theme-primary: #60389F;
 $vaporwave-theme-primary: #EFBAF4;
 $america-theme-primary: red;
+$hulk-theme-primary: #10B100;
 
 // set the rest of them
 // these will all be overwritten
@@ -211,7 +212,7 @@ When adding new themes you will also need to update:
 .america-app-theme {
 
   $primary-color: $america-theme-primary;
-  $secondary-color: #C0F2F9;
+  $secondary-color: blue;
   $text-color: white;
   $header-bar: $primary-color;
   // used for indicators
@@ -243,6 +244,41 @@ When adding new themes you will also need to update:
   @import 'componentSassImporter';
 }
 
+.hulk-app-theme {
+
+  $primary-color: $hulk-theme-primary;
+  $secondary-color: #0C7F00;
+  $text-color: white;
+  $header-bar: $primary-color;
+  // used for indicators
+  $alt-color: white;
+
+  $main-background: #0C7F00;
+  $nest-background: #98FF97;
+  $nest-text: #053600;
+  $nest-text-subtle: gray;
+  background-color: $main-background;
+
+  //used to color dialog div headers
+  $template-dialog-header: #10B100;
+  $template-dialog-header-script: white;
+
+  $slider-fill: lightgray;
+
+  $empty-border: #6E7777;
+  $empty-fill: $main-background;
+
+  $error-text: red;
+  $success-text: green;
+
+  $skin-primary: #10B100;
+  $skin-secondary: #053600;
+  $skin-tertiary: #053600;
+  $skin-text: white;
+
+  @import 'componentSassImporter';
+}
+
 // export colors for use by jsx. specifically, tnrisDownloadTemplateDownload map
 :export {
   lightFill: #7E39F1; lightText: white;
@@ -251,4 +287,5 @@ When adding new themes you will also need to update:
   fuegoFill: #D588FF; fuegoText: #FEEF00;
   vaporwaveFill: #D588FF; vaporwaveText: #7D57C3;
   americaFill: red; americaText: blue;
+  hulkFill: #10B100; hulkText: #053600;
         }

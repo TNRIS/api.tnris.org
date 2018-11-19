@@ -44,6 +44,8 @@ styles for component: OrderCart
       color: $primary-color;
 
       .mdc-list-item {
+        background-color: $nest-background;
+
         .mdc-list-item__graphic {
           color: $primary-color;
         }

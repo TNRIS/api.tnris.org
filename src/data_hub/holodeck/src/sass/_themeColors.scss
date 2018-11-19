@@ -18,6 +18,7 @@ $default-theme-primary: white;
 $dark-theme-primary: #282828;
 $earth-theme-primary: green;
 $fuego-theme-primary: #60389F;
+$vaporwave-theme-primary: #EFBAF4;
 
 
 // set the rest of them
@@ -172,10 +173,46 @@ When adding new themes you will also need to update:
   @import 'componentSassImporter';
 }
 
+.vaporwave-app-theme {
+
+  $primary-color: $vaporwave-theme-primary;
+  $secondary-color: #C0F2F9;
+  $text-color: #7D57C3;
+  $header-bar: $primary-color;
+  // used for indicators
+  $alt-color: #7D57C3;
+
+  $main-background: #C0F2F9;
+  $nest-background: white;
+  $nest-text: #7D57C3;
+  $nest-text-subtle: #EFA816;
+  background-color: $main-background;
+
+  //used to color dialog div headers
+  $template-dialog-header: #F141FF;
+  $template-dialog-header-script: white;
+
+  $slider-fill: white;
+
+  $empty-border: #6E7777;
+  $empty-fill: $main-background;
+
+  $error-text: red;
+  $success-text: green;
+
+  $skin-primary: $primary-color;
+  $skin-secondary: #F141FF;
+  $skin-tertiary: #7D57C3;
+  $skin-text: white;
+
+  @import 'componentSassImporter';
+}
+
 // export colors for use by jsx. specifically, tnrisDownloadTemplateDownload map
 :export {
   lightFill: #7E39F1; lightText: white;
   darkFill: #6E7777; darkText: lightgray;
   earthFill: lightgreen; earthText: white;
   fuegoFill: #D588FF; fuegoText: #FEEF00;
+  vaporwaveFill: #D588FF; vaporwaveText: #7D57C3;
         }

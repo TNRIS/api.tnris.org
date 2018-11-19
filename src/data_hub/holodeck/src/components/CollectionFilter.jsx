@@ -53,8 +53,8 @@ export default class CollectionFilter extends React.Component {
       labelArray.forEach(label => {
         return label.classList.remove('filter-active');
       });
-      // THIS IS CODE TO COLLAPSE THE FILTER GROUP WHEN ALL FILTERS ARE TURNED OFF
-      // WAS WRITTEN TO RUN AFTER USER CLICKS BUTTON TO CLEAR ALL BUT IT CAUSES
+      // THIS IS CODE TO COLLAPSE THE FILTER GROUP WHEN ALL FILTERS ARE TURNED OFF.
+      // WAS WRITTEN TO RUN AFTER USER CLICKS THE BUTTON TO CLEAR ALL BUT IT CAUSES
       // GROUPS TO COLLAPSE WHEN USER MANUALLY UNCHECKS ALL WHICH IS NOT DESIRED
       // const groupArray = filterComponent.querySelectorAll("ul[id$='-list']");
       // groupArray.forEach(group => {

@@ -106,11 +106,11 @@ export default class CollectionFilterMap extends React.Component {
       let bounds = turfExtent(aoiRectangle); // get the bounds with turf.js
       let sql = new cartodb.SQL({user: 'tnris-flood'});
       let query = `SELECT
-                     areas.collections
+                     areas_view.collections
                    FROM
-                     area_type, areas
+                     area_type, areas_view
                    WHERE
-                     area_type.area_type_id = areas.area_type_id
+                     area_type.area_type_id = areas_view.area_type_id
                    AND
                      area_type.the_geom && ST_MakeEnvelope(
                        ${bounds[2]}, ${bounds[1]}, ${bounds[0]}, ${bounds[3]})`;

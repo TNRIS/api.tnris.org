@@ -13,16 +13,11 @@ export default class ToolDrawer extends React.Component {
   constructor(props) {
       super(props);
 
-      this.handleCloseDrawer = this.handleCloseDrawer.bind(this);
       this.clearAllFilters = this.clearAllFilters.bind(this);
   }
 
   componentDidMount() {
     this.toolDrawer = MDCDrawer.attachTo(document.querySelector('.tool-drawer'));
-  }
-
-  handleCloseDrawer() {
-    this.toolDrawer.open = false;
   }
 
   clearAllFilters() {
@@ -40,9 +35,6 @@ export default class ToolDrawer extends React.Component {
   render() {
     const classname = this.props.view === 'dismiss' ? 'mdc-drawer mdc-drawer--dismissible tool-drawer' : 'mdc-drawer mdc-drawer--modal tool-drawer';
     const fullclass = this.props.status === 'open' ? ' mdc-drawer--open' : '';
-
-    console.log(this.props.view);
-    console.log(this.props.status);
 
     return (
 

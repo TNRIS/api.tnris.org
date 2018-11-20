@@ -11,18 +11,7 @@ export default class Header extends React.Component {
   constructor(props) {
     super(props);
 
-    this.handleToolDrawer = this.handleToolDrawer.bind(this);
     this.handleOpenOrderCartDialog = this.handleOpenOrderCartDialog.bind(this);
-  }
-
-  handleToolDrawer() {
-    this.toolDrawer.open = !this.toolDrawer.open;
-
-    const headerElement = document.getElementById('master-header');
-
-    if (this.props.view === 'dismiss') {
-      headerElement.classList.contains('open-drawer') ? headerElement.classList.remove('open-drawer') : headerElement.classList.add('open-drawer');
-    }
   }
 
   componentDidMount() {
@@ -30,12 +19,6 @@ export default class Header extends React.Component {
     this.toolDrawer = MDCDrawer.attachTo(document.querySelector('.tool-drawer'));
     this.topAppBarElement = document.querySelector('.mdc-top-app-bar');
     this.topAppBar = new MDCTopAppBar(this.topAppBarElement);
-
-    // window.addEventListener("resize", this.handleResize);
-
-    // this.topAppBar.listen('MDCTopAppBar:nav', () => {
-    //     this.menuDrawer.open = !this.menuDrawer.open;
-    // });
   }
 
   handleOpenOrderCartDialog() {
@@ -112,7 +95,7 @@ export default class Header extends React.Component {
             <a onClick={this.handleOpenOrderCartDialog} className="mdc-top-app-bar__action-item">
               <i className={shoppingCartClass}>shopping_cart</i>
             </a>
-            <a onClick={this.handleToolDrawer} className="mdc-top-app-bar__action-item" id="tools">
+            <a onClick={this.props.handler} className="mdc-top-app-bar__action-item" id="tools">
               <i className="material-icons mdc-top-app-bar__navigation-icon">search</i>
             </a>
           </section>

@@ -14,12 +14,10 @@ styles for component: Catalog
 
   .open-drawer {
     width: calc(100% - 255px);
-    transition: width 0.3s;
   }
 
   .closed-drawer {
     width: 100%;
-    transition: width 0.3s;
   }
 
   .catalog {

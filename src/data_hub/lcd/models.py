@@ -1271,8 +1271,14 @@ class AreasView(models.Model):
   area_type = models.TextField(
       'Area Type'
   )
+  download = models.TextField(
+      'Download Collections'
+  )
+  historical = models.TextField(
+      'Historical Collections'
+  )
   collections = models.TextField(
-      'Collections'
+      'Download and Historical Collections'
   )
 
   def __str__(self):

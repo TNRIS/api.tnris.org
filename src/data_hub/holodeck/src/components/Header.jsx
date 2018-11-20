@@ -38,6 +38,9 @@ export default class Header extends React.Component {
       dismissClass = 'open-drawer';
     }
 
+    const closedTitle = 'Open Tool Drawer';
+    const openTitle = 'Close Tool Drawer';
+
     let tnrisLogo;
     switch(this.props.theme) {
       case 'light':
@@ -95,7 +98,7 @@ export default class Header extends React.Component {
             <a onClick={this.handleOpenOrderCartDialog} className="mdc-top-app-bar__action-item">
               <i className={shoppingCartClass}>shopping_cart</i>
             </a>
-            <a onClick={this.props.handler} className="mdc-top-app-bar__action-item" id="tools">
+            <a onClick={this.props.handler} className="mdc-top-app-bar__action-item" id="tools" title={this.props.status === 'closed' ? closedTitle : openTitle}>
               <i className="material-icons mdc-top-app-bar__navigation-icon">search</i>
             </a>
           </section>

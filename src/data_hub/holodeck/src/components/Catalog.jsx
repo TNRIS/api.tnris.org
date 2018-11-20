@@ -121,7 +121,7 @@ export default class Catalog extends React.Component {
           status={this.state.toolDrawerStatus}
           handler={this.handler} />
 
-          <div className={`catalog ${dismissClass}`} id="dismiss-class">
+          <div className={`catalog ${dismissClass}`}>
             <ul className='catalog-list mdc-image-list mdc-image-list--with-text-protection'>
               {this.props.visibleCollections ? this.props.visibleCollections.map(collectionId =>
                 <CatalogCardContainer collection={this.props.collections[collectionId]} key={collectionId} match={this.props.match} history={this.props.history} />

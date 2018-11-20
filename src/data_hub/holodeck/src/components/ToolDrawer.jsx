@@ -39,13 +39,17 @@ export default class ToolDrawer extends React.Component {
     return (
 
       <div className='tool-drawer-component mdc-typography'>
-        <aside className={`${classname}${fullclass}`} dir='rtl' id='aside-drawer'>
+        <aside className={`${classname}${fullclass}`} dir='rtl'>
           <div className='mdc-drawer__content' dir='ltr'>
-            <nav className='mdc-list-group'>
-              <div className='dataset-counter mdc-drawer__subtitle'>
-                Showing <span className="dataset-counter-count">{this.props.total}</span> Datasets
+            
+              <div className='mdc-drawer__header no-scroll'>
+                <div className='dataset-counter'>
+                  Showing <span className="dataset-counter-count">{this.props.total}</span> Datasets
+                </div>
+                <CollectionSearcherContainer className='mdc-list-group' match={this.props.match} history={this.props.history} />
               </div>
-              <CollectionSearcherContainer className='mdc-list-item' match={this.props.match} history={this.props.history} />
+
+            <nav className='mdc-list-group scroll'>
               <a className='sort-title mdc-list-group__subheader'>
                 Sort
               </a>
@@ -66,6 +70,7 @@ export default class ToolDrawer extends React.Component {
               </div>
               <ThemeChooserContainer />
             </nav>
+
           </div>
         </aside>
 

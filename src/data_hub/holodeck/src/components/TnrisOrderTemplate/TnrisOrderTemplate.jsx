@@ -4,7 +4,7 @@ import {MDCTabBar} from '@material/tab-bar';
 import { MDCMenu } from '@material/menu';
 
 import TnrisOrderTemplateOrder from './TnrisOrderTemplateOrder';
-import TnrisDownloadTemplateDetails from '../TnrisDownloadTemplate/TnrisDownloadTemplateDetails'
+import TnrisOrderTemplateDetails from './TnrisOrderTemplateDetails'
 import TnrisDownloadTemplateImages from '../TnrisDownloadTemplate/TnrisDownloadTemplateImages'
 
 export default class TnrisOrderTemplate extends React.Component {
@@ -51,7 +51,7 @@ export default class TnrisOrderTemplate extends React.Component {
     let showComponent;
     switch(this.state.view) {
       case 'details':
-        showComponent = <TnrisDownloadTemplateDetails collection={this.props.collection} />;
+        showComponent = <TnrisOrderTemplateDetails collection={this.props.collection} />;
         break;
       case 'images':
         showComponent = (<TnrisDownloadTemplateImages
@@ -62,7 +62,7 @@ export default class TnrisOrderTemplate extends React.Component {
         showComponent = <TnrisOrderTemplateOrder />;
         break;
       default:
-        showComponent = <TnrisDownloadTemplateDetails collection={this.props.collection} />;
+        showComponent = <TnrisOrderTemplateDetails collection={this.props.collection} />;
     }
 
     return (

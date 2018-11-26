@@ -1,0 +1,106 @@
+/*
+styles for component: TnrisOrderTemplateDetails
+*/
+
+.tnris-order-template-details {
+  padding: 84px 20px 20px 20px;
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  .template-content-div.county-coverage {
+    padding-bottom: 15px;
+
+    .mdc-typography--body2 {
+        color: $nest-text;
+        padding: 15px;
+    }
+
+    #county-coverage-map {
+      position: relative;
+      width: calc(100% - 30px);
+      height: 500px;
+      margin: 0 auto;
+
+      .mapboxgl-canvas {
+        width: 100% !important;
+      }
+    }
+  }
+
+  .template-content-div {
+    box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+    margin-bottom: 15px;
+    background-color: $nest-background;
+    color: $nest-text;
+
+    .template-content-div-header {
+      color: $template-dialog-header-script;
+      background-color: $template-dialog-header;
+      text-align: center;
+    }
+
+    a {
+      color: $primary-color;
+    }
+
+    p {
+      padding: 6px;
+      margin: 0;
+      white-space: pre-line;
+    }
+
+    .mdc-list {
+      padding: 6px;
+
+      .mdc-list-item {
+        min-height: 34px;
+        height: initial;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        color: $nest-text;
+
+        strong {
+          margin-right: 4px;
+        }
+      }
+    }
+
+    .mdc-list.supplemental-downloads {
+      .mdc-list-item {
+        a {
+          i {
+            vertical-align: text-bottom;
+          }
+
+        }
+      }
+    }
+
+    .services-link-details {
+      padding: 6px;
+
+      #service-link-details-input {
+        color: $primary-color;
+        border-bottom-color: rgba(0, 0, 0, 0.12);
+        margin-bottom: 10px;
+      }
+
+      .service-link-details-buttons {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        button, a {
+          margin-left: 5px;
+          margin-right: 5px;
+          text-align: center;
+          background-color: $primary-color;
+          color: $text-color;
+
+          i {
+            margin-right: 5px;
+          }
+        }
+      }
+    }
+  }
+}

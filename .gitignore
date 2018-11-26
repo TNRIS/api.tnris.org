@@ -170,3 +170,7 @@ src/data_hub/static/*
 src/data_hub/webpack-stats\.prod\.json
 
 *.csv#
+
+lambda-areas_view/*
+!lambda-areas_view/lambda_function.py
+!lambda-areas_view/requirements.txt

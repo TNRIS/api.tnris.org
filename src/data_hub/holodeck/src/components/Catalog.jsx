@@ -14,15 +14,47 @@ import loadingImage from '../images/loading.gif';
 export default class Catalog extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      badUrlFlag: false
+
+    window.innerWidth >= 1050 ? this.state = {toolDrawerView:'dismiss', toolDrawerStatus:'open', badUrlFlag: false} : this.state = {toolDrawerView:'modal', toolDrawerStatus:'closed', badUrlFlag: false};
+
+    this.handleResize = this.handleResize.bind(this);
+    this.handler = this.handler.bind(this);
+  }
+
+  handleResize() {
+    if (window.innerWidth >= 1050) {
+      this.setState({toolDrawerView:'dismiss'});
+      this.setState({toolDrawerStatus: 'open'});
+    }
+    else {
+      this.setState({toolDrawerView:'modal'});
+      this.setState({toolDrawerStatus:'closed'});
+      const scrim = document.getElementById('scrim');
+      scrim.onclick = () => {
+        this.setState({toolDrawerStatus:'closed'});
+      };
+    }
+  }
+
+  handler() {
+    this.state.toolDrawerStatus === 'open' ? this.setState({toolDrawerStatus:'closed'}) : this.setState({toolDrawerStatus:'open'});
+
+    if (this.state.toolDrawerView === 'modal') {
+      const scrim = document.getElementById('scrim');
+      scrim.onclick = () => {
+        this.setState({toolDrawerStatus:'closed'});
+      };
     }
   }
 
   componentDidMount() {
     this.props.fetchCollections();
-    // this.props.fetchResources();
     this.props.fetchStoredShoppingCart();
+    window.addEventListener("resize", this.handleResize);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.handleResize);
   }
 
   componentDidUpdate() {
@@ -44,11 +76,18 @@ export default class Catalog extends React.Component {
 
   render() {
     const { error, loading } = this.props;
+
     const loadingMessage = (
         <div className="catalog-component__loading">
           <img src={loadingImage} alt="Holodeck Loading..." className="holodeck-loading-image" />
         </div>
       );
+
+    let dismissClass = 'closed-drawer';
+
+    if (this.state.toolDrawerStatus === 'open' && this.state.toolDrawerView === 'dismiss') {
+      dismissClass = 'open-drawer';
+    }
 
     if (error) {
       return <div>Error! {error.message}</div>;
@@ -63,21 +102,37 @@ export default class Catalog extends React.Component {
     }
 
     return (
-      <div className="catalog-component ">
-        {/*<Drawer />*/}
-        <ToolDrawerContainer match={this.props.match} history={this.props.history} total={this.props.visibleCollections ? this.props.visibleCollections.length : 0} />
-        <HeaderContainer />
-        <div className='catalog'>
-          <CollectionDialogContainer history={this.props.history} />
-          <OrderCartDialogContainer />
-          <CollectionFilterMapDialogContainer />
-          <ul className='catalog-list mdc-image-list mdc-image-list--with-text-protection'>
-            {this.props.visibleCollections ? this.props.visibleCollections.map(collectionId =>
-              <CatalogCardContainer collection={this.props.collections[collectionId]} key={collectionId} match={this.props.match} history={this.props.history} />
-            ) : loadingMessage}
-          </ul>
-        </div>
-        <Footer />
+      <div className="catalog-component">
+
+        <CollectionDialogContainer history={this.props.history} />
+        <OrderCartDialogContainer />
+        <CollectionFilterMapDialogContainer />
+
+        <ToolDrawerContainer
+          match={this.props.match}
+          history={this.props.history}
+          total={this.props.visibleCollections ? this.props.visibleCollections.length : 0}
+          view={this.state.toolDrawerView}
+          status={this.state.toolDrawerStatus}
+        />
+
+        <HeaderContainer
+          view={this.state.toolDrawerView}
+          status={this.state.toolDrawerStatus}
+          handler={this.handler} />
+
+          <div className={`catalog ${dismissClass}`}>
+            <ul className='catalog-list mdc-image-list mdc-image-list--with-text-protection'>
+              {this.props.visibleCollections ? this.props.visibleCollections.map(collectionId =>
+                <CatalogCardContainer collection={this.props.collections[collectionId]} key={collectionId} match={this.props.match} history={this.props.history} />
+              ) : loadingMessage}
+            </ul>
+          </div>
+
+        <Footer
+          view={this.state.toolDrawerView}
+          status={this.state.toolDrawerStatus} />
+
       </div>
     );
   }

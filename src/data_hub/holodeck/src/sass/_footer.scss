@@ -11,6 +11,11 @@ styles for component: Footer
   left: 0;
   bottom: 0;
 
+  .open-drawer {
+    width: calc(100% - 255px);
+    transition: width 0.3s;
+  }
+
   @media (min-width: mdc-layout-grid-breakpoint-min(desktop)) {
     min-height: 375px;
   }

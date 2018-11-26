@@ -30,9 +30,16 @@ styles for component: Header
         text-decoration: none;
         color: inherit;
         font-size: 12px;
+        text-align: right;
       }
-    }
 
+      .header-title__tnris {
+        text-decoration: none;
+        text-align: left;
+        color: inherit;
+      }
+
+    }
   }
 
   .header-nav {

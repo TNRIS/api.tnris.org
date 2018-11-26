@@ -51,6 +51,12 @@ export const getSearchIndex = createSelector(
       'agency_name',
       'agency_abbreviation'
     ];
+    
+    // default text string seperator is:  /[\s\-]+/
+    // here, we overwrite it to that dashes are not used as a seperator,
+    // only spaces. dash seperator is an issue for strings like 'H-GAC'
+    elasticlunr.tokenizer.setSeperator(/[\s]+/);
+
     const searchIndex = elasticlunr(function() {
       searchFields.map(field => {
         this.addField(field);

@@ -39,6 +39,7 @@ from .models import (
 class AgencyTypeAdmin(admin.ModelAdmin):
     model = AgencyType
     ordering = ('agency_name',)
+    list_display = ('agency_name', 'agency_abbreviation')
 
 
 # AreaType is solidified as statewide, counties, quads, qquads, & national grid

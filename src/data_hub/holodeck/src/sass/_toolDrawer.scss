@@ -10,27 +10,26 @@ styles for component: ToolDrawer
 
 
     .mdc-drawer__content {
-      overflow-x: hidden;
-      overflow-y: auto;
-      right: 0;
-      height: 100%;
 
       .no-scroll {
         position: fixed;
-        right: 0;
       }
 
       .scroll {
-        overflow-y: auto;
+        max-height: 85.7vh;
         overflow-x: hidden;
-        margin-top: 115px;
+        overflow-y: auto;
+        margin-top: 110px;
+        padding-bottom: 20px;
+        padding-top: 10px;
       }
 
       .mdc-drawer__header {
-        width: auto;
+        width: 255px;
         z-index: 999;
-        background: $primary-color;
         padding: 0 0 0 0;
+        background: $header-bar;
+        border-bottom: solid 1px $skin-secondary;
       }
 
       .dataset-counter {

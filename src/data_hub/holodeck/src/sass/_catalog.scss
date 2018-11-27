@@ -28,15 +28,27 @@ styles for component: Catalog
       background-color: $main-background;
     }
 
-    .catalog-list {
+    .no-data {
+      top: -100px;
+      position: relative;
+      width: 100%;
+      height: auto;
 
-      .no-data {
-        padding: 0 0 0 0;
-
-        .no-data-image {
-          position: relative;
-        }
+      @media (min-width: 1400px) {
+        top: -250px;
       }
+
+      @media (min-width: 1050px) and (max-width: 1399px) {
+        top: -150px;
+      }
+
+      .no-data-image {
+        width: 100%;
+        height: auto;
+      }
+    }
+
+    .catalog-list {
 
       padding: 20px 10% 2% 10%;
       margin-bottom: 500px;

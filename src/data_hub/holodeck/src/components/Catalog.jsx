@@ -86,7 +86,7 @@ export default class Catalog extends React.Component {
 
     const noData = (
         <div className="no-data">
-          <img src={noDataImage} alt="No Data Available" className="no-data-image" />
+          <img src={noDataImage} className="no-data-image" alt="No Data Available" title="No data available with those search terms" />
         </div>
       );
 
@@ -129,12 +129,12 @@ export default class Catalog extends React.Component {
           handler={this.handler} />
 
         <div className={`catalog ${dismissClass}`}>
+          {this.props.visibleCollections && this.props.visibleCollections.length < 1 ? noData : ''}
+
           <ul className='catalog-list mdc-image-list mdc-image-list--with-text-protection'>
             {this.props.visibleCollections ? this.props.visibleCollections.map(collectionId =>
               <CatalogCardContainer collection={this.props.collections[collectionId]} key={collectionId} match={this.props.match} history={this.props.history} />
             ) : loadingMessage}
-
-            {this.props.visibleCollections && this.props.visibleCollections.length < 1 ? noData : ''}
           </ul>
         </div>
 

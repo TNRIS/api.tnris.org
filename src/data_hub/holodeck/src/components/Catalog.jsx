@@ -10,6 +10,7 @@ import HeaderContainer from '../containers/HeaderContainer';
 import OrderCartDialogContainer from '../containers/OrderCartDialogContainer';
 import ToolDrawerContainer from '../containers/ToolDrawerContainer';
 import loadingImage from '../images/loading.gif';
+import noDataImage from '../images/no-data.png';
 
 export default class Catalog extends React.Component {
   constructor(props) {
@@ -83,6 +84,12 @@ export default class Catalog extends React.Component {
         </div>
       );
 
+    const noData = (
+        <div className="no-data">
+          <img src={noDataImage} alt="No Data Available" className="no-data-image" />
+        </div>
+      );
+
     let dismissClass = 'closed-drawer';
 
     if (this.state.toolDrawerStatus === 'open' && this.state.toolDrawerView === 'dismiss') {
@@ -121,13 +128,15 @@ export default class Catalog extends React.Component {
           status={this.state.toolDrawerStatus}
           handler={this.handler} />
 
-          <div className={`catalog ${dismissClass}`}>
-            <ul className='catalog-list mdc-image-list mdc-image-list--with-text-protection'>
-              {this.props.visibleCollections ? this.props.visibleCollections.map(collectionId =>
-                <CatalogCardContainer collection={this.props.collections[collectionId]} key={collectionId} match={this.props.match} history={this.props.history} />
-              ) : loadingMessage}
-            </ul>
-          </div>
+        <div className={`catalog ${dismissClass}`}>
+          <ul className='catalog-list mdc-image-list mdc-image-list--with-text-protection'>
+            {this.props.visibleCollections ? this.props.visibleCollections.map(collectionId =>
+              <CatalogCardContainer collection={this.props.collections[collectionId]} key={collectionId} match={this.props.match} history={this.props.history} />
+            ) : loadingMessage}
+
+            {this.props.visibleCollections && this.props.visibleCollections.length < 1 ? noData : ''}
+          </ul>
+        </div>
 
         <Footer
           view={this.state.toolDrawerView}

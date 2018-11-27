@@ -29,8 +29,18 @@ styles for component: Catalog
     }
 
     .catalog-list {
+
+      .no-data {
+        padding: 0 0 0 0;
+
+        .no-data-image {
+          position: relative;
+        }
+      }
+
       padding: 20px 10% 2% 10%;
       margin-bottom: 500px;
+
       @include mdc-image-list-standard-columns(6);
 
       @media (min-width: mdc-layout-grid-breakpoint-min(tablet)) and (max-width: mdc-layout-grid-breakpoint-min(desktop)) {

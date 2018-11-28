@@ -37,6 +37,10 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
     }
   }
 
+  componentWillUnmount() {
+    this.map.remove();
+  }
+
   toggleLayers (e, map, areaType) {
     // if popup is open, close it
     if (document.querySelector('.mapboxgl-popup')) {
@@ -84,6 +88,7 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
         center: [-99.341389, 31.330000],
         zoom: 6.1
     });
+    this.map = map;
     // add those controls!
     map.addControl(new mapboxgl.NavigationControl(), 'top-left');
     const areaTypesAry = Object.keys(this.props.resourceAreaTypes).sort();
@@ -202,55 +207,58 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
       }
       // reformat the tile urls in the carto api response to convert them to
       // vector rather than raster tiles
-      var areaTiles = result.tiles.map(function (tileUrl) {
+      const areaTiles = result.tiles.map(function (tileUrl) {
         return tileUrl
           .replace('{s}', 'a')
           .replace(/.png/, '.mvt');
       });
-      // use the tiles from the response to add a source to the map
-      map.addSource(layerSourceName, { type: 'vector', tiles: areaTiles });
-      // add the polygon area_type layer
-      map.addLayer({
-          id: layerBaseName,
-          'type': 'fill',
-          'source': layerSourceName,
-          'source-layer': 'layer0',
-          'layout': {'visibility': visibility},
-          'paint': {
-            'fill-color': styles[filler],
-            'fill-opacity': .3,
-            'fill-outline-color': styles[texter]
-          }
-      });
-      // add the polygon area_type hover layer. wired below to toggle on hover
-      map.addLayer({
-          id: layerHoverName,
-          'type': 'fill',
-          'source': layerSourceName,
-          'source-layer': 'layer0',
-          'layout': {'visibility': visibility},
-          'paint': {
-            'fill-color': styles[filler],
-            'fill-opacity': .7,
-            'fill-outline-color': styles[texter]
-          },
-          'filter': ['==', 'area_type_name', '']
-      }, layerBaseName);
-      // add the labels layer for the area_type polygons
-      // map.addLayer({
-      //     id: layerLabelName,
-      //     'type': 'symbol',
-      //     'source': layerSourceName,
-      //     'source-layer': 'layer0',
-      //     // 'minzoom': 10,
-      //     'layout': {
-      //       "text-field": "{area_type_name}",
-      //       'visibility': visibility
-      //     },
-      //     'paint': {
-      //       "text-color": styles[texter]
-      //     }
-      // });
+
+      setTimeout(function () {
+          // use the tiles from the response to add a source to the map
+          map.addSource(layerSourceName, { type: 'vector', tiles: areaTiles });
+          // add the polygon area_type layer
+          map.addLayer({
+              id: layerBaseName,
+              'type': 'fill',
+              'source': layerSourceName,
+              'source-layer': 'layer0',
+              'layout': {'visibility': visibility},
+              'paint': {
+                'fill-color': styles[filler],
+                'fill-opacity': .3,
+                'fill-outline-color': styles[texter]
+              }
+          });
+          // add the polygon area_type hover layer. wired below to toggle on hover
+          map.addLayer({
+              id: layerHoverName,
+              'type': 'fill',
+              'source': layerSourceName,
+              'source-layer': 'layer0',
+              'layout': {'visibility': visibility},
+              'paint': {
+                'fill-color': styles[filler],
+                'fill-opacity': .7,
+                'fill-outline-color': styles[texter]
+              },
+              'filter': ['==', 'area_type_name', '']
+          }, layerBaseName);
+          // add the labels layer for the area_type polygons
+          // map.addLayer({
+          //     id: layerLabelName,
+          //     'type': 'symbol',
+          //     'source': layerSourceName,
+          //     'source-layer': 'layer0',
+          //     // 'minzoom': 10,
+          //     'layout': {
+          //       "text-field": "{area_type_name}",
+          //       'visibility': visibility
+          //     },
+          //     'paint': {
+          //       "text-color": styles[texter]
+          //     }
+          // });
+      }, 100);
     });
     // add the layer id's to the areaType's array in the layerRef for toggling
     this.layerRef[areaType].push(layerBaseName, layerHoverName, layerLabelName);

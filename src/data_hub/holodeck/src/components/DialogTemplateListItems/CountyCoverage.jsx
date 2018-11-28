@@ -16,6 +16,10 @@ export default class CountyCoverage extends React.Component {
     this.createMap();
   }
 
+  componentWillUnmount() {
+    this.map.remove();
+  }
+
   createMap() {
     // define mapbox map
     mapboxgl.accessToken = 'undefined';
@@ -25,6 +29,7 @@ export default class CountyCoverage extends React.Component {
         center: [-99.341389, 31.330000],
         zoom: 4
     });
+    this.map = map;
     // add those controls!
     map.addControl(new mapboxgl.NavigationControl(), 'top-left');
     // disable map zoom when using scroll
@@ -62,39 +67,42 @@ export default class CountyCoverage extends React.Component {
         }
         // reformat the tile urls in the carto api response to convert them to
         // vector rather than raster tiles
-        var areaTiles = result.tiles.map(function (tileUrl) {
+        const areaTiles = result.tiles.map(function (tileUrl) {
           return tileUrl
             .replace('{s}', 'a')
             .replace(/.png/, '.mvt');
         });
-        // use the tiles from the response to add a source to the map
-        map.addSource('county-polygons-source', { type: 'vector', tiles: areaTiles });
-        // add the polygon area_type layer
-        map.addLayer({
-            id: 'county-polygons',
-            'type': 'fill',
-            'source': 'county-polygons-source',
-            'source-layer': 'layer0',
-            'paint': {
-              'fill-color': styles[filler],
-              'fill-opacity': .3,
-              'fill-outline-color': styles[texter]
-            }
-        });
-        // add the labels layer for the area_type polygons
-        // map.addLayer({
-        //     id: 'county-polygons-labels',
-        //     'type': 'symbol',
-        //     'source': 'county-polygons-source',
-        //     'source-layer': 'layer0',
-        //     // 'minzoom': 10,
-        //     'layout': {
-        //       "text-field": "{area_type_name}"
-        //     },
-        //     'paint': {
-        //       "text-color": styles[texter]
-        //     }
-        // });
+
+        setTimeout(function () {
+            // use the tiles from the response to add a source to the map
+            map.addSource('county-polygons-source', { type: 'vector', tiles: areaTiles });
+            // add the polygon area_type layer
+            map.addLayer({
+                id: 'county-polygons',
+                'type': 'fill',
+                'source': 'county-polygons-source',
+                'source-layer': 'layer0',
+                'paint': {
+                  'fill-color': styles[filler],
+                  'fill-opacity': .3,
+                  'fill-outline-color': styles[texter]
+                }
+            });
+            // add the labels layer for the area_type polygons
+            // map.addLayer({
+            //     id: 'county-polygons-labels',
+            //     'type': 'symbol',
+            //     'source': 'county-polygons-source',
+            //     'source-layer': 'layer0',
+            //     // 'minzoom': 10,
+            //     'layout': {
+            //       "text-field": "{area_type_name}"
+            //     },
+            //     'paint': {
+            //       "text-color": styles[texter]
+            //     }
+            // });
+        }, 100);
     });
   }
 

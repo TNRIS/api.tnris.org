@@ -1284,7 +1284,7 @@ class AreasView(models.Model):
       'Order Collections'
   )
   collections = models.TextField(
-      'Download and Historical Collections'
+      'All Collections Aggregated'
   )
 
   def __str__(self):

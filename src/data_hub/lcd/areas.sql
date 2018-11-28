@@ -57,6 +57,26 @@ outside_entity_state_join as (
   FROM area_type
   INNER JOIN outside_area_join ON outside_area_join.area_type_id = area_type.area_type_id
   GROUP BY area_type.area_type_id
+),
+
+order_county_join as (
+  -- use collection and template_type tables to create list of order only collection_ids
+  WITH order_collections as (
+    SELECT
+    collection.collection_id
+    FROM collection
+    INNER JOIN template_type ON collection.template_type_id=template_type.template_type_id
+    WHERE template_type.template = 'tnris-order' AND collection.public = true
+  )
+  -- use the collection/template_type join to create collection_id list for
+  -- all associated county area_types
+  SELECT
+  collection_county_relate.area_type_id,
+  string_agg(CAST(collection_county_relate.collection_id as varchar), ',') as collections
+  FROM
+  collection_county_relate
+  INNER JOIN order_collections ON order_collections.collection_id = collection_county_relate.collection_id
+  GROUP BY collection_county_relate.area_type_id
 )
 
 SELECT
@@ -67,12 +87,14 @@ SELECT
   string_agg(CAST(resource.collection_id as varchar), ',') as download,
   historical_county_join.collections as historical,
   outside_entity_state_join.collections as outside_entity,
+  order_county_join.collections as order,
   -- aggregated collection_id list of all template_types (this is the
   -- field used by the geography filter)
   concat_ws(',',
             string_agg(CAST(resource.collection_id as varchar), ','),
             historical_county_join.collections,
-            outside_entity_state_join.collections) as collections
+            outside_entity_state_join.collections,
+            order_county_join.collections) as collections
 FROM
   resource
 
@@ -85,9 +107,13 @@ ON resource.area_type_id = historical_county_join.area_type_id
 LEFT JOIN outside_entity_state_join
 ON resource.area_type_id = outside_entity_state_join.area_type_id
 
+LEFT JOIN order_county_join
+ON resource.area_type_id = order_county_join.area_type_id
+
 GROUP BY
   resource.area_type_id,
   area_type.area_type_name,
   area_type.area_type,
   historical_county_join.collections,
-  outside_entity_state_join.collections;
+  outside_entity_state_join.collections,
+  order_county_join.collections;

@@ -40,22 +40,30 @@ styles for component: Catalog
     }
 
     .no-data-open {
-      margin: 0 0 0 500px;
+      margin: 0 0 0 28%;
 
-      @media (max-width: 1400px) {
-        margin-left: 300px;
+      @media (min-width: 1050px) and (max-width: 1200px) {
+        margin-left: 15%;
       }
-
-      @media (max-width: 1200px) {
-        margin-left: 150px;
+      @media (min-width: 1201px) and (max-width: 1500px) {
+        margin-left: 22%;
       }
     }
 
     .no-data-closed {
       margin: 0 0 0 calc(100% / 3);
 
-      @media (max-width: 1050px) {
+      @media (max-width: 769px) {
+        margin-left: 1%;
+      }
+      @media (min-width: 770px) and (max-width: 900px) {
         margin-left: 10%;
+      }
+      @media (min-width: 901px) and (max-width: 1049px) {
+        margin-left: 15%;
+      }
+      @media (min-width: 1050px) and (max-width: 1500px) {
+        margin-left: 25%;
       }
     }
 

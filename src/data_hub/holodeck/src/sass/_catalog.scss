@@ -29,22 +29,33 @@ styles for component: Catalog
     }
 
     .no-data {
-      top: -100px;
+      top: 0;
       position: relative;
-      width: 100%;
-      height: auto;
-
-      @media (min-width: 1400px) {
-        top: -250px;
-      }
-
-      @media (min-width: 1050px) and (max-width: 1399px) {
-        top: -150px;
-      }
+      max-width: 600px;
 
       .no-data-image {
         width: 100%;
         height: auto;
+      }
+    }
+
+    .no-data-open {
+      margin: 0 0 0 500px;
+
+      @media (max-width: 1400px) {
+        margin-left: 300px;
+      }
+
+      @media (max-width: 1200px) {
+        margin-left: 150px;
+      }
+    }
+
+    .no-data-closed {
+      margin: 0 0 0 calc(100% / 3);
+
+      @media (max-width: 1050px) {
+        margin-left: 10%;
       }
     }
 

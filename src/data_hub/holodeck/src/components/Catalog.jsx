@@ -77,6 +77,8 @@ export default class Catalog extends React.Component {
 
   render() {
     const { error, loading } = this.props;
+    let noDataDivClass = 'no-data no-data-closed';
+    let dismissClass = 'closed-drawer';
 
     const loadingMessage = (
         <div className="catalog-component__loading">
@@ -84,16 +86,9 @@ export default class Catalog extends React.Component {
         </div>
       );
 
-    const noData = (
-        <div className="no-data">
-          <img src={noDataImage} className="no-data-image" alt="No Data Available" title="No data available with those search terms" />
-        </div>
-      );
-
-    let dismissClass = 'closed-drawer';
-
     if (this.state.toolDrawerStatus === 'open' && this.state.toolDrawerView === 'dismiss') {
       dismissClass = 'open-drawer';
+      noDataDivClass = 'no-data no-data-open';
     }
 
     if (error) {
@@ -129,7 +124,9 @@ export default class Catalog extends React.Component {
           handler={this.handler} />
 
         <div className={`catalog ${dismissClass}`}>
-          {this.props.visibleCollections && this.props.visibleCollections.length < 1 ? noData : ''}
+          {this.props.visibleCollections && this.props.visibleCollections.length < 1 ? <div className={noDataDivClass}>
+            <img src={noDataImage} className="no-data-image" alt="No Data Available" title="No data available with those search terms" />
+          </div> : ''}
 
           <ul className='catalog-list mdc-image-list mdc-image-list--with-text-protection'>
             {this.props.visibleCollections ? this.props.visibleCollections.map(collectionId =>

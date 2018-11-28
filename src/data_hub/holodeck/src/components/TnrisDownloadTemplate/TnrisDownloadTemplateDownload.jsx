@@ -38,7 +38,9 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
   }
 
   componentWillUnmount() {
-    this.map.remove();
+    if (this.map) {
+      this.map.remove();
+    }
   }
 
   toggleLayers (e, map, areaType) {

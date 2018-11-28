@@ -9,6 +9,9 @@ const cartodb = window.cartodb;
 export default class TnrisDownloadTemplateDownload extends React.Component {
   constructor(props) {
       super(props);
+      this.state = {
+        resourceLength: null
+      };
       // bind our map builder functions
       this.createMap = this.createMap.bind(this);
       this.createLayers = this.createLayers.bind(this);
@@ -26,6 +29,9 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
       this.areaLookup = this.props.resourceAreas;
       this.createMap();
     }
+    if (this.props.selectedCollectionResources.result && this.props.selectedCollectionResources.result.length === 0) {
+      this.setState({resourceLength:this.props.selectedCollectionResources.result.length});
+    }
   }
 
   componentDidUpdate () {
@@ -34,6 +40,12 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
     if (this.props.loadingResources === false && this.props.selectedCollectionResources.result.length > 0) {
       this.areaLookup = this.props.resourceAreas;
       this.createMap();
+    }
+  }
+
+  componentWillReceiveProps (nextProps) {
+    if (nextProps.selectedCollectionResources.result && nextProps.selectedCollectionResources.result.length === 0) {
+      this.setState({resourceLength:this.props.selectedCollectionResources.result.length});
     }
   }
 
@@ -325,6 +337,16 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
 
     if (loadingResources) {
       return loadingMessage;
+    }
+
+    if (this.state.resourceLength === 0) {
+      return (
+        <div className='tnris-download-template-download'>
+          <div className="tnris-download-template-download__none">
+            Uh oh, we couldn't find the files to download. Please notify TNRIS using the contact form for this dataset.
+          </div>
+        </div>
+      )
     }
 
     return (

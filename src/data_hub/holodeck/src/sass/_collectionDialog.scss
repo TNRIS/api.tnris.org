@@ -7,6 +7,10 @@ styles for component: CollectionDialog
   .mdc-dialog__surface {
     max-width: 75%;
     height: 80%;
+
+    .mdc-top-app-bar {
+      top: initial !important;
+    }
   }
 
   .app-fab--absolute {

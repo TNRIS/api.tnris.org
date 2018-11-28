@@ -10,24 +10,15 @@ import tnrisFuego from '../images/tnris_fuego.png';
 export default class Header extends React.Component {
   constructor(props) {
     super(props);
-    this.handleOpenToolDrawer = this.handleOpenToolDrawer.bind(this);
+
     this.handleOpenOrderCartDialog = this.handleOpenOrderCartDialog.bind(this);
   }
 
   componentDidMount() {
     // this.menuDrawer = MDCDrawer.attachTo(document.querySelector('.menu-drawer'));
     this.toolDrawer = MDCDrawer.attachTo(document.querySelector('.tool-drawer'));
-
     this.topAppBarElement = document.querySelector('.mdc-top-app-bar');
     this.topAppBar = new MDCTopAppBar(this.topAppBarElement);
-
-    // this.topAppBar.listen('MDCTopAppBar:nav', () => {
-    //     this.menuDrawer.open = !this.menuDrawer.open;
-    // });
-  }
-
-  handleOpenToolDrawer() {
-    this.toolDrawer.open = !this.toolDrawer.open;
   }
 
   handleOpenOrderCartDialog() {
@@ -36,9 +27,19 @@ export default class Header extends React.Component {
 
   render() {
     let shoppingCartClass = "material-icons mdc-top-app-bar__navigation-icon";
+
     if (this.props.orders) {
       shoppingCartClass = Object.keys(this.props.orders).length !== 0 ? "material-icons mdc-top-app-bar__navigation-icon shopping-cart-full" : "material-icons mdc-top-app-bar__navigation-icon";
     }
+
+    let dismissClass = 'closed-drawer';
+
+    if (this.props.status === 'open' && this.props.view === 'dismiss') {
+      dismissClass = 'open-drawer';
+    }
+
+    const closedTitle = 'Open Tool Drawer';
+    const openTitle = 'Close Tool Drawer';
 
     let tnrisLogo;
     switch(this.props.theme) {
@@ -71,7 +72,7 @@ export default class Header extends React.Component {
     }
 
     return (
-      <header className="header-component mdc-top-app-bar mdc-top-app-bar--fixed">
+      <header className={`header-component mdc-top-app-bar mdc-top-app-bar--fixed ${dismissClass}`} id="master-header">
         <div className="header-title mdc-top-app-bar__row">
           <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
             <span className='header-title__tnris'>Texas Natural Resources Information System</span>
@@ -97,7 +98,7 @@ export default class Header extends React.Component {
             <a onClick={this.handleOpenOrderCartDialog} className="mdc-top-app-bar__action-item">
               <i className={shoppingCartClass}>shopping_cart</i>
             </a>
-            <a onClick={this.handleOpenToolDrawer} className="mdc-top-app-bar__action-item">
+            <a onClick={this.props.handler} className="mdc-top-app-bar__action-item" id="tools" title={this.props.status === 'closed' ? closedTitle : openTitle}>
               <i className="material-icons mdc-top-app-bar__navigation-icon">search</i>
             </a>
           </section>

@@ -10,9 +10,27 @@ styles for component: ToolDrawer
 
 
     .mdc-drawer__content {
-      overflow-x: hidden;
-      overflow-y: auto;
-      padding-bottom: 30px;
+
+      .no-scroll {
+        position: fixed;
+      }
+
+      .scroll {
+        max-height: 85.7vh;
+        overflow-x: hidden;
+        overflow-y: auto;
+        margin-top: 110px;
+        padding-bottom: 20px;
+        padding-top: 10px;
+      }
+
+      .mdc-drawer__header {
+        width: 255px;
+        z-index: 999;
+        padding: 0 0 0 0;
+        background: $header-bar;
+        border-bottom: solid 1px $skin-secondary;
+      }
 
       .dataset-counter {
         background: $skin-tertiary;
@@ -20,6 +38,11 @@ styles for component: ToolDrawer
         text-align: center;
         height: 26px;
         line-height: 26px;
+
+        @media only screen and (max-width: 1306px) {
+          height: 44px;
+          line-height: 44px;
+        }
 
         .dataset-counter-count {
           font-weight: bold;

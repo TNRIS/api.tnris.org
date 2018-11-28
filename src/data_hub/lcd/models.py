@@ -1280,6 +1280,9 @@ class AreasView(models.Model):
   outside_entity = models.TextField(
       'Outside Entity Collections'
   )
+  order = models.TextField(
+      'Order Collections'
+  )
   collections = models.TextField(
       'Download and Historical Collections'
   )

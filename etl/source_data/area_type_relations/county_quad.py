@@ -76,6 +76,7 @@ print('county uuid list created')
 query = "select collection.collection_id, template_type.template from collection left join template_type on template_type.template_type_id=collection.template_type_id;"
 cur.execute(query)
 response = cur.fetchall()
+bad_areas = []
 for r in response:
     coll_id = r[0]
     template = r[1]
@@ -137,6 +138,8 @@ for r in response:
                                 these_county_uuids.append(rcul)
                     except:
                         print('bad related quad: ' + related_quad)
+                        if related_quad not in bad_areas:
+                            bad_areas.append(related_quad)
                 # if qquad, lookup related quad, then use it to lookup county
                 # and add it to the list
                 elif 'qquad':
@@ -150,6 +153,8 @@ for r in response:
                                 these_county_uuids.append(rcul)
                     except:
                         print('bad qquad related quad: ' + related_quad)
+                        if related_quad not in bad_areas:
+                            bad_areas.append(related_quad)
                 else:
                     # not a county, quad, or qquad? that shouldn't be possible
                     print("WHAAAAA?????")
@@ -165,11 +170,9 @@ for r in response:
                 cur.execute(newQuery)
                 conn.commit()
 
-
-
-
 ###########
 cur.close()
 conn.close()
-
+print('--------------------------------')
+print(bad_areas)
 print("that's all folks!!")

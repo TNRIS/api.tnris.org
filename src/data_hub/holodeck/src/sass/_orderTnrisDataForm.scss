@@ -4,13 +4,17 @@ styles for component: OrderTnrisDataForm
 
 .order-tnris-data-form-component {
   @include mdc-text-field-bottom-line-color(rgba(0,0,0,.42));
-  @include mdc-text-field-label-color(#6200ee);
-  @include mdc-text-field-line-ripple-color(#6200ee);
+  @include mdc-text-field-label-color($primary-color);
+  @include mdc-text-field-line-ripple-color($primary-color);
   @include mdc-text-field-textarea-stroke-color(rgba(0,0,0,.42));
 
-  @include mdc-radio-ink-color(#6200ee);
-  @include mdc-radio-checked-stroke-color(#6200ee);
-  @include mdc-radio-focus-indicator-color(#6200ee);
+  @include mdc-radio-ink-color($primary-color);
+  @include mdc-radio-checked-stroke-color($primary-color);
+  @include mdc-radio-focus-indicator-color($primary-color);
+
+  .mdc-radio .mdc-radio__native-control:enabled:not(:checked) + .mdc-radio__background .mdc-radio__outer-circle {
+    border-color: $nest-text;
+  }
 
   padding: 15px;
   overflow-y: auto;
@@ -23,46 +27,31 @@ styles for component: OrderTnrisDataForm
     display: flex;
   }
 
+  div.mdc-text-field--textarea {
+    textarea {
+      color: $nest-text;
+    }
+
+    label {
+      background-color: $nest-background;
+    }
+  }
+
+  .mdc-text-field--focused {
+    border-color: $primary-color;
+  }
+
   .mdc-text-field--invalid {
-    @include mdc-text-field-bottom-line-color(red);
-    @include mdc-text-field-label-color(red);
-    @include mdc-text-field-line-ripple-color(red);
-    @include mdc-text-field-textarea-stroke-color(red);
+    @include mdc-text-field-bottom-line-color($error-text);
+    @include mdc-text-field-label-color($error-text);
+    @include mdc-text-field-line-ripple-color($error-text);
+    @include mdc-text-field-textarea-stroke-color($error-text);
   }
 
-  input[type='number'] {
-    -moz-appearance:textfield;
-  }
-
-  input::-webkit-outer-spin-button,
-  input::-webkit-inner-spin-button {
-      -webkit-appearance: none;
-  }
-
-  .mdc-select:not(.mdc-select--disabled) {
-    background-color: initial;
-    margin-bottom: 16px;
-    display: flex;
-    @include mdc-select-label-color(#6200ee);
-    // @include mdc-select-ink-color(#6200ee);
-    @include mdc-select-bottom-line-color(rgba(0, 0, 0, 0.12));
-    @include mdc-select-focused-bottom-line-color(#6200ee);
-
-
-    select {
-      -webkit-appearance: none;
-      -moz-appearance: none;
-      appearance: none;
-
-      option:not([disabled]) {
-        color: black;
-      }
+  .mdc-form-field {
+    label {
+      color: $nest-text;
     }
-
-    select::-ms-expand {
-      display: none;
-    }
-
   }
 
   .order-lidar-switches, .order-historical-switches {
@@ -70,10 +59,10 @@ styles for component: OrderTnrisDataForm
       min-height: 40px;
 
       .mdc-switch:not(.mdc-switch--disabled) {
-        @include mdc-switch-toggled-on-color(#6200ee);
-        @include mdc-switch-toggled-on-track-color(#6200ee);
-        @include mdc-switch-toggled-on-thumb-color(#6200ee);
-        @include mdc-switch-toggled-on-ripple-color(#6200ee);
+        @include mdc-switch-toggled-on-color($primary-color);
+        @include mdc-switch-toggled-on-track-color($primary-color);
+        @include mdc-switch-toggled-on-thumb-color($primary-color);
+        @include mdc-switch-toggled-on-ripple-color($primary-color);
       }
 
       .mdc-switch {
@@ -103,12 +92,16 @@ styles for component: OrderTnrisDataForm
   }
 
   .mdc-typography--body2 {
-    color: rgba(0, 0, 0, 0.6);
+    color: $nest-text;
   }
 
   .mdc-typography--caption {
     margin-left: 44px;
-    color: rgba(0, 0, 0, 0.6);
+    color: $nest-text-subtle;
+
+    a {
+      color: $primary-color;
+    }
   }
 
   .mdc-form-field {
@@ -121,28 +114,34 @@ styles for component: OrderTnrisDataForm
 
   .mdc-text-field:not(.mdc-text-field--disabled) + .mdc-text-field-helper-text {
     margin-bottom: 10px;
-    color: #6200ee;
+    color: $primary-color;
   }
 
   .invalid-prompt {
-    color: red;
+    color: $error-text;
   }
 
   .submit-button {
     display: flex;
     justify-content: center;
     align-items: center;
+
+    .mdc-button--raised:not(:disabled),
+    .mdc-button--unelevated:not(:disabled) {
+      background-color: $primary-color;
+      color: $text-color;
+    }
   }
 
   .order-cart-form-success {
     span {
-      color: green;
+      color: $success-text;
     }
   }
 
   .order-cart-form-error {
     span {
-      color: red;
+      color: $error-text;
     }
   }
 

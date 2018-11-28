@@ -3,21 +3,30 @@ styles for component: OrderCart
 */
 
 .order-cart-form-component-container {
+  header {
+    @include mdc-top-app-bar-ink-color($text-color);
+    @include mdc-top-app-bar-icon-ink-color($text-color);
+    @include mdc-top-app-bar-fill-color($primary-color);
+    border-bottom: solid 1px $skin-secondary;
+  }
+
   overflow-y: auto;
   overflow-x: hidden;
+  background-color: $main-background;
 
   .order-cart-form-component {
     @include mdc-text-field-bottom-line-color(rgba(0,0,0,.42));
-    @include mdc-text-field-label-color(#6200ee);
-    @include mdc-text-field-line-ripple-color(#6200ee);
+    @include mdc-text-field-label-color($primary-color);
+    @include mdc-text-field-line-ripple-color($primary-color);
     @include mdc-text-field-textarea-stroke-color(rgba(0,0,0,.42));
 
-    @include mdc-radio-ink-color(#6200ee);
-    @include mdc-radio-checked-stroke-color(#6200ee);
-    @include mdc-radio-focus-indicator-color(#6200ee)
+    @include mdc-radio-ink-color($primary-color);
+    @include mdc-radio-checked-stroke-color($primary-color);
+    @include mdc-radio-focus-indicator-color($primary-color)
 
     padding: 15px;
     margin-top: 64px;
+    color: $nest-text;
 
     .order-cart-data-items {
       .mdc-list-item {
@@ -31,18 +40,56 @@ styles for component: OrderCart
       }
     }
 
+    .mdc-list {
+      color: $nest-text-subtle;
+
+      .mdc-list-item {
+        background-color: $nest-background;
+
+        .mdc-list-item__graphic {
+          color: $primary-color;
+        }
+
+        .mdc-list-item__text {
+          .mdc-list-item__primary-text {
+            color: $primary-color;
+          }
+
+          .mdc-list-item__secondary-text {
+            color: $nest-text-subtle;
+          }
+        }
+
+        .mdc-list-item__meta {
+          color: $nest-text-subtle;
+        }
+      }
+
+    }
+
+    .template-content-div {
+      box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+      margin-bottom: 15px;
+      background-color: $nest-background;
+      padding: 6px 16px 16px 16px;
+    }
+
     div.mdc-text-field {
       border-bottom-width: 1px;
       border-bottom-style: solid;
       margin-bottom: 16px;
       display: flex;
+
+      input {
+        color: $nest-text;
+      }
     }
 
     .mdc-text-field--invalid {
-      @include mdc-text-field-bottom-line-color(red);
-      @include mdc-text-field-label-color(red);
-      @include mdc-text-field-line-ripple-color(red);
-      @include mdc-text-field-textarea-stroke-color(red);
+      @include mdc-text-field-bottom-line-color($error-text);
+      @include mdc-text-field-label-color($error-text);
+      @include mdc-text-field-line-ripple-color($error-text);
+      @include mdc-text-field-textarea-stroke-color($error-text);
     }
 
     input[type='number'] {
@@ -58,19 +105,24 @@ styles for component: OrderCart
       background-color: initial;
       margin-bottom: 16px;
       display: flex;
-      @include mdc-select-label-color(#6200ee);
-      // @include mdc-select-ink-color(#6200ee);
+      @include mdc-select-label-color($primary-color);
       @include mdc-select-bottom-line-color(rgba(0, 0, 0, 0.12));
-      @include mdc-select-focused-bottom-line-color(#6200ee);
+      @include mdc-select-focused-bottom-line-color($primary-color);
 
 
       select {
         -webkit-appearance: none;
         -moz-appearance: none;
         appearance: none;
+        color: $nest-text;
 
         option:not([disabled]) {
           color: black;
+        }
+
+        option {
+          background-color: $nest-background;
+          color: $nest-text !important;
         }
       }
 
@@ -80,17 +132,22 @@ styles for component: OrderCart
 
     }
 
+    .mdc-radio .mdc-radio__native-control:enabled:not(:checked) + .mdc-radio__background .mdc-radio__outer-circle {
+      border-color: $nest-text;
+    }
+
     .mdc-typography--headline6 {
       margin-bottom: 10px;
+      color: $nest-text;
     }
 
     .mdc-typography--body2 {
-      color: rgba(0, 0, 0, 0.6);
+      color: $nest-text;
     }
 
     .mdc-typography--caption {
       margin-left: 44px;
-      color: rgba(0, 0, 0, 0.6);
+      color: $nest-text-subtle;
     }
 
     .expiration-note {
@@ -102,6 +159,7 @@ styles for component: OrderCart
 
       label {
         cursor: pointer;
+        color: $nest-text;
       }
     }
 
@@ -112,22 +170,33 @@ styles for component: OrderCart
     }
 
     .invalid-prompt {
-      color: red;
+      color: $error-text;
     }
 
     .submit-button {
       display: flex;
       justify-content: center;
       align-items: center;
+
+      .mdc-button--raised:not(:disabled),
+      .mdc-button--unelevated:not(:disabled) {
+        background-color: $primary-color;
+        color: $text-color;
+      }
     }
 
     .default-order-cart-display {
       text-align: center;
+
+      button {
+        background-color: $primary-color;
+        color: $text-color;
+      }
     }
 
     .order-cart-form-success {
       span {
-        color: green;
+        color: $success-text;
       }
     }
 

@@ -19,6 +19,7 @@ const mapStateToProps = (state) => ({
   showCollectionDialog: state.collectionDialog.showCollectionDialog,
   sortOrder: state.sorter.sortOrder,
   visibleCollections: getSortedCollections(state),
+  theme: state.colorTheme.theme
 });
 
 const mapDispatchToProps = dispatch => ({

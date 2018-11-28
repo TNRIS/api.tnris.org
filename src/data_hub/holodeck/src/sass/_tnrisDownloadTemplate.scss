@@ -3,8 +3,16 @@ styles for component: TnrisDownloadTemplate
 */
 
 .tnris-download-template {
+  header {
+    @include mdc-top-app-bar-ink-color($text-color);
+    @include mdc-top-app-bar-icon-ink-color($text-color);
+    @include mdc-top-app-bar-fill-color($primary-color);
+    border-bottom: solid 1px $skin-secondary;
+  }
+
   height: 100%;
   overflow-y: auto;
+  background-color: $main-background;
 
   &:focus {
     outline: none;
@@ -17,11 +25,11 @@ styles for component: TnrisDownloadTemplate
       .mdc-tab {
         max-width: 25px;
         span {
-          color: white;
+          color: $text-color;
         }
         .mdc-tab-indicator--active {
           .mdc-tab-indicator__content--underline {
-            background-color: white;
+            background-color: $text-color;
           }
         }
       }

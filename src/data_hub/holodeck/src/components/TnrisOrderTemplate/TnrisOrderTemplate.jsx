@@ -4,7 +4,7 @@ import {MDCTabBar} from '@material/tab-bar';
 import { MDCMenu } from '@material/menu';
 
 import TnrisOrderTemplateOrder from './TnrisOrderTemplateOrder';
-import TnrisDownloadTemplateDetails from '../TnrisDownloadTemplate/TnrisDownloadTemplateDetails'
+import TnrisOrderTemplateDetails from './TnrisOrderTemplateDetails'
 import TnrisDownloadTemplateImages from '../TnrisDownloadTemplate/TnrisDownloadTemplateImages'
 
 export default class TnrisOrderTemplate extends React.Component {
@@ -51,7 +51,7 @@ export default class TnrisOrderTemplate extends React.Component {
     let showComponent;
     switch(this.state.view) {
       case 'details':
-        showComponent = <TnrisDownloadTemplateDetails collection={this.props.collection} />;
+        showComponent = <TnrisOrderTemplateDetails collection={this.props.collection} />;
         break;
       case 'images':
         showComponent = (<TnrisDownloadTemplateImages
@@ -62,11 +62,11 @@ export default class TnrisOrderTemplate extends React.Component {
         showComponent = <TnrisOrderTemplateOrder />;
         break;
       default:
-        showComponent = <TnrisDownloadTemplateDetails collection={this.props.collection} />;
+        showComponent = <TnrisOrderTemplateDetails collection={this.props.collection} />;
     }
 
     return (
-      <div className='tnris-download-template' tabIndex='1'>
+      <div className='tnris-order-template' tabIndex='1'>
         <header className="mdc-top-app-bar">
           <div className="mdc-top-app-bar__row">
 
@@ -104,7 +104,7 @@ export default class TnrisOrderTemplate extends React.Component {
 
                       <button className="mdc-tab" role="tab" aria-selected="false" tabIndex="-1"  onClick={() => this.setTemplateView("order")} title="Order">
                         <span className="mdc-tab__content">
-                          <span className="mdc-tab__icon material-icons">create</span>
+                          <span className="mdc-tab__icon material-icons">shopping_basket</span>
                         </span>
                         <span className="mdc-tab-indicator">
                           <span className="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
@@ -134,7 +134,7 @@ export default class TnrisOrderTemplate extends React.Component {
                     </a>
                     <a className={this.state.view === 'order' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
                        onClick={() => this.setTemplateView("order")}>
-                       <i className="mdc-tab__icon material-icons">create</i> Order
+                       <i className="mdc-tab__icon material-icons">shopping_basket</i> Order
                     </a>
                   </nav>
                 </div>

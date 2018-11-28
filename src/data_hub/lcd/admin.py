@@ -39,6 +39,7 @@ from .models import (
 class AgencyTypeAdmin(admin.ModelAdmin):
     model = AgencyType
     ordering = ('agency_name',)
+    list_display = ('agency_name', 'agency_abbreviation')
 
 
 # AreaType is solidified as statewide, counties, quads, qquads, & national grid
@@ -115,12 +116,22 @@ class CollectionAdmin(admin.ModelAdmin):
     inlines = [ImageInlineAdmin]
     ordering = ('name',)
     list_display = (
-        'name', 'collection_id', 'last_modified', 'public'
+        'disp_name', 'collection_id', 'last_modified', 'public'
     )
-    search_fields = ('name', 'collection_id')
+    search_fields = ('name', 'collection_id', 'acquisition_date')
     list_filter = (
         'public', 'template_type_id'
     )
+
+    # set aside acqusition_date year for list display
+    def disp_name(self, collection):
+        if collection.acquisition_date is not None and collection.template_type_id.template != 'outside-entity':
+            year = collection.acquisition_date.split("-")[0] + " "
+        else:
+            year = ""
+        return year + collection.name
+    disp_name.short_description = 'Collection Display Name'
+
     # remove default action 'delete_selected' so s3 files will be deleted by the
     # model's overridden delete method. also so user permissions don't have to be
     # handled. **No logical scenario calls for Collections to be bulk deleted
@@ -203,7 +214,7 @@ class ResourceAdmin(admin.ModelAdmin):
 
     ordering = ('collection_id',)
     list_display = (
-        'collection_id', 'area_type_id', 'resource', 'resource_type_id', 'last_modified'
+        'disp_name', 'area_type_id', 'resource', 'resource_type_id', 'last_modified'
     )
     search_fields = ('collection_id__name', 'area_type_id__area_type_name', 'resource', 'resource_type_id__resource_type_name')
     list_filter = (
@@ -211,6 +222,15 @@ class ResourceAdmin(admin.ModelAdmin):
         'area_type_id',
         'resource_type_id'
     )
+
+    # set aside acqusition_date year for list display
+    def disp_name(self, resource):
+        if resource.collection_id.acquisition_date is not None and resource.collection_id.template_type_id.template != 'outside-entity':
+            year = resource.collection_id.acquisition_date.split("-")[0] + " "
+        else:
+            year = ""
+        return year + resource.collection_id.name
+    disp_name.short_description = 'Collection Display Name'
 
     # override the /resource/add/ form
     def add_view(self,request,extra_context=None):
@@ -262,6 +282,7 @@ class ResourceTypeAdmin(admin.ModelAdmin):
 class TemplateTypeAdmin(admin.ModelAdmin):
     model = TemplateType
     ordering = ('template',)
+    list_display = ('template', 'filter_name')
 
 
 @admin.register(UseType)

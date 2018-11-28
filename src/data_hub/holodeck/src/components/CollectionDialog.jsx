@@ -15,6 +15,26 @@ class CollectionDialog extends React.Component {
 
     componentDidMount() {
       this.dialog = new MDCDialog(this.refs.collection_dialog);
+
+      // wire cancel event to handle closing the dialog via ESC key or clicking
+      // the backdrop. simply running this.closeCollectionDialog() trips up the
+      // app so we have to clear the store's selected collection below in the
+      // componentWillReceiveProps lifecycle function after the dialog is closed
+      this.dialog.listen('MDCDialog:cancel', () => {
+        this.props.closeCollectionDialog();
+        if (this.props.previousUrl.includes('/collection/')) {
+          this.props.setUrl('/', this.props.history);
+        }
+        else {
+          this.props.setUrl(this.props.previousUrl, this.props.history);
+        }
+      })
+    }
+
+    componentWillReceiveProps (nextProps) {
+      if (nextProps.selectedCollection && !nextProps.showCollectionDialog) {
+        this.props.clearSelectedCollection();
+      }
     }
 
     componentDidUpdate() {

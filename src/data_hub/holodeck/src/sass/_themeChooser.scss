@@ -1,0 +1,57 @@
+/*
+styles for component: ThemeChooser
+*/
+
+.theme-chooser-component {
+  display: flex;
+  justify-content: center;
+  padding: 8px;
+
+  .theme-chooser-option {
+    cursor: pointer;
+    height: 20px;
+    width: 20px;
+    border-radius: 10px;
+    margin: 4px;
+    border: 1px solid black;
+
+    i {
+      color: $alt-color;
+      font-size: 21px;
+    }
+  }
+
+  // currently light is default
+  .theme-chooser-option.light-app-theme {
+    background-color: $default-theme-primary;
+  }
+
+  .theme-chooser-option.dark-app-theme {
+    background-color: $dark-theme-primary;
+  }
+
+  .theme-chooser-option.earth-app-theme {
+    background-color: $earth-theme-primary;
+  }
+
+  .theme-chooser-option.fuego-app-theme {
+    background-color: $fuego-theme-primary;
+  }
+
+  .theme-chooser-option.vaporwave-app-theme {
+    background-color: $vaporwave-theme-primary;
+  }
+
+  .theme-chooser-option.america-app-theme {
+    background-color: $america-theme-primary;
+  }
+
+  .theme-chooser-option.hulk-app-theme {
+    background-color: $hulk-theme-primary;
+  }
+
+  .theme-chooser-option.relax-app-theme {
+    background-color: $relax-theme-primary;
+  }
+
+}

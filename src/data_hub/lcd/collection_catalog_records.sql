@@ -6,6 +6,7 @@ CREATE VIEW "collection_catalog_record" as
 SELECT collection.collection_id,
   collection.name,
   CASE
+    -- if an outside-entity, overwrite acquisition_date to always be today
     WHEN (
       (template_type.template ~ '.*outside-entity.*')
     ) THEN to_char(CURRENT_DATE ,'YYYY-MM-DD')
@@ -35,6 +36,7 @@ SELECT collection.collection_id,
   string_agg(distinct image.image_url, ',') as images,
   string_agg(distinct area_type.area_type_name, ', ' order by area_type.area_type_name) as counties,
   CASE
+    -- use resource_types from relate table to determine data_types (only for tnris-download)
     WHEN (
       (string_agg(distinct resource_type.resource_type_abbreviation, ',' order by resource_type.resource_type_abbreviation)
       ~ '.*(HYPSO|LPC|VECTOR).*')
@@ -56,6 +58,7 @@ SELECT collection.collection_id,
     ELSE NULL
   END AS data_types,
   CASE
+    -- use resource_types from relate table to determine band_types (only for tnris-download)
     WHEN (
       (string_agg(distinct resource_type.resource_type_abbreviation, ',' order by resource_type.resource_type_abbreviation)
       ~ '.*BW.*')
@@ -121,7 +124,8 @@ SELECT collection.collection_id,
 	license_type.license_name,
 	license_type.license_abbreviation,
 	license_type.license_url,
-	template_type.template
+	template_type.template,
+  template_type.filter_name as availability
 FROM collection
 
 LEFT JOIN category_relate ON category_relate.collection_id=collection.collection_id
@@ -161,4 +165,5 @@ GROUP BY collection.collection_id,
 				license_type.license_name,
 				license_type.license_abbreviation,
 				license_type.license_url,
-				template_type.template;
+				template_type.template,
+        template_type.filter_name;

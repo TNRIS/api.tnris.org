@@ -5,7 +5,6 @@ export default class CollectionFilter extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      filters: this.props.collectionFilter,
       badUrlFlag: false
     }
     this.handleOpenFilterMenu = this.handleOpenFilterMenu.bind(this);
@@ -27,6 +26,7 @@ export default class CollectionFilter extends React.Component {
               const hashId = '#' + id;
               if (document.querySelector(hashId)) {
                 document.querySelector(hashId).checked = true;
+                document.querySelector(`${hashId}-label`).classList.add('filter-active');
               }
               return hashId;
             });
@@ -39,6 +39,37 @@ export default class CollectionFilter extends React.Component {
           badUrlFlag: true
         });
       }
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (Object.keys(nextProps.collectionFilter).length === 0) {
+      const filterComponent = document.getElementById('filter-component');
+      const inputArray = filterComponent.querySelectorAll("input");
+      inputArray.forEach(input => {
+        return input.checked = false;
+      });
+      const labelArray = filterComponent.querySelectorAll("label[class='filter-active']");
+      labelArray.forEach(label => {
+        return label.classList.remove('filter-active');
+      });
+      // THIS IS CODE TO COLLAPSE THE FILTER GROUP WHEN ALL FILTERS ARE TURNED OFF.
+      // WAS WRITTEN TO RUN AFTER USER CLICKS THE BUTTON TO CLEAR ALL BUT IT CAUSES
+      // GROUPS TO COLLAPSE WHEN USER MANUALLY UNCHECKS ALL WHICH IS NOT DESIRED
+      // const groupArray = filterComponent.querySelectorAll("ul[id$='-list']");
+      // groupArray.forEach(group => {
+      //   if (!group.classList.contains('hide-filter-list')) {
+      //     group.classList.add('hide-filter-list');
+      //   }
+      //   return group;
+      // });
+      // const iconArray = filterComponent.querySelectorAll("i[id$='-expansion-icon']");
+      // iconArray.forEach(icon => {
+      //   if (icon.innerHTML === 'expand_less') {
+      //     icon.innerHTML = 'expand_more';
+      //   }
+      //   return icon;
+      // });
     }
   }
 
@@ -66,6 +97,7 @@ export default class CollectionFilter extends React.Component {
         currentFilters[target.name] = [target.value];
       }
       this.props.setCollectionFilter(currentFilters);
+      document.getElementById(`${target.value}-label`).classList.add("filter-active");
     } else {
       if (currentFilters.hasOwnProperty(target.name) && currentFilters[target.name].indexOf(target.value) >= 0) {
         currentFilters[target.name] = currentFilters[target.name].filter(item => item !== target.value);
@@ -75,6 +107,7 @@ export default class CollectionFilter extends React.Component {
         }
       }
       this.props.setCollectionFilter(currentFilters);
+      document.getElementById(`${target.value}-label`).classList.remove("filter-active");
     }
 
     // update URL to reflect new filter changes
@@ -95,9 +128,8 @@ export default class CollectionFilter extends React.Component {
     if (this.state.badUrlFlag) {
       return <Redirect to='/404' />;
     }
-    // console.log(this.props);
     return (
-      <div className='filter-component'>
+      <div id='filter-component' className='filter-component'>
         <ul className='mdc-list'>
           {
             Object.keys(this.props.collectionFilterChoices).map(choice =>
@@ -113,41 +145,45 @@ export default class CollectionFilter extends React.Component {
                 </a>
                   <ul className='mdc-list hide-filter-list' id={`${choice}-list`}>
                     {
-                      this.props.collectionFilterChoices[choice].map((choiceValue, i) =>
-                      <li
-                        className='mdc-list-item'
-                        key={choiceValue}>
-                        <div className='mdc-form-field'>
-                          <div className='mdc-checkbox'>
-                            <input type='checkbox'
-                                   className='mdc-checkbox__native-control'
-                                   id={choiceValue}
-                                   name={choice}
-                                   value={choiceValue}
-                                   onChange={e => this.handleSetFilter(e.target)}/>
-                            <div className='mdc-checkbox__background'>
-                              <svg className='mdc-checkbox__checkmark'
-                                   viewBox='0 0 24 24'>
-                                <path className='mdc-checkbox__checkmark-path'
-                                      fill='none'
-                                      d='M1.73,12.91 8.1,19.28 22.79,4.59'/>
-                              </svg>
-                              <div className='mdc-checkbox__mixedmark'></div>
+                      this.props.collectionFilterChoices[choice].map((choiceValue, i) =>{
+                        const labelValue = choiceValue.replace(/_/g, ' ');
+                        return (<li
+                          className='mdc-list-item'
+                          key={choiceValue}>
+                          <div className='mdc-form-field'>
+                            <div className='mdc-checkbox'>
+                              <input type='checkbox'
+                                     className='mdc-checkbox__native-control'
+                                     id={choiceValue}
+                                     name={choice}
+                                     value={choiceValue}
+                                     onChange={e => this.handleSetFilter(e.target)}/>
+                              <div className='mdc-checkbox__background'>
+                                <svg className='mdc-checkbox__checkmark'
+                                     viewBox='0 0 24 24'>
+                                  <path className='mdc-checkbox__checkmark-path'
+                                        fill='none'
+                                        d='M1.73,12.91 8.1,19.28 22.79,4.59'/>
+                                </svg>
+                                <div className='mdc-checkbox__mixedmark'></div>
+                              </div>
                             </div>
+                            <label id={`${choiceValue}-label`}
+                                   htmlFor={choiceValue}>
+                                   {labelValue}
+                           </label>
                           </div>
-                          <label htmlFor={choiceValue}>{choiceValue}</label>
-                        </div>
-                      </li>)}
+                        </li>);
+                    })}
                   </ul>
               </li>
             )
           }
           <li key='filter-map-button'>
-            <a
-              className='mdc-list-item filter-list-title'
-              id='filter-map-button'
-              onClick={this.props.openCollectionFilterMapDialog}>
-              by geography
+            <a className='mdc-list-item filter-list-title'
+               id='filter-map-button'
+               onClick={this.props.openCollectionFilterMapDialog}>
+               by geography
             </a>
           </li>
         </ul>

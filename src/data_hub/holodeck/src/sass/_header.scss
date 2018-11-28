@@ -3,14 +3,14 @@ styles for component: Header
 */
 
 .header-component {
-  @include mdc-top-app-bar-ink-color(gray);
-  @include mdc-top-app-bar-icon-ink-color(gray);
-  @include mdc-top-app-bar-fill-color(white);
-  border-bottom: solid 1px gray;
+  @include mdc-top-app-bar-ink-color($skin-secondary);
+  @include mdc-top-app-bar-icon-ink-color($skin-secondary);
+  @include mdc-top-app-bar-fill-color($header-bar);
+  border-bottom: solid 1px $skin-secondary;
 
   .header-title {
-    background: lightgray;
-    color: white;
+    background: $skin-tertiary;
+    color: $skin-text;
     font-family: pragmatica-web-condensed,sans-serif;
     font-size: 16px;
     font-weight: 100;
@@ -30,9 +30,16 @@ styles for component: Header
         text-decoration: none;
         color: inherit;
         font-size: 12px;
+        text-align: right;
       }
-    }
 
+      .header-title__tnris {
+        text-decoration: none;
+        text-align: left;
+        color: inherit;
+      }
+
+    }
   }
 
   .header-nav {
@@ -46,10 +53,16 @@ styles for component: Header
       }
 
       .shopping-cart-full {
-        color: #b088e8;
+        color: $alt-color;
       }
     }
 
+    .tnris-logo-text {
+      font-style: italic;
+      font-family: crillee;
+      font-weight: 900;
+      letter-spacing: -1px;
+    }
   }
 
 }

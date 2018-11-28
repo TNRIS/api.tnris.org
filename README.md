@@ -47,6 +47,30 @@ Built with:
 1. save and commit all changes. push to github appropriately.
 1. head over to the deployments repo to execute the actual application deployment and make it so
 
+# Lambda
+
+The database API '/areas' endpoint is routinely accessed by a Lambda Function which
+creates a CSV and dumps it into S3 for Carto to sync with. This provides an efficient
+query capability for the Geography map filter to spatially identify collections directly
+in Carto.
+
+### Lambda Development
+1. make a new python virtual environment (separate from the app's above) for lambda development. This is required as all associated python packages will need to be bundled
+for deployment and we don't want un-needed packages included.
+2. enable the lambda function's virtual environment. Example: `workon lambda-areas_view` (for virtualenv wrapper)
+3. Upgrade pip using `pip install --upgrade pip`
+4. Install python dependencies:
+   * `cd ~/data.tnris.org/lambda-areas_view`
+   * `pip install -r requirements.txt`
+5. run the function with `python lambda_function.py` (will need the aws cli set up with proper permissions)
+
+### Lambda Deployment Prep
+1. go through the development steps and run the function locally to ensure it is running as expected
+2. enable the lambda function's virtual environment. Example: `workon lambda-areas_view` (for virtualenv wrapper)
+3. cd into the repo root with `cd ~/data.tnris.org`
+4. run `make pack-lambda_areas_view` to copy the python dependencies from the virtual env into the lambda function folder
+5. hop over to the tnris deployments repo to run the rest
+
 
 <!-- ## Notes
  *  -->

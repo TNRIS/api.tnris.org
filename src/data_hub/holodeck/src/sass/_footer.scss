@@ -1,14 +1,20 @@
 /*
 styles for component: Footer
 */
-// #272727
+//
+
 .footer-component {
-  background-color: #444;
-  color: #f5f5f5;
+  background-color: $skin-primary;
+  color: $skin-text;
   position: absolute;
   width: 100%;
   left: 0;
   bottom: 0;
+
+  .open-drawer {
+    width: calc(100% - 255px);
+    transition: width 0.3s;
+  }
 
   @media (min-width: mdc-layout-grid-breakpoint-min(desktop)) {
     min-height: 375px;
@@ -16,11 +22,11 @@ styles for component: Footer
 
 
   .footer-component__legal {
-    background-color: gray;
+    background-color: $skin-secondary;
     font-size: 12px;
     text-align: center;
     padding: 10px 0;
-    color: #eee;
+    color: $skin-text;
 
     .legal-links {
       margin-top: 0;
@@ -34,7 +40,7 @@ styles for component: Footer
         padding-left: 5px;
 
         a {
-          color: #eee;
+          color: $skin-text;
           text-decoration: none;
 
           &:hover {
@@ -76,19 +82,19 @@ styles for component: Footer
           margin-bottom: 5px;
 
           a {
-            color: #9d9d9d;
+            color: $skin-text;
           }
 
           .footer-sub-menu {
             padding-left: 10px;
-            border-left: 1px solid #f5f5f5;
+            border-left: 1px solid $skin-text;
           }
         }
       }
 
       a {
         text-decoration: none;
-        color: #f5f5f5;
+        color: $skin-text;
         font-size: 14px;
 
         &:hover {
@@ -116,7 +122,7 @@ styles for component: Footer
     font-size: 12px;
     padding-bottom: 25px;
     text-align: center;
-    color: #eee;
+    color: $skin-text;
 
     @media (min-width: mdc-layout-grid-breakpoint-min(desktop)) {
       bottom: 0;

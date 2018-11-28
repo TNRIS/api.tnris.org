@@ -16,7 +16,12 @@ export default class Metadata extends React.Component {
 
     const agency_contact = this.props.collection.agency_contact ? (
       <li className="mdc-list-item">
-        <strong>Agency Contact:</strong><a href={"mailto:" + this.props.collection.agency_contact + "?subject=GIS data question"}>{this.props.collection.agency_contact}</a>
+        <strong>Agency Contact:</strong>
+          {
+            this.props.collection.agency_contact.includes('http') ? <a href={this.props.collection.agency_contact} target="_blank">{this.props.collection.agency_contact}</a>
+            : this.props.collection.agency_contact.includes('@') ? <a href={"mailto:" + this.props.collection.agency_contact + "?subject=GIS data question"}>{this.props.collection.agency_contact}</a>
+            : <p>{this.props.collection.agency_contact}</p>
+          }
       </li>
     ) : "";
 

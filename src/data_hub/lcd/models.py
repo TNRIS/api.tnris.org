@@ -1277,6 +1277,9 @@ class AreasView(models.Model):
   historical = models.TextField(
       'Historical Collections'
   )
+  outside_entity = models.TextField(
+      'Outside Entity Collections'
+  )
   collections = models.TextField(
       'Download and Historical Collections'
   )

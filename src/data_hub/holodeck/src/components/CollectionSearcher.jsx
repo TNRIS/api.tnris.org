@@ -10,6 +10,7 @@ export default class CollectionSearcher extends React.Component {
       badUrlFlag: false
     }
     this.handleSearch = this.handleSearch.bind(this);
+    this.clearSearch = this.clearSearch.bind(this);
   }
 
   componentDidMount() {
@@ -58,13 +59,28 @@ export default class CollectionSearcher extends React.Component {
     Object.keys(filterObj).length === 0 ? this.props.setUrl('/', this.props.history) : this.props.setUrl('/catalog/' + encodeURIComponent(filterString), this.props.history);
   }
 
+  clearSearch() {
+    if (this.searchField.value) {
+      this.props.setCollectionSearchQuery('');
+      console.log(this.props.history);
+      this.props.setUrl('/', this.props.history);
+    }
+  }
+
   render() {
     if (this.state.badUrlFlag) {
       return <Redirect to='/404' />;
     }
 
+    const clearDiv = <div id="clear-search" onClick={this.clearSearch} title="Clear search">
+        <i id='clear-icon' className='material-icons'>clear</i>
+      </div>
+
     return (
-      <div className='search-component mdc-text-field mdc-text-field--fullwidth'>
+      <div id='searchparent' className='search-component mdc-text-field mdc-text-field--fullwidth'>
+        {
+          this.props.collectionSearchQuery ? clearDiv : ''
+        }
         <input className='mdc-text-field__input'
                type='search'
                id='search-collections'
@@ -72,7 +88,8 @@ export default class CollectionSearcher extends React.Component {
                onChange={this.handleSearch}
                placeholder='Search'
                aria-label='Search data collections'>
-         </input>
+        </input>
+
       </div>
     );
   }

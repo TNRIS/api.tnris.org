@@ -11,7 +11,8 @@ import { getCollectionFilterChoices } from '../selectors/collectionSelectors';
 const mapStateToProps = (state) => ({
   collectionFilter: state.collectionFilter.collectionFilter,
   collectionFilterChoices: getCollectionFilterChoices(state),
-  showCollectionFilterMapDialog: state.collectionFilterMapDialog.showCollectionFilterMapDialog
+  showCollectionFilterMapDialog: state.collectionFilterMapDialog.showCollectionFilterMapDialog,
+  collectionFilterMapFilter: state.collectionFilterMap.collectionFilterMapFilter
 });
 
 const mapDispatchToProps = dispatch => ({

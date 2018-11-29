@@ -6,6 +6,10 @@
     bottom:0;
     left: 0;
     width:100%;
+
+    canvas {
+      width: 100% !important;
+    }
   }
 
   .map-filter-button {

@@ -194,6 +194,30 @@ styles for component: HistoricalAerialTemplateDetails
       }
     }
 
+    .share-bar {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+
+      .share-button {
+        margin: 6px;
+        cursor: pointer;
+      }
+
+      .share-copy-link {
+        background-color: #7E7E7E;
+        color: white;
+        border-radius: 15px;
+        height: 26px;
+        width: 26px;
+        text-align: center;
+
+        i {
+          font-size: 18px;
+          line-height: 26px;
+        }
+      }
+    }
 
   }
 }

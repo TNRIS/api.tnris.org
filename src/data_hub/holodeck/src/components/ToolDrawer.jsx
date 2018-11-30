@@ -6,6 +6,8 @@ import CollectionSearcherContainer from '../containers/CollectionSearcherContain
 import CollectionSorterContainer from '../containers/CollectionSorterContainer';
 import CollectionTimesliderContainer from '../containers/CollectionTimesliderContainer';
 
+import ShareButtons from './DialogTemplateListItems/ShareButtons';
+
 import ThemeChooserContainer from '../containers/ThemeChooserContainer';
 
 export default class ToolDrawer extends React.Component {
@@ -41,7 +43,7 @@ export default class ToolDrawer extends React.Component {
       <div className='tool-drawer-component mdc-typography'>
         <aside className={`${classname}${fullclass}`} dir='rtl'>
           <div className='mdc-drawer__content' dir='ltr'>
-            
+
               <div className='mdc-drawer__header no-scroll'>
                 <div className='dataset-counter'>
                   Showing <span className="dataset-counter-count">{this.props.total}</span> Datasets
@@ -68,7 +70,10 @@ export default class ToolDrawer extends React.Component {
               <div className='clear-all-filters-container'>
                 <button className="mdc-button mdc-button--raised" onClick={this.clearAllFilters}>Clear All</button>
               </div>
+              <hr className='mdc-list-divider'/>
               <ThemeChooserContainer />
+              <hr className='mdc-list-divider'/>
+              <ShareButtons />
             </nav>
 
           </div>

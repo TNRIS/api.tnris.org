@@ -62,6 +62,7 @@ class AgencyTypeAdmin(admin.ModelAdmin):
 class CategoryTypeAdmin(admin.ModelAdmin):
     model = CategoryType
     ordering = ('category',)
+    list_display = ('category', 'filter_name')
 
 
 class ImageInlineAdmin(admin.StackedInline):

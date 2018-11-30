@@ -31,7 +31,7 @@ export default class TnrisDownloadTemplateDetails extends React.Component {
         {lidarCard}
         <div className="template-content-div">
           <div className='mdc-typography--headline5 template-content-div-header'>
-            <i className="material-icons">share</i> Share
+            Share
           </div>
           <ShareButtons />
         </div>

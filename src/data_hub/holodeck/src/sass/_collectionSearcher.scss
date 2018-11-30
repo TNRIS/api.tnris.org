@@ -5,6 +5,10 @@ styles for component: CollectionSearcher
 .search-component {
   height: 64px;
 
+  .search-collections {
+    float: left;
+  }
+
   input:focus::-webkit-input-placeholder {
     color: $primary-color;
   }
@@ -25,8 +29,33 @@ styles for component: CollectionSearcher
     caret-color: $primary-color;
   }
 
-  input[type="search"]::-webkit-search-decoration:hover,
-  input[type="search"]::-webkit-search-cancel-button:hover {
-        cursor:pointer;
-    }
+  input[type="search"]::-webkit-search-decoration,
+  input[type="search"]::-webkit-search-cancel-button,
+  input[type="search"]::-webkit-search-results-button,
+  input[type="search"]::-webkit-search-results-decoration {
+    -webkit-appearance:none;
+  }
+
+  #clear-search {
+    margin: 17px 8px 0 0;
+    right: 0;
+    z-index: 1000;
+    background-color: $skin-tertiary;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    opacity: 0.6;
+    position: fixed;
+  }
+
+  #clear-search:hover {
+    opacity: 1;
+    cursor: pointer;
+  }
+
+  #clear-icon {
+    padding-top: 3px;
+    color: white;
+  }
 }

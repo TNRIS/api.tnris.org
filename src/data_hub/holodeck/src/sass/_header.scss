@@ -18,9 +18,14 @@ styles for component: Header
     letter-spacing: 3px;
     text-transform: uppercase;
     padding: 4px;
+    height: 26px;
 
     @media (max-width: mdc-layout-grid-breakpoint-min(desktop)) {
       display: none;
+    }
+
+    @media only screen and (max-width: 1306px) {
+      height: 44px;
     }
 
     section {

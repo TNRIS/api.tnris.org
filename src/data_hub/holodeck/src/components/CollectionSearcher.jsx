@@ -61,9 +61,8 @@ export default class CollectionSearcher extends React.Component {
 
   clearSearch() {
     if (this.searchField.value) {
-      this.props.setCollectionSearchQuery('');
-      console.log(this.props.history);
-      this.props.setUrl('/', this.props.history);
+      document.getElementById("search-collections").value = "";
+      this.handleSearch();
     }
   }
 

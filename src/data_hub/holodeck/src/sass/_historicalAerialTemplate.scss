@@ -38,6 +38,9 @@ styles for component: HistoricalAerialTemplate
 
     div.mdc-menu-surface--anchor {
       .mdc-list {
+        @include mdc-menu-surface-fill-color($primary-color);
+        @include mdc-list-item-primary-text-ink-color($text-color);
+
         i {
           margin-right: 6px;
         }

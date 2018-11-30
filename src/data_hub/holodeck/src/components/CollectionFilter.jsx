@@ -5,7 +5,8 @@ export default class CollectionFilter extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      badUrlFlag: false
+      badUrlFlag: false,
+      geographySet: false
     }
     this.handleOpenFilterMenu = this.handleOpenFilterMenu.bind(this);
     this.handleSetFilter = this.handleSetFilter.bind(this);
@@ -71,6 +72,8 @@ export default class CollectionFilter extends React.Component {
       //   return icon;
       // });
     }
+
+    nextProps.collectionFilterMapFilter.length > 0 ? this.setState({geographySet:true}) : this.setState({geographySet:false});
   }
 
   handleOpenFilterMenu(e) {
@@ -128,6 +131,9 @@ export default class CollectionFilter extends React.Component {
     if (this.state.badUrlFlag) {
       return <Redirect to='/404' />;
     }
+
+    const filterSet = this.state.geographySet ? "mdc-list-item mdc-list-item--activated filter-list-title" : "mdc-list-item filter-list-title";
+
     return (
       <div id='filter-component' className='filter-component'>
         <ul className='mdc-list'>
@@ -180,7 +186,7 @@ export default class CollectionFilter extends React.Component {
             )
           }
           <li key='filter-map-button'>
-            <a className='mdc-list-item filter-list-title'
+            <a className={filterSet}
                id='filter-map-button'
                onClick={this.props.openCollectionFilterMapDialog}>
                by geography

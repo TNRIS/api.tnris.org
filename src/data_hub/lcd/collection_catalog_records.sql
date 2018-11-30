@@ -2,6 +2,7 @@
 -- associated lookup tables. This SQL only needs to be run after initial database
 -- creation
 DROP VIEW IF EXISTS "collection_catalog_record";
+
 CREATE VIEW "collection_catalog_record" as
 SELECT collection.collection_id,
   collection.name,
@@ -34,7 +35,18 @@ SELECT collection.collection_id,
 	string_agg(distinct use_type.use_type, ',' order by use_type.use_type) as recommended_use,
   string_agg(distinct resource_type.resource_type_abbreviation, ',' order by resource_type.resource_type_abbreviation) as resource_types,
   string_agg(distinct image.image_url, ',') as images,
-  string_agg(distinct area_type.area_type_name, ', ' order by area_type.area_type_name) as counties,
+  CASE
+    -- if an outside-entity template, override database counties and attribute
+    -- all counties, otherwise use the collection_county_relate table
+    WHEN (template_type.template = 'outside-entity')
+    THEN (
+      SELECT
+      string_agg(distinct area_type_name, ', ') as counties
+      FROM area_type
+      WHERE area_type = 'county'
+    )
+    ELSE (string_agg(distinct area_type.area_type_name, ', ' order by area_type.area_type_name))
+  END AS counties,
   CASE
     -- use resource_types from relate table to determine data_types (only for tnris-download)
     WHEN (

@@ -32,13 +32,19 @@ class CollectionDialog extends React.Component {
     }
 
     componentWillReceiveProps (nextProps) {
+      // must be very specific about the dialog switching from redux declared
+      // closed to open and vice versa. firing this.dialog.show() and .close()
+      // with every prop update causing material to fire unwanted animations
+      if (!this.props.showCollectionDialog && nextProps.showCollectionDialog) {
+        this.dialog.show();
+      }
+      else if (this.props.showCollectionDialog && !nextProps.showCollectionDialog) {
+        this.dialog.close();
+      }
+
       if (nextProps.selectedCollection && !nextProps.showCollectionDialog) {
         this.props.clearSelectedCollection();
       }
-    }
-
-    componentDidUpdate() {
-      this.props.showCollectionDialog ? this.dialog.show() : this.dialog.close();
     }
 
     collectionDialogContent() {

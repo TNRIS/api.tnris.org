@@ -7,6 +7,7 @@ styles for component: OrderCartDialog
   .mdc-dialog__surface {
     max-width: 75%;
     height: 80%;
+    background-color: $main-background;
   }
 
   .app-fab--absolute {

@@ -112,6 +112,12 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
     if (areaTypesAry.includes('state')) {
       startLayer = 'state';
       map.setMinZoom(this.stateMinZoom);
+    } else if (areaTypesAry.includes('250k')) {
+      startLayer = '250k';
+      map.setMinZoom(this.stateMinZoom);
+    } else if (areaTypesAry.includes('block')) {
+      startLayer = 'block';
+      map.setMinZoom(this.stateMinZoom);
     } else if (areaTypesAry.includes('county')) {
       startLayer = 'county';
       map.setMinZoom(this.stateMinZoom);

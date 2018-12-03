@@ -14,7 +14,7 @@ WITH historical_county_join as (
     area_type.area_type,
     area_type.area_code
     FROM county
-    INNER JOIN area_type on county.fips = area_type.area_code::int8
+    INNER JOIN area_type on county.fips::text = area_type.area_code
   )
   -- use the county/area join to create collection_id list on those county area_types
   SELECT

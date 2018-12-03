@@ -102,7 +102,7 @@ export default class CountyCoverage extends React.Component {
             //       "text-color": styles[texter]
             //     }
             // });
-        }, 100);
+        }, 500);
     });
   }
 

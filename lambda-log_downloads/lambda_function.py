@@ -1,6 +1,7 @@
 # --------------- IMPORTS ---------------
 import boto3
 import re
+import os
 
 log_bucket = os.environ.get('log_bucket')
 dynamodb_table = os.environ.get('dynamodb_table')
@@ -35,33 +36,37 @@ def lambda_handler(event, context):
                 line_obj = dict(result)
                 line_obj['DownloadId'] = logfile.replace('data.tnris.org/', '') + "-Line" + str(counter)
                 # split the downloaded files' key to dismantle details
-                try:
-                    splitten = line_obj['key'].split('/')
-                    line_obj['collection_id'] = splitten[0]
-                    line_obj['download_type'] = splitten[1]
-                    line_obj['filename'] = splitten[2]
-                    # if a dataset download, use filename to split out more details
-                    if line_obj['download_type'] == 'resources':
-                        line_obj['collection_shorthand'] = filename.replace('.zip', '').split("_")[0]
-                        line_obj['area_code'] = filename.replace('.zip', '').split("_")[1]
-                        line_obj['resource_type'] = filename.replace('.zip', '').split("_")[2]
-                        print(line_obj['key'])
-                        batch.put_item(Item=line_obj)
-                        counter += 1
-                    # if a supplemental download, use filename to split out more details
-                    if line_obj['download_type'] == 'assets' and '.zip' in line_obj['filename']:
-                        if 'supplemental-report' in line_obj['filename']:
-                            line_obj['supplemental_download'] = 'supplemental-report'
-                        elif 'lidar-breaklines' in line_obj['filename']:
-                            line_obj['supplemental_download'] = 'lidar-breaklines'
-                        elif 'tile-index' in line_obj['filename']:
-                            line_obj['supplemental_download'] = 'tile-index'
-                        print(line_obj['key'])
-                        batch.put_item(Item=line_obj)
-                        counter += 1
-                except Exception as e:
-                    print('ERROR!')
-                    print(e)
+                if line_obj['operation'] == 'REST.GET.OBJECT':
+                    try:
+                        splitten = line_obj['key'].split('/')
+                        line_obj['collection_id'] = splitten[0]
+                        line_obj['download_type'] = splitten[1]
+                        line_obj['filename'] = splitten[2]
+                        # if a dataset download, use filename to split out more details
+                        if line_obj['download_type'] == 'resources':
+                            line_obj['collection_shorthand'] = filename.replace('.zip', '').split("_")[0]
+                            line_obj['area_code'] = filename.replace('.zip', '').split("_")[1]
+                            line_obj['resource_type'] = filename.replace('.zip', '').split("_")[2]
+                            print(line_obj['key'])
+                            batch.put_item(Item=line_obj)
+                            counter += 1
+                        # if a supplemental download, use filename to split out more details
+                        if line_obj['download_type'] == 'assets' and '.zip' in line_obj['filename']:
+                            if 'supplemental-report' in line_obj['filename']:
+                                line_obj['supplemental_download'] = 'supplemental-report'
+                            elif 'lidar-breaklines' in line_obj['filename']:
+                                line_obj['supplemental_download'] = 'lidar-breaklines'
+                            elif 'tile-index' in line_obj['filename']:
+                                line_obj['supplemental_download'] = 'tile-index'
+                            print(line_obj['key'])
+                            batch.put_item(Item=line_obj)
+                            counter += 1
+                    except Exception as e:
+                        print('ERROR!')
+                        print(e)
+                else:
+                    print('object not GET: ', line_obj['operation'])
+                    print(line_obj['key'])
     print("that's all folks!!")
 
 if __name__ == '__main__':

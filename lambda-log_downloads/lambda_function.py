@@ -27,6 +27,7 @@ def lambda_handler(event, context):
         content = obj.get()['Body'].read()
         lines = content.splitlines()
         counter = 1
+        print(len(lines), " lines in log.")
         for l in lines:
             match = s3_log_format.match(l.decode('utf-8'))
             if match is not None:
@@ -37,36 +38,41 @@ def lambda_handler(event, context):
                 line_obj['DownloadId'] = logfile.replace('data.tnris.org/', '') + "-Line" + str(counter)
                 # split the downloaded files' key to dismantle details
                 if line_obj['operation'] == 'REST.GET.OBJECT':
-                    try:
-                        splitten = line_obj['key'].split('/')
-                        line_obj['collection_id'] = splitten[0]
-                        line_obj['download_type'] = splitten[1]
-                        line_obj['filename'] = splitten[2]
-                        # if a dataset download, use filename to split out more details
-                        if line_obj['download_type'] == 'resources':
-                            line_obj['collection_shorthand'] = filename.replace('.zip', '').split("_")[0]
-                            line_obj['area_code'] = filename.replace('.zip', '').split("_")[1]
-                            line_obj['resource_type'] = filename.replace('.zip', '').split("_")[2]
-                            print(line_obj['key'])
-                            batch.put_item(Item=line_obj)
-                            counter += 1
-                        # if a supplemental download, use filename to split out more details
-                        if line_obj['download_type'] == 'assets' and '.zip' in line_obj['filename']:
-                            if 'supplemental-report' in line_obj['filename']:
-                                line_obj['supplemental_download'] = 'supplemental-report'
-                            elif 'lidar-breaklines' in line_obj['filename']:
-                                line_obj['supplemental_download'] = 'lidar-breaklines'
-                            elif 'tile-index' in line_obj['filename']:
-                                line_obj['supplemental_download'] = 'tile-index'
-                            print(line_obj['key'])
-                            batch.put_item(Item=line_obj)
-                            counter += 1
-                    except Exception as e:
-                        print('ERROR!')
-                        print(e)
+                    if line_obj['key'] != 'areas_view.csv':
+                        try:
+                            splitten = line_obj['key'].split('/')
+                            line_obj['collection_id'] = splitten[0]
+                            line_obj['download_type'] = splitten[1]
+                            line_obj['filename'] = splitten[2]
+                            # if a dataset download, use filename to split out more details
+                            if line_obj['download_type'] == 'resources':
+                                line_obj['collection_shorthand'] = line_obj['filename'].replace('.zip', '').split("_")[0]
+                                line_obj['area_code'] = line_obj['filename'].replace('.zip', '').split("_")[1]
+                                line_obj['resource_type'] = line_obj['filename'].replace('.zip', '').split("_")[2]
+                                print('adding to dynamodb: ', line_obj['key'])
+                                batch.put_item(Item=line_obj)
+                                counter += 1
+                            # if a supplemental download, use filename to split out more details
+                            if line_obj['download_type'] == 'assets' and '.zip' in line_obj['filename']:
+                                if 'supplemental-report' in line_obj['filename']:
+                                    line_obj['supplemental_download'] = 'supplemental-report'
+                                elif 'lidar-breaklines' in line_obj['filename']:
+                                    line_obj['supplemental_download'] = 'lidar-breaklines'
+                                elif 'tile-index' in line_obj['filename']:
+                                    line_obj['supplemental_download'] = 'tile-index'
+                                print('adding to dynamodb: ', line_obj['key'])
+                                batch.put_item(Item=line_obj)
+                                counter += 1
+                        except Exception as e:
+                            print('ERROR! KEY: ', line_obj['key'])
+                            print(e)
+                    else:
+                        print('carto areas_view sync. skipping...')
+                        print(line_obj['key'])
                 else:
                     print('object not GET: ', line_obj['operation'])
                     print(line_obj['key'])
+        print(counter - 1, ' lines were downloads.')
     print("that's all folks!!")
 
 if __name__ == '__main__':

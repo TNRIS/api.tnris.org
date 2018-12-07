@@ -178,3 +178,7 @@ lambda-areas_view/*
 lambda-log_downloads/*
 !lambda-log_downloads/lambda_function.py
 !lambda-log_downloads/requirements.txt
+
+lambda-outside_entity_services/*
+!lambda-outside_entity_services/lambda_function.py
+!lambda-outside_entity_services/requirements.txt

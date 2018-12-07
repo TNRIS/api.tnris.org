@@ -1211,6 +1211,9 @@ class CcrView(models.Model):
     counties = models.TextField(
         'Counties'
     )
+    oe_service_names = models.TextField(
+        'Outside Entity Service Names'
+    )
 
     def __str__(self):
         return self.name

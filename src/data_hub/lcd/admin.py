@@ -93,7 +93,8 @@ class CollectionAdmin(admin.ModelAdmin):
                        'agency_type_id',
                        'license_type_id',
                        'template_type_id',
-                       'thumbnail_image'),
+                       'thumbnail_image',
+                       'esri_open_data_id'),
         }),
         ('Links', {
             'classes': ('grp-collapse grp-closed',),

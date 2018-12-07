@@ -879,6 +879,12 @@ class Collection(models.Model):
         null=True,
         blank=True
     )
+    esri_open_data_id = models.TextField(
+        'ESRI Open Data ID',
+        db_column='esri_open_data_id',
+        null=True,
+        blank=True
+    )
     created = models.DateTimeField(
         'Created',
         auto_now_add=True
@@ -1035,6 +1041,43 @@ class Image(models.Model):
 
     def __str__(self):
         return self.image_url
+
+
+class OutsideEntityServices(models.Model):
+    """
+    Defines available outside entity services.
+    Related to :model:`lcd.collection`.
+    """
+
+    class Meta:
+        db_table = 'outside_entity_services'
+        verbose_name = 'Outside Entity Service'
+        verbose_name_plural = 'Outside Entity Services'
+
+    service_id = models.UUIDField(
+        'Service ID',
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False
+    )
+    collection_id = models.ForeignKey(
+        'Collection',
+        db_column='collection_id',
+        on_delete=models.CASCADE,
+        related_name='outside_entity_service_collections'
+    )
+    service_name = models.TextField(
+        'Service Name',
+        db_column='service_name',
+        null=False,
+        blank=False
+    )
+    service_url = models.URLField(
+        'Service URL',
+        db_column='service_url',
+        null=False,
+        blank=False
+    )
 
 
 """

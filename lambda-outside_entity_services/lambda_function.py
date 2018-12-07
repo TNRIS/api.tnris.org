@@ -61,6 +61,8 @@ def lambda_handler(event, context):
                         except:
                             print('bad!')
 
+    cur.close()
+    conn.close()
     print("that's all folks!!")
 
 if __name__ == '__main__':

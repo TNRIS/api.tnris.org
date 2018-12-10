@@ -53,13 +53,13 @@ export default class CollectionFilterMapDialog extends React.Component {
                 <section className='mdc-dialog__body'>
                   {this.dialogContent()}
                 </section>
-                <button
-                  className="mdc-fab app-fab--absolute"
-                  aria-label="Close"
-                  onClick={this.closeCollectionFilterMapDialog}>
-                  <span className="mdc-fab__icon material-icons">close</span>
-                </button>
               </div>
+              <button
+                className="mdc-fab app-fab--absolute"
+                aria-label="Close"
+                onClick={this.closeCollectionFilterMapDialog}>
+                <span className="mdc-fab__icon material-icons">close</span>
+              </button>
               <div className="mdc-dialog__backdrop"></div>
           </aside>
       );

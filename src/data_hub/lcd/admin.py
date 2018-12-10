@@ -81,6 +81,7 @@ class CollectionAdmin(admin.ModelAdmin):
         ('Collection Information', {
             'classes': ('grp-collapse', 'grp-closed'),
             'fields': ('name',
+                       'template_type_id',
                        'acquisition_date',
                        'short_description',
                        'description',
@@ -92,7 +93,6 @@ class CollectionAdmin(admin.ModelAdmin):
                        'tags',
                        'agency_type_id',
                        'license_type_id',
-                       'template_type_id',
                        'thumbnail_image',
                        'esri_open_data_id'),
         }),
@@ -127,7 +127,7 @@ class CollectionAdmin(admin.ModelAdmin):
 
     # set aside acqusition_date year for list display
     def disp_name(self, collection):
-        if collection.acquisition_date is not None and collection.template_type_id.template != 'outside-entity':
+        if collection.acquisition_date is not None and collection.template_type_id is not None and collection.template_type_id.template != 'outside-entity':
             year = collection.acquisition_date.split("-")[0] + " "
         else:
             year = ""

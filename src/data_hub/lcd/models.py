@@ -876,8 +876,8 @@ class Collection(models.Model):
         db_column='template_type_id',
         on_delete=models.CASCADE,
         related_name='template_types',
-        null=True,
-        blank=True
+        null=False,
+        blank=False
     )
     esri_open_data_id = models.TextField(
         'ESRI Open Data ID',

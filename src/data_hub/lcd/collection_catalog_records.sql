@@ -35,6 +35,7 @@ SELECT collection.collection_id,
 	string_agg(distinct use_type.use_type, ',' order by use_type.use_type) as recommended_use,
   string_agg(distinct resource_type.resource_type_abbreviation, ',' order by resource_type.resource_type_abbreviation) as resource_types,
   string_agg(distinct image.image_url, ',') as images,
+  string_agg(distinct outside_entity_services.service_name, ', ' order by outside_entity_services.service_name) as oe_service_names,
   CASE
     -- if an outside-entity template, override database counties and attribute
     -- all counties, otherwise use the collection_county_relate table
@@ -168,6 +169,8 @@ LEFT JOIN image ON image.collection_id = collection.collection_id
 
 LEFT JOIN collection_county_relate ON collection_county_relate.collection_id=collection.collection_id
 LEFT JOIN area_type ON area_type.area_type_id=collection_county_relate.area_type_id
+
+LEFT JOIN outside_entity_services ON outside_entity_services.collection_id = collection.collection_id
 
 GROUP BY collection.collection_id,
 				agency_type.agency_name,

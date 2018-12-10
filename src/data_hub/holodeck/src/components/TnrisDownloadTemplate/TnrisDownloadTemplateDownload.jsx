@@ -278,7 +278,7 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
           //       "text-color": styles[texter]
           //     }
           // });
-      }, 100);
+      }, 500);
     });
     // add the layer id's to the areaType's array in the layerRef for toggling
     this.layerRef[areaType].push(layerBaseName, layerHoverName, layerLabelName);

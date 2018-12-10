@@ -49,9 +49,10 @@ export const getSearchIndex = createSelector(
       'counties',
       'acquisition_date',
       'agency_name',
-      'agency_abbreviation'
+      'agency_abbreviation',
+      'oe_service_names'
     ];
-    
+
     // default text string seperator is:  /[\s\-]+/
     // here, we overwrite it to that dashes are not used as a seperator,
     // only spaces. dash seperator is an issue for strings like 'H-GAC'

@@ -1214,6 +1214,9 @@ class CcrView(models.Model):
     oe_service_names = models.TextField(
         'Outside Entity Service Names'
     )
+    oe_service_urls = models.TextField(
+        'Outside Entity Service URLs'
+    )
 
     def __str__(self):
         return self.name

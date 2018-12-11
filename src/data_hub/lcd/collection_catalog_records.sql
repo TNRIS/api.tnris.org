@@ -36,6 +36,9 @@ SELECT collection.collection_id,
   string_agg(distinct resource_type.resource_type_abbreviation, ',' order by resource_type.resource_type_abbreviation) as resource_types,
   string_agg(distinct image.image_url, ',') as images,
   string_agg(distinct outside_entity_services.service_name, ', ' order by outside_entity_services.service_name) as oe_service_names,
+  string_agg(distinct outside_entity_services.service_url, ', ' order by outside_entity_services.service_url) as oe_service_urls,
+
+
   CASE
     -- if an outside-entity template, override database counties and attribute
     -- all counties, otherwise use the collection_county_relate table

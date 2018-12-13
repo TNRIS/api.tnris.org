@@ -5,8 +5,24 @@ export default class Description extends React.Component {
   render() {
 
     // create service name and url arrays from aggregated string
-    const namesArray = this.props.collection.oe_service_names ? this.props.collection.oe_service_names.split(', ') : '';
-    const servicesArray = this.props.collection.oe_service_urls ? this.props.collection.oe_service_urls.split(', ') : '';
+    const namesArray = this.props.collection.oe_service_names !== null ? this.props.collection.oe_service_names.split(', ') : [];
+    const servicesArray = this.props.collection.oe_service_urls !== null ? this.props.collection.oe_service_urls.split(', ') : [];
+
+    console.log(this.props.collection);
+
+    // console.log(this.props.collection.oe_service_names === null ? console.log('null') : console.log('not null'));
+
+    // if (servicesArray.length !== 0) {
+    //   const s = servicesArray.map((service) => {
+    //     console.log('service');
+    //     // return service.split("/")[-2];
+    //   });
+    //   return s;
+    // }
+
+    // console.log(s);
+
+    // <a href={s} target="_blank"></a>
 
     const services = namesArray ? (
       <div id="oe_services">
@@ -14,7 +30,8 @@ export default class Description extends React.Component {
         <ul>
           {
             namesArray.map((i) => {
-              return <li key={i}><a href="" target="_blank">{i}</a></li>;
+              // return service name with hyperlink to service url, trim whitespaces and replace '_' with ' ' using regex
+              return <li key={i}>{i.trim().replace(/ /g,' ')}</li>;
             })
           }
         </ul>

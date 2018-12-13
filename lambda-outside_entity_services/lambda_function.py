@@ -41,10 +41,10 @@ def lambda_handler(event, context):
             if len(services) > 0:
                 cur.execute("DELETE FROM outside_entity_services WHERE collection_id = '%s'" % collection_id)
                 for s in services:
-                    title = s['title']
+                    name = s['name']
                     url = s['url']
-                    if url is not None:
-                        print(title)
+                    if url is not None and name is not None:
+                        print(name)
                         cur.execute("INSERT INTO {table} ({id},{url},{col},{name}) VALUES ('{v1}','{v2}','{v3}','{v4}');".format(
                             table='outside_entity_services',
                             id='service_id',
@@ -54,7 +54,7 @@ def lambda_handler(event, context):
                             v1=uuid.uuid4(),
                             v2=url,
                             v3=collection_id,
-                            v4=title)
+                            v4=name)
                         )
                         try:
                             conn.commit()

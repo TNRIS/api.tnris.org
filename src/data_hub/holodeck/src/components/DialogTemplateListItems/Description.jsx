@@ -3,16 +3,40 @@ import React from 'react';
 export default class Description extends React.Component {
 
   render() {
-    const oe_service_names = this.props.collection.oe_service_names ? (
-      <p><strong>Available services include:</strong> {this.props.collection.oe_service_names}</p>
+
+    // create service name and url arrays from aggregated string
+    const namesArray = this.props.collection.oe_service_names !== null ? this.props.collection.oe_service_names.split(', ') : [];
+    const servicesArray = this.props.collection.oe_service_urls !== null ? this.props.collection.oe_service_urls.split(', ') : [];
+
+    console.log(this.props.collection);
+
+    // console.log(this.props.collection.oe_service_names === null ? console.log('null') : console.log('not null'));
+
+    // if (servicesArray.length !== 0) {
+    //   const s = servicesArray.map((service) => {
+    //     console.log('service');
+    //     // return service.split("/")[-2];
+    //   });
+    //   return s;
+    // }
+
+    // console.log(s);
+
+    // <a href={s} target="_blank"></a>
+
+    const services = namesArray ? (
+      <div id="oe_services">
+        <p><strong>Available services include:</strong></p>
+        <ul>
+          {
+            namesArray.map((i) => {
+              // return service name with hyperlink to service url, trim whitespaces and replace '_' with ' ' using regex
+              return <li key={i}>{i.trim().replace(/ /g,' ')}</li>;
+            })
+          }
+        </ul>
+      </div>
       ) : '';
-
-      // create service name and url arrays from aggregated string
-      const names = this.props.collection.oe_service_names.split(', ');
-      const services = this.props.collection.oe_service_urls.split(', ');
-
-      // test log to see if service name and url array order matches
-      console.log(names[70], services[70]);
 
     return (
       <div className="template-content-div">
@@ -22,7 +46,7 @@ export default class Description extends React.Component {
         <p>
           {this.props.collection.description}
         </p>
-        {oe_service_names}
+        {services}
       </div>
     )
   }

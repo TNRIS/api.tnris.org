@@ -13,6 +13,25 @@ styles for component: OutsideEntityTemplateDetails
     background-color: $nest-background;
     color: $nest-text;
 
+    #oe_services {
+      padding-bottom: 10px;
+      
+      @media (min-width: 1000px) {
+        ul {
+          columns: 2;
+          -webkit-columns: 2;
+          -moz-columns: 2;
+        }
+      }
+      @media (min-width: 1500px) {
+        ul {
+          columns: 3;
+          -webkit-columns: 3;
+          -moz-columns: 3;
+        }
+      }
+    }
+
     .template-content-div-header {
       color: $template-dialog-header-script;
       background-color: $template-dialog-header;

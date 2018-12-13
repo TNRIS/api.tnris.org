@@ -3,16 +3,23 @@ import React from 'react';
 export default class Description extends React.Component {
 
   render() {
-    const oe_service_names = this.props.collection.oe_service_names ? (
-      <p><strong>Available services include:</strong> {this.props.collection.oe_service_names}</p>
+
+    // create service name and url arrays from aggregated string
+    const namesArray = this.props.collection.oe_service_names ? this.props.collection.oe_service_names.split(', ') : '';
+    const servicesArray = this.props.collection.oe_service_urls ? this.props.collection.oe_service_urls.split(', ') : '';
+
+    const services = namesArray ? (
+      <div id="oe_services">
+        <p><strong>Available services include:</strong></p>
+        <ul>
+          {
+            namesArray.map((i) => {
+              return <li key={i}><a href="" target="_blank">{i}</a></li>;
+            })
+          }
+        </ul>
+      </div>
       ) : '';
-
-      // create service name and url arrays from aggregated string
-      const names = this.props.collection.oe_service_names.split(', ');
-      const services = this.props.collection.oe_service_urls.split(', ');
-
-      // test log to see if service name and url array order matches
-      console.log(names[70], services[70]);
 
     return (
       <div className="template-content-div">
@@ -22,7 +29,7 @@ export default class Description extends React.Component {
         <p>
           {this.props.collection.description}
         </p>
-        {oe_service_names}
+        {services}
       </div>
     )
   }

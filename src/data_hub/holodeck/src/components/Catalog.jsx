@@ -2,8 +2,8 @@ import React from 'react';
 import { Redirect } from 'react-router';
 
 import CatalogCardContainer from '../containers/CatalogCardContainer';
+import CatalogView from './CatalogView';
 import CollectionDialogContainer from '../containers/CollectionDialogContainer';
-// import Drawer from './Drawer';
 import Footer from './Footer';
 import CollectionFilterMapDialogContainer from '../containers/CollectionFilterMapDialogContainer';
 import HeaderContainer from '../containers/HeaderContainer';
@@ -16,7 +16,15 @@ export default class Catalog extends React.Component {
   constructor(props) {
     super(props);
 
-    window.innerWidth >= 1050 ? this.state = {toolDrawerView:'dismiss', toolDrawerStatus:'open', badUrlFlag: false} : this.state = {toolDrawerView:'modal', toolDrawerStatus:'closed', badUrlFlag: false};
+    window.innerWidth >= 1050 ? this.state = {
+      toolDrawerView:'dismiss',
+      toolDrawerStatus:'open',
+      badUrlFlag: false
+    } : this.state = {
+      toolDrawerView:'modal',
+      toolDrawerStatus:'closed',
+      badUrlFlag: false
+    };
 
     this.handleResize = this.handleResize.bind(this);
     this.handler = this.handler.bind(this);
@@ -38,7 +46,11 @@ export default class Catalog extends React.Component {
   }
 
   handler() {
-    this.state.toolDrawerStatus === 'open' ? this.setState({toolDrawerStatus:'closed'}) : this.setState({toolDrawerStatus:'open'});
+    this.state.toolDrawerStatus === 'open' ? this.setState({
+      toolDrawerStatus:'closed'
+    }) : this.setState({
+      toolDrawerStatus:'open'
+    });
 
     if (this.state.toolDrawerView === 'modal') {
       const scrim = document.getElementById('scrim');
@@ -76,6 +88,7 @@ export default class Catalog extends React.Component {
   }
 
   render() {
+    console.log(this.props);
     const { error, loading } = this.props;
     let noDataDivClass = 'no-data no-data-closed';
     let dismissClass = 'closed-drawer';
@@ -124,14 +137,37 @@ export default class Catalog extends React.Component {
           handler={this.handler} />
 
         <div className={`catalog ${dismissClass}`}>
-          {this.props.visibleCollections && this.props.visibleCollections.length < 1 ? <div className={noDataDivClass}>
-            <img src={noDataImage} className="no-data-image" alt="No Data Available" title="No data available with those search terms" />
-          </div> : ''}
+          {this.props.visibleCollections && this.props.visibleCollections.length < 1 ?
+            <div className={noDataDivClass}>
+              <img
+                src={noDataImage}
+                className="no-data-image"
+                alt="No Data Available"
+                title="No data available with those search terms" />
+            </div> : ''}
 
           <ul className='catalog-list mdc-image-list mdc-image-list--with-text-protection'>
-            {this.props.visibleCollections ? this.props.visibleCollections.map(collectionId =>
-              <CatalogCardContainer collection={this.props.collections[collectionId]} key={collectionId} match={this.props.match} history={this.props.history} />
-            ) : loadingMessage}
+            {this.props.visibleCollections ?
+              <CatalogView
+                collections={this.props.collections}
+                visibleCollections={this.props.visibleCollections}
+                match={this.props.match}
+                history={this.props.history} />
+                : loadingMessage}
+
+            {/*{this.props.visibleCollections ? this.props.visibleCollections.map(collectionId =>
+              <CatalogView
+                collections={this.props.collections}
+                visibleCollections={this.props.visibleCollections}
+                match={this.props.match}
+                history={this.props.history} />
+
+              <CatalogCardContainer
+                collection={this.props.collections[collectionId]}
+                key={collectionId}
+                match={this.props.match}
+                history={this.props.history} />
+            ) : loadingMessage}*/}
           </ul>
         </div>
 

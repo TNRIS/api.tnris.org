@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Carousel } from 'react-responsive-carousel';
 
-export default class TnrisDownloadTemplateImages extends React.Component {
+export default class Images extends React.Component {
   render() {
 
     const all_images = this.props.images.split(',');
@@ -18,27 +18,23 @@ export default class TnrisDownloadTemplateImages extends React.Component {
 
     return (
 
-      <div className="tnris-download-template-images">
-        <div className="desktop-lg">
+      <div className="template-content-div">
+        <div className='mdc-typography--headline5 template-content-div-header'>
+          Images
+        </div>
+        <div>
           <Carousel
             autoPlay={true}
             showThumbs={false}
             infiniteLoop={true}
             emulateTouch
             useKeyboardArrows={true}
-            transitionTime={700}
-          >
+            transitionTime={700} >
 
             {
               carousel_images.map(url => ( <div key={url}><img src={url} alt='' /></div> ))
             }
           </Carousel>
-        </div>
-
-        <div className="mobile">
-          {
-            carousel_images.map(url => ( <div key={url}><img src={url} alt='' /></div> ))
-          }
         </div>
       </div>
     )

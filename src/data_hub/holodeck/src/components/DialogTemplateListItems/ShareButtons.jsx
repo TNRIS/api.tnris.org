@@ -60,38 +60,46 @@ export default class ShareButtons extends React.Component {
 
     return (
         <div className="share-bar">
-          <TwitterShareButton
-            url={shareUrl}
-            title={tweetTitle}
-            className="share-button"
-            hashtags={["TNRIS", "DataHolodeck"]}
-          >
-            <TwitterIcon size={26} round={true} />
-          </TwitterShareButton>
-          <FacebookShareButton
-            url={shareUrl}
-            quote={shareTitle}
-            className="share-button"
-            hashtag="TNRIS"
-          >
-            <FacebookIcon size={26} round={true} />
-          </FacebookShareButton>
-          <RedditShareButton
-            url={shareUrl}
-            title={shareTitle}
-            className="share-button"
-          >
-            <RedditIcon size={26} round={true} />
-          </RedditShareButton>
-          <EmailShareButton
-            url={shareUrl}
-            subject={shareTitle}
-            body={shareCombo}
-            className="share-button"
-          >
-            <EmailIcon size={26} round={true} />
-          </EmailShareButton>
-          <div className="share-button share-copy-link"
+          <div title="Twitter">
+            <TwitterShareButton
+              url={shareUrl}
+              title={tweetTitle}
+              className="share-button"
+              hashtags={["TNRIS", "DataHolodeck"]}
+            >
+              <TwitterIcon size={26} round={true} />
+            </TwitterShareButton>
+          </div>
+          <div title="Facebook">
+            <FacebookShareButton
+              url={shareUrl}
+              quote={shareTitle}
+              className="share-button"
+              hashtag="TNRIS"
+            >
+              <FacebookIcon size={26} round={true} />
+            </FacebookShareButton>
+          </div>
+          <div title="Reddit">
+            <RedditShareButton
+              url={shareUrl}
+              title={shareTitle}
+              className="share-button"
+            >
+              <RedditIcon size={26} round={true} />
+            </RedditShareButton>
+          </div>
+          <div title="Email">
+            <EmailShareButton
+              url={shareUrl}
+              subject={shareTitle}
+              body={shareCombo}
+              className="share-button"
+            >
+              <EmailIcon size={26} round={true} />
+            </EmailShareButton>
+          </div>
+          <div title="Copy Link" className="share-button share-copy-link"
                onClick={() => this.copyUrl()}>
             <i className="material-icons">{linkIcon}</i>
           </div>

@@ -5,7 +5,7 @@ import { MDCMenu } from '@material/menu';
 
 import TnrisOrderTemplateOrder from './TnrisOrderTemplateOrder';
 import TnrisOrderTemplateDetails from './TnrisOrderTemplateDetails'
-import TnrisDownloadTemplateImages from '../TnrisDownloadTemplate/TnrisDownloadTemplateImages'
+// import TnrisDownloadTemplateImages from '../TnrisDownloadTemplate/TnrisDownloadTemplateImages'
 
 export default class TnrisOrderTemplate extends React.Component {
   constructor(props) {
@@ -53,11 +53,11 @@ export default class TnrisOrderTemplate extends React.Component {
       case 'details':
         showComponent = <TnrisOrderTemplateDetails collection={this.props.collection} />;
         break;
-      case 'images':
-        showComponent = (<TnrisDownloadTemplateImages
-          images={this.props.collection.images}
-          thumbnail={this.props.collection.thumbnail_image} />);
-        break;
+      // case 'images':
+      //   showComponent = (<TnrisDownloadTemplateImages
+      //     images={this.props.collection.images}
+      //     thumbnail={this.props.collection.thumbnail_image} />);
+      //   break;
       case 'order':
         showComponent = <TnrisOrderTemplateOrder />;
         break;
@@ -92,7 +92,7 @@ export default class TnrisOrderTemplate extends React.Component {
                         <span className="mdc-tab__ripple"></span>
                       </button>
 
-                      <button className="mdc-tab" role="tab" aria-selected="false" tabIndex="-1"  onClick={() => this.setTemplateView("images")} title="Images">
+                      {/*}<button className="mdc-tab" role="tab" aria-selected="false" tabIndex="-1"  onClick={() => this.setTemplateView("images")} title="Images">
                         <span className="mdc-tab__content">
                           <span className="mdc-tab__icon material-icons">collections</span>
                         </span>
@@ -100,7 +100,7 @@ export default class TnrisOrderTemplate extends React.Component {
                           <span className="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
                         </span>
                         <span className="mdc-tab__ripple"></span>
-                      </button>
+                      </button>*/}
 
                       <button className="mdc-tab" role="tab" aria-selected="false" tabIndex="-1"  onClick={() => this.setTemplateView("order")} title="Order">
                         <span className="mdc-tab__content">

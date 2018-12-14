@@ -6,6 +6,7 @@ import Metadata from '../DialogTemplateListItems/Metadata'
 import Services from '../DialogTemplateListItems/Services'
 import Supplementals from '../DialogTemplateListItems/Supplementals'
 import ShareButtons from '../DialogTemplateListItems/ShareButtons'
+import Images from '../DialogTemplateListItems/Images'
 
 import ContactContainer from '../../containers/ContactContainer';
 
@@ -22,6 +23,9 @@ export default class TnrisDownloadTemplateDetails extends React.Component {
     return (
       <div className='tnris-download-template-details'>
         <Metadata collection={this.props.collection} />
+        <Images
+          thumbnail={this.props.collection.thumbnail_image}
+          images={this.props.collection.images} />
         {supplementalDownloadsCard}
         {servicesCard}
         <Description collection={this.props.collection} />

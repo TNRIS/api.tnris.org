@@ -13,13 +13,16 @@ export default class Description extends React.Component {
     namesArray.map((key) => {
       const compare = key.split(' ').join('_');
       servicesArray.map((service) => {
-        const serviceArray = service.split("/");
-        serviceArray.map((i) => {
+        const stringArray = service.split("/");
+        stringArray.map((i) => {
           if (i === compare) {
             servicesObj[key] = servicesArray[servicesArray.indexOf(service)];
           }
+          return i;
         })
+        return service;
       })
+      return key;
     });
 
     const services = namesArray.length !== 0 ? (

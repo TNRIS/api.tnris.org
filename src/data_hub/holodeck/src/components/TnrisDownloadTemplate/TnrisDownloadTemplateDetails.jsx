@@ -36,14 +36,14 @@ export default class TnrisDownloadTemplateDetails extends React.Component {
           </div>
           <ShareButtons />
         </div>
-        <div className="template-content-div">
+        {/*}<div className="template-content-div">
           <div className='mdc-typography--headline5 template-content-div-header'>
             Contact
           </div>
           <div>
             <ContactContainer collection={this.props.collection} />
           </div>
-        </div>
+        </div>*/}
       </div>
     );
   }

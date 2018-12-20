@@ -20,6 +20,7 @@ export default class HistoricalAerialTemplate extends React.Component {
     this.topAppBarElement = document.querySelector('.mdc-top-app-bar');
     this.topAppBar = new MDCTopAppBar(this.topAppBarElement);
     this.tabBar = new MDCTabBar(document.querySelector('.mdc-tab-bar'));
+    window.scrollTo(0,0);
   }
 
   setTemplateView(viewString) {
@@ -114,8 +115,8 @@ export default class HistoricalAerialTemplate extends React.Component {
                     <div className="mdc-tab-scroller__scroll-content">
 
                       <button className="mdc-tab mdc-tab--active" role="tab" aria-selected="true" tabIndex="0" onClick={() => this.setTemplateView("details")} title="Details">
-                        <span className="mdc-tab__content">
-                          <span className="mdc-tab__icon material-icons">details</span>
+                        <span className="mdc-tab__content">details
+                          {/*<span className="mdc-tab__icon material-icons">details</span>*/}
                         </span>
                         <span className="mdc-tab-indicator mdc-tab-indicator--active">
                           <span className="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
@@ -126,8 +127,8 @@ export default class HistoricalAerialTemplate extends React.Component {
                       {exploreTab}
 
                       <button className="mdc-tab" role="tab" aria-selected="false" tabIndex="-1"  onClick={() => this.setTemplateView("order")} title="Order">
-                        <span className="mdc-tab__content">
-                          <span className="mdc-tab__icon material-icons">shopping_basket</span>
+                        <span className="mdc-tab__content">order
+                          {/*<span className="mdc-tab__icon material-icons">shopping_basket</span>*/}
                         </span>
                         <span className="mdc-tab-indicator">
                           <span className="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
@@ -148,15 +149,15 @@ export default class HistoricalAerialTemplate extends React.Component {
                 <div ref="tab_menu" className="mdc-menu mdc-menu-surface">
                   <nav className="mdc-list">
                     <a className={this.state.view === 'details' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
-                       onClick={() => this.setTemplateView("details")}>
-                       <i className="mdc-tab__icon material-icons">details</i> Details
+                       onClick={() => this.setTemplateView("details")}>Details
+                       {/*<i className="mdc-tab__icon material-icons">details</i>*/}
                     </a>
 
                     {exploreListItem}
 
                     <a className={this.state.view === 'order' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
-                       onClick={() => this.setTemplateView("order")}>
-                       <i className="mdc-tab__icon material-icons">shopping_basket</i> Order
+                       onClick={() => this.setTemplateView("order")}>Order
+                       {/*<i className="mdc-tab__icon material-icons">shopping_basket</i>*/}
                     </a>
                   </nav>
                 </div>

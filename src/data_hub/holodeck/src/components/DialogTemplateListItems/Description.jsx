@@ -8,8 +8,6 @@ export default class Description extends React.Component {
     const namesArray = this.props.collection.oe_service_names !== null ? this.props.collection.oe_service_names.split(', ') : [];
     const servicesArray = this.props.collection.oe_service_urls !== null ? this.props.collection.oe_service_urls.split(', ') : [];
 
-    console.log(this.props.collection);
-
     // console.log(this.props.collection.oe_service_names === null ? console.log('null') : console.log('not null'));
 
     // if (servicesArray.length !== 0) {

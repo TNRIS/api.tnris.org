@@ -23,6 +23,7 @@ export default class TnrisDownloadTemplate extends React.Component {
     this.topAppBarElement = document.querySelector('.mdc-top-app-bar');
     this.topAppBar = new MDCTopAppBar(this.topAppBarElement);
     this.tabBar = new MDCTabBar(document.querySelector('.mdc-tab-bar'));
+    window.scrollTo(0,0);
   }
 
   setTemplateView(viewString) {
@@ -108,8 +109,8 @@ export default class TnrisDownloadTemplate extends React.Component {
                     <div className="mdc-tab-scroller__scroll-content">
 
                       <button className="mdc-tab mdc-tab--active" role="tab" aria-selected="true" tabIndex="0" onClick={() => this.setTemplateView("details")} title="Details">
-                        <span className="mdc-tab__content">
-                          <span className="mdc-tab__icon material-icons">details</span>
+                        <span className="mdc-tab__content">details
+                          {/*<span className="mdc-tab__icon material-icons">details</span>*/}
                         </span>
                         <span className="mdc-tab-indicator mdc-tab-indicator--active">
                           <span className="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
@@ -118,8 +119,8 @@ export default class TnrisDownloadTemplate extends React.Component {
                       </button>
 
                       <button className="mdc-tab" role="tab" aria-selected="false" tabIndex="-1"  onClick={() => this.setTemplateView("images")} title="Images">
-                        <span className="mdc-tab__content">
-                          <span className="mdc-tab__icon material-icons">collections</span>
+                        <span className="mdc-tab__content">images
+                          {/*<span className="mdc-tab__icon material-icons">collections</span>*/}
                         </span>
                         <span className="mdc-tab-indicator">
                           <span className="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
@@ -128,8 +129,8 @@ export default class TnrisDownloadTemplate extends React.Component {
                       </button>
 
                       <button className="mdc-tab" role="tab" aria-selected="false" tabIndex="-1"  onClick={() => this.setTemplateView("download")} title="Download">
-                        <span className="mdc-tab__content">
-                          <span className="mdc-tab__icon material-icons">save_alt</span>
+                        <span className="mdc-tab__content">download
+                          {/*<span className="mdc-tab__icon material-icons">save_alt</span>*/}
                         </span>
                         <span className="mdc-tab-indicator">
                           <span className="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
@@ -138,8 +139,8 @@ export default class TnrisDownloadTemplate extends React.Component {
                       </button>
 
                       <button className="mdc-tab" role="tab" aria-selected="false" tabIndex="-1"  onClick={() => this.setTemplateView("order")} title="Order">
-                        <span className="mdc-tab__content">
-                          <span className="mdc-tab__icon material-icons">shopping_basket</span>
+                        <span className="mdc-tab__content">order
+                          {/*<span className="mdc-tab__icon material-icons">shopping_basket</span>*/}
                         </span>
                         <span className="mdc-tab-indicator">
                           <span className="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>

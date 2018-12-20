@@ -20,8 +20,8 @@ const mapDispatchToProps = dispatch => ({
   setCollectionSearchQuery: (collectionSearchQuery) => {
     dispatch(collectionSearcherActions.setCollectionSearchQuery(collectionSearchQuery));
   },
-  sortAZ: () => {
-    dispatch(sortActions.setSortAZ());
+  sortNew: () => {
+    dispatch(sortActions.setSortNew());
   },
   setCollectionFilter: (collectionFilter) => {
     dispatch(collectionFilterActions.setCollectionFilter(collectionFilter));

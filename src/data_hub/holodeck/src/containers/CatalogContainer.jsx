@@ -16,6 +16,7 @@ const mapStateToProps = (state) => ({
   error: state.collections.error,
   loading: state.collections.loading,
   resources: state.resources.items,
+  selectedCollection: state.collections.selectedCollection,
   showCollectionDialog: state.collectionDialog.showCollectionDialog,
   sortOrder: state.collectionSorter.sortOrder,
   visibleCollections: getSortedCollections(state),

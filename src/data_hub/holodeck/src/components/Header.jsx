@@ -1,7 +1,6 @@
 import React from 'react';
 import {MDCTopAppBar} from '@material/top-app-bar/index';
 import {MDCDrawer} from "@material/drawer";
-// import SortContainer from '../containers/SortContainer';
 
 import tnrisGray from '../images/tnris_gray.png';
 import tnrisWhite from '../images/tnris_white.png';
@@ -11,11 +10,11 @@ export default class Header extends React.Component {
   constructor(props) {
     super(props);
 
+    this.handleCloseCollectionDialog = this.handleCloseCollectionDialog.bind(this);
     this.handleOpenOrderCartDialog = this.handleOpenOrderCartDialog.bind(this);
   }
 
   componentDidMount() {
-    // this.menuDrawer = MDCDrawer.attachTo(document.querySelector('.menu-drawer'));
     this.toolDrawer = MDCDrawer.attachTo(document.querySelector('.tool-drawer'));
     this.topAppBarElement = document.querySelector('.mdc-top-app-bar');
     this.topAppBar = new MDCTopAppBar(this.topAppBarElement);
@@ -23,6 +22,17 @@ export default class Header extends React.Component {
 
   handleOpenOrderCartDialog() {
     this.props.openOrderCartDialog();
+  }
+
+  handleCloseCollectionDialog() {
+    this.props.closeCollectionDialog();
+    this.props.clearSelectedCollection();
+    if (this.props.previousUrl.includes('/collection/')) {
+      this.props.setUrl('/', this.props.history);
+    }
+    else {
+      this.props.setUrl(this.props.previousUrl, this.props.history);
+    }
   }
 
   render() {
@@ -70,7 +80,7 @@ export default class Header extends React.Component {
       default:
       tnrisLogo = tnrisGray;
     }
-
+    console.log(this.props);
     return (
       <header className={`header-component mdc-top-app-bar mdc-top-app-bar--fixed ${dismissClass}`} id="master-header">
         <div className="header-title mdc-top-app-bar__row">
@@ -86,20 +96,21 @@ export default class Header extends React.Component {
         </div>
         <div className="header-nav mdc-top-app-bar__row">
           <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
-            {/*<i className="material-icons mdc-top-app-bar__navigation-icon">menu</i>*/}
             <a href="https://tnris.org" className="mdc-top-app-bar__action-item tnris-logo-text">
               <img src={tnrisLogo} aria-label="TNRIS Logo" alt="TNRIS Logo" className="logo" />
-              {/*TNRIS*/}
             </a>
             <span className="mdc-top-app-bar__title">Data Holodeck</span>
           </section>
           <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
-            {/* <SortContainer /> */}
+            {this.props.selectedCollection !== null ?
+              <a onClick={this.handleCloseCollectionDialog} className="mdc-top-app-bar__action-item">
+                <i className="material-icons mdc-top-app-bar__navigation-icon">home</i>
+              </a> : ''}
             <a onClick={this.handleOpenOrderCartDialog} className="mdc-top-app-bar__action-item">
               <i className={shoppingCartClass}>shopping_cart</i>
             </a>
             <a onClick={this.props.handler} className="mdc-top-app-bar__action-item" id="tools" title={this.props.status === 'closed' ? closedTitle : openTitle}>
-              <i className="material-icons mdc-top-app-bar__navigation-icon">search</i>
+              <i className="material-icons mdc-top-app-bar__navigation-icon">{this.props.status === 'closed' ? 'search' : 'keyboard_arrow_right'}</i>
             </a>
           </section>
         </div>

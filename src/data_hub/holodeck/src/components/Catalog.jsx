@@ -5,6 +5,10 @@ import CatalogCardContainer from '../containers/CatalogCardContainer';
 import CatalogView from './CatalogView';
 import CollectionDialogContainer from '../containers/CollectionDialogContainer';
 import Footer from './Footer';
+import HistoricalAerialTemplate from './HistoricalAerialTemplate/HistoricalAerialTemplate';
+import OutsideEntityTemplate from './TnrisOutsideEntityTemplate/TnrisOutsideEntityTemplate';
+import TnrisDownloadTemplate from './TnrisDownloadTemplate/TnrisDownloadTemplate';
+import TnrisOrderTemplate from './TnrisOrderTemplate/TnrisOrderTemplate';
 import CollectionFilterMapDialogContainer from '../containers/CollectionFilterMapDialogContainer';
 import HeaderContainer from '../containers/HeaderContainer';
 import OrderCartDialogContainer from '../containers/OrderCartDialogContainer';
@@ -28,6 +32,34 @@ export default class Catalog extends React.Component {
 
     this.handleResize = this.handleResize.bind(this);
     this.handler = this.handler.bind(this);
+    this.handleShowCollectionView = this.handleShowCollectionView.bind(this);
+  }
+
+  componentDidMount() {
+    this.props.fetchCollections();
+    this.props.fetchStoredShoppingCart();
+    window.addEventListener("resize", this.handleResize);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.handleResize);
+  }
+
+  componentDidUpdate() {
+    if (this.props.collections && Object.keys(this.props.match.params).includes('collectionId')) {
+      if (!Object.keys(this.props.collections).includes(this.props.match.params.collectionId)) {
+        console.log(this.props.match.params.collectionId);
+        this.setState({
+          badUrlFlag: true
+        });
+      }
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const themedClass = nextProps.theme + "-app-theme";
+    const html = document.querySelector('html');
+    html.className = themedClass;
   }
 
   handleResize() {
@@ -60,31 +92,22 @@ export default class Catalog extends React.Component {
     }
   }
 
-  componentDidMount() {
-    this.props.fetchCollections();
-    this.props.fetchStoredShoppingCart();
-    window.addEventListener("resize", this.handleResize);
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener("resize", this.handleResize);
-  }
-
-  componentDidUpdate() {
-    if (this.props.collections && Object.keys(this.props.match.params).includes('collectionId')) {
-      if (!Object.keys(this.props.collections).includes(this.props.match.params.collectionId)) {
-        console.log(this.props.match.params.collectionId);
-        this.setState({
-          badUrlFlag: true
-        });
+  handleShowCollectionView() {
+    if (this.props.showCollectionDialog) {
+      let collection = this.props.collections[this.props.selectedCollection];
+      switch(collection['template']) {
+        case 'tnris-download':
+          return (<TnrisDownloadTemplate collection={collection} />);
+        case 'tnris-order':
+          return (<TnrisOrderTemplate collection={collection} />);
+        case 'historical-aerial':
+          return (<HistoricalAerialTemplate collection={collection} />);
+        case 'outside-entity':
+          return (<OutsideEntityTemplate collection={collection} />);
+        default:
+          return (<TnrisDownloadTemplate collection={collection} />);
       }
     }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const themedClass = nextProps.theme + "-app-theme";
-    const html = document.querySelector('html');
-    html.className = themedClass;
   }
 
   render() {
@@ -119,7 +142,7 @@ export default class Catalog extends React.Component {
     return (
       <div className="catalog-component">
 
-        <CollectionDialogContainer history={this.props.history} />
+        {/*<CollectionDialogContainer history={this.props.history} />*/}
         <OrderCartDialogContainer />
         <CollectionFilterMapDialogContainer />
 
@@ -134,7 +157,8 @@ export default class Catalog extends React.Component {
         <HeaderContainer
           view={this.state.toolDrawerView}
           status={this.state.toolDrawerStatus}
-          handler={this.handler} />
+          handler={this.handler}
+          history={this.props.history} />
 
         <div className={`catalog ${dismissClass}`}>
           {this.props.visibleCollections && this.props.visibleCollections.length < 1 ?
@@ -146,29 +170,17 @@ export default class Catalog extends React.Component {
                 title="No data available with those search terms" />
             </div> : ''}
 
-          <ul className='catalog-list mdc-image-list mdc-image-list--with-text-protection'>
-            {this.props.visibleCollections ?
-              <CatalogView
-                collections={this.props.collections}
-                visibleCollections={this.props.visibleCollections}
-                match={this.props.match}
-                history={this.props.history} />
-                : loadingMessage}
-
-            {/*{this.props.visibleCollections ? this.props.visibleCollections.map(collectionId =>
-              <CatalogView
-                collections={this.props.collections}
-                visibleCollections={this.props.visibleCollections}
-                match={this.props.match}
-                history={this.props.history} />
-
-              <CatalogCardContainer
-                collection={this.props.collections[collectionId]}
-                key={collectionId}
-                match={this.props.match}
-                history={this.props.history} />
-            ) : loadingMessage}*/}
-          </ul>
+          {this.props.showCollectionDialog ? this.handleShowCollectionView() :
+            <ul className='catalog-list mdc-image-list mdc-image-list--with-text-protection'>
+              {this.props.visibleCollections ? this.props.visibleCollections.map(collectionId =>
+                <CatalogCardContainer
+                  collection={this.props.collections[collectionId]}
+                  key={collectionId}
+                  match={this.props.match}
+                  history={this.props.history} />
+              ) : loadingMessage}
+            </ul>
+          }
         </div>
 
         <Footer

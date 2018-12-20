@@ -7,7 +7,14 @@ styles for component: HistoricalAerialTemplate
     @include mdc-top-app-bar-ink-color($text-color);
     @include mdc-top-app-bar-icon-ink-color($text-color);
     @include mdc-top-app-bar-fill-color($primary-color);
-    border-bottom: solid 1px $skin-secondary;
+    // border-bottom: solid 1px $skin-secondary;
+    background-color: white;
+    color: gray;
+  }
+
+  button {
+    margin-left: 25px;
+    margin-right: 25px;
   }
 
   height: 100%;
@@ -19,13 +26,15 @@ styles for component: HistoricalAerialTemplate
   }
 
   section.mdc-top-app-bar__section.mdc-top-app-bar__section--align-end {
-    max-width: 200px;
+    // max-width: 200px;
+    width: auto;
 
     div.mdc-tab-bar {
       .mdc-tab {
-        max-width: 25px;
+        max-width: 86px;
         span {
-          color: $text-color;
+          // color: $text-color;
+          color: gray;
         }
 
         .mdc-tab-indicator--active {

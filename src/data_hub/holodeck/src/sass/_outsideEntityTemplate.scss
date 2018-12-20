@@ -7,7 +7,8 @@ styles for component: OutsideEntityTemplate
     @include mdc-top-app-bar-ink-color($text-color);
     @include mdc-top-app-bar-icon-ink-color($text-color);
     @include mdc-top-app-bar-fill-color($primary-color);
-    border-bottom: solid 1px $skin-secondary;
+    // border-bottom: solid 1px $skin-secondary;
+    background-color: white;
   }
 
   height: 100%;

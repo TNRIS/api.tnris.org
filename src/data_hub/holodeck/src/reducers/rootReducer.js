@@ -6,9 +6,9 @@ import collectionFilter from './collectionFilterReducer';
 import collectionFilterMap from './collectionFilterMapReducer';
 import collectionFilterMapDialog from './collectionFilterMapDialogReducer';
 import collectionSearcher from './collectionSearcherReducer';
+import collectionSorter from './collectionSorterReducer';
 import collectionTimeslider from './collectionTimesliderReducer';
 import resources from './resourceReducer';
-import sorter from './sortReducer';
 import contact from './contactReducer';
 import orderCart from './orderCartReducer';
 import urlTracker from './urlTrackerReducer';
@@ -21,9 +21,9 @@ const rootReducer = combineReducers({
   collectionFilterMap,
   collectionFilterMapDialog,
   collectionSearcher,
+  collectionSorter,
   collectionTimeslider,
   resources,
-  sorter,
   contact,
   orderCart,
   urlTracker,

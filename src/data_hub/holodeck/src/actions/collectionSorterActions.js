@@ -4,7 +4,7 @@ import {
   SET_SORT_ZA,
   SET_SORT_NEW,
   SET_SORT_OLD,
-} from '../constants/sortActionTypes';
+} from '../constants/collectionSorterActionTypes';
 
 export const setSortAZ = () => {
   return (dispatch) => {

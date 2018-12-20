@@ -4,9 +4,9 @@ import * as collectionFilterActions from './collectionFilterActions';
 import * as collectionFilterMapActions from './collectionFilterMapActions';
 import * as collectionFilterMapDialogActions from './collectionFilterMapDialogActions';
 import * as collectionSearcherActions from './collectionSearcherActions';
+import * as collectionSorterActions from './collectionSorterActions';
 import * as collectionTimesliderActions from './collectionTimesliderActions';
 import * as resourceActions from './resourceActions';
-import * as sortActions from './sortActions';
 import * as contactActions from './contactActions';
 import * as orderCartDialogActions from './orderCartDialogActions';
 import * as orderCartActions from './orderCartActions';
@@ -20,9 +20,9 @@ export {
   collectionFilterMapActions,
   collectionFilterMapDialogActions,
   collectionSearcherActions,
+  collectionSorterActions,
   collectionTimesliderActions,
   resourceActions,
-  sortActions,
   contactActions,
   orderCartDialogActions,
   orderCartActions,

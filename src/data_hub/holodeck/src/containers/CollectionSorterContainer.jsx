@@ -1,24 +1,24 @@
 import { connect } from 'react-redux';
 
-import { sortActions, urlTrackerActions } from '../actions';
+import { collectionSorterActions, urlTrackerActions } from '../actions';
 import CollectionSorter from '../components/CollectionSorter';
 
 const mapStateToProps = state => ({
-  sortOrder: state.sorter.sortOrder
+  sortOrder: state.collectionSorter.sortOrder
 });
 
 const mapDispatchToProps = dispatch => ({
   sortAZ: () => {
-    dispatch(sortActions.setSortAZ());
+    dispatch(collectionSorterActions.setSortAZ());
   },
   sortZA: () => {
-    dispatch(sortActions.setSortZA());
+    dispatch(collectionSorterActions.setSortZA());
   },
   sortNew: () => {
-    dispatch(sortActions.setSortNew());
+    dispatch(collectionSorterActions.setSortNew());
   },
   sortOld: () => {
-    dispatch(sortActions.setSortOld());
+    dispatch(collectionSorterActions.setSortOld());
   },
   setUrl: (newUrl, history) => {
     dispatch(urlTrackerActions.setUrl(newUrl, history))

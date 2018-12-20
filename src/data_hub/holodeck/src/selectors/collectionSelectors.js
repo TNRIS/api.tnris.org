@@ -4,7 +4,7 @@ import elasticlunr from 'elasticlunr';
 const getCollections = (state) => state.collections.items;
 const getFilters = (state) => state.collectionFilter.collectionFilter;
 const getSearchQuery = (state) => state.collectionSearcher.collectionSearchQuery;
-const getSortOrder = (state) => state.sorter.sortOrder;
+const getSortOrder = (state) => state.collectionSorter.sortOrder;
 const getFilterMapFilter = (state) => state.collectionFilterMap.collectionFilterMapFilter;
 const setTimeslider = (state) => state.collectionTimeslider.collectionTimeslider;
 

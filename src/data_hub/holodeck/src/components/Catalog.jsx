@@ -2,7 +2,6 @@ import React from 'react';
 import { Redirect } from 'react-router';
 
 import CatalogCardContainer from '../containers/CatalogCardContainer';
-import CatalogView from './CatalogView';
 import CollectionDialogContainer from '../containers/CollectionDialogContainer';
 import Footer from './Footer';
 import HistoricalAerialTemplate from './HistoricalAerialTemplate/HistoricalAerialTemplate';
@@ -32,6 +31,7 @@ export default class Catalog extends React.Component {
 
     this.handleResize = this.handleResize.bind(this);
     this.handler = this.handler.bind(this);
+    this.handleCloseCollectionView = this.handleCloseCollectionView.bind(this);
     this.handleShowCollectionView = this.handleShowCollectionView.bind(this);
   }
 
@@ -78,12 +78,18 @@ export default class Catalog extends React.Component {
   }
 
   handler() {
-    this.state.toolDrawerStatus === 'open' ? this.setState({
-      toolDrawerStatus:'closed'
-    }) : this.setState({
-      toolDrawerStatus:'open'
-    });
-
+    if (this.props.selectedCollection === null) {
+      this.state.toolDrawerStatus === 'open' ? this.setState({
+        toolDrawerStatus:'closed'
+      }) : this.setState({
+        toolDrawerStatus:'open'
+      });
+    } else {
+      this.handleCloseCollectionView();
+      this.setState({
+        toolDrawerStatus:'open'
+      });
+    }
     if (this.state.toolDrawerView === 'modal') {
       const scrim = document.getElementById('scrim');
       scrim.onclick = () => {
@@ -110,6 +116,17 @@ export default class Catalog extends React.Component {
     }
   }
 
+  handleCloseCollectionView() {
+    this.props.closeCollectionDialog();
+    this.props.clearSelectedCollection();
+    if (this.props.previousUrl.includes('/collection/')) {
+      this.props.setUrl('/', this.props.history);
+    }
+    else {
+      this.props.setUrl(this.props.previousUrl, this.props.history);
+    }
+  }
+
   render() {
     console.log(this.props);
     const { error, loading } = this.props;
@@ -117,10 +134,10 @@ export default class Catalog extends React.Component {
     let dismissClass = 'closed-drawer';
 
     const loadingMessage = (
-        <div className="catalog-component__loading">
-          <img src={loadingImage} alt="Holodeck Loading..." className="holodeck-loading-image" />
-        </div>
-      );
+      <div className="catalog-component__loading">
+        <img src={loadingImage} alt="Holodeck Loading..." className="holodeck-loading-image" />
+      </div>
+    );
 
     if (this.state.toolDrawerStatus === 'open' && this.state.toolDrawerView === 'dismiss') {
       dismissClass = 'open-drawer';
@@ -160,7 +177,7 @@ export default class Catalog extends React.Component {
           handler={this.handler}
           history={this.props.history} />
 
-        <div className={`catalog ${dismissClass}`}>
+        <div className={`catalog ${dismissClass} mdc-drawer-app-content`}>
           {this.props.visibleCollections && this.props.visibleCollections.length < 1 ?
             <div className={noDataDivClass}>
               <img

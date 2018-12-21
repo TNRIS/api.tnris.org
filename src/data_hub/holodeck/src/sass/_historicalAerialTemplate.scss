@@ -9,7 +9,7 @@ styles for component: HistoricalAerialTemplate
     @include mdc-top-app-bar-fill-color($primary-color);
     // border-bottom: solid 1px $skin-secondary;
     background-color: white;
-    color: gray;
+    color: #444;
   }
 
   button {
@@ -36,11 +36,19 @@ styles for component: HistoricalAerialTemplate
           // color: $text-color;
           color: gray;
         }
-
-        .mdc-tab-indicator--active {
-          .mdc-tab-indicator__content--underline {
-            background-color: $text-color;
-          }
+        // .mdc-tab-indicator--active {
+        //   .mdc-tab-indicator__content--underline {
+        //     // background-color: $text-color;
+        //     background-color: gray;
+        //   }
+        // }
+      }
+      .mdc-tab--active {
+        .mdc-tab__content {
+          color: #444;
+        }
+        .mdc-tab-indicator__content--underline {
+          background-color: #444;
         }
       }
     }

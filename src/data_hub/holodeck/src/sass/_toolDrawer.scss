@@ -33,7 +33,8 @@ styles for component: ToolDrawer
       }
 
       .dataset-counter {
-        background: $skin-tertiary;
+        // background: $skin-tertiary;
+        background-color: $skin-secondary;
         color: $skin-text;
         text-align: center;
         height: 26px;

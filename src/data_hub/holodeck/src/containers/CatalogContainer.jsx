@@ -5,7 +5,8 @@ import {
   collectionActions,
   collectionDialogActions,
   orderCartActions,
-  resourceActions } from '../actions';
+  resourceActions,
+  urlTrackerActions } from '../actions';
 import {
   getAllCollections,
   getSortedCollections
@@ -20,10 +21,17 @@ const mapStateToProps = (state) => ({
   showCollectionDialog: state.collectionDialog.showCollectionDialog,
   sortOrder: state.sorter.sortOrder,
   visibleCollections: getSortedCollections(state),
-  theme: state.colorTheme.theme
+  theme: state.colorTheme.theme,
+  previousUrl: state.urlTracker.previousUrl,
 });
 
 const mapDispatchToProps = dispatch => ({
+  clearSelectedCollection: () => {
+    dispatch(collectionActions.clearSelectedCollection());
+  },
+  closeCollectionDialog: () => {
+    dispatch(collectionDialogActions.closeCollectionDialog());
+  },
   fetchCollections: () => {
     dispatch(collectionActions.fetchCollections());
   },
@@ -35,6 +43,9 @@ const mapDispatchToProps = dispatch => ({
   },
   fetchStoredShoppingCart: () => {
     dispatch(orderCartActions.fetchStoredShoppingCart());
+  },
+  setUrl: (newUrl, history) => {
+    dispatch(urlTrackerActions.setUrl(newUrl, history))
   }
 })
 

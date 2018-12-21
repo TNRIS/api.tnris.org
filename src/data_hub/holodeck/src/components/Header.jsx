@@ -10,7 +10,7 @@ export default class Header extends React.Component {
   constructor(props) {
     super(props);
 
-    this.handleCloseCollectionDialog = this.handleCloseCollectionDialog.bind(this);
+    this.handleCloseCollectionView = this.handleCloseCollectionView.bind(this);
     this.handleOpenOrderCartDialog = this.handleOpenOrderCartDialog.bind(this);
   }
 
@@ -24,7 +24,7 @@ export default class Header extends React.Component {
     this.props.openOrderCartDialog();
   }
 
-  handleCloseCollectionDialog() {
+  handleCloseCollectionView() {
     this.props.closeCollectionDialog();
     this.props.clearSelectedCollection();
     if (this.props.previousUrl.includes('/collection/')) {
@@ -82,39 +82,39 @@ export default class Header extends React.Component {
     }
     console.log(this.props);
     return (
-      <header className={`header-component mdc-top-app-bar mdc-top-app-bar--fixed ${dismissClass}`} id="master-header">
-        <div className="header-title mdc-top-app-bar__row">
-          <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
-            <span className='header-title__tnris'>Texas Natural Resources Information System</span>
-          </section>
-          <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
-            <a
-              className='header-title__twdb' href="http://www.twdb.texas.gov/">
-              A Division of the Texas Water Development Board
-            </a>
-          </section>
-        </div>
-        <div className="header-nav mdc-top-app-bar__row">
-          <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
-            <a href="https://tnris.org" className="mdc-top-app-bar__action-item tnris-logo-text">
-              <img src={tnrisLogo} aria-label="TNRIS Logo" alt="TNRIS Logo" className="logo" />
-            </a>
-            <span className="mdc-top-app-bar__title">Data Holodeck</span>
-          </section>
-          <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
-            {this.props.selectedCollection !== null ?
-              <a onClick={this.handleCloseCollectionDialog} className="mdc-top-app-bar__action-item">
-                <i className="material-icons mdc-top-app-bar__navigation-icon">home</i>
-              </a> : ''}
-            <a onClick={this.handleOpenOrderCartDialog} className="mdc-top-app-bar__action-item">
-              <i className={shoppingCartClass}>shopping_cart</i>
-            </a>
-            <a onClick={this.props.handler} className="mdc-top-app-bar__action-item" id="tools" title={this.props.status === 'closed' ? closedTitle : openTitle}>
-              <i className="material-icons mdc-top-app-bar__navigation-icon">{this.props.status === 'closed' ? 'search' : 'keyboard_arrow_right'}</i>
-            </a>
-          </section>
-        </div>
-      </header>
+        <header className={`header-component mdc-top-app-bar mdc-top-app-bar--fixed ${dismissClass}`} id="master-header">
+          <div className="header-title mdc-top-app-bar__row">
+            <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
+              <span className='header-title__tnris'>Texas Natural Resources Information System</span>
+            </section>
+            <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
+              <a
+                className='header-title__twdb' href="http://www.twdb.texas.gov/">
+                A Division of the Texas Water Development Board
+              </a>
+            </section>
+          </div>
+          <div className="header-nav mdc-top-app-bar__row">
+            <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
+              <a href="https://tnris.org" className="mdc-top-app-bar__action-item tnris-logo-text">
+                <img src={tnrisLogo} aria-label="TNRIS Logo" alt="TNRIS Logo" className="logo" />
+              </a>
+              <span className="mdc-top-app-bar__title">Data Holodeck</span>
+            </section>
+            <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
+              {this.props.selectedCollection !== null ?
+                <a onClick={this.handleCloseCollectionView} className="mdc-top-app-bar__action-item">
+                  <i className="material-icons mdc-top-app-bar__navigation-icon">home</i>
+                </a> : ''}
+              <a onClick={this.handleOpenOrderCartDialog} className="mdc-top-app-bar__action-item">
+                <i className={shoppingCartClass}>shopping_cart</i>
+              </a>
+              <a onClick={this.props.handler} className="mdc-top-app-bar__action-item" id="tools" title={this.props.status === 'closed' ? closedTitle : openTitle}>
+                <i className="material-icons mdc-top-app-bar__navigation-icon">{this.props.status === 'closed' ? 'search' : 'keyboard_arrow_right'}</i>
+              </a>
+            </section>
+          </div>
+        </header>
     );
   }
 }

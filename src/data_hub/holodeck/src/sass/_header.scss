@@ -9,7 +9,8 @@ styles for component: Header
   border-bottom: solid 1px $skin-secondary;
 
   .header-title {
-    background: $skin-tertiary;
+    // background: $skin-tertiary;
+    background-color: $skin-secondary;
     color: $skin-text;
     font-family: pragmatica-web-condensed,sans-serif;
     font-size: 16px;

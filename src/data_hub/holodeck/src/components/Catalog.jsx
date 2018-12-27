@@ -21,11 +21,9 @@ export default class Catalog extends React.Component {
 
     window.innerWidth >= 1050 ? this.state = {
       toolDrawerView:'dismiss',
-      toolDrawerStatus:'open',
       badUrlFlag: false
     } : this.state = {
       toolDrawerView:'modal',
-      toolDrawerStatus:'closed',
       badUrlFlag: false
     };
 
@@ -79,21 +77,15 @@ export default class Catalog extends React.Component {
 
   handler() {
     if (this.props.selectedCollection === null) {
-      this.state.toolDrawerStatus === 'open' ? this.setState({
-        toolDrawerStatus:'closed'
-      }) : this.setState({
-        toolDrawerStatus:'open'
-      });
+      this.props.toolDrawerStatus === 'open' ? this.props.closeToolDrawer() : this.props.openToolDrawer();
     } else {
       this.handleCloseCollectionView();
-      this.setState({
-        toolDrawerStatus:'open'
-      });
+      this.props.openToolDrawer();
     }
     if (this.state.toolDrawerView === 'modal') {
       const scrim = document.getElementById('scrim');
       scrim.onclick = () => {
-        this.setState({toolDrawerStatus:'closed'});
+        this.props.closeToolDrawer();
       };
     }
   }
@@ -139,7 +131,7 @@ export default class Catalog extends React.Component {
       </div>
     );
 
-    if (this.state.toolDrawerStatus === 'open' && this.state.toolDrawerView === 'dismiss') {
+    if (this.props.toolDrawerStatus === 'open' && this.state.toolDrawerView === 'dismiss') {
       dismissClass = 'open-drawer';
       noDataDivClass = 'no-data no-data-open';
     }
@@ -159,7 +151,6 @@ export default class Catalog extends React.Component {
     return (
       <div className="catalog-component">
 
-        {/*<CollectionDialogContainer history={this.props.history} />*/}
         <OrderCartDialogContainer />
         <CollectionFilterMapDialogContainer />
 
@@ -168,12 +159,12 @@ export default class Catalog extends React.Component {
           history={this.props.history}
           total={this.props.visibleCollections ? this.props.visibleCollections.length : 0}
           view={this.state.toolDrawerView}
-          status={this.state.toolDrawerStatus}
+          status={this.props.toolDrawerStatus}
         />
 
         <HeaderContainer
           view={this.state.toolDrawerView}
-          status={this.state.toolDrawerStatus}
+          status={this.props.toolDrawerStatus}
           handler={this.handler}
           history={this.props.history} />
 
@@ -202,7 +193,7 @@ export default class Catalog extends React.Component {
 
         <Footer
           view={this.state.toolDrawerView}
-          status={this.state.toolDrawerStatus} />
+          status={this.props.toolDrawerStatus} />
 
       </div>
     );

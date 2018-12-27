@@ -39,7 +39,9 @@ export default class Header extends React.Component {
     let shoppingCartClass = "material-icons mdc-top-app-bar__navigation-icon";
 
     if (this.props.orders) {
-      shoppingCartClass = Object.keys(this.props.orders).length !== 0 ? "material-icons mdc-top-app-bar__navigation-icon shopping-cart-full" : "material-icons mdc-top-app-bar__navigation-icon";
+      shoppingCartClass = Object.keys(this.props.orders).length !== 0 ?
+      "material-icons mdc-top-app-bar__navigation-icon shopping-cart-full" :
+      "material-icons mdc-top-app-bar__navigation-icon";
     }
 
     let dismissClass = 'closed-drawer';
@@ -82,7 +84,9 @@ export default class Header extends React.Component {
     }
     console.log(this.props);
     return (
-        <header className={`header-component mdc-top-app-bar mdc-top-app-bar--fixed ${dismissClass}`} id="master-header">
+        <header
+          className={`header-component mdc-top-app-bar mdc-top-app-bar--fixed ${dismissClass}`}
+          id="master-header">
           <div className="header-title mdc-top-app-bar__row">
             <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
               <span className='header-title__tnris'>Texas Natural Resources Information System</span>
@@ -109,8 +113,14 @@ export default class Header extends React.Component {
               <a onClick={this.handleOpenOrderCartDialog} className="mdc-top-app-bar__action-item">
                 <i className={shoppingCartClass}>shopping_cart</i>
               </a>
-              <a onClick={this.props.handler} className="mdc-top-app-bar__action-item" id="tools" title={this.props.status === 'closed' ? closedTitle : openTitle}>
-                <i className="material-icons mdc-top-app-bar__navigation-icon">{this.props.status === 'closed' ? 'search' : 'keyboard_arrow_right'}</i>
+              <a
+                onClick={this.props.handler}
+                className="mdc-top-app-bar__action-item"
+                id="tools" title={this.props.status === 'closed' ? closedTitle : openTitle}>
+                <i
+                  className="material-icons mdc-top-app-bar__navigation-icon">
+                  {this.props.status === 'closed' ? 'search' : 'keyboard_arrow_right'}
+                </i>
               </a>
             </section>
           </div>

@@ -2,6 +2,7 @@ import { connect } from 'react-redux';
 
 import { collectionActions,
          collectionDialogActions,
+         toolDrawerActions,
          urlTrackerActions } from '../actions';
 import CatalogCard from '../components/CatalogCard';
 
@@ -11,17 +12,20 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    openCollectionDialog: () => {
-      dispatch(collectionDialogActions.openCollectionDialog());
-    },
     closeCollectionDialog: () => {
       dispatch(collectionDialogActions.closeCollectionDialog());
     },
-    selectCollection: (collectionId) => {
-      dispatch(collectionActions.selectCollection(collectionId));
+    closeToolDrawer: () => {
+      dispatch(toolDrawerActions.closeToolDrawer());
     },
     fetchCollectionResources: (collectionId) => {
       dispatch(collectionActions.fetchCollectionResources(collectionId))
+    },
+    openCollectionDialog: () => {
+      dispatch(collectionDialogActions.openCollectionDialog());
+    },
+    selectCollection: (collectionId) => {
+      dispatch(collectionActions.selectCollection(collectionId));
     },
     setUrl: (newUrl, history) => {
       dispatch(urlTrackerActions.setUrl(newUrl, history))

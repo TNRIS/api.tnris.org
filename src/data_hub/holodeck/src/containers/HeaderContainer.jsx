@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { collectionActions,
          collectionDialogActions,
          orderCartDialogActions,
+         toolDrawerActions,
          urlTrackerActions } from '../actions';
 import Header from '../components/Header';
 
@@ -23,6 +24,9 @@ const mapDispatchToProps = dispatch => ({
   },
   openOrderCartDialog: () => {
     dispatch(orderCartDialogActions.openOrderCartDialog());
+  },
+  openToolDrawer: () => {
+    dispatch(toolDrawerActions.openToolDrawer());
   },
   setUrl: (newUrl, history) => {
     dispatch(urlTrackerActions.setUrl(newUrl, history))

@@ -20,7 +20,7 @@ const mapStateToProps = (state) => ({
   resources: state.resources.items,
   selectedCollection: state.collections.selectedCollection,
   showCollectionDialog: state.collectionDialog.showCollectionDialog,
-  sortOrder: state.sorter.sortOrder,
+  sortOrder: state.collectionSorter.sortOrder,
   visibleCollections: getSortedCollections(state),
   theme: state.colorTheme.theme,
   previousUrl: state.urlTracker.previousUrl,

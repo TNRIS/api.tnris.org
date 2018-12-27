@@ -54,7 +54,7 @@ def lambda_handler(event, context):
                             v1=uuid.uuid4(),
                             v2=url,
                             v3=collection_id,
-                            v4=name)
+                            v4=name.replace('_', ' '))
                         )
                         try:
                             conn.commit()

@@ -8,28 +8,32 @@ export default class Description extends React.Component {
     const namesArray = this.props.collection.oe_service_names !== null ? this.props.collection.oe_service_names.split(', ') : [];
     const servicesArray = this.props.collection.oe_service_urls !== null ? this.props.collection.oe_service_urls.split(', ') : [];
 
-    // console.log(this.props.collection.oe_service_names === null ? console.log('null') : console.log('not null'));
+    const servicesObj = {};
 
-    // if (servicesArray.length !== 0) {
-    //   const s = servicesArray.map((service) => {
-    //     console.log('service');
-    //     // return service.split("/")[-2];
-    //   });
-    //   return s;
-    // }
+    namesArray.map((key) => {
+      const compare = key.split(' ').join('_');
+      servicesArray.map((service) => {
+        const stringArray = service.split("/");
+        stringArray.map((i) => {
+          if (i === compare) {
+            servicesObj[key] = servicesArray[servicesArray.indexOf(service)];
+          }
+          return i;
+        })
+        return service;
+      })
+      return key;
+    });
 
-    // console.log(s);
-
-    // <a href={s} target="_blank"></a>
-
-    const services = namesArray ? (
+    const services = namesArray.length !== 0 ? (
       <div id="oe_services">
-        <p><strong>Available services include:</strong></p>
+        <p>Currently, there are <strong>{namesArray.length}</strong> available services that you can access below, or by visiting TxDOT's open data portal at the link above.</p>
         <ul>
           {
-            namesArray.map((i) => {
-              // return service name with hyperlink to service url, trim whitespaces and replace '_' with ' ' using regex
-              return <li key={i}>{i.trim().replace(/ /g,' ')}</li>;
+            Object.entries(servicesObj).map((i) => {
+              let key = i[0];
+              let value = i[1];
+              return <li key={key}><a href={value} target="_blank">{key}</a></li>;
             })
           }
         </ul>

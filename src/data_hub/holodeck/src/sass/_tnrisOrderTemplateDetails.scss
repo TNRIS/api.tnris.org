@@ -39,6 +39,28 @@ styles for component: TnrisOrderTemplateDetails
       text-align: center;
     }
 
+    .carousel {
+
+      .control-next.control-arrow:before {
+        border-left: 20px solid #fff;
+      }
+
+      .control-prev.control-arrow:before {
+        border-right: 20px solid #fff;
+      }
+
+      .control-arrow:before {
+        border-top: 20px solid transparent;
+        border-bottom: 20px solid transparent;
+      }
+
+      p.carousel-status {
+        font-size: 16px;
+        font-weight: bold;
+        text-shadow: 2px 2px #333;
+      }
+    }
+
     a {
       color: $primary-color;
     }

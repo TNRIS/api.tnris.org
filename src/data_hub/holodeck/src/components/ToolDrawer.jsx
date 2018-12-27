@@ -24,7 +24,7 @@ export default class ToolDrawer extends React.Component {
 
   clearAllFilters() {
     this.props.setCollectionSearchQuery('');
-    this.props.sortAZ();
+    this.props.sortNew();
     this.props.setCollectionFilter({});
     this.props.setCollectionFilterMapAoi({});
     this.props.setCollectionFilterMapCenter({lng: -99.341389, lat: 31.33}); // the center of Texas

@@ -5,7 +5,6 @@ import { MDCMenu } from '@material/menu';
 
 import TnrisOrderTemplateOrder from './TnrisOrderTemplateOrder';
 import TnrisOrderTemplateDetails from './TnrisOrderTemplateDetails'
-import TnrisDownloadTemplateImages from '../TnrisDownloadTemplate/TnrisDownloadTemplateImages'
 
 export default class TnrisOrderTemplate extends React.Component {
   constructor(props) {
@@ -31,9 +30,6 @@ export default class TnrisOrderTemplate extends React.Component {
       case 'details':
         tabIndex = 0;
         break;
-      case 'images':
-        tabIndex = 1;
-        break;
       case 'order':
         tabIndex = 2;
         break;
@@ -53,11 +49,6 @@ export default class TnrisOrderTemplate extends React.Component {
     switch(this.state.view) {
       case 'details':
         showComponent = <TnrisOrderTemplateDetails collection={this.props.collection} />;
-        break;
-      case 'images':
-        showComponent = (<TnrisDownloadTemplateImages
-          images={this.props.collection.images}
-          thumbnail={this.props.collection.thumbnail_image} />);
         break;
       case 'order':
         showComponent = <TnrisOrderTemplateOrder />;
@@ -128,10 +119,6 @@ export default class TnrisOrderTemplate extends React.Component {
                     <a className={this.state.view === 'details' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
                        onClick={() => this.setTemplateView("details")}>
                        <i className="mdc-tab__icon material-icons">details</i> Details
-                    </a>
-                    <a className={this.state.view === 'images' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
-                       onClick={() => this.setTemplateView("images")}>
-                       <i className="mdc-tab__icon material-icons">collections</i> Images
                     </a>
                     <a className={this.state.view === 'order' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
                        onClick={() => this.setTemplateView("order")}>

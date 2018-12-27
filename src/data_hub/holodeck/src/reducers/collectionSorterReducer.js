@@ -3,26 +3,14 @@ import {
   SET_SORT_ZA,
   SET_SORT_NEW,
   SET_SORT_OLD,
-} from '../constants/sortActionTypes';
+} from '../constants/collectionSorterActionTypes';
 
 const initialState = {
-  sortOrder: 'AZ'
+  sortOrder: 'NEW'
 };
 
 export default function sortReducer(state = initialState, action) {
   switch(action.type) {
-    case SET_SORT_AZ:
-      // sort collections by title A to Z
-      return {
-        sortOrder: 'AZ'
-      };
-
-    case SET_SORT_ZA:
-      // sort collections by title Z to A
-      return {
-        sortOrder: 'ZA'
-      };
-
     case SET_SORT_NEW:
       // sort collections by newest acquisition_date
       return {
@@ -33,6 +21,18 @@ export default function sortReducer(state = initialState, action) {
       // sort collections by oldest acquisition_date
       return {
         sortOrder: 'OLD'
+      };
+
+    case SET_SORT_AZ:
+      // sort collections by title A to Z
+      return {
+        sortOrder: 'AZ'
+      };
+
+    case SET_SORT_ZA:
+      // sort collections by title Z to A
+      return {
+        sortOrder: 'ZA'
       };
 
     default:

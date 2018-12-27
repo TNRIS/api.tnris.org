@@ -4,6 +4,7 @@ import * as collectionFilterActions from './collectionFilterActions';
 import * as collectionFilterMapActions from './collectionFilterMapActions';
 import * as collectionFilterMapDialogActions from './collectionFilterMapDialogActions';
 import * as collectionSearcherActions from './collectionSearcherActions';
+import * as collectionSorterActions from './collectionSorterActions';
 import * as collectionTimesliderActions from './collectionTimesliderActions';
 import * as colorThemeActions from './colorThemeActions';
 import * as contactActions from './contactActions';
@@ -21,6 +22,7 @@ export {
   collectionFilterMapActions,
   collectionFilterMapDialogActions,
   collectionSearcherActions,
+  collectionSorterActions,
   collectionTimesliderActions,
   colorThemeActions,
   contactActions,

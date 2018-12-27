@@ -4,7 +4,6 @@ import {MDCTabBar} from '@material/tab-bar';
 import { MDCMenu } from '@material/menu';
 
 import TnrisDownloadTemplateDetails from './TnrisDownloadTemplateDetails';
-import TnrisDownloadTemplateImages from './TnrisDownloadTemplateImages';
 
 import TnrisDownloadTemplateDownloadContainer from '../../containers/TnrisDownloadTemplateDownloadContainer';
 import OrderTnrisDataFormContainer from '../../containers/OrderTnrisDataFormContainer';
@@ -33,14 +32,11 @@ export default class TnrisDownloadTemplate extends React.Component {
       case 'details':
         tabIndex = 0;
         break;
-      case 'images':
+      case 'download':
         tabIndex = 1;
         break;
-      case 'download':
-        tabIndex = 2;
-        break;
       case 'order':
-        tabIndex = 3
+        tabIndex = 2
         break;
       default:
         tabIndex = 0;
@@ -59,12 +55,6 @@ export default class TnrisDownloadTemplate extends React.Component {
     switch(this.state.view) {
       case 'details':
         showComponent = <TnrisDownloadTemplateDetails collection={this.props.collection} />;
-        templateClass = 'tnris-download-template';
-        break;
-      case 'images':
-        showComponent = (<TnrisDownloadTemplateImages
-          images={this.props.collection.images}
-          thumbnail={this.props.collection.thumbnail_image} />);
         templateClass = 'tnris-download-template';
         break;
       case 'download':
@@ -163,10 +153,6 @@ export default class TnrisDownloadTemplate extends React.Component {
                     <a className={this.state.view === 'details' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
                        onClick={() => this.setTemplateView("details")}>
                        <i className="mdc-tab__icon material-icons">details</i> Details
-                    </a>
-                    <a className={this.state.view === 'images' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
-                       onClick={() => this.setTemplateView("images")}>
-                       <i className="mdc-tab__icon material-icons">collections</i> Images
                     </a>
                     <a className={this.state.view === 'download' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
                        onClick={() => this.setTemplateView("download")}>

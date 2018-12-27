@@ -6,12 +6,14 @@ import * as collectionFilterMapDialogActions from './collectionFilterMapDialogAc
 import * as collectionSearcherActions from './collectionSearcherActions';
 import * as collectionSorterActions from './collectionSorterActions';
 import * as collectionTimesliderActions from './collectionTimesliderActions';
-import * as resourceActions from './resourceActions';
-import * as contactActions from './contactActions';
-import * as orderCartDialogActions from './orderCartDialogActions';
-import * as orderCartActions from './orderCartActions';
-import * as urlTrackerActions from './urlTrackerActions';
 import * as colorThemeActions from './colorThemeActions';
+import * as contactActions from './contactActions';
+import * as orderCartActions from './orderCartActions';
+import * as orderCartDialogActions from './orderCartDialogActions';
+import * as resourceActions from './resourceActions';
+import * as sortActions from './sortActions';
+import * as toolDrawerActions from './toolDrawerActions';
+import * as urlTrackerActions from './urlTrackerActions';
 
 export {
   collectionActions,
@@ -22,10 +24,12 @@ export {
   collectionSearcherActions,
   collectionSorterActions,
   collectionTimesliderActions,
-  resourceActions,
+  colorThemeActions,
   contactActions,
-  orderCartDialogActions,
   orderCartActions,
-  urlTrackerActions,
-  colorThemeActions
+  orderCartDialogActions,
+  resourceActions,
+  sortActions,
+  toolDrawerActions,
+  urlTrackerActions
 };

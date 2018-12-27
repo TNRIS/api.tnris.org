@@ -6,6 +6,7 @@ import {
   collectionDialogActions,
   orderCartActions,
   resourceActions,
+  toolDrawerActions,
   urlTrackerActions } from '../actions';
 import {
   getAllCollections,
@@ -23,6 +24,7 @@ const mapStateToProps = (state) => ({
   visibleCollections: getSortedCollections(state),
   theme: state.colorTheme.theme,
   previousUrl: state.urlTracker.previousUrl,
+  toolDrawerStatus: state.toolDrawer.toolDrawerStatus
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -32,17 +34,23 @@ const mapDispatchToProps = dispatch => ({
   closeCollectionDialog: () => {
     dispatch(collectionDialogActions.closeCollectionDialog());
   },
+  closeToolDrawer: () => {
+    dispatch(toolDrawerActions.closeToolDrawer());
+  },
   fetchCollections: () => {
     dispatch(collectionActions.fetchCollections());
   },
   fetchResources: () => {
     dispatch(resourceActions.fetchResources());
   },
+  fetchStoredShoppingCart: () => {
+    dispatch(orderCartActions.fetchStoredShoppingCart());
+  },
   openCollectionDialog: () => {
     dispatch(collectionDialogActions.openCollectionDialog());
   },
-  fetchStoredShoppingCart: () => {
-    dispatch(orderCartActions.fetchStoredShoppingCart());
+  openToolDrawer: () => {
+    dispatch(toolDrawerActions.openToolDrawer());
   },
   setUrl: (newUrl, history) => {
     dispatch(urlTrackerActions.setUrl(newUrl, history))

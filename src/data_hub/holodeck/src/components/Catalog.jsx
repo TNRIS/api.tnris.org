@@ -2,7 +2,6 @@ import React from 'react';
 import { Redirect } from 'react-router';
 
 import CatalogCardContainer from '../containers/CatalogCardContainer';
-import CollectionDialogContainer from '../containers/CollectionDialogContainer';
 import Footer from './Footer';
 import HistoricalAerialTemplate from './HistoricalAerialTemplate/HistoricalAerialTemplate';
 import OutsideEntityTemplate from './TnrisOutsideEntityTemplate/TnrisOutsideEntityTemplate';

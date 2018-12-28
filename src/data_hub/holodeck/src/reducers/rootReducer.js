@@ -12,7 +12,6 @@ import colorTheme from './colorThemeReducer';
 import contact from './contactReducer';
 import orderCart from './orderCartReducer';
 import resources from './resourceReducer';
-import sorter from './sortReducer';
 import toolDrawer from './toolDrawerReducer';
 import urlTracker from './urlTrackerReducer';
 
@@ -30,7 +29,6 @@ const rootReducer = combineReducers({
   contact,
   orderCart,
   resources,
-  sorter,
   toolDrawer,
   urlTracker,
 })

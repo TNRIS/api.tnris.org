@@ -4,9 +4,8 @@ import {
   collectionFilterActions,
   collectionFilterMapActions,
   collectionSearcherActions,
+  collectionSorterActions,
   collectionTimesliderActions,
-  sortActions,
-  toolDrawerActions,
   urlTrackerActions
 } from '../actions';
 import { getCollectionTimesliderRange } from '../selectors/collectionSelectors';

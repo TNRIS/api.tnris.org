@@ -4,12 +4,26 @@ styles for component: ToolDrawer
 
 .tool-drawer-component {
 
+  .mdc-drawer--dismissible.mdc-drawer--open {
+    display: flex;
+    transition: display .1s;
+  }
+  //
+  // .mdc-drawer--dismissible {
+  //   display: none;
+  //   transition: display .1s;
+  // }
+
   .mdc-drawer {
     @include mdc-drawer-surface-fill-color($main-background);
     @include mdc-drawer-divider-color($empty-border);
 
 
     .mdc-drawer__content {
+
+      .mdc-list-group {
+        position: fixed;
+      }
 
       .no-scroll {
         position: fixed;
@@ -29,7 +43,7 @@ styles for component: ToolDrawer
         z-index: 999;
         padding: 0 0 0 0;
         background: $header-bar;
-        border-bottom: solid 1px $skin-secondary;
+        border-bottom: solid 1px $skin-tertiary;
       }
 
       .dataset-counter {

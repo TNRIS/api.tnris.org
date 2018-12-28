@@ -11,7 +11,6 @@ import * as contactActions from './contactActions';
 import * as orderCartActions from './orderCartActions';
 import * as orderCartDialogActions from './orderCartDialogActions';
 import * as resourceActions from './resourceActions';
-import * as sortActions from './sortActions';
 import * as toolDrawerActions from './toolDrawerActions';
 import * as urlTrackerActions from './urlTrackerActions';
 
@@ -29,7 +28,6 @@ export {
   orderCartActions,
   orderCartDialogActions,
   resourceActions,
-  sortActions,
   toolDrawerActions,
   urlTrackerActions
 };

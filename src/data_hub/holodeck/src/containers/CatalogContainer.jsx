@@ -17,7 +17,7 @@ const mapStateToProps = (state) => ({
   loading: state.collections.loading,
   resources: state.resources.items,
   showCollectionDialog: state.collectionDialog.showCollectionDialog,
-  sortOrder: state.sorter.sortOrder,
+  sortOrder: state.collectionSorter.sortOrder,
   visibleCollections: getSortedCollections(state),
   theme: state.colorTheme.theme
 });

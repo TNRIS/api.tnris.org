@@ -73,4 +73,9 @@
       <br />
       Note: Database changes run on backend and <strong>WILL BE</strong> permanently committed regardless of changes in browser <strong>unless a validation error occurs</strong> (in which case all Resource records will be permanently cleared from the database with no new replacements until a successful completion of this process).
     </p>
+    <div style="max-width:70%;margin:0 auto;padding-bottom:15px;">
+      <p style="padding-top:15px;">
+        <strong>NOTE: </strong>In production, the request worker (gunicorn) times out after 30 seconds. If this form fails numerous times and demonstrates inconsistent behavior in doing so, chances are such this timeout is the source of the problem. It certainly causes this issue for statewide qquad-cut datasets. In these scenarios, this form must be run within a local build of the application as to avoid the worker timeout.
+      </p>
+    </div>
 {% endspaceless %}

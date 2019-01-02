@@ -33,36 +33,36 @@ class CollectionSorter extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-      if (nextProps.sortOrder === 'AZ') {
-        this.setState({sortOrder: 'AZ'});
+      if (nextProps.sortOrder === 'NEW') {
+        this.setState({sortOrder: 'NEW'});
       }
   }
 
   setSort(order) {
     this.setState({sortOrder: order});
     switch(order) {
-      case 'AZ':
-        this.props.sortAZ();
-        break;
-      case 'ZA':
-        this.props.sortZA();
-        break;
       case 'NEW':
         this.props.sortNew();
         break;
       case 'OLD':
         this.props.sortOld();
         break;
-      default:
+      case 'AZ':
         this.props.sortAZ();
+        break;
+      case 'ZA':
+        this.props.sortZA();
+        break;
+      default:
+        this.props.sortNew();
     }
     // update URL to reflect new sort change
     const prevFilter = this.props.history.location.pathname.includes('/catalog/') ?
                        JSON.parse(decodeURIComponent(this.props.history.location.pathname.replace('/catalog/', '')))
                        : {};
     const filterObj = {...prevFilter, sort: order};
-    // if the default sort 'AZ' then remove from the url
-    if (filterObj['sort'] === 'AZ') {
+    // if the default sort 'NEW' then remove from the url
+    if (filterObj['sort'] === 'NEW') {
       delete filterObj['sort'];
     }
     const filterString = JSON.stringify(filterObj);
@@ -79,16 +79,6 @@ class CollectionSorter extends React.Component {
       <div className='sort-component'>
           <ul className='mdc-list'>
             <li
-              className={this.state.sortOrder === 'AZ' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
-              onClick={() => this.setSort("AZ")}>
-               <span className='mdc-list-item__text'>A to Z</span>
-            </li>
-            <li
-              className={this.state.sortOrder === 'ZA' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
-              onClick={() => this.setSort("ZA")}>
-               <span className='mdc-list-item__text'>Z to A</span>
-            </li>
-            <li
               className={this.state.sortOrder === 'NEW' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
               onClick={() => this.setSort("NEW")}>
                <span className='mdc-list-item__text'>Newest</span>
@@ -97,6 +87,16 @@ class CollectionSorter extends React.Component {
               className={this.state.sortOrder === 'OLD' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
               onClick={() => this.setSort("OLD")}>
                <span className='mdc-list-item__text'>Oldest</span>
+            </li>
+            <li
+              className={this.state.sortOrder === 'AZ' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
+              onClick={() => this.setSort("AZ")}>
+               <span className='mdc-list-item__text'>A to Z</span>
+            </li>
+            <li
+              className={this.state.sortOrder === 'ZA' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
+              onClick={() => this.setSort("ZA")}>
+               <span className='mdc-list-item__text'>Z to A</span>
             </li>
           </ul>
       </div>

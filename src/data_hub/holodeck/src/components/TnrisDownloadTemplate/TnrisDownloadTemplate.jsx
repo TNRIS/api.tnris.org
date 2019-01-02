@@ -35,11 +35,11 @@ export default class TnrisDownloadTemplate extends React.Component {
       case 'download':
         tabIndex = 1;
         break;
-      case 'contact':
-        tabIndex = 2;
-        break;
       case 'order':
-        tabIndex = 3
+        tabIndex = 2
+        break;
+      case 'contact':
+        tabIndex = 3;
         break;
       default:
         tabIndex = 0;
@@ -65,7 +65,18 @@ export default class TnrisDownloadTemplate extends React.Component {
         templateClass = 'tnris-download-template dark-theme';
         break;
       case 'contact':
-        showComponent = <ContactContainer collection={this.props.collection}/>;
+        showComponent = (
+          <div className='tnris-download-template-details'>
+            <div className="template-content-div">
+              <div className='mdc-typography--headline5 template-content-div-header'>
+                Contact
+              </div>
+              <div>
+                <ContactContainer collection={this.props.collection}/>
+              </div>
+            </div>
+          </div>
+        )
         templateClass = 'tnris-download-template';
         break;
       case 'order':
@@ -125,9 +136,9 @@ export default class TnrisDownloadTemplate extends React.Component {
                         <span className="mdc-tab__ripple"></span>
                       </button>
 
-                      <button className="mdc-tab" role="tab" aria-selected="false" tabIndex="-1"  onClick={() => this.setTemplateView("contact")} title="Contact">
+                      <button className="mdc-tab" role="tab" aria-selected="false" tabIndex="-1"  onClick={() => this.setTemplateView("order")} title="Order">
                         <span className="mdc-tab__content">
-                          <span className="mdc-tab__icon material-icons">contact_support</span>
+                          <span className="mdc-tab__icon material-icons">shopping_basket</span>
                         </span>
                         <span className="mdc-tab-indicator">
                           <span className="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
@@ -135,9 +146,9 @@ export default class TnrisDownloadTemplate extends React.Component {
                         <span className="mdc-tab__ripple"></span>
                       </button>
 
-                      <button className="mdc-tab" role="tab" aria-selected="false" tabIndex="-1"  onClick={() => this.setTemplateView("order")} title="Order">
+                      <button className="mdc-tab" role="tab" aria-selected="false" tabIndex="-1"  onClick={() => this.setTemplateView("contact")} title="Contact">
                         <span className="mdc-tab__content">
-                          <span className="mdc-tab__icon material-icons">shopping_basket</span>
+                          <span className="mdc-tab__icon material-icons">contact_support</span>
                         </span>
                         <span className="mdc-tab-indicator">
                           <span className="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
@@ -165,13 +176,13 @@ export default class TnrisDownloadTemplate extends React.Component {
                        onClick={() => this.setTemplateView("download")}>
                        <i className="mdc-tab__icon material-icons">save_alt</i> Download
                     </a>
-                    <a className={this.state.view === 'contact' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
-                       onClick={() => this.setTemplateView("contact")}>
-                       <i className="mdc-tab__icon material-icons">contact_support</i> Contact
-                    </a>
                     <a className={this.state.view === 'download' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
                        onClick={() => this.setTemplateView("order")}>
                        <i className="mdc-tab__icon material-icons">shopping_basket</i> Order
+                    </a>
+                    <a className={this.state.view === 'contact' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
+                       onClick={() => this.setTemplateView("contact")}>
+                       <i className="mdc-tab__icon material-icons">contact_support</i> Contact
                     </a>
                   </nav>
                 </div>

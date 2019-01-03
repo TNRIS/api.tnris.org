@@ -8,11 +8,6 @@ styles for component: ToolDrawer
     display: flex;
     transition: display .1s;
   }
-  //
-  // .mdc-drawer--dismissible {
-  //   display: none;
-  //   transition: display .1s;
-  // }
 
   .mdc-drawer {
     @include mdc-drawer-surface-fill-color($main-background);

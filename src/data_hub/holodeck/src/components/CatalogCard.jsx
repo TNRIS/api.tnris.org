@@ -30,15 +30,23 @@ export default class CatalogCard extends React.Component {
     const collectionYear = this.props.collection.acquisition_date && this.props.collection.template !== 'outside-entity' ? this.props.collection.acquisition_date.substring(0, 4) : '';
 
     return (
-      <li className={cardClass} onClick={this.cardClicked}>
-        <div className="mdc-image-list__image-aspect-container">
-            <img className="mdc-image-list__image" src={this.props.collection.thumbnail_image} alt="Dataset Thumbnail" />
-            <div className="acquisition-year">{collectionYear}</div>
+      <div
+        className="catalog-card-component mdc-card mdc-card__primary-action"
+        onClick={this.cardClicked}>
+        <div
+          className="mdc-card__media mdc-card__media--16-9"
+          style={{backgroundImage: `url(${this.props.collection.thumbnail_image})`}}>
         </div>
-        <div className="mdc-image-list__supporting">
-          <span className="mdc-image-list__label">{this.props.collection.name}</span>
-        </div>
-      </li>
+        <p className='catalog-card__headline mdc-typography--headline6'>
+          {this.props.collection.name}
+        </p>
+        <p className='catalog-card__year mdc-typography--subtitle1'>
+          {collectionYear}
+        </p>
+        <p className='catalog-card__agency mdc-typography--body1'>
+          {this.props.collection.agency_abbreviation}
+        </p>
+      </div>
     );
   }
 }

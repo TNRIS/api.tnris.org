@@ -8,13 +8,8 @@ styles for component: TnrisDownloadTemplate
     @include mdc-top-app-bar-icon-ink-color($text-color);
     @include mdc-top-app-bar-fill-color($primary-color);
     border-bottom: solid 1px $skin-tertiary;
-    background-color: white;
-    color: #444;
-  }
-
-  button {
-    margin-left: 25px;
-    margin-right: 25px;
+    background-color: $header-bar;
+    color: $text-color;
   }
 
   height: 100%;
@@ -31,9 +26,10 @@ styles for component: TnrisDownloadTemplate
     div.mdc-tab-bar {
       .mdc-tab {
         max-width: 86px;
+        margin: 0 25px 0 25px;
         span {
           // color: $text-color;
-          color: gray;
+          color: $skin-secondary;
         }
         // .mdc-tab-indicator--active {
         //   .mdc-tab-indicator__content--underline {
@@ -44,10 +40,10 @@ styles for component: TnrisDownloadTemplate
       }
       .mdc-tab--active {
         .mdc-tab__content {
-          color: #444;
+          color: $skin-primary;
         }
         .mdc-tab-indicator__content--underline {
-          background-color: #444;
+          background-color: $skin-primary;
         }
       }
     }
@@ -70,6 +66,10 @@ styles for component: TnrisDownloadTemplate
 
       .mdc-menu-surface--anchor {
         display: flex;
+
+        i {
+          color: $skin-secondary;
+        }
       }
     }
 

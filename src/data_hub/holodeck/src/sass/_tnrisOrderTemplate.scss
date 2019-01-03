@@ -7,9 +7,9 @@ styles for component: TnrisOrderTemplate
     @include mdc-top-app-bar-ink-color($text-color);
     @include mdc-top-app-bar-icon-ink-color($text-color);
     @include mdc-top-app-bar-fill-color($primary-color);
-    // border-bottom: solid 1px $skin-secondary;
-    background-color: white;
-    color: #444;
+    border-bottom: solid 1px $skin-tertiary;
+    background-color: $header-bar;
+    color: $skin-primary;
   }
 
   button {
@@ -34,7 +34,7 @@ styles for component: TnrisOrderTemplate
         max-width: 86px;
         span {
           // color: $text-color;
-          color: gray;
+          color: $skin-secondary;
         }
         // .mdc-tab-indicator--active {
         //   .mdc-tab-indicator__content--underline {
@@ -45,10 +45,10 @@ styles for component: TnrisOrderTemplate
       }
       .mdc-tab--active {
         .mdc-tab__content {
-          color: #444;
+          color: $skin-primary;
         }
         .mdc-tab-indicator__content--underline {
-          background-color: #444;
+          background-color: $skin-primary;
         }
       }
     }
@@ -71,6 +71,10 @@ styles for component: TnrisOrderTemplate
 
       .mdc-menu-surface--anchor {
         display: flex;
+
+        i {
+          color: $skin-secondary;
+        }
       }
     }
 

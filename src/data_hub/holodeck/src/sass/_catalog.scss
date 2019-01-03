@@ -28,6 +28,14 @@ styles for component: Catalog
     padding-top: 91px;
     margin-bottom: 375px;
 
+    .mdc-layout-grid {
+      mdc-layout-grid-gutter-desktop: 2px;
+    }
+
+    ul {
+      list-style-type: none;
+    }
+
     .mdc-dialog__surface {
       background-color: $main-background;
     }

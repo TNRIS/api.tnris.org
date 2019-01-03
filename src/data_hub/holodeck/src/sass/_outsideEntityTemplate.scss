@@ -18,4 +18,54 @@ styles for component: OutsideEntityTemplate
     outline: none;
   }
 
+  section.mdc-top-app-bar__section.mdc-top-app-bar__section--align-end {
+    width: auto;
+
+    div.mdc-tab-bar {
+      .mdc-tab {
+        max-width: 25px;
+        span {
+          color: $text-color;
+        }
+        .mdc-tab-indicator--active {
+          .mdc-tab-indicator__content--underline {
+            background-color: $text-color;
+          }
+        }
+      }
+    }
+
+    div.mdc-menu-surface--anchor {
+      .mdc-list {
+        @include mdc-menu-surface-fill-color($primary-color);
+        @include mdc-list-item-primary-text-ink-color($text-color);
+
+        i {
+          margin-right: 6px;
+        }
+      }
+    }
+
+    @media (max-width: mdc-layout-grid-breakpoint-max(tablet)) {
+      .mdc-tab-bar {
+        display: none;
+      }
+
+      .mdc-menu-surface--anchor {
+        display: flex;
+      }
+    }
+
+    @media (min-width: mdc-layout-grid-breakpoint-max(tablet)) {
+      .mdc-tab-bar {
+        display: block;
+      }
+
+      .mdc-menu-surface--anchor {
+        display: none;
+      }
+    }
+
+  }
+
 }

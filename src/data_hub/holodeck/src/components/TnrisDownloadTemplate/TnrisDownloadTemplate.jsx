@@ -133,7 +133,12 @@ export default class TnrisDownloadTemplate extends React.Component {
                         <span className="mdc-tab__ripple"></span>
                       </button>
 
-                      {/*<button className="mdc-tab" role="tab" aria-selected="false" tabIndex="-1"  onClick={() => this.setTemplateView("images")} title="Images">
+                      {/*<button
+                          className="mdc-tab"
+                          role="tab" aria-selected="false"
+                          tabIndex="-1"
+                          onClick={() => this.setTemplateView("images")}
+                          title="Images">
                         <span className="mdc-tab__content">images
                           <span className="mdc-tab__icon material-icons">collections</span>
                         </span>

@@ -178,6 +178,22 @@ export default class Catalog extends React.Component {
             </div> : ''}
 
           {this.props.showCollectionDialog ? this.handleShowCollectionView() :
+            <div className="mdc-layout-grid">
+              <ul className="mdc-layout-grid__inner">
+                {this.props.visibleCollections ? this.props.visibleCollections.map(collectionId =>
+                  <li
+                    className="mdc-layout-grid__cell mdc-layout-grid__cell--span-3"
+                    key={collectionId}>
+                    <CatalogCardContainer
+                      collection={this.props.collections[collectionId]}
+                      match={this.props.match}
+                      history={this.props.history} />
+                  </li>
+                ) : loadingMessage}
+              </ul>
+            </div>
+          }
+          {/*{this.props.showCollectionDialog ? this.handleShowCollectionView() :
             <ul className='catalog-list mdc-image-list mdc-image-list--with-text-protection'>
               {this.props.visibleCollections ? this.props.visibleCollections.map(collectionId =>
                 <CatalogCardContainer
@@ -187,7 +203,7 @@ export default class Catalog extends React.Component {
                   history={this.props.history} />
               ) : loadingMessage}
             </ul>
-          }
+          }*/}
         </div>
 
         <Footer

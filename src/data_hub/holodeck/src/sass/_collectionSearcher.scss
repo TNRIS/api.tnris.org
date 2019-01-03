@@ -23,7 +23,7 @@ styles for component: CollectionSearcher
   }
 
   .mdc-text-field__input {
-    padding: 5px 7px 5px 7px !important;
+    padding: 5px 40px 5px 40px !important;
     border-bottom: 0;
     color: $skin-text;
     caret-color: $primary-color;
@@ -55,7 +55,13 @@ styles for component: CollectionSearcher
   }
 
   #clear-icon {
-    padding-top: 3px;
-    color: white;
+    // padding-top: 3px;
+    padding-bottom: 3px;
+    // color: white;
+  }
+
+  #search-icon {
+    left: 8px;
+    padding-bottom: 3px;
   }
 }

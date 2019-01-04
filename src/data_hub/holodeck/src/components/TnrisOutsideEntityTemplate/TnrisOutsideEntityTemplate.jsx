@@ -92,8 +92,8 @@ export default class TnrisOutsideEntityTemplate extends React.Component {
                     <div className="mdc-tab-scroller__scroll-content">
 
                       <button className="mdc-tab mdc-tab--active" role="tab" aria-selected="true" tabIndex="0" onClick={() => this.setTemplateView("details")} title="Details">
-                        <span className="mdc-tab__content">
-                          <span className="mdc-tab__icon material-icons">details</span>
+                        <span className="mdc-tab__content">details
+                          {/*<span className="mdc-tab__icon material-icons">details</span>*/}
                         </span>
                         <span className="mdc-tab-indicator mdc-tab-indicator--active">
                           <span className="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
@@ -102,8 +102,8 @@ export default class TnrisOutsideEntityTemplate extends React.Component {
                       </button>
 
                       <button className="mdc-tab" role="tab" aria-selected="false" tabIndex="-1"  onClick={() => this.setTemplateView("contact")} title="Contact">
-                        <span className="mdc-tab__content">
-                          <span className="mdc-tab__icon material-icons">contact_support</span>
+                        <span className="mdc-tab__content">contact
+                          {/*<span className="mdc-tab__icon material-icons">contact_support</span>*/}
                         </span>
                         <span className="mdc-tab-indicator">
                           <span className="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
@@ -124,12 +124,12 @@ export default class TnrisOutsideEntityTemplate extends React.Component {
                 <div ref="tab_menu" className="mdc-menu mdc-menu-surface">
                   <nav className="mdc-list">
                     <a className={this.state.view === 'details' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
-                       onClick={() => this.setTemplateView("details")}>
-                       <i className="mdc-tab__icon material-icons">details</i> Details
+                       onClick={() => this.setTemplateView("details")}>Details
+                       {/*<i className="mdc-tab__icon material-icons">details</i>*/}
                     </a>
                     <a className={this.state.view === 'contact' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
-                       onClick={() => this.setTemplateView("contact")}>
-                       <i className="mdc-tab__icon material-icons">contact_support</i> Contact
+                       onClick={() => this.setTemplateView("contact")}>Contact
+                       {/*<i className="mdc-tab__icon material-icons">contact_support</i>*/}
                     </a>
                   </nav>
                 </div>

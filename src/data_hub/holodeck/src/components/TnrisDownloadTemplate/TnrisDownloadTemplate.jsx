@@ -199,30 +199,21 @@ export default class TnrisDownloadTemplate extends React.Component {
                 </a>
                 <div ref="tab_menu" className="mdc-menu mdc-menu-surface">
                   <nav className="mdc-list">
-                    <a
-                      className={
-                        this.state.view === 'details' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'
-                      }
-                      onClick={() => this.setTemplateView("details")}>
-                      <i className="mdc-tab__icon material-icons">details</i> Details
+                    <a className={this.state.view === 'details' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
+                      onClick={() => this.setTemplateView("details")}>Details
+                      {/*<i className="mdc-tab__icon material-icons">details</i>*/}
                     </a>
-                    <a
-                      className={
-                        this.state.view === 'download' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'
-                      }
-                      onClick={() => this.setTemplateView("download")}>
-                      <i className="mdc-tab__icon material-icons">save_alt</i> Download
+                    <a className={this.state.view === 'download' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
+                      onClick={() => this.setTemplateView("download")}>Download
+                      {/*<i className="mdc-tab__icon material-icons">save_alt</i>*/}
                     </a>
-                    <a
-                      className={
-                        this.state.view === 'download' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'
-                      }
-                      onClick={() => this.setTemplateView("order")}>
-                      <i className="mdc-tab__icon material-icons">shopping_basket</i> Order
+                    <a className={this.state.view === 'download' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
+                      onClick={() => this.setTemplateView("order")}>Order
+                      {/*<i className="mdc-tab__icon material-icons">shopping_basket</i>*/}
                     </a>
                     <a className={this.state.view === 'contact' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
-                       onClick={() => this.setTemplateView("contact")}>
-                       <i className="mdc-tab__icon material-icons">contact_support</i> Contact
+                       onClick={() => this.setTemplateView("contact")}>Contact
+                       {/*<i className="mdc-tab__icon material-icons">contact_support</i>*/}
                     </a>
                   </nav>
                 </div>

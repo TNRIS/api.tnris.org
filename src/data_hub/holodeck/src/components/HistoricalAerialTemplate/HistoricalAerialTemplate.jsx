@@ -161,8 +161,8 @@ export default class HistoricalAerialTemplate extends React.Component {
                       </button>
 
                       <button className="mdc-tab" role="tab" aria-selected="false" tabIndex="-1"  onClick={() => this.setTemplateView("contact")} title="Contact">
-                        <span className="mdc-tab__content">
-                          <span className="mdc-tab__icon material-icons">contact_support</span>
+                        <span className="mdc-tab__content">contact
+                          {/*<span className="mdc-tab__icon material-icons">contact_support</span>*/}
                         </span>
                         <span className="mdc-tab-indicator">
                           <span className="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
@@ -194,8 +194,8 @@ export default class HistoricalAerialTemplate extends React.Component {
                        {/*<i className="mdc-tab__icon material-icons">shopping_basket</i>*/}
                     </a>
                     <a className={this.state.view === 'contact' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
-                       onClick={() => this.setTemplateView("contact")}>
-                       <i className="mdc-tab__icon material-icons">contact_support</i> Contact
+                       onClick={() => this.setTemplateView("contact")}>Contact
+                       {/*<i className="mdc-tab__icon material-icons">contact_support</i>*/}
                     </a>
                   </nav>
                 </div>

@@ -45,7 +45,7 @@ export default class Catalog extends React.Component {
   componentDidUpdate() {
     if (this.props.collections && Object.keys(this.props.match.params).includes('collectionId')) {
       if (!Object.keys(this.props.collections).includes(this.props.match.params.collectionId)) {
-        console.log(this.props.match.params.collectionId);
+        // console.log(this.props.match.params.collectionId);
         this.setState({
           badUrlFlag: true
         });
@@ -119,7 +119,7 @@ export default class Catalog extends React.Component {
   }
 
   render() {
-    console.log(this.props);
+    // console.log(this.props);
     const { error, loading } = this.props;
     let noDataDivClass = 'no-data no-data-closed';
     let dismissClass = 'closed-drawer';

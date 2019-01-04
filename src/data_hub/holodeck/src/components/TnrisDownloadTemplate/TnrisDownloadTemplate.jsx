@@ -65,21 +65,6 @@ export default class TnrisDownloadTemplate extends React.Component {
         showComponent = <TnrisDownloadTemplateDownloadContainer />;
         templateClass = 'tnris-download-template dark-theme';
         break;
-      case 'contact':
-        showComponent = (
-          <div className='tnris-download-template-details'>
-            <div className="template-content-div">
-              <div className='mdc-typography--headline5 template-content-div-header'>
-                Contact
-              </div>
-              <div>
-                <ContactContainer collection={this.props.collection}/>
-              </div>
-            </div>
-          </div>
-        )
-        templateClass = 'tnris-download-template';
-        break;
       case 'order':
         showComponent = (
           <div className='tnris-download-template-details'>
@@ -89,6 +74,21 @@ export default class TnrisDownloadTemplate extends React.Component {
               </div>
               <div>
                 <OrderTnrisDataFormContainer />
+              </div>
+            </div>
+          </div>
+        )
+        templateClass = 'tnris-download-template';
+        break;
+      case 'contact':
+        showComponent = (
+          <div className='tnris-download-template-details'>
+            <div className="template-content-div">
+              <div className='mdc-typography--headline5 template-content-div-header'>
+                Contact
+              </div>
+              <div>
+                <ContactContainer collection={this.props.collection}/>
               </div>
             </div>
           </div>
@@ -133,21 +133,6 @@ export default class TnrisDownloadTemplate extends React.Component {
                         <span className="mdc-tab__ripple"></span>
                       </button>
 
-                      {/*<button
-                          className="mdc-tab"
-                          role="tab" aria-selected="false"
-                          tabIndex="-1"
-                          onClick={() => this.setTemplateView("images")}
-                          title="Images">
-                        <span className="mdc-tab__content">images
-                          <span className="mdc-tab__icon material-icons">collections</span>
-                        </span>
-                        <span className="mdc-tab-indicator">
-                          <span className="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
-                        </span>
-                        <span className="mdc-tab__ripple"></span>
-                      </button>*/}
-
                       <button
                         className="mdc-tab"
                         role="tab"
@@ -175,6 +160,24 @@ export default class TnrisDownloadTemplate extends React.Component {
                         title="Order">
                         <span className="mdc-tab__content">order
                           {/*<span className="mdc-tab__icon material-icons">shopping_basket</span>*/}
+                        </span>
+                        <span className="mdc-tab-indicator">
+                          <span
+                            className="mdc-tab-indicator__content mdc-tab-indicator__content--underline">
+                          </span>
+                        </span>
+                        <span className="mdc-tab__ripple"></span>
+                      </button>
+
+                      <button
+                        className="mdc-tab"
+                        role="tab"
+                        aria-selected="false"
+                        tabIndex="-1"
+                        onClick={() => this.setTemplateView("contact")}
+                        title="Contact">
+                        <span className="mdc-tab__content">contact
+                          {/*<span className="mdc-tab__icon material-icons">save_alt</span>*/}
                         </span>
                         <span className="mdc-tab-indicator">
                           <span

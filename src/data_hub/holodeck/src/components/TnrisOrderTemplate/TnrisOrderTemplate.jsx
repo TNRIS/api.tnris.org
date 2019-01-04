@@ -6,6 +6,8 @@ import { MDCMenu } from '@material/menu';
 import TnrisOrderTemplateOrder from './TnrisOrderTemplateOrder';
 import TnrisOrderTemplateDetails from './TnrisOrderTemplateDetails'
 
+import ContactContainer from '../../containers/ContactContainer';
+
 export default class TnrisOrderTemplate extends React.Component {
   constructor(props) {
       super(props);
@@ -31,6 +33,9 @@ export default class TnrisOrderTemplate extends React.Component {
         tabIndex = 0;
         break;
       case 'order':
+        tabIndex = 1;
+        break;
+      case 'contact':
         tabIndex = 2;
         break;
       default:
@@ -52,6 +57,20 @@ export default class TnrisOrderTemplate extends React.Component {
         break;
       case 'order':
         showComponent = <TnrisOrderTemplateOrder />;
+        break;
+      case 'contact':
+        showComponent = (
+          <div className='tnris-order-template-details'>
+            <div className="template-content-div">
+              <div className='mdc-typography--headline5 template-content-div-header'>
+                Contact
+              </div>
+              <div>
+                <ContactContainer collection={this.props.collection} />
+              </div>
+            </div>
+          </div>
+        )
         break;
       default:
         showComponent = <TnrisOrderTemplateDetails collection={this.props.collection} />;
@@ -104,6 +123,16 @@ export default class TnrisOrderTemplate extends React.Component {
                         <span className="mdc-tab__ripple"></span>
                       </button>
 
+                      <button className="mdc-tab" role="tab" aria-selected="false" tabIndex="-1"  onClick={() => this.setTemplateView("contact")} title="Contact">
+                        <span className="mdc-tab__content">
+                          <span className="mdc-tab__icon material-icons">contact_support</span>
+                        </span>
+                        <span className="mdc-tab-indicator">
+                          <span className="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
+                        </span>
+                        <span className="mdc-tab__ripple"></span>
+                      </button>
+
                     </div>
                   </div>
                 </div>
@@ -123,6 +152,10 @@ export default class TnrisOrderTemplate extends React.Component {
                     <a className={this.state.view === 'order' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
                        onClick={() => this.setTemplateView("order")}>
                        <i className="mdc-tab__icon material-icons">shopping_basket</i> Order
+                    </a>
+                    <a className={this.state.view === 'contact' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
+                       onClick={() => this.setTemplateView("contact")}>
+                       <i className="mdc-tab__icon material-icons">contact_support</i> Contact
                     </a>
                   </nav>
                 </div>

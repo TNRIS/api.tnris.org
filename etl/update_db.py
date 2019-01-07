@@ -1,5 +1,6 @@
 '''
 script to update data.tnris.org category and use types in rds postgres db
+1/7/19
 '''
 
 # imports
@@ -19,64 +20,123 @@ def update_db():
     # connection string
     conn_string = "dbname='%s' user='%s' host='%s' password='%s' port='%s'" % (database, username, host, password, port)
 
-    # db table names
-    category_type_table = 'category_type'
-    category_relate_table = 'category_relate'
+    # old categories dictionary --- key is old and value is new
+    old_cat_new_cat_dict = {
+                            'Bathymetry':'Elevation',
+                            'Boundary':'Basemap',
+                            'Cultural':'Basemap',
+                            'Demographics':'Basemap',
+                            'Environmental':'Basemap',
+                            'Floodplain':'Hydrography',
+                            'Geology':'Basemap',
+                            'Land Use Land Cover':'Land Use',
+                            'Natural Regions':'Basemap',
+                            'Orthoimagery':'Imagery',
+                            'Topographic Map':'Basemap',
+                            'Transportation':'Basemap'
+                            }
 
-    # categories to be changed
-    old_categories = ['Bathymetry', 'Boundary', 'Cultural', 'Demographics', 'Elevation', 'Environmental', 'Floodplain', 'Geology', 'Historic Imagery', 'Hydrography',
-                        'Land Use Land Cover', 'Lidar', 'Natural Regions', 'Orthoimagery', 'Reference Grid', 'Topographic Map', 'Transportation', 'Weather']
-
-    old_uses = ['Analysis', 'Cartography', 'Feature Extraction', 'General Large Scale Geologic Information and Mapping', 'Historical Use', 'Location', 'Planning']
+    # old_uses = ['Analysis', 'Cartography', 'Feature Extraction', 'General Large Scale Geologic Information and Mapping', 'Historical Use', 'Location', 'Planning']
 
     # connect to the database
     conn = psycopg2.connect(conn_string)
     cur = conn.cursor()
 
+    # category db table names
+    category_type_table = 'category_type'
+    category_relate_table = 'category_relate'
+    # use db table names
+    # use_type_table = 'use_type'
+    # use_relate_table = 'use_relate'
+
     # sql statements
     category_type_query = "SELECT category_type_id, category FROM %s;" % category_type_table
     category_relate_query = "SELECT category_type_id FROM %s;" % category_relate_table
+    # use_type_query = "SELECT use_type_id, use_type FROM %s;" % use_type_table
+    # use_relate_query = "SELECT use_type_id FROM %s;" % use_relate_table
+
     query_list = [category_type_query, category_relate_query]
 
-    # execute list of sql queries and assign to variables
+    change_list = []
+    keep_dict = {}
+    new_dict = {}
+    new_list = []
+    all_relates = []
+    count = 0
+    # print(cat_type)
+
+    # take category type response and generate dict with current ids and new type values
     for i in query_list:
         cur.execute(i)
         db_response = cur.fetchall()
         for x in db_response:
-            if len(x) > 1:
-                cat_type = db_response
-            else:
-                cat_relate = db_response
+            # limit to type response to create dict
+            if len(x) == 2:
+                for key, val in old_cat_new_cat_dict.items():
+                    # if category response equals key, create current dict
+                    if x[1] == key:
+                        change_list.append(x[0])
+                        # new_cat_dict[x[0]] = val
+                    elif x[1] == val:
+                        # keep_list.append(x[0])
+                        keep_dict[x[0]] = val
+                    elif x[1] != val and val not in new_list:
+                        # id = str(uuid.uuid4())
+                        new_list.append(val)
+                        # new_dict[id] = val
 
-    # print(cat_type)
-    # print(cat_relate)
+                # create uuid for new_dict
+                for item in new_list:
+                    id = str(uuid.uuid4())
+                    new_dict[id] = item
+
+            # limit to relate response to update relate table first
+            if len(x) == 1:
+                all_relates.append(x)
+                # for key, val in new_cat_dict.items():
+                #     print(key)
+                #     if x[0] == key:
+                #         new_relate = x[0]
+                #         print(new_relate)
+                #         print('value =', val)
+
+                        # update relate table with new ids
+                        # cur.execute("UPDATE {table} SET {field} = '{new_id}';".format(
+                        #     table=category_relate_table,
+                        #     field='category_type_id',
+                        #     new_id=new_relate)
+                        # )
+                        #
+                        # try:
+                        #     conn.commit()
+                        # except:
+                        #     cat_list.append()
+
+
+    # print(change_list)
+    # print(keep_dict)
+    # print(new_list)
+    print(new_dict)
+    # print(all_relates)
+
+
+    # print(current_cat_dict)
+    # print(count)
+    # print(new_cat_dict)
+
 
     # iterate through category types and find those matching old_categories
-    for i in cat_type:
-        for x in old_categories:
-            if i[1] == x:
-                cat_match_id = i[0]
-                print('matching cat id:', cat_match_id)
-            else:
-                print('no match')
+    # for i[1] in cat_type:
+    #     print(i)
+    #         print(v)
+    #         for k, v in category_dict:
+    #         if k == i[1]:
+    #             print(v)
+    #             cat_matches.append(i[0])
+    #             count += 1
 
-            for s in cat_relate:
-                if s == cat_match_id:
-                    print(s, '---', i[0])
 
-    # while True:
 
-    #     db_response = cur.execute(category_type_query)
-    #
-    #     for r in cat_type:
-    #         print(r[1])
-    #         print(r)
-    #         db_cat_name = r[1]
-    #         for i in old_categories:
-    #             if i == db_cat_name:
-    #                 print(db_cat_name)
-    #                 cat_match = db_cat_name
-    #                 for
 
     '''
     while True:

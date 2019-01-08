@@ -14,7 +14,8 @@ import ContactContainer from '../../containers/ContactContainer';
 export default class TnrisDownloadTemplateDetails extends React.Component {
 
   render() {
-    const countyCoverageCard = this.props.collection.counties ? <CountyCoverageContainer counties={this.props.collection.counties} /> : "";
+    const countyCoverageCard = this.props.collection.counties ?
+      <CountyCoverageContainer counties={this.props.collection.counties} /> : "";
     const lidarCard = this.props.collection.category === 'Lidar' ? <LidarBlurb /> : "";
     const supplementalDownloadsCard = (this.props.collection.tile_index_url ||
                                         this.props.collection.supplemental_report_url ||

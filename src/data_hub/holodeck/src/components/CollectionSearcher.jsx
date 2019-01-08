@@ -71,12 +71,14 @@ export default class CollectionSearcher extends React.Component {
       return <Redirect to='/404' />;
     }
 
-    const clearDiv = <div id="clear-search" onClick={this.clearSearch} title="Clear search">
-                       <i id="clear-icon" className="material-icons">clear</i>
-                     </div>
+    // const clearDiv = <div id="clear-search" onClick={this.clearSearch} title="Clear search">
+    //                    <i id="clear-icon" className="material-icons">clear</i>
+    //                  </div>
 
     return (
-      <div id="searchparent" className="search-component mdc-text-field mdc-text-field--fullwidth mdc-text-field--with-leading-icon mdc-text-field--with-leading-icon">
+      <div
+        id="searchparent"
+        className="search-component mdc-text-field mdc-text-field--fullwidth mdc-text-field--with-leading-icon">
         {/*{
           this.props.collectionSearchQuery ? clearDiv : ''
         }*/}

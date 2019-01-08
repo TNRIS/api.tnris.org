@@ -3,10 +3,7 @@ styles for component: CatalogCard
 */
 
 .catalog-card-component {
-  // width: calc(100% / 5 - 4.2px);
-  width: auto;
   max-width: 350px;
-  margin: 2px;
 
   @media (max-width: mdc-layout-grid-breakpoint-max(tablet)) {
     width: calc(100% / 3 - 4.2px);
@@ -17,6 +14,8 @@ styles for component: CatalogCard
   }
 
   .catalog-card__headline {
+    font-size: 24px;
+    font-weight: 400;
     margin: 1em 0 inherit 0;
     -webkit-margin-before: 1em;
     -webkit-margin-after: inherit;
@@ -33,6 +32,7 @@ styles for component: CatalogCard
   }
 
   .catalog-card__agency {
+    font-size: 18px;
     color: #767676;
     padding-left: 10px;
     margin-top: 0;

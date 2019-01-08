@@ -122,9 +122,7 @@ export default class TnrisDownloadTemplate extends React.Component {
                         role="tab" aria-selected="true"
                         tabIndex="0" onClick={() => this.setTemplateView("details")}
                         title="Details">
-                        <span className="mdc-tab__content">details
-                          {/*<span className="mdc-tab__icon material-icons">details</span>*/}
-                        </span>
+                        <span className="mdc-tab__content">details</span>
                         <span className="mdc-tab-indicator mdc-tab-indicator--active">
                           <span
                             className="mdc-tab-indicator__content mdc-tab-indicator__content--underline">
@@ -133,21 +131,6 @@ export default class TnrisDownloadTemplate extends React.Component {
                         <span className="mdc-tab__ripple"></span>
                       </button>
 
-                      {/*<button
-                          className="mdc-tab"
-                          role="tab" aria-selected="false"
-                          tabIndex="-1"
-                          onClick={() => this.setTemplateView("images")}
-                          title="Images">
-                        <span className="mdc-tab__content">images
-                          <span className="mdc-tab__icon material-icons">collections</span>
-                        </span>
-                        <span className="mdc-tab-indicator">
-                          <span className="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
-                        </span>
-                        <span className="mdc-tab__ripple"></span>
-                      </button>*/}
-
                       <button
                         className="mdc-tab"
                         role="tab"
@@ -155,9 +138,7 @@ export default class TnrisDownloadTemplate extends React.Component {
                         tabIndex="-1"
                         onClick={() => this.setTemplateView("download")}
                         title="Download">
-                        <span className="mdc-tab__content">download
-                          {/*<span className="mdc-tab__icon material-icons">save_alt</span>*/}
-                        </span>
+                        <span className="mdc-tab__content">download</span>
                         <span className="mdc-tab-indicator">
                           <span
                             className="mdc-tab-indicator__content mdc-tab-indicator__content--underline">
@@ -173,9 +154,7 @@ export default class TnrisDownloadTemplate extends React.Component {
                         tabIndex="-1"
                         onClick={() => this.setTemplateView("order")}
                         title="Order">
-                        <span className="mdc-tab__content">order
-                          {/*<span className="mdc-tab__icon material-icons">shopping_basket</span>*/}
-                        </span>
+                        <span className="mdc-tab__content">order</span>
                         <span className="mdc-tab-indicator">
                           <span
                             className="mdc-tab-indicator__content mdc-tab-indicator__content--underline">
@@ -217,7 +196,10 @@ export default class TnrisDownloadTemplate extends React.Component {
                       onClick={() => this.setTemplateView("order")}>
                       <i className="mdc-tab__icon material-icons">shopping_basket</i> Order
                     </a>
-                    <a className={this.state.view === 'contact' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
+                    <a
+                      className={
+                        this.state.view === 'contact' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'
+                      }
                        onClick={() => this.setTemplateView("contact")}>
                        <i className="mdc-tab__icon material-icons">contact_support</i> Contact
                     </a>

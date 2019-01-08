@@ -26,7 +26,7 @@ export default class CatalogCard extends React.Component {
   }
 
   render() {
-    const cardClass = 'catalog-card-component mdc-image-list__item ' + this.props.collection.template;
+    // const cardClass = 'catalog-card-component mdc-image-list__item ' + this.props.collection.template;
     const collectionYear = this.props.collection.acquisition_date && this.props.collection.template !== 'outside-entity' ? this.props.collection.acquisition_date.substring(0, 4) : '';
 
     return (
@@ -43,7 +43,7 @@ export default class CatalogCard extends React.Component {
         <p className='catalog-card__year mdc-typography--subtitle1'>
           {collectionYear}
         </p>
-        <p className='catalog-card__agency mdc-typography--body1'>
+        <p className='catalog-card__agency mdc-typography--subtitle1'>
           {this.props.collection.agency_abbreviation}
         </p>
       </div>

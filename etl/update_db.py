@@ -66,8 +66,10 @@ def update_db():
     # variables
     relate_dict = {}
     counter = 0
-    category_dict = {}
-    reverse_cat_dict = {}
+    # category_dict = {}
+    # reverse_cat_dict = {}
+    new_use_dict = {}
+    reverse_use_dict = {}
 
     error_list = []
 
@@ -80,10 +82,10 @@ def update_db():
         # category_dict[x[0]] = x[1]
         # reverse_cat_dict[x[1]] = x[0]
         new_use_dict[x[0]] = x[1]
-        reverse_new_use_dict[x[1]] = x[0]
+        reverse_use_dict[x[1]] = x[0]
 
     # print(category_dict)
-    print(new_use_dict)
+    # print(new_use_dict)
 
     # cur.execute(category_relate_query)
     cur.execute(use_relate_query)
@@ -95,27 +97,39 @@ def update_db():
         relate_id = i[2]
 
         # if cat_name in cat_dict.keys():
-        if cat_name in use_dict.keys():
+        if use_name in use_dict.keys():
             # new_cat_name = cat_dict[cat_name]
             new_use_name = use_dict[use_name]
-            # print(cat_name, new_cat_name)
-            new_cat_uuid = reverse_cat_dict[new_cat_name]
+
+            # new_cat_uuid = reverse_cat_dict[new_cat_name]
+            new_use_uuid = reverse_use_dict[new_use_name]
+
             # print(new_cat_uuid)
+            print(new_use_uuid)
 
-            # update relate table with new ids
-            cur.execute("UPDATE {table} SET {field} = '{new_id}' WHERE category_relate_id = '{relate_id}';".format(
-                table=category_relate_table,
-                relate_id=relate_id,
-                field='category_type_id',
-                new_id=new_cat_uuid)
-            )
+            # update category relate table with new ids
+            # cur.execute("UPDATE {table} SET {field} = '{new_id}' WHERE category_relate_id = '{relate_id}';".format(
+            #     table=category_relate_table,
+            #     relate_id=relate_id,
+            #     field='category_type_id',
+            #     new_id=new_cat_uuid)
+            # )
 
-            try:
-                conn.commit()
-            except:
-                error_list.append(relate_id)
+            # update use relate table with new ids
+    #         cur.execute("UPDATE {table} SET {field} = '{new_id}' WHERE use_relate_id = '{relate_id}';".format(
+    #             table=use_relate_table,
+    #             relate_id=relate_id,
+    #             field='use_type_id',
+    #             new_id=new_use_uuid)
+    #         )
+    #
+    #         try:
+    #             conn.commit()
+    #         except:
+    #             error_list.append(relate_id)
+    #
+    # print(error_list)
 
-    print(error_list)
 
 # execute
 if __name__ == '__main__':

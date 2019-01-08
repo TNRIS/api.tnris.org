@@ -10,12 +10,81 @@ styles for component: OutsideEntityTemplate
     border-bottom: solid 1px $skin-tertiary;
   }
 
+  button {
+    margin-left: 25px;
+    margin-right: 25px;
+  }
+
   height: 100%;
   overflow-y: auto;
   background-color: $main-background;
 
   &:focus {
     outline: none;
+  }
+
+  section.mdc-top-app-bar__section.mdc-top-app-bar__section--align-end {
+    width: auto;
+
+    div.mdc-tab-bar {
+      .mdc-tab {
+        max-width: 86px;
+        span {
+          // color: $text-color;
+          color: $skin-secondary;
+        }
+        // .mdc-tab-indicator--active {
+        //   .mdc-tab-indicator__content--underline {
+        //     // background-color: $text-color;
+        //     background-color: gray;
+        //   }
+        // }
+      }
+      .mdc-tab--active {
+        .mdc-tab__content {
+          color: $skin-primary;
+        }
+        .mdc-tab-indicator__content--underline {
+          background-color: $skin-primary;
+        }
+      }
+    }
+
+    div.mdc-menu-surface--anchor {
+      .mdc-list {
+        @include mdc-menu-surface-fill-color($primary-color);
+        @include mdc-list-item-primary-text-ink-color($text-color);
+
+        i {
+          margin-right: 6px;
+        }
+      }
+    }
+
+    @media (max-width: mdc-layout-grid-breakpoint-max(tablet)) {
+      .mdc-tab-bar {
+        display: none;
+      }
+
+      .mdc-menu-surface--anchor {
+        display: flex;
+
+        i {
+          color: $skin-secondary;
+        }
+      }
+    }
+
+    @media (min-width: mdc-layout-grid-breakpoint-max(tablet)) {
+      .mdc-tab-bar {
+        display: block;
+      }
+
+      .mdc-menu-surface--anchor {
+        display: none;
+      }
+    }
+
   }
 
 }

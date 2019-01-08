@@ -9,7 +9,7 @@ import Supplementals from '../DialogTemplateListItems/Supplementals'
 import ShareButtons from '../DialogTemplateListItems/ShareButtons'
 import Images from '../DialogTemplateListItems/Images'
 
-import ContactContainer from '../../containers/ContactContainer';
+// import ContactContainer from '../../containers/ContactContainer';
 
 export default class TnrisDownloadTemplateDetails extends React.Component {
 
@@ -40,14 +40,14 @@ export default class TnrisDownloadTemplateDetails extends React.Component {
           </div>
           <ShareButtons />
         </div>
-        <div className="template-content-div">
+        {/*<div className="template-content-div">
           <div className='mdc-typography--headline5 template-content-div-header'>
             Contact
           </div>
           <div>
             <ContactContainer collection={this.props.collection} />
           </div>
-        </div>
+        </div>*/}
       </div>
     );
   }

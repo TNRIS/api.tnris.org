@@ -10,6 +10,11 @@ styles for component: TnrisDownloadTemplate
     border-bottom: solid 1px $skin-tertiary;
   }
 
+  button {
+    margin-left: 25px;
+    margin-right: 25px;
+  }
+
   height: 100%;
   overflow-y: auto;
   background-color: $main-background;
@@ -24,7 +29,6 @@ styles for component: TnrisDownloadTemplate
     div.mdc-tab-bar {
       .mdc-tab {
         max-width: 86px;
-        margin: 0 25px 0 25px;
         span {
           color: $skin-secondary;
         }

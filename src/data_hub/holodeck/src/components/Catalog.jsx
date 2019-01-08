@@ -165,6 +165,7 @@ export default class Catalog extends React.Component {
           view={this.state.toolDrawerView}
           status={this.props.toolDrawerStatus}
           handler={this.handler}
+          match={this.props.match}
           history={this.props.history} />
 
         <div className={`catalog ${dismissClass} mdc-drawer-app-content`}>
@@ -182,7 +183,7 @@ export default class Catalog extends React.Component {
               <ul className="mdc-layout-grid__inner">
                 {this.props.visibleCollections ? this.props.visibleCollections.map(collectionId =>
                   <li
-                    className="mdc-layout-grid__cell mdc-layout-grid__cell--span-3"
+                    className="mdc-layout-grid__cell mdc-layout-grid__cell--span-2"
                     key={collectionId}>
                     <CatalogCardContainer
                       collection={this.props.collections[collectionId]}
@@ -193,17 +194,6 @@ export default class Catalog extends React.Component {
               </ul>
             </div>
           }
-          {/*{this.props.showCollectionDialog ? this.handleShowCollectionView() :
-            <ul className='catalog-list mdc-image-list mdc-image-list--with-text-protection'>
-              {this.props.visibleCollections ? this.props.visibleCollections.map(collectionId =>
-                <CatalogCardContainer
-                  collection={this.props.collections[collectionId]}
-                  key={collectionId}
-                  match={this.props.match}
-                  history={this.props.history} />
-              ) : loadingMessage}
-            </ul>
-          }*/}
         </div>
 
         <Footer

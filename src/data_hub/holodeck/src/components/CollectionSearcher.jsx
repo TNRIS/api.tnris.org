@@ -76,7 +76,9 @@ export default class CollectionSearcher extends React.Component {
     //                  </div>
 
     return (
-      <div id="searchparent" className="search-component mdc-text-field mdc-text-field--fullwidth mdc-text-field--with-leading-icon mdc-text-field--with-leading-icon">
+      <div
+        id="searchparent"
+        className="search-component mdc-text-field mdc-text-field--fullwidth mdc-text-field--with-leading-icon">
         {/*{
           this.props.collectionSearchQuery ? clearDiv : ''
         }*/}

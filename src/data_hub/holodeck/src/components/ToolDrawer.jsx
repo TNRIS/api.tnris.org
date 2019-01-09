@@ -46,9 +46,10 @@ export default class ToolDrawer extends React.Component {
 
               <div className='mdc-drawer__header no-scroll'>
                 <div className='dataset-counter'>
-                  Showing <span className="dataset-counter-count">{this.props.total}</span> Datasets
+                  {/*Showing <span className="dataset-counter-count">{this.props.total}</span> Datasets*/}
+                  <span className="dataset-counter-count">{this.props.total}</span> Datasets Found
                 </div>
-                <CollectionSearcherContainer className='mdc-list-group' match={this.props.match} history={this.props.history} />
+                {/*<CollectionSearcherContainer className='mdc-list-group' match={this.props.match} history={this.props.history} />*/}
               </div>
 
             <nav className='mdc-list-group scroll'>

@@ -4,10 +4,15 @@ styles for component: TnrisOrderTemplate
 
 .tnris-order-template {
   header {
-    @include mdc-top-app-bar-ink-color($text-color);
+    // @include mdc-top-app-bar-ink-color($text-color);
     @include mdc-top-app-bar-icon-ink-color($text-color);
-    @include mdc-top-app-bar-fill-color($primary-color);
-    border-bottom: solid 1px $skin-secondary;
+    @include mdc-top-app-bar-fill-color($header-bar);
+    border-bottom: solid 1px $skin-tertiary;
+  }
+
+  button {
+    margin-left: 25px;
+    margin-right: 25px;
   }
 
   height: 100%;
@@ -19,18 +24,21 @@ styles for component: TnrisOrderTemplate
   }
 
   section.mdc-top-app-bar__section.mdc-top-app-bar__section--align-end {
-    min-width: 200px;
+    width: auto;
 
     div.mdc-tab-bar {
       .mdc-tab {
-        max-width: 25px;
+        max-width: 86px;
         span {
-          color: $text-color;
+          color: $skin-secondary;
         }
-        .mdc-tab-indicator--active {
-          .mdc-tab-indicator__content--underline {
-            background-color: $text-color;
-          }
+      }
+      .mdc-tab--active {
+        .mdc-tab__content {
+          color: $skin-primary;
+        }
+        .mdc-tab-indicator__content--underline {
+          background-color: $skin-primary;
         }
       }
     }
@@ -53,6 +61,10 @@ styles for component: TnrisOrderTemplate
 
       .mdc-menu-surface--anchor {
         display: flex;
+
+        i {
+          color: $skin-secondary;
+        }
       }
     }
 

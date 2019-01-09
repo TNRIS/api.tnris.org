@@ -9,12 +9,13 @@ import Supplementals from '../DialogTemplateListItems/Supplementals'
 import ShareButtons from '../DialogTemplateListItems/ShareButtons'
 import Images from '../DialogTemplateListItems/Images'
 
-import ContactContainer from '../../containers/ContactContainer';
+// import ContactContainer from '../../containers/ContactContainer';
 
 export default class TnrisDownloadTemplateDetails extends React.Component {
 
   render() {
-    const countyCoverageCard = this.props.collection.counties ? <CountyCoverageContainer counties={this.props.collection.counties} /> : "";
+    const countyCoverageCard = this.props.collection.counties ?
+      <CountyCoverageContainer counties={this.props.collection.counties} /> : "";
     const lidarCard = this.props.collection.category === 'Lidar' ? <LidarBlurb /> : "";
     const supplementalDownloadsCard = (this.props.collection.tile_index_url ||
                                         this.props.collection.supplemental_report_url ||
@@ -39,14 +40,14 @@ export default class TnrisDownloadTemplateDetails extends React.Component {
           </div>
           <ShareButtons />
         </div>
-        <div className="template-content-div">
+        {/*<div className="template-content-div">
           <div className='mdc-typography--headline5 template-content-div-header'>
             Contact
           </div>
           <div>
             <ContactContainer collection={this.props.collection} />
           </div>
-        </div>
+        </div>*/}
       </div>
     );
   }

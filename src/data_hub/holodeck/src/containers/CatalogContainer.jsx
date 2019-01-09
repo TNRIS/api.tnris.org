@@ -5,7 +5,9 @@ import {
   collectionActions,
   collectionDialogActions,
   orderCartActions,
-  resourceActions } from '../actions';
+  resourceActions,
+  toolDrawerActions,
+  urlTrackerActions } from '../actions';
 import {
   getAllCollections,
   getSortedCollections
@@ -16,24 +18,42 @@ const mapStateToProps = (state) => ({
   error: state.collections.error,
   loading: state.collections.loading,
   resources: state.resources.items,
+  selectedCollection: state.collections.selectedCollection,
   showCollectionDialog: state.collectionDialog.showCollectionDialog,
-  sortOrder: state.sorter.sortOrder,
+  sortOrder: state.collectionSorter.sortOrder,
   visibleCollections: getSortedCollections(state),
-  theme: state.colorTheme.theme
+  theme: state.colorTheme.theme,
+  previousUrl: state.urlTracker.previousUrl,
+  toolDrawerStatus: state.toolDrawer.toolDrawerStatus
 });
 
 const mapDispatchToProps = dispatch => ({
+  clearSelectedCollection: () => {
+    dispatch(collectionActions.clearSelectedCollection());
+  },
+  closeCollectionDialog: () => {
+    dispatch(collectionDialogActions.closeCollectionDialog());
+  },
+  closeToolDrawer: () => {
+    dispatch(toolDrawerActions.closeToolDrawer());
+  },
   fetchCollections: () => {
     dispatch(collectionActions.fetchCollections());
   },
   fetchResources: () => {
     dispatch(resourceActions.fetchResources());
   },
+  fetchStoredShoppingCart: () => {
+    dispatch(orderCartActions.fetchStoredShoppingCart());
+  },
   openCollectionDialog: () => {
     dispatch(collectionDialogActions.openCollectionDialog());
   },
-  fetchStoredShoppingCart: () => {
-    dispatch(orderCartActions.fetchStoredShoppingCart());
+  openToolDrawer: () => {
+    dispatch(toolDrawerActions.openToolDrawer());
+  },
+  setUrl: (newUrl, history) => {
+    dispatch(urlTrackerActions.setUrl(newUrl, history))
   }
 })
 

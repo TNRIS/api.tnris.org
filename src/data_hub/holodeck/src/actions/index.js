@@ -4,14 +4,15 @@ import * as collectionFilterActions from './collectionFilterActions';
 import * as collectionFilterMapActions from './collectionFilterMapActions';
 import * as collectionFilterMapDialogActions from './collectionFilterMapDialogActions';
 import * as collectionSearcherActions from './collectionSearcherActions';
+import * as collectionSorterActions from './collectionSorterActions';
 import * as collectionTimesliderActions from './collectionTimesliderActions';
-import * as resourceActions from './resourceActions';
-import * as sortActions from './sortActions';
-import * as contactActions from './contactActions';
-import * as orderCartDialogActions from './orderCartDialogActions';
-import * as orderCartActions from './orderCartActions';
-import * as urlTrackerActions from './urlTrackerActions';
 import * as colorThemeActions from './colorThemeActions';
+import * as contactActions from './contactActions';
+import * as orderCartActions from './orderCartActions';
+import * as orderCartDialogActions from './orderCartDialogActions';
+import * as resourceActions from './resourceActions';
+import * as toolDrawerActions from './toolDrawerActions';
+import * as urlTrackerActions from './urlTrackerActions';
 
 export {
   collectionActions,
@@ -20,12 +21,13 @@ export {
   collectionFilterMapActions,
   collectionFilterMapDialogActions,
   collectionSearcherActions,
+  collectionSorterActions,
   collectionTimesliderActions,
-  resourceActions,
-  sortActions,
+  colorThemeActions,
   contactActions,
-  orderCartDialogActions,
   orderCartActions,
-  urlTrackerActions,
-  colorThemeActions
+  orderCartDialogActions,
+  resourceActions,
+  toolDrawerActions,
+  urlTrackerActions
 };

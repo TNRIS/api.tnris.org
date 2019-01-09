@@ -1,16 +1,35 @@
 import { connect } from 'react-redux';
 
-import { orderCartDialogActions } from '../actions';
+import { collectionActions,
+         collectionDialogActions,
+         orderCartDialogActions,
+         toolDrawerActions,
+         urlTrackerActions } from '../actions';
 import Header from '../components/Header';
 
 const mapStateToProps = state => ({
   orders: state.orderCart.orders,
+  previousUrl: state.urlTracker.previousUrl,
+  selectedCollection: state.collections.selectedCollection,
+  showCollectionDialog: state.collectionDialog.showCollectionDialog,
   theme: state.colorTheme.theme
 });
 
 const mapDispatchToProps = dispatch => ({
+  clearSelectedCollection: () => {
+    dispatch(collectionActions.clearSelectedCollection());
+  },
+  closeCollectionDialog: () => {
+    dispatch(collectionDialogActions.closeCollectionDialog());
+  },
   openOrderCartDialog: () => {
     dispatch(orderCartDialogActions.openOrderCartDialog());
+  },
+  openToolDrawer: () => {
+    dispatch(toolDrawerActions.openToolDrawer());
+  },
+  setUrl: (newUrl, history) => {
+    dispatch(urlTrackerActions.setUrl(newUrl, history))
   }
 })
 

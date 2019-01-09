@@ -1,0 +1,2 @@
+export const OPEN_TOOL_DRAWER = 'OPEN_TOOL_DRAWER';
+export const CLOSE_TOOL_DRAWER = 'CLOSE_TOOL_DRAWER';

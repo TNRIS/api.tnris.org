@@ -105,7 +105,6 @@ class ContactTnrisForm extends Component {
         invalid: 'Please confirm you are not a robot to proceed.'
       });
     }
-
   }
 
   render() {
@@ -226,6 +225,7 @@ class ContactTnrisForm extends Component {
     }
 
     return (
+
       <form className="contact-tnris-form-component" onSubmit={ this.submitForm }>
         {showHTML}
       </form>

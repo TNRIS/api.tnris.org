@@ -6,13 +6,15 @@ import collectionFilter from './collectionFilterReducer';
 import collectionFilterMap from './collectionFilterMapReducer';
 import collectionFilterMapDialog from './collectionFilterMapDialogReducer';
 import collectionSearcher from './collectionSearcherReducer';
+import collectionSorter from './collectionSorterReducer';
 import collectionTimeslider from './collectionTimesliderReducer';
-import resources from './resourceReducer';
-import sorter from './sortReducer';
+import colorTheme from './colorThemeReducer';
 import contact from './contactReducer';
 import orderCart from './orderCartReducer';
+import resources from './resourceReducer';
+import toolDrawer from './toolDrawerReducer';
 import urlTracker from './urlTrackerReducer';
-import colorTheme from './colorThemeReducer';
+
 
 const rootReducer = combineReducers({
   collections,
@@ -21,13 +23,14 @@ const rootReducer = combineReducers({
   collectionFilterMap,
   collectionFilterMapDialog,
   collectionSearcher,
+  collectionSorter,
   collectionTimeslider,
-  resources,
-  sorter,
+  colorTheme,
   contact,
   orderCart,
+  resources,
+  toolDrawer,
   urlTracker,
-  colorTheme
 })
 
 export default rootReducer;

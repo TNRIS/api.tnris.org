@@ -1,10 +1,10 @@
 import { connect } from 'react-redux';
 
 import {
-  collectionSearcherActions,
-  sortActions,
   collectionFilterActions,
   collectionFilterMapActions,
+  collectionSearcherActions,
+  collectionSorterActions,
   collectionTimesliderActions,
   urlTrackerActions
 } from '../actions';
@@ -13,15 +13,16 @@ import { getCollectionTimesliderRange } from '../selectors/collectionSelectors';
 import ToolDrawer from '../components/ToolDrawer';
 
 const mapStateToProps = (state) => ({
-  collectionTimesliderRange: getCollectionTimesliderRange(state)
+  collectionTimesliderRange: getCollectionTimesliderRange(state),
+  toolDrawerStaus: state.toolDrawer.toolDrawerStatus
 });
 
 const mapDispatchToProps = dispatch => ({
   setCollectionSearchQuery: (collectionSearchQuery) => {
     dispatch(collectionSearcherActions.setCollectionSearchQuery(collectionSearchQuery));
   },
-  sortAZ: () => {
-    dispatch(sortActions.setSortAZ());
+  sortNew: () => {
+    dispatch(collectionSorterActions.setSortNew());
   },
   setCollectionFilter: (collectionFilter) => {
     dispatch(collectionFilterActions.setCollectionFilter(collectionFilter));

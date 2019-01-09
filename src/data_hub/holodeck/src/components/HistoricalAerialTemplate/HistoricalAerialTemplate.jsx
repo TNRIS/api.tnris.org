@@ -5,6 +5,7 @@ import { MDCMenu } from '@material/menu';
 
 import HistoricalAerialTemplateDetails from './HistoricalAerialTemplateDetails';
 import OrderTnrisDataFormContainer from '../../containers/OrderTnrisDataFormContainer';
+import ContactContainer from '../../containers/ContactContainer';
 
 export default class HistoricalAerialTemplate extends React.Component {
   constructor(props) {
@@ -20,6 +21,7 @@ export default class HistoricalAerialTemplate extends React.Component {
     this.topAppBarElement = document.querySelector('.mdc-top-app-bar');
     this.topAppBar = new MDCTopAppBar(this.topAppBarElement);
     this.tabBar = new MDCTabBar(document.querySelector('.mdc-tab-bar'));
+    window.scrollTo(0,0);
   }
 
   setTemplateView(viewString) {
@@ -33,6 +35,9 @@ export default class HistoricalAerialTemplate extends React.Component {
       //   tabIndex = 1;
       //   break;
       case 'order':
+        tabIndex = 1;
+        break;
+      case 'contact':
         tabIndex = 2;
         break;
       default:
@@ -48,9 +53,12 @@ export default class HistoricalAerialTemplate extends React.Component {
 
   render() {
     let showComponent;
+    let templateClass;
+
     switch(this.state.view) {
       case 'details':
         showComponent = <HistoricalAerialTemplateDetails collection={this.props.collection} />;
+        templateClass = 'historical-aerial-template';
         break;
       // case 'explore':
       //   showComponent = (<div>Explore Map loaded with LS4 WMS Services</div>);
@@ -67,13 +75,31 @@ export default class HistoricalAerialTemplate extends React.Component {
               </div>
             </div>
           </div>
-          );
+        )
+        templateClass = 'historical-aerial-template';
+        break;
+      case 'contact':
+        showComponent = (
+          <div className='tnris-download-template-details'>
+            <div className="template-content-div">
+              <div className='mdc-typography--headline5 template-content-div-header'>
+                Contact
+              </div>
+              <div>
+                <ContactContainer collection={this.props.collection}/>
+              </div>
+            </div>
+          </div>
+        )
+        templateClass = 'historical-aerial-template';
         break;
       default:
         showComponent = <HistoricalAerialTemplateDetails collection={this.props.collection} />;
+        templateClass = 'historical-aerial-template';
     }
 
-    const collectionYear = this.props.collection.acquisition_date ? this.props.collection.acquisition_date.substring(0, 4) + ' ' : '';
+    const collectionYear = this.props.collection.acquisition_date ?
+      this.props.collection.acquisition_date.substring(0, 4) + ' ' : '';
 
     // const exploreTab = this.props.collection.index_service_url || this.props.collection.mosaic_service_url || this.props.collection.frames_service_url ? (
     //   <button className="mdc-tab" role="tab" aria-selected="false" tabIndex="-1"  onClick={() => this.setTemplateView("explore")}>
@@ -87,17 +113,17 @@ export default class HistoricalAerialTemplate extends React.Component {
     //     <span className="mdc-tab__ripple"></span>
     //   </button>
     // ) : '';
-    const exploreTab = '';
+    // const exploreTab = '';
     // const exploreListItem = this.props.collection.index_service_url || this.props.collection.mosaic_service_url || this.props.collection.frames_service_url ? (
     //   <a className={this.state.view === 'explore' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
     //      onClick={() => this.setTemplateView("explore")}>
     //      <i className="mdc-tab__icon material-icons">map</i> Explore
     //   </a>
     // ) : '';
-    const exploreListItem = '';
+    // const exploreListItem = '';
 
     return (
-      <div className='historical-aerial-template' tabIndex='1'>
+      <div className={templateClass} tabIndex='0'>
         <header className="mdc-top-app-bar">
           <div className="mdc-top-app-bar__row">
 
@@ -113,21 +139,39 @@ export default class HistoricalAerialTemplate extends React.Component {
                   <div className="mdc-tab-scroller__scroll-area">
                     <div className="mdc-tab-scroller__scroll-content">
 
-                      <button className="mdc-tab mdc-tab--active" role="tab" aria-selected="true" tabIndex="0" onClick={() => this.setTemplateView("details")} title="Details">
-                        <span className="mdc-tab__content">
-                          <span className="mdc-tab__icon material-icons">details</span>
-                        </span>
+                      <button
+                        className="mdc-tab mdc-tab--active"
+                        role="tab"
+                        aria-selected="true"
+                        tabIndex="0"
+                        onClick={() => this.setTemplateView("details")}
+                        title="Details">
+                        <span className="mdc-tab__content">details</span>
                         <span className="mdc-tab-indicator mdc-tab-indicator--active">
                           <span className="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
                         </span>
                         <span className="mdc-tab__ripple"></span>
                       </button>
 
-                      {exploreTab}
+                      {/*{exploreTab}*/}
 
-                      <button className="mdc-tab" role="tab" aria-selected="false" tabIndex="-1"  onClick={() => this.setTemplateView("order")} title="Order">
-                        <span className="mdc-tab__content">
-                          <span className="mdc-tab__icon material-icons">shopping_basket</span>
+                      <button
+                        className="mdc-tab"
+                        role="tab"
+                        aria-selected="false"
+                        tabIndex="-1"
+                        onClick={() => this.setTemplateView("order")}
+                        title="Order">
+                        <span className="mdc-tab__content">order</span>
+                        <span className="mdc-tab-indicator">
+                          <span className="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
+                        </span>
+                        <span className="mdc-tab__ripple"></span>
+                      </button>
+
+                      <button className="mdc-tab" role="tab" aria-selected="false" tabIndex="-1"  onClick={() => this.setTemplateView("contact")} title="Contact">
+                        <span className="mdc-tab__content">contact
+                          {/*<span className="mdc-tab__icon material-icons">contact_support</span>*/}
                         </span>
                         <span className="mdc-tab-indicator">
                           <span className="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
@@ -147,16 +191,26 @@ export default class HistoricalAerialTemplate extends React.Component {
                 </a>
                 <div ref="tab_menu" className="mdc-menu mdc-menu-surface">
                   <nav className="mdc-list">
-                    <a className={this.state.view === 'details' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
-                       onClick={() => this.setTemplateView("details")}>
-                       <i className="mdc-tab__icon material-icons">details</i> Details
+                    <a
+                      className={
+                        this.state.view === 'details' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'
+                      }
+                      onClick={() => this.setTemplateView("details")}>
+                      Details
                     </a>
 
-                    {exploreListItem}
+                    {/* {exploreListItem}*/}
 
-                    <a className={this.state.view === 'order' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
-                       onClick={() => this.setTemplateView("order")}>
-                       <i className="mdc-tab__icon material-icons">shopping_basket</i> Order
+                    <a
+                      className={
+                        this.state.view === 'order' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'
+                      }
+                      onClick={() => this.setTemplateView("order")}>
+                      Order
+                    </a>
+                    <a className={this.state.view === 'contact' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
+                       onClick={() => this.setTemplateView("contact")}>Contact
+                       {/*<i className="mdc-tab__icon material-icons">contact_support</i>*/}
                     </a>
                   </nav>
                 </div>

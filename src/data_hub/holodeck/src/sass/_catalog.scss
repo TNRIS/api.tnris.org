@@ -14,15 +14,23 @@ styles for component: Catalog
 
   .open-drawer {
     width: calc(100% - 255px);
+    -webkit-transition: width 2s; /* Safari */
+    transition: width .1s;
   }
 
   .closed-drawer {
     width: 100%;
+    -webkit-transition: width 2s; /* Safari */
+    transition: width .1s;
   }
 
   .catalog {
-    padding-top: 100px;
-    margin-bottom: 375px;
+    padding-top: 91px;
+    margin-bottom: 375px; 
+
+    ul {
+      list-style-type: none;
+    }
 
     .mdc-dialog__surface {
       background-color: $main-background;

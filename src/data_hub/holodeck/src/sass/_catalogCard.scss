@@ -3,8 +3,7 @@ styles for component: CatalogCard
 */
 
 .catalog-card-component {
-  width: calc(100% / 5 - 4.2px);
-  margin: 2px;
+  max-width: 350px;
 
   @media (max-width: mdc-layout-grid-breakpoint-max(tablet)) {
     width: calc(100% / 3 - 4.2px);
@@ -12,6 +11,32 @@ styles for component: CatalogCard
 
   @media (max-width: mdc-layout-grid-breakpoint-max(phone)) {
     width: 100%;
+  }
+
+  .catalog-card__headline {
+    font-size: 24px;
+    font-weight: 400;
+    margin: 1em 0 inherit 0;
+    -webkit-margin-before: 1em;
+    -webkit-margin-after: inherit;
+    padding-left: 10px;
+  }
+
+  .catalog-card__year {
+    font-size: 18px;
+    color: #767676;
+    padding-left: 10px;
+    margin-top: 0;
+    -webkit-margin-before: 0;
+    margin-bottom: auto;
+  }
+
+  .catalog-card__agency {
+    font-size: 18px;
+    color: #767676;
+    padding-left: 10px;
+    margin-top: 0;
+    -webkit-margin-before: 0;
   }
 
   .acquisition-year {

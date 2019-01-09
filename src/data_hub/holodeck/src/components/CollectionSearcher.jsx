@@ -71,24 +71,36 @@ export default class CollectionSearcher extends React.Component {
       return <Redirect to='/404' />;
     }
 
-    const clearDiv = <div id="clear-search" onClick={this.clearSearch} title="Clear search">
-        <i id='clear-icon' className='material-icons'>clear</i>
-      </div>
+    // const clearDiv = <div id="clear-search" onClick={this.clearSearch} title="Clear search">
+    //                    <i id="clear-icon" className="material-icons">clear</i>
+    //                  </div>
 
     return (
-      <div id='searchparent' className='search-component mdc-text-field mdc-text-field--fullwidth'>
-        {
+      <div
+        id="searchparent"
+        className="search-component mdc-text-field mdc-text-field--fullwidth mdc-text-field--with-leading-icon">
+        {/*{
           this.props.collectionSearchQuery ? clearDiv : ''
-        }
+        }*/}
+        <i id="search-icon" className="material-icons mdc-text-field__icon">search</i>
         <input className='mdc-text-field__input'
                type='search'
                id='search-collections'
                name='q'
                onChange={this.handleSearch}
                placeholder='Search'
-               aria-label='Search data collections'>
+               aria-label='Search data collections'
+               tabIndex="0">
         </input>
-
+        {this.props.collectionSearchQuery ?
+          <i
+            id='clear-icon'
+            className="material-icons mdc-text-field__icon"
+            tabIndex="0"
+            role="button"
+            onClick={this.clearSearch}>
+            clear
+          </i> : ''}
       </div>
     );
   }

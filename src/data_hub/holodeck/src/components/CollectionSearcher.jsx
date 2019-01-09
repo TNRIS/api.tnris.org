@@ -1,4 +1,5 @@
 import React from 'react';
+import { MDCRipple } from '@material/ripple';
 import { MDCTextField } from '@material/textfield';
 import { Redirect } from 'react-router';
 
@@ -78,7 +79,7 @@ export default class CollectionSearcher extends React.Component {
     return (
       <div
         id="searchparent"
-        className="search-component mdc-text-field mdc-text-field--fullwidth mdc-text-field--with-leading-icon">
+        className="search-component mdc-text-field mdc-text-field--fullwidth mdc-text-field--with-leading-icon mdc-text-field--with-trailing-icon">
         {/*{
           this.props.collectionSearchQuery ? clearDiv : ''
         }*/}

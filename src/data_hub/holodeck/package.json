@@ -12,6 +12,7 @@
     "@material/fab": "^0.39.3",
     "@material/floating-label": "^0.40.0",
     "@material/form-field": "^0.39.3",
+    "@material/icon-button": "^0.43.0",
     "@material/image-list": "^0.39.1",
     "@material/layout-grid": "^0.39.0",
     "@material/line-ripple": "^0.40.0",

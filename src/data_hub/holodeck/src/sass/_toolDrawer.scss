@@ -39,6 +39,7 @@ styles for component: ToolDrawer
         padding: 0 0 0 0;
         background: $header-bar;
         border-bottom: solid 1px $skin-tertiary;
+        min-height: 91px;
       }
 
       .dataset-counter {

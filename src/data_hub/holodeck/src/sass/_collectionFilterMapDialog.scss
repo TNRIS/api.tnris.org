@@ -6,9 +6,31 @@ styles for component: CollectionFilterMapDialog
   z-index: 6;
 
   .mdc-dialog__surface {
-    max-width: 75%;
-    height: 80%;
+    max-width: 90%;
+    height: 90%;
     background-color: $main-background;
+
+    .mdc-dialog__header {
+      padding: 4px 8px 4px;
+      text-align: center;
+      overflow: auto;
+      height: 56px;
+
+      .instruction-header {
+        color: $nest-text;
+        margin: 0 auto;
+        height: 56px;
+
+        p {
+          margin: 0;
+        }
+
+        #bottom-instruction {
+          margin-bottom: 10px;
+        }
+
+      }
+    }
   }
 
   .app-fab--absolute {

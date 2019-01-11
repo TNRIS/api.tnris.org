@@ -23,7 +23,6 @@ class CollectionViewSet(viewsets.ReadOnlyModelViewSet):
                 if value in null_list:
                     value = None
                 args[field] = value
-        print(args)
         # get records using query
         queryset = CcrView.objects.filter(**args)
         return queryset
@@ -44,7 +43,6 @@ class ResourceViewSet(viewsets.ReadOnlyModelViewSet):
                 if value in null_list:
                     value = None
                 args[field] = value
-        print(args)
         # get records using query
         queryset = RemView.objects.filter(**args)
         return queryset
@@ -65,7 +63,6 @@ class AreaViewSet(viewsets.ReadOnlyModelViewSet):
                 if value in null_list:
                     value = None
                 args[field] = value
-        print(args)
         # get records using query
         queryset = AreasView.objects.filter(**args)
         return queryset
@@ -86,7 +83,6 @@ class AcdcViewSet(viewsets.ReadOnlyModelViewSet):
                 if value in null_list:
                     value = None
                 args[field] = value
-        print(args)
         # get records using query
         queryset = AcdcView.objects.filter(**args)
         return queryset

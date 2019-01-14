@@ -29,7 +29,7 @@ export default class CollectionFilterMapDialog extends React.Component {
 
     dialogContent() {
       if (this.props.showCollectionFilterMapDialog) {
-        return <CollectionFilterMapContainer />
+        return <CollectionFilterMapContainer history={this.props.history} />
       }
       else {
         return (

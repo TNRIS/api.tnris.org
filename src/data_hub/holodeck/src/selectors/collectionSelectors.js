@@ -215,7 +215,7 @@ export const getMapFilteredCollections = createSelector(
   [ getFilteredCollections, getFilterMapFilter ],
   (collectionIds, filterMapFilter) => {
     let mapFilteredCollectionIds = [];
-    if (filterMapFilter.length > 0) {
+    if (collectionIds && filterMapFilter.length > 0) {
       collectionIds.map(collectionId => {
         if (filterMapFilter.indexOf(collectionId) >= 0) {
           mapFilteredCollectionIds.push(collectionId);

@@ -19,9 +19,6 @@ export default class Images extends React.Component {
     return (
 
       <div className="template-content-div">
-        <div className='mdc-typography--headline5 template-content-div-header'>
-          Images
-        </div>
         <div>
           <Carousel
             autoPlay={true}

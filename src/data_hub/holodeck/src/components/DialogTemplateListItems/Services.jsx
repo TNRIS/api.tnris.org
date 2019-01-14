@@ -26,9 +26,6 @@ export default class Services extends React.Component {
 
     return (
       <div className="template-content-div">
-        <div className='mdc-typography--headline5 template-content-div-header'>
-          Services
-        </div>
         <p>
           This dataset is published as a WMS Service! Use the URL below to
           connect to the service in the mapping software of your choosing.

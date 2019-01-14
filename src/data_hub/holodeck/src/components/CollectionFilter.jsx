@@ -40,7 +40,6 @@ export default class CollectionFilter extends React.Component {
         }
         // fourth, apply geo to store and component if present
         if (Object.keys(allFilters).includes('geo')) {
-          console.log('applying geo filter');
           // set the filter map aoi
           this.props.setCollectionFilterMapAoi(allFilters.geo);
           // run the spatial query to set the filtered collection id list
@@ -65,8 +64,6 @@ export default class CollectionFilter extends React.Component {
             });
             // combine all collection_id arrays into a single array of unique ids
             let uniqueCollectionIds = [...new Set([].concat(...collectionIds))];
-            console.log(_this);
-            console.log(uniqueCollectionIds);
             _this.props.setCollectionFilterMapFilter(uniqueCollectionIds);
           }).error(function(errors) {
             // errors contains a list of errors

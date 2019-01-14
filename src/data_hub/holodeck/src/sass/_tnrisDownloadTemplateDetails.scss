@@ -43,6 +43,18 @@ styles for component: TnrisDownloadTemplateDetails
         border-bottom: 20px solid transparent;
       }
 
+      .control-arrow.control-next {
+        margin-right: 0;
+      }
+
+      .control-arrow.control-prev {
+        margin-left: 0;
+      }
+
+      .control-arrow {
+        opacity: 0.8;
+      }
+
       p.carousel-status {
         font-size: 16px;
         font-weight: bold;

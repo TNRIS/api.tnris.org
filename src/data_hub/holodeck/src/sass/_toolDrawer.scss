@@ -49,11 +49,6 @@ styles for component: ToolDrawer
         height: 26px;
         line-height: 26px;
 
-        @media only screen and (max-width: 1306px) {
-          height: 44px;
-          line-height: 44px;
-        }
-
         .dataset-counter-count {
           font-weight: bold;
         }

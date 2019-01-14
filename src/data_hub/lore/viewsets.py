@@ -54,7 +54,6 @@ class CollectionViewSet(viewsets.ReadOnlyModelViewSet):
                 if value in null_list:
                     value = None
                 args[field] = value
-        print(args)
         # get records using query
         queryset = ChcView.objects.filter(**args)
         return queryset

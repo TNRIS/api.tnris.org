@@ -75,7 +75,7 @@ export default class ShareButtons extends React.Component {
               url={shareUrl}
               quote={shareTitle}
               className="share-button"
-              hashtag="TNRIS"
+              hashtag="#TNRIS"
             >
               <FacebookIcon size={26} round={true} />
             </FacebookShareButton>

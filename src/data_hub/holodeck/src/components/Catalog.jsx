@@ -151,7 +151,7 @@ export default class Catalog extends React.Component {
       <div className="catalog-component">
 
         <OrderCartDialogContainer />
-        <CollectionFilterMapDialogContainer />
+        <CollectionFilterMapDialogContainer history={this.props.history} />
 
         <ToolDrawerContainer
           match={this.props.match}

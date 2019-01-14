@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import {
   collectionFilterActions,
   collectionFilterMapDialogActions,
+  collectionFilterMapActions,
   urlTrackerActions
 } from '../actions';
 import CollectionFilter from '../components/CollectionFilter';
@@ -24,6 +25,12 @@ const mapDispatchToProps = dispatch => ({
   },
   setUrl: (newUrl, history) => {
     dispatch(urlTrackerActions.setUrl(newUrl, history))
+  },
+  setCollectionFilterMapAoi: (collectionFilterMapAoi) => {
+    dispatch(collectionFilterMapActions.setCollectionFilterMapAoi(collectionFilterMapAoi));
+  },
+  setCollectionFilterMapFilter: (collectionFilterMapFilter) => {
+    dispatch(collectionFilterMapActions.setCollectionFilterMapFilter(collectionFilterMapFilter));
   }
 })
 

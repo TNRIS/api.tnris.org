@@ -6,13 +6,7 @@ DROP VIEW IF EXISTS "collection_catalog_record";
 CREATE VIEW "collection_catalog_record" as
 SELECT collection.collection_id,
   collection.name,
-  CASE
-    -- if an outside-entity, overwrite acquisition_date to always be today
-    WHEN (
-      (template_type.template ~ '.*outside-entity.*')
-    ) THEN to_char(CURRENT_DATE ,'YYYY-MM-DD')
-    ELSE collection.acquisition_date
-  END AS acquisition_date,
+  collection.acquisition_date,
 	collection.short_description,
 	collection.description,
 	collection.source,

@@ -4,7 +4,7 @@ script to update data.tnris.org category and use types in rds postgres db
 '''
 
 # imports
-import os, datetime
+import os, datetime, csv
 import uuid, psycopg2
 
 # update the aws postgres rds db with new category types
@@ -38,7 +38,6 @@ def update_db():
     use_dict = {
                 'Analysis':'Research',
                 'Cartography':'Basemap',
-                'Feature Extraction':'Remove',
                 'General Large Scale Geologic Information and Mapping':'Basemap',
                 'Historical Use':'Research',
                 'Location':'Research',
@@ -61,61 +60,104 @@ def update_db():
     # category_type_query = "SELECT category_type_id, category FROM %s;" % category_type_table
     # category_relate_query = "SELECT category_type_id, collection_id, category_relate_id FROM %s;" % category_relate_table
     use_type_query = "SELECT use_type_id, use_type FROM %s;" % use_type_table
-    use_relate_query = "SELECT use_type_id, collection_id, use_relate_id FROM %s;" % use_relate_table
+    use_relate_query = "SELECT use_type_id, use_relate_id FROM %s;" % use_relate_table
 
     # variables
-    relate_dict = {}
     counter = 0
-    category_dict = {}
-    reverse_cat_dict = {}
-
+    response_dict = {}
+    reverse_response_dict = {}
     error_list = []
 
-    # take response and build dict
+    # take responses and build dicts
     # cur.execute(category_type_query)
     cur.execute(use_type_query)
     db_response = cur.fetchall()
 
     for x in db_response:
-        # category_dict[x[0]] = x[1]
-        # reverse_cat_dict[x[1]] = x[0]
-        new_use_dict[x[0]] = x[1]
-        reverse_new_use_dict[x[1]] = x[0]
-
-    # print(category_dict)
-    print(new_use_dict)
+        response_dict[x[0]] = x[1]
+        reverse_response_dict[x[1]] = x[0]
 
     # cur.execute(category_relate_query)
-    cur.execute(use_relate_query)
-    db_response = cur.fetchall()
+    # cur.execute(use_relate_query)
+    # db_response = cur.fetchall()
+    csv_file = 'source_data/use_relate.csv'
+    with open(csv_file, 'r') as file:
+        csv_reader = csv.DictReader(file)
+        # print(csv_reader)
+        print(use_dict.keys())
 
-    for i in db_response:
-        # cat_name = category_dict[i[0]]
-        use_name = new_use_dict[i[0]]
-        relate_id = i[2]
+        for i in csv_reader:
+            print(i)
 
-        # if cat_name in cat_dict.keys():
-        if cat_name in use_dict.keys():
-            # new_cat_name = cat_dict[cat_name]
-            new_use_name = use_dict[use_name]
-            # print(cat_name, new_cat_name)
-            new_cat_uuid = reverse_cat_dict[new_cat_name]
-            # print(new_cat_uuid)
+            name = response_dict[i['use_type_id']]
+            relate_id = i['use_relate_id']
 
-            # update relate table with new ids
-            cur.execute("UPDATE {table} SET {field} = '{new_id}' WHERE category_relate_id = '{relate_id}';".format(
-                table=category_relate_table,
-                relate_id=relate_id,
-                field='category_type_id',
-                new_id=new_cat_uuid)
-            )
+        # run this sql to load data back to postgres db
+        #     try:
+        #         cur.execute("INSERT INTO {table} (use_relate_id, created, last_modified, collection_id, use_type_id) VALUES ('{column1}', '{column2}', '{column3}', '{column4}', '{column5}');".format(
+        #                     table=use_relate_table,
+        #                     column1=i['use_relate_id'],
+        #                     column2=i['created'],
+        #                     column3=i['last_modified'],
+        #                     column4=i['collection_id'],
+        #                     column5=i['use_type_id'])
+        #                     )
+        #
+        #         conn.commit()
+        #
+        #     except:
+        #         error_list.append("'" + relate_id + "'")
+        #
+        # print(error_list)
 
-            try:
-                conn.commit()
-            except:
-                error_list.append(relate_id)
+            # if name in cat_dict.keys():
+            print(name)
+            if name in use_dict.keys():
+                print("YES!")
+                # new_name = cat_dict[name]
+                new_name = use_dict[name]
 
-    print(error_list)
+                new_uuid = reverse_response_dict[new_name]
+
+                print(new_uuid)
+
+                try:
+                    # update category relate table with new ids
+                    # cur.execute("UPDATE {table} SET {field} = '{new_id}' WHERE category_relate_id = '{relate_id}';".format(
+                    #     table=category_relate_table,
+                    #     relate_id=relate_id,
+                    #     field='category_type_id',
+                    #     new_id=new_uuid)
+                    # )
+
+                    # update use relate table with new ids
+                    cur.execute("UPDATE {table} SET {field} = '{new_id}' WHERE use_relate_id = '{relate_id}';".format(
+                        table=use_relate_table,
+                        relate_id=relate_id,
+                        field='use_type_id',
+                        new_id=new_uuid)
+                    )
+
+                    conn.commit()
+
+                except:
+                    # cur.close()
+                    # cur = conn.cursor()
+                    #
+                    # query = "DELETE FROM {table} WHERE use_relate_id = '{relate_id}';".format(
+                    #     table=use_relate_table,
+                    #     relate_id=relate_id)
+                    #
+                    # print(query)
+                    #
+                    # cur.execute(query)
+                    #
+                    # conn.commit()
+
+                    error_list.append("'" + relate_id + "'")
+
+        print(error_list)
+
 
 # execute
 if __name__ == '__main__':

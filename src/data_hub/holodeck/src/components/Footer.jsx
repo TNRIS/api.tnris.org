@@ -99,6 +99,10 @@ export default class Footer extends React.Component {
                 <a href="tel:5124638337">
                   <i className="material-icons">phone</i>512-463-8337
                 </a>
+                <br />
+                RDC Office Hours:<br />
+                Monday-Friday, 8am-4pm<br />
+                By Appointment Only
               </p>
             </div>
           </div>

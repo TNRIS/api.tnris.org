@@ -3,7 +3,6 @@ styles for component: TnrisDownloadTemplateDownload
 */
 
 .tnris-download-template-download {
-  padding: 64px 0 0 0;
   height: -webkit-fill-available;
 
   #tnris-download-menu {
@@ -33,6 +32,14 @@ styles for component: TnrisDownloadTemplateDownload
     top: 154px;
     bottom: 0;
     width: 100%;
+
+    @media (min-width: 600px) and (max-width: 1080px) {
+      top: 128px;
+    }
+
+    @media (max-width: 599px) {
+      top: 112px;
+    }
 
     .mapboxgl-canvas {
       height: 100%;

@@ -57,9 +57,6 @@ export default class TnrisOutsideEntityTemplate extends React.Component {
         showComponent = (
           <div className='tnris-download-template-details'>
             <div className="template-content-div">
-              <div className='mdc-typography--headline5 template-content-div-header'>
-                Contact
-              </div>
               <div>
                 <ContactOutsideContainer collection={this.props.collection}/>
               </div>

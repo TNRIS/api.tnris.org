@@ -4,6 +4,7 @@ styles for component: CatalogCard
 
 .catalog-card-component {
   max-width: 350px;
+  height: 100%;
 
   @media (max-width: mdc-layout-grid-breakpoint-max(tablet)) {
     width: calc(100% / 3 - 4.2px);

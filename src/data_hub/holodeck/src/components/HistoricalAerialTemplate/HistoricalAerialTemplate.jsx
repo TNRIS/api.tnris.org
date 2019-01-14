@@ -67,9 +67,6 @@ export default class HistoricalAerialTemplate extends React.Component {
         showComponent = (
           <div className='historical-aerial-template-details'>
             <div className="template-content-div">
-              <div className='mdc-typography--headline5 template-content-div-header'>
-                Order
-              </div>
               <div>
                 <OrderTnrisDataFormContainer />
               </div>
@@ -82,9 +79,6 @@ export default class HistoricalAerialTemplate extends React.Component {
         showComponent = (
           <div className='tnris-download-template-details'>
             <div className="template-content-div">
-              <div className='mdc-typography--headline5 template-content-div-header'>
-                Contact
-              </div>
               <div>
                 <ContactContainer collection={this.props.collection}/>
               </div>

@@ -62,9 +62,6 @@ export default class TnrisOrderTemplate extends React.Component {
         showComponent = (
           <div className='tnris-order-template-details'>
             <div className="template-content-div">
-              <div className='mdc-typography--headline5 template-content-div-header'>
-                Contact
-              </div>
               <div>
                 <ContactContainer collection={this.props.collection} />
               </div>

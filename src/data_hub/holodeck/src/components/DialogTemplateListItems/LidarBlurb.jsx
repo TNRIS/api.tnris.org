@@ -11,7 +11,7 @@ export default class LidarBlurb extends React.Component {
         <p>
           Lidar data for Texas is made available online through the use of data compression using <a href="https://rapidlasso.com/lastools/" target="_blank" rel="noopener noreferrer">LASTools</a>. LASTools is an open-source collection of tools for lidar data viewing and manipulation. TNRIS uses the LASzip portion of LASTools for compression\decompression. LASTools provides a lossless compression of the data from las to laz formats.
         </p>
-        <ul className="mdc-list">
+        <ul className="mdc-list mdc-list--non-interactive">
           <li className="mdc-list-item">Software with native LAZ support</li>
           <li className="mdc-list-item">ERDAS IMAGINE (14.1 and up) by Hexagon Geospatial</li>
           <li className="mdc-list-item">Global Mapper (13.1 and up) by Blue Marble Geo</li>

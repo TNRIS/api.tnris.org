@@ -30,7 +30,6 @@ export default class Images extends React.Component {
             emulateTouch
             useKeyboardArrows={true}
             transitionTime={700} >
-
             {
               carousel_images.map(url => ( <div key={url}><img src={url} alt='' /></div> ))
             }

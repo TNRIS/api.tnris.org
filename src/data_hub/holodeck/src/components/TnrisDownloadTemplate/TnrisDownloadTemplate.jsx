@@ -69,9 +69,6 @@ export default class TnrisDownloadTemplate extends React.Component {
         showComponent = (
           <div className='tnris-download-template-details'>
             <div className="template-content-div">
-              <div className='mdc-typography--headline5 template-content-div-header'>
-                Order
-              </div>
               <div>
                 <OrderTnrisDataFormContainer />
               </div>
@@ -84,9 +81,6 @@ export default class TnrisDownloadTemplate extends React.Component {
         showComponent = (
           <div className='tnris-download-template-details'>
             <div className="template-content-div">
-              <div className='mdc-typography--headline5 template-content-div-header'>
-                Contact
-              </div>
               <div>
                 <ContactContainer collection={this.props.collection}/>
               </div>

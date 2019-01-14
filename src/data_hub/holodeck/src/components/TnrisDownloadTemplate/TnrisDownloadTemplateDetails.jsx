@@ -20,19 +20,45 @@ export default class TnrisDownloadTemplateDetails extends React.Component {
 
     return (
       <div className='tnris-download-template-details'>
-        <Metadata collection={this.props.collection} />
-        <Images
-          thumbnail={this.props.collection.thumbnail_image}
-          images={this.props.collection.images} />
-        {supplementalDownloadsCard}
-        {servicesCard}
-        <Description collection={this.props.collection} />
-        {lidarCard}
-        <div className="template-content-div">
-          <div className='mdc-typography--headline5 template-content-div-header'>
-            Share
+        <div className='mdc-layout-grid'>
+          <div className="mdc-layout-grid__inner">
+
+            <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-6'>
+              <Metadata collection={this.props.collection} />
+            </div>
+
+            <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-6'>
+              <Images
+                thumbnail={this.props.collection.thumbnail_image}
+                images={this.props.collection.images} />
+            </div>
+
+            <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-12'>
+              <Description collection={this.props.collection} />
+            </div>
+
+            <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-6'>
+              {supplementalDownloadsCard}
+            </div>
+
+            <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-6'>
+              {servicesCard}
+            </div>
+
+            <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-6'>
+              {lidarCard}
+            </div>
+
+            <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-12'>
+              <div className="template-content-div">
+                <div className='mdc-typography--headline5 template-content-div-header'>
+                  Share
+                </div>
+                <ShareButtons />
+              </div>
+            </div>
+
           </div>
-          <ShareButtons />
         </div>
       </div>
     );

@@ -6,9 +6,15 @@ styles for component: CollectionFilterMapDialog
   z-index: 6;
 
   .mdc-dialog__surface {
-    max-width: 90%;
+    max-width: 100%;
+    width: 90%;
     height: 90%;
     background-color: $main-background;
+
+    @media (max-width: mdc-layout-grid-breakpoint-max(phone)) {
+      width: 100%;
+      height: 100%;
+    }
 
     .mdc-dialog__header {
       padding: 4px 8px 4px;

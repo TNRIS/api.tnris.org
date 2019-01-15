@@ -9,7 +9,6 @@ import Supplementals from '../DialogTemplateListItems/Supplementals'
 import ShareButtons from '../DialogTemplateListItems/ShareButtons'
 import Images from '../DialogTemplateListItems/Images'
 
-// import ContactContainer from '../../containers/ContactContainer';
 
 export default class TnrisDownloadTemplateDetails extends React.Component {
 

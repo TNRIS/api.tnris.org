@@ -4,7 +4,6 @@ import Description from '../DialogTemplateListItems/Description'
 import Metadata from '../DialogTemplateListItems/Metadata'
 import ShareButtons from '../DialogTemplateListItems/ShareButtons'
 
-// import ContactOutsideContainer from '../../containers/ContactOutsideContainer';
 
 export default class TnrisOutsideEntityTemplateDetails extends React.Component {
 

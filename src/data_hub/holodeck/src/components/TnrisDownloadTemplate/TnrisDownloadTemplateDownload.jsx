@@ -1,4 +1,6 @@
 import React from 'react';
+import TnrisDownloadMapNote from './TnrisDownloadMapNote';
+
 import mapboxgl from 'mapbox-gl';
 import styles from '../../sass/index.scss';
 import loadingImage from '../../images/loading.gif';
@@ -359,6 +361,7 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
       <div className='tnris-download-template-download'>
         <nav id='tnris-download-menu' className='mdc-list'></nav>
         <div id='tnris-download-map'></div>
+        <TnrisDownloadMapNote />
       </div>
     );
   }

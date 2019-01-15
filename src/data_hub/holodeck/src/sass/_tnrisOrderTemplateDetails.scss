@@ -32,11 +32,19 @@ styles for component: TnrisOrderTemplateDetails
     background-color: $nest-background;
     color: $nest-text;
 
-    .template-content-div-header {
-      color: $template-dialog-header-script;
-      background-color: $template-dialog-header;
-      text-align: center;
+    .mdc-list-item__text {
+      max-width: 50%;
     }
+
+    .mdc-list-item__meta {
+      max-width: 50%;
+    }
+
+    // .template-content-div-header {
+    //   color: $template-dialog-header-script;
+    //   background-color: $template-dialog-header;
+    //   text-align: center;
+    // }
 
     .carousel {
 

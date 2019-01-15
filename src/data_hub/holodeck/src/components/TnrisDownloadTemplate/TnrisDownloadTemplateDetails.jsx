@@ -11,6 +11,14 @@ import Images from '../DialogTemplateListItems/Images'
 export default class TnrisDownloadTemplateDetails extends React.Component {
 
   render() {
+    const imageCarousel = this.props.collection.images ?
+                        (<div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-6'>
+                          <Images
+                            thumbnail={this.props.collection.thumbnail_image}
+                            images={this.props.collection.images} />
+                        </div>)
+                        : "";
+
     const lidarCard = this.props.collection.category === 'Lidar' ?
                         (<div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-12'>
                           <LidarBlurb />
@@ -32,6 +40,11 @@ export default class TnrisDownloadTemplateDetails extends React.Component {
                           </div>)
                           : "";
 
+    const description = this.props.collection.description ?
+                          (<div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-12'>
+                            <Description collection={this.props.collection} />
+                          </div>)
+                          : "";
 
     return (
       <div className='tnris-download-template-details'>
@@ -42,20 +55,10 @@ export default class TnrisDownloadTemplateDetails extends React.Component {
               <Metadata collection={this.props.collection} />
             </div>
 
-            <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-6'>
-              <Images
-                thumbnail={this.props.collection.thumbnail_image}
-                images={this.props.collection.images} />
-            </div>
-
-            <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-12'>
-              <Description collection={this.props.collection} />
-            </div>
-
+            {imageCarousel}
+            {description}
             {lidarCard}
-
             {servicesCard}
-
             {supplementalDownloadsCard}
 
             <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-12'>

@@ -12,21 +12,13 @@ styles for component: TnrisDownloadTemplateDetails
     background-color: $nest-background;
     color: $nest-text;
 
-    .mdc-list-item__text {
-      max-width: 50%;
-    }
-
-    .mdc-list-item__meta {
-      max-width: 50%;
-    }
-
-    .template-content-div-header {
-      // color: $template-dialog-header-script;
-      color: $nest-text;
-      text-decoration: underline;
-      // background-color: $template-dialog-header;
-      text-align: center;
-    }
+    // .template-content-div-header {
+    //   color: $template-dialog-header-script;
+    //   color: $nest-text;
+    //   text-decoration: underline;
+    //   background-color: $template-dialog-header;
+    //   text-align: center;
+    // }
 
     .carousel {
 
@@ -87,6 +79,14 @@ styles for component: TnrisDownloadTemplateDetails
         height: initial;
         border-bottom: 1px solid rgba(0, 0, 0, 0.1);
         color: $nest-text;
+
+        .mdc-list-item__text {
+          max-width: 50%;
+        }
+
+        .mdc-list-item__meta {
+          max-width: 50%;
+        }
 
         strong {
           margin-right: 4px;

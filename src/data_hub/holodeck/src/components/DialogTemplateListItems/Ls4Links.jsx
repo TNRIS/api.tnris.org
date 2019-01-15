@@ -112,9 +112,6 @@ export default class Ls4Links extends React.Component {
 
     return (
       <div className="template-content-div ls4-links-container">
-        <div className='mdc-typography--headline5 template-content-div-header'>
-          Download and Service Links
-        </div>
         {scanLinks}
         {indexUrl}
         {mosaicUrl}

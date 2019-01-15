@@ -10,16 +10,29 @@ export default class TnrisOutsideEntityTemplateDetails extends React.Component {
 
   render() {
 
+    const description = this.props.collection.description ?
+                          (<div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-6'>
+                            <Description collection={this.props.collection} />
+                          </div>)
+                          : "";
+
     return (
       <div className='outside-entity-template-details'>
-        <Metadata collection={this.props.collection} />
-        <Description collection={this.props.collection} />
-          <div className="template-content-div">
-            <div className='mdc-typography--headline5 template-content-div-header'>
-              Share
+        <div className='mdc-layout-grid'>
+          <div className="mdc-layout-grid__inner">
+
+            <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-6'>
+              <Metadata collection={this.props.collection} />
             </div>
-            <ShareButtons />
+
+            {description}
+
+            <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-12'>
+              <ShareButtons />
+            </div>
+
           </div>
+        </div>
       </div>
     );
   }

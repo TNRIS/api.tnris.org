@@ -15,39 +15,67 @@ export default class TnrisDownloadTemplateDetails extends React.Component {
 
   render() {
     const countyCoverageCard = this.props.collection.counties ?
-      <CountyCoverageContainer counties={this.props.collection.counties} /> : "";
-    const lidarCard = this.props.collection.category === 'Lidar' ? <LidarBlurb /> : "";
+                                (<div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-6'>
+                                  <CountyCoverageContainer counties={this.props.collection.counties} />
+                                </div>)
+                                : "";
+
+    const imageCarousel = this.props.collection.images ?
+                        (<div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-6'>
+                          <Images
+                            thumbnail={this.props.collection.thumbnail_image}
+                            images={this.props.collection.images} />
+                        </div>)
+                        : "";
+
+    const lidarCard = this.props.collection.category === 'Lidar' ?
+                        (<div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-12'>
+                          <LidarBlurb />
+                        </div>)
+                        : "";
+
     const supplementalDownloadsCard = (this.props.collection.tile_index_url ||
                                         this.props.collection.supplemental_report_url ||
                                         this.props.collection.lidar_breaklines_url) ?
-                                        <Supplementals collection={this.props.collection} /> : "";
-    const servicesCard = this.props.collection.wms_link ? <Services collection={this.props.collection} /> : "";
+                                          (<div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-6'>
+                                            <Supplementals collection={this.props.collection} />
+                                          </div>)
+                                          : "";
+
+    const servicesCard = this.props.collection.wms_link ?
+                          (<div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-6'>
+                            <Services collection={this.props.collection} />
+                          </div>)
+                          : "";
+
+    const description = this.props.collection.description ?
+                          (<div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-6'>
+                            <Description collection={this.props.collection} />
+                          </div>)
+                          : "";
 
     return (
       <div className='tnris-order-template-details'>
-        <Metadata collection={this.props.collection} />
-        <Images
-          thumbnail={this.props.collection.thumbnail_image}
-          images={this.props.collection.images} />
-        {countyCoverageCard}
-        {supplementalDownloadsCard}
-        {servicesCard}
-        <Description collection={this.props.collection} />
-        {lidarCard}
-        <div className="template-content-div">
-          <div className='mdc-typography--headline5 template-content-div-header'>
-            Share
+        <div className='mdc-layout-grid'>
+          <div className="mdc-layout-grid__inner">
+
+            <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-6'>
+              <Metadata collection={this.props.collection} />
+            </div>
+
+            {imageCarousel}
+            {description}
+            {countyCoverageCard}
+            {lidarCard}
+            {servicesCard}
+            {supplementalDownloadsCard}
+
+            <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-12'>
+              <ShareButtons />
+            </div>
+
           </div>
-          <ShareButtons />
         </div>
-        {/*<div className="template-content-div">
-          <div className='mdc-typography--headline5 template-content-div-header'>
-            Contact
-          </div>
-          <div>
-            <ContactContainer collection={this.props.collection} />
-          </div>
-        </div>*/}
       </div>
     );
   }

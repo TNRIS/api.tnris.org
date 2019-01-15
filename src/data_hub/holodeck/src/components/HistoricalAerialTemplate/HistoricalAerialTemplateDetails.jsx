@@ -5,6 +5,7 @@ import CountyCoverageContainer from '../../containers/CountyCoverageContainer'
 import HistoricalProducts from '../DialogTemplateListItems/HistoricalProducts'
 import Ls4Links from '../DialogTemplateListItems/Ls4Links'
 import ShareButtons from '../DialogTemplateListItems/ShareButtons'
+import Images from '../DialogTemplateListItems/Images'
 
 // import ContactContainer from '../../containers/ContactContainer';
 
@@ -12,38 +13,49 @@ export default class TnrisDownloadTemplateDetails extends React.Component {
 
 
   render() {
-    const productsCard = this.props.collection.products ? <HistoricalProducts products={this.props.collection.products} /> : "";
-    const countyCoverageCard = this.props.collection.counties ? <CountyCoverageContainer counties={this.props.collection.counties} /> : "";
+    const productsCard = this.props.collection.products ?
+                          (<div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-6'>
+                            <HistoricalProducts products={this.props.collection.products} />
+                          </div>)
+                          : "";
+
+    const countyCoverageCard = this.props.collection.counties ?
+                                (<div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-6'>
+                                  <CountyCoverageContainer counties={this.props.collection.counties} />
+                                </div>)
+                                : "";
+
     const ls4LinksCard = (this.props.collection.index_service_url && this.props.collection.index_service_url !== "") ||
                          (this.props.collection.mosaic_service_url && this.props.collection.mosaic_service_url !== "") ||
                          (this.props.collection.frames_service_url && this.props.collection.frames_service_url !== "") ||
                          (this.props.collection.scanned_index_ls4_links && this.props.collection.scanned_index_ls4_links) !== "" ?
-                         <Ls4Links index={this.props.collection.index_service_url}
-                                   mosaic={this.props.collection.mosaic_service_url}
-                                   frames={this.props.collection.frames_service_url}
-                                   scans={this.props.collection.scanned_index_ls4_links} />
-                                 : "";
+                         (<div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-6'>
+                           <Ls4Links index={this.props.collection.index_service_url}
+                                     mosaic={this.props.collection.mosaic_service_url}
+                                     frames={this.props.collection.frames_service_url}
+                                     scans={this.props.collection.scanned_index_ls4_links} />
+                         </div>)
+                         : "";
 
     return (
       <div className='historical-aerial-template-details'>
-        <Metadata collection={this.props.collection} />
-        {countyCoverageCard}
-        {productsCard}
-        {ls4LinksCard}
-        <div className="template-content-div">
-          <div className='mdc-typography--headline5 template-content-div-header'>
-            Share
+        <div className='mdc-layout-grid'>
+          <div className="mdc-layout-grid__inner">
+
+            <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-6'>
+              <Metadata collection={this.props.collection} />
+            </div>
+
+            {countyCoverageCard}
+            {productsCard}
+            {ls4LinksCard}
+
+            <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-12'>
+              <ShareButtons />
+            </div>
+
           </div>
-          <ShareButtons />
         </div>
-        {/*<div className="template-content-div">
-          <div className='mdc-typography--headline5 template-content-div-header'>
-            Contact
-          </div>
-          <div>
-            <ContactContainer collection={this.props.collection} />
-          </div>
-        </div>*/}
       </div>
     );
   }

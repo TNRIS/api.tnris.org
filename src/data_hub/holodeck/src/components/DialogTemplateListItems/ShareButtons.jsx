@@ -59,6 +59,7 @@ export default class ShareButtons extends React.Component {
     const linkIcon = this.state.urlCopied ? 'done' : 'link';
 
     return (
+      <div className="template-content-div">
         <div className="share-bar">
           <div title="Twitter">
             <TwitterShareButton
@@ -104,6 +105,7 @@ export default class ShareButtons extends React.Component {
             <i className="material-icons">{linkIcon}</i>
           </div>
         </div>
+      </div>
     )
   }
 }

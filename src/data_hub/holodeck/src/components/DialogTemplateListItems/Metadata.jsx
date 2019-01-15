@@ -201,9 +201,6 @@ export default class Metadata extends React.Component {
 
     return (
       <div className="template-content-div metadata">
-        <div className='mdc-typography--headline5 template-content-div-header'>
-          Metadata
-        </div>
         <ul className="mdc-list mdc-list--non-interactive">
           {source}
           {agency}

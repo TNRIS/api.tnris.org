@@ -13,7 +13,7 @@ export default class TnrisDownloadTemplateDetails extends React.Component {
 
   render() {
     const imageCarousel = this.props.collection.images ?
-                        (<div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-6'>
+                        (<div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-8'>
                           <Images
                             thumbnail={this.props.collection.thumbnail_image}
                             images={this.props.collection.images} />
@@ -51,12 +51,13 @@ export default class TnrisDownloadTemplateDetails extends React.Component {
       <div className='tnris-download-template-details'>
         <div className='mdc-layout-grid'>
           <div className="mdc-layout-grid__inner">
+            {imageCarousel}
 
-            <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-6'>
+            <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-4'>
               <Metadata collection={this.props.collection} />
             </div>
 
-            {imageCarousel}
+
             {description}
             {lidarCard}
             {servicesCard}

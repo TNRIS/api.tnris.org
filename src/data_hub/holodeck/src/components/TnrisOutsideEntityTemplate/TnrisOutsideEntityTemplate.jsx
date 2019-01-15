@@ -69,6 +69,7 @@ export default class TnrisOutsideEntityTemplate extends React.Component {
         showComponent = <TnrisOutsideEntityTemplateDetails collection={this.props.collection} />;
         templateClass = 'outside-entity-template';
     }
+    
 
     return (
 

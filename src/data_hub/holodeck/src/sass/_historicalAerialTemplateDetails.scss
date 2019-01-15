@@ -55,7 +55,7 @@ styles for component: HistoricalAerialTemplateDetails
         display: table-cell;
         text-align: center;
         padding: 10px;
-        width: 120px;
+        // width: 120px;
         border: .5px solid rgba(0, 0, 0, 0.1);
 
         @media (max-width: mdc-layout-grid-breakpoint-max(phone)) {
@@ -183,13 +183,13 @@ styles for component: HistoricalAerialTemplateDetails
         border-bottom: 1px solid rgba(0, 0, 0, 0.1);
         color: $nest-text;
 
-        .mdc-list-item__text {
-          max-width: 50%;
-        }
-
-        .mdc-list-item__meta {
-          max-width: 50%;
-        }
+        // .mdc-list-item__text {
+        //   max-width: 50%;
+        // }
+        //
+        // .mdc-list-item__meta {
+        //   max-width: 50%;
+        // }
 
         strong {
           margin-right: 4px;

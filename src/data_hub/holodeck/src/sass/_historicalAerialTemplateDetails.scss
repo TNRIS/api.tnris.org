@@ -158,12 +158,6 @@ styles for component: HistoricalAerialTemplateDetails
     background-color: $nest-background;
     color: $nest-text;
 
-    // .template-content-div-header {
-    //   color: $template-dialog-header-script;
-    //   background-color: $template-dialog-header;
-    //   text-align: center;
-    // }
-
     a {
       color: $primary-color;
     }
@@ -182,6 +176,19 @@ styles for component: HistoricalAerialTemplateDetails
         height: initial;
         border-bottom: 1px solid rgba(0, 0, 0, 0.1);
         color: $nest-text;
+
+        .mdc-list-item__text {
+          .mdc-list-item__primary-text::before {
+            height: 20px;
+          }
+          .mdc-list-item__secondary-text::after {
+            display: inline-block;
+            width: 0;
+            height: 20px;
+            content: "";
+            vertical-align: -7px;
+          }
+        }
 
         // .mdc-list-item__text {
         //   max-width: 50%;

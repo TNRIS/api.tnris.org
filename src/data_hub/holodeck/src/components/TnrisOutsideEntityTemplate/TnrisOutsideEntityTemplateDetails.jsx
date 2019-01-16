@@ -10,7 +10,7 @@ export default class TnrisOutsideEntityTemplateDetails extends React.Component {
   render() {
 
     const description = this.props.collection.description ?
-                          (<div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-12'>
+                          (<div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-6'>
                             <Description collection={this.props.collection} />
                           </div>)
                           : "";
@@ -20,7 +20,7 @@ export default class TnrisOutsideEntityTemplateDetails extends React.Component {
         <div className='mdc-layout-grid'>
           <div className="mdc-layout-grid__inner">
 
-            <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-12'>
+            <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-6'>
               <Metadata collection={this.props.collection} />
             </div>
 

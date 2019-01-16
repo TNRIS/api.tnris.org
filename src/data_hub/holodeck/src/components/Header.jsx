@@ -107,13 +107,13 @@ export default class Header extends React.Component {
             </section>
             <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
               {this.props.selectedCollection !== null ?
-                <a onClick={this.handleCloseCollectionView} className="mdc-top-app-bar__action-item">
+                <div onClick={this.handleCloseCollectionView} className="mdc-top-app-bar__action-item">
                   <i className="material-icons mdc-top-app-bar__navigation-icon">home</i>
-                </a> : ''}
-              <a onClick={this.handleOpenOrderCartDialog} className="mdc-top-app-bar__action-item">
+                </div> : ''}
+              <div onClick={this.handleOpenOrderCartDialog} className="mdc-top-app-bar__action-item">
                 <i className={shoppingCartClass}>shopping_cart</i>
-              </a>
-              <a
+              </div>
+              <div
                 onClick={this.props.handler}
                 className="mdc-top-app-bar__action-item"
                 id="tools" title={this.props.status === 'closed' ? closedTitle : openTitle}>
@@ -121,7 +121,7 @@ export default class Header extends React.Component {
                   className="material-icons mdc-top-app-bar__navigation-icon">
                   {this.props.status === 'closed' ? 'search' : 'keyboard_arrow_right'}
                 </i>
-              </a>
+              </div>
             </section>
           </div>
         </header>

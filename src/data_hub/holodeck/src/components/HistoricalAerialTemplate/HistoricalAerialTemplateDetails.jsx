@@ -5,7 +5,6 @@ import CountyCoverageContainer from '../../containers/CountyCoverageContainer'
 import HistoricalProducts from '../DialogTemplateListItems/HistoricalProducts'
 import Ls4Links from '../DialogTemplateListItems/Ls4Links'
 import ShareButtons from '../DialogTemplateListItems/ShareButtons'
-import Images from '../DialogTemplateListItems/Images'
 
 
 export default class TnrisDownloadTemplateDetails extends React.Component {

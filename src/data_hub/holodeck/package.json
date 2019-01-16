@@ -132,7 +132,12 @@
     ]
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": "react-app",
+    "settings": {
+      "react": {
+        "version": "detect"
+      }
+    }
   },
   "devDependencies": {
     "install-peers": "^1.0.3"

@@ -117,19 +117,19 @@ export default class TnrisOutsideEntityTemplate extends React.Component {
               </div>
 
               <div className="mdc-menu-surface--anchor">
-                <a onClick={this.showTabMenu} className="mdc-top-app-bar__action-item">
+                <div onClick={this.showTabMenu} className="mdc-top-app-bar__action-item">
                   <i className="material-icons mdc-top-app-bar__navigation-icon">more_vert</i>
-                </a>
+                </div>
                 <div ref="tab_menu" className="mdc-menu mdc-menu-surface">
                   <nav className="mdc-list">
-                    <a className={this.state.view === 'details' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
+                    <div className={this.state.view === 'details' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
                        onClick={() => this.setTemplateView("details")}>Details
                        {/*<i className="mdc-tab__icon material-icons">details</i>*/}
-                    </a>
-                    <a className={this.state.view === 'contact' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
+                    </div>
+                    <div className={this.state.view === 'contact' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
                        onClick={() => this.setTemplateView("contact")}>Contact
                        {/*<i className="mdc-tab__icon material-icons">contact_support</i>*/}
-                    </a>
+                    </div>
                   </nav>
                 </div>
               </div>

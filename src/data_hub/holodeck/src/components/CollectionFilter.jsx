@@ -176,7 +176,7 @@ export default class CollectionFilter extends React.Component {
           {
             Object.keys(this.props.collectionFilterChoices).map(choice =>
               <li key={choice}>
-                <a
+                <div
                   className='mdc-list-item filter-list-title'
                   id={`${choice}-title`}
                   onClick={e => this.handleOpenFilterMenu(e)}>
@@ -184,7 +184,7 @@ export default class CollectionFilter extends React.Component {
                   <i
                     className='mdc-list-item__meta material-icons'
                     id={`${choice}-expansion-icon`}>expand_more</i>
-                </a>
+                </div>
                   <ul className='mdc-list hide-filter-list' id={`${choice}-list`}>
                     {
                       this.props.collectionFilterChoices[choice].map((choiceValue, i) =>{
@@ -222,11 +222,11 @@ export default class CollectionFilter extends React.Component {
             )
           }
           <li key='filter-map-button'>
-            <a className={filterSet}
+            <div className={filterSet}
                id='filter-map-button'
                onClick={this.props.openCollectionFilterMapDialog}>
                by geography
-            </a>
+            </div>
           </li>
         </ul>
       </div>

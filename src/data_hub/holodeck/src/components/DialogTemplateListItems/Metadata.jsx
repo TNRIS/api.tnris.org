@@ -31,7 +31,7 @@ export default class Metadata extends React.Component {
         </span>
         <span className="mdc-list-item__meta">
             {
-              this.props.collection.agency_contact.includes('http') ? <a href={this.props.collection.agency_contact} target="_blank">{this.props.collection.agency_contact}</a>
+              this.props.collection.agency_contact.includes('http') ? <a href={this.props.collection.agency_contact} target="_blank" rel="noopener noreferrer">{this.props.collection.agency_contact}</a>
               : this.props.collection.agency_contact.includes('@') ? <a href={"mailto:" + this.props.collection.agency_contact + "?subject=GIS data question"}>{this.props.collection.agency_contact}</a>
               : <p>{this.props.collection.agency_contact}</p>
             }
@@ -45,7 +45,7 @@ export default class Metadata extends React.Component {
           <strong>Agency Website:</strong>
         </span>
         <span className="mdc-list-item__meta">
-          <a href={this.props.collection.agency_website} target="_blank">{this.props.collection.agency_website}</a>
+          <a href={this.props.collection.agency_website} target="_blank" rel="noopener noreferrer">{this.props.collection.agency_website}</a>
         </span>
       </li>
     ) : "";
@@ -138,7 +138,7 @@ export default class Metadata extends React.Component {
         <span className="mdc-list-item__text">
           <strong>Resolution:</strong>
         </span>
-        <span className="mdc-list-item__meta">  
+        <span className="mdc-list-item__meta">
           {this.props.collection.resolution}
         </span>
       </li>
@@ -149,7 +149,7 @@ export default class Metadata extends React.Component {
         <span className="mdc-list-item__text">
           <strong>Bands:</strong>
         </span>
-        <span className="mdc-list-item__meta">  
+        <span className="mdc-list-item__meta">
           {this.props.collection.band_types}
         </span>
       </li>

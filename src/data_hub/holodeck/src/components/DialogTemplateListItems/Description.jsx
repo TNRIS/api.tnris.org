@@ -33,7 +33,7 @@ export default class Description extends React.Component {
             Object.entries(servicesObj).map((i) => {
               let key = i[0];
               let value = i[1];
-              return <li key={key}><a href={value} target="_blank">{key}</a></li>;
+              return <li key={key}><a href={value} target="_blank" rel="noopener noreferrer">{key}</a></li>;
             })
           }
         </ul>

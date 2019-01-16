@@ -53,7 +53,7 @@
     "html-webpack-plugin": "2.29.0",
     "jest": "20.0.4",
     "mapbox-gl": "^0.48.0",
-    "mapbox-gl-draw-rectangle-mode": "^1.0.3",
+    "mapbox-gl-draw-rectangle-mode": "^1.0.4",
     "node-sass": "^4.9.3",
     "normalizr": "^3.2.4",
     "object-assign": "4.1.1",

@@ -50,6 +50,7 @@ export default class CollectionFilterMapDialog extends React.Component {
               id="filter_map_dialog"
               className="mdc-dialog"
               role="alertdialog"
+              aria-modal="true"
               aria-labelledby="filter_map_dialog-label"
               aria-describedby="filter_map_dialog-description">
               <div className="mdc-dialog__surface">

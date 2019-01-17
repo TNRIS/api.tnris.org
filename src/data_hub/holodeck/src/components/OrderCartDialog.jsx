@@ -14,7 +14,7 @@ class OrderCartDialog extends React.Component {
     }
 
     componentDidUpdate() {
-      this.props.showOrderCartDialog ? this.dialog.open() : this.dialog.close()
+      this.props.showOrderCartDialog ? this.dialog.open() : this.dialog.close();
     }
 
     componentWillReceiveProps() {
@@ -29,6 +29,7 @@ class OrderCartDialog extends React.Component {
 
     closeOrderCartDialog() {
       this.props.closeOrderCartDialog();
+      document.querySelector('.catalog-component').removeAttribute('aria-hidden');
     }
 
     render() {
@@ -38,6 +39,7 @@ class OrderCartDialog extends React.Component {
           id="order_cart_dialog"
           className="mdc-dialog"
           role="alertdialog"
+          aria-modal="true"
           aria-labelledby="order_cart_dialog-label"
           aria-describedby="order_cart_dialog-description">
           <div className="mdc-dialog__surface">

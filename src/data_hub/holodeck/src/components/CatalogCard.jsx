@@ -32,7 +32,8 @@ export default class CatalogCard extends React.Component {
     return (
       <div
         className="catalog-card-component mdc-card mdc-card__primary-action"
-        onClick={this.cardClicked}>
+        onClick={this.cardClicked}
+        tabIndex="0">
         <div
           className="mdc-card__media mdc-card__media--16-9"
           style={{backgroundImage: `url(${this.props.collection.thumbnail_image})`}}>

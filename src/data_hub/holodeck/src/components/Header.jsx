@@ -22,6 +22,7 @@ export default class Header extends React.Component {
 
   handleOpenOrderCartDialog() {
     this.props.openOrderCartDialog();
+    document.querySelector('.catalog-component').setAttribute('aria-hidden', 'true');
   }
 
   handleCloseCollectionView() {
@@ -93,30 +94,31 @@ export default class Header extends React.Component {
             </section>
             <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
               <a
-                className='header-title__twdb' href="http://www.twdb.texas.gov/">
+                className='header-title__twdb' href="http://www.twdb.texas.gov/" tabIndex="0">
                 A Division of the Texas Water Development Board
               </a>
             </section>
           </div>
           <div className="header-nav mdc-top-app-bar__row">
             <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
-              <a href="https://tnris.org" className="mdc-top-app-bar__action-item tnris-logo-text">
+              <a href="https://tnris.org" className="mdc-top-app-bar__action-item tnris-logo-text" tabIndex="0">
                 <img src={tnrisLogo} aria-label="TNRIS Logo" alt="TNRIS Logo" className="logo" />
               </a>
               <span className="mdc-top-app-bar__title">Data Holodeck</span>
             </section>
             <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
               {this.props.selectedCollection !== null ?
-                <div onClick={this.handleCloseCollectionView} className="mdc-top-app-bar__action-item">
+                <div onClick={this.handleCloseCollectionView} className="mdc-top-app-bar__action-item" tabIndex="0">
                   <i className="material-icons mdc-top-app-bar__navigation-icon">home</i>
                 </div> : ''}
-              <div onClick={this.handleOpenOrderCartDialog} className="mdc-top-app-bar__action-item">
+              <div onClick={this.handleOpenOrderCartDialog} className="mdc-top-app-bar__action-item" tabIndex="0">
                 <i className={shoppingCartClass}>shopping_cart</i>
               </div>
               <div
                 onClick={this.props.handler}
                 className="mdc-top-app-bar__action-item"
-                id="tools" title={this.props.status === 'closed' ? closedTitle : openTitle}>
+                id="tools" title={this.props.status === 'closed' ? closedTitle : openTitle}
+                tabIndex="0">
                 <i
                   className="material-icons mdc-top-app-bar__navigation-icon">
                   {this.props.status === 'closed' ? 'search' : 'keyboard_arrow_right'}

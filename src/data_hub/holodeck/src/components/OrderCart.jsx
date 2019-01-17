@@ -231,7 +231,7 @@ class OrderCart extends Component {
     // default filler for empty cart
     let showHTML = (
       <div className="default-order-cart-display">
-        <button className="mdc-button mdc-button--raised" onClick={() => this.props.closeOrderCartDialog()}>
+        <button className="mdc-button mdc-button--raised" onClick={() => this.props.closeOrderCartDialog()} tabIndex="1">
           Let's go shopping!
         </button>
       </div>
@@ -267,7 +267,8 @@ class OrderCart extends Component {
             <span className="mdc-list-item__meta material-icons"
                   aria-hidden="true"
                   title="Remove from Shopping Cart"
-                  onClick={() => this.props.removeCollectionFromCart(collectionId)}>remove_circle</span>
+                  onClick={() => this.props.removeCollectionFromCart(collectionId)}
+                  tabIndex="1">remove_circle</span>
           </li>
         );
       }) : emptyCartMessage;
@@ -288,6 +289,7 @@ class OrderCart extends Component {
                    name="firstName"
                    title="First Name"
                    onChange={this.handleChange}
+                   tabIndex="1"
                    required />
             <label className="mdc-floating-label" htmlFor="order-cart-first-name-input">First Name</label>
             <div className="mdc-line-ripple"></div>
@@ -299,6 +301,7 @@ class OrderCart extends Component {
                    name="lastName"
                    title="Last Name"
                    onChange={this.handleChange}
+                   tabIndex="1"
                    required />
             <label className="mdc-floating-label" htmlFor="order-cart-last-name-input">Last Name</label>
             <div className="mdc-line-ripple"></div>
@@ -310,6 +313,7 @@ class OrderCart extends Component {
                    name="address"
                    title="Mailing address number and street name"
                    onChange={this.handleChange}
+                   tabIndex="1"
                    required />
                  <label className="mdc-floating-label" htmlFor="order-cart-address-input">Address</label>
             <div className="mdc-line-ripple"></div>
@@ -321,6 +325,7 @@ class OrderCart extends Component {
                    name="city"
                    title="Mailing address city"
                    onChange={this.handleChange}
+                   tabIndex="1"
                    required />
                  <label className="mdc-floating-label" htmlFor="order-cart-city-input">City</label>
             <div className="mdc-line-ripple"></div>
@@ -331,6 +336,7 @@ class OrderCart extends Component {
                     name="state"
                     title="Mailing address state"
                     onChange={this.handleChange}
+                    tabIndex="1"
                     required>
               <option value="AL">Alabama</option>
             	<option value="AK">Alaska</option>
@@ -395,6 +401,7 @@ class OrderCart extends Component {
                    pattern="[0-9]{5}"
                    title="5 digit numerical zipcode"
                    onChange={this.handleChange}
+                   tabIndex="1"
                    required />
                  <label className="mdc-floating-label" htmlFor="order-cart-zipcode-input">Zipcode</label>
             <div className="mdc-line-ripple"></div>
@@ -407,6 +414,7 @@ class OrderCart extends Component {
                    pattern="[0-9]{10}"
                    title="10 digit numerical phone number with no separator characters"
                    onChange={this.handleChange}
+                   tabIndex="1"
                    required />
                  <label className="mdc-floating-label" htmlFor="order-cart-phone-input">Phone Number</label>
             <div className="mdc-line-ripple"></div>
@@ -418,6 +426,7 @@ class OrderCart extends Component {
                    name="email"
                    title="Valid email address. e.g. crockett@miamivice.com"
                    onChange={this.handleChange}
+                   tabIndex="1"
                    required />
             <label className="mdc-floating-label" htmlFor="order-cart-email-input">Email</label>
             <div className="mdc-line-ripple"></div>
@@ -428,6 +437,7 @@ class OrderCart extends Component {
                     name="industry"
                     title="Please choose your industry from the dropdown"
                     onChange={this.handleChange}
+                    tabIndex="1"
                     required>
               <option value="" disabled></option>
               <option value="No Industry" label="No Industry (Personal Order)">No Industry (Personal Order)</option>
@@ -460,7 +470,8 @@ class OrderCart extends Component {
                    name="organization"
                    defaultValue=""
                    title="Organization name"
-                   onChange={this.handleChange} />
+                   onChange={this.handleChange}
+                   tabIndex="1" />
                  <label className="mdc-floating-label" htmlFor="order-cart-organization-input">Organization</label>
             <div className="mdc-line-ripple"></div>
           </div>
@@ -477,6 +488,7 @@ class OrderCart extends Component {
                 name="delivery"
                 value="Zipfile Download"
                 onChange={this.handleChange}
+                tabIndex="1"
                 required />
               <div className="mdc-radio__background">
                 <div className="mdc-radio__outer-circle"></div>
@@ -493,7 +505,8 @@ class OrderCart extends Component {
                      id="delivery-usps-input"
                      name="delivery"
                      value="USPS"
-                     onChange={this.handleChange} />
+                     onChange={this.handleChange}
+                     tabIndex="1" />
               <div className="mdc-radio__background">
                 <div className="mdc-radio__outer-circle"></div>
                 <div className="mdc-radio__inner-circle"></div>
@@ -508,7 +521,8 @@ class OrderCart extends Component {
                      id="delivery-fedex-input"
                      name="delivery"
                      value="Fedex"
-                     onChange={this.handleChange} />
+                     onChange={this.handleChange}
+                     tabIndex="1" />
               <div className="mdc-radio__background">
                 <div className="mdc-radio__outer-circle"></div>
                 <div className="mdc-radio__inner-circle"></div>
@@ -524,7 +538,8 @@ class OrderCart extends Component {
                      id="delivery-pickup-input"
                      name="delivery"
                      value="Pickup"
-                     onChange={this.handleChange} />
+                     onChange={this.handleChange}
+                     tabIndex="1" />
               <div className="mdc-radio__background">
                 <div className="mdc-radio__outer-circle"></div>
                 <div className="mdc-radio__inner-circle"></div>
@@ -546,6 +561,7 @@ class OrderCart extends Component {
                        name="hardDrive"
                        value="TNRIS Hard Drive"
                        onChange={this.handleChange}
+                       tabIndex="1"
                        required />
                 <div className="mdc-radio__background">
                   <div className="mdc-radio__outer-circle"></div>
@@ -562,7 +578,8 @@ class OrderCart extends Component {
                        id="hard-drive-tnris-flash-input"
                        name="hardDrive"
                        value="TNRIS Flash"
-                       onChange={this.handleChange} />
+                       onChange={this.handleChange}
+                       tabIndex="1" />
                 <div className="mdc-radio__background">
                   <div className="mdc-radio__outer-circle"></div>
                   <div className="mdc-radio__inner-circle"></div>
@@ -577,7 +594,8 @@ class OrderCart extends Component {
                        id="hard-drive-customer-hd-input"
                        name="hardDrive"
                        value="Customer Hard Drive"
-                       onChange={this.handleChange} />
+                       onChange={this.handleChange}
+                       tabIndex="1" />
                 <div className="mdc-radio__background">
                   <div className="mdc-radio__outer-circle"></div>
                   <div className="mdc-radio__inner-circle"></div>
@@ -599,6 +617,7 @@ class OrderCart extends Component {
                      name="payment"
                      value="Credit Card"
                      onChange={this.handleChange}
+                     tabIndex="1"
                      required />
               <div className="mdc-radio__background">
                 <div className="mdc-radio__outer-circle"></div>
@@ -614,7 +633,8 @@ class OrderCart extends Component {
                      id="payment-check-input"
                      name="payment"
                      value="Check"
-                     onChange={this.handleChange} />
+                     onChange={this.handleChange}
+                     tabIndex="1" />
               <div className="mdc-radio__background">
                 <div className="mdc-radio__outer-circle"></div>
                 <div className="mdc-radio__inner-circle"></div>
@@ -630,6 +650,7 @@ class OrderCart extends Component {
                      name="payment"
                      value="Fedex Customer Account"
                      onChange={this.handleChange}
+                     tabIndex="1"
                      disabled />
               <div className="mdc-radio__background">
                 <div className="mdc-radio__outer-circle"></div>
@@ -646,6 +667,7 @@ class OrderCart extends Component {
                      name="payment"
                      value="Pay at Pickup"
                      onChange={this.handleChange}
+                     tabIndex="1"
                      disabled />
               <div className="mdc-radio__background">
                 <div className="mdc-radio__outer-circle"></div>
@@ -663,11 +685,11 @@ class OrderCart extends Component {
           <div className='mdc-typography--body2'>Cost breakdown of Staff and "Computer" time!</div>
           <div className='mdc-typography--body2'>Display calculated cost summary here...</div>
 
-          <ReCAPTCHA className="recaptcha-container" sitekey="6Lf8GP8SAAAAAFx2H53RtfDO18x7S1q_0pGNdmbd" onChange={this.recaptchaChange} />
+          <ReCAPTCHA className="recaptcha-container" sitekey="6Lf8GP8SAAAAAFx2H53RtfDO18x7S1q_0pGNdmbd" onChange={this.recaptchaChange} tabIndex="1" />
           <p className="invalid-prompt">{this.state.invalid}</p>
 
           <div className="submit-button">
-            <input type="submit" value="Submit" id="order-cart-submit" className="mdc-button mdc-button--raised"/>
+            <input type="submit" value="Submit" id="order-cart-submit" className="mdc-button mdc-button--raised" tabIndex="1" />
           </div>
         </div>
       );

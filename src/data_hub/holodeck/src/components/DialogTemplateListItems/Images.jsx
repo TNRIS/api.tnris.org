@@ -22,7 +22,7 @@ export default class Images extends React.Component {
         <div>
           <Carousel
             autoPlay={true}
-            showThumbs={false}
+            showThumbs={true}
             infiniteLoop={true}
             emulateTouch
             useKeyboardArrows={true}

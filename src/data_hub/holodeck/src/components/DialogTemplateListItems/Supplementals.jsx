@@ -44,6 +44,9 @@ export default class Supplementals extends React.Component {
 
     return (
       <div className="template-content-div">
+        <div className='mdc-typography--headline5 template-content-div-header'>
+          Supplemental Downloads
+        </div>
         <ul className="mdc-list mdc-list--non-interactive supplemental-downloads">
           {tileIndex}
           {supplementalReport}

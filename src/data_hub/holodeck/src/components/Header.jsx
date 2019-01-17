@@ -10,7 +10,7 @@ export default class Header extends React.Component {
   constructor(props) {
     super(props);
 
-    this.handleCloseCollectionView = this.handleCloseCollectionView.bind(this);
+    this.handleCloseView = this.handleCloseView.bind(this);
     this.handleOpenOrderCartDialog = this.handleOpenOrderCartDialog.bind(this);
   }
 
@@ -22,12 +22,12 @@ export default class Header extends React.Component {
 
   handleOpenOrderCartDialog() {
     this.props.openOrderCartDialog();
-    document.querySelector('.catalog-component').setAttribute('aria-hidden', 'true');
   }
 
-  handleCloseCollectionView() {
+  handleCloseView() {
     this.props.closeCollectionDialog();
     this.props.clearSelectedCollection();
+    this.props.closeOrderCartDialog();
     if (this.props.previousUrl.includes('/collection/')) {
       this.props.setUrl('/', this.props.history);
     }
@@ -107,8 +107,8 @@ export default class Header extends React.Component {
               <span className="mdc-top-app-bar__title">Data Holodeck</span>
             </section>
             <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
-              {this.props.selectedCollection !== null ?
-                <div onClick={this.handleCloseCollectionView} className="mdc-top-app-bar__action-item" tabIndex="0">
+              {this.props.selectedCollection !== null || this.props.showOrderCartDialog ?
+                <div onClick={this.handleCloseView} className="mdc-top-app-bar__action-item" tabIndex="0">
                   <i className="material-icons mdc-top-app-bar__navigation-icon">home</i>
                 </div> : ''}
               <div onClick={this.handleOpenOrderCartDialog} className="mdc-top-app-bar__action-item" tabIndex="0">

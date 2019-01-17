@@ -1,6 +1,5 @@
 import { connect } from 'react-redux';
 
-import { orderCartDialogActions } from '../actions';
 import OrderCartDialog from '../components/OrderCartDialog';
 
 const mapStateToProps = state => ({
@@ -8,9 +7,6 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  closeOrderCartDialog: () => {
-    dispatch(orderCartDialogActions.closeOrderCartDialog());
-  }
 })
 
 const OrderCartDialogContainer = connect(

@@ -12,6 +12,7 @@ const mapStateToProps = state => ({
   previousUrl: state.urlTracker.previousUrl,
   selectedCollection: state.collections.selectedCollection,
   showCollectionDialog: state.collectionDialog.showCollectionDialog,
+  showOrderCartDialog: state.orderCart.showOrderCartDialog,
   theme: state.colorTheme.theme
 });
 
@@ -24,6 +25,9 @@ const mapDispatchToProps = dispatch => ({
   },
   openOrderCartDialog: () => {
     dispatch(orderCartDialogActions.openOrderCartDialog());
+  },
+  closeOrderCartDialog: () => {
+    dispatch(orderCartDialogActions.closeOrderCartDialog());
   },
   openToolDrawer: () => {
     dispatch(toolDrawerActions.openToolDrawer());

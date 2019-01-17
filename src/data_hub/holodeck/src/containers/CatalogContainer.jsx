@@ -20,6 +20,7 @@ const mapStateToProps = (state) => ({
   resources: state.resources.items,
   selectedCollection: state.collections.selectedCollection,
   showCollectionDialog: state.collectionDialog.showCollectionDialog,
+  showOrderCartDialog: state.orderCart.showOrderCartDialog,
   sortOrder: state.collectionSorter.sortOrder,
   visibleCollections: getSortedCollections(state),
   theme: state.colorTheme.theme,

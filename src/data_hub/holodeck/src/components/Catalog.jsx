@@ -150,7 +150,6 @@ export default class Catalog extends React.Component {
     return (
       <div className="catalog-component">
 
-        <OrderCartDialogContainer />
         <CollectionFilterMapDialogContainer history={this.props.history} />
 
         <ToolDrawerContainer
@@ -169,6 +168,8 @@ export default class Catalog extends React.Component {
           history={this.props.history} />
 
         <div className={`catalog ${dismissClass} mdc-drawer-app-content`}>
+          {this.props.showOrderCartDialog ? <OrderCartDialogContainer /> : ""}
+          
           {this.props.visibleCollections && this.props.visibleCollections.length < 1 ?
             <div className={noDataDivClass}>
               <img

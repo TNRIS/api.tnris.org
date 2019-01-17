@@ -733,7 +733,6 @@ class OrderCart extends Component {
       <div className="order-cart-form-component-container">
         <form className="order-cart-form-component" onSubmit={ this.submitForm }>
           <div className='mdc-typography--headline6'>
-            Shopping Cart
             <div className='mdc-typography--caption expiration-note'>
               Cart items expire after 14 days
             </div>

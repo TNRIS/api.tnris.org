@@ -41,7 +41,7 @@ export default class Metadata extends React.Component {
       <li className="mdc-list-item">
         <span className="mdc-list-item__text">
           <span className="mdc-list-item__primary-text">
-            <a href={this.props.collection.agency_website} target="_blank">{this.props.collection.agency_website}</a>
+            <a href={this.props.collection.agency_website} target="_blank" rel="noopener noreferrer">{this.props.collection.agency_website}</a>
           </span>
           <span className="mdc-list-item__secondary-text">Agency Website</span>
         </span>

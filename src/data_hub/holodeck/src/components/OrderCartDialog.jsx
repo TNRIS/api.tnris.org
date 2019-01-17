@@ -10,11 +10,11 @@ class OrderCartDialog extends React.Component {
     }
 
     componentDidMount() {
-      this.dialog = new MDCDialog(this.refs.order_cart_dialog);
+      this.dialog = new MDCDialog(document.querySelector('#order_cart_dialog'));
     }
 
     componentDidUpdate() {
-      this.props.showOrderCartDialog ? this.dialog.show() : this.dialog.close()
+      this.props.showOrderCartDialog ? this.dialog.open() : this.dialog.close()
     }
 
     componentWillReceiveProps() {
@@ -41,6 +41,9 @@ class OrderCartDialog extends React.Component {
           aria-labelledby="order_cart_dialog-label"
           aria-describedby="order_cart_dialog-description">
           <div className="mdc-dialog__surface">
+            <h2 className="mdc-dialog__title">
+              Order Data
+            </h2>
             {this.OrderCartDialogContent()}
           </div>
           <button className="mdc-fab app-fab--absolute" aria-label="Close" onClick={this.closeOrderCartDialog}>

@@ -14,7 +14,7 @@ class CollectionDialog extends React.Component {
     }
 
     componentDidMount() {
-      this.dialog = new MDCDialog(this.refs.collection_dialog);
+      this.dialog = new MDCDialog(document.querySelector('#collection_dialog'));
 
       // wire cancel event to handle closing the dialog via ESC key or clicking
       // the backdrop. simply running this.closeCollectionDialog() trips up the
@@ -33,10 +33,10 @@ class CollectionDialog extends React.Component {
 
     componentWillReceiveProps (nextProps) {
       // must be very specific about the dialog switching from redux declared
-      // closed to open and vice versa. firing this.dialog.show() and .close()
+      // closed to open and vice versa. firing this.dialog.open() and .close()
       // with every prop update causing material to fire unwanted animations
       if (!this.props.showCollectionDialog && nextProps.showCollectionDialog) {
-        this.dialog.show();
+        this.dialog.open();
       }
       else if (this.props.showCollectionDialog && !nextProps.showCollectionDialog) {
         this.dialog.close();

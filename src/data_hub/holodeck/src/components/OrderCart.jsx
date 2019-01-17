@@ -709,13 +709,6 @@ class OrderCart extends Component {
 
     return (
       <div className="order-cart-form-component-container">
-        <header className="mdc-top-app-bar">
-          <div className="mdc-top-app-bar__row">
-            <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
-              <span className="mdc-top-app-bar__title">Order Data</span>
-            </section>
-          </div>
-        </header>
         <form className="order-cart-form-component" onSubmit={ this.submitForm }>
           <div className='mdc-typography--headline6'>
             Shopping Cart

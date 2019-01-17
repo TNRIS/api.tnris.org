@@ -13,12 +13,11 @@ export default class CollectionFilterMapDialog extends React.Component {
     }
 
     componentDidMount() {
-      this.dialog = new MDCDialog(this.refs.filter_map_dialog);
+      this.dialog = new MDCDialog(document.querySelector('#filter_map_dialog'));
     }
 
     componentDidUpdate() {
-      this.props.showCollectionFilterMapDialog ? this.dialog.show() : this.dialog.close()
-
+      this.props.showCollectionFilterMapDialog ? this.dialog.open() : this.dialog.close()
     }
 
     componentWillReceiveProps() {

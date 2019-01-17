@@ -4,8 +4,15 @@ styles for component: OrderCartDialog
 
 #order_cart_dialog {
 
+  .mdc-dialog__title {
+    color: $text-color;
+    background-color: $primary-color;
+    border-bottom: solid 1px $skin-secondary;
+  }
+
   .mdc-dialog__surface {
     max-width: 100%;
+    max-height: 100%;
     width: 90%;
     height: 90%;
     background-color: $main-background;

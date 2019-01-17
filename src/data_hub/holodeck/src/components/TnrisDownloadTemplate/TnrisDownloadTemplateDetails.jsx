@@ -51,12 +51,12 @@ export default class TnrisDownloadTemplateDetails extends React.Component {
       <div className='tnris-download-template-details'>
         <div className='mdc-layout-grid'>
           <div className="mdc-layout-grid__inner">
+
             {imageCarousel}
 
             <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-4'>
               <Metadata collection={this.props.collection} />
             </div>
-
 
             {description}
             {lidarCard}

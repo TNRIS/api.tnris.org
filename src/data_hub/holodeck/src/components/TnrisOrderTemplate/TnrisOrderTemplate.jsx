@@ -73,13 +73,18 @@ export default class TnrisOrderTemplate extends React.Component {
         showComponent = <TnrisOrderTemplateDetails collection={this.props.collection} />;
     }
 
+    const acquisition = this.props.collection.acquisition_date ? this.props.collection.acquisition_date.substring(0, 4) : '';
+    const acq_year = this.props.collection.template !== 'outside-entity' && this.props.collection.acquisition_date ? (
+      <span>{acquisition}</span>
+      ) : "";
+
     return (
       <div className='tnris-order-template' tabIndex='1'>
         <header className="mdc-top-app-bar">
           <div className="mdc-top-app-bar__row">
 
             <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
-              <span className="mdc-top-app-bar__title">{this.props.collection.name}</span>
+              <span className="mdc-top-app-bar__title">{this.props.collection.name} {acq_year}</span>
             </section>
 
             <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">

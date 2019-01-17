@@ -92,8 +92,10 @@ export default class HistoricalAerialTemplate extends React.Component {
         templateClass = 'historical-aerial-template';
     }
 
-    const collectionYear = this.props.collection.acquisition_date ?
-      this.props.collection.acquisition_date.substring(0, 4) + ' ' : '';
+    const acquisition = this.props.collection.acquisition_date ? this.props.collection.acquisition_date.substring(0, 4) : '';
+    const acq_year = this.props.collection.template !== 'outside-entity' && this.props.collection.acquisition_date ? (
+      <span>{acquisition}</span>
+      ) : "";
 
     // const exploreTab = this.props.collection.index_service_url || this.props.collection.mosaic_service_url || this.props.collection.frames_service_url ? (
     //   <button className="mdc-tab" role="tab" aria-selected="false" tabIndex="-1"  onClick={() => this.setTemplateView("explore")}>
@@ -122,7 +124,7 @@ export default class HistoricalAerialTemplate extends React.Component {
           <div className="mdc-top-app-bar__row">
 
             <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
-              <span className="mdc-top-app-bar__title">{collectionYear}{this.props.collection.name}</span>
+              <span className="mdc-top-app-bar__title">{this.props.collection.name} {acq_year}</span>
             </section>
 
             <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">

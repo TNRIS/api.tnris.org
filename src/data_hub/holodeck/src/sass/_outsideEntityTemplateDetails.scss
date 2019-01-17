@@ -31,12 +31,6 @@ styles for component: OutsideEntityTemplateDetails
       }
     }
 
-    // .template-content-div-header {
-    //   color: $template-dialog-header-script;
-    //   background-color: $template-dialog-header;
-    //   text-align: center;
-    // }
-
     a {
       color: $primary-color;
     }
@@ -57,11 +51,16 @@ styles for component: OutsideEntityTemplateDetails
         color: $nest-text;
 
         .mdc-list-item__text {
-          max-width: 50%;
-        }
-
-        .mdc-list-item__meta {
-          max-width: 50%;
+          .mdc-list-item__primary-text::before {
+            height: 20px;
+          }
+          .mdc-list-item__secondary-text::after {
+            display: inline-block;
+            width: 0;
+            height: 20px;
+            content: "";
+            vertical-align: -7px;
+          }
         }
 
         strong {

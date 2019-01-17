@@ -18,7 +18,7 @@ export default class TnrisDownloadTemplateDetails extends React.Component {
                           : "";
 
     const countyCoverageCard = this.props.collection.counties ?
-                                (<div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-6'>
+                                (<div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-8'>
                                   <CountyCoverageContainer counties={this.props.collection.counties} />
                                 </div>)
                                 : "";
@@ -40,11 +40,12 @@ export default class TnrisDownloadTemplateDetails extends React.Component {
         <div className='mdc-layout-grid'>
           <div className="mdc-layout-grid__inner">
 
-            <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-6'>
+            {countyCoverageCard}
+
+            <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-4'>
               <Metadata collection={this.props.collection} />
             </div>
 
-            {countyCoverageCard}
             {productsCard}
             {ls4LinksCard}
 

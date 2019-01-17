@@ -20,14 +20,19 @@ export default class TnrisOutsideEntityTemplateDetails extends React.Component {
         <div className='mdc-layout-grid'>
           <div className="mdc-layout-grid__inner">
 
-            <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-6'>
-              <Metadata collection={this.props.collection} />
+            <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-4'>
+              <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-12'>
+                <Metadata collection={this.props.collection} />
+              </div>
+              <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-12'>
+                <ShareButtons />
+              </div>
             </div>
 
-            {description}
-
-            <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-12'>
-              <ShareButtons />
+            <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-8'>
+              <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-12'>
+                {description}
+              </div>
             </div>
 
           </div>

@@ -41,29 +41,30 @@ export default class TnrisDownloadTemplateDetails extends React.Component {
       <div className='tnris-download-template-details'>
         <div className='mdc-layout-grid'>
           <div className="mdc-layout-grid__inner">
+
             <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-4'>
-              <div className='mdc-layout-grid__cell mdc-layou-grid__cell--span-12'>
+              <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-12'>
                 <Metadata collection={this.props.collection} />
               </div>
-              <div className='mdc-layout-grid__cell mdc-layou-grid__cell--span-12'>
+              <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-12'>
                 {lidarCard}
               </div>
-              <div className='mdc-layout-grid__cell mdc-layou-grid__cell--span-12'>
+              <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-12'>
                 {servicesCard}
               </div>
-              <div className='mdc-layout-grid__cell mdc-layou-grid__cell--span-12'>
+              <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-12'>
                 {supplementalDownloadsCard}
               </div>
-              <div className='mdc-layout-grid__cell mdc-layou-grid__cell--span-12'>
+              <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-12'>
                 <ShareButtons />
               </div>
             </div>
 
             <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-8'>
-              <div className='mdc-layout-grid__cell mdc-layou-grid__cell--span-12'>
+              <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-12'>
                 {imageCarousel}
               </div>
-              <div className='mdc-layout-grid__cell mdc-layou-grid__cell--span-12'>
+              <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-12'>
                 {description}
               </div>
             </div>

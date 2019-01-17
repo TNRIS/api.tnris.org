@@ -12,27 +12,21 @@ export default class TnrisDownloadTemplateDetails extends React.Component {
 
   render() {
     const productsCard = this.props.collection.products ?
-                          (<div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-6'>
-                            <HistoricalProducts products={this.props.collection.products} />
-                          </div>)
+                          (<HistoricalProducts products={this.props.collection.products} />)
                           : "";
 
     const countyCoverageCard = this.props.collection.counties ?
-                                (<div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-8'>
-                                  <CountyCoverageContainer counties={this.props.collection.counties} />
-                                </div>)
+                                (<CountyCoverageContainer counties={this.props.collection.counties} />)
                                 : "";
 
     const ls4LinksCard = (this.props.collection.index_service_url && this.props.collection.index_service_url !== "") ||
                          (this.props.collection.mosaic_service_url && this.props.collection.mosaic_service_url !== "") ||
                          (this.props.collection.frames_service_url && this.props.collection.frames_service_url !== "") ||
                          (this.props.collection.scanned_index_ls4_links && this.props.collection.scanned_index_ls4_links) !== "" ?
-                         (<div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-6'>
-                           <Ls4Links index={this.props.collection.index_service_url}
+                         (<Ls4Links index={this.props.collection.index_service_url}
                                      mosaic={this.props.collection.mosaic_service_url}
                                      frames={this.props.collection.frames_service_url}
-                                     scans={this.props.collection.scanned_index_ls4_links} />
-                         </div>)
+                                     scans={this.props.collection.scanned_index_ls4_links} />)
                          : "";
 
     return (
@@ -40,17 +34,25 @@ export default class TnrisDownloadTemplateDetails extends React.Component {
         <div className='mdc-layout-grid'>
           <div className="mdc-layout-grid__inner">
 
-            {countyCoverageCard}
-
             <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-4'>
-              <Metadata collection={this.props.collection} />
+              <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-12'>
+                <Metadata collection={this.props.collection} />
+              </div>
+              <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-12'>
+                {productsCard}
+              </div>
+              <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-12'>
+                {ls4LinksCard}
+              </div>
+              <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-12'>
+                <ShareButtons />
+              </div>
             </div>
 
-            {productsCard}
-            {ls4LinksCard}
-
-            <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-12'>
-              <ShareButtons />
+            <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-8'>
+              <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-12'>
+                {countyCoverageCard}
+              </div>
             </div>
 
           </div>

@@ -22,13 +22,18 @@ export default class Images extends React.Component {
         <div>
           <Carousel
             autoPlay={true}
-            showThumbs={true}
             infiniteLoop={true}
+            showThumbs={true}
             emulateTouch
             useKeyboardArrows={true}
             transitionTime={700} >
             {
-              carousel_images.map(url => ( <div key={url}><img src={url} alt='' /></div> ))
+              carousel_images.map(url => (
+                <div key={url}>
+                  <img src={url} alt='' />
+                </div>
+                )
+              )
             }
           </Carousel>
         </div>

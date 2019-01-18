@@ -150,7 +150,7 @@ export default class Catalog extends React.Component {
     return (
       <div className="catalog-component">
 
-        <OrderCartDialogContainer />
+        {/*<OrderCartDialogContainer />*/}
         <CollectionFilterMapDialogContainer />
 
         <ToolDrawerContainer
@@ -183,7 +183,7 @@ export default class Catalog extends React.Component {
               <ul className="mdc-layout-grid__inner">
                 {this.props.visibleCollections ? this.props.visibleCollections.map(collectionId =>
                   <li
-                    className="mdc-layout-grid__cell mdc-layout-grid__cell--span-2"
+                    className="mdc-layout-grid__cell mdc-layout-grid__cell--span-3"
                     key={collectionId}>
                     <CatalogCardContainer
                       collection={this.props.collections[collectionId]}

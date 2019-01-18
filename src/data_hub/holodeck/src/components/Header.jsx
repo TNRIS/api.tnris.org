@@ -28,6 +28,7 @@ export default class Header extends React.Component {
   handleCloseCollectionView() {
     this.props.closeCollectionDialog();
     this.props.clearSelectedCollection();
+    this.props.openToolDrawer();
     if (this.props.previousUrl.includes('/collection/')) {
       this.props.setUrl('/', this.props.history);
     }
@@ -83,7 +84,7 @@ export default class Header extends React.Component {
       default:
       tnrisLogo = tnrisGray;
     }
-    
+    console.log(this.props);
     return (
         <header
           className={`header-component mdc-top-app-bar mdc-top-app-bar--fixed ${dismissClass}`}
@@ -109,7 +110,7 @@ export default class Header extends React.Component {
                 <a
                   onClick={this.handleCloseCollectionView}
                   className="mdc-top-app-bar__action-item"
-                  title="Back to data catalog">
+                  title="Back to the catalog">
                   <i className="material-icons mdc-top-app-bar__navigation-icon">arrow_back</i>
                 </a> : ''}
               <CollectionSearcherContainer match={this.props.match} history={this.props.history} />

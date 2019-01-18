@@ -1,9 +1,11 @@
 import {
-  SET_COLLECTION_SEARCH_QUERY
+  SET_COLLECTION_SEARCH_QUERY,
+  SET_COLLECTION_SEARCH_SUGGESTIONS_QUERY
 } from '../constants/collectionSearcherActionTypes';
 
 const initialState = {
-  collectionSearchQuery: ''
+  collectionSearchQuery: '',
+  collectionSearchSuggestionsQuery: ''
 };
 
 export default function collectionSearcherReducer(state = initialState, action) {
@@ -13,6 +15,13 @@ export default function collectionSearcherReducer(state = initialState, action) 
       return {
         ...state,
         collectionSearchQuery: action.payload.collectionSearchQuery
+      };
+
+    case SET_COLLECTION_SEARCH_SUGGESTIONS_QUERY:
+      // Set the collection search suggestions query in the state
+      return {
+        ...state,
+        collectionSearchSuggestionsQuery: action.payload.collectionSearchSuggestionsQuery
       };
 
       default:

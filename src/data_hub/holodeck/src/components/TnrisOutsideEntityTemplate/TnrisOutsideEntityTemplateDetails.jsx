@@ -9,33 +9,36 @@ export default class TnrisOutsideEntityTemplateDetails extends React.Component {
 
   render() {
 
-    const description = this.props.collection.description ?
-                          (<div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-6'>
-                            <Description collection={this.props.collection} />
-                          </div>)
+    const description = this.props.collection.description ? (
+                          <Description collection={this.props.collection} />)
                           : "";
+
+    // using mdc classes to determine grid layout depending on screen size (desktop/tablet)
+    // special case with phone or smaller device (<840px) because order of divs changes
+    const gridLayout = window.innerWidth >= 900 ? (
+                          <div className="mdc-layout-grid__inner">
+                            <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-4'>
+                              <Metadata collection={this.props.collection} />
+                              <ShareButtons />
+                            </div>
+                            <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-8'>
+                              {description}
+                            </div>
+                          </div>) : (
+                          <div className="mdc-layout-grid__inner">
+                            <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-12'>
+                              <Metadata collection={this.props.collection} />
+                              {description}
+                              <ShareButtons />
+                            </div>
+                          </div>);
 
     return (
       <div className='outside-entity-template-details'>
         <div className='mdc-layout-grid'>
-          <div className="mdc-layout-grid__inner">
 
-            <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-4'>
-              <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-12'>
-                <Metadata collection={this.props.collection} />
-              </div>
-              <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-12'>
-                <ShareButtons />
-              </div>
-            </div>
+          {gridLayout}
 
-            <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-8'>
-              <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-12'>
-                {description}
-              </div>
-            </div>
-
-          </div>
         </div>
       </div>
     );

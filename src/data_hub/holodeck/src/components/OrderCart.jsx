@@ -243,9 +243,8 @@ class OrderCart extends Component {
     // empty cart html
     const emptyCartMessage = (
       <ul className="mdc-list">
-        <li>There are no datasets in your cart.</li>
-        <li>Although only some datasets are available for download, all datasets are available for ordering directly from TNRIS.</li>
-        <li>To order a dataset(s), click the Let's Go Shopping button below, open a dataset card and choose the Order tab in the top right.</li>
+        <li><strong>There are no datasets in your cart.</strong></li>
+        <li>Although only some datasets are available for download, all datasets are available for ordering directly from TNRIS. To order a dataset(s), click the Let's Go Shopping button below, open a dataset card and choose the Order tab in the top right.</li>
       </ul>
     );
     // if cart not empty, iterate datasets and display their order details,

@@ -16,17 +16,21 @@ export default class Images extends React.Component {
       return url;
     });
 
+    const multiImage = carousel_images.length > 1 ? true : false;
+
     return (
 
       <div className="template-content-div">
         <div>
           <Carousel
-            autoPlay={true}
-            infiniteLoop={true}
-            showThumbs={true}
+            autoPlay={multiImage}
+            infiniteLoop={multiImage}
+            showThumbs={multiImage}
             emulateTouch
             useKeyboardArrows={true}
-            transitionTime={700} >
+            transitionTime={700}
+            showIndicators={multiImage}
+            showStatus={multiImage} >
             {
               carousel_images.map(url => (
                 <div key={url}>

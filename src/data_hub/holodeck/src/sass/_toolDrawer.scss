@@ -18,6 +18,7 @@ styles for component: ToolDrawer
 
       .mdc-list-group {
         position: fixed;
+        min-width: 255px;
       }
 
       .no-scroll {
@@ -34,7 +35,7 @@ styles for component: ToolDrawer
       }
 
       .mdc-drawer__header {
-        width: 255px;
+        min-width: 255px;
         z-index: 999;
         padding: 0 0 0 0;
         background: $header-bar;

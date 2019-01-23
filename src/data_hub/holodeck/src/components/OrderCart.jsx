@@ -243,7 +243,8 @@ class OrderCart extends Component {
     // empty cart html
     const emptyCartMessage = (
       <ul className="mdc-list">
-        There are no datasets in your cart.
+        <li><strong>There are no datasets in your cart.</strong></li>
+        <li>Although only some datasets are available for download, all datasets are available for ordering directly from TNRIS. To order a dataset(s), click the Let's Go Shopping button below, open a dataset card and choose the Order tab in the top right.</li>
       </ul>
     );
     // if cart not empty, iterate datasets and display their order details,
@@ -678,14 +679,36 @@ class OrderCart extends Component {
           </div>
 
           <div className='mdc-typography--headline6'>
-            Estimated Cost Summary
+            Pricing Summary
           </div>
-          <div className='mdc-typography--body2'>Final cost for your order depends on many variables including hardware, staff time, computer time, data size, etc. TNRIS will contact you with the final, calculated cost.</div>
-          <div className='mdc-typography--body2'>Cost breakdown of TNRIS supplied drives!</div>
-          <div className='mdc-typography--body2'>Cost breakdown of Staff and "Computer" time!</div>
-          <div className='mdc-typography--body2'>Display calculated cost summary here...</div>
 
-          <ReCAPTCHA className="recaptcha-container" sitekey="6Lf8GP8SAAAAAFx2H53RtfDO18x7S1q_0pGNdmbd" onChange={this.recaptchaChange} tabIndex="1" />
+          <div className='mdc-typography--body2'>Final cost for your order depends on many variables including hardware, staff time, computer time, data size, etc. TNRIS will contact you with the final, calculated cost.
+            For a general estimate of your order, please take a look at the following prices:
+          </div>
+
+          <div className='mdc-typography--body2'>
+            <h3 className='mdc-list-group__subheader'>Historical Imagery Costs</h3>
+            <ul>
+              <li>Historical search (1 image per decade): <strong>$40.00 per site</strong></li>
+              <li>Single year search: <strong>$18.00 per site</strong></li>
+              <li>Scanned historical frame: <strong>$10.00 per image</strong></li>
+              <li>Scanned + georeferenced historical frame: <strong>$20.00 per image</strong></li>
+              <li>Digital download (0 - 10GB): <strong>$7.00</strong></li>
+            </ul>
+
+            <h3 className='mdc-list-group__subheader'>Data Reproduction Costs</h3>
+            <ul>
+              <li>Staff time: <strong>$46.00 per TB</strong></li>
+              <li>Server/computer time: <strong>$0.15 per GB</strong></li>
+              <li>TNRIS provided USB flash drive (64 GB): <strong>$40.00</strong></li>
+              <li>TNRIS provided external hard drive (1 TB): <strong>$100.00</strong></li>
+            </ul>
+          </div>
+          {/*
+            <div className='mdc-typography--body2'>Display calculated cost summary here...</div>
+            */}
+          <br></br>
+          <ReCAPTCHA className="recaptcha-container" sitekey="6Lf8GP8SAAAAAFx2H53RtfDO18x7S1q_0pGNdmbd" onChange={this.recaptchaChange} />
           <p className="invalid-prompt">{this.state.invalid}</p>
 
           <div className="submit-button">

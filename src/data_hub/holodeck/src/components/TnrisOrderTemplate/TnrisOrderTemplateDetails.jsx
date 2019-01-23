@@ -13,68 +13,70 @@ import Images from '../DialogTemplateListItems/Images'
 export default class TnrisDownloadTemplateDetails extends React.Component {
 
   render() {
-    const countyCoverageCard = this.props.collection.counties ?
-                                (<div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-6'>
-                                  <CountyCoverageContainer counties={this.props.collection.counties} />
-                                </div>)
+    const countyCoverageCard = this.props.collection.counties ? (
+                                <CountyCoverageContainer counties={this.props.collection.counties} />)
                                 : "";
 
-    const imageCarousel = this.props.collection.images ?
-                        (<div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-8'>
-                          <Images
+    const imageCarousel = this.props.collection.images ? (
+                        <Images
                             thumbnail={this.props.collection.thumbnail_image}
-                            images={this.props.collection.images} />
-                        </div>)
+                            images={this.props.collection.images} />)
                         : "";
 
-    const lidarCard = this.props.collection.category === 'Lidar' ?
-                        (<div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-12'>
-                          <LidarBlurb />
-                        </div>)
+    const lidarCard = this.props.collection.category === 'Lidar' ? (
+                        <LidarBlurb />)
                         : "";
 
     const supplementalDownloadsCard = (this.props.collection.tile_index_url ||
                                         this.props.collection.supplemental_report_url ||
-                                        this.props.collection.lidar_breaklines_url) ?
-                                          (<div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-6'>
-                                            <Supplementals collection={this.props.collection} />
-                                          </div>)
+                                        this.props.collection.lidar_breaklines_url) ? (
+                                          <Supplementals collection={this.props.collection} />)
                                           : "";
 
-    const servicesCard = this.props.collection.wms_link ?
-                          (<div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-6'>
-                            <Services collection={this.props.collection} />
-                          </div>)
+    const servicesCard = this.props.collection.wms_link ? (
+                          <Services collection={this.props.collection} />)
                           : "";
 
-    const description = this.props.collection.description ?
-                          (<div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-12'>
-                            <Description collection={this.props.collection} />
-                          </div>)
+    const description = this.props.collection.description ? (
+                          <Description collection={this.props.collection} />)
                           : "";
+
+    // using mdc classes to determine grid layout depending on screen size (desktop/tablet)
+    // special case with phone or smaller device (<840px) because order of divs changes
+    const gridLayout = window.innerWidth >= 900 ? (
+                          <div className="mdc-layout-grid__inner">
+                            <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-4'>
+                              <Metadata collection={this.props.collection} />
+                              {lidarCard}
+                              {servicesCard}
+                              {supplementalDownloadsCard}
+                              <ShareButtons />
+                            </div>
+                            <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-8'>
+                              {imageCarousel}
+                              {description}
+                              {countyCoverageCard}
+                            </div>
+                          </div>) : (
+                          <div className="mdc-layout-grid__inner">
+                            <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-12'>
+                              {imageCarousel}
+                              <Metadata collection={this.props.collection} />
+                              {description}
+                              {countyCoverageCard}
+                              {lidarCard}
+                              {servicesCard}
+                              {supplementalDownloadsCard}
+                              <ShareButtons />
+                            </div>
+                          </div>);
 
     return (
       <div className='tnris-order-template-details'>
         <div className='mdc-layout-grid'>
-          <div className="mdc-layout-grid__inner">
 
-            {imageCarousel}
+          {gridLayout}
 
-            <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-4'>
-              <Metadata collection={this.props.collection} />
-            </div>
-
-            {description}
-            {countyCoverageCard}
-            {lidarCard}
-            {servicesCard}
-            {supplementalDownloadsCard}
-
-            <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-12'>
-              <ShareButtons />
-            </div>
-
-          </div>
         </div>
       </div>
     );

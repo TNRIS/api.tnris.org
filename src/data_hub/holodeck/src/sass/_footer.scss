@@ -7,8 +7,10 @@ styles for component: Footer
   background-color: $skin-primary;
   color: $skin-text;
   width: 100%;
+  position: absolute;
   left: 0;
   bottom: 0;
+  right: 0;
 
   .open-drawer {
     width: calc(100% - 255px);

@@ -3,6 +3,7 @@ styles for component: Catalog
 */
 
 .catalog-component {
+  margin-bottom: 400px; //to make sure footer doesn't hide catalog content
 
   .mdc-dialog {
     z-index: 1000;

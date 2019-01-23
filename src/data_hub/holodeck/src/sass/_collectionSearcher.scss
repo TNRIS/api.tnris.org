@@ -2,104 +2,64 @@
 styles for component: CollectionSearcher
 */
 
-.shadowy {
+.search-component:focus-within {
   box-shadow: rgba(0, 0, 0, 0.2) 0px 5px 5px -3px,
     rgba(0, 0, 0, 0.14) 0px 8px 10px 1px,
     rgba(0, 0, 0, 0.12) 0px 3px 14px 2px;
+
+    .search-input {
+      background-color: white;
+    }
 }
 
-// #search-collections:focus {
-//   box-shadow: rgba(0, 0, 0, 0.2) 0px 5px 5px -3px,
-//   rgba(0, 0, 0, 0.14) 0px 8px 10px 1px,
-//   rgba(0, 0, 0, 0.12) 0px 3px 14px 2px;
-// }
-
 .search-component {
-  // height: 64px;
   width: 32%;
   left: 4%;
   margin-left: auto;
   margin-right: auto;
   padding-top: .2em;
-  // padding-top: 1.2em;
   padding-bottom: .2em;
-  // padding-left: 60px;
   overflow: unset;
 
-  // box-shadow: rgba(0, 0, 0, 0.2) 0px 5px 5px -3px,
-  //   rgba(0, 0, 0, 0.14) 0px 8px 10px 1px,
-  //   rgba(0, 0, 0, 0.12) 0px 3px 14px 2px;
-
-  #search-collections {
-    // background-color: #efefef;
-  }
-
-  input:focus::-webkit-input-placeholder {
-    color: $primary-color;
-  }
-  input:focus:-moz-placeholder {
-    color: $primary-color;
-  }
-  input:focus::-moz-placeholder {
-    color: $primary-color;
-  }
-  input:focus:-ms-input-placeholder {
-    color: $primary-color;
-  }
-
-  // .downshift-input {
-  //   // padding: 5px 60px 5px 50px !important;
-  //   // border-bottom: 0;
-  //   // color: $skin-text;
-  //   // caret-color: $primary-color;
-  //   margin: 0 50px 0 50px;
-  //   width: -webkit-fill-available;
-  // }
-
-  .mdc-text-field__input {
+  .search-input {
+    background-color: #efefef;
     padding: 5px 60px 5px 50px !important;
     border-bottom: 0;
     color: $skin-text;
     caret-color: $primary-color;
   }
 
-  input[type="search"]::-webkit-search-decoration,
-  input[type="search"]::-webkit-search-cancel-button,
-  input[type="search"]::-webkit-search-results-button,
-  input[type="search"]::-webkit-search-results-decoration {
-    -webkit-appearance:none;
-  }
+  // input:focus::-webkit-input-placeholder {
+  //   color: $primary-color;
+  // }
+  // input:focus:-moz-placeholder {
+  //   color: $primary-color;
+  // }
+  // input:focus::-moz-placeholder {
+  //   color: $primary-color;
+  // }
+  // input:focus:-ms-input-placeholder {
+  //   color: $primary-color;
+  // }
 
-  .mdc-menu {
-    width: 100%;
-    margin-top: 60px;
-  }
-
-  #clear-search {
-    margin: 17px 8px 0 0;
-    right: 0;
-    z-index: 1000;
-    background-color: $skin-tertiary;
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    text-align: center;
-    opacity: 0.6;
-    position: fixed;
-  }
-
-  #clear-search:hover {
-    opacity: 1;
-    cursor: pointer;
-  }
-
-  #clear-icon {
-    top: calc(50% - 43%);
-  }
+  // input[type="search"]::-webkit-search-decoration,
+  // input[type="search"]::-webkit-search-cancel-button,
+  // input[type="search"]::-webkit-search-results-button,
+  // input[type="search"]::-webkit-search-results-decoration {
+  //   -webkit-appearance:none;
+  // }
 
   .suggestion-list {
     background-color: white;
     border-top: 1px solid $skin-tertiary;
     box-shadow: inherit;
+  }
+
+  .suggestion-list:hover {
+    cursor: pointer;
+  }
+
+  .clear-button {
+    top: calc(50% - 43%);
   }
 }

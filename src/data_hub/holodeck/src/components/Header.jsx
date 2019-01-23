@@ -114,41 +114,29 @@ export default class Header extends React.Component {
                 </a> : ''}
               <CollectionSearcherContainer match={this.props.match} history={this.props.history} />
 
-              <a
-                onClick={this.handleOpenOrderCartDialog}
-                className="mdc-top-app-bar__action-item"
-                title="View shopping cart">
-                <i className={shoppingCartClass}>shopping_cart</i>
-              </a>
-              {this.props.selectedCollection === null ?
-                <a
-                  onClick={this.props.handler}
-                  className="mdc-top-app-bar__action-item"
-                  id="tools" title={this.props.status === 'closed' ? closedTitle : openTitle}>
-                  <i
-                    className="material-icons mdc-top-app-bar__navigation-icon">
-                    {this.props.status === 'closed' ? 'tune' : 'keyboard_arrow_right'}
-                  </i>
-                </a> : ''}
+
             </section>
             <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
               {this.props.selectedCollection !== null || this.props.showOrderCartDialog ?
                 <div onClick={this.handleCloseView} className="mdc-top-app-bar__action-item" tabIndex="0">
                   <i className="material-icons mdc-top-app-bar__navigation-icon">home</i>
                 </div> : ''}
-              <div onClick={this.handleOpenOrderCartDialog} className="mdc-top-app-bar__action-item" tabIndex="0">
-                <i className={shoppingCartClass}>shopping_cart</i>
-              </div>
-              <div
-                onClick={this.props.handler}
-                className="mdc-top-app-bar__action-item"
-                id="tools" title={this.props.status === 'closed' ? closedTitle : openTitle}
-                tabIndex="0">
-                <i
-                  className="material-icons mdc-top-app-bar__navigation-icon">
-                  {this.props.status === 'closed' ? 'search' : 'keyboard_arrow_right'}
-                </i>
-              </div>
+                <a
+                  onClick={this.handleOpenOrderCartDialog}
+                  className="mdc-top-app-bar__action-item"
+                  title="View shopping cart">
+                  <i className={shoppingCartClass}>shopping_cart</i>
+                </a>
+                {this.props.selectedCollection === null ?
+                  <a
+                    onClick={this.props.handler}
+                    className="mdc-top-app-bar__action-item"
+                    id="tools" title={this.props.status === 'closed' ? closedTitle : openTitle}>
+                    <i
+                      className="material-icons mdc-top-app-bar__navigation-icon">
+                      {this.props.status === 'closed' ? 'tune' : 'keyboard_arrow_right'}
+                    </i>
+                  </a> : ''}
             </section>
           </div>
         </header>

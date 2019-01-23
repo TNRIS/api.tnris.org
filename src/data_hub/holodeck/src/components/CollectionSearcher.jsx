@@ -16,14 +16,17 @@ export default class CollectionSearcher extends React.Component {
     this.state = {
       badUrlFlag: false,
       searchFieldValue: '',
-      showSuggestionList: false,
-      selectValue: 'value'
+      showSuggestionList: false
     }
-    this.handleSearch = this.handleSearch.bind(this);
+    // this.handleSearch = this.handleSearch.bind(this);
     this.handleClearSearch = this.handleClearSearch.bind(this);
     this.updateUrl = this.updateUrl.bind(this);
     this.handleBlur = this.handleBlur.bind(this);
     this.handleFocus = this.handleFocus.bind(this);
+    this.handleStateChange = this.handleStateChange.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleKeyUp = this.handleKeyUp.bind(this);
+    this.handleSelect = this.handleSelect.bind(this);
   }
 
   componentDidMount() {
@@ -55,12 +58,6 @@ export default class CollectionSearcher extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    // if (nextProps.collectionSearchQuery === "") {
-    //   document.getElementById('search-collections').value = '';
-    // }
-  }
-
   updateUrl(searchFieldValue) {
     // update URL to reflect new search change
     const prevFilter = this.props.history.location.pathname.includes('/catalog/') ?
@@ -79,13 +76,15 @@ export default class CollectionSearcher extends React.Component {
   handleBlur() {
     this.searchField.foundation_.adapter_.removeClass('shadowy');
     this.searchFieldInput.style.backgroundColor = searchFieldBackgroundColor;
-    // this.list.foundation_.adapter_.focusItemAtIndex(1);
-    // this.setState({showSuggestionList: false});
+    this.setState({showSuggestionList: false});
   }
 
-  handleFocus() {
+  handleFocus(event) {
     this.searchField.foundation_.adapter_.addClass('shadowy');
     this.searchFieldInput.style.backgroundColor = 'white';
+    if (event.target.value) {
+      this.setState({showSuggestionList: true});
+    }
   }
 
   // handleSearch(e) {
@@ -137,71 +136,77 @@ export default class CollectionSearcher extends React.Component {
   //   }
   // }
   //
-  handleSearch(e) {
+
+  handleInputChange(event) {
     try {
-      console.log(e);
-      if (e.target.value) {
-        console.log(e.target.value);
-        // first set the collectionSearchSuggestionsQuery in the app state then set the
-        // local state for the clear button handling to show the suggestion list
-        this.props.setCollectionSearchSuggestionsQuery(e.target.value);
-        this.setState({
-          // searchFieldValue: this.searchField.value,
-          showSuggestionList: true
-        });
-        // we check if the user pressed the enter or escape key
-        if (e.keyCode === 13) { // they pressed enter, so fire the search
-            e.preventDefault(); // ensure it is only our code that is run
-            this.props.setCollectionSearchQuery(e.target.value);
-            this.updateUrl(e.target.value);
-            this.setState({showSuggestionList: false});
-        } else if (e.keyCode === 27) { // they pressed escape, so drop focus
-          // this.searchFieldInput.blur();
-        }
+      if (event.target.value) {
+        this.setState({searchFieldValue: event.target.value, showSuggestionList: true});
+        this.props.setCollectionSearchSuggestionsQuery(event.target.value);
       } else {
-        if (e.keyCode === 13) { // they pressed enter, so fire the search
-          this.props.setCollectionSearchQuery('');
-          this.props.setCollectionSearchSuggestionsQuery('');
-          this.updateUrl('');
-          this.setState({
-            // searchFieldValue: null,
-            showSuggestionList: false
-          });
-        }
-        if (e.keyCode === 27) { // they pressed escape, so drop focus
-          this.setState({
-            // searchFieldValue: null,
-            showSuggestionList: false
-          });
-        }
+        this.setState({searchFieldValue: '', showSuggestionList: false});
         this.props.setCollectionSearchSuggestionsQuery('');
-        this.setState({
-          // searchFieldValue: null,
-          showSuggestionList: false
-        });
       }
     } catch(e) {
       console.log(e);
     }
   }
 
-  handleClearSearch(e) {
+  handleKeyUp(event) {
     try {
-      if (this.searchField.value) {
-        // document.getElementById("search-collections").value = '';
-        this.props.setCollectionSearchQuery('');
-        this.props.setCollectionSearchSuggestionsQuery('');
-        this.updateUrl('');
-        this.setState({
-          // searchFieldValue: null,
-          showSuggestionList: false
-        });
-        this.searchFieldInput.focus();
+      // we check if the user pressed the enter or escape key
+      if (event.keyCode === 13) { // they pressed enter, so fire the search
+        event.preventDefault(); // ensure it is only our code that is run
+        this.props.setCollectionSearchQuery(event.target.value);
+        this.updateUrl(event.target.value);
+        this.setState({showSuggestionList: false});
+        event.target.blur();
+      } else if (event.keyCode === 27) { // they pressed escape, so drop focus
+        event.target.blur();
       }
     } catch(e) {
       console.log(e);
     }
   }
+
+  handleClearSearch() {
+    try {
+      this.setState({searchFieldValue: ''});
+      // this.props.setCollectionSearchQuery('');
+      // this.props.setCollectionSearchSuggestionsQuery('');
+      // this.updateUrl('');
+      this.searchFieldInput.focus();
+    } catch(e) {
+      console.log(e);
+    }
+  }
+
+  handleSelect(selection) {
+    console.log(selection);
+    this.setState({searchFieldValue: selection});
+  }
+
+  handleStateChange = (changes, downshiftState) => {
+    console.log(changes, downshiftState);
+
+  }
+
+  // handleClearSearch(e) {
+  //   try {
+  //     if (this.searchField.value) {
+  //       // document.getElementById("search-collections").value = '';
+  //       this.props.setCollectionSearchQuery('');
+  //       this.props.setCollectionSearchSuggestionsQuery('');
+  //       this.updateUrl('');
+  //       this.setState({
+  //         // searchFieldValue: null,
+  //         showSuggestionList: false
+  //       });
+  //       this.searchFieldInput.focus();
+  //     }
+  //   } catch(e) {
+  //     console.log(e);
+  //   }
+  // }
 
   // <div
   //   id="searchparent"
@@ -240,6 +245,9 @@ export default class CollectionSearcher extends React.Component {
   //         </ul>
   //       </div> : ''}
   // </div>
+  //
+  //
+  // onChange={selection => alert(`You selected ${selection}`)}
 
   render() {
     if (this.state.badUrlFlag) {
@@ -259,7 +267,8 @@ export default class CollectionSearcher extends React.Component {
     console.log(this.props);
     return (
       <Downshift
-        onChange={selection => alert(`You selected ${selection}`)}
+        onStateChange={this.handleStateChange}
+        onChange={selection => this.handleSelect(selection)}
         itemToString={item => (item ? item.value : '')}
       >
         {({
@@ -269,6 +278,7 @@ export default class CollectionSearcher extends React.Component {
           getMenuProps,
           isOpen,
           inputValue,
+          clearSelection,
           reset,
           highlightedIndex,
           selectedItem,
@@ -282,8 +292,10 @@ export default class CollectionSearcher extends React.Component {
               className="downshift-input mdc-text-field__input"
               id="search-collections"
               {...getInputProps({
+              value: this.state.searchFieldValue,
               placeholder: "Search",
-              onKeyUp: this.handleSearch,
+              onChange: this.handleInputChange,
+              onKeyUp: this.handleKeyUp,
               onFocus: this.handleFocus,
               onBlur: this.handleBlur
             })}>
@@ -310,7 +322,7 @@ export default class CollectionSearcher extends React.Component {
                       {item}
                     </li>
                   )}
-                </ul> : ''}
+                </ul> : null}
           </div>
         )}
       </Downshift>

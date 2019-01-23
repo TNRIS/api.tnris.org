@@ -77,10 +77,11 @@ class CollectionSorter extends React.Component {
 
     return (
       <div className='sort-component'>
-          <ul className='mdc-list'>
+          <ul className='mdc-list' role='listbox'>
             <li
               className={this.state.sortOrder === 'NEW' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
-              onClick={() => this.setSort("NEW")}>
+              onClick={() => this.setSort("NEW")}
+              tabIndex='0'>
                <span className='mdc-list-item__text'>Newest</span>
             </li>
             <li

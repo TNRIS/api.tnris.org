@@ -2,11 +2,36 @@
 styles for component: CollectionSearcher
 */
 
-.search-component {
-  height: 64px;
+.shadowy {
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 5px 5px -3px,
+    rgba(0, 0, 0, 0.14) 0px 8px 10px 1px,
+    rgba(0, 0, 0, 0.12) 0px 3px 14px 2px;
+}
 
-  .search-collections {
-    float: left;
+// #search-collections:focus {
+//   box-shadow: rgba(0, 0, 0, 0.2) 0px 5px 5px -3px,
+//   rgba(0, 0, 0, 0.14) 0px 8px 10px 1px,
+//   rgba(0, 0, 0, 0.12) 0px 3px 14px 2px;
+// }
+
+.search-component {
+  // height: 64px;
+  width: 32%;
+  left: 4%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-top: .2em;
+  // padding-top: 1.2em;
+  padding-bottom: .2em;
+  // padding-left: 60px;
+  overflow: unset;
+
+  // box-shadow: rgba(0, 0, 0, 0.2) 0px 5px 5px -3px,
+  //   rgba(0, 0, 0, 0.14) 0px 8px 10px 1px,
+  //   rgba(0, 0, 0, 0.12) 0px 3px 14px 2px;
+
+  #search-collections {
+    // background-color: #efefef;
   }
 
   input:focus::-webkit-input-placeholder {
@@ -22,8 +47,17 @@ styles for component: CollectionSearcher
     color: $primary-color;
   }
 
+  // .downshift-input {
+  //   // padding: 5px 60px 5px 50px !important;
+  //   // border-bottom: 0;
+  //   // color: $skin-text;
+  //   // caret-color: $primary-color;
+  //   margin: 0 50px 0 50px;
+  //   width: -webkit-fill-available;
+  // }
+
   .mdc-text-field__input {
-    padding: 5px 40px 5px 40px !important;
+    padding: 5px 60px 5px 50px !important;
     border-bottom: 0;
     color: $skin-text;
     caret-color: $primary-color;
@@ -34,6 +68,11 @@ styles for component: CollectionSearcher
   input[type="search"]::-webkit-search-results-button,
   input[type="search"]::-webkit-search-results-decoration {
     -webkit-appearance:none;
+  }
+
+  .mdc-menu {
+    width: 100%;
+    margin-top: 60px;
   }
 
   #clear-search {
@@ -55,13 +94,12 @@ styles for component: CollectionSearcher
   }
 
   #clear-icon {
-    // padding-top: 3px;
-    padding-bottom: 3px;
-    // color: white;
+    top: calc(50% - 43%);
   }
 
-  #search-icon {
-    left: 8px;
-    padding-bottom: 3px;
+  .suggestion-list {
+    background-color: white;
+    border-top: 1px solid $skin-tertiary;
+    box-shadow: inherit;
   }
 }

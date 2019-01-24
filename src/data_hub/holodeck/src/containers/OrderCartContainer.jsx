@@ -2,12 +2,16 @@ import { connect } from 'react-redux';
 
 import OrderCart from '../components/OrderCart';
 
-import { orderCartActions, orderCartDialogActions } from '../actions';
+import { catalogActions,
+         collectionActions,
+         orderCartActions,
+         urlTrackerActions } from '../actions';
 import { getAllCollections } from '../selectors/collectionSelectors';
 
 const mapStateToProps = state => ({
   collections: getAllCollections(state),
   orders: state.orderCart.orders,
+  previousUrl: state.urlTracker.previousUrl,
   submitting: state.orderCart.submitting,
   submitError: state.orderCart.submitError
 });
@@ -22,8 +26,17 @@ const mapDispatchToProps = dispatch => ({
   submitOrderCartForm: (formInfo) => {
     dispatch(orderCartActions.submitOrderCartForm(formInfo));
   },
-  closeOrderCartDialog: () => {
-    dispatch(orderCartDialogActions.closeOrderCartDialog());
+  setUrl: (newUrl, history) => {
+    dispatch(urlTrackerActions.setUrl(newUrl, history))
+  },
+  setViewCatalog: () => {
+    dispatch(catalogActions.setViewCatalog());
+  },
+  setViewCollection: () => {
+    dispatch(catalogActions.setViewCollection());
+  },
+  selectCollection: (collectionId) => {
+    dispatch(collectionActions.selectCollection(collectionId));
   }
 })
 

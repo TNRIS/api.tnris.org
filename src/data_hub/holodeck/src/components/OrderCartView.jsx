@@ -1,22 +1,17 @@
 import React from 'react';
 import OrderCartContainer from '../containers/OrderCartContainer';
 
-class OrderCartDialog extends React.Component {
-
-    componentDidMount() {
-      console.log('order cart mount');
-    }
-
+class OrderCartView extends React.Component {
     render() {
       return (
-        <div className="order-cart-dialog">
+        <div className="order-cart-view">
           <h2 className="mdc-top-app-bar__title">
             Shopping Cart
           </h2>
-          <OrderCartContainer />
+          <OrderCartContainer history={this.props.history} />
         </div>
       );
     }
 }
 
-export default OrderCartDialog;
+export default OrderCartView;

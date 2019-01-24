@@ -2,8 +2,8 @@ import { connect } from 'react-redux';
 
 import Catalog from '../components/Catalog';
 import {
+  catalogActions,
   collectionActions,
-  collectionDialogActions,
   orderCartActions,
   resourceActions,
   toolDrawerActions,
@@ -19,21 +19,17 @@ const mapStateToProps = (state) => ({
   loading: state.collections.loading,
   resources: state.resources.items,
   selectedCollection: state.collections.selectedCollection,
-  showCollectionDialog: state.collectionDialog.showCollectionDialog,
-  showOrderCartDialog: state.orderCart.showOrderCartDialog,
   sortOrder: state.collectionSorter.sortOrder,
   visibleCollections: getSortedCollections(state),
   theme: state.colorTheme.theme,
   previousUrl: state.urlTracker.previousUrl,
-  toolDrawerStatus: state.toolDrawer.toolDrawerStatus
+  toolDrawerStatus: state.toolDrawer.toolDrawerStatus,
+  view: state.catalog.view
 });
 
 const mapDispatchToProps = dispatch => ({
   clearSelectedCollection: () => {
     dispatch(collectionActions.clearSelectedCollection());
-  },
-  closeCollectionDialog: () => {
-    dispatch(collectionDialogActions.closeCollectionDialog());
   },
   closeToolDrawer: () => {
     dispatch(toolDrawerActions.closeToolDrawer());
@@ -47,14 +43,14 @@ const mapDispatchToProps = dispatch => ({
   fetchStoredShoppingCart: () => {
     dispatch(orderCartActions.fetchStoredShoppingCart());
   },
-  openCollectionDialog: () => {
-    dispatch(collectionDialogActions.openCollectionDialog());
-  },
   openToolDrawer: () => {
     dispatch(toolDrawerActions.openToolDrawer());
   },
   setUrl: (newUrl, history) => {
     dispatch(urlTrackerActions.setUrl(newUrl, history))
+  },
+  setViewCatalog: () => {
+    dispatch(catalogActions.setViewCatalog());
   }
 })
 

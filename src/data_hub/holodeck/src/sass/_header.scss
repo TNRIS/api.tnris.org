@@ -45,6 +45,7 @@ styles for component: Header
   }
 
   .header-nav {
+    width: calc(100% - 255px);
 
     .mdc-top-app-bar__action-item {
       margin-left: 3px;
@@ -56,6 +57,10 @@ styles for component: Header
 
       .shopping-cart-full {
         color: $alt-color;
+      }
+
+      .shopping-cart-empty {
+        color: gray;
       }
     }
 

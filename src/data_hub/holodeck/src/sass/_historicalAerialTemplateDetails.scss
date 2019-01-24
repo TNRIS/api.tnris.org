@@ -24,6 +24,15 @@ styles for component: HistoricalAerialTemplateDetails
       .mapboxgl-canvas {
         width: 100% !important;
       }
+
+      .mapboxgl-control-container {
+        .mapboxgl-ctrl-top-left {
+          button {
+            margin-left: 0;
+            margin-right: 0;
+          }
+        }
+      }
     }
   }
 

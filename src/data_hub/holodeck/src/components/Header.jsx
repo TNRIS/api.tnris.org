@@ -11,8 +11,9 @@ export default class Header extends React.Component {
   constructor(props) {
     super(props);
 
-    this.handleCloseView = this.handleCloseView.bind(this);
-    this.handleOpenOrderCartDialog = this.handleOpenOrderCartDialog.bind(this);
+    this.handleBack = this.handleBack.bind(this);
+    this.handleOrderCartView = this.handleOrderCartView.bind(this);
+    this.handleCatalogView = this.handleCatalogView.bind(this);
   }
 
   componentDidMount() {
@@ -21,20 +22,40 @@ export default class Header extends React.Component {
     this.topAppBar = new MDCTopAppBar(this.topAppBarElement);
   }
 
-  handleOpenOrderCartDialog() {
-    this.props.openOrderCartDialog();
-  }
-
-  handleCloseView() {
-    this.props.closeCollectionDialog();
-    this.props.clearSelectedCollection();
-    this.props.openToolDrawer();
-    if (this.props.previousUrl.includes('/collection/')) {
-      this.props.setUrl('/', this.props.history);
-    }
-    else {
+  handleBack() {
+    if (this.props.previousUrl.includes('/catalog/')) {
+      this.props.setViewCatalog();
+      this.props.openToolDrawer();
       this.props.setUrl(this.props.previousUrl, this.props.history);
     }
+    else if (this.props.previousUrl.includes('/collection/')) {
+      const collectionUuid = this.props.previousUrl.replace('/collection/', '');
+      this.props.setViewCollection();
+      this.props.selectCollection(collectionUuid);
+      if (this.props.collections[collectionUuid].template === 'tnris-download') {
+        this.props.fetchCollectionResources(collectionUuid);
+      }
+      this.props.setUrl(this.props.previousUrl, this.props.history);
+    }
+    else {
+      this.props.setViewCatalog();
+      this.props.openToolDrawer();
+      this.props.setUrl(this.props.previousUrl, this.props.history);
+    }
+  }
+
+  handleOrderCartView() {
+    this.props.clearSelectedCollection();
+    this.props.closeToolDrawer();
+    this.props.setViewOrderCart();
+    this.props.setUrl('/', this.props.history);
+  }
+
+  handleCatalogView() {
+    this.props.clearSelectedCollection();
+    this.props.openToolDrawer();
+    this.props.setViewCatalog();
+    this.props.setUrl(this.props.catalogFilterUrl, this.props.history);
   }
 
   render() {
@@ -43,7 +64,7 @@ export default class Header extends React.Component {
     if (this.props.orders) {
       shoppingCartClass = Object.keys(this.props.orders).length !== 0 ?
       "material-icons mdc-top-app-bar__navigation-icon shopping-cart-full" :
-      "material-icons mdc-top-app-bar__navigation-icon";
+      "material-icons mdc-top-app-bar__navigation-icon shopping-cart-empty";
     }
 
     let dismissClass = 'closed-drawer';
@@ -105,38 +126,37 @@ export default class Header extends React.Component {
                 <img src={tnrisLogo} aria-label="TNRIS Logo" alt="TNRIS Logo" className="logo" />
               </a>
               <span className="mdc-top-app-bar__title">Data Holodeck</span>*/}
-              {this.props.selectedCollection !== null ?
+              {this.props.view === 'orderCart' ?
                 <a
-                  onClick={this.handleCloseCollectionView}
+                  onClick={this.handleBack}
                   className="mdc-top-app-bar__action-item"
-                  title="Back to the catalog">
+                  title="Back">
                   <i className="material-icons mdc-top-app-bar__navigation-icon">arrow_back</i>
                 </a> : ''}
-              <CollectionSearcherContainer match={this.props.match} history={this.props.history} />
-
-
-            </section>
-            <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
-              {this.props.selectedCollection !== null || this.props.showOrderCartDialog ?
-                <div onClick={this.handleCloseView} className="mdc-top-app-bar__action-item" tabIndex="0">
-                  <i className="material-icons mdc-top-app-bar__navigation-icon">home</i>
-                </div> : ''}
-                <a
-                  onClick={this.handleOpenOrderCartDialog}
-                  className="mdc-top-app-bar__action-item"
-                  title="View shopping cart">
-                  <i className={shoppingCartClass}>shopping_cart</i>
-                </a>
-                {this.props.selectedCollection === null ?
+               <CollectionSearcherContainer match={this.props.match} history={this.props.history} />
+               {this.props.orders && Object.keys(this.props.orders).length !== 0 ?
                   <a
-                    onClick={this.props.handler}
+                    onClick={this.handleOrderCartView}
+                    className="mdc-top-app-bar__action-item"
+                    title="View shopping cart">
+                    <i className={shoppingCartClass}>shopping_cart</i>
+                  </a> : ''}
+                {this.props.view === 'catalog' ?
+                  <a
+                    onClick={this.props.toggleToolDrawerDisplay}
                     className="mdc-top-app-bar__action-item"
                     id="tools" title={this.props.status === 'closed' ? closedTitle : openTitle}>
                     <i
                       className="material-icons mdc-top-app-bar__navigation-icon">
                       {this.props.status === 'closed' ? 'tune' : 'keyboard_arrow_right'}
                     </i>
-                  </a> : ''}
+                  </a> :
+                  <a
+                    onClick={this.handleCatalogView}
+                    className="mdc-top-app-bar__action-item"
+                    id="tools" title="Catalog">
+                    <i className="material-icons mdc-top-app-bar__navigation-icon">view_list</i>
+                  </a>}
             </section>
           </div>
         </header>

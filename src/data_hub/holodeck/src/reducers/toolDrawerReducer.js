@@ -7,7 +7,7 @@ const initialState = {
   toolDrawerStatus: 'open'
 }
 
-export default function collectionDialogReducer(state = initialState, action) {
+export default function toolDrawerReducer(state = initialState, action) {
   switch(action.type) {
     case CLOSE_TOOL_DRAWER:
       // Set toolDrawerStatus in the state to closed so that we may close the drawer

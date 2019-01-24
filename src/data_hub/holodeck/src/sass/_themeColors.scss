@@ -25,13 +25,13 @@ $relax-theme-primary: #809FC0;
 
 // set the rest of them
 // these will all be overwritten
-$primary-color: #6200ee; // goog purple
+$primary-color: #1E8DC1; // goog purple
 // $primary-color: white;
-$secondary-color: #b088e8; // goog purple
+$secondary-color: #BADBFF; // goog purple
 $text-color: white;
 $header-bar: white;
 // used for indicators
-$alt-color: #b088e8;
+$alt-color: #1E8DC1;
 
 $main-background: white;
 $nest-background: white;
@@ -320,7 +320,7 @@ When adding new themes you will also need to update:
 
 // export colors for use by jsx. specifically, tnrisDownloadTemplateDownload map
 :export {
-  lightFill: #7E39F1; lightText: white;
+  lightFill: #1E8DC1; lightText: white;
   darkFill: #6E7777; darkText: lightgray;
   earthFill: lightgreen; earthText: white;
   fuegoFill: #D588FF; fuegoText: #FEEF00;

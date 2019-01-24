@@ -1,16 +1,18 @@
 import React from 'react';
 import { Redirect } from 'react-router';
 
-import CatalogCardContainer from '../containers/CatalogCardContainer';
 import Footer from './Footer';
 import HistoricalAerialTemplate from './HistoricalAerialTemplate/HistoricalAerialTemplate';
 import OutsideEntityTemplate from './TnrisOutsideEntityTemplate/TnrisOutsideEntityTemplate';
 import TnrisDownloadTemplate from './TnrisDownloadTemplate/TnrisDownloadTemplate';
 import TnrisOrderTemplate from './TnrisOrderTemplate/TnrisOrderTemplate';
+import OrderCartView from './OrderCartView';
+
 import CollectionFilterMapDialogContainer from '../containers/CollectionFilterMapDialogContainer';
 import HeaderContainer from '../containers/HeaderContainer';
-import OrderCartDialogContainer from '../containers/OrderCartDialogContainer';
 import ToolDrawerContainer from '../containers/ToolDrawerContainer';
+import CatalogCardContainer from '../containers/CatalogCardContainer';
+
 import loadingImage from '../images/loading.gif';
 import noDataImage from '../images/no-data.png';
 
@@ -27,9 +29,15 @@ export default class Catalog extends React.Component {
     };
 
     this.handleResize = this.handleResize.bind(this);
-    this.handler = this.handler.bind(this);
-    this.handleCloseCollectionView = this.handleCloseCollectionView.bind(this);
+    this.toggleToolDrawerDisplay = this.toggleToolDrawerDisplay.bind(this);
     this.handleShowCollectionView = this.handleShowCollectionView.bind(this);
+    this.handleViewChange = this.handleViewChange.bind(this);
+    this.setCatalogView = this.setCatalogView.bind(this);
+    this.loadingMessage = (
+      <div className="catalog-component__loading">
+        <img src={loadingImage} alt="Holodeck Loading..." className="holodeck-loading-image" />
+      </div>
+    );
   }
 
   componentDidMount() {
@@ -45,7 +53,6 @@ export default class Catalog extends React.Component {
   componentDidUpdate() {
     if (this.props.collections && Object.keys(this.props.match.params).includes('collectionId')) {
       if (!Object.keys(this.props.collections).includes(this.props.match.params.collectionId)) {
-        // console.log(this.props.match.params.collectionId);
         this.setState({
           badUrlFlag: true
         });
@@ -74,13 +81,8 @@ export default class Catalog extends React.Component {
     }
   }
 
-  handler() {
-    if (this.props.selectedCollection === null) {
-      this.props.toolDrawerStatus === 'open' ? this.props.closeToolDrawer() : this.props.openToolDrawer();
-    } else {
-      this.handleCloseCollectionView();
-      this.props.openToolDrawer();
-    }
+  toggleToolDrawerDisplay() {
+    this.props.toolDrawerStatus === 'open' ? this.props.closeToolDrawer() : this.props.openToolDrawer();
     if (this.state.toolDrawerView === 'modal') {
       const scrim = document.getElementById('scrim');
       scrim.onclick = () => {
@@ -90,49 +92,70 @@ export default class Catalog extends React.Component {
   }
 
   handleShowCollectionView() {
-    if (this.props.showCollectionDialog) {
-      let collection = this.props.collections[this.props.selectedCollection];
-      switch(collection['template']) {
-        case 'tnris-download':
-          return (<TnrisDownloadTemplate collection={collection} />);
-        case 'tnris-order':
-          return (<TnrisOrderTemplate collection={collection} />);
-        case 'historical-aerial':
-          return (<HistoricalAerialTemplate collection={collection} />);
-        case 'outside-entity':
-          return (<OutsideEntityTemplate collection={collection} />);
-        default:
-          return (<TnrisDownloadTemplate collection={collection} />);
-      }
+    let collection = this.props.collections[this.props.selectedCollection];
+    switch(collection['template']) {
+      case 'tnris-download':
+        return (<TnrisDownloadTemplate collection={collection} />);
+      case 'tnris-order':
+        return (<TnrisOrderTemplate collection={collection} />);
+      case 'historical-aerial':
+        return (<HistoricalAerialTemplate collection={collection} />);
+      case 'outside-entity':
+        return (<OutsideEntityTemplate collection={collection} />);
+      default:
+        return (<TnrisDownloadTemplate collection={collection} />);
     }
   }
 
-  handleCloseCollectionView() {
-    this.props.closeCollectionDialog();
-    this.props.clearSelectedCollection();
-    if (this.props.previousUrl.includes('/collection/')) {
-      this.props.setUrl('/', this.props.history);
-    }
-    else {
-      this.props.setUrl(this.props.previousUrl, this.props.history);
+  setCatalogView() {
+    const noDataDivClass = this.props.toolDrawerStatus === 'open' && this.state.toolDrawerView === 'dismiss' ?
+      'no-data no-data-open' : 'no-data no-data-closed';
+    const catalogCards = this.props.visibleCollections && this.props.visibleCollections.length < 1 ?
+      <div className={noDataDivClass}>
+        <img
+          src={noDataImage}
+          className="no-data-image"
+          alt="No Data Available"
+          title="No data available with those search terms" />
+      </div> : <div className="mdc-layout-grid">
+          <ul className="mdc-layout-grid__inner">
+            {this.props.visibleCollections ? this.props.visibleCollections.map(collectionId =>
+              <li
+                className="mdc-layout-grid__cell mdc-layout-grid__cell--span-3"
+                key={collectionId}>
+                <CatalogCardContainer
+                  collection={this.props.collections[collectionId]}
+                  match={this.props.match}
+                  history={this.props.history} />
+              </li>
+            ) : this.loadingMessage}
+          </ul>
+        </div>;
+    return catalogCards;
+  }
+
+  handleViewChange() {
+    console.log('view change ', this.props.view);
+    switch(this.props.view) {
+      case 'catalog':
+        return this.setCatalogView();
+      case 'collection':
+        return this.handleShowCollectionView();
+      case 'orderCart':
+        return <OrderCartView history={this.props.history} />;
+      case 'geoFilter':
+        return <CollectionFilterMapDialogContainer history={this.props.history} />;
+      default:
+        return this.setCatalogView();
     }
   }
 
   render() {
-    // console.log(this.props);
     const { error, loading } = this.props;
-    let noDataDivClass = 'no-data no-data-closed';
     let dismissClass = 'closed-drawer';
-
-    const loadingMessage = (
-      <div className="catalog-component__loading">
-        <img src={loadingImage} alt="Holodeck Loading..." className="holodeck-loading-image" />
-      </div>
-    );
 
     if (this.props.toolDrawerStatus === 'open' && this.state.toolDrawerView === 'dismiss') {
       dismissClass = 'open-drawer';
-      noDataDivClass = 'no-data no-data-open';
     }
 
     if (error) {
@@ -140,7 +163,7 @@ export default class Catalog extends React.Component {
     }
 
     if (loading) {
-      return loadingMessage;
+      return this.loadingMessage;
     }
 
     if (this.state.badUrlFlag) {
@@ -149,8 +172,6 @@ export default class Catalog extends React.Component {
 
     return (
       <div className="catalog-component">
-
-        <CollectionFilterMapDialogContainer history={this.props.history} />
 
         <ToolDrawerContainer
           match={this.props.match}
@@ -163,38 +184,12 @@ export default class Catalog extends React.Component {
         <HeaderContainer
           view={this.state.toolDrawerView}
           status={this.props.toolDrawerStatus}
-          handler={this.handler}
+          toggleToolDrawerDisplay={this.toggleToolDrawerDisplay}
           match={this.props.match}
           history={this.props.history} />
 
         <div className={`catalog ${dismissClass} mdc-drawer-app-content`}>
-          {this.props.showOrderCartDialog ? <OrderCartDialogContainer /> : ""}
-          
-          {this.props.visibleCollections && this.props.visibleCollections.length < 1 ?
-            <div className={noDataDivClass}>
-              <img
-                src={noDataImage}
-                className="no-data-image"
-                alt="No Data Available"
-                title="No data available with those search terms" />
-            </div> : ''}
-
-          {this.props.showCollectionDialog ? this.handleShowCollectionView() :
-            <div className="mdc-layout-grid">
-              <ul className="mdc-layout-grid__inner">
-                {this.props.visibleCollections ? this.props.visibleCollections.map(collectionId =>
-                  <li
-                    className="mdc-layout-grid__cell mdc-layout-grid__cell--span-3"
-                    key={collectionId}>
-                    <CatalogCardContainer
-                      collection={this.props.collections[collectionId]}
-                      match={this.props.match}
-                      history={this.props.history} />
-                  </li>
-                ) : loadingMessage}
-              </ul>
-            </div>
-          }
+          {this.handleViewChange()}
         </div>
 
         <Footer

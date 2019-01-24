@@ -32,6 +32,7 @@ export default class ToolDrawer extends React.Component {
     this.props.setCollectionFilterMapZoom(5.8);
     this.props.setCollectionTimeslider(this.props.collectionTimesliderRange);
     this.props.setUrl('/', this.props.history);
+    this.props.logFilterChange('/');
   }
 
   render() {

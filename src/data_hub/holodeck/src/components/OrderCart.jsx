@@ -230,11 +230,7 @@ class OrderCart extends Component {
   render() {
     // default filler for empty cart
     let showHTML = (
-      <div className="default-order-cart-display">
-        <button className="mdc-button mdc-button--raised" onClick={() => this.props.closeOrderCartDialog()} tabIndex="1">
-          Let's go shopping!
-        </button>
-      </div>
+      <div className="default-order-cart-display"></div>
     );
     // toggle classes of inputs based on other form field selections
     const orgClass = this.state.industry !== '' && this.state.industry !== 'No Industry' ? "mdc-text-field mdc-text-field--outlined" : "mdc-text-field mdc-text-field--outlined hidden-field";
@@ -244,7 +240,7 @@ class OrderCart extends Component {
     const emptyCartMessage = (
       <ul className="mdc-list">
         <li><strong>There are no datasets in your cart.</strong></li>
-        <li>Although only some datasets are available for download, all datasets are available for ordering directly from TNRIS. To order a dataset(s), click the Let's Go Shopping button below, open a dataset card and choose the Order tab in the top right.</li>
+        <li>Although only some datasets are available for download, all datasets are available for ordering directly from TNRIS. To order a dataset(s), click the Catalog icon above, open a dataset card, and choose the Order tab in the top right.</li>
       </ul>
     );
     // if cart not empty, iterate datasets and display their order details,

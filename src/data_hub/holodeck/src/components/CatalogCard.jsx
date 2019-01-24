@@ -15,9 +15,8 @@ export default class CatalogCard extends React.Component {
   }
 
   cardClicked() {
-    // console.log(this.props);
     this.props.closeToolDrawer();
-    this.props.openCollectionDialog();
+    this.props.setViewCollection();
     this.props.selectCollection(this.props.collection.collection_id);
     if (this.props.collection.template === 'tnris-download') {
       this.props.fetchCollectionResources(this.props.collection.collection_id);

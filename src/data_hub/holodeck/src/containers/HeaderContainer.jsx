@@ -1,39 +1,51 @@
 import { connect } from 'react-redux';
 
-import { collectionActions,
-         collectionDialogActions,
-         orderCartDialogActions,
+import { catalogActions,
+         collectionActions,
          toolDrawerActions,
          urlTrackerActions } from '../actions';
+import {
+  getAllCollections
+} from '../selectors/collectionSelectors';
 import Header from '../components/Header';
 
 const mapStateToProps = state => ({
+  collections: getAllCollections(state),
   orders: state.orderCart.orders,
   previousUrl: state.urlTracker.previousUrl,
+  catalogFilterUrl: state.urlTracker.catalogFilterUrl,
   selectedCollection: state.collections.selectedCollection,
-  showCollectionDialog: state.collectionDialog.showCollectionDialog,
-  showOrderCartDialog: state.orderCart.showOrderCartDialog,
-  theme: state.colorTheme.theme
+  theme: state.colorTheme.theme,
+  view: state.catalog.view
 });
 
 const mapDispatchToProps = dispatch => ({
   clearSelectedCollection: () => {
     dispatch(collectionActions.clearSelectedCollection());
   },
-  closeCollectionDialog: () => {
-    dispatch(collectionDialogActions.closeCollectionDialog());
+  selectCollection: (collectionId) => {
+    dispatch(collectionActions.selectCollection(collectionId));
   },
-  openOrderCartDialog: () => {
-    dispatch(orderCartDialogActions.openOrderCartDialog());
-  },
-  closeOrderCartDialog: () => {
-    dispatch(orderCartDialogActions.closeOrderCartDialog());
+  fetchCollectionResources: (collectionId) => {
+    dispatch(collectionActions.fetchCollectionResources(collectionId))
   },
   openToolDrawer: () => {
     dispatch(toolDrawerActions.openToolDrawer());
   },
+  closeToolDrawer: () => {
+    dispatch(toolDrawerActions.closeToolDrawer());
+  },
   setUrl: (newUrl, history) => {
-    dispatch(urlTrackerActions.setUrl(newUrl, history))
+    dispatch(urlTrackerActions.setUrl(newUrl, history));
+  },
+  setViewCatalog: () => {
+    dispatch(catalogActions.setViewCatalog());
+  },
+  setViewOrderCart: () => {
+    dispatch(catalogActions.setViewOrderCart());
+  },
+  setViewCollection: () => {
+    dispatch(catalogActions.setViewCollection());
   }
 })
 

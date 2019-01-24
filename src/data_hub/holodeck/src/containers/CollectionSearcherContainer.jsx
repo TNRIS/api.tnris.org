@@ -25,7 +25,10 @@ const mapDispatchToProps = dispatch => ({
     dispatch(collectionSearcherActions.setCollectionSearchSuggestionsQuery(collectionSearchSuggestionsQuery));
   },
   setUrl: (newUrl, history) => {
-    dispatch(urlTrackerActions.setUrl(newUrl, history))
+    dispatch(urlTrackerActions.setUrl(newUrl, history));
+  },
+  logFilterChange: (url) => {
+    dispatch(urlTrackerActions.logFilterChange(url));
   }
 })
 

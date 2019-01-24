@@ -1,9 +1,5 @@
 import React from 'react';
 import Downshift from 'downshift';
-import {MDCList} from '@material/list';
-import {MDCMenu} from '@material/menu';
-import {MDCMenuSurface} from '@material/menu-surface';
-import {MDCRipple} from '@material/ripple';
 import { MDCTextField } from '@material/textfield';
 import { Redirect } from 'react-router';
 

@@ -2,7 +2,6 @@ import React from 'react';
 import { MDCDrawer } from "@material/drawer";
 
 import CollectionFilterContainer from '../containers/CollectionFilterContainer';
-import CollectionSearcherContainer from '../containers/CollectionSearcherContainer';
 import CollectionSorterContainer from '../containers/CollectionSorterContainer';
 import CollectionTimesliderContainer from '../containers/CollectionTimesliderContainer';
 

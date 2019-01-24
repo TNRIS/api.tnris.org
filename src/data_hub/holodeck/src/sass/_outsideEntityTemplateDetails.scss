@@ -86,10 +86,12 @@ styles for component: OutsideEntityTemplateDetails
         height: 26px;
         width: 26px;
         text-align: center;
+        border: none;
+        padding-left: 4px;
 
         i {
           font-size: 18px;
-          line-height: 26px;
+          line-height: 24px;
         }
       }
     }

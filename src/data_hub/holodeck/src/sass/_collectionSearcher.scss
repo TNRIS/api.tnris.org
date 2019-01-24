@@ -25,8 +25,21 @@ styles for component: CollectionSearcher
     background-color: #efefef;
     padding: 5px 60px 5px 50px !important;
     border-bottom: 0;
-    color: $skin-text;
-    caret-color: $primary-color;
+    caret-color: $skin-primary;
+  }
+
+  .suggestion-list {
+    background-color: white;
+    border-top: 1px solid $skin-tertiary;
+    box-shadow: inherit;
+  }
+
+  .suggestion-list:hover {
+    cursor: pointer;
+  }
+
+  .clear-button {
+    top: calc(50% - 43%);
   }
 
   // input:focus::-webkit-input-placeholder {
@@ -48,18 +61,4 @@ styles for component: CollectionSearcher
   // input[type="search"]::-webkit-search-results-decoration {
   //   -webkit-appearance:none;
   // }
-
-  .suggestion-list {
-    background-color: white;
-    border-top: 1px solid $skin-tertiary;
-    box-shadow: inherit;
-  }
-
-  .suggestion-list:hover {
-    cursor: pointer;
-  }
-
-  .clear-button {
-    top: calc(50% - 43%);
-  }
 }

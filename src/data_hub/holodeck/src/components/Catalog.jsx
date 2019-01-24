@@ -119,7 +119,6 @@ export default class Catalog extends React.Component {
   }
 
   render() {
-    // console.log(this.props);
     const { error, loading } = this.props;
     let noDataDivClass = 'no-data no-data-closed';
     let dismissClass = 'closed-drawer';

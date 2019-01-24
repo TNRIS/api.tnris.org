@@ -284,7 +284,6 @@ export const getSearchedCollections = createSelector(
           searchedCollectionIds = [];
         } else {
           queryResult.map(result => {
-            console.log(`${collections[result.ref]['name']} ${collections[result.ref]['acquisition_date']}`);
             if (collectionIds.includes(result.ref) && !searchedCollectionIds.includes(result.ref)) {
               searchedCollectionIds.push(result.ref);
             }
@@ -387,7 +386,6 @@ export const getSearchSuggestions = createSelector(
   (collections, collectionIds, searchQuery, searchIndex) => {
     // Check if collections are ready in the state
     if (collections) {
-      // let searchedCollectionIds = [];
       let searchedCollectionNames = [];
       if (searchQuery) {
         let queryResult = searchIndex.search(
@@ -405,24 +403,18 @@ export const getSearchSuggestions = createSelector(
           bool: "AND"
         });
         if (!Array.isArray(queryResult) || !queryResult.length) {
-          // searchedCollectionIds = [];
           searchedCollectionNames = [];
         } else {
           queryResult.map(result => {
-            // console.log(`${collections[result.ref]['name']} ${collections[result.ref]['acquisition_date']}`);
-            // if (collectionIds.includes(result.ref) && !searchedCollectionIds.includes(result.ref)) {
-            if (collectionIds.includes(result.ref) && !searchedCollectionNames.includes(collections[result.ref]['name'])) {
-              // searchedCollectionIds.push(result.ref);
-              searchedCollectionNames.push(collections[result.ref]['name']);
+            if (collectionIds.includes(result.ref) &&
+              !searchedCollectionNames.includes(collections[result.ref]['name'])) {
+                searchedCollectionNames.push(collections[result.ref]['name']);
             }
             return result;
           })
         }
-        // return searchedCollectionIds;
         return searchedCollectionNames;
       }
-      // searchedCollectionIds = collectionIds;
-      // return searchedCollectionIds;
     }
   }
 );

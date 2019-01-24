@@ -19,7 +19,6 @@ export default class CollectionSearcher extends React.Component {
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleKeyUp = this.handleKeyUp.bind(this);
     this.handleSelect = this.handleSelect.bind(this);
-    this.handleStateChange = this.handleStateChange.bind(this);
     this.updateUrl = this.updateUrl.bind(this);
   }
 
@@ -48,8 +47,16 @@ export default class CollectionSearcher extends React.Component {
     }
   }
 
+  // if the input loses focus, hide the suggestionList
   handleBlur() {
     this.setState({showSuggestionList: false});
+  }
+
+  // if the input gains focus and has value, show the suggestionList
+  handleFocus(event) {
+    if (event.target.value) {
+      this.setState({showSuggestionList: true});
+    }
   }
 
   // clears the text from the search input, resets the local state, and resets
@@ -69,12 +76,9 @@ export default class CollectionSearcher extends React.Component {
     }
   }
 
-  handleFocus(event) {
-    if (event.target.value) {
-      this.setState({showSuggestionList: true});
-    }
-  }
-
+  // sets the local state with the input value, shows or hides the suggestionList,
+  // and sets the collectionSearchsuggestionsQuery to retrieve search suggestions
+  // from the search index
   handleInputChange(event) {
     try {
       if (event.target.value) {
@@ -95,6 +99,8 @@ export default class CollectionSearcher extends React.Component {
     }
   }
 
+  // handles firing the search if the user presses enter or blurs the input if
+  // they press escape while in the search textField
   handleKeyUp(event) {
     try {
       // we check if the user pressed the enter or escape key
@@ -104,6 +110,11 @@ export default class CollectionSearcher extends React.Component {
         this.updateUrl(event.target.value);
         this.setState({showSuggestionList: false});
         event.target.blur();
+        if (this.props.showCollectionDialog) {
+          this.props.closeCollectionDialog();
+          this.props.clearSelectedCollection();
+          this.props.openToolDrawer();
+        }
       } else if (event.keyCode === 27) { // they pressed escape, so drop focus
         event.target.blur();
       }
@@ -112,8 +123,8 @@ export default class CollectionSearcher extends React.Component {
     }
   }
 
+  // handles firing the search if the user selects an item from the suggestionList
   handleSelect(selection) {
-    console.log(selection);
     this.setState({
       searchFieldValue: selection,
       showSuggestionList: false
@@ -122,17 +133,15 @@ export default class CollectionSearcher extends React.Component {
     this.props.setCollectionSearchSuggestionsQuery(selection);
     this.updateUrl(selection);
     this.searchFieldInput.blur();
-
-  }
-
-  // removes the selected item from the component's internal stateAndHelpers
-  // to ensure there isn't any unexpected behavior
-  handleStateChange = (changes, stateAndHelpers) => {
-    if (stateAndHelpers.selectedItem) {
-      stateAndHelpers.clearSelection;
+    if (this.props.showCollectionDialog) {
+      this.props.closeCollectionDialog();
+      this.props.clearSelectedCollection();
+      this.props.openToolDrawer();
     }
+
   }
 
+  // updates the url to reflect the current state of the search input textField
   updateUrl(searchFieldValue) {
     // update URL to reflect new search change
     const prevFilter = this.props.history.location.pathname.includes('/catalog/') ?
@@ -156,7 +165,6 @@ export default class CollectionSearcher extends React.Component {
 
     return (
       <Downshift
-        onStateChange={this.handleStateChange}
         onChange={selection => this.handleSelect(selection)}
         itemToString={item => (item ? item.value : '')}
       >

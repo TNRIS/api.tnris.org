@@ -1,21 +1,19 @@
 import React from 'react';
 
 export default class CatalogCard extends React.Component {
-
   constructor(props) {
     super(props)
-    this.cardClicked = this.cardClicked.bind(this)
+    this.handleCardClick = this.handleCardClick.bind(this)
   }
 
   componentDidMount () {
     if (Object.keys(this.props.match.params).includes('collectionId') &&
         this.props.match.params.collectionId === this.props.collection.collection_id) {
-      this.cardClicked();
+      this.handleCardClick();
     }
   }
 
-  cardClicked() {
-    // console.log(this.props);
+  handleCardClick() {
     this.props.closeToolDrawer();
     this.props.openCollectionDialog();
     this.props.selectCollection(this.props.collection.collection_id);
@@ -26,13 +24,14 @@ export default class CatalogCard extends React.Component {
   }
 
   render() {
-    // const cardClass = 'catalog-card-component mdc-image-list__item ' + this.props.collection.template;
-    const collectionYear = this.props.collection.acquisition_date && this.props.collection.template !== 'outside-entity' ? this.props.collection.acquisition_date.substring(0, 4) : '';
+    const collectionYear = this.props.collection.acquisition_date &&
+      this.props.collection.template !== 'outside-entity' ?
+      this.props.collection.acquisition_date.substring(0, 4) : '';
 
     return (
       <div
         className="catalog-card-component mdc-card mdc-card__primary-action"
-        onClick={this.cardClicked}>
+        onClick={this.handleCardClick}>
         <div
           className="mdc-card__media mdc-card__media--16-9"
           style={{backgroundImage: `url(${this.props.collection.thumbnail_image})`}}>

@@ -10,6 +10,7 @@ styles for component: HistoricalAerialTemplate
     border-bottom: solid 1px $skin-tertiary;
     background-color: $header-bar;
     color: $skin-primary;
+    z-index: 3;
   }
 
   button {

@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import {
   collectionFilterActions,
   collectionFilterMapActions,
-  collectionSearcherActions,
   collectionSorterActions,
   collectionTimesliderActions,
   urlTrackerActions
@@ -18,9 +17,6 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  setCollectionSearchQuery: (collectionSearchQuery) => {
-    dispatch(collectionSearcherActions.setCollectionSearchQuery(collectionSearchQuery));
-  },
   sortNew: () => {
     dispatch(collectionSorterActions.setSortNew());
   },

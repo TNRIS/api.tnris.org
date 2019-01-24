@@ -16,7 +16,8 @@ const mapStateToProps = state => ({
   catalogFilterUrl: state.urlTracker.catalogFilterUrl,
   selectedCollection: state.collections.selectedCollection,
   theme: state.colorTheme.theme,
-  view: state.catalog.view
+  view: state.catalog.view,
+  toolDrawerStatus: state.toolDrawer.toolDrawerStatus
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -37,6 +38,9 @@ const mapDispatchToProps = dispatch => ({
   },
   setUrl: (newUrl, history) => {
     dispatch(urlTrackerActions.setUrl(newUrl, history));
+  },
+  clearPreviousUrl: () => {
+    dispatch(urlTrackerActions.clearPreviousUrl());
   },
   setViewCatalog: () => {
     dispatch(catalogActions.setViewCatalog());

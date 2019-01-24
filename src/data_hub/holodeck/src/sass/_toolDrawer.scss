@@ -19,6 +19,7 @@ styles for component: ToolDrawer
       .mdc-list-group {
         position: fixed;
         min-width: 255px;
+        padding-top: 36px;
       }
 
       .no-scroll {
@@ -26,12 +27,10 @@ styles for component: ToolDrawer
       }
 
       .scroll {
-        max-height: 85.7vh;
+        max-height: calc(100vh - 46px);
         overflow-x: hidden;
         overflow-y: auto;
-        margin-top: 110px;
         padding-bottom: 20px;
-        padding-top: 10px;
       }
 
       .mdc-drawer__header {
@@ -39,8 +38,7 @@ styles for component: ToolDrawer
         z-index: 999;
         padding: 0 0 0 0;
         background: $header-bar;
-        border-bottom: solid 1px $skin-tertiary;
-        min-height: 91px;
+        min-height: 26px;
       }
 
       .dataset-counter {

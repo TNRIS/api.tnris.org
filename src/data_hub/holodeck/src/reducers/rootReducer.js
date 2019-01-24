@@ -4,7 +4,6 @@ import catalog from './catalogReducer';
 import collections from './collectionReducer';
 import collectionFilter from './collectionFilterReducer';
 import collectionFilterMap from './collectionFilterMapReducer';
-import collectionFilterMapDialog from './collectionFilterMapDialogReducer';
 import collectionSearcher from './collectionSearcherReducer';
 import collectionSorter from './collectionSorterReducer';
 import collectionTimeslider from './collectionTimesliderReducer';
@@ -21,7 +20,6 @@ const rootReducer = combineReducers({
   collections,
   collectionFilter,
   collectionFilterMap,
-  collectionFilterMapDialog,
   collectionSearcher,
   collectionSorter,
   collectionTimeslider,

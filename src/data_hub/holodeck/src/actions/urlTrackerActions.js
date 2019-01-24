@@ -1,7 +1,8 @@
 
 import {
   SET_URL,
-  LOG_FILTER_CHANGE
+  LOG_FILTER_CHANGE,
+  CLEAR_PREVIOUS_URL
 } from '../constants/urlTrackerActionTypes';
 import ReactGA from 'react-ga';
 
@@ -22,6 +23,14 @@ export const logFilterChange = (url) => {
     dispatch({
       type: LOG_FILTER_CHANGE,
       payload: {catalogFilterUrl: url}
+    })
+  }
+};
+
+export const clearPreviousUrl = () => {
+  return (dispatch) => {
+    dispatch({
+      type: CLEAR_PREVIOUS_URL
     })
   }
 };

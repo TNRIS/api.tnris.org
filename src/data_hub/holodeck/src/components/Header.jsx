@@ -20,6 +20,12 @@ export default class Header extends React.Component {
     this.toolDrawer = MDCDrawer.attachTo(document.querySelector('.tool-drawer'));
     this.topAppBarElement = document.querySelector('.mdc-top-app-bar');
     this.topAppBar = new MDCTopAppBar(this.topAppBarElement);
+
+    if (this.props.match.path === "/cart/") {
+      this.props.closeToolDrawer();
+      this.props.setViewOrderCart();
+      this.props.clearPreviousUrl();
+    }
   }
 
   handleBack() {
@@ -45,10 +51,12 @@ export default class Header extends React.Component {
   }
 
   handleOrderCartView() {
-    this.props.clearSelectedCollection();
-    this.props.closeToolDrawer();
-    this.props.setViewOrderCart();
-    this.props.setUrl('/', this.props.history);
+    if (window.location.pathname !== '/cart/') {
+      this.props.clearSelectedCollection();
+      this.props.closeToolDrawer();
+      this.props.setViewOrderCart();
+      this.props.setUrl('/cart/', this.props.history);
+    }
   }
 
   handleCatalogView() {
@@ -69,7 +77,7 @@ export default class Header extends React.Component {
 
     let dismissClass = 'closed-drawer';
 
-    if (this.props.status === 'open' && this.props.view === 'dismiss') {
+    if (this.props.toolDrawerStatus === 'open' && this.props.view === 'dismiss') {
       dismissClass = 'open-drawer';
     }
 
@@ -130,7 +138,8 @@ export default class Header extends React.Component {
                 <a
                   onClick={this.handleBack}
                   className="mdc-top-app-bar__action-item"
-                  title="Back">
+                  title="Back"
+                  >
                   <i className="material-icons mdc-top-app-bar__navigation-icon">arrow_back</i>
                 </a> : ''}
                <CollectionSearcherContainer match={this.props.match} history={this.props.history} />
@@ -145,10 +154,10 @@ export default class Header extends React.Component {
                   <a
                     onClick={this.props.toggleToolDrawerDisplay}
                     className="mdc-top-app-bar__action-item"
-                    id="tools" title={this.props.status === 'closed' ? closedTitle : openTitle}>
+                    id="tools" title={this.props.toolDrawerStatus === 'closed' ? closedTitle : openTitle}>
                     <i
                       className="material-icons mdc-top-app-bar__navigation-icon">
-                      {this.props.status === 'closed' ? 'tune' : 'keyboard_arrow_right'}
+                      {this.props.toolDrawerStatus === 'closed' ? 'tune' : 'keyboard_arrow_right'}
                     </i>
                   </a> :
                   <a

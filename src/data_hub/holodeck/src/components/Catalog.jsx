@@ -8,7 +8,7 @@ import TnrisDownloadTemplate from './TnrisDownloadTemplate/TnrisDownloadTemplate
 import TnrisOrderTemplate from './TnrisOrderTemplate/TnrisOrderTemplate';
 import OrderCartView from './OrderCartView';
 
-import CollectionFilterMapDialogContainer from '../containers/CollectionFilterMapDialogContainer';
+import CollectionFilterMapViewContainer from '../containers/CollectionFilterMapViewContainer';
 import HeaderContainer from '../containers/HeaderContainer';
 import ToolDrawerContainer from '../containers/ToolDrawerContainer';
 import CatalogCardContainer from '../containers/CatalogCardContainer';
@@ -69,14 +69,12 @@ export default class Catalog extends React.Component {
   handleResize() {
     if (window.innerWidth >= 1050) {
       this.setState({toolDrawerView:'dismiss'});
-      this.setState({toolDrawerStatus: 'open'});
     }
     else {
       this.setState({toolDrawerView:'modal'});
-      this.setState({toolDrawerStatus:'closed'});
       const scrim = document.getElementById('scrim');
       scrim.onclick = () => {
-        this.setState({toolDrawerStatus:'closed'});
+        this.props.closeToolDrawer();
       };
     }
   }
@@ -135,7 +133,6 @@ export default class Catalog extends React.Component {
   }
 
   handleViewChange() {
-    console.log('view change ', this.props.view);
     switch(this.props.view) {
       case 'catalog':
         return this.setCatalogView();
@@ -144,7 +141,7 @@ export default class Catalog extends React.Component {
       case 'orderCart':
         return <OrderCartView history={this.props.history} />;
       case 'geoFilter':
-        return <CollectionFilterMapDialogContainer history={this.props.history} />;
+        return <CollectionFilterMapViewContainer history={this.props.history} />;
       default:
         return this.setCatalogView();
     }
@@ -178,12 +175,10 @@ export default class Catalog extends React.Component {
           history={this.props.history}
           total={this.props.visibleCollections ? this.props.visibleCollections.length : 0}
           view={this.state.toolDrawerView}
-          status={this.props.toolDrawerStatus}
         />
 
         <HeaderContainer
           view={this.state.toolDrawerView}
-          status={this.props.toolDrawerStatus}
           toggleToolDrawerDisplay={this.toggleToolDrawerDisplay}
           match={this.props.match}
           history={this.props.history} />

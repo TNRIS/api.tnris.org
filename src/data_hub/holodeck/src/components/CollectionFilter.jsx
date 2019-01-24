@@ -226,7 +226,7 @@ export default class CollectionFilter extends React.Component {
           <li key='filter-map-button'>
             <div className={filterSet}
                id='filter-map-button'
-               onClick={this.props.openCollectionFilterMapDialog}>
+               onClick={this.props.setViewGeoFilter}>
                by geography
             </div>
           </li>

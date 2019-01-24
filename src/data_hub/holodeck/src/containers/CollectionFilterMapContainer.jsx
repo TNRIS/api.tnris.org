@@ -28,6 +28,9 @@ const mapDispatchToProps = dispatch => ({
   },
   setUrl: (newUrl, history) => {
     dispatch(urlTrackerActions.setUrl(newUrl, history))
+  },
+  logFilterChange: (url) => {
+    dispatch(urlTrackerActions.logFilterChange(url));
   }
 })
 

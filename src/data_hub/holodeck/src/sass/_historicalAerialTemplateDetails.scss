@@ -16,14 +16,8 @@ styles for component: HistoricalAerialTemplateDetails
     }
 
     #county-coverage-map {
-      position: relative;
-      width: calc(100% - 30px);
       height: 500px;
       margin: 0 auto;
-
-      .mapboxgl-canvas {
-        width: 100% !important;
-      }
 
       .mapboxgl-control-container {
         .mapboxgl-ctrl-top-left {

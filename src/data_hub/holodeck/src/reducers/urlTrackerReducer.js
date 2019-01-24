@@ -1,6 +1,7 @@
 import {
   SET_URL,
-  LOG_FILTER_CHANGE
+  LOG_FILTER_CHANGE,
+  CLEAR_PREVIOUS_URL
 } from '../constants/urlTrackerActionTypes';
 
 const initialState = {
@@ -22,6 +23,13 @@ export default function urlTrackerReducer(state = initialState, action) {
       return {
         ...state,
         catalogFilterUrl: action.payload.catalogFilterUrl
+      };
+
+    case CLEAR_PREVIOUS_URL:
+      // Clear previous url in the state
+      return {
+        ...state,
+        previousUrl: "/"
       };
 
     default:

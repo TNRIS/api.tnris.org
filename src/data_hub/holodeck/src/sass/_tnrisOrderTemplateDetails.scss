@@ -16,13 +16,14 @@ styles for component: TnrisOrderTemplateDetails
     }
 
     #county-coverage-map {
-      position: relative;
-      width: calc(100% - 30px);
       height: 500px;
       margin: 0 auto;
 
-      .mapboxgl-canvas {
-        width: 100% !important;
+      .mapboxgl-ctrl-top-left {
+        button {
+          margin-left: 0;
+          margin-right: 0;
+        }
       }
     }
   }

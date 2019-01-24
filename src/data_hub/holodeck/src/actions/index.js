@@ -2,7 +2,6 @@ import * as catalogActions from './catalogActions';
 import * as collectionActions from './collectionActions';
 import * as collectionFilterActions from './collectionFilterActions';
 import * as collectionFilterMapActions from './collectionFilterMapActions';
-import * as collectionFilterMapDialogActions from './collectionFilterMapDialogActions';
 import * as collectionSearcherActions from './collectionSearcherActions';
 import * as collectionSorterActions from './collectionSorterActions';
 import * as collectionTimesliderActions from './collectionTimesliderActions';
@@ -18,7 +17,6 @@ export {
   collectionActions,
   collectionFilterActions,
   collectionFilterMapActions,
-  collectionFilterMapDialogActions,
   collectionSearcherActions,
   collectionSorterActions,
   collectionTimesliderActions,

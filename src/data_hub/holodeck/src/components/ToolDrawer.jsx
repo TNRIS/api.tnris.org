@@ -2,7 +2,6 @@ import React from 'react';
 import { MDCDrawer } from "@material/drawer";
 
 import CollectionFilterContainer from '../containers/CollectionFilterContainer';
-import CollectionSearcherContainer from '../containers/CollectionSearcherContainer';
 import CollectionSorterContainer from '../containers/CollectionSorterContainer';
 import CollectionTimesliderContainer from '../containers/CollectionTimesliderContainer';
 
@@ -23,7 +22,6 @@ export default class ToolDrawer extends React.Component {
   }
 
   clearAllFilters() {
-    this.props.setCollectionSearchQuery('');
     this.props.sortNew();
     this.props.setCollectionFilter({});
     this.props.setCollectionFilterMapAoi({});
@@ -46,10 +44,8 @@ export default class ToolDrawer extends React.Component {
 
               <div className='mdc-drawer__header no-scroll'>
                 <div className='dataset-counter'>
-                  {/*Showing <span className="dataset-counter-count">{this.props.total}</span> Datasets*/}
                   <span className="dataset-counter-count">{this.props.total}</span> Datasets Found
                 </div>
-                {/*<CollectionSearcherContainer className='mdc-list-group' match={this.props.match} history={this.props.history} />*/}
               </div>
 
             <nav className='mdc-list-group scroll'>

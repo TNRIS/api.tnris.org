@@ -3,9 +3,6 @@ import {MDCTopAppBar} from '@material/top-app-bar/index';
 import {MDCDrawer} from "@material/drawer";
 
 import CollectionSearcherContainer from '../containers/CollectionSearcherContainer';
-import tnrisGray from '../images/tnris_gray.png';
-import tnrisWhite from '../images/tnris_white.png';
-import tnrisFuego from '../images/tnris_fuego.png';
 
 export default class Header extends React.Component {
   constructor(props) {
@@ -84,35 +81,6 @@ export default class Header extends React.Component {
     const closedTitle = 'Open tool drawer';
     const openTitle = 'Close tool drawer';
 
-    let tnrisLogo;
-    switch(this.props.theme) {
-      case 'light':
-        tnrisLogo = tnrisGray;
-        break;
-      case 'dark':
-        tnrisLogo = tnrisGray;
-        break;
-      case 'earth':
-        tnrisLogo = tnrisWhite;
-        break;
-      case 'fuego':
-        tnrisLogo = tnrisFuego;
-        break;
-      case 'vaporwave':
-        tnrisLogo = tnrisWhite;
-        break;
-      case 'america':
-        tnrisLogo = tnrisWhite;
-        break;
-      case 'hulk':
-        tnrisLogo = tnrisWhite;
-        break;
-      case 'relax':
-        tnrisLogo = tnrisWhite;
-        break;
-      default:
-      tnrisLogo = tnrisGray;
-    }
     return (
         <header
           className={`header-component mdc-top-app-bar mdc-top-app-bar--fixed`}
@@ -132,10 +100,6 @@ export default class Header extends React.Component {
           </div>
           <div className={`header-nav mdc-top-app-bar__row ${dismissClass}`}>
             <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start" role="toolbar">
-              {/*<a href="https://tnris.org" className="mdc-top-app-bar__action-item tnris-logo-text">
-                <img src={tnrisLogo} aria-label="TNRIS Logo" alt="TNRIS Logo" className="logo" />
-              </a>
-              <span className="mdc-top-app-bar__title">Data Holodeck</span>*/}
               {this.props.view === 'orderCart' ?
                 <a
                   onClick={this.handleBack}

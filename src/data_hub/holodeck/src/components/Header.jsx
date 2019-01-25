@@ -11,30 +11,59 @@ export default class Header extends React.Component {
   constructor(props) {
     super(props);
 
-    this.handleCloseCollectionView = this.handleCloseCollectionView.bind(this);
-    this.handleOpenOrderCartDialog = this.handleOpenOrderCartDialog.bind(this);
+    this.handleBack = this.handleBack.bind(this);
+    this.handleOrderCartView = this.handleOrderCartView.bind(this);
+    this.handleCatalogView = this.handleCatalogView.bind(this);
   }
 
   componentDidMount() {
     this.toolDrawer = MDCDrawer.attachTo(document.querySelector('.tool-drawer'));
     this.topAppBarElement = document.querySelector('.mdc-top-app-bar');
     this.topAppBar = new MDCTopAppBar(this.topAppBarElement);
-  }
 
-  handleOpenOrderCartDialog() {
-    this.props.openOrderCartDialog();
-  }
-
-  handleCloseCollectionView() {
-    this.props.closeCollectionDialog();
-    this.props.clearSelectedCollection();
-    this.props.openToolDrawer();
-    if (this.props.previousUrl.includes('/collection/')) {
-      this.props.setUrl('/', this.props.history);
+    if (this.props.match.path === "/cart/") {
+      this.props.closeToolDrawer();
+      this.props.setViewOrderCart();
+      this.props.clearPreviousUrl();
     }
-    else {
+  }
+
+  handleBack() {
+    if (this.props.previousUrl.includes('/catalog/')) {
+      this.props.setViewCatalog();
+      this.props.openToolDrawer();
       this.props.setUrl(this.props.previousUrl, this.props.history);
     }
+    else if (this.props.previousUrl.includes('/collection/')) {
+      const collectionUuid = this.props.previousUrl.replace('/collection/', '');
+      this.props.setViewCollection();
+      this.props.selectCollection(collectionUuid);
+      if (this.props.collections[collectionUuid].template === 'tnris-download') {
+        this.props.fetchCollectionResources(collectionUuid);
+      }
+      this.props.setUrl(this.props.previousUrl, this.props.history);
+    }
+    else {
+      this.props.setViewCatalog();
+      this.props.openToolDrawer();
+      this.props.setUrl(this.props.previousUrl, this.props.history);
+    }
+  }
+
+  handleOrderCartView() {
+    if (window.location.pathname !== '/cart/') {
+      this.props.clearSelectedCollection();
+      this.props.closeToolDrawer();
+      this.props.setViewOrderCart();
+      this.props.setUrl('/cart/', this.props.history);
+    }
+  }
+
+  handleCatalogView() {
+    this.props.clearSelectedCollection();
+    this.props.openToolDrawer();
+    this.props.setViewCatalog();
+    this.props.setUrl(this.props.catalogFilterUrl, this.props.history);
   }
 
   render() {
@@ -43,12 +72,12 @@ export default class Header extends React.Component {
     if (this.props.orders) {
       shoppingCartClass = Object.keys(this.props.orders).length !== 0 ?
       "material-icons mdc-top-app-bar__navigation-icon shopping-cart-full" :
-      "material-icons mdc-top-app-bar__navigation-icon";
+      "material-icons mdc-top-app-bar__navigation-icon shopping-cart-empty";
     }
 
     let dismissClass = 'closed-drawer';
 
-    if (this.props.status === 'open' && this.props.view === 'dismiss') {
+    if (this.props.toolDrawerStatus === 'open' && this.props.view === 'dismiss') {
       dismissClass = 'open-drawer';
     }
 
@@ -94,7 +123,7 @@ export default class Header extends React.Component {
             </section>
             <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
               <a
-                className='header-title__twdb' href="http://www.twdb.texas.gov/">
+                className='header-title__twdb' href="http://www.twdb.texas.gov/" tabIndex="0">
                 A Division of the Texas Water Development Board
               </a>
             </section>
@@ -105,50 +134,39 @@ export default class Header extends React.Component {
                 <img src={tnrisLogo} aria-label="TNRIS Logo" alt="TNRIS Logo" className="logo" />
               </a>
               <span className="mdc-top-app-bar__title">Data Holodeck</span>*/}
-              {this.props.selectedCollection !== null ?
+              {this.props.view === 'orderCart' ?
                 <a
-                  onClick={this.handleCloseCollectionView}
+                  onClick={this.handleBack}
                   className="mdc-top-app-bar__action-item"
-                  title="Back to the catalog">
+                  title="Back"
+                  >
                   <i className="material-icons mdc-top-app-bar__navigation-icon">arrow_back</i>
                 </a> : ''}
-              <CollectionSearcherContainer match={this.props.match} history={this.props.history} />
-
-              <a
-                onClick={this.handleOpenOrderCartDialog}
-                className="mdc-top-app-bar__action-item"
-                title="View shopping cart">
-                <i className={shoppingCartClass}>shopping_cart</i>
-              </a>
-              {this.props.selectedCollection === null ?
-                <a
-                  onClick={this.props.handler}
-                  className="mdc-top-app-bar__action-item"
-                  id="tools" title={this.props.status === 'closed' ? closedTitle : openTitle}>
-                  <i
-                    className="material-icons mdc-top-app-bar__navigation-icon">
-                    {this.props.status === 'closed' ? 'tune' : 'keyboard_arrow_right'}
-                  </i>
-                </a> : ''}
+               <CollectionSearcherContainer match={this.props.match} history={this.props.history} />
+               {this.props.orders && Object.keys(this.props.orders).length !== 0 ?
+                  <a
+                    onClick={this.handleOrderCartView}
+                    className="mdc-top-app-bar__action-item"
+                    title="View shopping cart">
+                    <i className={shoppingCartClass}>shopping_cart</i>
+                  </a> : ''}
+                {this.props.view === 'catalog' ?
+                  <a
+                    onClick={this.props.toggleToolDrawerDisplay}
+                    className="mdc-top-app-bar__action-item"
+                    id="tools" title={this.props.toolDrawerStatus === 'closed' ? closedTitle : openTitle}>
+                    <i
+                      className="material-icons mdc-top-app-bar__navigation-icon">
+                      {this.props.toolDrawerStatus === 'closed' ? 'tune' : 'keyboard_arrow_right'}
+                    </i>
+                  </a> :
+                  <a
+                    onClick={this.handleCatalogView}
+                    className="mdc-top-app-bar__action-item"
+                    id="tools" title="Catalog">
+                    <i className="material-icons mdc-top-app-bar__navigation-icon">view_list</i>
+                  </a>}
             </section>
-            {/*<section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
-              {this.props.selectedCollection !== null ?
-                <a onClick={this.handleCloseCollectionView} className="mdc-top-app-bar__action-item">
-                  <i className="material-icons mdc-top-app-bar__navigation-icon">home</i>
-                </a> : ''}
-              <a onClick={this.handleOpenOrderCartDialog} className="mdc-top-app-bar__action-item">
-                <i className={shoppingCartClass}>shopping_cart</i>
-              </a>
-              <a
-                onClick={this.props.handler}
-                className="mdc-top-app-bar__action-item"
-                id="tools" title={this.props.status === 'closed' ? closedTitle : openTitle}>
-                <i
-                  className="material-icons mdc-top-app-bar__navigation-icon">
-                  {this.props.status === 'closed' ? 'search' : 'keyboard_arrow_right'}
-                </i>
-              </a>
-            </section>*/}
           </div>
         </header>
     );

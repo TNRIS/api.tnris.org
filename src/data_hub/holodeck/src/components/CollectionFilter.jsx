@@ -161,7 +161,9 @@ export default class CollectionFilter extends React.Component {
     const filterString = JSON.stringify(filterObj);
     // if empty filter settings, use the base home url instead of the filter url
     Object.keys(filterObj).length === 0 ? this.props.setUrl('/', this.props.history) : this.props.setUrl('/catalog/' + encodeURIComponent(filterString), this.props.history);
-  }
+    // log filter change in store
+    Object.keys(filterObj).length === 0 ? this.props.logFilterChange('/') : this.props.logFilterChange('/catalog/' + encodeURIComponent(filterString));
+}
 
   render() {
     if (this.state.badUrlFlag) {
@@ -176,7 +178,7 @@ export default class CollectionFilter extends React.Component {
           {
             Object.keys(this.props.collectionFilterChoices).map(choice =>
               <li key={choice}>
-                <a
+                <div
                   className='mdc-list-item filter-list-title'
                   id={`${choice}-title`}
                   onClick={e => this.handleOpenFilterMenu(e)}>
@@ -184,7 +186,7 @@ export default class CollectionFilter extends React.Component {
                   <i
                     className='mdc-list-item__meta material-icons'
                     id={`${choice}-expansion-icon`}>expand_more</i>
-                </a>
+                </div>
                   <ul className='mdc-list hide-filter-list' id={`${choice}-list`}>
                     {
                       this.props.collectionFilterChoices[choice].map((choiceValue, i) =>{
@@ -222,11 +224,11 @@ export default class CollectionFilter extends React.Component {
             )
           }
           <li key='filter-map-button'>
-            <a className={filterSet}
+            <div className={filterSet}
                id='filter-map-button'
-               onClick={this.props.openCollectionFilterMapDialog}>
+               onClick={this.props.setViewGeoFilter}>
                by geography
-            </a>
+            </div>
           </li>
         </ul>
       </div>

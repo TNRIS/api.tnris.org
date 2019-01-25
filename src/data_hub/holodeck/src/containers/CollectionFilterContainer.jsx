@@ -1,8 +1,8 @@
 import { connect } from 'react-redux';
 
 import {
+  catalogActions,
   collectionFilterActions,
-  collectionFilterMapDialogActions,
   collectionFilterMapActions,
   urlTrackerActions
 } from '../actions';
@@ -12,7 +12,6 @@ import { getCollectionFilterChoices } from '../selectors/collectionSelectors';
 const mapStateToProps = (state) => ({
   collectionFilter: state.collectionFilter.collectionFilter,
   collectionFilterChoices: getCollectionFilterChoices(state),
-  showCollectionFilterMapDialog: state.collectionFilterMapDialog.showCollectionFilterMapDialog,
   collectionFilterMapFilter: state.collectionFilterMap.collectionFilterMapFilter
 });
 
@@ -20,17 +19,20 @@ const mapDispatchToProps = dispatch => ({
   setCollectionFilter: (collectionFilter) => {
     dispatch(collectionFilterActions.setCollectionFilter(collectionFilter));
   },
-  openCollectionFilterMapDialog: () => {
-    dispatch(collectionFilterMapDialogActions.openCollectionFilterMapDialog());
-  },
   setUrl: (newUrl, history) => {
     dispatch(urlTrackerActions.setUrl(newUrl, history))
+  },
+  logFilterChange: (url) => {
+    dispatch(urlTrackerActions.logFilterChange(url));
   },
   setCollectionFilterMapAoi: (collectionFilterMapAoi) => {
     dispatch(collectionFilterMapActions.setCollectionFilterMapAoi(collectionFilterMapAoi));
   },
   setCollectionFilterMapFilter: (collectionFilterMapFilter) => {
     dispatch(collectionFilterMapActions.setCollectionFilterMapFilter(collectionFilterMapFilter));
+  },
+  setViewGeoFilter: () => {
+    dispatch(catalogActions.setViewGeoFilter());
   }
 })
 

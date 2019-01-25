@@ -27,7 +27,7 @@ export default class Metadata extends React.Component {
         <span className="mdc-list-item__text">
           <span className="mdc-list-item__primary-text">
             {
-              this.props.collection.agency_contact.includes('http') ? <a href={this.props.collection.agency_contact} target="_blank">{this.props.collection.agency_contact}</a>
+              this.props.collection.agency_contact.includes('http') ? <a href={this.props.collection.agency_contact} target="_blank" rel="noopener noreferrer">{this.props.collection.agency_contact}</a>
               : this.props.collection.agency_contact.includes('@') ? <a href={"mailto:" + this.props.collection.agency_contact + "?subject=GIS data question"}>{this.props.collection.agency_contact}</a>
               : <p>{this.props.collection.agency_contact}</p>
             }
@@ -41,7 +41,7 @@ export default class Metadata extends React.Component {
       <li className="mdc-list-item">
         <span className="mdc-list-item__text">
           <span className="mdc-list-item__primary-text">
-            <a href={this.props.collection.agency_website} target="_blank">{this.props.collection.agency_website}</a>
+            <a href={this.props.collection.agency_website} target="_blank" rel="noopener noreferrer">{this.props.collection.agency_website}</a>
           </span>
           <span className="mdc-list-item__secondary-text">Agency Website</span>
         </span>

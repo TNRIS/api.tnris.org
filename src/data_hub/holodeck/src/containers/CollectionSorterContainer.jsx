@@ -21,7 +21,10 @@ const mapDispatchToProps = dispatch => ({
     dispatch(collectionSorterActions.setSortOld());
   },
   setUrl: (newUrl, history) => {
-    dispatch(urlTrackerActions.setUrl(newUrl, history))
+    dispatch(urlTrackerActions.setUrl(newUrl, history));
+  },
+  logFilterChange: (url) => {
+    dispatch(urlTrackerActions.logFilterChange(url));
   }
 })
 

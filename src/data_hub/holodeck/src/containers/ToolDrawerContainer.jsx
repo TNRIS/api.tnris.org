@@ -5,6 +5,7 @@ import {
   collectionFilterMapActions,
   collectionSorterActions,
   collectionTimesliderActions,
+  toolDrawerActions,
   urlTrackerActions
 } from '../actions';
 import { getCollectionTimesliderRange } from '../selectors/collectionSelectors';
@@ -13,7 +14,7 @@ import ToolDrawer from '../components/ToolDrawer';
 
 const mapStateToProps = (state) => ({
   collectionTimesliderRange: getCollectionTimesliderRange(state),
-  toolDrawerStaus: state.toolDrawer.toolDrawerStatus
+  toolDrawerStatus: state.toolDrawer.toolDrawerStatus
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -40,6 +41,12 @@ const mapDispatchToProps = dispatch => ({
   },
   setUrl: (newUrl, history) => {
     dispatch(urlTrackerActions.setUrl(newUrl, history))
+  },
+  logFilterChange: (url) => {
+    dispatch(urlTrackerActions.logFilterChange(url));
+  },
+  closeToolDrawer: () => {
+    dispatch(toolDrawerActions.closeToolDrawer());
   }
 })
 

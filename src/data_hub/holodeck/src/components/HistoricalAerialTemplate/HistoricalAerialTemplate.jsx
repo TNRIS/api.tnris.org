@@ -182,32 +182,32 @@ export default class HistoricalAerialTemplate extends React.Component {
               </div>
 
               <div className="mdc-menu-surface--anchor">
-                <a onClick={this.showTabMenu} className="mdc-top-app-bar__action-item">
+                <div onClick={this.showTabMenu} className="mdc-top-app-bar__action-item">
                   <i className="material-icons mdc-top-app-bar__navigation-icon">more_vert</i>
-                </a>
+                </div>
                 <div ref="tab_menu" className="mdc-menu mdc-menu-surface">
                   <nav className="mdc-list">
-                    <a
+                    <div
                       className={
                         this.state.view === 'details' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'
                       }
                       onClick={() => this.setTemplateView("details")}>
                       Details
-                    </a>
+                    </div>
 
                     {/* {exploreListItem}*/}
 
-                    <a
+                    <div
                       className={
                         this.state.view === 'order' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'
                       }
                       onClick={() => this.setTemplateView("order")}>
                       Order
-                    </a>
-                    <a className={this.state.view === 'contact' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
+                    </div>
+                    <div className={this.state.view === 'contact' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
                        onClick={() => this.setTemplateView("contact")}>Contact
                        {/*<i className="mdc-tab__icon material-icons">contact_support</i>*/}
-                    </a>
+                    </div>
                   </nav>
                 </div>
               </div>

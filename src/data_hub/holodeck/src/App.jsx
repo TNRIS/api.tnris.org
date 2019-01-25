@@ -28,6 +28,7 @@ class App extends Component {
           <Switch>
             <Route path='/collection/:collectionId' exact component={CatalogContainer} />
             <Route path='/catalog/:filters' exact component={CatalogContainer} />
+            <Route path='/cart/' exact component={CatalogContainer} />
             <Route path='/' exact component={CatalogContainer} />
             <Route path='*' component={NotFound} />
           </Switch>

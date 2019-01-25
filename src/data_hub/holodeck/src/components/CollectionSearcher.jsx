@@ -186,6 +186,7 @@ export default class CollectionSearcher extends React.Component {
             <i id="search-icon" className="material-icons mdc-text-field__icon">search</i>
             <input
               className="search-input downshift-input mdc-text-field__input"
+              tabIndex="2"
               {...getInputProps({
                 value: this.state.searchFieldValue,
                 placeholder: "Search",

@@ -105,6 +105,7 @@ export default class Header extends React.Component {
                   onClick={this.handleBack}
                   className="mdc-top-app-bar__action-item"
                   title="Back"
+                  tabIndex="2"
                   >
                   <i className="material-icons mdc-top-app-bar__navigation-icon">arrow_back</i>
                 </a> : ''}
@@ -113,14 +114,17 @@ export default class Header extends React.Component {
                   <a href="javascript:undefined" // eslint-disable-line
                     onClick={this.handleOrderCartView}
                     className="mdc-top-app-bar__action-item"
-                    title="View shopping cart">
+                    title="View shopping cart"
+                    tabIndex="2">
                     <i className={shoppingCartClass}>shopping_cart</i>
                   </a> : ''}
                 {this.props.view === 'catalog' ?
                   <a href="javascript:undefined" // eslint-disable-line
                     onClick={this.props.toggleToolDrawerDisplay}
                     className="mdc-top-app-bar__action-item"
-                    id="tools" title={this.props.toolDrawerStatus === 'closed' ? closedTitle : openTitle}>
+                    id="tools"
+                    title={this.props.toolDrawerStatus === 'closed' ? closedTitle : openTitle}
+                    tabIndex="2">
                     <i
                       className="material-icons mdc-top-app-bar__navigation-icon">
                       {this.props.toolDrawerStatus === 'closed' ? 'tune' : 'keyboard_arrow_right'}
@@ -129,7 +133,9 @@ export default class Header extends React.Component {
                   <a href="javascript:undefined" // eslint-disable-line
                     onClick={this.handleCatalogView}
                     className="mdc-top-app-bar__action-item"
-                    id="tools" title="Catalog">
+                    id="tools"
+                    title="Catalog"
+                    tabIndex="2">
                     <i className="material-icons mdc-top-app-bar__navigation-icon">view_list</i>
                   </a>}
             </section>

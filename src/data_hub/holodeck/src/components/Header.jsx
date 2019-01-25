@@ -101,7 +101,7 @@ export default class Header extends React.Component {
           <div className={`header-nav mdc-top-app-bar__row ${dismissClass}`}>
             <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start" role="toolbar">
               {this.props.view === 'orderCart' ?
-                <a
+                <a href="javascript:undefined" // eslint-disable-line
                   onClick={this.handleBack}
                   className="mdc-top-app-bar__action-item"
                   title="Back"
@@ -110,14 +110,14 @@ export default class Header extends React.Component {
                 </a> : ''}
                <CollectionSearcherContainer match={this.props.match} history={this.props.history} />
                {this.props.orders && Object.keys(this.props.orders).length !== 0 ?
-                  <a
+                  <a href="javascript:undefined" // eslint-disable-line
                     onClick={this.handleOrderCartView}
                     className="mdc-top-app-bar__action-item"
                     title="View shopping cart">
                     <i className={shoppingCartClass}>shopping_cart</i>
                   </a> : ''}
                 {this.props.view === 'catalog' ?
-                  <a
+                  <a href="javascript:undefined" // eslint-disable-line
                     onClick={this.props.toggleToolDrawerDisplay}
                     className="mdc-top-app-bar__action-item"
                     id="tools" title={this.props.toolDrawerStatus === 'closed' ? closedTitle : openTitle}>
@@ -126,7 +126,7 @@ export default class Header extends React.Component {
                       {this.props.toolDrawerStatus === 'closed' ? 'tune' : 'keyboard_arrow_right'}
                     </i>
                   </a> :
-                  <a
+                  <a href="javascript:undefined" // eslint-disable-line
                     onClick={this.handleCatalogView}
                     className="mdc-top-app-bar__action-item"
                     id="tools" title="Catalog">

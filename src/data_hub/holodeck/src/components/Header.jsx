@@ -119,7 +119,9 @@ export default class Header extends React.Component {
           id="master-header">
           <div className="header-title mdc-top-app-bar__row">
             <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
-              <span className='header-title__tnris'>Texas Natural Resources Information System</span>
+              <a className='header-title__tnris' href="https://tnris.org/" tabIndex="0">
+                Texas Natural Resources Information System
+              </a>
             </section>
             <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
               <a

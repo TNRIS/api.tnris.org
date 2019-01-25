@@ -2,8 +2,8 @@ import { connect } from 'react-redux';
 
 import CollectionSearcher from '../components/CollectionSearcher';
 import {
+  catalogActions,
   collectionActions,
-  collectionDialogActions,
   collectionSearcherActions,
   toolDrawerActions,
   urlTrackerActions
@@ -18,15 +18,12 @@ const mapStateToProps = (state) => ({
   collectionSearchQuery: state.collectionSearcher.collectionSearchQuery,
   collectionSearchSuggestions: getSearchSuggestions(state),
   collectionSearchSuggestionsQuery: state.collectionSearcher.collectionSearchSuggestionsQuery,
-  showCollectionDialog: state.collectionDialog.showCollectionDialog
+  view: state.catalog.view
 });
 
 const mapDispatchToProps = dispatch => ({
   clearSelectedCollection: () => {
     dispatch(collectionActions.clearSelectedCollection());
-  },
-  closeCollectionDialog: () => {
-    dispatch(collectionDialogActions.closeCollectionDialog());
   },
   openToolDrawer: () => {
     dispatch(toolDrawerActions.openToolDrawer());
@@ -42,6 +39,9 @@ const mapDispatchToProps = dispatch => ({
   },
   logFilterChange: (url) => {
     dispatch(urlTrackerActions.logFilterChange(url));
+  },
+  setViewCatalog: () => {
+    dispatch(catalogActions.setViewCatalog());
   }
 })
 

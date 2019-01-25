@@ -110,8 +110,8 @@ export default class CollectionSearcher extends React.Component {
         this.updateUrl(event.target.value);
         this.setState({showSuggestionList: false});
         event.target.blur();
-        if (this.props.showCollectionDialog) {
-          this.props.closeCollectionDialog();
+        if (this.props.view !== 'catalog') {
+          this.props.setViewCatalog();
           this.props.clearSelectedCollection();
           this.props.openToolDrawer();
         }
@@ -133,8 +133,8 @@ export default class CollectionSearcher extends React.Component {
     this.props.setCollectionSearchSuggestionsQuery(selection);
     this.updateUrl(selection);
     this.searchFieldInput.blur();
-    if (this.props.showCollectionDialog) {
-      this.props.closeCollectionDialog();
+    if (this.props.view !== 'catalog') {
+      this.props.setViewCatalog();
       this.props.clearSelectedCollection();
       this.props.openToolDrawer();
     }

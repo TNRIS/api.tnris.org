@@ -101,7 +101,7 @@ export default class ShareButtons extends React.Component {
             </EmailShareButton>
           </div>
           <button title="Copy Link" className="share-button share-copy-link"
-               onClick={() => this.copyUrl()} role="button" tabIndex="0">
+               onClick={() => this.copyUrl()} tabIndex="0">
             <i className="material-icons">{linkIcon}</i>
           </button>
         </div>

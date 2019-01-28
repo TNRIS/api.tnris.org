@@ -87,13 +87,13 @@ export default class Header extends React.Component {
           id="master-header">
           <div className="header-title mdc-top-app-bar__row">
             <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
-              <a className='header-title__tnris' href="https://tnris.org/" tabIndex="0">
+              <a className='header-title__tnris' href="https://tnris.org/" tabIndex="0" rel="noopener noreferrer" target="_blank">
                 Texas Natural Resources Information System
               </a>
             </section>
             <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
               <a
-                className='header-title__twdb' href="http://www.twdb.texas.gov/" tabIndex="0">
+                className='header-title__twdb' href="http://www.twdb.texas.gov/" tabIndex="0" rel="noopener noreferrer" target="_blank">
                 A Division of the Texas Water Development Board
               </a>
             </section>

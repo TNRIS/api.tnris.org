@@ -12,7 +12,8 @@ import { getCollectionFilterChoices } from '../selectors/collectionSelectors';
 const mapStateToProps = (state) => ({
   collectionFilter: state.collectionFilter.collectionFilter,
   collectionFilterChoices: getCollectionFilterChoices(state),
-  collectionFilterMapFilter: state.collectionFilterMap.collectionFilterMapFilter
+  collectionFilterMapFilter: state.collectionFilterMap.collectionFilterMapFilter,
+  view: state.catalog.view
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -33,6 +34,9 @@ const mapDispatchToProps = dispatch => ({
   },
   setViewGeoFilter: () => {
     dispatch(catalogActions.setViewGeoFilter());
+  },
+  setViewCatalog: () => {
+    dispatch(catalogActions.setViewCatalog());
   }
 })
 

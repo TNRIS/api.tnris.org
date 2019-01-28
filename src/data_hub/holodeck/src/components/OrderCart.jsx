@@ -387,7 +387,7 @@ class OrderCart extends Component {
             	<option value="WI">Wisconsin</option>
             	<option value="WY">Wyoming</option>
             </select>
-            <label className="mdc-floating-label">State*</label>
+            <label className="mdc-floating-label">State</label>
             <div className="mdc-line-ripple"></div>
           </div>
 
@@ -457,7 +457,7 @@ class OrderCart extends Component {
               <option value="Urban Planning" label="Urban Planning">Urban Planning</option>
               <option value="Other" label="Other">Other</option>
             </select>
-            <label className="mdc-floating-label">Industry*</label>
+            <label className="mdc-floating-label">Industry</label>
             <div className="mdc-line-ripple"></div>
           </div>
 

@@ -77,7 +77,7 @@ export default class Header extends React.Component {
 
     let dismissClass = 'closed-drawer';
 
-    if (this.props.toolDrawerStatus === 'open' && this.props.view === 'dismiss') {
+    if (this.props.toolDrawerStatus === 'open' && this.props.toolDrawerView === 'dismiss') {
       dismissClass = 'open-drawer';
     }
 
@@ -115,7 +115,7 @@ export default class Header extends React.Component {
     }
     return (
         <header
-          className={`header-component mdc-top-app-bar mdc-top-app-bar--fixed ${dismissClass}`}
+          className={`header-component mdc-top-app-bar mdc-top-app-bar--fixed`}
           id="master-header">
           <div className="header-title mdc-top-app-bar__row">
             <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
@@ -130,7 +130,7 @@ export default class Header extends React.Component {
               </a>
             </section>
           </div>
-          <div className="header-nav mdc-top-app-bar__row">
+          <div className={`header-nav mdc-top-app-bar__row ${dismissClass}`}>
             <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start" role="toolbar">
               {/*<a href="https://tnris.org" className="mdc-top-app-bar__action-item tnris-logo-text">
                 <img src={tnrisLogo} aria-label="TNRIS Logo" alt="TNRIS Logo" className="logo" />

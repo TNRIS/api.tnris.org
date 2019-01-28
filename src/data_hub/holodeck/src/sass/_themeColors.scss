@@ -30,7 +30,7 @@ $secondary-color: #BADBFF;
 $text-color: white;
 $header-bar: white;
 // used for indicators
-$alt-color: #1E8DC1;
+$alt-color: #b088e8;
 
 $main-background: white;
 $nest-background: white;
@@ -51,8 +51,8 @@ $error-text: red;
 $success-text: green;
 
 $skin-primary: #444;
-// $skin-secondary: gray;
-$skin-secondary: #1E8DC1;
+$skin-secondary: gray;
+// $skin-secondary: #1E8DC1;
 $skin-tertiary: lightgray;
 $skin-text: #f5f5f5;
 
@@ -319,7 +319,7 @@ When adding new themes you will also need to update:
 
 // export colors for use by jsx. specifically, tnrisDownloadTemplateDownload map
 :export {
-  lightFill: #1E8DC1; lightText: white;
+  lightFill: #7E39F1; lightText: white;
   darkFill: #6E7777; darkText: lightgray;
   earthFill: lightgreen; earthText: white;
   fuegoFill: #D588FF; fuegoText: #FEEF00;

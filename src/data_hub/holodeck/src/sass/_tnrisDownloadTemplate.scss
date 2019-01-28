@@ -37,8 +37,10 @@ styles for component: TnrisDownloadTemplate
       .mdc-tab--active {
         .mdc-tab__content {
           color: $skin-primary;
+          // color: $primary-color;
         }
         .mdc-tab-indicator__content--underline {
+          // background-color: $primary-color;
           background-color: $skin-primary;
         }
       }

@@ -178,7 +178,7 @@ export default class Catalog extends React.Component {
         />
 
         <HeaderContainer
-          view={this.state.toolDrawerView}
+          toolDrawerView={this.state.toolDrawerView}
           toggleToolDrawerDisplay={this.toggleToolDrawerDisplay}
           match={this.props.match}
           history={this.props.history} />

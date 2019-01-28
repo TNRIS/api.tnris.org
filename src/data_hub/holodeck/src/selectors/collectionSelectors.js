@@ -277,7 +277,7 @@ export const getSearchedCollections = createSelector(
               agency_abbreviation: {boost: 2},
               oe_service_names: {boost: 1}
           },
-          expand: false,
+          expand: true,
           bool: "AND"
         });
         if (!Array.isArray(queryResult) || !queryResult.length) {

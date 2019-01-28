@@ -142,6 +142,7 @@
     }
   },
   "devDependencies": {
-    "install-peers": "^1.0.3"
+    "install-peers": "^1.0.3",
+    "uglifyjs-webpack-plugin": "^2.1.1"
   }
 }

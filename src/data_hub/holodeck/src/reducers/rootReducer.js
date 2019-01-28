@@ -1,10 +1,9 @@
 import { combineReducers } from "redux";
 
+import catalog from './catalogReducer';
 import collections from './collectionReducer';
-import collectionDialog from './collectionDialogReducer';
 import collectionFilter from './collectionFilterReducer';
 import collectionFilterMap from './collectionFilterMapReducer';
-import collectionFilterMapDialog from './collectionFilterMapDialogReducer';
 import collectionSearcher from './collectionSearcherReducer';
 import collectionSorter from './collectionSorterReducer';
 import collectionTimeslider from './collectionTimesliderReducer';
@@ -17,11 +16,10 @@ import urlTracker from './urlTrackerReducer';
 
 
 const rootReducer = combineReducers({
+  catalog,
   collections,
-  collectionDialog,
   collectionFilter,
   collectionFilterMap,
-  collectionFilterMapDialog,
   collectionSearcher,
   collectionSorter,
   collectionTimeslider,

@@ -7,6 +7,8 @@ styles for component: ToolDrawer
   .mdc-drawer--dismissible.mdc-drawer--open {
     display: flex;
     transition: display .1s;
+    position: fixed;
+    // top: 26px;
   }
 
   .mdc-drawer {
@@ -18,6 +20,8 @@ styles for component: ToolDrawer
 
       .mdc-list-group {
         position: fixed;
+        min-width: 255px;
+        padding-top: 36px;
       }
 
       .no-scroll {
@@ -25,34 +29,26 @@ styles for component: ToolDrawer
       }
 
       .scroll {
-        max-height: 85.7vh;
+        max-height: calc(100vh - 46px);
         overflow-x: hidden;
         overflow-y: auto;
-        margin-top: 110px;
         padding-bottom: 20px;
-        padding-top: 10px;
       }
 
       .mdc-drawer__header {
-        width: 255px;
+        min-width: 255px;
         z-index: 999;
         padding: 0 0 0 0;
         background: $header-bar;
-        border-bottom: solid 1px $skin-tertiary;
+        min-height: 26px;
       }
 
       .dataset-counter {
-        // background: $skin-tertiary;
-        background-color: $skin-secondary;
+        background-color: $primary-color;
         color: $skin-text;
         text-align: center;
         height: 26px;
         line-height: 26px;
-
-        @media only screen and (max-width: 1306px) {
-          height: 44px;
-          line-height: 44px;
-        }
 
         .dataset-counter-count {
           font-weight: bold;
@@ -102,11 +98,12 @@ styles for component: ToolDrawer
           height: 26px;
           width: 26px;
           text-align: center;
+          border: none;
+          padding-left: 5px;
 
           i {
             font-size: 18px;
-            line-height: 26px;
-            margin-left: 1px;
+            line-height: 24px;
           }
         }
       }

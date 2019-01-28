@@ -68,6 +68,8 @@ class CollectionSorter extends React.Component {
     const filterString = JSON.stringify(filterObj);
     // if empty filter settings, use the base home url instead of the filter url
     Object.keys(filterObj).length === 0 ? this.props.setUrl('/', this.props.history) : this.props.setUrl('/catalog/' + encodeURIComponent(filterString), this.props.history);
+    // log filter change in store
+    Object.keys(filterObj).length === 0 ? this.props.logFilterChange('/') : this.props.logFilterChange('/catalog/' + encodeURIComponent(filterString));
   }
 
   render() {
@@ -77,10 +79,11 @@ class CollectionSorter extends React.Component {
 
     return (
       <div className='sort-component'>
-          <ul className='mdc-list'>
+          <ul className='mdc-list' role='listbox'>
             <li
               className={this.state.sortOrder === 'NEW' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
-              onClick={() => this.setSort("NEW")}>
+              onClick={() => this.setSort("NEW")}
+              tabIndex='0'>
                <span className='mdc-list-item__text'>Newest</span>
             </li>
             <li

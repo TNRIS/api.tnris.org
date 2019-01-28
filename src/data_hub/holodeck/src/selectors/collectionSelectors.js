@@ -4,6 +4,7 @@ import elasticlunr from 'elasticlunr';
 const getCollections = (state) => state.collections.items;
 const getFilters = (state) => state.collectionFilter.collectionFilter;
 const getSearchQuery = (state) => state.collectionSearcher.collectionSearchQuery;
+const getSearchSuggestionsQuery = (state) => state.collectionSearcher.collectionSearchSuggestionsQuery;
 const getSortOrder = (state) => state.collectionSorter.sortOrder;
 const getFilterMapFilter = (state) => state.collectionFilterMap.collectionFilterMapFilter;
 const setTimeslider = (state) => state.collectionTimeslider.collectionTimeslider;
@@ -215,7 +216,7 @@ export const getMapFilteredCollections = createSelector(
   [ getFilteredCollections, getFilterMapFilter ],
   (collectionIds, filterMapFilter) => {
     let mapFilteredCollectionIds = [];
-    if (filterMapFilter.length > 0) {
+    if (collectionIds && filterMapFilter.length > 0) {
       collectionIds.map(collectionId => {
         if (filterMapFilter.indexOf(collectionId) >= 0) {
           mapFilteredCollectionIds.push(collectionId);
@@ -229,40 +230,11 @@ export const getMapFilteredCollections = createSelector(
   }
 )
 
-// Returns an array of collections to show in the catalog view.
-// If the user has entered a search query, returns only those collections
-// that return from the search.
-export const getSearchedCollections = createSelector(
-  [ getAllCollections, getMapFilteredCollections, getSearchQuery, getSearchIndex ],
-  (collections, collectionIds, searchQuery, searchIndex) => {
-    // Check if collections are ready in the state
-    if (collections) {
-      let searchedCollectionIds = [];
-      if (searchQuery) {
-        let queryResult = searchIndex.search(searchQuery, {expand: true});
-        if (!Array.isArray(queryResult) || !queryResult.length) {
-          searchedCollectionIds = [];
-        } else {
-          queryResult.map(result => {
-            if (collectionIds.includes(result.ref) && !searchedCollectionIds.includes(result.ref)) {
-              searchedCollectionIds.push(result.ref);
-            }
-            return result;
-          })
-        }
-        return searchedCollectionIds;
-      }
-      searchedCollectionIds = collectionIds;
-      return searchedCollectionIds;
-    }
-  }
-);
-
 // Takes the filtered and searched array of collection ids and reduces them
 // to an array of Ids whose collection acquisition_date year is within the
 // year range as designated by the CollectionTimeslider component
 export const getTimesliderCollections = createSelector(
-  [ getAllCollections, getSearchedCollections, setTimeslider ],
+  [ getAllCollections, getMapFilteredCollections, setTimeslider ],
   (collections, collectionIds, range) => {
     // Check if collections are ready in the state
     if (collections) {
@@ -283,10 +255,53 @@ export const getTimesliderCollections = createSelector(
   }
 );
 
+// Returns an array of collections to show in the catalog view.
+// If the user has entered a search query, returns only those collections
+// that return from the search. Field names below come from the
+// getSearchIndex selector above.
+export const getSearchedCollections = createSelector(
+  [ getAllCollections, getTimesliderCollections, getSearchQuery, getSearchIndex ],
+  (collections, collectionIds, searchQuery, searchIndex) => {
+    // Check if collections are ready in the state
+    if (collections) {
+      let searchedCollectionIds = [];
+      if (searchQuery) {
+        let queryResult = searchIndex.search(
+          searchQuery, {
+            fields: {
+              name: {boost: 7},
+              acquisition_date: {boost: 6},
+              description: {boost: 5},
+              counties: {boost: 4},
+              agency_name: {boost: 3},
+              agency_abbreviation: {boost: 2},
+              oe_service_names: {boost: 1}
+          },
+          expand: true,
+          bool: "AND"
+        });
+        if (!Array.isArray(queryResult) || !queryResult.length) {
+          searchedCollectionIds = [];
+        } else {
+          queryResult.map(result => {
+            if (collectionIds.includes(result.ref) && !searchedCollectionIds.includes(result.ref)) {
+              searchedCollectionIds.push(result.ref);
+            }
+            return result;
+          })
+        }
+        return searchedCollectionIds;
+      }
+      searchedCollectionIds = collectionIds;
+      return searchedCollectionIds;
+    }
+  }
+);
+
 // Takes the filtered array of collection ids and reorders them based on the
 // sort order delcared in the store by the Sort component
 export const getSortedCollections = createSelector(
-  [ getAllCollections, getTimesliderCollections, getSortOrder ],
+  [ getAllCollections, getSearchedCollections, getSortOrder ],
   (collections, collectionIds, order) => {
     // Check if collections are ready in the state
     if (collections) {
@@ -354,6 +369,52 @@ export const getSortedCollections = createSelector(
           });
       }
       return sortedCollectionIds;
+    }
+  }
+);
+
+// ////////////////////////////////////////////////////////////////////////
+// Here lies the selector that delivers the search suggestions for the
+// search component's suggestion list.
+// Returns an array of collections to show in the search suggestions list.
+// If the user has entered anything in the search box, returns only those
+// collections that return from the search. Field names below come from the
+// getSearchIndex selector above.
+// ////////////////////////////////////////////////////////////////////////
+export const getSearchSuggestions = createSelector(
+  [ getAllCollections, getTimesliderCollections, getSearchSuggestionsQuery, getSearchIndex ],
+  (collections, collectionIds, searchQuery, searchIndex) => {
+    // Check if collections are ready in the state
+    if (collections) {
+      let searchedCollectionNames = [];
+      if (searchQuery) {
+        let queryResult = searchIndex.search(
+          searchQuery, {
+            fields: {
+              name: {boost: 7},
+              acquisition_date: {boost: 6},
+              description: {boost: 5},
+              counties: {boost: 4},
+              agency_name: {boost: 3},
+              agency_abbreviation: {boost: 2},
+              oe_service_names: {boost: 1}
+          },
+          expand: true,
+          bool: "AND"
+        });
+        if (!Array.isArray(queryResult) || !queryResult.length) {
+          searchedCollectionNames = [];
+        } else {
+          queryResult.map(result => {
+            if (collectionIds.includes(result.ref) &&
+              !searchedCollectionNames.includes(collections[result.ref]['name'])) {
+                searchedCollectionNames.push(collections[result.ref]['name']);
+            }
+            return result;
+          })
+        }
+        return searchedCollectionNames;
+      }
     }
   }
 );

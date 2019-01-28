@@ -31,5 +31,7 @@ urlpatterns = [
     path('health/', HealthCheckView.as_view()),
     path('collection/<coll>', TemplateView.as_view(template_name='index.html')),
     path('catalog/<filt>', TemplateView.as_view(template_name='index.html')),
+    path('cart/', TemplateView.as_view(template_name='index.html')),
+    path('cart', RedirectView.as_view(url='cart/', permanent=False)),
     path('', TemplateView.as_view(template_name='index.html')),
 ]

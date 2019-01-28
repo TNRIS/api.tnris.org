@@ -3,14 +3,26 @@ styles for component: Header
 */
 
 .header-component {
-  @include mdc-top-app-bar-ink-color($skin-secondary);
-  @include mdc-top-app-bar-icon-ink-color($skin-secondary);
+  @include mdc-top-app-bar-ink-color($skin-primary);
+  @include mdc-top-app-bar-icon-ink-color($skin-primary);
   @include mdc-top-app-bar-fill-color($header-bar);
   border-bottom: solid 1px $skin-tertiary;
 
+  .open-drawer {
+    width: calc(100% - 255px);
+    -webkit-transition: width 2s; /* Safari */
+    transition: width .1s;
+  }
+
+  .closed-drawer {
+    width: 100%;
+    -webkit-transition: width 2s; /* Safari */
+    transition: width .1s;
+  }
+
   .header-title {
-    // background: $skin-tertiary;
-    background-color: $skin-secondary;
+    background-color: $primary-color;
+    // background-color: $skin-secondary;
     color: $skin-text;
     font-family: pragmatica-web-condensed,sans-serif;
     font-size: 16px;
@@ -21,12 +33,8 @@ styles for component: Header
     padding: 4px;
     height: 26px;
 
-    @media (max-width: mdc-layout-grid-breakpoint-min(desktop)) {
+    @media (max-width: 1080px) {
       display: none;
-    }
-
-    @media only screen and (max-width: 1306px) {
-      height: 44px;
     }
 
     section {
@@ -49,6 +57,18 @@ styles for component: Header
   }
 
   .header-nav {
+    
+    .open-drawer {
+      width: calc(100% - 255px);
+      -webkit-transition: width 2s; /* Safari */
+      transition: width .1s;
+    }
+
+    .closed-drawer {
+      width: 100%;
+      -webkit-transition: width 2s; /* Safari */
+      transition: width .1s;
+    }
 
     .mdc-top-app-bar__action-item {
       margin-left: 3px;
@@ -60,6 +80,10 @@ styles for component: Header
 
       .shopping-cart-full {
         color: $alt-color;
+      }
+
+      .shopping-cart-empty {
+        color: gray;
       }
     }
 

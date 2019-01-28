@@ -59,6 +59,7 @@ export default class ShareButtons extends React.Component {
     const linkIcon = this.state.urlCopied ? 'done' : 'link';
 
     return (
+      <div className="template-content-div">
         <div className="share-bar">
           <div title="Twitter">
             <TwitterShareButton
@@ -75,7 +76,7 @@ export default class ShareButtons extends React.Component {
               url={shareUrl}
               quote={shareTitle}
               className="share-button"
-              hashtag="TNRIS"
+              hashtag="#TNRIS"
             >
               <FacebookIcon size={26} round={true} />
             </FacebookShareButton>
@@ -99,11 +100,12 @@ export default class ShareButtons extends React.Component {
               <EmailIcon size={26} round={true} />
             </EmailShareButton>
           </div>
-          <div title="Copy Link" className="share-button share-copy-link"
-               onClick={() => this.copyUrl()}>
+          <button title="Copy Link" className="share-button share-copy-link"
+               onClick={() => this.copyUrl()} tabIndex="0">
             <i className="material-icons">{linkIcon}</i>
-          </div>
+          </button>
         </div>
+      </div>
     )
   }
 }

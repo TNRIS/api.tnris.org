@@ -1,5 +1,9 @@
 import React from 'react';
 import { Redirect } from 'react-router';
+import turfExtent from 'turf-extent';
+// the carto core api is a CDN in the app template HTML (not available as NPM package)
+// so we create a constant to represent it so it's available to the component
+const cartodb = window.cartodb;
 
 export default class CollectionFilter extends React.Component {
   constructor(props) {
@@ -33,6 +37,38 @@ export default class CollectionFilter extends React.Component {
             });
             return key;
           });
+        }
+        // fourth, apply geo to store and component if present
+        if (Object.keys(allFilters).includes('geo')) {
+          // set the filter map aoi
+          this.props.setCollectionFilterMapAoi(allFilters.geo);
+          // run the spatial query to set the filtered collection id list
+          let bounds = turfExtent(allFilters.geo); // get the bounds with turf.js
+          let sql = new cartodb.SQL({user: 'tnris-flood'});
+          let query = `SELECT
+                         areas_view.collections
+                       FROM
+                         area_type, areas_view
+                       WHERE
+                         area_type.area_type_id = areas_view.area_type_id
+                       AND
+                         area_type.the_geom && ST_MakeEnvelope(
+                           ${bounds[2]}, ${bounds[1]}, ${bounds[0]}, ${bounds[3]})`;
+
+          const _this = this;
+          sql.execute(query).done(function(data) {
+            // set up the array of collection_id arrays from the returned
+            // query object
+            let collectionIds = data.rows.map(function (obj) {
+              return obj.collections.split(",");
+            });
+            // combine all collection_id arrays into a single array of unique ids
+            let uniqueCollectionIds = [...new Set([].concat(...collectionIds))];
+            _this.props.setCollectionFilterMapFilter(uniqueCollectionIds);
+          }).error(function(errors) {
+            // errors contains a list of errors
+            console.log("errors:" + errors);
+          })
         }
       } catch (e) {
         console.log(e);
@@ -125,7 +161,9 @@ export default class CollectionFilter extends React.Component {
     const filterString = JSON.stringify(filterObj);
     // if empty filter settings, use the base home url instead of the filter url
     Object.keys(filterObj).length === 0 ? this.props.setUrl('/', this.props.history) : this.props.setUrl('/catalog/' + encodeURIComponent(filterString), this.props.history);
-  }
+    // log filter change in store
+    Object.keys(filterObj).length === 0 ? this.props.logFilterChange('/') : this.props.logFilterChange('/catalog/' + encodeURIComponent(filterString));
+}
 
   render() {
     if (this.state.badUrlFlag) {
@@ -140,7 +178,7 @@ export default class CollectionFilter extends React.Component {
           {
             Object.keys(this.props.collectionFilterChoices).map(choice =>
               <li key={choice}>
-                <a
+                <div
                   className='mdc-list-item filter-list-title'
                   id={`${choice}-title`}
                   onClick={e => this.handleOpenFilterMenu(e)}>
@@ -148,7 +186,7 @@ export default class CollectionFilter extends React.Component {
                   <i
                     className='mdc-list-item__meta material-icons'
                     id={`${choice}-expansion-icon`}>expand_more</i>
-                </a>
+                </div>
                   <ul className='mdc-list hide-filter-list' id={`${choice}-list`}>
                     {
                       this.props.collectionFilterChoices[choice].map((choiceValue, i) =>{
@@ -186,11 +224,11 @@ export default class CollectionFilter extends React.Component {
             )
           }
           <li key='filter-map-button'>
-            <a className={filterSet}
+            <div className={filterSet}
                id='filter-map-button'
-               onClick={this.props.openCollectionFilterMapDialog}>
+               onClick={this.props.setViewGeoFilter}>
                by geography
-            </a>
+            </div>
           </li>
         </ul>
       </div>

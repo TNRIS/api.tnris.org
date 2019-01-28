@@ -2,7 +2,6 @@ import React from 'react';
 import { MDCDrawer } from "@material/drawer";
 
 import CollectionFilterContainer from '../containers/CollectionFilterContainer';
-import CollectionSearcherContainer from '../containers/CollectionSearcherContainer';
 import CollectionSorterContainer from '../containers/CollectionSorterContainer';
 import CollectionTimesliderContainer from '../containers/CollectionTimesliderContainer';
 
@@ -14,16 +13,20 @@ export default class ToolDrawer extends React.Component {
 
   constructor(props) {
       super(props);
-
       this.clearAllFilters = this.clearAllFilters.bind(this);
   }
 
   componentDidMount() {
     this.toolDrawer = MDCDrawer.attachTo(document.querySelector('.tool-drawer'));
+    if (this.props.view === 'modal') {
+      const scrim = document.getElementById('scrim');
+      scrim.onclick = () => {
+        this.props.closeToolDrawer();
+      };
+    }
   }
 
   clearAllFilters() {
-    this.props.setCollectionSearchQuery('');
     this.props.sortNew();
     this.props.setCollectionFilter({});
     this.props.setCollectionFilterMapAoi({});
@@ -32,11 +35,12 @@ export default class ToolDrawer extends React.Component {
     this.props.setCollectionFilterMapZoom(5.8);
     this.props.setCollectionTimeslider(this.props.collectionTimesliderRange);
     this.props.setUrl('/', this.props.history);
+    this.props.logFilterChange('/');
   }
 
   render() {
     const classname = this.props.view === 'dismiss' ? 'mdc-drawer mdc-drawer--dismissible tool-drawer' : 'mdc-drawer mdc-drawer--modal tool-drawer';
-    const fullclass = this.props.status === 'open' ? ' mdc-drawer--open' : '';
+    const fullclass = this.props.toolDrawerStatus === 'open' ? ' mdc-drawer--open' : '';
 
     return (
 
@@ -46,25 +50,24 @@ export default class ToolDrawer extends React.Component {
 
               <div className='mdc-drawer__header no-scroll'>
                 <div className='dataset-counter'>
-                  Showing <span className="dataset-counter-count">{this.props.total}</span> Datasets
+                  <span className="dataset-counter-count">{this.props.total}</span> Datasets Found
                 </div>
-                <CollectionSearcherContainer className='mdc-list-group' match={this.props.match} history={this.props.history} />
               </div>
 
             <nav className='mdc-list-group scroll'>
-              <a className='sort-title mdc-list-group__subheader'>
+              <div className='sort-title mdc-list-group__subheader'>
                 Sort
-              </a>
+              </div>
               <CollectionSorterContainer className='mdc-list-item' match={this.props.match} history={this.props.history} />
               <hr className='mdc-list-divider'/>
-              <a className='filter-title mdc-list-group__subheader'>
+              <div className='filter-title mdc-list-group__subheader'>
                 Filter
-              </a>
+              </div>
               <CollectionFilterContainer className='mdc-list-item' match={this.props.match} history={this.props.history} />
               <hr className='mdc-list-divider'/>
-              <a className='timeslider-title mdc-list-group__subheader'>
+              <div className='timeslider-title mdc-list-group__subheader'>
                 Acquisition Date Range
-              </a>
+              </div>
               <CollectionTimesliderContainer className='mdc-list-item' match={this.props.match} history={this.props.history} />
               <hr className='mdc-list-divider'/>
               <div className='clear-all-filters-container'>

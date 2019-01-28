@@ -4,7 +4,8 @@ class ThemeChooser extends Component {
   constructor(props) {
       super(props);
       this.setColorTheme = this.setColorTheme.bind(this);
-      this.themeOptions = ['light', 'dark', 'earth', 'fuego', 'vaporwave', 'america', 'hulk', 'relax'];
+      // this.themeOptions = ['light', 'dark', 'earth', 'fuego', 'vaporwave', 'america', 'hulk', 'relax'];
+      this.themeOptions = ['light', 'dark'];
   }
 
   componentDidMount() {
@@ -33,10 +34,10 @@ class ThemeChooser extends Component {
           const label = theme.replace("-", " ").replace(/\b\w/g, l => l.toUpperCase());
           const themeClass = `theme-chooser-option ${theme}-app-theme`;
           const checked = this.props.theme === theme ? <i className='material-icons'>done</i> : '';
-          return <div key={theme}
+          return <button key={theme}
                       onClick={() => this.setColorTheme(theme)}
                       className={themeClass}
-                      title={label}>{checked}</div>
+                      title={label}>{checked}</button>
         })}
       </div>
     )

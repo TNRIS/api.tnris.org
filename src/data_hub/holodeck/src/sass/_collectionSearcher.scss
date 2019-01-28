@@ -2,66 +2,63 @@
 styles for component: CollectionSearcher
 */
 
+.search-component:focus-within {
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 5px 5px -3px,
+    rgba(0, 0, 0, 0.14) 0px 8px 10px 1px,
+    rgba(0, 0, 0, 0.12) 0px 3px 14px 2px;
+
+    .search-input {
+      background-color: white;
+    }
+}
+
 .search-component {
-  height: 64px;
+  width: 32%;
+  left: 4%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-top: .2em;
+  padding-bottom: .2em;
+  overflow: unset;
 
-  .search-collections {
-    float: left;
-  }
-
-  input:focus::-webkit-input-placeholder {
-    color: $primary-color;
-  }
-  input:focus:-moz-placeholder {
-    color: $primary-color;
-  }
-  input:focus::-moz-placeholder {
-    color: $primary-color;
-  }
-  input:focus:-ms-input-placeholder {
-    color: $primary-color;
-  }
-
-  .mdc-text-field__input {
-    padding: 5px 40px 5px 40px !important;
+  .search-input {
+    background-color: #efefef;
+    padding: 5px 60px 5px 50px !important;
     border-bottom: 0;
-    color: $skin-text;
-    caret-color: $primary-color;
+    caret-color: $skin-primary;
   }
 
-  input[type="search"]::-webkit-search-decoration,
-  input[type="search"]::-webkit-search-cancel-button,
-  input[type="search"]::-webkit-search-results-button,
-  input[type="search"]::-webkit-search-results-decoration {
-    -webkit-appearance:none;
+  .suggestion-list {
+    background-color: white;
+    border-top: 1px solid $skin-tertiary;
+    box-shadow: inherit;
   }
 
-  #clear-search {
-    margin: 17px 8px 0 0;
-    right: 0;
-    z-index: 1000;
-    background-color: $skin-tertiary;
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    text-align: center;
-    opacity: 0.6;
-    position: fixed;
-  }
-
-  #clear-search:hover {
-    opacity: 1;
+  .suggestion-list:hover {
     cursor: pointer;
   }
 
-  #clear-icon {
-    // padding-top: 3px;
-    padding-bottom: 3px;
-    // color: white;
+  .clear-button {
+    top: calc(50% - 43%);
   }
 
-  #search-icon {
-    left: 8px;
-    padding-bottom: 3px;
-  }
+  // input:focus::-webkit-input-placeholder {
+  //   color: $primary-color;
+  // }
+  // input:focus:-moz-placeholder {
+  //   color: $primary-color;
+  // }
+  // input:focus::-moz-placeholder {
+  //   color: $primary-color;
+  // }
+  // input:focus:-ms-input-placeholder {
+  //   color: $primary-color;
+  // }
+
+  // input[type="search"]::-webkit-search-decoration,
+  // input[type="search"]::-webkit-search-cancel-button,
+  // input[type="search"]::-webkit-search-results-button,
+  // input[type="search"]::-webkit-search-results-decoration {
+  //   -webkit-appearance:none;
+  // }
 }

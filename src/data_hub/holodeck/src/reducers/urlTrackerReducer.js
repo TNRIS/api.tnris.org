@@ -1,9 +1,12 @@
 import {
-  SET_URL
+  SET_URL,
+  LOG_FILTER_CHANGE,
+  CLEAR_PREVIOUS_URL
 } from '../constants/urlTrackerActionTypes';
 
 const initialState = {
-  previousUrl: window.location.pathname
+  previousUrl: window.location.pathname,
+  catalogFilterUrl: "/"
 }
 
 export default function urlTrackerReducer(state = initialState, action) {
@@ -15,8 +18,22 @@ export default function urlTrackerReducer(state = initialState, action) {
         previousUrl: action.payload.previousUrl
       };
 
-      default:
-        // ALWAYS have a default case in a reducer
-        return state;
+    case LOG_FILTER_CHANGE:
+    // logs the catalog url for filter tracking
+      return {
+        ...state,
+        catalogFilterUrl: action.payload.catalogFilterUrl
+      };
+
+    case CLEAR_PREVIOUS_URL:
+      // Clear previous url in the state
+      return {
+        ...state,
+        previousUrl: "/"
+      };
+
+    default:
+      // ALWAYS have a default case in a reducer
+      return state;
   }
 }

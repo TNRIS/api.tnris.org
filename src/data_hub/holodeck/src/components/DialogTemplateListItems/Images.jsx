@@ -16,23 +16,28 @@ export default class Images extends React.Component {
       return url;
     });
 
+    const multiImage = carousel_images.length > 1 ? true : false;
+
     return (
 
       <div className="template-content-div">
-        <div className='mdc-typography--headline5 template-content-div-header'>
-          Images
-        </div>
         <div>
           <Carousel
-            autoPlay={true}
-            showThumbs={false}
-            infiniteLoop={true}
+            autoPlay={multiImage}
+            infiniteLoop={multiImage}
+            showThumbs={multiImage}
             emulateTouch
             useKeyboardArrows={true}
-            transitionTime={700} >
-
+            transitionTime={700}
+            showIndicators={multiImage}
+            showStatus={multiImage} >
             {
-              carousel_images.map(url => ( <div key={url}><img src={url} alt='' /></div> ))
+              carousel_images.map(url => (
+                <div key={url}>
+                  <img src={url} alt='' />
+                </div>
+                )
+              )
             }
           </Carousel>
         </div>

@@ -25,11 +25,9 @@ $relax-theme-primary: #809FC0;
 
 // set the rest of them
 // these will all be overwritten
-$primary-color: #6200ee;
-// $primary-color: white;
-$secondary-color: #b088e8;
+$primary-color: #1E8DC1;
+$secondary-color: #BADBFF;
 $text-color: white;
-// $text-color: #444;
 $header-bar: white;
 // used for indicators
 $alt-color: #b088e8;
@@ -40,10 +38,11 @@ $nest-text: #444;
 $nest-text-subtle: gray;
 
 //used to color dialog div headers
-$template-dialog-header: #272727;
-$template-dialog-header-script: #d2f1ff;
+// $template-dialog-header: #272727;
+// $template-dialog-header-script: #d2f1ff;
 
-$slider-fill: #dbc8f4;
+// $slider-fill: #dbc8f4;
+$slider-fill: #BADBFF;
 
 $empty-border: #6E7777;
 $empty-fill: white;
@@ -53,6 +52,7 @@ $success-text: green;
 
 $skin-primary: #444;
 $skin-secondary: gray;
+// $skin-secondary: #1E8DC1;
 $skin-tertiary: lightgray;
 $skin-text: #f5f5f5;
 

@@ -75,10 +75,10 @@ export default class CollectionTimeslider extends React.Component {
     }
     const filterString = JSON.stringify(filterObj);
     // if empty filter settings, use the base home url instead of the filter url
-    if (!this.props.history.location.pathname.includes('/collection/')) {
-      Object.keys(filterObj).length === 0 ? this.props.setUrl('/', this.props.history) : this.props.setUrl('/catalog/' + encodeURIComponent(filterString), this.props.history);
-    }
-  }
+    Object.keys(filterObj).length === 0 ? this.props.setUrl('/', this.props.history) : this.props.setUrl('/catalog/' + encodeURIComponent(filterString), this.props.history);
+    // log filter change in store
+    Object.keys(filterObj).length === 0 ? this.props.logFilterChange('/') : this.props.logFilterChange('/catalog/' + encodeURIComponent(filterString));
+}
 
   render() {
     if (this.state.badUrlFlag) {

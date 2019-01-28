@@ -69,9 +69,6 @@ export default class TnrisDownloadTemplate extends React.Component {
         showComponent = (
           <div className='tnris-download-template-details'>
             <div className="template-content-div">
-              <div className='mdc-typography--headline5 template-content-div-header'>
-                Order
-              </div>
               <div>
                 <OrderTnrisDataFormContainer />
               </div>
@@ -84,9 +81,6 @@ export default class TnrisDownloadTemplate extends React.Component {
         showComponent = (
           <div className='tnris-download-template-details'>
             <div className="template-content-div">
-              <div className='mdc-typography--headline5 template-content-div-header'>
-                Contact
-              </div>
               <div>
                 <ContactContainer collection={this.props.collection}/>
               </div>
@@ -100,13 +94,18 @@ export default class TnrisDownloadTemplate extends React.Component {
         templateClass = 'tnris-download-template';
     }
 
+    const acquisition = this.props.collection.acquisition_date ? this.props.collection.acquisition_date.substring(0, 4) : '';
+    const acq_year = this.props.collection.template !== 'outside-entity' && this.props.collection.acquisition_date ? (
+      <span>{acquisition}</span>
+      ) : "";
+
     return (
       <div className={templateClass} tabIndex='1'>
         <header className="mdc-top-app-bar">
           <div className="mdc-top-app-bar__row">
 
             <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
-              <span className="mdc-top-app-bar__title">{this.props.collection.name}</span>
+              <span className="mdc-top-app-bar__title">{this.props.collection.name} {acq_year}</span>
             </section>
 
             <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
@@ -188,27 +187,27 @@ export default class TnrisDownloadTemplate extends React.Component {
               </div>
 
               <div className="mdc-menu-surface--anchor">
-                <a onClick={this.showTabMenu} className="mdc-top-app-bar__action-item">
+                <div onClick={this.showTabMenu} className="mdc-top-app-bar__action-item">
                   <i className="material-icons mdc-top-app-bar__navigation-icon">more_vert</i>
-                </a>
+                </div>
                 <div ref="tab_menu" className="mdc-menu mdc-menu-surface">
                   <nav className="mdc-list">
-                    <a className={this.state.view === 'details' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
+                    <div className={this.state.view === 'details' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
                       onClick={() => this.setTemplateView("details")}>Details
                       {/*<i className="mdc-tab__icon material-icons">details</i>*/}
-                    </a>
-                    <a className={this.state.view === 'download' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
+                    </div>
+                    <div className={this.state.view === 'download' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
                       onClick={() => this.setTemplateView("download")}>Download
                       {/*<i className="mdc-tab__icon material-icons">save_alt</i>*/}
-                    </a>
-                    <a className={this.state.view === 'download' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
+                    </div>
+                    <div className={this.state.view === 'download' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
                       onClick={() => this.setTemplateView("order")}>Order
                       {/*<i className="mdc-tab__icon material-icons">shopping_basket</i>*/}
-                    </a>
-                    <a className={this.state.view === 'contact' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
+                    </div>
+                    <div className={this.state.view === 'contact' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
                        onClick={() => this.setTemplateView("contact")}>Contact
                        {/*<i className="mdc-tab__icon material-icons">contact_support</i>*/}
-                    </a>
+                    </div>
                   </nav>
                 </div>
               </div>

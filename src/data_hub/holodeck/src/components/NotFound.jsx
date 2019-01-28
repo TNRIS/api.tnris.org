@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Footer from './Footer';
+import image404 from '../images/404.jpg';
 
 class NotFound extends Component {
 
@@ -8,7 +9,7 @@ class NotFound extends Component {
       <div className="notfound-component">
           <div className="notfound">
             <img
-              src="http://www.startrek.com/uploads/assets/db_articles/d3c7e2f13d99edef700ed6b48fbfb694579299d2.jpg"
+              src={image404}
               alt="Lieutenant Commander Data"
               className="notfound-image"
               />

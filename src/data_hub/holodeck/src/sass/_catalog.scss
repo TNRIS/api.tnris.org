@@ -3,13 +3,10 @@ styles for component: Catalog
 */
 
 .catalog-component {
+  margin-bottom: 375px; //to make sure footer doesn't hide catalog content
 
   .mdc-dialog {
     z-index: 1000;
-  }
-
-  #filter_map_dialog {
-    z-index: 999;
   }
 
   .open-drawer {
@@ -26,7 +23,14 @@ styles for component: Catalog
 
   .catalog {
     padding-top: 91px;
-    margin-bottom: 375px; 
+
+    @media (min-width: 600px) and (max-width: 1080px) {
+      padding-top: 65px;
+    }
+
+    @media (max-width: 599px) {
+      padding-top: 57px;
+    }
 
     ul {
       list-style-type: none;

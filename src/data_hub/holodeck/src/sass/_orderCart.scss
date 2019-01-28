@@ -3,13 +3,6 @@ styles for component: OrderCart
 */
 
 .order-cart-form-component-container {
-  header {
-    @include mdc-top-app-bar-ink-color($text-color);
-    @include mdc-top-app-bar-icon-ink-color($text-color);
-    @include mdc-top-app-bar-fill-color($primary-color);
-    border-bottom: solid 1px $skin-secondary;
-  }
-
   overflow-y: auto;
   overflow-x: hidden;
   background-color: $main-background;
@@ -25,11 +18,17 @@ styles for component: OrderCart
     @include mdc-radio-focus-indicator-color($primary-color)
 
     padding: 15px;
-    margin-top: 64px;
     color: $nest-text;
 
     .order-cart-data-items {
       .mdc-list-item {
+        width: calc(100% - 16px);
+
+        @media (max-width: mdc-layout-grid-breakpoint-max(phone)) {
+          width: 100%;
+          padding: 0;
+        }
+
         .mdc-list-item__meta {
           cursor: pointer;
 
@@ -68,7 +67,6 @@ styles for component: OrderCart
     }
 
     .template-content-div {
-      box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
       margin-bottom: 15px;
       background-color: $nest-background;
       padding: 6px 16px 16px 16px;

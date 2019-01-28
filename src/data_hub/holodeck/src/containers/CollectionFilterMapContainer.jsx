@@ -2,6 +2,7 @@ import { connect } from 'react-redux';
 
 import {
   collectionFilterMapActions,
+  urlTrackerActions
 } from '../actions';
 import CollectionFilterMap from '../components/CollectionFilterMap';
 
@@ -24,6 +25,12 @@ const mapDispatchToProps = dispatch => ({
   },
   setCollectionFilterMapZoom: (collectionFilterMapZoom) => {
     dispatch(collectionFilterMapActions.setCollectionFilterMapZoom(collectionFilterMapZoom));
+  },
+  setUrl: (newUrl, history) => {
+    dispatch(urlTrackerActions.setUrl(newUrl, history))
+  },
+  logFilterChange: (url) => {
+    dispatch(urlTrackerActions.logFilterChange(url));
   }
 })
 

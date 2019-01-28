@@ -1,35 +1,55 @@
 import { connect } from 'react-redux';
 
-import { collectionActions,
-         collectionDialogActions,
-         orderCartDialogActions,
+import { catalogActions,
+         collectionActions,
          toolDrawerActions,
          urlTrackerActions } from '../actions';
+import {
+  getAllCollections
+} from '../selectors/collectionSelectors';
 import Header from '../components/Header';
 
 const mapStateToProps = state => ({
+  collections: getAllCollections(state),
   orders: state.orderCart.orders,
   previousUrl: state.urlTracker.previousUrl,
+  catalogFilterUrl: state.urlTracker.catalogFilterUrl,
   selectedCollection: state.collections.selectedCollection,
-  showCollectionDialog: state.collectionDialog.showCollectionDialog,
-  theme: state.colorTheme.theme
+  theme: state.colorTheme.theme,
+  view: state.catalog.view,
+  toolDrawerStatus: state.toolDrawer.toolDrawerStatus
 });
 
 const mapDispatchToProps = dispatch => ({
   clearSelectedCollection: () => {
     dispatch(collectionActions.clearSelectedCollection());
   },
-  closeCollectionDialog: () => {
-    dispatch(collectionDialogActions.closeCollectionDialog());
+  selectCollection: (collectionId) => {
+    dispatch(collectionActions.selectCollection(collectionId));
   },
-  openOrderCartDialog: () => {
-    dispatch(orderCartDialogActions.openOrderCartDialog());
+  fetchCollectionResources: (collectionId) => {
+    dispatch(collectionActions.fetchCollectionResources(collectionId))
   },
   openToolDrawer: () => {
     dispatch(toolDrawerActions.openToolDrawer());
   },
+  closeToolDrawer: () => {
+    dispatch(toolDrawerActions.closeToolDrawer());
+  },
   setUrl: (newUrl, history) => {
-    dispatch(urlTrackerActions.setUrl(newUrl, history))
+    dispatch(urlTrackerActions.setUrl(newUrl, history));
+  },
+  clearPreviousUrl: () => {
+    dispatch(urlTrackerActions.clearPreviousUrl());
+  },
+  setViewCatalog: () => {
+    dispatch(catalogActions.setViewCatalog());
+  },
+  setViewOrderCart: () => {
+    dispatch(catalogActions.setViewOrderCart());
+  },
+  setViewCollection: () => {
+    dispatch(catalogActions.setViewCollection());
   }
 })
 

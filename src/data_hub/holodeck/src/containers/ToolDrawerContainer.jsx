@@ -3,9 +3,9 @@ import { connect } from 'react-redux';
 import {
   collectionFilterActions,
   collectionFilterMapActions,
-  collectionSearcherActions,
   collectionSorterActions,
   collectionTimesliderActions,
+  toolDrawerActions,
   urlTrackerActions
 } from '../actions';
 import { getCollectionTimesliderRange } from '../selectors/collectionSelectors';
@@ -14,13 +14,10 @@ import ToolDrawer from '../components/ToolDrawer';
 
 const mapStateToProps = (state) => ({
   collectionTimesliderRange: getCollectionTimesliderRange(state),
-  toolDrawerStaus: state.toolDrawer.toolDrawerStatus
+  toolDrawerStatus: state.toolDrawer.toolDrawerStatus
 });
 
 const mapDispatchToProps = dispatch => ({
-  setCollectionSearchQuery: (collectionSearchQuery) => {
-    dispatch(collectionSearcherActions.setCollectionSearchQuery(collectionSearchQuery));
-  },
   sortNew: () => {
     dispatch(collectionSorterActions.setSortNew());
   },
@@ -44,6 +41,12 @@ const mapDispatchToProps = dispatch => ({
   },
   setUrl: (newUrl, history) => {
     dispatch(urlTrackerActions.setUrl(newUrl, history))
+  },
+  logFilterChange: (url) => {
+    dispatch(urlTrackerActions.logFilterChange(url));
+  },
+  closeToolDrawer: () => {
+    dispatch(toolDrawerActions.closeToolDrawer());
   }
 })
 

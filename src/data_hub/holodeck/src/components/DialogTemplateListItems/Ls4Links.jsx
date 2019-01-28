@@ -41,7 +41,7 @@ export default class Ls4Links extends React.Component {
                   <div>Sheet #{scan.sheet}</div>
                   <div>{scan.size}</div>
                   <div>
-                    <a href={scan.link} target="_blank">Download</a>
+                    <a href={scan.link} target="_blank" rel="noopener noreferrer">Download</a>
                   </div>
                 </li>
               )}
@@ -112,9 +112,6 @@ export default class Ls4Links extends React.Component {
 
     return (
       <div className="template-content-div ls4-links-container">
-        <div className='mdc-typography--headline5 template-content-div-header'>
-          Download and Service Links
-        </div>
         {scanLinks}
         {indexUrl}
         {mosaicUrl}

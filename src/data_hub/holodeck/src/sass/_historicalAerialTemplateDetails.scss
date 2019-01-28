@@ -16,13 +16,16 @@ styles for component: HistoricalAerialTemplateDetails
     }
 
     #county-coverage-map {
-      position: relative;
-      width: calc(100% - 30px);
       height: 500px;
       margin: 0 auto;
 
-      .mapboxgl-canvas {
-        width: 100% !important;
+      .mapboxgl-control-container {
+        .mapboxgl-ctrl-top-left {
+          button {
+            margin-left: 0;
+            margin-right: 0;
+          }
+        }
       }
     }
   }
@@ -55,7 +58,7 @@ styles for component: HistoricalAerialTemplateDetails
         display: table-cell;
         text-align: center;
         padding: 10px;
-        width: 120px;
+        // width: 120px;
         border: .5px solid rgba(0, 0, 0, 0.1);
 
         @media (max-width: mdc-layout-grid-breakpoint-max(phone)) {
@@ -154,16 +157,9 @@ styles for component: HistoricalAerialTemplateDetails
   }
 
   .template-content-div {
-    box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
     margin-bottom: 15px;
     background-color: $nest-background;
     color: $nest-text;
-
-    .template-content-div-header {
-      color: $template-dialog-header-script;
-      background-color: $template-dialog-header;
-      text-align: center;
-    }
 
     a {
       color: $primary-color;
@@ -183,6 +179,27 @@ styles for component: HistoricalAerialTemplateDetails
         height: initial;
         border-bottom: 1px solid rgba(0, 0, 0, 0.1);
         color: $nest-text;
+
+        .mdc-list-item__text {
+          .mdc-list-item__primary-text::before {
+            height: 20px;
+          }
+          .mdc-list-item__secondary-text::after {
+            display: inline-block;
+            width: 0;
+            height: 20px;
+            content: "";
+            vertical-align: -7px;
+          }
+        }
+
+        // .mdc-list-item__text {
+        //   max-width: 50%;
+        // }
+        //
+        // .mdc-list-item__meta {
+        //   max-width: 50%;
+        // }
 
         strong {
           margin-right: 4px;
@@ -211,10 +228,12 @@ styles for component: HistoricalAerialTemplateDetails
         height: 26px;
         width: 26px;
         text-align: center;
+        border: none;
+        padding-left: 4px;
 
         i {
           font-size: 18px;
-          line-height: 26px;
+          line-height: 24px;
         }
       }
     }

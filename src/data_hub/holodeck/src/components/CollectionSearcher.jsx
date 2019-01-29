@@ -186,7 +186,7 @@ export default class CollectionSearcher extends React.Component {
             <i id="search-icon" className="material-icons mdc-text-field__icon">search</i>
             <input
               className="search-input downshift-input mdc-text-field__input"
-              tabIndex="2"
+              tabIndex="3"
               {...getInputProps({
                 value: this.state.searchFieldValue,
                 placeholder: "Search",
@@ -200,7 +200,7 @@ export default class CollectionSearcher extends React.Component {
               <button
                 id='clear-icon'
                 className="clear-button mdc-top-app-bar__action-item material-icons mdc-text-field__icon"
-                tabIndex="0"
+                tabIndex="3"
                 onClick={this.handleClearSearch}>
                 clear
               </button> : ''}

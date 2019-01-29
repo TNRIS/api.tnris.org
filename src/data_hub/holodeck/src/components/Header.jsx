@@ -105,7 +105,7 @@ export default class Header extends React.Component {
                   onClick={this.handleBack}
                   className="mdc-top-app-bar__action-item"
                   title="Back"
-                  tabIndex="2"
+                  tabIndex="3"
                   >
                   <i className="material-icons mdc-top-app-bar__navigation-icon">arrow_back</i>
                 </a> : ''}
@@ -115,7 +115,7 @@ export default class Header extends React.Component {
                     onClick={this.handleOrderCartView}
                     className="mdc-top-app-bar__action-item"
                     title="View shopping cart"
-                    tabIndex="2">
+                    tabIndex="3">
                     <i className={shoppingCartClass}>shopping_cart</i>
                   </a> : ''}
                 {this.props.view === 'catalog' ?
@@ -124,7 +124,7 @@ export default class Header extends React.Component {
                     className="mdc-top-app-bar__action-item"
                     id="tools"
                     title={this.props.toolDrawerStatus === 'closed' ? closedTitle : openTitle}
-                    tabIndex="2">
+                    tabIndex="3">
                     <i
                       className="material-icons mdc-top-app-bar__navigation-icon">
                       {this.props.toolDrawerStatus === 'closed' ? 'tune' : 'keyboard_arrow_right'}
@@ -135,7 +135,7 @@ export default class Header extends React.Component {
                     className="mdc-top-app-bar__action-item"
                     id="tools"
                     title="Catalog"
-                    tabIndex="2">
+                    tabIndex="3">
                     <i className="material-icons mdc-top-app-bar__navigation-icon">view_list</i>
                   </a>}
             </section>

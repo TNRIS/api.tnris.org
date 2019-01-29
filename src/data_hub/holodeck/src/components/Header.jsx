@@ -120,53 +120,55 @@ export default class Header extends React.Component {
           id="master-header">
           <div className="header-title mdc-top-app-bar__row">
             <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
-              <a className='header-title__tnris' href="https://tnris.org/" tabIndex="0">
+              <a className='header-title__tnris' href="https://tnris.org/" tabIndex="0" rel="noopener noreferrer" target="_blank">
                 Texas Natural Resources Information System
               </a>
             </section>
             <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
               <a
-                className='header-title__twdb' href="http://www.twdb.texas.gov/" tabIndex="0">
+                className='header-title__twdb' href="http://www.twdb.texas.gov/" tabIndex="0" rel="noopener noreferrer" target="_blank">
                 A Division of the Texas Water Development Board
               </a>
             </section>
           </div>
           <div className={`header-nav mdc-top-app-bar__row`}>
             <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start" role="toolbar">
-              {/*<a href="https://tnris.org" className="mdc-top-app-bar__action-item tnris-logo-text">
-                <img src={tnrisLogo} aria-label="TNRIS Logo" alt="TNRIS Logo" className="logo" />
-              </a>
-              <span className="mdc-top-app-bar__title">Data Holodeck</span>*/}
               {this.props.view === 'orderCart' ?
-                <a
+                <a href="javascript:undefined" // eslint-disable-line
                   onClick={this.handleBack}
                   className="mdc-top-app-bar__action-item"
                   title="Back"
+                  tabIndex="3"
                   >
                   <i className="material-icons mdc-top-app-bar__navigation-icon">arrow_back</i>
                 </a> : ''}
                <CollectionSearcherContainer match={this.props.match} history={this.props.history} />
                {this.props.orders && Object.keys(this.props.orders).length !== 0 ?
-                  <a
+                  <a href="javascript:undefined" // eslint-disable-line
                     onClick={this.handleOrderCartView}
                     className="mdc-top-app-bar__action-item"
-                    title="View shopping cart">
+                    title="View shopping cart"
+                    tabIndex="3">
                     <i className={shoppingCartClass}>shopping_cart</i>
                   </a> : ''}
                 {this.props.view === 'catalog' ?
-                  <a
+                  <a href="javascript:undefined" // eslint-disable-line
                     onClick={this.props.toggleToolDrawerDisplay}
                     className="mdc-top-app-bar__action-item"
-                    id="tools" title={this.props.toolDrawerStatus === 'closed' ? closedTitle : openTitle}>
+                    id="tools"
+                    title={this.props.toolDrawerStatus === 'closed' ? closedTitle : openTitle}
+                    tabIndex="3">
                     <i
                       className="material-icons mdc-top-app-bar__navigation-icon">
                       {this.props.toolDrawerStatus === 'closed' ? 'tune' : 'keyboard_arrow_right'}
                     </i>
                   </a> :
-                  <a
+                  <a href="javascript:undefined" // eslint-disable-line
                     onClick={this.handleCatalogView}
                     className="mdc-top-app-bar__action-item"
-                    id="tools" title="Catalog">
+                    id="tools"
+                    title="Catalog"
+                    tabIndex="3">
                     <i className="material-icons mdc-top-app-bar__navigation-icon">view_list</i>
                   </a>}
             </section>

@@ -3,7 +3,8 @@ import React from 'react';
 export default class CatalogCard extends React.Component {
   constructor(props) {
     super(props)
-    this.handleCardClick = this.handleCardClick.bind(this)
+    this.handleCardClick = this.handleCardClick.bind(this);
+    this.handleKeyPress = this.handleKeyPress.bind(this);
   }
 
   componentDidMount () {
@@ -23,6 +24,12 @@ export default class CatalogCard extends React.Component {
     this.props.setUrl('/collection/' + this.props.collection.collection_id, this.props.history);
   }
 
+  handleKeyPress (e) {
+    if (e.keyCode === 13 || e.keyCode === 32) {
+      this.handleCardClick();
+    }
+  }
+
   render() {
     const collectionYear = this.props.collection.acquisition_date &&
       this.props.collection.template !== 'outside-entity' ?
@@ -31,7 +38,9 @@ export default class CatalogCard extends React.Component {
     return (
       <div
         className="catalog-card-component mdc-card mdc-card__primary-action"
-        onClick={this.handleCardClick}>
+        onClick={this.handleCardClick}
+        onKeyDown={(e) => this.handleKeyPress(e)}
+        tabIndex="2">
         <div
           className="mdc-card__media mdc-card__media--16-9"
           style={{backgroundImage: `url(${this.props.collection.thumbnail_image})`}}>

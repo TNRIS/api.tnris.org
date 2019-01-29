@@ -14,6 +14,9 @@ export default class CollectionFilter extends React.Component {
     }
     this.handleOpenFilterMenu = this.handleOpenFilterMenu.bind(this);
     this.handleSetFilter = this.handleSetFilter.bind(this);
+    this.handleKeyPress = this.handleKeyPress.bind(this);
+    this.toggleGeoFilter = this.toggleGeoFilter.bind(this);
+    this.handleKeySetFilter = this.handleKeySetFilter.bind(this);
   }
 
   componentDidMount () {
@@ -163,7 +166,29 @@ export default class CollectionFilter extends React.Component {
     Object.keys(filterObj).length === 0 ? this.props.setUrl('/', this.props.history) : this.props.setUrl('/catalog/' + encodeURIComponent(filterString), this.props.history);
     // log filter change in store
     Object.keys(filterObj).length === 0 ? this.props.logFilterChange('/') : this.props.logFilterChange('/catalog/' + encodeURIComponent(filterString));
-}
+  }
+
+  handleKeyPress (e) {
+    if (e.keyCode === 13 || e.keyCode === 32) {
+      if (e.target.id !== 'filter-map-button') {
+        this.handleOpenFilterMenu(e);
+      }
+      else {
+        this.toggleGeoFilter();
+      }
+    }
+  }
+
+  handleKeySetFilter (e) {
+    if (e.keyCode === 13 || e.keyCode === 32) {
+      e.target.checked = !e.target.checked;
+      this.handleSetFilter(e.target);
+    }
+  }
+
+  toggleGeoFilter () {
+    this.props.view === 'catalog' ? this.props.setViewGeoFilter() : this.props.setViewCatalog();
+  }
 
   render() {
     if (this.state.badUrlFlag) {
@@ -181,7 +206,9 @@ export default class CollectionFilter extends React.Component {
                 <div
                   className='mdc-list-item filter-list-title'
                   id={`${choice}-title`}
-                  onClick={e => this.handleOpenFilterMenu(e)}>
+                  onClick={e => this.handleOpenFilterMenu(e)}
+                  onKeyDown={(e) => this.handleKeyPress(e)}
+                  tabIndex="0">
                   {`by ${choice.replace(/_/, ' ')}`}
                   <i
                     className='mdc-list-item__meta material-icons'
@@ -201,7 +228,8 @@ export default class CollectionFilter extends React.Component {
                                      id={choiceValue}
                                      name={choice}
                                      value={choiceValue}
-                                     onChange={e => this.handleSetFilter(e.target)}/>
+                                     onChange={e => this.handleSetFilter(e.target)}
+                                     onKeyDown={(e) => this.handleKeySetFilter(e)}/>
                               <div className='mdc-checkbox__background'>
                                 <svg className='mdc-checkbox__checkmark'
                                      viewBox='0 0 24 24'>
@@ -226,7 +254,9 @@ export default class CollectionFilter extends React.Component {
           <li key='filter-map-button'>
             <div className={filterSet}
                id='filter-map-button'
-               onClick={this.props.setViewGeoFilter}>
+               onClick={() => this.toggleGeoFilter()}
+               onKeyDown={(e) => this.handleKeyPress(e)}
+               tabIndex="0"     >
                by geography
             </div>
           </li>

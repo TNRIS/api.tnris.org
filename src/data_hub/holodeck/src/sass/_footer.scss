@@ -4,7 +4,8 @@ styles for component: Footer
 //
 
 .footer-component {
-  background-color: $skin-primary;
+  // background-color: $skin-primary;
+  background-color: $footer-dark;
   color: $skin-text;
   width: 100%;
   position: absolute;
@@ -23,7 +24,8 @@ styles for component: Footer
 
 
   .footer-component__legal {
-    background-color: $skin-secondary;
+    // background-color: $skin-secondary;
+    background-color: $skin-primary;
     font-size: 12px;
     text-align: center;
     padding: 10px 0;

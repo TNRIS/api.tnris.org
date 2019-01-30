@@ -3,6 +3,9 @@ import {MDCTopAppBar} from '@material/top-app-bar/index';
 import {MDCDrawer} from "@material/drawer";
 
 import CollectionSearcherContainer from '../containers/CollectionSearcherContainer';
+// import tnrisGray from '../images/tnris_gray.png';
+// import tnrisWhite from '../images/tnris_white.png';
+// import tnrisFuego from '../images/tnris_fuego.png';
 
 export default class Header extends React.Component {
   constructor(props) {
@@ -81,61 +84,89 @@ export default class Header extends React.Component {
     const closedTitle = 'Open tool drawer';
     const openTitle = 'Close tool drawer';
 
+    // let tnrisLogo;
+    // switch(this.props.theme) {
+    //   case 'light':
+    //     tnrisLogo = tnrisGray;
+    //     break;
+    //   case 'dark':
+    //     tnrisLogo = tnrisGray;
+    //     break;
+    //   case 'earth':
+    //     tnrisLogo = tnrisWhite;
+    //     break;
+    //   case 'fuego':
+    //     tnrisLogo = tnrisFuego;
+    //     break;
+    //   case 'vaporwave':
+    //     tnrisLogo = tnrisWhite;
+    //     break;
+    //   case 'america':
+    //     tnrisLogo = tnrisWhite;
+    //     break;
+    //   case 'hulk':
+    //     tnrisLogo = tnrisWhite;
+    //     break;
+    //   case 'relax':
+    //     tnrisLogo = tnrisWhite;
+    //     break;
+    //   default:
+    //   tnrisLogo = tnrisGray;
+    // }
+    console.log(this.props);
     return (
         <header
-          className={`header-component mdc-top-app-bar mdc-top-app-bar--fixed`}
+          className={`header-component mdc-top-app-bar mdc-top-app-bar--fixed ${dismissClass}`}
           id="master-header">
           <div className="header-title mdc-top-app-bar__row">
             <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
-              <a className='header-title__tnris' href="https://tnris.org/" tabIndex="0" rel="noopener noreferrer" target="_blank">
+              <a className='header-title__tnris' href="https://tnris.org/" tabIndex="0">
                 Texas Natural Resources Information System
               </a>
             </section>
             <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
               <a
-                className='header-title__twdb' href="http://www.twdb.texas.gov/" tabIndex="0" rel="noopener noreferrer" target="_blank">
+                className='header-title__twdb' href="http://www.twdb.texas.gov/" tabIndex="0">
                 A Division of the Texas Water Development Board
               </a>
             </section>
           </div>
-          <div className={`header-nav mdc-top-app-bar__row ${dismissClass}`}>
+          <div className={`header-nav mdc-top-app-bar__row`}>
             <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start" role="toolbar">
+              {/*<a href="https://tnris.org" className="mdc-top-app-bar__action-item tnris-logo-text">
+                <img src={tnrisLogo} aria-label="TNRIS Logo" alt="TNRIS Logo" className="logo" />
+              </a>
+              <span className="mdc-top-app-bar__title">Data Holodeck</span>*/}
               {this.props.view === 'orderCart' ?
-                <a href="javascript:undefined" // eslint-disable-line
+                <a
                   onClick={this.handleBack}
                   className="mdc-top-app-bar__action-item"
                   title="Back"
-                  tabIndex="3"
                   >
                   <i className="material-icons mdc-top-app-bar__navigation-icon">arrow_back</i>
                 </a> : ''}
                <CollectionSearcherContainer match={this.props.match} history={this.props.history} />
                {this.props.orders && Object.keys(this.props.orders).length !== 0 ?
-                  <a href="javascript:undefined" // eslint-disable-line
+                  <a
                     onClick={this.handleOrderCartView}
                     className="mdc-top-app-bar__action-item"
-                    title="View shopping cart"
-                    tabIndex="3">
+                    title="View shopping cart">
                     <i className={shoppingCartClass}>shopping_cart</i>
                   </a> : ''}
                 {this.props.view === 'catalog' ?
-                  <a href="javascript:undefined" // eslint-disable-line
+                  <a
                     onClick={this.props.toggleToolDrawerDisplay}
                     className="mdc-top-app-bar__action-item"
-                    id="tools"
-                    title={this.props.toolDrawerStatus === 'closed' ? closedTitle : openTitle}
-                    tabIndex="3">
+                    id="tools" title={this.props.toolDrawerStatus === 'closed' ? closedTitle : openTitle}>
                     <i
                       className="material-icons mdc-top-app-bar__navigation-icon">
                       {this.props.toolDrawerStatus === 'closed' ? 'tune' : 'keyboard_arrow_right'}
                     </i>
                   </a> :
-                  <a href="javascript:undefined" // eslint-disable-line
+                  <a
                     onClick={this.handleCatalogView}
                     className="mdc-top-app-bar__action-item"
-                    id="tools"
-                    title="Catalog"
-                    tabIndex="3">
+                    id="tools" title="Catalog">
                     <i className="material-icons mdc-top-app-bar__navigation-icon">view_list</i>
                   </a>}
             </section>

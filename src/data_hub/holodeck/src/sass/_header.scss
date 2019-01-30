@@ -2,6 +2,11 @@
 styles for component: Header
 */
 
+// removes the shadow on scroll from the header
+.mdc-top-app-bar--fixed-scrolled {
+  box-shadow: none;
+}
+
 .header-component {
   @include mdc-top-app-bar-ink-color($skin-primary);
   @include mdc-top-app-bar-icon-ink-color($skin-primary);
@@ -57,7 +62,7 @@ styles for component: Header
   }
 
   .header-nav {
-    
+
     .open-drawer {
       width: calc(100% - 255px);
       -webkit-transition: width 2s; /* Safari */

@@ -3,6 +3,9 @@ import {MDCTopAppBar} from '@material/top-app-bar/index';
 import {MDCDrawer} from "@material/drawer";
 
 import CollectionSearcherContainer from '../containers/CollectionSearcherContainer';
+// import tnrisGray from '../images/tnris_gray.png';
+// import tnrisWhite from '../images/tnris_white.png';
+// import tnrisFuego from '../images/tnris_fuego.png';
 
 export default class Header extends React.Component {
   constructor(props) {
@@ -81,9 +84,39 @@ export default class Header extends React.Component {
     const closedTitle = 'Open tool drawer';
     const openTitle = 'Close tool drawer';
 
+    // let tnrisLogo;
+    // switch(this.props.theme) {
+    //   case 'light':
+    //     tnrisLogo = tnrisGray;
+    //     break;
+    //   case 'dark':
+    //     tnrisLogo = tnrisGray;
+    //     break;
+    //   case 'earth':
+    //     tnrisLogo = tnrisWhite;
+    //     break;
+    //   case 'fuego':
+    //     tnrisLogo = tnrisFuego;
+    //     break;
+    //   case 'vaporwave':
+    //     tnrisLogo = tnrisWhite;
+    //     break;
+    //   case 'america':
+    //     tnrisLogo = tnrisWhite;
+    //     break;
+    //   case 'hulk':
+    //     tnrisLogo = tnrisWhite;
+    //     break;
+    //   case 'relax':
+    //     tnrisLogo = tnrisWhite;
+    //     break;
+    //   default:
+    //   tnrisLogo = tnrisGray;
+    // }
+    console.log(this.props);
     return (
         <header
-          className={`header-component mdc-top-app-bar mdc-top-app-bar--fixed`}
+          className={`header-component mdc-top-app-bar mdc-top-app-bar--fixed ${dismissClass}`}
           id="master-header">
           <div className="header-title mdc-top-app-bar__row">
             <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
@@ -98,7 +131,7 @@ export default class Header extends React.Component {
               </a>
             </section>
           </div>
-          <div className={`header-nav mdc-top-app-bar__row ${dismissClass}`}>
+          <div className={`header-nav mdc-top-app-bar__row`}>
             <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start" role="toolbar">
               {this.props.view === 'orderCart' ?
                 <a href="javascript:undefined" // eslint-disable-line

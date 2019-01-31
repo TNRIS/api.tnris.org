@@ -4,18 +4,7 @@ import { Carousel } from 'react-responsive-carousel';
 
 export default class Images extends React.Component {
   render() {
-
-    const all_images = this.props.images.split(',');
-    const thumbnail = this.props.thumbnail;
-    const carousel_images = [];
-
-    all_images.map(function(url) {
-      if (url !== thumbnail) {
-        carousel_images.push(url);
-      }
-      return url;
-    });
-
+    const carousel_images = this.props.images.split(',');
     const multiImage = carousel_images.length > 1 ? true : false;
 
     return (

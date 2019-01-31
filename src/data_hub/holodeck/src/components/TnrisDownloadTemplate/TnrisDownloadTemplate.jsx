@@ -62,7 +62,7 @@ export default class TnrisDownloadTemplate extends React.Component {
         templateClass = 'tnris-download-template';
         break;
       case 'download':
-        showComponent = <TnrisDownloadTemplateDownloadContainer />;
+        showComponent = <TnrisDownloadTemplateDownloadContainer collectionName={this.props.collection.name}/>;
         templateClass = 'tnris-download-template dark-theme';
         break;
       case 'order':

@@ -20,7 +20,6 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
       this.toggleLayers = this.toggleLayers.bind(this);
       this.layerRef = {};
       this.stateMinZoom = 5;
-      this.quadMinZoom = 7;
       this.qquadMinZoom = 8;
   }
 
@@ -62,12 +61,12 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
     if (document.querySelector('.mapboxgl-popup')) {
       document.querySelector('.mapboxgl-popup').remove();
     }
-
-    if (areaType === 'qquad') {
+    // naip and top qquad layers get qqMinZoom, everything else is state zoom
+    if (this.props.collectionName.includes('NAIP') && areaType === 'qquad') {
       map.setMinZoom(this.qquadMinZoom);
     }
-    else if (areaType === 'quad') {
-      map.setMinZoom(this.quadMinZoom);
+    else if (this.props.collectionName.includes('TOP') && areaType === 'qquad') {
+      map.setMinZoom(this.qquadMinZoom);
     }
     else {
       map.setMinZoom(this.stateMinZoom);
@@ -113,21 +112,26 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
     let startLayer = 'qquad';
     if (areaTypesAry.includes('state')) {
       startLayer = 'state';
-      map.setMinZoom(this.stateMinZoom);
     } else if (areaTypesAry.includes('250k')) {
       startLayer = '250k';
-      map.setMinZoom(this.stateMinZoom);
     } else if (areaTypesAry.includes('block')) {
       startLayer = 'block';
-      map.setMinZoom(this.stateMinZoom);
     } else if (areaTypesAry.includes('county')) {
       startLayer = 'county';
-      map.setMinZoom(this.stateMinZoom);
     } else if (areaTypesAry.includes('quad')) {
       startLayer = 'quad';
-      map.setMinZoom(this.quadMinZoom);
-    } else {
+    }
+
+    // set initial minZoom
+    // naip and top qquad layers get qqMinZoom, everything else is state zoom
+    if (this.props.collectionName.includes('NAIP') && startLayer === 'qquad') {
       map.setMinZoom(this.qquadMinZoom);
+    }
+    else if (this.props.collectionName.includes('TOP') && startLayer === 'qquad') {
+      map.setMinZoom(this.qquadMinZoom);
+    }
+    else {
+      map.setMinZoom(this.stateMinZoom);
     }
 
     // iterate our area_types so we can add them to different layers for
@@ -218,7 +222,7 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
     const layerSourceName = areaType + '__area_type_source' + loop;
     const layerBaseName = areaType + '__area_type' + loop;
     const layerHoverName = areaType + '__area_type_hover' + loop;
-    const layerLabelName = areaType + '__area_type_label' + loop;
+    // const layerLabelName = areaType + '__area_type_label' + loop;
     const filler = this.props.theme + "Fill";
     const texter = this.props.theme + "Text";
     // get the raster tiles from the carto api
@@ -283,7 +287,9 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
       }, 500);
     });
     // add the layer id's to the areaType's array in the layerRef for toggling
-    this.layerRef[areaType].push(layerBaseName, layerHoverName, layerLabelName);
+    // next line is legacy and is commented out to turn off labels
+    // this.layerRef[areaType].push(layerBaseName, layerHoverName, layerLabelName);
+    this.layerRef[areaType].push(layerBaseName, layerHoverName);
 
     // wire an on-click event to the area_type polygons to show a popup of
     // available resource downloads for clicked area

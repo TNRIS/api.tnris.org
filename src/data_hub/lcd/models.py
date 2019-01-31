@@ -76,7 +76,7 @@ class AreaType(models.Model):
         ordering = ('area_type', 'area_type_name',)
         unique_together = (
             'area_type',
-            'area_type_name'
+            'area_code'
         )
 
     area_type_id = models.UUIDField(

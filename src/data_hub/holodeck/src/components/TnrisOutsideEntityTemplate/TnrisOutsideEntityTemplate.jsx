@@ -79,7 +79,7 @@ export default class TnrisOutsideEntityTemplate extends React.Component {
 
             <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
               <span className="mdc-top-app-bar__title">
-                {this.props.collection.source_name} ({this.props.collection.source_abbreviation})
+                {this.props.collection.name}
               </span>
             </section>
 

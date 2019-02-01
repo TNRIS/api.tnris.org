@@ -84,7 +84,7 @@ export default class ToolDrawer extends React.Component {
                 <button
                   className="mdc-button mdc-button--raised"
                   onClick={this.clearAllFilters}>
-                  Clear All
+                  Clear All Filters
                 </button>
               </div>
               <hr className='mdc-list-divider'/>

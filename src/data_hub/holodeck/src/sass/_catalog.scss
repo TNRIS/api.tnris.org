@@ -24,7 +24,7 @@ styles for component: Catalog
   .catalog {
     padding-top: 91px;
 
-    .mdc-layout-grid {
+    .catalog-grid {
       @include mdc-layout-grid(desktop, 30px, 1600px);
 
       .mdc-layout-grid__inner {

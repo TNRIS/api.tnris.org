@@ -51,8 +51,8 @@ class CollectionForm(forms.ModelForm):
         fields = ('__all__')
 
     # adjust some field types so their form inputs are pretty
-    name = forms.CharField(widget=forms.TextInput(attrs={'style':'width:758px'}),max_length=150)
-    acquisition_date = forms.DateField(required=False, widget=AdminDateWidget())
+    name = forms.CharField(widget=forms.TextInput(attrs={'style':'width:758px'}),max_length=150, help_text="Create a concise name not redundant to metadata. Do not include a year or date. The year will be auto-appended in the frontend.")
+    acquisition_date = forms.DateField(required=False, widget=AdminDateWidget(), help_text="Last date of the data acquisition")
     known_issues = forms.CharField(required=False, widget=forms.Textarea(), initial='None')
     carto_map_id = forms.CharField(required=False, widget=forms.TextInput(attrs={'style':'width:758px'}),max_length=50)
 
@@ -97,7 +97,7 @@ class CollectionForm(forms.ModelForm):
             choices = ()
         return choices
 
-    # generatl function to create a form dropdown for thumbnail image
+    # general function to create a form dropdown for thumbnail image
     def create_image_choices(self, id_field, label_field, type_table, order_field):
         # get the relate type choices from the type table
         try:
@@ -107,13 +107,20 @@ class CollectionForm(forms.ModelForm):
             choices = ()
         return choices
 
+    # retrieve selected thumbnail id for helper text to display
+    def selected_thumbnail(self):
+        text = "NO THUMBNAIL SELECTED! Please choose an image UUID from the dropdown and 'Save' the form."
+        if self.instance.thumbnail_image is not None and self.instance.thumbnail_image != "":
+            text = "Currently Selected: " + self.instance.thumbnail_image.split("/")[-1]
+        return text
+
     # fire function to create the relate form inputs
-    categories = forms.MultipleChoiceField(required=False, widget=forms.SelectMultiple(attrs={'title': 'Hold down ctrl to select multiple values',}), choices=[])
+    categories = forms.MultipleChoiceField(required=False, widget=forms.SelectMultiple(attrs={'title': 'Hold down ctrl to select multiple values',}), choices=[], help_text="Select all categories related to this collection.")
     projections = forms.MultipleChoiceField(required=False, widget=forms.SelectMultiple(attrs={'title': 'Hold down ctrl to select multiple values',}), choices=[])
     file_types = forms.MultipleChoiceField(required=False, widget=forms.SelectMultiple(attrs={'title': 'Hold down ctrl to select multiple values',}), choices=[])
     resolutions = forms.MultipleChoiceField(required=False, widget=forms.SelectMultiple(attrs={'title': 'Hold down ctrl to select multiple values',}), choices=[])
     uses = forms.MultipleChoiceField(required=False, widget=forms.SelectMultiple(attrs={'title': 'Hold down ctrl to select multiple values',}), choices=[])
-    counties = forms.MultipleChoiceField(required=False, widget=forms.SelectMultiple(attrs={'title': 'Hold down ctrl to select multiple values',}), choices=[])
+    counties = forms.MultipleChoiceField(required=False, widget=forms.SelectMultiple(attrs={'title': 'Hold down ctrl to select multiple values',}), choices=[], help_text="Select all counties related to this collection spatially or by metadata.")
     thumbnail_image = forms.ChoiceField(required=False, choices=[])
 
     # generic function to retrieve the initial relate values from the relate table
@@ -139,6 +146,13 @@ class CollectionForm(forms.ModelForm):
             self.fields['uses'].choices = self.create_relate_field('use_type_id', 'use_type', UseType, 'use_type')
             self.fields['counties'].choices = self.create_county_choices('area_type_id', 'area_type_name', AreaType, 'area_type_name')
             self.fields['thumbnail_image'].choices = self.create_image_choices('image_url', 'image_id', Image, 'image_id')
+            self.fields['thumbnail_image'].help_text = self.selected_thumbnail()
+            self.fields['description'].help_text = "Provide as much descriptive and historical detail about this data as possible. Frontend search functionality utilizes this field to return this collection as a search result."
+            self.fields['public'].help_text = "Check the 'Public' checkbox to make this collection publically available within the live, production frontend: data.tnris.org"
+            self.fields['esri_open_data_id'].help_text = "ArcGIS Online Open Data Portal 'Group ID'. This is ONLY used by 'outside-entity' template collections for injecting a list of available services directly within the collection 'Description'."
+            self.fields['source_type_id'].help_text = "Choose the organization which this collection is owned by/sourced from."
+            self.fields['partners'].help_text = "List all organizations/companies associated with the creation, execution, or funding of this collection."
+            self.fields['popup_link'].help_text = "Link to preview the WMS service link above. For ArcServer WMS links, this is the WMS link with '?f=jsapi' replacing '/WMSServer' at the end."
             self.attribute_initial_values('categories', CategoryRelate, 'category_type_id')
             self.attribute_initial_values('projections', EpsgRelate, 'epsg_type_id')
             self.attribute_initial_values('file_types', FileTypeRelate, 'file_type_id')

@@ -24,6 +24,14 @@ styles for component: Catalog
   .catalog {
     padding-top: 91px;
 
+    .catalog-grid {
+      @include mdc-layout-grid(desktop, 30px, 1600px);
+
+      .mdc-layout-grid__inner {
+        padding-inline-start: unset;
+      }
+    }
+
     @media (min-width: 600px) and (max-width: 1080px) {
       padding-top: 65px;
     }

@@ -94,8 +94,8 @@ class ContactOutsideForm extends Component {
         'Software': this.state.software,
         'Message': this.state.question,
         'tnris_link': window.location.protocol + "//" + window.location.host + window.location.pathname,
-        'send_to_email': this.props.collection.agency_contact,
-        'send_to_name': this.props.collection.agency_name,
+        'send_to_email': this.props.collection.source_contact,
+        'send_to_name': this.props.collection.source_name,
         'form_id': 'data-tnris-org-outside-entity',
         'recaptcha': this.state.recaptcha
       };
@@ -117,7 +117,7 @@ class ContactOutsideForm extends Component {
         <div>
           <p className="mdc-typography--body2">
             For questions about <strong>{this.compiledDisplayName}</strong> data, please complete the form below.
-            Contact submissions through this form are sent directly to the agency responsible for the data. <strong>{this.compiledDisplayName}</strong> data
+            Contact submissions through this form are sent directly to the party responsible for the data. <strong>{this.compiledDisplayName}</strong> data
             is not hosted by TNRIS and must be requested through the data owner.
           </p>
           <br></br>
@@ -196,7 +196,7 @@ class ContactOutsideForm extends Component {
     }
     else if (this.state.display === 'success') {
       showHTML = (
-        <div className="contact-tnris-form-success">
+        <div className="contact-tnris-form-success push-footer">
           <p className="mdc-typography--body2">
             <span><strong>Success!</strong></span>
             <br />
@@ -207,7 +207,7 @@ class ContactOutsideForm extends Component {
     }
     else if (this.state.display === 'error') {
       showHTML = (
-        <div className="contact-tnris-form-error">
+        <div className="contact-tnris-form-error push-footer">
           <p className="mdc-typography--body2">
             <span><strong>Error!</strong></span>
             <br />
@@ -221,7 +221,7 @@ class ContactOutsideForm extends Component {
     }
     else if (this.state.display === 'submitting') {
       showHTML = (
-        <div className="contact-tnris-form-submitting">
+        <div className="contact-tnris-form-submitting push-footer">
           <p className="mdc-typography--body2">
             <span><strong>Submitting form...</strong></span>
           </p>

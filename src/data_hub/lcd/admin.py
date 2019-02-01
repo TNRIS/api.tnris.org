@@ -22,6 +22,7 @@ from .models import (
     Resource,
     ResourceType,
     ResourceTypeRelate,
+    SourceType,
     TemplateType,
     UseRelate,
     UseType
@@ -83,25 +84,25 @@ class CollectionAdmin(admin.ModelAdmin):
             'fields': ('name',
                        'template_type_id',
                        'acquisition_date',
-                       'short_description',
+                       # 'short_description',
                        'description',
-                       'source',
-                       'authoritative',
+                       # 'authoritative',
                        'public',
-                       'known_issues',
-                       'coverage_extent',
-                       'tags',
-                       'agency_type_id',
+                       # 'known_issues',
+                       # 'coverage_extent',
+                       # 'tags',
+                       'source_type_id',
+                       'partners',
                        'license_type_id',
                        'thumbnail_image',
                        'esri_open_data_id'),
         }),
         ('Links', {
             'classes': ('grp-collapse grp-closed',),
-            'fields': ('carto_map_id',
-                       'wms_link',
+            'fields': ('wms_link',
                        'popup_link',
                        'supplemental_report_url',
+                       # 'carto_map_id',
                        'delete_supplemental_report_url',
                        'lidar_breaklines_url',
                        'delete_lidar_breaklines_url',
@@ -112,7 +113,8 @@ class CollectionAdmin(admin.ModelAdmin):
             'classes': ('grp-collapse grp-closed',),
             'fields': (('projections', 'categories'),
                        ('file_types', 'resolutions'),
-                       ('uses', 'counties'))
+                       # ('uses', 'counties'))
+                       ('counties',))
         })
     )
     inlines = [ImageInlineAdmin]
@@ -142,6 +144,22 @@ class CollectionAdmin(admin.ModelAdmin):
         if 'delete_selected' in actions:
             del actions['delete_selected']
         return actions
+
+    # handle the thumbnail image attribute if inline images were changed
+    def save_formset(self, request, form, formset, change):
+        super(CollectionAdmin, self).save_formset(request, form, formset, change)
+        # only for the Image table inlines
+        if formset.model == Image:
+            obj = formset.instance
+            # query for number of images saved for this collection
+            total_images = Image.objects.filter(collection_id=obj.collection_id)
+            # if none exist, clear thumbnail image reference
+            if len(total_images) == 0:
+                obj.thumbnail_image = ""
+            # if only one image exists, use it for the thumbnail
+            elif len(total_images) == 1:
+                obj.thumbnail_image = total_images[0].image_url
+            obj.save()
 
 
 # views not compiled from joined tables. not managed in admin console
@@ -278,6 +296,13 @@ class ResourceTypeAdmin(admin.ModelAdmin):
     list_display = (
         'resource_type_name', 'resource_type_abbreviation'
     )
+
+
+@admin.register(SourceType)
+class SourceTypeAdmin(admin.ModelAdmin):
+    model = SourceType
+    ordering = ('source_name',)
+    list_display = ('source_name', 'source_abbreviation')
 
 
 @admin.register(TemplateType)

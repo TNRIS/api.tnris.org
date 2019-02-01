@@ -2,6 +2,11 @@
 styles for component: Header
 */
 
+// removes the shadow from the header on scroll
+.mdc-top-app-bar--fixed-scrolled {
+  box-shadow: none;
+}
+
 .header-component {
   @include mdc-top-app-bar-ink-color($skin-primary);
   @include mdc-top-app-bar-icon-ink-color($skin-primary);
@@ -40,24 +45,26 @@ styles for component: Header
     section {
       padding: 0;
 
-      .header-title__twdb {
-        text-decoration: none;
-        color: inherit;
-        font-size: 12px;
-        text-align: right;
-      }
-
       .header-title__tnris {
         text-decoration: none;
         text-align: left;
         color: inherit;
+        padding-left: 10px;
       }
 
+      .header-title__twdb {
+        text-decoration: none;
+        text-align: right;
+        color: inherit;
+        font-size: 12px;
+        padding-right: 10px;
+      }
     }
   }
 
   .header-nav {
-    
+    height: 70px;
+
     .open-drawer {
       width: calc(100% - 255px);
       -webkit-transition: width 2s; /* Safari */
@@ -71,8 +78,8 @@ styles for component: Header
     }
 
     .mdc-top-app-bar__action-item {
-      margin-left: 3px;
-      margin-right: 3px;
+      // margin-left: 3px;
+      // margin-right: 3px;
 
       .logo {
         max-height: 100%;

@@ -39,7 +39,8 @@ export default class ToolDrawer extends React.Component {
   }
 
   render() {
-    const classname = this.props.view === 'dismiss' ? 'mdc-drawer mdc-drawer--dismissible tool-drawer' : 'mdc-drawer mdc-drawer--modal tool-drawer';
+    const classname = this.props.view === 'dismiss' ?
+      'mdc-drawer mdc-drawer--dismissible tool-drawer' : 'mdc-drawer mdc-drawer--modal tool-drawer';
     const fullclass = this.props.toolDrawerStatus === 'open' ? ' mdc-drawer--open' : '';
 
     return (
@@ -58,24 +59,37 @@ export default class ToolDrawer extends React.Component {
               <div className='sort-title mdc-list-group__subheader'>
                 Sort
               </div>
-              <CollectionSorterContainer className='mdc-list-item' match={this.props.match} history={this.props.history} />
-              <hr className='mdc-list-divider'/>
+              <CollectionSorterContainer
+                className='mdc-list-item'
+                match={this.props.match}
+                history={this.props.history} />
+              {/*<hr className='mdc-list-divider'/>*/}
               <div className='filter-title mdc-list-group__subheader'>
                 Filter
               </div>
-              <CollectionFilterContainer className='mdc-list-item' match={this.props.match} history={this.props.history} />
-              <hr className='mdc-list-divider'/>
+              <CollectionFilterContainer
+                className='mdc-list-item'
+                match={this.props.match}
+                history={this.props.history} />
+              {/*<hr className='mdc-list-divider'/>*/}
               <div className='timeslider-title mdc-list-group__subheader'>
-                Acquisition Date Range
+                Date Range
               </div>
-              <CollectionTimesliderContainer className='mdc-list-item' match={this.props.match} history={this.props.history} />
-              <hr className='mdc-list-divider'/>
+              <CollectionTimesliderContainer
+                className='mdc-list-item'
+                match={this.props.match}
+                history={this.props.history} />
+              {/*<hr className='mdc-list-divider'/>*/}
               <div className='clear-all-filters-container'>
-                <button className="mdc-button mdc-button--raised" onClick={this.clearAllFilters}>Clear All</button>
+                <button
+                  className="mdc-button mdc-button--raised"
+                  onClick={this.clearAllFilters}>
+                  Clear All Filters
+                </button>
               </div>
-              <hr className='mdc-list-divider'/>
+              {/*<hr className='mdc-list-divider'/>*/}
               <ThemeChooserContainer />
-              <hr className='mdc-list-divider'/>
+              {/*<hr className='mdc-list-divider'/>*/}
               <ShareButtons />
             </nav>
 

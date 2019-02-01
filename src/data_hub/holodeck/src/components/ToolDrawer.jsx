@@ -63,7 +63,7 @@ export default class ToolDrawer extends React.Component {
                 className='mdc-list-item'
                 match={this.props.match}
                 history={this.props.history} />
-              <hr className='mdc-list-divider'/>
+              {/*<hr className='mdc-list-divider'/>*/}
               <div className='filter-title mdc-list-group__subheader'>
                 Filter
               </div>
@@ -71,15 +71,15 @@ export default class ToolDrawer extends React.Component {
                 className='mdc-list-item'
                 match={this.props.match}
                 history={this.props.history} />
-              <hr className='mdc-list-divider'/>
+              {/*<hr className='mdc-list-divider'/>*/}
               <div className='timeslider-title mdc-list-group__subheader'>
-                Acquisition Date Range
+                Date Range
               </div>
               <CollectionTimesliderContainer
                 className='mdc-list-item'
                 match={this.props.match}
                 history={this.props.history} />
-              <hr className='mdc-list-divider'/>
+              {/*<hr className='mdc-list-divider'/>*/}
               <div className='clear-all-filters-container'>
                 <button
                   className="mdc-button mdc-button--raised"
@@ -87,9 +87,9 @@ export default class ToolDrawer extends React.Component {
                   Clear All Filters
                 </button>
               </div>
-              <hr className='mdc-list-divider'/>
+              {/*<hr className='mdc-list-divider'/>*/}
               <ThemeChooserContainer />
-              <hr className='mdc-list-divider'/>
+              {/*<hr className='mdc-list-divider'/>*/}
               <ShareButtons />
             </nav>
 

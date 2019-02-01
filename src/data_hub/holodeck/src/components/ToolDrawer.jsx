@@ -18,12 +18,6 @@ export default class ToolDrawer extends React.Component {
 
   componentDidMount() {
     this.toolDrawer = MDCDrawer.attachTo(document.querySelector('.tool-drawer'));
-    if (this.props.view === 'modal') {
-      const scrim = document.getElementById('scrim');
-      scrim.onclick = () => {
-        this.props.closeToolDrawer();
-      };
-    }
   }
 
   clearAllFilters() {
@@ -39,14 +33,14 @@ export default class ToolDrawer extends React.Component {
   }
 
   render() {
-    const classname = this.props.view === 'dismiss' ?
-      'mdc-drawer mdc-drawer--dismissible tool-drawer' : 'mdc-drawer mdc-drawer--modal tool-drawer';
+    // const classname = this.props.view === 'dismiss' ?
+    //   'mdc-drawer mdc-drawer--dismissible tool-drawer' : 'mdc-drawer mdc-drawer--modal tool-drawer';
     const fullclass = this.props.toolDrawerStatus === 'open' ? ' mdc-drawer--open' : '';
 
     return (
 
       <div className='tool-drawer-component mdc-typography'>
-        <aside className={`${classname}${fullclass}`} dir='rtl'>
+        <aside className={`mdc-drawer mdc-drawer--dismissible tool-drawer ${fullclass}`} dir='rtl'>
           <div className='mdc-drawer__content' dir='ltr'>
 
               <div className='mdc-drawer__header no-scroll'>
@@ -95,9 +89,6 @@ export default class ToolDrawer extends React.Component {
 
           </div>
         </aside>
-
-        {this.props.view === 'modal' ? <div className='mdc-drawer-scrim' id='scrim'></div> : ''}
-
       </div>
     );
   }

@@ -10,7 +10,6 @@ styles for component: Footer
   width: 100%;
   position: absolute;
   left: 0;
-  bottom: 0;
   right: 0;
 
   .open-drawer {
@@ -117,7 +116,6 @@ styles for component: Footer
         position: relative;
         top: 3px;
       }
-
     }
   }
 
@@ -134,6 +132,11 @@ styles for component: Footer
       margin: auto;
       position: absolute;
     }
+  }
+
+  // greater than tablet breakpoint = keep footer at bottom
+  @media (min-width: mdc-layout-grid-breakpoint-max(tablet)) {
+    bottom: 0;
   }
 
 }

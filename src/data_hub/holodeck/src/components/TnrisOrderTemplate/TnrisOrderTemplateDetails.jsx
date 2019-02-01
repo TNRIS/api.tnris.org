@@ -40,8 +40,8 @@ export default class TnrisDownloadTemplateDetails extends React.Component {
                           : "";
 
     // using mdc classes to determine grid layout depending on screen size (desktop/tablet)
-    // special case with phone or smaller device (<840px) because order of divs changes
-    const gridLayout = window.innerWidth >= 900 ? (
+    // special case with phone or smaller device because order of divs changes
+    const gridLayout = window.innerWidth >= 1000 ? (
                           <div className="mdc-layout-grid__inner">
                             <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-4'>
                               <Metadata collection={this.props.collection} />

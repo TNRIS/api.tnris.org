@@ -2,7 +2,7 @@
 styles for component: Header
 */
 
-// removes the shadow on scroll from the header
+// removes the shadow from the header on scroll
 .mdc-top-app-bar--fixed-scrolled {
   box-shadow: none;
 }
@@ -45,23 +45,25 @@ styles for component: Header
     section {
       padding: 0;
 
-      .header-title__twdb {
-        text-decoration: none;
-        color: inherit;
-        font-size: 12px;
-        text-align: right;
-      }
-
       .header-title__tnris {
         text-decoration: none;
         text-align: left;
         color: inherit;
+        padding-left: 10px;
       }
 
+      .header-title__twdb {
+        text-decoration: none;
+        text-align: right;
+        color: inherit;
+        font-size: 12px;
+        padding-right: 10px;
+      }
     }
   }
 
   .header-nav {
+    height: 70px;
 
     .open-drawer {
       width: calc(100% - 255px);

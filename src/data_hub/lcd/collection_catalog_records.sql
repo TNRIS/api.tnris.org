@@ -10,6 +10,7 @@ SELECT collection.collection_id,
 	collection.short_description,
 	collection.description,
 	collection.source,
+  collection.partners,
 	collection.authoritative,
 	collection.public,
 	collection.known_issues,
@@ -131,6 +132,10 @@ SELECT collection.collection_id,
 	agency_type.agency_abbreviation,
 	agency_type.agency_website,
 	agency_type.agency_contact,
+  source_type.source_name,
+	source_type.source_abbreviation,
+	source_type.source_website,
+	source_type.source_contact,
 	license_type.license_name,
 	license_type.license_abbreviation,
 	license_type.license_url,
@@ -158,6 +163,8 @@ LEFT JOIN resource_type ON resource_type.resource_type_id=resource_type_relate.r
 
 LEFT JOIN agency_type ON agency_type.agency_type_id=collection.agency_type_id
 
+LEFT JOIN source_type ON source_type.source_type_id=collection.source_type_id
+
 LEFT JOIN license_type ON license_type.license_type_id=collection.license_type_id
 
 LEFT JOIN template_type ON template_type.template_type_id=collection.template_type_id
@@ -174,6 +181,10 @@ GROUP BY collection.collection_id,
 				agency_type.agency_abbreviation,
 				agency_type.agency_website,
 				agency_type.agency_contact,
+        source_type.source_name,
+				source_type.source_abbreviation,
+				source_type.source_website,
+				source_type.source_contact,
 				license_type.license_name,
 				license_type.license_abbreviation,
 				license_type.license_url,

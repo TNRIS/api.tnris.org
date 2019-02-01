@@ -18,9 +18,7 @@ export default class TnrisDownloadTemplateDetails extends React.Component {
                                 : "";
 
     const imageCarousel = this.props.collection.images ? (
-                        <Images
-                            thumbnail={this.props.collection.thumbnail_image}
-                            images={this.props.collection.images} />)
+                        <Images images={this.props.collection.images} />)
                         : "";
 
     const lidarCard = this.props.collection.category === 'Lidar' ? (

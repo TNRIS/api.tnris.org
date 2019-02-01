@@ -15,6 +15,8 @@ styles for component: ToolDrawer
     @include mdc-drawer-surface-fill-color($main-background);
     @include mdc-drawer-divider-color($empty-border);
 
+    top: 26px;
+
 
     .mdc-drawer__content {
 
@@ -41,23 +43,31 @@ styles for component: ToolDrawer
         padding: 0 0 0 0;
         background: $header-bar;
         min-height: 26px;
+
+        top: 48px;
       }
 
       .dataset-counter {
-        background-color: $primary-color;
-        color: $skin-text;
+        // background-color: $primary-color;
+        // color: $skin-text;
         text-align: center;
         height: 26px;
         line-height: 26px;
 
         .dataset-counter-count {
-          font-weight: bold;
+          // font-weight: bold;
         }
       }
 
-      .mdc-list-group__subheader {
-        font-size: 1rem;
-        color: $nest-text-subtle;
+      .mdc-list-group {
+        margin-top: 70px;
+        border-top: solid 1px lightgrey;
+        padding-top: 0;
+
+        .mdc-list-group__subheader {
+          font-size: 1rem;
+          color: $nest-text-subtle;
+        }
       }
 
       ul {
@@ -85,6 +95,7 @@ styles for component: ToolDrawer
         width: 100%;
         display: flex;
         justify-content: center;
+        padding-bottom: 72px;
 
         .share-button {
           margin: 6px;

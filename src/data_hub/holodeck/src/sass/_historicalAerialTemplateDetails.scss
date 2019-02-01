@@ -191,6 +191,9 @@ styles for component: HistoricalAerialTemplateDetails
             content: "";
             vertical-align: -7px;
           }
+          .metadata-wraptext-list-item {
+            white-space: normal;
+          }
         }
 
         // .mdc-list-item__text {

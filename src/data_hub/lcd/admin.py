@@ -22,6 +22,7 @@ from .models import (
     Resource,
     ResourceType,
     ResourceTypeRelate,
+    SourceType,
     TemplateType,
     UseRelate,
     UseType
@@ -85,13 +86,13 @@ class CollectionAdmin(admin.ModelAdmin):
                        'acquisition_date',
                        # 'short_description',
                        'description',
-                       'source',
                        # 'authoritative',
                        'public',
                        # 'known_issues',
                        # 'coverage_extent',
                        # 'tags',
-                       'agency_type_id',
+                       'source_type_id',
+                       'partners',
                        'license_type_id',
                        'thumbnail_image',
                        'esri_open_data_id'),
@@ -295,6 +296,13 @@ class ResourceTypeAdmin(admin.ModelAdmin):
     list_display = (
         'resource_type_name', 'resource_type_abbreviation'
     )
+
+
+@admin.register(SourceType)
+class SourceTypeAdmin(admin.ModelAdmin):
+    model = SourceType
+    ordering = ('source_name',)
+    list_display = ('source_name', 'source_abbreviation')
 
 
 @admin.register(TemplateType)

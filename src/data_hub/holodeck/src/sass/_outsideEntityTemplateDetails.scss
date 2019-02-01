@@ -61,6 +61,9 @@ styles for component: OutsideEntityTemplateDetails
             content: "";
             vertical-align: -7px;
           }
+          .metadata-wraptext-list-item {
+            white-space: normal;
+          }
         }
 
         strong {

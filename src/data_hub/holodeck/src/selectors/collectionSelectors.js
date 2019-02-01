@@ -49,8 +49,8 @@ export const getSearchIndex = createSelector(
       'description',
       'counties',
       'acquisition_date',
-      'agency_name',
-      'agency_abbreviation',
+      'source_name',
+      'source_abbreviation',
       'oe_service_names'
     ];
 
@@ -273,8 +273,8 @@ export const getSearchedCollections = createSelector(
               acquisition_date: {boost: 6},
               description: {boost: 5},
               counties: {boost: 4},
-              agency_name: {boost: 3},
-              agency_abbreviation: {boost: 2},
+              source_name: {boost: 3},
+              source_abbreviation: {boost: 2},
               oe_service_names: {boost: 1}
           },
           expand: true,
@@ -395,8 +395,8 @@ export const getSearchSuggestions = createSelector(
               acquisition_date: {boost: 6},
               description: {boost: 5},
               counties: {boost: 4},
-              agency_name: {boost: 3},
-              agency_abbreviation: {boost: 2},
+              source_name: {boost: 3},
+              source_abbreviation: {boost: 2},
               oe_service_names: {boost: 1}
           },
           expand: true,

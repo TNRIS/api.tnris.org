@@ -665,6 +665,61 @@ class ResourceTypeRelate(models.Model):
         return self.resource_type_id.resource_type_name
 
 
+class SourceType(models.Model):
+    """Sources domain table"""
+
+    class Meta:
+        db_table = 'source_type'
+        verbose_name = 'Source Type'
+        verbose_name_plural = 'Source Types'
+        unique_together = (
+            'source_name',
+            'source_abbreviation',
+            'source_website',
+            'source_contact'
+        )
+
+    source_type_id = models.UUIDField(
+        'Source Type ID',
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False
+    )
+    source_name = models.TextField(
+        'Source Name',
+        max_length=100
+    )
+    source_abbreviation = models.TextField(
+        'Source Abbreviation',
+        max_length=100,
+        null=True,
+        blank=True
+    )
+    source_website = models.URLField(
+        'Source Website',
+        max_length=255,
+        null=True,
+        blank=True
+    )
+    source_contact = models.TextField(
+        'Source Contact',
+        max_length=255,
+        null=True,
+        blank=True
+    )
+    created = models.DateTimeField(
+        'Created',
+        auto_now_add=True
+    )
+    last_modified = models.DateTimeField(
+        'Last Modified',
+        auto_now=True
+    )
+
+    def __str__(self):
+        return self.source_name
+
+
 class UseRelate(models.Model):
     """
     Defines the reccommended uses for collections in the data catalog.
@@ -746,6 +801,7 @@ class Collection(models.Model):
             'tags',
             'license_type_id',
             'agency_type_id',
+            'source_type_id',
             'template_type_id'
         )
 
@@ -780,6 +836,11 @@ class Collection(models.Model):
     source = models.TextField(
         'Source',
         max_length=255,
+        null=True,
+        blank=True
+    )
+    partners = models.TextField(
+        'Partners',
         null=True,
         blank=True
     )
@@ -868,6 +929,14 @@ class Collection(models.Model):
         db_column='agency_type_id',
         on_delete=models.CASCADE,
         related_name='agency_types',
+        null=True,
+        blank=True
+    )
+    source_type_id = models.ForeignKey(
+        'SourceType',
+        db_column='source_type_id',
+        on_delete=models.CASCADE,
+        related_name='source_types',
         null=True,
         blank=True
     )
@@ -1116,6 +1185,9 @@ class CcrView(models.Model):
     source = models.TextField(
         'Source'
     )
+    partners = models.TextField(
+        'Partners'
+    )
     authoritative = models.BooleanField(
         'Authoritative'
     )
@@ -1191,6 +1263,19 @@ class CcrView(models.Model):
     )
     agency_contact = models.TextField(
         'Agency Contact'
+    )
+    source_name = models.TextField(
+        'Source Name'
+    )
+    source_abbreviation = models.TextField(
+        'Source Abbreviation'
+    )
+    source_website = models.CharField(
+        'Source Website',
+        max_length=255
+    )
+    source_contact = models.TextField(
+        'Source Contact'
     )
     license_name = models.TextField(
         'License Name'

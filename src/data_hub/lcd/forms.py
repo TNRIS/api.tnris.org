@@ -150,6 +150,8 @@ class CollectionForm(forms.ModelForm):
             self.fields['description'].help_text = "Provide as much descriptive and historical detail about this data as possible. Frontend search functionality utilizes this field to return this collection as a search result."
             self.fields['public'].help_text = "Check the 'Public' checkbox to make this collection publically available within the live, production frontend: data.tnris.org"
             self.fields['esri_open_data_id'].help_text = "ArcGIS Online Open Data Portal 'Group ID'. This is ONLY used by 'outside-entity' template collections for injecting a list of available services directly within the collection 'Description'."
+            self.fields['source_type_id'].help_text = "Choose the organization which this collection is owned by/sourced from."
+            self.fields['partners'].help_text = "List all organizations/companies associated with the creation, execution, or funding of this collection."
             self.attribute_initial_values('categories', CategoryRelate, 'category_type_id')
             self.attribute_initial_values('projections', EpsgRelate, 'epsg_type_id')
             self.attribute_initial_values('file_types', FileTypeRelate, 'file_type_id')

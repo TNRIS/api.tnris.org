@@ -113,7 +113,7 @@ export default class Header extends React.Component {
     //   default:
     //   tnrisLogo = tnrisGray;
     // }
-    console.log(this.props);
+
     return (
         <header
           className={`header-component mdc-top-app-bar mdc-top-app-bar--fixed`}

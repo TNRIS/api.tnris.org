@@ -152,6 +152,7 @@ class CollectionForm(forms.ModelForm):
             self.fields['esri_open_data_id'].help_text = "ArcGIS Online Open Data Portal 'Group ID'. This is ONLY used by 'outside-entity' template collections for injecting a list of available services directly within the collection 'Description'."
             self.fields['source_type_id'].help_text = "Choose the organization which this collection is owned by/sourced from."
             self.fields['partners'].help_text = "List all organizations/companies associated with the creation, execution, or funding of this collection."
+            self.fields['popup_link'].help_text = "Link to preview the WMS service link above. For ArcServer WMS links, this is the WMS link with '?f=jsapi' replacing '/WMSServer' at the end."
             self.attribute_initial_values('categories', CategoryRelate, 'category_type_id')
             self.attribute_initial_values('projections', EpsgRelate, 'epsg_type_id')
             self.attribute_initial_values('file_types', FileTypeRelate, 'file_type_id')

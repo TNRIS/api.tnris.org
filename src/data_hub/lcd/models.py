@@ -343,6 +343,61 @@ class ResourceType(models.Model):
         return self.resource_type_name
 
 
+class SourceType(models.Model):
+    """Sources domain table"""
+
+    class Meta:
+        db_table = 'source_type'
+        verbose_name = 'Source Type'
+        verbose_name_plural = 'Source Types'
+        unique_together = (
+            'source_name',
+            'source_abbreviation',
+            'source_website',
+            'source_contact'
+        )
+
+    source_type_id = models.UUIDField(
+        'Source Type ID',
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False
+    )
+    source_name = models.TextField(
+        'Source Name',
+        max_length=100
+    )
+    source_abbreviation = models.TextField(
+        'Source Abbreviation',
+        max_length=100,
+        null=True,
+        blank=True
+    )
+    source_website = models.URLField(
+        'Source Website',
+        max_length=255,
+        null=True,
+        blank=True
+    )
+    source_contact = models.TextField(
+        'Source Contact',
+        max_length=255,
+        null=True,
+        blank=True
+    )
+    created = models.DateTimeField(
+        'Created',
+        auto_now_add=True
+    )
+    last_modified = models.DateTimeField(
+        'Last Modified',
+        auto_now=True
+    )
+
+    def __str__(self):
+        return self.source_name
+
+
 class TemplateType(models.Model):
     """HTML template domain table"""
 
@@ -663,61 +718,6 @@ class ResourceTypeRelate(models.Model):
 
     def __str__(self):
         return self.resource_type_id.resource_type_name
-
-
-class SourceType(models.Model):
-    """Sources domain table"""
-
-    class Meta:
-        db_table = 'source_type'
-        verbose_name = 'Source Type'
-        verbose_name_plural = 'Source Types'
-        unique_together = (
-            'source_name',
-            'source_abbreviation',
-            'source_website',
-            'source_contact'
-        )
-
-    source_type_id = models.UUIDField(
-        'Source Type ID',
-        primary_key=True,
-        default=uuid.uuid4,
-        editable=False
-    )
-    source_name = models.TextField(
-        'Source Name',
-        max_length=100
-    )
-    source_abbreviation = models.TextField(
-        'Source Abbreviation',
-        max_length=100,
-        null=True,
-        blank=True
-    )
-    source_website = models.URLField(
-        'Source Website',
-        max_length=255,
-        null=True,
-        blank=True
-    )
-    source_contact = models.TextField(
-        'Source Contact',
-        max_length=255,
-        null=True,
-        blank=True
-    )
-    created = models.DateTimeField(
-        'Created',
-        auto_now_add=True
-    )
-    last_modified = models.DateTimeField(
-        'Last Modified',
-        auto_now=True
-    )
-
-    def __str__(self):
-        return self.source_name
 
 
 class UseRelate(models.Model):

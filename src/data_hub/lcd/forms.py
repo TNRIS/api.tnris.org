@@ -110,7 +110,7 @@ class CollectionForm(forms.ModelForm):
     # retrieve selected thumbnail id for helper text to display
     def selected_thumbnail(self):
         text = "NO THUMBNAIL SELECTED! Please choose an image UUID from the dropdown and 'Save' the form."
-        if self.instance.thumbnail_image != "":
+        if self.instance.thumbnail_image is not None and self.instance.thumbnail_image != "":
             text = "Currently Selected: " + self.instance.thumbnail_image.split("/")[-1]
         return text
 

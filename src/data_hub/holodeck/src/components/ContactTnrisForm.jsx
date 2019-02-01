@@ -191,7 +191,7 @@ class ContactTnrisForm extends Component {
     }
     else if (this.state.display === 'success') {
       showHTML = (
-        <div className="contact-tnris-form-success">
+        <div className="contact-tnris-form-success push-footer">
           <p className="mdc-typography--body2">
             <span><strong>Success!</strong></span>
             <br />
@@ -202,7 +202,7 @@ class ContactTnrisForm extends Component {
     }
     else if (this.state.display === 'error') {
       showHTML = (
-        <div className="contact-tnris-form-error">
+        <div className="contact-tnris-form-error push-footer">
           <p className="mdc-typography--body2">
             <span><strong>Error!</strong></span>
             <br />
@@ -216,7 +216,7 @@ class ContactTnrisForm extends Component {
     }
     else if (this.state.display === 'submitting') {
       showHTML = (
-        <div className="contact-tnris-form-submitting">
+        <div className="contact-tnris-form-submitting push-footer">
           <p className="mdc-typography--body2">
             <span><strong>Submitting form...</strong></span>
           </p>

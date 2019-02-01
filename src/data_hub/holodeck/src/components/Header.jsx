@@ -116,7 +116,7 @@ export default class Header extends React.Component {
     console.log(this.props);
     return (
         <header
-          className={`header-component mdc-top-app-bar mdc-top-app-bar--fixed ${dismissClass}`}
+          className={`header-component mdc-top-app-bar mdc-top-app-bar--fixed`}
           id="master-header">
           <div className="header-title mdc-top-app-bar__row">
             <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
@@ -131,7 +131,7 @@ export default class Header extends React.Component {
               </a>
             </section>
           </div>
-          <div className={`header-nav mdc-top-app-bar__row`}>
+          <div className={`header-nav mdc-top-app-bar__row ${dismissClass}`}>
             <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start" role="toolbar">
               {/*<a href="https://tnris.org" className="mdc-top-app-bar__action-item tnris-logo-text">
                 <img src={tnrisLogo} aria-label="TNRIS Logo" alt="TNRIS Logo" className="logo" />
@@ -167,7 +167,7 @@ export default class Header extends React.Component {
                     onClick={this.handleCatalogView}
                     className="mdc-top-app-bar__action-item"
                     id="tools" title="Catalog">
-                    <i className="material-icons mdc-top-app-bar__navigation-icon">view_list</i>
+                    <i className="material-icons mdc-top-app-bar__navigation-icon">view_comfy</i>
                   </a>}
             </section>
           </div>

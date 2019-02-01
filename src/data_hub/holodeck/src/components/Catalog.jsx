@@ -11,6 +11,7 @@ import OrderCartView from './OrderCartView';
 import CollectionFilterMapViewContainer from '../containers/CollectionFilterMapViewContainer';
 import HeaderContainer from '../containers/HeaderContainer';
 import ToolDrawerContainer from '../containers/ToolDrawerContainer';
+import ToolDrawerMobileContainer from '../containers/ToolDrawerMobileContainer';
 import CatalogCardContainer from '../containers/CatalogCardContainer';
 
 import loadingImage from '../images/loading.gif';
@@ -170,13 +171,20 @@ export default class Catalog extends React.Component {
     return (
       <div className="catalog-component">
 
-        <ToolDrawerContainer
-          match={this.props.match}
-          history={this.props.history}
-          total={this.props.visibleCollections ? this.props.visibleCollections.length : 0}
-          view={this.state.toolDrawerView}
-        />
-
+        {this.state.toolDrawerView === 'dismiss' ?
+          <ToolDrawerContainer
+            match={this.props.match}
+            history={this.props.history}
+            total={this.props.visibleCollections ? this.props.visibleCollections.length : 0}
+            view={this.state.toolDrawerView}
+          /> :
+          <ToolDrawerMobileContainer
+            match={this.props.match}
+            history={this.props.history}
+            total={this.props.visibleCollections ? this.props.visibleCollections.length : 0}
+            view={this.state.toolDrawerView}
+          />
+        }
         <HeaderContainer
           toolDrawerView={this.state.toolDrawerView}
           toggleToolDrawerDisplay={this.toggleToolDrawerDisplay}

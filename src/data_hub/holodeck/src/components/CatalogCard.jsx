@@ -51,8 +51,8 @@ export default class CatalogCard extends React.Component {
         <p className='catalog-card__year mdc-typography--subtitle1'>
           {collectionYear}
         </p>
-        <p className='catalog-card__agency mdc-typography--subtitle1'>
-          {this.props.collection.agency_abbreviation}
+        <p className='catalog-card__source mdc-typography--subtitle1'>
+          {this.props.collection.source_abbreviation}
         </p>
       </div>
     );

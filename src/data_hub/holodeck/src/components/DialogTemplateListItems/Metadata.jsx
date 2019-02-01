@@ -2,48 +2,48 @@ import React from 'react';
 
 export default class Metadata extends React.Component {
   render() {
-    const source = this.props.collection.template !== 'outside-entity' && this.props.collection.source ? (
+    const partners = this.props.collection.template !== 'outside-entity' && this.props.collection.partners ? (
       <li className="mdc-list-item">
         <span className="mdc-list-item__text">
-          <span className="mdc-list-item__primary-text">{this.props.collection.source}</span>
-          <span className="mdc-list-item__secondary-text">Source</span>
+          <span className="mdc-list-item__primary-text metadata-wraptext-list-item">{this.props.collection.partners}</span>
+          <span className="mdc-list-item__secondary-text">Partners</span>
         </span>
       </li>
     ) : "";
 
-    const agency = this.props.collection.agency_name ? (
+    const source = this.props.collection.source_name ? (
       <li className="mdc-list-item">
         <span className="mdc-list-item__text">
           <span className="mdc-list-item__primary-text">
-            {this.props.collection.agency_name} ({this.props.collection.agency_abbreviation})
+            {this.props.collection.source_name} ({this.props.collection.source_abbreviation})
           </span>
-          <span className="mdc-list-item__secondary-text">Agency Name</span>
+          <span className="mdc-list-item__secondary-text">Source Name</span>
         </span>
       </li>
     ) : "";
 
-    const agency_contact = this.props.collection.agency_contact ? (
+    const source_contact = this.props.collection.source_contact ? (
       <li className="mdc-list-item">
         <span className="mdc-list-item__text">
           <span className="mdc-list-item__primary-text">
             {
-              this.props.collection.agency_contact.includes('http') ? <a href={this.props.collection.agency_contact} target="_blank" rel="noopener noreferrer">{this.props.collection.agency_contact}</a>
-              : this.props.collection.agency_contact.includes('@') ? <a href={"mailto:" + this.props.collection.agency_contact + "?subject=GIS data question"}>{this.props.collection.agency_contact}</a>
-              : <p>{this.props.collection.agency_contact}</p>
+              this.props.collection.source_contact.includes('http') ? <a href={this.props.collection.source_contact} target="_blank" rel="noopener noreferrer">{this.props.collection.source_contact}</a>
+              : this.props.collection.source_contact.includes('@') ? <a href={"mailto:" + this.props.collection.source_contact + "?subject=GIS data question"}>{this.props.collection.source_contact}</a>
+              : <p>{this.props.collection.source_contact}</p>
             }
           </span>
-          <span className="mdc-list-item__secondary-text">Agency Contact</span>
+          <span className="mdc-list-item__secondary-text">Source Contact</span>
         </span>
       </li>
     ) : "";
 
-    const agency_site = this.props.collection.agency_website ? (
+    const source_site = this.props.collection.source_website ? (
       <li className="mdc-list-item">
         <span className="mdc-list-item__text">
           <span className="mdc-list-item__primary-text">
-            <a href={this.props.collection.agency_website} target="_blank" rel="noopener noreferrer">{this.props.collection.agency_website}</a>
+            <a href={this.props.collection.source_website} target="_blank" rel="noopener noreferrer">{this.props.collection.source_website}</a>
           </span>
-          <span className="mdc-list-item__secondary-text">Agency Website</span>
+          <span className="mdc-list-item__secondary-text">Source Website</span>
         </span>
       </li>
     ) : "";
@@ -200,10 +200,10 @@ export default class Metadata extends React.Component {
     return (
       <div className="template-content-div metadata">
         <ul className="mdc-list mdc-list--non-interactive">
+          {partners}
           {source}
-          {agency}
-          {agency_site}
-          {agency_contact}
+          {source_site}
+          {source_contact}
           {epsg}
           {license}
 

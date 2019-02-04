@@ -13,7 +13,7 @@ if (!NODE_ENV) {
     'The NODE_ENV environment variable is required but was not specified.'
   );
 }
-const contactUrl = process.env.NODE_ENV === 'development' ? 'http://localhost:8001/' : process.env.CONTACT_SUBMIT_URL;
+const contactUrl = process.env.NODE_ENV === 'development' ? 'http://localhost:8001/' : 'https://contact.tnris.org/';
 
 // https://github.com/bkeepers/dotenv#what-other-env-files-can-i-use
 var dotenvFiles = [
@@ -79,7 +79,7 @@ function getClientEnvironment(publicUrl) {
         // images into the `src` and `import` them in code to get their paths.
         PUBLIC_URL: publicUrl,
         CONTACT_URL: contactUrl,
-        CONTACT_UPLOAD_BUCKET: process.env.CONTACT_UPLOAD_BUCKET,
+        CONTACT_UPLOAD_BUCKET: 'contact-uploads',
         ZIP_UPLOAD_POLICY_URL: contactUrl + 'policy/zip-upload',
         IMAGE_UPLOAD_POLICY_URL: contactUrl + 'policy/image-upload'
         // OSTICKET_API_KEY: process.env.OSTICKET_API_KEY

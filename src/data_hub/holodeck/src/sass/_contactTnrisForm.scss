@@ -8,7 +8,7 @@ styles for component: ContactTnrisForm
   @include mdc-text-field-line-ripple-color($primary-color);
   @include mdc-text-field-textarea-stroke-color(rgba(0,0,0,.42));
 
-  padding: 15px;
+  padding: 0px 15px 15px 15px;
   overflow-y: auto;
   overflow-x: hidden;
 

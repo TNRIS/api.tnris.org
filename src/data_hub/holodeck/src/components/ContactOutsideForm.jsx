@@ -87,14 +87,21 @@ class ContactOutsideForm extends Component {
       });
       const fullName = this.state.firstName + " " + this.state.lastName;
 
+      let sendTo = this.props.collection.source_contact;
+      let sendMessage = this.state.question;
+      if (this.props.collection.source_contact == null || this.props.collection.source_contact === "") {
+        sendTo = "support@tnris.supportsystem.com";
+        sendMessage = "OUTSIDE ENTITY INQUIRY - BAD SOURCE CONTACT EMAIL - data.tnris.org " + this.state.question;
+      }
+
       const formInfo = {
         'Name': fullName,
         'Email': this.state.email,
         'Category': this.props.collection.category,
         'Software': this.state.software,
-        'Message': this.state.question,
+        'Message': sendMessage,
         'tnris_link': window.location.protocol + "//" + window.location.host + window.location.pathname,
-        'send_to_email': this.props.collection.source_contact,
+        'send_to_email': sendTo,
         'send_to_name': this.props.collection.source_name,
         'form_id': 'data-tnris-org-outside-entity',
         'recaptcha': this.state.recaptcha

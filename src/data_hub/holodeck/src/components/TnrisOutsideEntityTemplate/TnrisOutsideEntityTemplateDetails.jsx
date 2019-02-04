@@ -3,11 +3,14 @@ import React from 'react';
 import Description from '../DialogTemplateListItems/Description'
 import Metadata from '../DialogTemplateListItems/Metadata'
 import ShareButtons from '../DialogTemplateListItems/ShareButtons'
-
+import Images from '../DialogTemplateListItems/Images'
 
 export default class TnrisOutsideEntityTemplateDetails extends React.Component {
 
   render() {
+    const imageCarousel = this.props.collection.images ? (
+                        <Images images={this.props.collection.images} />)
+                        : "";
 
     const description = this.props.collection.description ? (
                           <Description collection={this.props.collection} />)
@@ -22,11 +25,13 @@ export default class TnrisOutsideEntityTemplateDetails extends React.Component {
                               <ShareButtons />
                             </div>
                             <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-8'>
+                              {imageCarousel}
                               {description}
                             </div>
                           </div>) : (
                           <div className="mdc-layout-grid__inner">
                             <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-12'>
+                              {imageCarousel}
                               <Metadata collection={this.props.collection} />
                               {description}
                               <ShareButtons />

@@ -3,16 +3,7 @@ styles for component: CatalogCard
 */
 
 .catalog-card-component {
-  // max-width: 350px;
-  // height: 100%;
-
-  @media (max-width: mdc-layout-grid-breakpoint-max(tablet)) {
-    width: calc(100% / 3 - 4.2px);
-  }
-
-  @media (max-width: mdc-layout-grid-breakpoint-max(phone)) {
-    width: 100%;
-  }
+  width: 100%;
 
   .catalog-card__headline {
     font-size: 22px;

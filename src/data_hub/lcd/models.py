@@ -11,60 +11,6 @@ from django.db import models
 ********** Domain Tables **********
 """
 
-class AgencyType(models.Model):
-    """Agencies domain table"""
-
-    class Meta:
-        db_table = 'agency_type'
-        verbose_name = 'Agency Type'
-        verbose_name_plural = 'Agency Types'
-        unique_together = (
-            'agency_name',
-            'agency_abbreviation',
-            'agency_website',
-            'agency_contact'
-        )
-
-    agency_type_id = models.UUIDField(
-        'Agency Type ID',
-        primary_key=True,
-        default=uuid.uuid4,
-        editable=False
-    )
-    agency_name = models.TextField(
-        'Agency Name',
-        max_length=100
-    )
-    agency_abbreviation = models.TextField(
-        'Agency Abbreviation',
-        max_length=100,
-        null=True,
-        blank=True
-    )
-    agency_website = models.URLField(
-        'Agency Website',
-        max_length=255,
-        null=True,
-        blank=True
-    )
-    agency_contact = models.TextField(
-        'Agency Contact',
-        max_length=255,
-        null=True,
-        blank=True
-    )
-    created = models.DateTimeField(
-        'Created',
-        auto_now_add=True
-    )
-    last_modified = models.DateTimeField(
-        'Last Modified',
-        auto_now=True
-    )
-
-    def __str__(self):
-        return self.agency_name
-
 
 class AreaType(models.Model):
     """Domain table defining areas that resources intersect"""
@@ -785,7 +731,6 @@ class Collection(models.Model):
         unique_together = (
             'name',
             'acquisition_date',
-            'source',
             'authoritative',
             'public',
             'known_issues',
@@ -800,7 +745,6 @@ class Collection(models.Model):
             'coverage_extent',
             'tags',
             'license_type_id',
-            'agency_type_id',
             'source_type_id',
             'template_type_id'
         )
@@ -830,12 +774,6 @@ class Collection(models.Model):
     )
     description = models.TextField(
         'Description',
-        null=True,
-        blank=True
-    )
-    source = models.TextField(
-        'Source',
-        max_length=255,
         null=True,
         blank=True
     )
@@ -921,14 +859,6 @@ class Collection(models.Model):
         db_column='license_type_id',
         on_delete=models.CASCADE,
         related_name='license_types',
-        null=True,
-        blank=True
-    )
-    agency_type_id = models.ForeignKey(
-        'AgencyType',
-        db_column='agency_type_id',
-        on_delete=models.CASCADE,
-        related_name='agency_types',
         null=True,
         blank=True
     )
@@ -1182,9 +1112,6 @@ class CcrView(models.Model):
     description = models.TextField(
         'Description'
     )
-    source = models.TextField(
-        'Source'
-    )
     partners = models.TextField(
         'Partners'
     )
@@ -1250,19 +1177,6 @@ class CcrView(models.Model):
     )
     band_types = models.TextField(
         'Band Types'
-    )
-    agency_name = models.TextField(
-        'Agency Name'
-    )
-    agency_abbreviation = models.TextField(
-        'Agency Abbreviation'
-    )
-    agency_website = models.CharField(
-        'Agency Website',
-        max_length=255
-    )
-    agency_contact = models.TextField(
-        'Agency Contact'
     )
     source_name = models.TextField(
         'Source Name'

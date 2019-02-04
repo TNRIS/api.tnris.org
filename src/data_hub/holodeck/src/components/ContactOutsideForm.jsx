@@ -87,14 +87,21 @@ class ContactOutsideForm extends Component {
       });
       const fullName = this.state.firstName + " " + this.state.lastName;
 
+      let sendTo = this.props.collection.source_contact;
+      let sendMessage = this.state.question;
+      if (this.props.collection.source_contact == null || this.props.collection.source_contact === "") {
+        sendTo = "support@tnris.supportsystem.com";
+        sendMessage = "OUTSIDE ENTITY INQUIRY - BAD SOURCE CONTACT EMAIL - data.tnris.org " + this.state.question;
+      }
+
       const formInfo = {
         'Name': fullName,
         'Email': this.state.email,
         'Category': this.props.collection.category,
         'Software': this.state.software,
-        'Message': this.state.question,
+        'Message': sendMessage,
         'tnris_link': window.location.protocol + "//" + window.location.host + window.location.pathname,
-        'send_to_email': this.props.collection.source_contact,
+        'send_to_email': sendTo,
         'send_to_name': this.props.collection.source_name,
         'form_id': 'data-tnris-org-outside-entity',
         'recaptcha': this.state.recaptcha
@@ -196,7 +203,7 @@ class ContactOutsideForm extends Component {
     }
     else if (this.state.display === 'success') {
       showHTML = (
-        <div className="contact-tnris-form-success">
+        <div className="contact-tnris-form-success push-footer">
           <p className="mdc-typography--body2">
             <span><strong>Success!</strong></span>
             <br />
@@ -207,7 +214,7 @@ class ContactOutsideForm extends Component {
     }
     else if (this.state.display === 'error') {
       showHTML = (
-        <div className="contact-tnris-form-error">
+        <div className="contact-tnris-form-error push-footer">
           <p className="mdc-typography--body2">
             <span><strong>Error!</strong></span>
             <br />
@@ -221,7 +228,7 @@ class ContactOutsideForm extends Component {
     }
     else if (this.state.display === 'submitting') {
       showHTML = (
-        <div className="contact-tnris-form-submitting">
+        <div className="contact-tnris-form-submitting push-footer">
           <p className="mdc-typography--body2">
             <span><strong>Submitting form...</strong></span>
           </p>

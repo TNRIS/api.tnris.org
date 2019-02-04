@@ -614,7 +614,7 @@ class OrderTnrisDataForm extends Component {
 
     else if (this.state.display === 'cart') {
       showHTML = (
-        <div className="order-tnris-data-cart">
+        <div className="order-tnris-data-cart push-footer">
           <p className="mdc-typography--body2">
             This dataset is already in the shopping cart.
           </p>
@@ -626,7 +626,7 @@ class OrderTnrisDataForm extends Component {
     }
     else if (this.state.display === 'added') {
       showHTML = (
-        <div className="order-tnris-data-cart">
+        <div className="order-tnris-data-cart push-footer">
           <p className="mdc-typography--body2">
             This dataset has been added to the shopping cart.
           </p>
@@ -638,7 +638,7 @@ class OrderTnrisDataForm extends Component {
     }
     else if (this.state.display === 'uploading') {
       showHTML = (
-        <div className="order-tnris-data-cart">
+        <div className="order-tnris-data-cart push-footer">
           <div className='mdc-typography--headline6'>
             Uploading files...
           </div>

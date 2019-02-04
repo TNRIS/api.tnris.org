@@ -120,7 +120,7 @@ export default class Catalog extends React.Component {
           <ul className="mdc-layout-grid__inner">
             {this.props.visibleCollections ? this.props.visibleCollections.map(collectionId =>
               <li
-                className="mdc-layout-grid__cell mdc-layout-grid__cell--span-3"
+                className="mdc-layout-grid__cell mdc-layout-grid__cell--span-3-desktop"
                 key={collectionId}>
                 <CatalogCardContainer
                   collection={this.props.collections[collectionId]}

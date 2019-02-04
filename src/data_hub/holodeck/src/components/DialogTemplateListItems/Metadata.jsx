@@ -91,7 +91,9 @@ export default class Metadata extends React.Component {
       <li className="mdc-list-item">
         <span className="mdc-list-item__text">
           <span className="mdc-list-item__primary-text">
-            {this.props.collection.category}
+            {
+              this.props.collection.category.includes('_') ? this.props.collection.category.split('_').join(' ') : this.props.collection.category
+            }
           </span>
           <span className="mdc-list-item__secondary-text">Category</span>
         </span>

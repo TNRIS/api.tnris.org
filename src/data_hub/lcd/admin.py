@@ -5,7 +5,6 @@ from django.contrib import admin
 from .forms import CollectionForm, ResourceForm, ImageForm
 from .models import (
     AcdcView,
-    AgencyType,
     AreaType,
     CategoryRelate,
     CategoryType,
@@ -34,14 +33,6 @@ from .models import (
 # class AcdcViewAdmin(admin.ModelAdmin):
 #     model = AcdcView
 #     ordering = ('name',)
-
-
-@admin.register(AgencyType)
-class AgencyTypeAdmin(admin.ModelAdmin):
-    model = AgencyType
-    ordering = ('agency_name',)
-    list_display = ('agency_name', 'agency_abbreviation')
-
 
 # AreaType is solidified as statewide, counties, quads, qquads, & national grid
 # not managed in admin console as it shouldn't be changing

@@ -7,8 +7,9 @@ styles for component: TnrisOrderTemplate
     // @include mdc-top-app-bar-ink-color($text-color);
     @include mdc-top-app-bar-icon-ink-color($text-color);
     @include mdc-top-app-bar-fill-color($header-bar);
-    border-bottom: solid 1px $skin-tertiary;
+    // border-bottom: solid 1px $skin-tertiary;
     z-index: 3;
+    position: relative;
   }
 
   button {
@@ -22,6 +23,10 @@ styles for component: TnrisOrderTemplate
 
   &:focus {
     outline: none;
+  }
+
+  .mdc-top-app-bar__title {
+    font-size: 1.8rem;
   }
 
   section.mdc-top-app-bar__section.mdc-top-app-bar__section--align-end {

@@ -46,6 +46,12 @@ styles for component: TnrisDownloadTemplateDetails
       }
     }
 
+    // max size for div around image carousel window
+    .max-img-size {
+      max-height: 400px;
+      // max-width: 1000px;
+    }
+
     a {
       color: $primary-color;
     }

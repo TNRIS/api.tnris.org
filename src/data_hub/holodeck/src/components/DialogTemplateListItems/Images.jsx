@@ -15,7 +15,6 @@ export default class Images extends React.Component {
             autoPlay={multiImage}
             infiniteLoop={multiImage}
             showThumbs={multiImage}
-            dynamicHeight={true}
             emulateTouch
             useKeyboardArrows={true}
             transitionTime={700}
@@ -25,7 +24,7 @@ export default class Images extends React.Component {
             {
               carousel_images.map(url => (
                 <div key={url}>
-                  <img src={url} alt='' />
+                  <img className='max-img-size' src={url} alt='' />
                 </div>
                 )
               )

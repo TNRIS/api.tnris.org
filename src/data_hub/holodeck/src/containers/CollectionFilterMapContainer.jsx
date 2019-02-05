@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 
 import {
+  catalogActions,
   collectionFilterMapActions,
   urlTrackerActions
 } from '../actions';
@@ -11,6 +12,7 @@ const mapStateToProps = state => ({
   collectionFilterMapCenter: state.collectionFilterMap.collectionFilterMapCenter,
   collectionFilterMapFilter: state.collectionFilterMap.collectionFilterMapFilter,
   collectionFilterMapZoom: state.collectionFilterMap.collectionFilterMapZoom,
+  theme: state.colorTheme.theme
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -31,6 +33,9 @@ const mapDispatchToProps = dispatch => ({
   },
   logFilterChange: (url) => {
     dispatch(urlTrackerActions.logFilterChange(url));
+  },
+  setViewCatalog: () => {
+    dispatch(catalogActions.setViewCatalog());
   }
 })
 

@@ -5,6 +5,7 @@ import MapboxDraw from '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.js';
 import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
 import DrawRectangle from 'mapbox-gl-draw-rectangle-mode';
 import turfExtent from 'turf-extent';
+import styles from '../sass/index.scss';
 // the carto core api is a CDN in the app template HTML (not available as NPM package)
 // so we create a constant to represent it so it's available to the component
 const cartodb = window.cartodb;
@@ -44,6 +45,9 @@ export default class CollectionFilterMap extends React.Component {
     this._navControl = new mapboxgl.NavigationControl()
     this._map.addControl(this._navControl, 'top-left');
 
+    const filler = this.props.theme + "Fill";
+    const texter = this.props.theme + "Text";
+
     // create the draw control and define its functionality
     // update the mapbox draw modes with the rectangle mode
     const modes = MapboxDraw.modes;
@@ -51,7 +55,66 @@ export default class CollectionFilterMap extends React.Component {
     this._draw = new MapboxDraw({
       displayControlsDefault: false,
       controls: {'polygon': true, 'trash': true},
-      modes: modes
+      modes: modes,
+      userProperties: true,
+      styles: [{
+          'id': 'gl-draw-polygon-fill-inactive',
+          'type': 'fill',
+          'filter': ['all', ['==', 'active', 'false'],
+            ['==', '$type', 'Polygon'],
+            ['!=', 'mode', 'static']
+          ],
+          'paint': {
+            'fill-color': styles[filler],
+            'fill-outline-color': styles[texter],
+            'fill-opacity': 0.6
+          }
+        },
+        {
+          'id': 'gl-draw-polygon-fill-active',
+          'type': 'fill',
+          'filter': ['all', ['==', 'active', 'true'],
+            ['==', '$type', 'Polygon']
+          ],
+          'paint': {
+            'fill-color': styles[filler],
+            'fill-outline-color': styles[filler],
+            'fill-opacity': 0.2
+          }
+        },
+        {
+          'id': 'gl-draw-polygon-stroke-inactive',
+          'type': 'line',
+          'filter': ['all', ['==', 'active', 'false'],
+            ['==', '$type', 'Polygon'],
+            ['!=', 'mode', 'static']
+          ],
+          'layout': {
+            'line-cap': 'round',
+            'line-join': 'round'
+          },
+          'paint': {
+            'line-color': styles[filler],
+            'line-width': 3
+          }
+        },
+        {
+          'id': 'gl-draw-polygon-stroke-active',
+          'type': 'line',
+          'filter': ['all', ['==', 'active', 'true'],
+            ['==', '$type', 'Polygon']
+          ],
+          'layout': {
+            'line-cap': 'round',
+            'line-join': 'round'
+          },
+          'paint': {
+            'line-color': styles[filler],
+            'line-dasharray': [0.2, 2],
+            'line-width': 2
+          }
+        }
+      ]
     });
     this._map.addControl(this._draw, 'top-left');
 
@@ -210,6 +273,9 @@ export default class CollectionFilterMap extends React.Component {
     Object.keys(filterObj).length === 0 ? this.props.setUrl('/', this.props.history) : this.props.setUrl('/catalog/' + encodeURIComponent(filterString), this.props.history);
     // log filter change in store
     Object.keys(filterObj).length === 0 ? this.props.logFilterChange('/') : this.props.logFilterChange('/catalog/' + encodeURIComponent(filterString));
+
+    // jump back into catalog view regardless of setting or clearing the geo filter
+    this.props.setViewCatalog();
 }
 
   render() {

@@ -24,6 +24,8 @@ export default class TnrisDownloadTemplate extends React.Component {
     this.topAppBar = new MDCTopAppBar(this.topAppBarElement);
     this.tabBar = new MDCTabBar(document.querySelector('.mdc-tab-bar'));
     window.scrollTo(0,0);
+    // retrieve download resources
+    this.props.fetchCollectionResources(this.props.collection.collection_id);
   }
 
   setTemplateView(viewString) {

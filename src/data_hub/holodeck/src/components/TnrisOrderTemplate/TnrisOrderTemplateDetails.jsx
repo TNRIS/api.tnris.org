@@ -21,7 +21,7 @@ export default class TnrisDownloadTemplateDetails extends React.Component {
                         <Images images={this.props.collection.images} />)
                         : "";
 
-    const lidarCard = this.props.collection.category === 'Lidar' ? (
+    const lidarCard = this.props.collection.category.includes('Lidar') ? (
                         <LidarBlurb />)
                         : "";
 

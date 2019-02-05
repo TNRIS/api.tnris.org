@@ -15,9 +15,11 @@ export default class Images extends React.Component {
             autoPlay={multiImage}
             infiniteLoop={multiImage}
             showThumbs={multiImage}
+            dynamicHeight={true}
             emulateTouch
             useKeyboardArrows={true}
             transitionTime={700}
+            interval={6000}
             showIndicators={multiImage}
             showStatus={multiImage} >
             {

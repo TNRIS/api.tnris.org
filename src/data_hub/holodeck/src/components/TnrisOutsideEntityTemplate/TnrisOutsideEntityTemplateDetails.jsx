@@ -17,7 +17,7 @@ export default class TnrisOutsideEntityTemplateDetails extends React.Component {
                           : "";
 
     // using mdc classes to determine grid layout depending on screen size (desktop/tablet)
-    // special case with phone or smaller device because order of divs changes
+    // special case with phone or smaller device because order of components changes
     const gridLayout = window.innerWidth >= 1000 ? (
                           <div className="mdc-layout-grid__inner">
                             <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-4'>

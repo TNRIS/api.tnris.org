@@ -207,7 +207,7 @@ class ContactOutsideForm extends Component {
           <p className="mdc-typography--body2">
             <span><strong>Success!</strong></span>
             <br />
-            Thank you for submitting your inquiry. We review submissions in a timely manner. (unless you are claiming our <strong>"data is corrupt"</strong>; in which case, we will NOT respond because our data is NOT corrupt. you are just a dumb-dumb.)
+            Thank you for submitting your inquiry. Your submission was sent directly to <strong>{this.compiledDisplayName}</strong> and they should respond to you directly via the email address submitted with this form.
           </p>
         </div>
       );

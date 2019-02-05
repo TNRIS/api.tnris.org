@@ -26,6 +26,13 @@ export default class Header extends React.Component {
       this.props.setViewOrderCart();
       this.props.clearPreviousUrl();
     }
+
+    else if (Object.keys(this.props.match.params).includes('collectionId')) {
+      const collectionUuid = this.props.match.params['collectionId'];
+      this.props.closeToolDrawer();
+      this.props.setViewCollection();
+      this.props.selectCollection(collectionUuid);
+    }
   }
 
   handleBack() {
@@ -38,9 +45,6 @@ export default class Header extends React.Component {
       const collectionUuid = this.props.previousUrl.replace('/collection/', '');
       this.props.setViewCollection();
       this.props.selectCollection(collectionUuid);
-      if (this.props.collections[collectionUuid].template === 'tnris-download') {
-        this.props.fetchCollectionResources(collectionUuid);
-      }
       this.props.setUrl(this.props.previousUrl, this.props.history);
     }
     else {
@@ -113,7 +117,7 @@ export default class Header extends React.Component {
     //   default:
     //   tnrisLogo = tnrisGray;
     // }
-    console.log(this.props);
+
     return (
         <header
           className={`header-component mdc-top-app-bar mdc-top-app-bar--fixed`}

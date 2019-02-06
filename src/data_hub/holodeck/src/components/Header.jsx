@@ -90,13 +90,11 @@ export default class Header extends React.Component {
     const closedTitle = 'Open tool drawer';
     const openTitle = 'Close tool drawer';
 
-    console.log(Object.keys(this.props.orders).length);
-
     const shoppingCartCountBadge = Object.keys(this.props.orders).length > 0 ? (
       <NotificationBadge count={Object.keys(this.props.orders).length} effect={Effect.SCALE} frameLength={30}/>
     ) : '';
 
-    const customToolDrawerNotification = this.props.toolDrawerStatus === 'closed' && this.props.match.url.includes('filters') ? (
+    const toolDrawerNotification = this.props.toolDrawerStatus === 'closed' && this.props.match.url.includes('filters') ? (
       <NotificationBadge label='!' count={Object.keys(this.props.orders).length} effect={Effect.SCALE} frameLength={30}/>
     ) : '';
 
@@ -178,7 +176,7 @@ export default class Header extends React.Component {
                     className="mdc-top-app-bar__action-item"
                     id="tools" title={this.props.toolDrawerStatus === 'closed' ? closedTitle : openTitle}>
                     <div>
-                      {customToolDrawerNotification}
+                      {toolDrawerNotification}
                       <i
                         className="material-icons mdc-top-app-bar__navigation-icon">
                         {this.props.toolDrawerStatus === 'closed' ? 'tune' : 'keyboard_arrow_right'}

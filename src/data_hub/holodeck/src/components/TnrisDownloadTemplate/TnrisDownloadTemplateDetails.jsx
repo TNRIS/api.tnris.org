@@ -10,16 +10,45 @@ import Images from '../DialogTemplateListItems/Images'
 
 
 export default class TnrisDownloadTemplateDetails extends React.Component {
+  constructor(props) {
+    super(props)
+
+    window.innerWidth >= 1000 ? this.state = {
+      gridLayout:'desktop'
+    } : this.state = {
+      gridLayout:'mobile'
+    };
+
+    this.handleResize = this.handleResize.bind(this);
+  }
+
+  componentDidMount() {
+    window.addEventListener("resize", this.handleResize);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.handleResize);
+  }
+
+  handleResize() {
+    if (window.innerWidth >= 1000) {
+      this.setState({gridLayout:'desktop'});
+    }
+    else {
+      this.setState({gridLayout:'mobile'});
+    }
+  }
 
   render() {
     const imageCarousel = this.props.collection.images ? (
-                        <Images images={this.props.collection.images} />)
+                        <Images
+                          thumbnail={this.props.collection.thumbnail_image}
+                          images={this.props.collection.images} />)
                         : "";
 
-    const lidarCard = this.props.collection.category === 'Lidar' ? (
+    const lidarCard = this.props.collection.category.includes('Lidar') ? (
                         <LidarBlurb />)
                         : "";
-
 
     const supplementalDownloadsCard = (this.props.collection.tile_index_url ||
                                         this.props.collection.supplemental_report_url ||
@@ -36,8 +65,8 @@ export default class TnrisDownloadTemplateDetails extends React.Component {
                           : "";
 
     // using mdc classes to determine grid layout depending on screen size (desktop/tablet)
-    // special case with phone or smaller device because order of divs changes
-    const gridLayout = window.innerWidth >= 1000 ? (
+    // special case with phone or smaller device because order of components changes
+    const gridLayout = this.state.gridLayout === 'desktop' ? (
                           <div className="mdc-layout-grid__inner">
                             <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-4'>
                               <Metadata collection={this.props.collection} />
@@ -62,7 +91,6 @@ export default class TnrisDownloadTemplateDetails extends React.Component {
                               <ShareButtons />
                             </div>
                           </div>);
-
 
     return (
       <div className='tnris-download-template-details'>

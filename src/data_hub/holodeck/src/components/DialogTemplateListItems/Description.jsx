@@ -27,7 +27,7 @@ export default class Description extends React.Component {
 
     const services = namesArray.length !== 0 ? (
       <div id="oe_services">
-        <p>Currently, there are <strong>{namesArray.length}</strong> available services that you can access below, or by visiting TxDOT's open data portal at the link above.</p>
+        <p>Currently, there are <strong>{namesArray.length}</strong> available services that you can access below, or by visiting the agency's open data portal.</p>
         <ul>
           {
             Object.entries(servicesObj).map((i) => {

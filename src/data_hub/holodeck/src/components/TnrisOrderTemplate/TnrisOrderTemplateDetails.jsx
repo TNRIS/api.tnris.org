@@ -18,10 +18,12 @@ export default class TnrisDownloadTemplateDetails extends React.Component {
                                 : "";
 
     const imageCarousel = this.props.collection.images ? (
-                        <Images images={this.props.collection.images} />)
+                        <Images
+                          thumbnail={this.props.collection.thumbnail_image}
+                          images={this.props.collection.images} />)
                         : "";
 
-    const lidarCard = this.props.collection.category === 'Lidar' ? (
+    const lidarCard = this.props.collection.category.includes('Lidar') ? (
                         <LidarBlurb />)
                         : "";
 
@@ -40,7 +42,7 @@ export default class TnrisDownloadTemplateDetails extends React.Component {
                           : "";
 
     // using mdc classes to determine grid layout depending on screen size (desktop/tablet)
-    // special case with phone or smaller device because order of divs changes
+    // special case with phone or smaller device because order of components changes
     const gridLayout = window.innerWidth >= 1000 ? (
                           <div className="mdc-layout-grid__inner">
                             <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-4'>

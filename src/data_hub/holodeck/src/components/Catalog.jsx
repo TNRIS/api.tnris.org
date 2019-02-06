@@ -4,7 +4,6 @@ import { Redirect } from 'react-router';
 import Footer from './Footer';
 import HistoricalAerialTemplate from './HistoricalAerialTemplate/HistoricalAerialTemplate';
 import OutsideEntityTemplate from './TnrisOutsideEntityTemplate/TnrisOutsideEntityTemplate';
-import TnrisDownloadTemplate from './TnrisDownloadTemplate/TnrisDownloadTemplate';
 import TnrisOrderTemplate from './TnrisOrderTemplate/TnrisOrderTemplate';
 import OrderCartView from './OrderCartView';
 
@@ -12,6 +11,7 @@ import CollectionFilterMapViewContainer from '../containers/CollectionFilterMapV
 import HeaderContainer from '../containers/HeaderContainer';
 import ToolDrawerContainer from '../containers/ToolDrawerContainer';
 import CatalogCardContainer from '../containers/CatalogCardContainer';
+import TnrisDownloadTemplateContainer from '../containers/TnrisDownloadTemplateContainer';
 
 import loadingImage from '../images/loading.gif';
 import noDataImage from '../images/no-data.png';
@@ -93,7 +93,7 @@ export default class Catalog extends React.Component {
     let collection = this.props.collections[this.props.selectedCollection];
     switch(collection['template']) {
       case 'tnris-download':
-        return (<TnrisDownloadTemplate collection={collection} />);
+        return (<TnrisDownloadTemplateContainer collection={collection} />);
       case 'tnris-order':
         return (<TnrisOrderTemplate collection={collection} />);
       case 'historical-aerial':
@@ -101,7 +101,7 @@ export default class Catalog extends React.Component {
       case 'outside-entity':
         return (<OutsideEntityTemplate collection={collection} />);
       default:
-        return (<TnrisDownloadTemplate collection={collection} />);
+        return (<TnrisDownloadTemplateContainer collection={collection} />);
     }
   }
 

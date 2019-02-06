@@ -67,6 +67,22 @@ styles for component: TnrisOrderTemplateDetails
       }
     }
 
+    // force each image to be in 16:9 aspect ratio container
+    .carousel-image{
+      padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+      overflow: hidden;
+      position: relative;
+    }
+
+    .carousel-image > img{
+      position: absolute;
+      display: block;
+      width: 100%;
+      height: auto;
+      top: 50%; /* 50% from the top of the container */
+      transform: translateY(-50%); /* -50% of the height of the image */
+    }
+
     a {
       color: $primary-color;
     }

@@ -9,7 +9,6 @@ SELECT collection.collection_id,
   collection.acquisition_date,
 	collection.short_description,
 	collection.description,
-	collection.source,
   collection.partners,
 	collection.authoritative,
 	collection.public,
@@ -128,10 +127,6 @@ SELECT collection.collection_id,
     ) THEN 'CIR'
     ELSE NULL
   END AS band_types,
-	agency_type.agency_name,
-	agency_type.agency_abbreviation,
-	agency_type.agency_website,
-	agency_type.agency_contact,
   source_type.source_name,
 	source_type.source_abbreviation,
 	source_type.source_website,
@@ -161,8 +156,6 @@ LEFT JOIN use_type ON use_type.use_type_id=use_relate.use_type_id
 LEFT JOIN resource_type_relate ON resource_type_relate.collection_id=collection.collection_id
 LEFT JOIN resource_type ON resource_type.resource_type_id=resource_type_relate.resource_type_id
 
-LEFT JOIN agency_type ON agency_type.agency_type_id=collection.agency_type_id
-
 LEFT JOIN source_type ON source_type.source_type_id=collection.source_type_id
 
 LEFT JOIN license_type ON license_type.license_type_id=collection.license_type_id
@@ -177,10 +170,6 @@ LEFT JOIN area_type ON area_type.area_type_id=collection_county_relate.area_type
 LEFT JOIN outside_entity_services ON outside_entity_services.collection_id = collection.collection_id
 
 GROUP BY collection.collection_id,
-				agency_type.agency_name,
-				agency_type.agency_abbreviation,
-				agency_type.agency_website,
-				agency_type.agency_contact,
         source_type.source_name,
 				source_type.source_abbreviation,
 				source_type.source_website,

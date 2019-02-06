@@ -51,6 +51,7 @@ export const getSearchIndex = createSelector(
       'acquisition_date',
       'source_name',
       'source_abbreviation',
+      'partners',
       'oe_service_names'
     ];
 

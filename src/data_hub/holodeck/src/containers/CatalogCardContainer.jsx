@@ -14,9 +14,6 @@ const mapDispatchToProps = (dispatch) => ({
     closeToolDrawer: () => {
       dispatch(toolDrawerActions.closeToolDrawer());
     },
-    fetchCollectionResources: (collectionId) => {
-      dispatch(collectionActions.fetchCollectionResources(collectionId))
-    },
     selectCollection: (collectionId) => {
       dispatch(collectionActions.selectCollection(collectionId));
     },

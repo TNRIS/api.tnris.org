@@ -1,6 +1,8 @@
 import React from 'react';
 import {MDCTopAppBar} from '@material/top-app-bar/index';
 import {MDCDrawer} from "@material/drawer";
+import NotificationBadge from 'react-notification-badge';
+import {Effect} from 'react-notification-badge';
 
 import CollectionSearcherContainer from '../containers/CollectionSearcherContainer';
 // import tnrisGray from '../images/tnris_gray.png';
@@ -26,6 +28,13 @@ export default class Header extends React.Component {
       this.props.setViewOrderCart();
       this.props.clearPreviousUrl();
     }
+
+    else if (Object.keys(this.props.match.params).includes('collectionId')) {
+      const collectionUuid = this.props.match.params['collectionId'];
+      this.props.closeToolDrawer();
+      this.props.setViewCollection();
+      this.props.selectCollection(collectionUuid);
+    }
   }
 
   handleBack() {
@@ -38,9 +47,6 @@ export default class Header extends React.Component {
       const collectionUuid = this.props.previousUrl.replace('/collection/', '');
       this.props.setViewCollection();
       this.props.selectCollection(collectionUuid);
-      if (this.props.collections[collectionUuid].template === 'tnris-download') {
-        this.props.fetchCollectionResources(collectionUuid);
-      }
       this.props.setUrl(this.props.previousUrl, this.props.history);
     }
     else {
@@ -83,6 +89,14 @@ export default class Header extends React.Component {
 
     const closedTitle = 'Open tool drawer';
     const openTitle = 'Close tool drawer';
+
+    const shoppingCartCountBadge = Object.keys(this.props.orders).length > 0 ? (
+      <NotificationBadge count={Object.keys(this.props.orders).length} effect={Effect.SCALE} frameLength={30}/>
+    ) : '';
+
+    const toolDrawerNotification = this.props.toolDrawerStatus === 'closed' && this.props.match.url.includes('filters') ? (
+      <NotificationBadge label='!' count={Object.keys(this.props.orders).length} effect={Effect.SCALE} frameLength={30}/>
+    ) : '';
 
     // let tnrisLogo;
     // switch(this.props.theme) {
@@ -151,17 +165,23 @@ export default class Header extends React.Component {
                     onClick={this.handleOrderCartView}
                     className="mdc-top-app-bar__action-item"
                     title="View shopping cart">
-                    <i className={shoppingCartClass}>shopping_cart</i>
+                    <div>
+                      {shoppingCartCountBadge}
+                      <i className={shoppingCartClass}>shopping_cart</i>
+                    </div>
                   </a> : ''}
                 {this.props.view === 'catalog' ?
                   <a
                     onClick={this.props.toggleToolDrawerDisplay}
                     className="mdc-top-app-bar__action-item"
                     id="tools" title={this.props.toolDrawerStatus === 'closed' ? closedTitle : openTitle}>
-                    <i
-                      className="material-icons mdc-top-app-bar__navigation-icon">
-                      {this.props.toolDrawerStatus === 'closed' ? 'tune' : 'keyboard_arrow_right'}
-                    </i>
+                    <div>
+                      {toolDrawerNotification}
+                      <i
+                        className="material-icons mdc-top-app-bar__navigation-icon">
+                        {this.props.toolDrawerStatus === 'closed' ? 'tune' : 'keyboard_arrow_right'}
+                      </i>
+                    </div>
                   </a> :
                   <a
                     onClick={this.handleCatalogView}

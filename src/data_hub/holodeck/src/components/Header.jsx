@@ -1,6 +1,8 @@
 import React from 'react';
 import {MDCTopAppBar} from '@material/top-app-bar/index';
 import {MDCDrawer} from "@material/drawer";
+import NotificationBadge from 'react-notification-badge';
+import {Effect} from 'react-notification-badge';
 
 import CollectionSearcherContainer from '../containers/CollectionSearcherContainer';
 // import tnrisGray from '../images/tnris_gray.png';
@@ -88,6 +90,12 @@ export default class Header extends React.Component {
     const closedTitle = 'Open tool drawer';
     const openTitle = 'Close tool drawer';
 
+    console.log(Object.keys(this.props.orders).length);
+
+    const shoppingCartCountBadge = Object.keys(this.props.orders).length > 0 ? (
+      <NotificationBadge count={Object.keys(this.props.orders).length} effect={Effect.SCALE} frameLength={30}/>
+    ) : '';
+
     // let tnrisLogo;
     // switch(this.props.theme) {
     //   case 'light':
@@ -155,7 +163,10 @@ export default class Header extends React.Component {
                     onClick={this.handleOrderCartView}
                     className="mdc-top-app-bar__action-item"
                     title="View shopping cart">
-                    <i className={shoppingCartClass}>shopping_cart</i>
+                    <div>
+                      {shoppingCartCountBadge}
+                      <i className={shoppingCartClass}>shopping_cart</i>
+                    </div>
                   </a> : ''}
                 {this.props.view === 'catalog' ?
                   <a

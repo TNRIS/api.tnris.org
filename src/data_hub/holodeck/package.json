@@ -47,6 +47,7 @@
     "react-dom": "^16.4.2",
     "react-ga": "^2.5.3",
     "react-google-recaptcha": "^1.0.5",
+    "react-notification-badge": "^1.4.0",
     "react-redux": "^5.0.7",
     "react-responsive-carousel": "^3.1.42",
     "react-router-dom": "^4.3.1",

@@ -96,6 +96,10 @@ export default class Header extends React.Component {
       <NotificationBadge count={Object.keys(this.props.orders).length} effect={Effect.SCALE} frameLength={30}/>
     ) : '';
 
+    const customToolDrawerNotification = this.props.toolDrawerStatus === 'closed' && this.props.match.url.includes('filters') ? (
+      <NotificationBadge label='!' count={Object.keys(this.props.orders).length} effect={Effect.SCALE} frameLength={30}/>
+    ) : '';
+
     // let tnrisLogo;
     // switch(this.props.theme) {
     //   case 'light':
@@ -173,10 +177,13 @@ export default class Header extends React.Component {
                     onClick={this.props.toggleToolDrawerDisplay}
                     className="mdc-top-app-bar__action-item"
                     id="tools" title={this.props.toolDrawerStatus === 'closed' ? closedTitle : openTitle}>
-                    <i
-                      className="material-icons mdc-top-app-bar__navigation-icon">
-                      {this.props.toolDrawerStatus === 'closed' ? 'tune' : 'keyboard_arrow_right'}
-                    </i>
+                    <div>
+                      {customToolDrawerNotification}
+                      <i
+                        className="material-icons mdc-top-app-bar__navigation-icon">
+                        {this.props.toolDrawerStatus === 'closed' ? 'tune' : 'keyboard_arrow_right'}
+                      </i>
+                    </div>
                   </a> :
                   <a
                     onClick={this.handleCatalogView}

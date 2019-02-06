@@ -67,9 +67,9 @@ export default class CollectionSearcher extends React.Component {
         searchFieldValue: '',
         showSuggestionList: false
       });
-      // this.props.setCollectionSearchQuery('');
+      this.props.setCollectionSearchQuery('');
       this.props.setCollectionSearchSuggestionsQuery('');
-      // this.updateUrl('');
+      this.updateUrl('');
       this.searchFieldInput.focus();
     } catch(e) {
       console.log(e);

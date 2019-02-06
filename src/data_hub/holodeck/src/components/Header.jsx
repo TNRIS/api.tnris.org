@@ -1,6 +1,6 @@
 import React from 'react';
-import {MDCTopAppBar} from '@material/top-app-bar/index';
-import {MDCDrawer} from "@material/drawer";
+import { MDCTopAppBar } from '@material/top-app-bar/index';
+import { MDCDrawer } from "@material/drawer";
 
 import CollectionSearcherContainer from '../containers/CollectionSearcherContainer';
 // import tnrisGray from '../images/tnris_gray.png';
@@ -60,8 +60,10 @@ export default class Header extends React.Component {
   }
 
   handleCatalogView() {
+    if (this.props.toolDrawerView === 'dismiss' && this.props.showToolDrawerInCatalogView) {
+      this.props.openToolDrawer();
+    }
     this.props.clearSelectedCollection();
-    this.props.openToolDrawer();
     this.props.setViewCatalog();
     this.props.setUrl(this.props.catalogFilterUrl, this.props.history);
   }
@@ -76,13 +78,9 @@ export default class Header extends React.Component {
     }
 
     let dismissClass = 'closed-drawer';
-
     if (this.props.toolDrawerStatus === 'open' && this.props.toolDrawerView === 'dismiss') {
       dismissClass = 'open-drawer';
     }
-
-    const closedTitle = 'Open tool drawer';
-    const openTitle = 'Close tool drawer';
 
     // let tnrisLogo;
     // switch(this.props.theme) {
@@ -113,7 +111,7 @@ export default class Header extends React.Component {
     //   default:
     //   tnrisLogo = tnrisGray;
     // }
-    
+    console.log(this.props);
     return (
         <header
           className={`header-component mdc-top-app-bar mdc-top-app-bar--fixed`}
@@ -137,38 +135,39 @@ export default class Header extends React.Component {
                 <img src={tnrisLogo} aria-label="TNRIS Logo" alt="TNRIS Logo" className="logo" />
               </a>
               <span className="mdc-top-app-bar__title">Data Holodeck</span>*/}
-              {this.props.view === 'orderCart' ?
+              {/*{this.props.view === 'orderCart' ?
                 <a
                   onClick={this.handleBack}
                   className="mdc-top-app-bar__action-item"
                   title="Back"
                   >
                   <i className="material-icons mdc-top-app-bar__navigation-icon">arrow_back</i>
+                </a> : ''}*/}
+              <a
+                onClick={this.handleCatalogView}
+                className="material-icons mdc-top-app-bar__navigation-icon"
+                id="tools"
+                title="Catalog">
+                view_comfy
+              </a>
+              <CollectionSearcherContainer match={this.props.match} history={this.props.history} />
+              {this.props.orders && Object.keys(this.props.orders).length !== 0 ?
+                <a
+                  onClick={this.handleOrderCartView}
+                  className={shoppingCartClass}
+                  title="View shopping cart">
+                  shopping_cart
                 </a> : ''}
-               <CollectionSearcherContainer match={this.props.match} history={this.props.history} />
-               {this.props.orders && Object.keys(this.props.orders).length !== 0 ?
-                  <a
-                    onClick={this.handleOrderCartView}
-                    className="mdc-top-app-bar__action-item"
-                    title="View shopping cart">
-                    <i className={shoppingCartClass}>shopping_cart</i>
-                  </a> : ''}
                 {this.props.view === 'catalog' ?
                   <a
                     onClick={this.props.toggleToolDrawerDisplay}
-                    className="mdc-top-app-bar__action-item"
-                    id="tools" title={this.props.toolDrawerStatus === 'closed' ? closedTitle : openTitle}>
-                    <i
-                      className="material-icons mdc-top-app-bar__navigation-icon">
-                      {this.props.toolDrawerStatus === 'closed' ? 'tune' : 'keyboard_arrow_right'}
-                    </i>
-                  </a> :
-                  <a
-                    onClick={this.handleCatalogView}
-                    className="mdc-top-app-bar__action-item"
-                    id="tools" title="Catalog">
-                    <i className="material-icons mdc-top-app-bar__navigation-icon">view_comfy</i>
-                  </a>}
+                    className="material-icons mdc-top-app-bar__navigation-icon"
+                    id="tools"
+                    title={this.props.toolDrawerStatus === 'closed' ? 'Open tool drawer' : 'Close tool drawer'}>
+                    {this.props.toolDrawerView === 'dismiss' ?
+                      this.props.toolDrawerStatus === 'closed' ?
+                        'tune' : 'keyboard_arrow_right' : 'tune'}
+                  </a> : null}
             </section>
           </div>
         </header>

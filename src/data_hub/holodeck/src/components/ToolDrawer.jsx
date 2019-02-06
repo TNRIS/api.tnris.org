@@ -18,6 +18,9 @@ export default class ToolDrawer extends React.Component {
 
   componentDidMount() {
     this.toolDrawer = MDCDrawer.attachTo(document.querySelector('.tool-drawer'));
+    if (this.props.view === 'modal') {
+      this.props.closeToolDrawer();
+    }
   }
 
   clearAllFilters() {
@@ -33,14 +36,15 @@ export default class ToolDrawer extends React.Component {
   }
 
   render() {
-    // const classname = this.props.view === 'dismiss' ?
-    //   'mdc-drawer mdc-drawer--dismissible tool-drawer' : 'mdc-drawer mdc-drawer--modal tool-drawer';
-    const fullclass = this.props.toolDrawerStatus === 'open' ? ' mdc-drawer--open' : '';
+    console.log(this.props);
+    const drawerTypeClass = this.props.view === 'dismiss' ?
+      'mdc-drawer mdc-drawer--dismissible tool-drawer' : 'mdc-drawer mdc-drawer--modal tool-drawer';
+    const openClass = this.props.toolDrawerStatus === 'open' && this.props.showToolDrawerInCatalogView ?
+      'mdc-drawer--open' : '';
 
     return (
-
       <div className='tool-drawer-component mdc-typography'>
-        <aside className={`mdc-drawer mdc-drawer--dismissible tool-drawer ${fullclass}`} dir='rtl'>
+        <aside className={`${drawerTypeClass} ${openClass}`} dir='rtl'>
           <div className='mdc-drawer__content' dir='ltr'>
 
               <div className='mdc-drawer__header no-scroll'>
@@ -57,7 +61,6 @@ export default class ToolDrawer extends React.Component {
                 className='mdc-list-item'
                 match={this.props.match}
                 history={this.props.history} />
-              {/*<hr className='mdc-list-divider'/>*/}
               <div className='filter-title mdc-list-group__subheader'>
                 Filter
               </div>
@@ -65,7 +68,6 @@ export default class ToolDrawer extends React.Component {
                 className='mdc-list-item'
                 match={this.props.match}
                 history={this.props.history} />
-              {/*<hr className='mdc-list-divider'/>*/}
               <div className='timeslider-title mdc-list-group__subheader'>
                 Date Range
               </div>
@@ -73,7 +75,6 @@ export default class ToolDrawer extends React.Component {
                 className='mdc-list-item'
                 match={this.props.match}
                 history={this.props.history} />
-              {/*<hr className='mdc-list-divider'/>*/}
               <div className='clear-all-filters-container'>
                 <button
                   className="mdc-button mdc-button--raised"
@@ -81,14 +82,15 @@ export default class ToolDrawer extends React.Component {
                   Clear All Filters
                 </button>
               </div>
-              {/*<hr className='mdc-list-divider'/>*/}
               <ThemeChooserContainer />
-              {/*<hr className='mdc-list-divider'/>*/}
               <ShareButtons />
             </nav>
 
           </div>
         </aside>
+
+        {this.props.view === 'modal' ? <div className='mdc-drawer-scrim' id='scrim'></div> : null}
+
       </div>
     );
   }

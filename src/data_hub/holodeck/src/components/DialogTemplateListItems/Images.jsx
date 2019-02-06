@@ -25,8 +25,8 @@ export default class Images extends React.Component {
             showStatus={multiImage} >
             {
               carousel_images.map(url => (
-                <div key={url}>
-                  <img className='carousel-img' src={url} alt='' />
+                <div className='carousel-image' key={url}>
+                  <img src={url} alt='' />
                 </div>
                 )
               )

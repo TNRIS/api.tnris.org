@@ -66,9 +66,9 @@ class CollectionForm(forms.ModelForm):
     delete_natural_image = forms.BooleanField(required=False)
     delete_urban_image = forms.BooleanField(required=False)
 
-    supplemental_report_url = forms.FileField(required=False, widget=ZipfileWidget)
-    lidar_breaklines_url = forms.FileField(required=False, widget=ZipfileWidget)
-    tile_index_url = forms.FileField(required=False, widget=ZipfileWidget)
+    supplemental_report_url = forms.FileField(required=False, widget=ZipfileWidget, help_text="Maximum filesize 75MB")
+    lidar_breaklines_url = forms.FileField(required=False, widget=ZipfileWidget, help_text="Maximum filesize 75MB")
+    tile_index_url = forms.FileField(required=False, widget=ZipfileWidget, help_text="Maximum filesize 75MB")
 
     delete_supplemental_report_url = forms.BooleanField(required=False)
     delete_lidar_breaklines_url = forms.BooleanField(required=False)

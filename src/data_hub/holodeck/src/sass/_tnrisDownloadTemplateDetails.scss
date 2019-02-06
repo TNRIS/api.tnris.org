@@ -47,8 +47,9 @@ styles for component: TnrisDownloadTemplateDetails
     }
 
     // set max height for img in carousel to 56.25% of 1000px (1600x900 - height is 56.25% of width).
-    .max-img-size {
-      max-height: 562.5px;
+    .carousel-img {
+      max-width: 100%;
+      height: auto;
     }
 
     a {

@@ -26,7 +26,7 @@ export default class Images extends React.Component {
             {
               carousel_images.map(url => (
                 <div key={url}>
-                  <img className='max-img-size' src={url} alt='' />
+                  <img className='carousel-img' src={url} alt='' />
                 </div>
                 )
               )

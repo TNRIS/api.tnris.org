@@ -1,5 +1,6 @@
 import React from 'react';
 import { Redirect } from 'react-router';
+import { MDCDrawer } from "@material/drawer";
 
 import Footer from './Footer';
 import HistoricalAerialTemplate from './HistoricalAerialTemplate/HistoricalAerialTemplate';
@@ -10,7 +11,6 @@ import OrderCartView from './OrderCartView';
 import CollectionFilterMapViewContainer from '../containers/CollectionFilterMapViewContainer';
 import HeaderContainer from '../containers/HeaderContainer';
 import ToolDrawerContainer from '../containers/ToolDrawerContainer';
-import ToolDrawerMobileContainer from '../containers/ToolDrawerMobileContainer';
 import CatalogCardContainer from '../containers/CatalogCardContainer';
 import TnrisDownloadTemplateContainer from '../containers/TnrisDownloadTemplateContainer';
 
@@ -23,10 +23,12 @@ export default class Catalog extends React.Component {
 
     window.innerWidth >= 1050 ? this.state = {
       toolDrawerView:'dismiss',
-      badUrlFlag: false
+      badUrlFlag: false,
+      showToolDrawerInCatalogView: true
     } : this.state = {
       toolDrawerView:'modal',
-      badUrlFlag: false
+      badUrlFlag: false,
+      showToolDrawerInCatalogView: true
     };
 
     this.handleResize = this.handleResize.bind(this);
@@ -45,6 +47,7 @@ export default class Catalog extends React.Component {
     this.props.fetchCollections();
     this.props.fetchStoredShoppingCart();
     window.addEventListener("resize", this.handleResize);
+    this.toolDrawer = MDCDrawer.attachTo(document.querySelector('.tool-drawer'));
   }
 
   componentWillUnmount() {
@@ -70,9 +73,13 @@ export default class Catalog extends React.Component {
   handleResize() {
     if (window.innerWidth >= 1050) {
       this.setState({toolDrawerView:'dismiss'});
+      if (this.props.showToolDrawerInCatalogView) {
+        this.props.openToolDrawer();
+      }
     }
     else {
       this.setState({toolDrawerView:'modal'});
+      this.props.closeToolDrawer();
       const scrim = document.getElementById('scrim');
       scrim.onclick = () => {
         this.props.closeToolDrawer();
@@ -82,7 +89,9 @@ export default class Catalog extends React.Component {
 
   toggleToolDrawerDisplay() {
     this.props.toolDrawerStatus === 'open' ? this.props.closeToolDrawer() : this.props.openToolDrawer();
-    if (this.state.toolDrawerView === 'modal') {
+    if (this.state.toolDrawerView === 'dismiss') {
+      this.setState({showToolDrawerInCatalogView: !this.state.showToolDrawerInCatalogView});
+    } else if (this.state.toolDrawerView === 'modal') {
       const scrim = document.getElementById('scrim');
       scrim.onclick = () => {
         this.props.closeToolDrawer();
@@ -107,7 +116,7 @@ export default class Catalog extends React.Component {
   }
 
   setCatalogView() {
-    const noDataDivClass = this.props.toolDrawerStatus === 'open' && this.state.toolDrawerView === 'dismiss' ?
+    const noDataDivClass = this.props.toolDrawerStatus === 'open' && this.state.showToolDrawerInCatalogView ?
       'no-data no-data-open' : 'no-data no-data-closed';
     const catalogCards = this.props.visibleCollections && this.props.visibleCollections.length < 1 ?
       <div className={noDataDivClass}>
@@ -149,9 +158,10 @@ export default class Catalog extends React.Component {
   }
 
   render() {
+    console.log(this.state);
     const { error, loading } = this.props;
-    let dismissClass = 'closed-drawer';
 
+    let dismissClass = 'closed-drawer';
     if (this.props.toolDrawerStatus === 'open' && this.state.toolDrawerView === 'dismiss') {
       dismissClass = 'open-drawer';
     }
@@ -170,24 +180,17 @@ export default class Catalog extends React.Component {
 
     return (
       <div className="catalog-component">
+        <ToolDrawerContainer
+          match={this.props.match}
+          history={this.props.history}
+          total={this.props.visibleCollections ? this.props.visibleCollections.length : 0}
+          showToolDrawerInCatalogView={this.state.showToolDrawerInCatalogView}
+          view={this.state.toolDrawerView} />
 
-        {this.state.toolDrawerView === 'dismiss' ?
-          <ToolDrawerContainer
-            match={this.props.match}
-            history={this.props.history}
-            total={this.props.visibleCollections ? this.props.visibleCollections.length : 0}
-            view={this.state.toolDrawerView}
-          /> :
-          <ToolDrawerMobileContainer
-            match={this.props.match}
-            history={this.props.history}
-            total={this.props.visibleCollections ? this.props.visibleCollections.length : 0}
-            view={this.state.toolDrawerView}
-          />
-        }
         <HeaderContainer
           toolDrawerView={this.state.toolDrawerView}
           toggleToolDrawerDisplay={this.toggleToolDrawerDisplay}
+          showToolDrawerInCatalogView={this.state.showToolDrawerInCatalogView}
           match={this.props.match}
           history={this.props.history} />
 
@@ -197,7 +200,8 @@ export default class Catalog extends React.Component {
 
         <Footer
           view={this.state.toolDrawerView}
-          status={this.props.toolDrawerStatus} />
+          status={this.props.toolDrawerStatus}
+          showToolDrawerInCatalogView={this.state.showToolDrawerInCatalogView} />
 
       </div>
     );

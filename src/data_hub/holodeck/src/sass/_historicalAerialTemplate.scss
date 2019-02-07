@@ -4,13 +4,12 @@ styles for component: HistoricalAerialTemplate
 
 .historical-aerial-template {
   header {
-    @include mdc-top-app-bar-ink-color($text-color);
+    // @include mdc-top-app-bar-ink-color($text-color);
     @include mdc-top-app-bar-icon-ink-color($text-color);
-    @include mdc-top-app-bar-fill-color($primary-color);
-    border-bottom: solid 1px $skin-tertiary;
-    background-color: $header-bar;
-    color: $skin-primary;
+    @include mdc-top-app-bar-fill-color($header-bar);
+    // border-bottom: solid 1px $skin-tertiary;
     z-index: 3;
+    position: relative;
   }
 
   button {
@@ -26,6 +25,10 @@ styles for component: HistoricalAerialTemplate
     outline: none;
   }
 
+  .mdc-top-app-bar__title {
+    font-size: 1.7rem;
+  }
+
   section.mdc-top-app-bar__section.mdc-top-app-bar__section--align-end {
     width: auto;
 
@@ -36,12 +39,6 @@ styles for component: HistoricalAerialTemplate
           // color: $text-color;
           color: $skin-secondary;
         }
-        // .mdc-tab-indicator--active {
-        //   .mdc-tab-indicator__content--underline {
-        //     // background-color: $text-color;
-        //     background-color: gray;
-        //   }
-        // }
       }
       .mdc-tab--active {
         .mdc-tab__content {

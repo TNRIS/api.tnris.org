@@ -94,9 +94,10 @@ export default class Header extends React.Component {
       <NotificationBadge count={Object.keys(this.props.orders).length} effect={Effect.SCALE} frameLength={30}/>
     ) : '';
 
-    const toolDrawerNotification = this.props.toolDrawerStatus === 'closed' && this.props.match.url.includes('filters') ? (
-      <NotificationBadge label='!' count={Object.keys(this.props.orders).length} effect={Effect.SCALE} frameLength={30}/>
-    ) : '';
+    const filters = ['filter', 'geo', 'sort', 'range'];
+    const toolDrawerNotification = this.props.toolDrawerStatus === 'closed' && filters.map(x => this.props.match.url.includes(x) ? (
+      <NotificationBadge key={x} label='!' count={1} frameLength={30}/>
+    ) : '');
 
     // let tnrisLogo;
     // switch(this.props.theme) {
@@ -177,8 +178,7 @@ export default class Header extends React.Component {
                     id="tools" title={this.props.toolDrawerStatus === 'closed' ? closedTitle : openTitle}>
                     <div>
                       {toolDrawerNotification}
-                      <i
-                        className="material-icons mdc-top-app-bar__navigation-icon">
+                      <i className="material-icons mdc-top-app-bar__navigation-icon">
                         {this.props.toolDrawerStatus === 'closed' ? 'tune' : 'keyboard_arrow_right'}
                       </i>
                     </div>

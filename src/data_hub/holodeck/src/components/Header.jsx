@@ -75,14 +75,6 @@ export default class Header extends React.Component {
   }
 
   render() {
-    let shoppingCartClass = "material-icons mdc-top-app-bar__navigation-icon";
-
-    if (this.props.orders) {
-      shoppingCartClass = Object.keys(this.props.orders).length !== 0 ?
-      "material-icons mdc-top-app-bar__navigation-icon shopping-cart-full" :
-      "material-icons mdc-top-app-bar__navigation-icon shopping-cart-empty";
-    }
-
     let dismissClass = 'closed-drawer';
     if (this.props.toolDrawerStatus === 'open' && this.props.toolDrawerView === 'dismiss') {
       dismissClass = 'open-drawer';
@@ -167,25 +159,27 @@ export default class Header extends React.Component {
               </a>
                <CollectionSearcherContainer match={this.props.match} history={this.props.history} />
                {this.props.orders && Object.keys(this.props.orders).length !== 0 ?
+                 <div>
+                   {shoppingCartCountBadge}
                   <a
                     onClick={this.handleOrderCartView}
-                    className="mdc-top-app-bar__action-item"
-                    title="View shopping cart">
-                    <div>
-                      {shoppingCartCountBadge}
-                      <i className={shoppingCartClass}>shopping_cart</i>
-                    </div>
-                  </a> : ''}
-                {this.props.view === 'catalog' ?
-                  <a
-                    onClick={this.props.toggleToolDrawerDisplay}
                     className="material-icons mdc-top-app-bar__navigation-icon"
-                    id="tools"
-                    title={this.props.toolDrawerStatus === 'closed' ? 'Open tool drawer' : 'Close tool drawer'}>
-                    {this.props.toolDrawerView === 'dismiss' ?
-                      this.props.toolDrawerStatus === 'closed' ?
-                        'tune' : 'keyboard_arrow_right' : 'tune'}
-                  </a> : null}
+                    title="View shopping cart">
+                    shopping_cart
+                  </a>
+                </div> : ''}
+                {this.props.view === 'catalog' ?
+                  <div>
+                    {toolDrawerNotification}
+                    <a
+                      onClick={this.props.toggleToolDrawerDisplay}
+                      className="material-icons mdc-top-app-bar__navigation-icon"
+                      id="tools"
+                      title={this.props.toolDrawerStatus === 'closed' ? 'Open tool drawer' : 'Close tool drawer'}>
+                      {this.props.toolDrawerView === 'dismiss' ?
+                        this.props.toolDrawerStatus === 'closed' ? 'tune' : 'keyboard_arrow_right' : 'tune'}
+                    </a>
+                  </div> : null}
             </section>
           </div>
         </header>

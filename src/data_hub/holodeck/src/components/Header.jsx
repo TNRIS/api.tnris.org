@@ -164,14 +164,6 @@ export default class Header extends React.Component {
                 title="Catalog">
                 view_comfy
               </a>
-              <CollectionSearcherContainer match={this.props.match} history={this.props.history} />
-              {this.props.orders && Object.keys(this.props.orders).length !== 0 ?
-                <a
-                  onClick={this.handleOrderCartView}
-                  className={shoppingCartClass}
-                  title="View shopping cart">
-                  shopping_cart
-                </a> : ''}
                <CollectionSearcherContainer match={this.props.match} history={this.props.history} />
                {this.props.orders && Object.keys(this.props.orders).length !== 0 ?
                   <a

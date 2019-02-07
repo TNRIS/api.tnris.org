@@ -36,7 +36,6 @@ export default class ToolDrawer extends React.Component {
   }
 
   render() {
-    console.log(this.props);
     const drawerTypeClass = this.props.view === 'dismiss' ?
       'mdc-drawer mdc-drawer--dismissible tool-drawer' : 'mdc-drawer mdc-drawer--modal tool-drawer';
     const openClass = this.props.toolDrawerStatus === 'open' && this.props.showToolDrawerInCatalogView ?

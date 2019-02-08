@@ -94,7 +94,7 @@ export default class Header extends React.Component {
         onClick={this.handleCatalogView}
         className="material-icons mdc-top-app-bar__navigation-icon"
         id="tools"
-        title="Catalog">
+        title="View Catalog">
         view_comfy
       </a>
     ) : '';

@@ -89,6 +89,16 @@ export default class Header extends React.Component {
       <NotificationBadge key={x} label='!' count={1} frameLength={30}/>
     ) : '');
 
+    const backToCatalogView = this.props.view !== 'catalog' ? (
+      <a
+        onClick={this.handleCatalogView}
+        className="material-icons mdc-top-app-bar__navigation-icon"
+        id="tools"
+        title="Catalog">
+        view_comfy
+      </a>
+    ) : '';
+
     // let tnrisLogo;
     // switch(this.props.theme) {
     //   case 'light':
@@ -150,13 +160,9 @@ export default class Header extends React.Component {
                   >
                   <i className="material-icons mdc-top-app-bar__navigation-icon">arrow_back</i>
                 </a> : ''}*/}
-              <a
-                onClick={this.handleCatalogView}
-                className="material-icons mdc-top-app-bar__navigation-icon"
-                id="tools"
-                title="Catalog">
-                view_comfy
-              </a>
+
+              {backToCatalogView}
+
                <CollectionSearcherContainer match={this.props.match} history={this.props.history} />
                {this.props.orders && Object.keys(this.props.orders).length !== 0 ?
                  <div>

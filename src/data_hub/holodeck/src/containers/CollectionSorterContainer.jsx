@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 
 import { collectionSorterActions, urlTrackerActions } from '../actions';
 import CollectionSorter from '../components/CollectionSorter';
@@ -28,9 +29,9 @@ const mapDispatchToProps = dispatch => ({
   }
 })
 
-const CollectionSorterContainer = connect(
+const CollectionSorterContainer = withRouter(connect(
   mapStateToProps,
   mapDispatchToProps
-)(CollectionSorter);
+)(CollectionSorter));
 
 export default CollectionSorterContainer;

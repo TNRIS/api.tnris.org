@@ -2,6 +2,7 @@ import React from 'react';
 import Downshift from 'downshift';
 import { MDCTextField } from '@material/textfield';
 import { Redirect } from 'react-router';
+import { matchPath } from 'react-router-dom';
 
 export default class CollectionSearcher extends React.Component {
 
@@ -25,12 +26,16 @@ export default class CollectionSearcher extends React.Component {
   componentDidMount() {
     this.searchField = new MDCTextField(document.querySelector('.search-component'));
     this.searchFieldInput = document.querySelector('.mdc-text-field__input');
-
     // on component mount, check the URl to apply any necessary filters
     // first, check if url has a 'filters' parameter
-    if (Object.keys(this.props.match.params).includes('filters')) {
+    const match = matchPath(
+        this.props.location.pathname,
+        { path: '/catalog/:filters' }
+      );
+    const filters = match ? match.params.filters : null;
+    if (filters) {
       try {
-        const allFilters = JSON.parse(decodeURIComponent(this.props.match.params.filters));
+        const allFilters = JSON.parse(decodeURIComponent(filters));
         // second, check if filters param includes search key
         if (Object.keys(allFilters).includes('search')) {
           // third, apply search text and then populate the input box
@@ -46,6 +51,53 @@ export default class CollectionSearcher extends React.Component {
       }
     }
   }
+
+  // componentDidUpdate() {
+  //   // component update may have come from browser navigation, check the
+  //   // URl to apply any necessary filters
+  //
+  //   window.onpopstate = (e) => {
+  //     // first, check if url has a 'filters' parameter
+  //     const match = matchPath(
+  //         this.props.location.pathname,
+  //         { path: '/catalog/:filters' }
+  //       );
+  //     const filters = match ? match.params.filters : null;
+  //     if (filters) {
+  //       try {
+  //         const allFilters = JSON.parse(decodeURIComponent(filters));
+  //         // second, check if filters param includes search key
+  //         if (Object.keys(allFilters).includes('search')) {
+  //           // third, apply search text and then populate the input box
+  //           if (allFilters.search !== this.props.collectionSearchQuery) {
+  //             this.props.setCollectionSearchQuery(allFilters.search);
+  //             this.props.setCollectionSearchSuggestionsQuery(allFilters.search);
+  //             this.setState({searchFieldValue: allFilters.search});
+  //           }
+  //         }
+  //         else {
+  //           if (this.props.collectionSearchQuery !== "") {
+  //             this.props.setCollectionSearchQuery("");
+  //             this.props.setCollectionSearchSuggestionsQuery("");
+  //             this.setState({searchFieldValue: ""});
+  //           }
+  //         }
+  //       } catch (e) {
+  //         console.log(e);
+  //         this.setState({
+  //           badUrlFlag: true
+  //         });
+  //       }
+  //     }
+  //     else {
+  //       if (this.props.collectionSearchQuery !== "") {
+  //         this.props.setCollectionSearchQuery("");
+  //         this.props.setCollectionSearchSuggestionsQuery("");
+  //         this.setState({searchFieldValue: ""});
+  //       }
+  //     }
+  //   }
+  // }
 
   // if the input loses focus, hide the suggestionList
   handleBlur() {
@@ -111,8 +163,8 @@ export default class CollectionSearcher extends React.Component {
         this.setState({showSuggestionList: false});
         event.target.blur();
         if (this.props.view !== 'catalog') {
-          this.props.setViewCatalog();
-          this.props.clearSelectedCollection();
+          // this.props.setViewCatalog();
+          // this.props.clearSelectedCollection();
           this.props.openToolDrawer();
         }
       } else if (event.keyCode === 27) { // they pressed escape, so drop focus
@@ -135,7 +187,7 @@ export default class CollectionSearcher extends React.Component {
     this.searchFieldInput.blur();
     if (this.props.view !== 'catalog') {
       this.props.setViewCatalog();
-      this.props.clearSelectedCollection();
+      // this.props.clearSelectedCollection();
       this.props.openToolDrawer();
     }
 
@@ -154,14 +206,15 @@ export default class CollectionSearcher extends React.Component {
     }
     const filterString = JSON.stringify(filterObj);
     // if empty filter settings, use the base home url instead of the filter url
-    Object.keys(filterObj).length === 0 ? this.props.setUrl('/', this.props.history) :
-      this.props.setUrl('/catalog/' + encodeURIComponent(filterString), this.props.history);
+    Object.keys(filterObj).length === 0 ? this.props.setUrl('/') :
+      this.props.setUrl('/catalog/' + encodeURIComponent(filterString));
     // log filter change in store
     Object.keys(filterObj).length === 0 ? this.props.logFilterChange('/') :
       this.props.logFilterChange('/catalog/' + encodeURIComponent(filterString));
 }
 
   render() {
+    console.log(this.props.view);
     if (this.state.badUrlFlag) {
       return <Redirect to='/404' />;
     }

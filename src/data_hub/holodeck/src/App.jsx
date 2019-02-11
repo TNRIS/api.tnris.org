@@ -1,22 +1,21 @@
 import React, { Component } from 'react';
-import { Route, Switch, BrowserRouter } from 'react-router-dom';
+import { createBrowserHistory } from 'history';
+import { routerMiddleware, ConnectedRouter } from 'connected-react-router';
 import { Provider } from 'react-redux';
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, compose, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import ReactGA from 'react-ga';
 
 import rootReducer from './reducers/rootReducer';
 import CatalogContainer from './containers/CatalogContainer';
-import NotFound from './components/NotFound';
 
-const store = createStore(rootReducer, applyMiddleware(thunk));
+export const history = createBrowserHistory();
+export const store = createStore(rootReducer(history), compose(applyMiddleware(thunk, routerMiddleware(history))));
 
 class App extends Component {
   constructor() {
     super();
-
     ReactGA.initialize("UA-491601-16");
-
     ReactGA.pageview(window.location.pathname);
   }
 
@@ -24,15 +23,9 @@ class App extends Component {
 
     return (
       <Provider store={store}>
-        <BrowserRouter>
-          <Switch>
-            <Route path='/collection/:collectionId' exact component={CatalogContainer} />
-            <Route path='/catalog/:filters' exact component={CatalogContainer} />
-            <Route path='/cart/' exact component={CatalogContainer} />
-            <Route path='/' exact component={CatalogContainer} />
-            <Route path='*' component={NotFound} />
-          </Switch>
-        </BrowserRouter>
+        <ConnectedRouter history={history}>
+          <CatalogContainer />
+        </ConnectedRouter>
       </Provider>
     );
   }

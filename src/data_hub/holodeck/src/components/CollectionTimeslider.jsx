@@ -1,5 +1,6 @@
 import React from 'react';
 import { Redirect } from 'react-router';
+import { matchPath } from 'react-router-dom';
 import Range from 'rc-slider/lib/Range';
 
 import 'rc-slider/assets/index.css';
@@ -26,9 +27,14 @@ export default class CollectionTimeslider extends React.Component {
     }
     // on component mount, check the URl to apply any necessary filters
     // first, check if url has a 'filters' parameter
-    if (Object.keys(this.props.match.params).includes('filters')) {
+    const match = matchPath(
+        this.props.location.pathname,
+        { path: '/catalog/:filters' }
+      );
+    const filters = match ? match.params.filters : null;
+    if (filters) {
       try {
-        const allFilters = JSON.parse(decodeURIComponent(this.props.match.params.filters));
+        const allFilters = JSON.parse(decodeURIComponent(filters));
         // second, check if filters param includes range key
         if (Object.keys(allFilters).includes('range')) {
           // third, apply range and set state to reflect it

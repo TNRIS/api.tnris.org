@@ -31,7 +31,7 @@ export default class ToolDrawer extends React.Component {
     this.props.setCollectionFilterMapFilter([]);
     this.props.setCollectionFilterMapZoom(5.8);
     this.props.setCollectionTimeslider(this.props.collectionTimesliderRange);
-    this.props.setUrl('/', this.props.history);
+    this.props.setUrl('/');
     this.props.logFilterChange('/');
   }
 
@@ -56,24 +56,18 @@ export default class ToolDrawer extends React.Component {
               <div className='sort-title mdc-list-group__subheader'>
                 Sort
               </div>
-              <CollectionSorterContainer
-                className='mdc-list-item'
-                match={this.props.match}
-                history={this.props.history} />
+              <CollectionSorterContainer className='mdc-list-item' />
+              {/*<hr className='mdc-list-divider'/>*/}
               <div className='filter-title mdc-list-group__subheader'>
                 Filter
               </div>
-              <CollectionFilterContainer
-                className='mdc-list-item'
-                match={this.props.match}
-                history={this.props.history} />
+              <CollectionFilterContainer className='mdc-list-item' />
+              {/*<hr className='mdc-list-divider'/>*/}
               <div className='timeslider-title mdc-list-group__subheader'>
                 Date Range
               </div>
-              <CollectionTimesliderContainer
-                className='mdc-list-item'
-                match={this.props.match}
-                history={this.props.history} />
+              <CollectionTimesliderContainer className='mdc-list-item' />
+              {/*<hr className='mdc-list-divider'/>*/}
               <div className='clear-all-filters-container'>
                 <button
                   className="mdc-button mdc-button--raised"

@@ -5,16 +5,20 @@ import {
   CLEAR_PREVIOUS_URL
 } from '../constants/urlTrackerActionTypes';
 import ReactGA from 'react-ga';
+import { push } from 'connected-react-router';
+import { store } from '../App';
 
-export const setUrl = (newUrl, history) => {
+export const setUrl = (newUrl) => {
   const currentUrl = window.location.pathname;
-  history.replace(newUrl);
   ReactGA.pageview(newUrl);
   return (dispatch) => {
+    const curState = store.getState();
+    console.log(curState);
+    dispatch(push(newUrl, curState));
     dispatch({
       type: SET_URL,
       payload: {previousUrl: currentUrl}
-    })
+    });
   }
 };
 

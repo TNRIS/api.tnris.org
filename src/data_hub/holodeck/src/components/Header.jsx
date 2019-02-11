@@ -3,6 +3,7 @@ import {MDCTopAppBar} from '@material/top-app-bar/index';
 import {MDCDrawer} from "@material/drawer";
 import NotificationBadge from 'react-notification-badge';
 import {Effect} from 'react-notification-badge';
+import { matchPath } from 'react-router-dom';
 
 import CollectionSearcherContainer from '../containers/CollectionSearcherContainer';
 // import tnrisGray from '../images/tnris_gray.png';
@@ -23,17 +24,22 @@ export default class Header extends React.Component {
     this.topAppBarElement = document.querySelector('.mdc-top-app-bar');
     this.topAppBar = new MDCTopAppBar(this.topAppBarElement);
 
-    if (this.props.match.path === "/cart/") {
+    const match = matchPath(
+        this.props.location.pathname,
+        { path: '/collection/:collectionId' }
+      );
+    const collectionId = match ? match.params.collectionId : null;
+
+    if (this.props.location.pathname === "/cart/") {
       this.props.closeToolDrawer();
       this.props.setViewOrderCart();
       this.props.clearPreviousUrl();
     }
 
-    else if (Object.keys(this.props.match.params).includes('collectionId')) {
-      const collectionUuid = this.props.match.params['collectionId'];
+    else if (collectionId) {
       this.props.closeToolDrawer();
       this.props.setViewCollection();
-      this.props.selectCollection(collectionUuid);
+      this.props.selectCollection(collectionId);
     }
   }
 
@@ -41,27 +47,27 @@ export default class Header extends React.Component {
     if (this.props.previousUrl.includes('/catalog/')) {
       this.props.setViewCatalog();
       this.props.openToolDrawer();
-      this.props.setUrl(this.props.previousUrl, this.props.history);
+      this.props.setUrl(this.props.previousUrl);
     }
     else if (this.props.previousUrl.includes('/collection/')) {
       const collectionUuid = this.props.previousUrl.replace('/collection/', '');
       this.props.setViewCollection();
       this.props.selectCollection(collectionUuid);
-      this.props.setUrl(this.props.previousUrl, this.props.history);
+      this.props.setUrl(this.props.previousUrl);
     }
     else {
       this.props.setViewCatalog();
       this.props.openToolDrawer();
-      this.props.setUrl(this.props.previousUrl, this.props.history);
+      this.props.setUrl(this.props.previousUrl);
     }
   }
 
   handleOrderCartView() {
     if (window.location.pathname !== '/cart/') {
-      this.props.clearSelectedCollection();
+      // this.props.clearSelectedCollection();
       this.props.closeToolDrawer();
       this.props.setViewOrderCart();
-      this.props.setUrl('/cart/', this.props.history);
+      this.props.setUrl('/cart/');
     }
   }
 
@@ -69,9 +75,9 @@ export default class Header extends React.Component {
     if (this.props.toolDrawerView === 'dismiss' && this.props.showToolDrawerInCatalogView) {
       this.props.openToolDrawer();
     }
-    this.props.clearSelectedCollection();
+    // this.props.clearSelectedCollection();
     this.props.setViewCatalog();
-    this.props.setUrl(this.props.catalogFilterUrl, this.props.history);
+    this.props.setUrl(this.props.catalogFilterUrl);
   }
 
   render() {
@@ -159,11 +165,9 @@ export default class Header extends React.Component {
                   title="Back"
                   >
                   <i className="material-icons mdc-top-app-bar__navigation-icon">arrow_back</i>
+               <CollectionSearcherContainer />
                 </a> : ''}*/}
-
               {backToCatalogView}
-
-               <CollectionSearcherContainer match={this.props.match} history={this.props.history} />
                {this.props.orders && Object.keys(this.props.orders).length !== 0 ?
                  <div>
                    {shoppingCartCountBadge}

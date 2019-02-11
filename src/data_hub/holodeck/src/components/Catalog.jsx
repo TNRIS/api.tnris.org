@@ -1,5 +1,6 @@
 import React from 'react';
 import { Redirect } from 'react-router';
+import { Route, Switch } from 'react-router';
 import { MDCDrawer } from "@material/drawer";
 
 import Footer from './Footer';
@@ -7,6 +8,7 @@ import HistoricalAerialTemplate from './HistoricalAerialTemplate/HistoricalAeria
 import OutsideEntityTemplate from './TnrisOutsideEntityTemplate/TnrisOutsideEntityTemplate';
 import TnrisOrderTemplate from './TnrisOrderTemplate/TnrisOrderTemplate';
 import OrderCartViewContainer from '../containers/OrderCartViewContainer';
+import NotFound from './NotFound';
 
 import CollectionFilterMapViewContainer from '../containers/CollectionFilterMapViewContainer';
 import HeaderContainer from '../containers/HeaderContainer';
@@ -16,6 +18,7 @@ import TnrisDownloadTemplateContainer from '../containers/TnrisDownloadTemplateC
 
 import loadingImage from '../images/loading.gif';
 import noDataImage from '../images/no-data.png';
+import { store } from '../App';
 
 export default class Catalog extends React.Component {
   constructor(props) {
@@ -34,7 +37,6 @@ export default class Catalog extends React.Component {
     this.handleResize = this.handleResize.bind(this);
     this.toggleToolDrawerDisplay = this.toggleToolDrawerDisplay.bind(this);
     this.handleShowCollectionView = this.handleShowCollectionView.bind(this);
-    this.handleViewChange = this.handleViewChange.bind(this);
     this.setCatalogView = this.setCatalogView.bind(this);
     this.loadingMessage = (
       <div className="catalog-component__loading">
@@ -55,12 +57,24 @@ export default class Catalog extends React.Component {
   }
 
   componentDidUpdate() {
-    if (this.props.collections && Object.keys(this.props.match.params).includes('collectionId')) {
-      if (!Object.keys(this.props.collections).includes(this.props.match.params.collectionId)) {
-        this.setState({
-          badUrlFlag: true
-        });
+    // if (this.props.collections && Object.keys(this.props.match.params).includes('collectionId')) {
+    //   if (!Object.keys(this.props.collections).includes(this.props.match.params.collectionId)) {
+    //     this.setState({
+    //       badUrlFlag: true
+    //     });
+    //   }
+    // }
+
+    if (this.props.view !== 'catalog') {
+      if (!this.props.location.pathname.includes('/collection/') && !this.props.location.pathname.includes('/cart/')) {
+        this.props.setViewCatalog();
       }
+    }
+
+    window.onpopstate = (e) => {
+      console.log(e);
+      const theState = e.state.state;
+      console.log(theState);
     }
   }
 
@@ -100,18 +114,20 @@ export default class Catalog extends React.Component {
   }
 
   handleShowCollectionView() {
-    let collection = this.props.collections[this.props.selectedCollection];
-    switch(collection['template']) {
-      case 'tnris-download':
-        return (<TnrisDownloadTemplateContainer collection={collection} />);
-      case 'tnris-order':
-        return (<TnrisOrderTemplate collection={collection} />);
-      case 'historical-aerial':
-        return (<HistoricalAerialTemplate collection={collection} />);
-      case 'outside-entity':
-        return (<OutsideEntityTemplate collection={collection} />);
-      default:
-        return (<TnrisDownloadTemplateContainer collection={collection} />);
+    if (this.props.selectedCollection) {
+      let collection = this.props.collections[this.props.selectedCollection];
+      switch(collection['template']) {
+        case 'tnris-download':
+          return (<TnrisDownloadTemplateContainer collection={collection} />);
+        case 'tnris-order':
+          return (<TnrisOrderTemplate collection={collection} />);
+        case 'historical-aerial':
+          return (<HistoricalAerialTemplate collection={collection} />);
+        case 'outside-entity':
+          return (<OutsideEntityTemplate collection={collection} />);
+        default:
+          return (<TnrisDownloadTemplateContainer collection={collection} />);
+      }
     }
   }
 
@@ -132,29 +148,12 @@ export default class Catalog extends React.Component {
                 className="mdc-layout-grid__cell mdc-layout-grid__cell--span-3-desktop"
                 key={collectionId}>
                 <CatalogCardContainer
-                  collection={this.props.collections[collectionId]}
-                  match={this.props.match}
-                  history={this.props.history} />
+                  collection={this.props.collections[collectionId]} />
               </li>
             ) : this.loadingMessage}
           </ul>
         </div>;
     return catalogCards;
-  }
-
-  handleViewChange() {
-    switch(this.props.view) {
-      case 'catalog':
-        return this.setCatalogView();
-      case 'collection':
-        return this.handleShowCollectionView();
-      case 'orderCart':
-        return <OrderCartViewContainer history={this.props.history} />;
-      case 'geoFilter':
-        return <CollectionFilterMapViewContainer history={this.props.history} />;
-      default:
-        return this.setCatalogView();
-    }
   }
 
   render() {
@@ -180,21 +179,24 @@ export default class Catalog extends React.Component {
     return (
       <div className="catalog-component">
         <ToolDrawerContainer
-          match={this.props.match}
-          history={this.props.history}
           total={this.props.visibleCollections ? this.props.visibleCollections.length : 0}
           showToolDrawerInCatalogView={this.state.showToolDrawerInCatalogView}
           view={this.state.toolDrawerView} />
 
         <HeaderContainer
           toolDrawerView={this.state.toolDrawerView}
-          toggleToolDrawerDisplay={this.toggleToolDrawerDisplay}
           showToolDrawerInCatalogView={this.state.showToolDrawerInCatalogView}
-          match={this.props.match}
-          history={this.props.history} />
 
         <div className={`catalog ${dismissClass} mdc-drawer-app-content`}>
-          {this.handleViewChange()}
+          <div>
+            <Switch>
+              <Route path='/collection/:collectionId' exact render={(props) => this.handleShowCollectionView()} />
+              <Route path='/catalog/:filters' exact render={(props) => this.setCatalogView()} />
+              <Route path='/cart/' exact component={OrderCartView} />} />
+              <Route path='/' exact render={(props) => this.setCatalogView()} />
+              <Route path='*' component={NotFound} />
+            </Switch>
+          </div>
         </div>
 
         <Footer

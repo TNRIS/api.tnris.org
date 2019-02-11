@@ -6,7 +6,7 @@ import Footer from './Footer';
 import HistoricalAerialTemplate from './HistoricalAerialTemplate/HistoricalAerialTemplate';
 import OutsideEntityTemplate from './TnrisOutsideEntityTemplate/TnrisOutsideEntityTemplate';
 import TnrisOrderTemplate from './TnrisOrderTemplate/TnrisOrderTemplate';
-import OrderCartView from './OrderCartView';
+import OrderCartViewContainer from '../containers/OrderCartViewContainer';
 
 import CollectionFilterMapViewContainer from '../containers/CollectionFilterMapViewContainer';
 import HeaderContainer from '../containers/HeaderContainer';
@@ -149,7 +149,7 @@ export default class Catalog extends React.Component {
       case 'collection':
         return this.handleShowCollectionView();
       case 'orderCart':
-        return <OrderCartView history={this.props.history} />;
+        return <OrderCartViewContainer history={this.props.history} />;
       case 'geoFilter':
         return <CollectionFilterMapViewContainer history={this.props.history} />;
       default:

@@ -12,7 +12,6 @@ const initialState = {
 };
 
 export default function catalogReducer(state = initialState, action) {
-  if (action.type === 'POP_BROWSER_STORE'){console.log(action.payload);}
   switch(action.type) {
     case SET_VIEW_CATALOG:
       return {

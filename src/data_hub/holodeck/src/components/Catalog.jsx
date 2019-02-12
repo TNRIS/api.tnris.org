@@ -25,8 +25,8 @@ export default class Catalog extends React.Component {
     super(props);
 
     window.innerWidth >= 1050 ? this.state = {
-      showToolDrawerInCatalogView: true
       toolDrawerView:'dismiss',
+      showToolDrawerInCatalogView: true
     } : this.state = {
       toolDrawerView:'modal',
       showToolDrawerInCatalogView: true
@@ -180,14 +180,14 @@ export default class Catalog extends React.Component {
 
         <HeaderContainer
           toolDrawerView={this.state.toolDrawerView}
-          showToolDrawerInCatalogView={this.state.showToolDrawerInCatalogView}
+          showToolDrawerInCatalogView={this.state.showToolDrawerInCatalogView} />
 
         <div className={`catalog ${dismissClass} mdc-drawer-app-content`}>
           <div>
             <Switch>
               <Route path='/collection/:collectionId' exact render={(props) => this.handleShowCollectionView()} />
               <Route path='/catalog/:filters' exact render={(props) => this.setCatalogView()} />
-              <Route path='/cart/' exact component={OrderCartView} />} />
+              <Route path='/cart/' exact component={OrderCartViewContainer} />} />
               <Route path='/' exact render={(props) => this.setCatalogView()} />
               <Route path='*' render={(props) => <NotFound status={this.props.toolDrawerStatus} />} />
             </Switch>

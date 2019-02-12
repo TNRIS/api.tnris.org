@@ -165,9 +165,9 @@ export default class Header extends React.Component {
                   title="Back"
                   >
                   <i className="material-icons mdc-top-app-bar__navigation-icon">arrow_back</i>
-               <CollectionSearcherContainer />
                 </a> : ''}*/}
               {backToCatalogView}
+              <CollectionSearcherContainer />
                {this.props.orders && Object.keys(this.props.orders).length !== 0 ?
                  <div>
                    {shoppingCartCountBadge}

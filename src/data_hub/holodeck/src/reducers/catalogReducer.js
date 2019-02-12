@@ -3,7 +3,6 @@ import {
   SET_VIEW_COLLECTION,
   SET_VIEW_ORDER_CART,
   SET_VIEW_GEO_FILTER,
-  SET_VIEW_NOT_FOUND,
   POP_BROWSER_STORE
 } from '../constants/catalogActionTypes';
 
@@ -35,12 +34,6 @@ export default function catalogReducer(state = initialState, action) {
       return {
         ...state,
         view: 'geoFilter'
-      };
-
-    case SET_VIEW_NOT_FOUND:
-      return {
-        ...state,
-        view: 'notFound'
       };
 
     case POP_BROWSER_STORE:

@@ -20,6 +20,9 @@ const mapDispatchToProps = dispatch => ({
   },
   logFilterChange: (url) => {
     dispatch(urlTrackerActions.logFilterChange(url));
+  },
+  url404: () => {
+    dispatch(urlTrackerActions.url404());
   }
 })
 

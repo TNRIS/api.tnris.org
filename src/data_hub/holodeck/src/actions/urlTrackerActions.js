@@ -5,7 +5,7 @@ import {
   CLEAR_PREVIOUS_URL
 } from '../constants/urlTrackerActionTypes';
 import ReactGA from 'react-ga';
-import { push } from 'connected-react-router';
+import { push, replace } from 'connected-react-router';
 import { store } from '../App';
 
 export const setUrl = (newUrl) => {
@@ -13,7 +13,6 @@ export const setUrl = (newUrl) => {
   ReactGA.pageview(newUrl);
   return (dispatch) => {
     const curState = store.getState();
-    console.log(curState);
     dispatch(push(newUrl, curState));
     dispatch({
       type: SET_URL,
@@ -38,3 +37,10 @@ export const clearPreviousUrl = () => {
     })
   }
 };
+
+export const url404 = () => {
+  const curState = store.getState();
+  return (dispatch) => {
+    dispatch(replace('/404', curState));
+  }
+}

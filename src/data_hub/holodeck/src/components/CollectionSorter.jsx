@@ -1,5 +1,4 @@
 import React from 'react';
-import { Redirect } from 'react-router';
 import { matchPath } from 'react-router-dom';
 import {MDCList} from '@material/list';
 
@@ -7,9 +6,6 @@ class CollectionSorter extends React.Component {
 
   constructor(props) {
       super(props);
-      this.state = {
-        badUrlFlag: false
-      }
       this.setSort = this.setSort.bind(this);
       this.handleKeyPress = this.handleKeyPress.bind(this);
   }
@@ -34,9 +30,7 @@ class CollectionSorter extends React.Component {
         }
       } catch (e) {
         console.log(e);
-        this.setState({
-          badUrlFlag: true
-        });
+        if (window.location.pathname !== '/404') { this.props.url404(); }
       }
     }
   }
@@ -81,10 +75,6 @@ class CollectionSorter extends React.Component {
   }
 
   render() {
-    if (this.state.badUrlFlag) {
-      return <Redirect to='/404' />;
-    }
-
     return (
       <div className='sort-component'>
           <ul id="sorter-list" className='mdc-list' role="listbox" aria-label="Sort list">

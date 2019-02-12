@@ -1,5 +1,4 @@
 import React from 'react';
-import { Redirect } from 'react-router';
 import { matchPath } from 'react-router-dom';
 import turfExtent from 'turf-extent';
 // the carto core api is a CDN in the app template HTML (not available as NPM package)
@@ -9,9 +8,6 @@ const cartodb = window.cartodb;
 export default class CollectionFilter extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      badUrlFlag: false
-    }
     this.handleOpenFilterMenu = this.handleOpenFilterMenu.bind(this);
     this.handleSetFilter = this.handleSetFilter.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);
@@ -80,9 +76,7 @@ export default class CollectionFilter extends React.Component {
         }
       } catch (e) {
         console.log(e);
-        this.setState({
-          badUrlFlag: true
-        });
+        if (window.location.pathname !== '/404') { this.props.url404(); }
       }
     }
   }
@@ -188,10 +182,6 @@ export default class CollectionFilter extends React.Component {
   }
 
   render() {
-    if (this.state.badUrlFlag) {
-      return <Redirect to='/404' />;
-    }
-
     const filterSet = this.props.collectionFilterMapFilter.length > 0 ? "mdc-list-item mdc-list-item--activated filter-list-title" : "mdc-list-item filter-list-title";
 
     return (

@@ -49,9 +49,6 @@ const mapDispatchToProps = dispatch => ({
   setViewCatalog: () => {
     dispatch(catalogActions.setViewCatalog());
   },
-  setViewNotFound: () => {
-    dispatch(catalogActions.setViewNotFound());
-  },
   popBrowserStore: (state) => {
     dispatch(catalogActions.popBrowserStore(state));
   }

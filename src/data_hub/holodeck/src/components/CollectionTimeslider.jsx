@@ -1,5 +1,4 @@
 import React from 'react';
-import { Redirect } from 'react-router';
 import { matchPath } from 'react-router-dom';
 import Range from 'rc-slider/lib/Range';
 
@@ -11,8 +10,7 @@ export default class CollectionTimeslider extends React.Component {
     this.state = {
       range: this.props.collectionTimeslider,
       setMin: this.props.collectionTimeslider[0],
-      setMax: this.props.collectionTimeslider[1],
-      badUrlFlag: false
+      setMax: this.props.collectionTimeslider[1]
     }
     this.handleSetTimeslider = this.handleSetTimeslider.bind(this);
   }
@@ -46,9 +44,7 @@ export default class CollectionTimeslider extends React.Component {
         }
       } catch (e) {
         console.log(e);
-        this.setState({
-          badUrlFlag: true
-        });
+        if (window.location.pathname !== '/404') { this.props.url404(); }
       }
     }
   }
@@ -87,10 +83,6 @@ export default class CollectionTimeslider extends React.Component {
 }
 
   render() {
-    if (this.state.badUrlFlag) {
-      return <Redirect to='/404' />;
-    }
-
     return (
       <div className='timeslider-component'>
         <div className="mdc-typography--body2">{this.state.setMin} - {this.state.setMax}</div>

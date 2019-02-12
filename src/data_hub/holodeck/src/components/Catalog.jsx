@@ -19,19 +19,16 @@ import TnrisDownloadTemplateContainer from '../containers/TnrisDownloadTemplateC
 
 import loadingImage from '../images/loading.gif';
 import noDataImage from '../images/no-data.png';
-import { store } from '../App';
 
 export default class Catalog extends React.Component {
   constructor(props) {
     super(props);
 
     window.innerWidth >= 1050 ? this.state = {
-      toolDrawerView:'dismiss',
-      badUrlFlag: false,
       showToolDrawerInCatalogView: true
+      toolDrawerView:'dismiss',
     } : this.state = {
       toolDrawerView:'modal',
-      badUrlFlag: false,
       showToolDrawerInCatalogView: true
     };
 
@@ -62,9 +59,8 @@ export default class Catalog extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (this.props.view !== 'catalog' && this.props.view !== 'geoFilter' && this.props.view !== 'notFound') {
+    if (this.props.view !== 'catalog' && this.props.view !== 'geoFilter') {
       if (!this.props.location.pathname.includes('/collection/') && !this.props.location.pathname.includes('/cart/')) {
-        console.log(this.props.view);
         this.props.setViewCatalog();
       }
     }
@@ -192,9 +188,8 @@ export default class Catalog extends React.Component {
               <Route path='/collection/:collectionId' exact render={(props) => this.handleShowCollectionView()} />
               <Route path='/catalog/:filters' exact render={(props) => this.setCatalogView()} />
               <Route path='/cart/' exact component={OrderCartView} />} />
-              <Route path='/404' exact component={NotFound} />
               <Route path='/' exact render={(props) => this.setCatalogView()} />
-              <Route path='*' component={NotFound} />
+              <Route path='*' render={(props) => <NotFound status={this.props.toolDrawerStatus} />} />
             </Switch>
           </div>
         </div>

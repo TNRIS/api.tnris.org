@@ -1,7 +1,6 @@
 import React from 'react';
 import Downshift from 'downshift';
 import { MDCTextField } from '@material/textfield';
-import { Redirect } from 'react-router';
 import { matchPath } from 'react-router-dom';
 
 export default class CollectionSearcher extends React.Component {
@@ -9,7 +8,6 @@ export default class CollectionSearcher extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      badUrlFlag: false,
       searchFieldValue: '',
       showSuggestionList: false
     }
@@ -45,9 +43,7 @@ export default class CollectionSearcher extends React.Component {
         }
       } catch (e) {
         console.log(e);
-        this.setState({
-          badUrlFlag: true
-        });
+        if (window.location.pathname !== '/404') { this.props.url404(); }
       }
     }
   }
@@ -173,11 +169,6 @@ export default class CollectionSearcher extends React.Component {
 }
 
   render() {
-    console.log(this.props.view);
-    if (this.state.badUrlFlag) {
-      return <Redirect to='/404' />;
-    }
-
     return (
       <Downshift
         onChange={selection => this.handleSelect(selection)}

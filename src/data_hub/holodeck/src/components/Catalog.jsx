@@ -1,6 +1,7 @@
 import React from 'react';
 import { Redirect } from 'react-router';
 import { Route, Switch } from 'react-router';
+import { matchPath } from 'react-router-dom';
 import { MDCDrawer } from "@material/drawer";
 
 import Footer from './Footer';
@@ -50,38 +51,28 @@ export default class Catalog extends React.Component {
     this.props.fetchStoredShoppingCart();
     window.addEventListener("resize", this.handleResize);
     this.toolDrawer = MDCDrawer.attachTo(document.querySelector('.tool-drawer'));
+    window.onpopstate = (e) => {
+      const theState = e.state.state;
+      this.props.popBrowserStore(theState);
+    }
   }
 
   componentWillUnmount() {
     window.removeEventListener("resize", this.handleResize);
   }
 
-  componentDidUpdate() {
-    // if (this.props.collections && Object.keys(this.props.match.params).includes('collectionId')) {
-    //   if (!Object.keys(this.props.collections).includes(this.props.match.params.collectionId)) {
-    //     this.setState({
-    //       badUrlFlag: true
-    //     });
-    //   }
-    // }
-
-    if (this.props.view !== 'catalog') {
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.view !== 'catalog' && this.props.view !== 'geoFilter' && this.props.view !== 'notFound') {
       if (!this.props.location.pathname.includes('/collection/') && !this.props.location.pathname.includes('/cart/')) {
+        console.log(this.props.view);
         this.props.setViewCatalog();
       }
     }
-
-    window.onpopstate = (e) => {
-      console.log(e);
-      const theState = e.state.state;
-      console.log(theState);
+    if (prevProps.theme !== this.props.theme) {
+      const themedClass = this.props.theme + "-app-theme";
+      const html = document.querySelector('html');
+      html.className = themedClass;
     }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const themedClass = nextProps.theme + "-app-theme";
-    const html = document.querySelector('html');
-    html.className = themedClass;
   }
 
   handleResize() {
@@ -129,6 +120,18 @@ export default class Catalog extends React.Component {
           return (<TnrisDownloadTemplateContainer collection={collection} />);
       }
     }
+    else {
+      const match = matchPath(
+        this.props.history.location.pathname,
+        { path: '/collection/:collectionId' }
+      );
+      if (this.props.collections && Object.keys(match.params).includes('collectionId')) {
+        if (!Object.keys(this.props.collections).includes(match.params.collectionId)) {
+          return <Redirect to='/404' />;
+        }
+      }
+    }
+
   }
 
   setCatalogView() {
@@ -172,10 +175,6 @@ export default class Catalog extends React.Component {
       return this.loadingMessage;
     }
 
-    if (this.state.badUrlFlag) {
-      return <Redirect to='/404' />;
-    }
-
     return (
       <div className="catalog-component">
         <ToolDrawerContainer
@@ -193,6 +192,7 @@ export default class Catalog extends React.Component {
               <Route path='/collection/:collectionId' exact render={(props) => this.handleShowCollectionView()} />
               <Route path='/catalog/:filters' exact render={(props) => this.setCatalogView()} />
               <Route path='/cart/' exact component={OrderCartView} />} />
+              <Route path='/404' exact component={NotFound} />
               <Route path='/' exact render={(props) => this.setCatalogView()} />
               <Route path='*' component={NotFound} />
             </Switch>

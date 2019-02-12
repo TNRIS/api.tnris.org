@@ -53,14 +53,14 @@ export default class CollectionTimeslider extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.collectionTimeslider[0] === this.state.range[0] &&
-        nextProps.collectionTimeslider[1] === this.state.range[1]) {
-          this.setState({
-            setMin: nextProps.collectionTimeslider[0],
-            setMax: nextProps.collectionTimeslider[1]
-          });
-        }
+  componentDidUpdate(prevProps, prevState) {
+    if(prevProps.collectionTimeslider[0] !== this.props.collectionTimeslider[0] ||
+       prevProps.collectionTimeslider[1] !== this.props.collectionTimeslider[1]) {
+         this.setState({
+           setMin: this.props.collectionTimeslider[0],
+           setMax: this.props.collectionTimeslider[1]
+         });
+    }
   }
 
   handleSetTimeslider(target) {

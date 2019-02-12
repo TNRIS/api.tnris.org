@@ -52,52 +52,11 @@ export default class CollectionSearcher extends React.Component {
     }
   }
 
-  // componentDidUpdate() {
-  //   // component update may have come from browser navigation, check the
-  //   // URl to apply any necessary filters
-  //
-  //   window.onpopstate = (e) => {
-  //     // first, check if url has a 'filters' parameter
-  //     const match = matchPath(
-  //         this.props.location.pathname,
-  //         { path: '/catalog/:filters' }
-  //       );
-  //     const filters = match ? match.params.filters : null;
-  //     if (filters) {
-  //       try {
-  //         const allFilters = JSON.parse(decodeURIComponent(filters));
-  //         // second, check if filters param includes search key
-  //         if (Object.keys(allFilters).includes('search')) {
-  //           // third, apply search text and then populate the input box
-  //           if (allFilters.search !== this.props.collectionSearchQuery) {
-  //             this.props.setCollectionSearchQuery(allFilters.search);
-  //             this.props.setCollectionSearchSuggestionsQuery(allFilters.search);
-  //             this.setState({searchFieldValue: allFilters.search});
-  //           }
-  //         }
-  //         else {
-  //           if (this.props.collectionSearchQuery !== "") {
-  //             this.props.setCollectionSearchQuery("");
-  //             this.props.setCollectionSearchSuggestionsQuery("");
-  //             this.setState({searchFieldValue: ""});
-  //           }
-  //         }
-  //       } catch (e) {
-  //         console.log(e);
-  //         this.setState({
-  //           badUrlFlag: true
-  //         });
-  //       }
-  //     }
-  //     else {
-  //       if (this.props.collectionSearchQuery !== "") {
-  //         this.props.setCollectionSearchQuery("");
-  //         this.props.setCollectionSearchSuggestionsQuery("");
-  //         this.setState({searchFieldValue: ""});
-  //       }
-  //     }
-  //   }
-  // }
+  componentDidUpdate(prevProps, prevState) {
+    if(prevProps.collectionSearchQuery !== this.props.collectionSearchQuery){
+      this.setState({searchFieldValue: this.props.collectionSearchQuery});
+    }
+  }
 
   // if the input loses focus, hide the suggestionList
   handleBlur() {

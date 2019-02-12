@@ -81,6 +81,9 @@ function historicalRecursiveFetcher(dispatch, getState, apiQuery, response) {
       if (!pathname.includes('/collection/')) {
         dispatch(fetchCollectionsSuccess(normalizedJson));
       }
+      else if (!normalizedJson.result.includes(pathname.replace('/collection/',''))) {
+        dispatch(fetchCollectionsSuccess(normalizedJson));
+      }
       else {
         const collectionId = pathname.replace('/collection/','');
         dispatch(fetchCollectionsWithSelectedSuccess(normalizedJson, collectionId));

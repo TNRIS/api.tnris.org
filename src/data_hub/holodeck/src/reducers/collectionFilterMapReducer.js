@@ -5,6 +5,8 @@ import {
   SET_COLLECTION_FILTER_MAP_ZOOM
 } from '../constants/collectionFilterMapActionTypes';
 
+import { POP_BROWSER_STORE } from '../constants/catalogActionTypes';
+
 // set the initial values for the filter, map center, and zoom level
 // these will be passed to the component when it is instantiated
 const initialState = {
@@ -43,6 +45,9 @@ export default function collectionFilterMapReducer(state = initialState, action)
         ...state,
         collectionFilterMapZoom: action.payload.collectionFilterMapZoom
       };
+
+    case POP_BROWSER_STORE:
+      return Object.assign({}, action.payload.collectionFilterMap);
 
     default:
       // ALWAYS have a default case in a reducer

@@ -82,27 +82,25 @@ class OrderTnrisDataForm extends Component {
     });
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentDidUpdate () {
     // toggle form and dialogues of submission lifecycle
-    if (nextProps.uploading === false &&
-        nextProps.uploadError !== null &&
+    if (this.props.uploading === false &&
+        this.props.uploadError !== null &&
         this.state.display === 'uploading') {
       this.setState({
         display: 'form',
         invalid: 'There was a problem with your file upload. Please try again.'
       });
     }
-    else if (nextProps.uploading === false &&
-             nextProps.uploadError === null &&
+    else if (this.props.uploading === false &&
+             this.props.uploadError === null &&
              this.state.display === 'uploading') {
       this.setState({
         display: 'added',
         invalid: null
       });
     }
-  }
 
-  componentDidUpdate () {
     // alter form requirements and inputs displayed based on form input selections
     if (this.state.orderType === 'Partial') {
       document.getElementsByName("portionDescription").forEach((input) => {

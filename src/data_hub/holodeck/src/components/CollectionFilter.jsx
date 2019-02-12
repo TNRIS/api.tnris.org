@@ -10,8 +10,7 @@ export default class CollectionFilter extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      badUrlFlag: false,
-      geographySet: false
+      badUrlFlag: false
     }
     this.handleOpenFilterMenu = this.handleOpenFilterMenu.bind(this);
     this.handleSetFilter = this.handleSetFilter.bind(this);
@@ -88,8 +87,8 @@ export default class CollectionFilter extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (Object.keys(nextProps.collectionFilter).length === 0) {
+  componentDidUpdate(prevProps, prevState) {
+    if (JSON.stringify(prevProps.collectionFilter) !== JSON.stringify(this.props.collectionFilter)) {
       const filterComponent = document.getElementById('filter-component');
       const inputArray = filterComponent.querySelectorAll("input");
       inputArray.forEach(input => {
@@ -99,26 +98,18 @@ export default class CollectionFilter extends React.Component {
       labelArray.forEach(label => {
         return label.classList.remove('filter-active');
       });
-      // THIS IS CODE TO COLLAPSE THE FILTER GROUP WHEN ALL FILTERS ARE TURNED OFF.
-      // WAS WRITTEN TO RUN AFTER USER CLICKS THE BUTTON TO CLEAR ALL BUT IT CAUSES
-      // GROUPS TO COLLAPSE WHEN USER MANUALLY UNCHECKS ALL WHICH IS NOT DESIRED
-      // const groupArray = filterComponent.querySelectorAll("ul[id$='-list']");
-      // groupArray.forEach(group => {
-      //   if (!group.classList.contains('hide-filter-list')) {
-      //     group.classList.add('hide-filter-list');
-      //   }
-      //   return group;
-      // });
-      // const iconArray = filterComponent.querySelectorAll("i[id$='-expansion-icon']");
-      // iconArray.forEach(icon => {
-      //   if (icon.innerHTML === 'expand_less') {
-      //     icon.innerHTML = 'expand_more';
-      //   }
-      //   return icon;
-      // });
+      Object.keys(this.props.collectionFilter).map(key => {
+        this.props.collectionFilter[key].map(id => {
+          const hashId = '#' + id;
+          if (document.querySelector(hashId)) {
+            document.querySelector(hashId).checked = true;
+            document.querySelector(`${hashId}-label`).classList.add('filter-active');
+          }
+          return hashId;
+        });
+        return key;
+      });
     }
-
-    nextProps.collectionFilterMapFilter.length > 0 ? this.setState({geographySet:true}) : this.setState({geographySet:false});
   }
 
   handleOpenFilterMenu(e) {
@@ -201,7 +192,7 @@ export default class CollectionFilter extends React.Component {
       return <Redirect to='/404' />;
     }
 
-    const filterSet = this.state.geographySet ? "mdc-list-item mdc-list-item--activated filter-list-title" : "mdc-list-item filter-list-title";
+    const filterSet = this.props.collectionFilterMapFilter.length > 0 ? "mdc-list-item mdc-list-item--activated filter-list-title" : "mdc-list-item filter-list-title";
 
     return (
       <div id='filter-component' className='filter-component'>

@@ -10,6 +10,8 @@ import {
   FETCH_COLLECTION_RESOURCES_FAILURE,
 } from '../constants/collectionActionTypes';
 
+import { POP_BROWSER_STORE } from '../constants/catalogActionTypes';
+
 const initialState = {
   items: [],
   loading: true,
@@ -106,6 +108,9 @@ export default function collectionReducer(state = initialState, action) {
         errorResources: action.payload.error,
         selectedCollectionResources: []
       };
+
+    case POP_BROWSER_STORE:
+      return Object.assign({}, action.payload.collections);
 
     default:
       // ALWAYS have a default case in a reducer

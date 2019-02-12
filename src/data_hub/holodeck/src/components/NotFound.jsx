@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
-import Footer from './Footer';
 import image404 from '../images/404.jpg';
 
 class NotFound extends Component {
-
   render() {
     return (
       <div className="notfound-component">
@@ -16,7 +14,6 @@ class NotFound extends Component {
             <h2>ERROR 404: Not Found</h2>
             <p>The page you're looking for does not exist.</p>
           </div>
-        <Footer />
       </div>
     )
   }

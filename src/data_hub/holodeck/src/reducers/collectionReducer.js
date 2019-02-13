@@ -2,6 +2,7 @@ import {
   FETCH_COLLECTIONS_BEGIN,
   FETCH_COLLECTIONS_SUCCESS,
   FETCH_COLLECTIONS_FAILURE,
+  FETCH_COLLECTIONS_WITH_SELECTED_SUCCESS,
   SELECT_COLLECTION,
   CLEAR_SELECTED_COLLECTION,
   FETCH_COLLECTION_RESOURCES_BEGIN,
@@ -9,9 +10,11 @@ import {
   FETCH_COLLECTION_RESOURCES_FAILURE,
 } from '../constants/collectionActionTypes';
 
+import { POP_BROWSER_STORE } from '../constants/catalogActionTypes';
+
 const initialState = {
   items: [],
-  loading: false,
+  loading: true,
   error: null,
   selectedCollection: null,
   selectedCollectionResources: [],
@@ -37,6 +40,17 @@ export default function collectionReducer(state = initialState, action) {
         ...state,
         loading: false,
         items: action.payload.collections
+      };
+
+    case FETCH_COLLECTIONS_WITH_SELECTED_SUCCESS:
+      // All done: set loading "false".
+      // Also, replace the items with the ones from the server
+      // Also, apply selected collection
+      return {
+        ...state,
+        loading: false,
+        items: action.payload.collections,
+        selectedCollection: action.payload.selected
       };
 
     case FETCH_COLLECTIONS_FAILURE:
@@ -94,6 +108,9 @@ export default function collectionReducer(state = initialState, action) {
         errorResources: action.payload.error,
         selectedCollectionResources: []
       };
+
+    case POP_BROWSER_STORE:
+      return Object.assign({}, action.payload.collections);
 
     default:
       // ALWAYS have a default case in a reducer

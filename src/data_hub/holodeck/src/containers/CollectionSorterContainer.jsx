@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 
 import { collectionSorterActions, urlTrackerActions } from '../actions';
 import CollectionSorter from '../components/CollectionSorter';
@@ -25,12 +26,15 @@ const mapDispatchToProps = dispatch => ({
   },
   logFilterChange: (url) => {
     dispatch(urlTrackerActions.logFilterChange(url));
+  },
+  url404: () => {
+    dispatch(urlTrackerActions.url404());
   }
 })
 
-const CollectionSorterContainer = connect(
+const CollectionSorterContainer = withRouter(connect(
   mapStateToProps,
   mapDispatchToProps
-)(CollectionSorter);
+)(CollectionSorter));
 
 export default CollectionSorterContainer;

@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 
 import {
   collectionFilterActions,
@@ -50,9 +51,9 @@ const mapDispatchToProps = dispatch => ({
   }
 })
 
-const ToolDrawerContainer = connect(
+const ToolDrawerContainer = withRouter(connect(
   mapStateToProps,
   mapDispatchToProps
-)(ToolDrawer);
+)(ToolDrawer));
 
 export default ToolDrawerContainer;

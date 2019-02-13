@@ -4,7 +4,6 @@ import OrderCartContainer from '../containers/OrderCartContainer';
 class OrderCartView extends React.Component {
   constructor() {
     super();
-
     this.handleBack = this.handleBack.bind(this);
   }
 
@@ -29,6 +28,7 @@ class OrderCartView extends React.Component {
     }
   }
 
+
   render() {
     return (
       <div className="order-cart-view">
@@ -47,7 +47,7 @@ class OrderCartView extends React.Component {
             </button>
           </section>
         </div>
-        <OrderCartContainer history={this.props.history} />
+        <OrderCartContainer />
       </div>
     );
   }

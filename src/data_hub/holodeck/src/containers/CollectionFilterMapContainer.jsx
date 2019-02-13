@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 
 import {
   catalogActions,
@@ -39,9 +40,9 @@ const mapDispatchToProps = dispatch => ({
   }
 })
 
-const CollectionFilterMapContainer = connect(
+const CollectionFilterMapContainer = withRouter(connect(
   mapStateToProps,
   mapDispatchToProps
-)(CollectionFilterMap);
+)(CollectionFilterMap));
 
 export default CollectionFilterMapContainer;

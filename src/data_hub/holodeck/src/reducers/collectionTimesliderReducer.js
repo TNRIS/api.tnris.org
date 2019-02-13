@@ -2,6 +2,8 @@ import {
   SET_COLLECTION_TIMESLIDER
 } from '../constants/collectionTimesliderActionTypes';
 
+import { POP_BROWSER_STORE } from '../constants/catalogActionTypes';
+
 const initialState = {
   collectionTimeslider: [1800, 2100]
 };
@@ -15,8 +17,11 @@ export default function collectionTimesliderReducer(state = initialState, action
         collectionTimeslider: action.payload.collectionTimeslider
       };
 
-      default:
-        // ALWAYS have a default case in a reducer
-        return state;
+    case POP_BROWSER_STORE:
+      return Object.assign({}, action.payload.collectionTimeslider);
+
+    default:
+      // ALWAYS have a default case in a reducer
+      return state;
   }
 }

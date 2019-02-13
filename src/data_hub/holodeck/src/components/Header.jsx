@@ -5,9 +5,6 @@ import NotificationBadge from 'react-notification-badge';
 import {Effect} from 'react-notification-badge';
 
 import CollectionSearcherContainer from '../containers/CollectionSearcherContainer';
-// import tnrisGray from '../images/tnris_gray.png';
-// import tnrisWhite from '../images/tnris_white.png';
-// import tnrisFuego from '../images/tnris_fuego.png';
 
 export default class Header extends React.Component {
   constructor(props) {
@@ -23,26 +20,19 @@ export default class Header extends React.Component {
     this.topAppBarElement = document.querySelector('.mdc-top-app-bar');
     this.topAppBar = new MDCTopAppBar(this.topAppBarElement);
 
-    if (this.props.match.path === "/cart/") {
+    if (this.props.location.pathname === "/cart/") {
       this.props.closeToolDrawer();
       this.props.setViewOrderCart();
       this.props.clearPreviousUrl();
-    }
-
-    else if (Object.keys(this.props.match.params).includes('collectionId')) {
-      const collectionUuid = this.props.match.params['collectionId'];
-      this.props.closeToolDrawer();
-      this.props.setViewCollection();
-      this.props.selectCollection(collectionUuid);
     }
   }
 
   handleOrderCartView() {
     if (window.location.pathname !== '/cart/') {
-      this.props.clearSelectedCollection();
+      // this.props.clearSelectedCollection();
       this.props.closeToolDrawer();
       this.props.setViewOrderCart();
-      this.props.setUrl('/cart/', this.props.history);
+      this.props.setUrl('/cart/');
     }
   }
 
@@ -50,9 +40,9 @@ export default class Header extends React.Component {
     if (this.props.toolDrawerView === 'dismiss' && this.props.showToolDrawerInCatalogView) {
       this.props.openToolDrawer();
     }
-    this.props.clearSelectedCollection();
+    // this.props.clearSelectedCollection();
     this.props.setViewCatalog();
-    this.props.setUrl(this.props.catalogFilterUrl, this.props.history);
+    this.props.setUrl(this.props.catalogFilterUrl);
   }
 
   handleToolDrawerDisplayMobile() {
@@ -75,11 +65,11 @@ export default class Header extends React.Component {
     ) : '';
 
     const filters = ['filter', 'geo', 'sort', 'range'];
-    const toolDrawerNotification = this.props.toolDrawerStatus === 'closed' && filters.map(x => this.props.match.url.includes(x) ? (
+    const toolDrawerNotification = this.props.toolDrawerStatus === 'closed' && filters.map(x => this.props.location.pathname.includes(x) ? (
       <NotificationBadge key={x} label='!' count={1} frameLength={30}/>
     ) : '');
 
-    const backToCatalogView = this.props.view !== 'catalog' ? (
+    const backToCatalogView = this.props.view !== 'catalog'  || this.props.location.pathname === '/404' ? (
       <a
         onClick={this.handleCatalogView}
         className="material-icons mdc-top-app-bar__navigation-icon"
@@ -88,36 +78,6 @@ export default class Header extends React.Component {
         view_comfy
       </a>
     ) : '';
-
-    // let tnrisLogo;
-    // switch(this.props.theme) {
-    //   case 'light':
-    //     tnrisLogo = tnrisGray;
-    //     break;
-    //   case 'dark':
-    //     tnrisLogo = tnrisGray;
-    //     break;
-    //   case 'earth':
-    //     tnrisLogo = tnrisWhite;
-    //     break;
-    //   case 'fuego':
-    //     tnrisLogo = tnrisFuego;
-    //     break;
-    //   case 'vaporwave':
-    //     tnrisLogo = tnrisWhite;
-    //     break;
-    //   case 'america':
-    //     tnrisLogo = tnrisWhite;
-    //     break;
-    //   case 'hulk':
-    //     tnrisLogo = tnrisWhite;
-    //     break;
-    //   case 'relax':
-    //     tnrisLogo = tnrisWhite;
-    //     break;
-    //   default:
-    //   tnrisLogo = tnrisGray;
-    // }
 
     return (
         <header
@@ -138,22 +98,8 @@ export default class Header extends React.Component {
           </div>
           <div className={`header-nav mdc-top-app-bar__row ${dismissClass}`}>
             <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start" role="toolbar">
-              {/*<a href="https://tnris.org" className="mdc-top-app-bar__action-item tnris-logo-text">
-                <img src={tnrisLogo} aria-label="TNRIS Logo" alt="TNRIS Logo" className="logo" />
-              </a>
-              <span className="mdc-top-app-bar__title">Data Holodeck</span>*/}
-              {/*{this.props.view === 'orderCart' ?
-                <a
-                  onClick={this.handleBack}
-                  className="mdc-top-app-bar__action-item"
-                  title="Back"
-                  >
-                  <i className="material-icons mdc-top-app-bar__navigation-icon">arrow_back</i>
-                </a> : ''}*/}
-
               {backToCatalogView}
-
-               <CollectionSearcherContainer match={this.props.match} history={this.props.history} />
+              <CollectionSearcherContainer />
                {this.props.orders && Object.keys(this.props.orders).length !== 0 ?
                  <div>
                    {shoppingCartCountBadge}

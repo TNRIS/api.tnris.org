@@ -3,6 +3,8 @@ import {
   SET_COLLECTION_SEARCH_SUGGESTIONS_QUERY
 } from '../constants/collectionSearcherActionTypes';
 
+import { POP_BROWSER_STORE } from '../constants/catalogActionTypes';
+
 const initialState = {
   collectionSearchQuery: '',
   collectionSearchSuggestionsQuery: ''
@@ -24,8 +26,11 @@ export default function collectionSearcherReducer(state = initialState, action) 
         collectionSearchSuggestionsQuery: action.payload.collectionSearchSuggestionsQuery
       };
 
-      default:
-        // ALWAYS have a default case in a reducer
-        return state;
+    case POP_BROWSER_STORE:
+      return Object.assign({}, action.payload.collectionSearcher);
+
+    default:
+      // ALWAYS have a default case in a reducer
+      return state;
   }
 }

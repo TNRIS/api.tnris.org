@@ -4,12 +4,18 @@ import {
   FETCH_COLLECTIONS_BEGIN,
   FETCH_COLLECTIONS_SUCCESS,
   FETCH_COLLECTIONS_FAILURE,
+  FETCH_COLLECTIONS_WITH_SELECTED_SUCCESS,
   SELECT_COLLECTION,
   CLEAR_SELECTED_COLLECTION,
   FETCH_COLLECTION_RESOURCES_BEGIN,
   FETCH_COLLECTION_RESOURCES_SUCCESS,
   FETCH_COLLECTION_RESOURCES_FAILURE,
 } from '../constants/collectionActionTypes';
+
+import { setViewCollection } from './catalogActions';
+import { closeToolDrawer } from './toolDrawerActions';
+
+import { store } from '../App';
 
 // -------------
 // Initial Store of all collections for display as cards
@@ -23,6 +29,14 @@ export const fetchCollectionsBegin = () => ({
 export const fetchCollectionsSuccess = (collections) => ({
   type: FETCH_COLLECTIONS_SUCCESS,
   payload: { collections }
+});
+
+export const fetchCollectionsWithSelectedSuccess = (collections, selected) => ({
+  type: FETCH_COLLECTIONS_WITH_SELECTED_SUCCESS,
+  payload: {
+    collections: collections,
+    selected: selected
+  }
 });
 
 export const fetchCollectionsFailure = (error) => ({
@@ -62,7 +76,20 @@ function historicalRecursiveFetcher(dispatch, getState, apiQuery, response) {
     }
     else {
       let normalizedJson = normalizeCollections(allResults);
-      dispatch(fetchCollectionsSuccess(normalizedJson));
+      let currentStore = store.getState();
+      const pathname = currentStore.router.location.pathname;
+      if (!pathname.includes('/collection/')) {
+        dispatch(fetchCollectionsSuccess(normalizedJson));
+      }
+      else if (!normalizedJson.result.includes(pathname.replace('/collection/',''))) {
+        dispatch(fetchCollectionsSuccess(normalizedJson));
+      }
+      else {
+        const collectionId = pathname.replace('/collection/','');
+        dispatch(fetchCollectionsWithSelectedSuccess(normalizedJson, collectionId));
+        dispatch(setViewCollection());
+        dispatch(closeToolDrawer());
+      }
       return normalizedJson;
     }
   })

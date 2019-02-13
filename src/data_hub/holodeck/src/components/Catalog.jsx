@@ -161,7 +161,15 @@ export default class Catalog extends React.Component {
               ) : this.loadingMessage}
             </ul>
           </div>;
-      return catalogCards;
+
+        const returnObj = (<div>
+          <ToolDrawerContainer
+          total={this.props.visibleCollections ? this.props.visibleCollections.length : 0}
+          showToolDrawerInCatalogView={this.state.showToolDrawerInCatalogView}
+          view={this.state.toolDrawerView} />
+        {catalogCards}
+      </div>)
+      return returnObj;
     }
   }
 
@@ -183,11 +191,6 @@ export default class Catalog extends React.Component {
 
     return (
       <div className="catalog-component">
-        <ToolDrawerContainer
-          total={this.props.visibleCollections ? this.props.visibleCollections.length : 0}
-          showToolDrawerInCatalogView={this.state.showToolDrawerInCatalogView}
-          view={this.state.toolDrawerView} />
-
         <HeaderContainer
           toolDrawerView={this.state.toolDrawerView}
           handleToolDrawerDisplayDesktop={this.handleToolDrawerDisplayDesktop}

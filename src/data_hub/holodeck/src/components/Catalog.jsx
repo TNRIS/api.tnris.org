@@ -2,20 +2,19 @@ import React from 'react';
 import { Redirect } from 'react-router';
 import { Route, Switch } from 'react-router';
 import { matchPath } from 'react-router-dom';
-import { MDCDrawer } from "@material/drawer";
 
 import Footer from './Footer';
 import HistoricalAerialTemplate from './HistoricalAerialTemplate/HistoricalAerialTemplate';
 import OutsideEntityTemplate from './TnrisOutsideEntityTemplate/TnrisOutsideEntityTemplate';
 import TnrisOrderTemplate from './TnrisOrderTemplate/TnrisOrderTemplate';
-import OrderCartViewContainer from '../containers/OrderCartViewContainer';
+import CollectionFilterMapView from './CollectionFilterMapView';
 import NotFound from './NotFound';
 
-import CollectionFilterMapViewContainer from '../containers/CollectionFilterMapViewContainer';
 import HeaderContainer from '../containers/HeaderContainer';
 import ToolDrawerContainer from '../containers/ToolDrawerContainer';
 import CatalogCardContainer from '../containers/CatalogCardContainer';
 import TnrisDownloadTemplateContainer from '../containers/TnrisDownloadTemplateContainer';
+import OrderCartViewContainer from '../containers/OrderCartViewContainer';
 
 import loadingImage from '../images/loading.gif';
 import noDataImage from '../images/no-data.png';
@@ -47,10 +46,15 @@ export default class Catalog extends React.Component {
     this.props.fetchCollections();
     this.props.fetchStoredShoppingCart();
     window.addEventListener("resize", this.handleResize);
-    this.toolDrawer = MDCDrawer.attachTo(document.querySelector('.tool-drawer'));
     window.onpopstate = (e) => {
       const theState = e.state.state;
       this.props.popBrowserStore(theState);
+      if (this.props.view === 'catalog' &&
+          this.state.showToolDrawerInCatalogView &&
+          this.state.toolDrawerView === 'dismiss' &&
+          this.props.toolDrawerStatus === 'closed') {
+        this.props.openToolDrawer();
+      }
     }
   }
 
@@ -68,6 +72,9 @@ export default class Catalog extends React.Component {
       const themedClass = this.props.theme + "-app-theme";
       const html = document.querySelector('html');
       html.className = themedClass;
+    }
+    if (this.props.view === 'orderCart' && this.props.toolDrawerStatus === 'open') {
+      this.props.closeToolDrawer();
     }
   }
 
@@ -133,26 +140,31 @@ export default class Catalog extends React.Component {
   setCatalogView() {
     const noDataDivClass = this.props.toolDrawerStatus === 'open' && this.state.showToolDrawerInCatalogView ?
       'no-data no-data-open' : 'no-data no-data-closed';
-    const catalogCards = this.props.visibleCollections && this.props.visibleCollections.length < 1 ?
-      <div className={noDataDivClass}>
-        <img
-          src={noDataImage}
-          className="no-data-image"
-          alt="No Data Available"
-          title="No data available with those search terms" />
-      </div> : <div className="catalog-grid mdc-layout-grid">
-          <ul className="mdc-layout-grid__inner">
-            {this.props.visibleCollections ? this.props.visibleCollections.map(collectionId =>
-              <li
-                className="mdc-layout-grid__cell mdc-layout-grid__cell--span-3-desktop"
-                key={collectionId}>
-                <CatalogCardContainer
-                  collection={this.props.collections[collectionId]} />
-              </li>
-            ) : this.loadingMessage}
-          </ul>
-        </div>;
-    return catalogCards;
+    if (this.props.view === 'geoFilter') {
+      return <CollectionFilterMapView />
+    }
+    else {
+      const catalogCards = this.props.visibleCollections && this.props.visibleCollections.length < 1 ?
+        <div className={noDataDivClass}>
+          <img
+            src={noDataImage}
+            className="no-data-image"
+            alt="No Data Available"
+            title="No data available with those search terms" />
+        </div> : <div className="catalog-grid mdc-layout-grid">
+            <ul className="mdc-layout-grid__inner">
+              {this.props.visibleCollections ? this.props.visibleCollections.map(collectionId =>
+                <li
+                  className="mdc-layout-grid__cell mdc-layout-grid__cell--span-3-desktop"
+                  key={collectionId}>
+                  <CatalogCardContainer
+                    collection={this.props.collections[collectionId]} />
+                </li>
+              ) : this.loadingMessage}
+            </ul>
+          </div>;
+      return catalogCards;
+    }
   }
 
   render() {
@@ -180,6 +192,7 @@ export default class Catalog extends React.Component {
 
         <HeaderContainer
           toolDrawerView={this.state.toolDrawerView}
+          toggleToolDrawerDisplay={this.toggleToolDrawerDisplay}
           showToolDrawerInCatalogView={this.state.showToolDrawerInCatalogView} />
 
         <div className={`catalog ${dismissClass} mdc-drawer-app-content`}>
@@ -187,7 +200,7 @@ export default class Catalog extends React.Component {
             <Switch>
               <Route path='/collection/:collectionId' exact render={(props) => this.handleShowCollectionView()} />
               <Route path='/catalog/:filters' exact render={(props) => this.setCatalogView()} />
-              <Route path='/cart/' exact component={OrderCartViewContainer} />} />
+              <Route path='/cart/' exact render={(props) => <OrderCartViewContainer toolDrawerView={this.state.toolDrawerView} showToolDrawerInCatalogView={this.state.showToolDrawerInCatalogView}/>} />
               <Route path='/' exact render={(props) => this.setCatalogView()} />
               <Route path='*' render={(props) => <NotFound status={this.props.toolDrawerStatus} />} />
             </Switch>

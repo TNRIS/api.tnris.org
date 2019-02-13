@@ -4,29 +4,25 @@ import OrderCartContainer from '../containers/OrderCartContainer';
 class OrderCartView extends React.Component {
   constructor() {
     super();
-
     this.handleBack = this.handleBack.bind(this);
   }
 
   handleBack() {
-    if (this.props.previousUrl.includes('/catalog/')) {
-      this.props.setViewCatalog();
-      this.props.openToolDrawer();
-      this.props.setUrl(this.props.previousUrl, this.props.history);
-    }
-    else if (this.props.previousUrl.includes('/collection/')) {
+    if (this.props.previousUrl.includes('/collection/')) {
       const collectionUuid = this.props.previousUrl.replace('/collection/', '');
       this.props.setViewCollection();
       this.props.selectCollection(collectionUuid);
-      this.props.setUrl(this.props.previousUrl, this.props.history);
+      this.props.setUrl(this.props.previousUrl);
     }
     else {
       this.props.setViewCatalog();
-      this.props.openToolDrawer();
-      this.props.setUrl(this.props.previousUrl, this.props.history);
+      this.props.setUrl(this.props.previousUrl);
+      if (this.props.toolDrawerView === 'dismiss' && this.props.showToolDrawerInCatalogView) {
+        this.props.openToolDrawer();
+      }
     }
   }
-  
+
 
   render() {
     return (
@@ -41,7 +37,7 @@ class OrderCartView extends React.Component {
             <button onClick={this.handleBack} className="close-shopping-cart mdc-icon-button material-icons" title="Close shopping cart">close</button>
           </section>
         </div>
-        <OrderCartContainer history={this.props.history} />
+        <OrderCartContainer />
       </div>
     );
   }

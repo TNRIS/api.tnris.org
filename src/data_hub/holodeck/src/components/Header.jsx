@@ -54,7 +54,6 @@ export default class Header extends React.Component {
   }
 
   render() {
-    console.log(this.props);
     let dismissClass = 'closed-drawer';
     if (this.props.toolDrawerStatus === 'open' && this.props.toolDrawerView === 'dismiss') {
       dismissClass = 'open-drawer';

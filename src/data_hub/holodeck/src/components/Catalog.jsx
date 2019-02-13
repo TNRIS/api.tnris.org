@@ -190,7 +190,7 @@ export default class Catalog extends React.Component {
 
         <HeaderContainer
           toolDrawerView={this.state.toolDrawerView}
-          toggleToolDrawerDisplay={this.toggleToolDrawerDisplay}
+          handleToolDrawerDisplayDesktop={this.handleToolDrawerDisplayDesktop}
           showToolDrawerInCatalogView={this.state.showToolDrawerInCatalogView} />
 
         <div className={`catalog ${dismissClass} mdc-drawer-app-content`}>

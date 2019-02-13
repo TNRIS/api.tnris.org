@@ -6,17 +6,14 @@ styles for component: ToolDrawer
 
   .mdc-drawer--dismissible.mdc-drawer--open {
     display: flex;
-    transition: display .1s;
+    // transition: display .1s;
     position: fixed;
-    // top: 26px;
+    top: 26px;
   }
 
   .mdc-drawer {
     @include mdc-drawer-surface-fill-color($main-background);
     @include mdc-drawer-divider-color($empty-border);
-
-    top: 26px;
-
 
     .mdc-drawer__content {
 

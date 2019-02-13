@@ -32,7 +32,7 @@ export default class Catalog extends React.Component {
     };
 
     this.handleResize = this.handleResize.bind(this);
-    this.toggleToolDrawerDisplay = this.toggleToolDrawerDisplay.bind(this);
+    this.handleToolDrawerDisplayDesktop = this.handleToolDrawerDisplayDesktop.bind(this);
     this.handleShowCollectionView = this.handleShowCollectionView.bind(this);
     this.setCatalogView = this.setCatalogView.bind(this);
     this.loadingMessage = (
@@ -81,7 +81,7 @@ export default class Catalog extends React.Component {
   handleResize() {
     if (window.innerWidth >= 1050) {
       this.setState({toolDrawerView:'dismiss'});
-      if (this.props.showToolDrawerInCatalogView) {
+      if (this.state.showToolDrawerInCatalogView) {
         this.props.openToolDrawer();
       }
     }
@@ -95,16 +95,14 @@ export default class Catalog extends React.Component {
     }
   }
 
-  toggleToolDrawerDisplay() {
-    this.props.toolDrawerStatus === 'open' ? this.props.closeToolDrawer() : this.props.openToolDrawer();
-    if (this.state.toolDrawerView === 'dismiss') {
-      this.setState({showToolDrawerInCatalogView: !this.state.showToolDrawerInCatalogView});
-    } else if (this.state.toolDrawerView === 'modal') {
-      const scrim = document.getElementById('scrim');
-      scrim.onclick = () => {
-        this.props.closeToolDrawer();
-      };
+  handleToolDrawerDisplayDesktop() {
+    if (this.props.toolDrawerStatus === 'open') {
+      this.props.closeToolDrawer();
+      this.setState({showToolDrawerInCatalogView: false});
+      return;
     }
+    this.props.openToolDrawer();
+    this.setState({showToolDrawerInCatalogView: true});
   }
 
   handleShowCollectionView() {
@@ -192,7 +190,7 @@ export default class Catalog extends React.Component {
 
         <HeaderContainer
           toolDrawerView={this.state.toolDrawerView}
-          toggleToolDrawerDisplay={this.toggleToolDrawerDisplay}
+          handleToolDrawerDisplayDesktop={this.handleToolDrawerDisplayDesktop}
           showToolDrawerInCatalogView={this.state.showToolDrawerInCatalogView} />
 
         <div className={`catalog ${dismissClass} mdc-drawer-app-content`}>

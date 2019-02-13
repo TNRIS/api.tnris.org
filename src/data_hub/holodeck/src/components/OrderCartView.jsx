@@ -8,18 +8,23 @@ class OrderCartView extends React.Component {
   }
 
   handleBack() {
-    if (this.props.previousUrl.includes('/collection/')) {
-      const collectionUuid = this.props.previousUrl.replace('/collection/', '');
-      this.props.setViewCollection();
-      this.props.selectCollection(collectionUuid);
-      this.props.setUrl(this.props.previousUrl);
-    }
-    else {
+    if (this.props.previousUrl.includes('/catalog/')) {
       this.props.setViewCatalog();
-      this.props.setUrl(this.props.previousUrl);
       if (this.props.toolDrawerView === 'dismiss' && this.props.showToolDrawerInCatalogView) {
         this.props.openToolDrawer();
       }
+      this.props.setUrl(this.props.previousUrl, this.props.history);
+    } else if (this.props.previousUrl.includes('/collection/')) {
+        const collectionUuid = this.props.previousUrl.replace('/collection/', '');
+        this.props.setViewCollection();
+        this.props.selectCollection(collectionUuid);
+        this.props.setUrl(this.props.previousUrl, this.props.history);
+    } else {
+        this.props.setViewCatalog();
+        if (this.props.toolDrawerView === 'dismiss' && this.props.showToolDrawerInCatalogView) {
+          this.props.openToolDrawer();
+        }
+        this.props.setUrl(this.props.previousUrl, this.props.history);
     }
   }
 
@@ -34,7 +39,12 @@ class OrderCartView extends React.Component {
             </h2>
           </section>
           <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-end">
-            <button onClick={this.handleBack} className="close-shopping-cart mdc-icon-button material-icons" title="Close shopping cart">close</button>
+            <button
+              className="close-shopping-cart mdc-icon-button material-icons"
+              onClick={this.handleBack}
+              title="Close shopping cart">
+              close
+            </button>
           </section>
         </div>
         <OrderCartContainer />

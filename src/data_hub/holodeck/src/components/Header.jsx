@@ -12,6 +12,7 @@ export default class Header extends React.Component {
 
     this.handleOrderCartView = this.handleOrderCartView.bind(this);
     this.handleCatalogView = this.handleCatalogView.bind(this);
+    this.handleToolDrawerDisplayMobile = this.handleToolDrawerDisplayMobile.bind(this);
   }
 
   componentDidMount() {
@@ -42,6 +43,14 @@ export default class Header extends React.Component {
     // this.props.clearSelectedCollection();
     this.props.setViewCatalog();
     this.props.setUrl(this.props.catalogFilterUrl);
+  }
+
+  handleToolDrawerDisplayMobile() {
+    this.toolDrawer.open = true;
+    const scrim = document.getElementById('scrim');
+    scrim.onclick = () => {
+      this.toolDrawer.open = false;
+    };
   }
 
   render() {
@@ -103,14 +112,22 @@ export default class Header extends React.Component {
                 {this.props.view === 'catalog' ?
                   <div>
                     {toolDrawerNotification}
-                    <a
-                      onClick={this.props.toggleToolDrawerDisplay}
-                      className="material-icons mdc-top-app-bar__navigation-icon"
-                      id="tools"
-                      title={this.props.toolDrawerStatus === 'closed' ? 'Open tool drawer' : 'Close tool drawer'}>
-                      {this.props.toolDrawerView === 'dismiss' ?
-                        this.props.toolDrawerStatus === 'closed' ? 'tune' : 'keyboard_arrow_right' : 'tune'}
-                    </a>
+                    {window.innerWidth >= 1050 ?
+                      <a
+                        onClick={this.props.handleToolDrawerDisplayDesktop}
+                        className="material-icons mdc-top-app-bar__navigation-icon"
+                        id="tools"
+                        title={this.props.toolDrawerStatus === 'closed' ? 'Open tool drawer' : 'Close tool drawer'}>
+                        {this.props.toolDrawerView === 'dismiss' ?
+                          this.props.toolDrawerStatus === 'closed' ? 'tune' : 'keyboard_arrow_right' : 'tune'}
+                      </a> :
+                      <a
+                        onClick={this.handleToolDrawerDisplayMobile}
+                        className="material-icons mdc-top-app-bar__navigation-icon"
+                        id="tools"
+                        title='Open tool drawer'>
+                        tune
+                      </a>}
                   </div> : null}
             </section>
           </div>

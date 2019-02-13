@@ -32,7 +32,7 @@ export default class Catalog extends React.Component {
     };
 
     this.handleResize = this.handleResize.bind(this);
-    this.toggleToolDrawerDisplay = this.toggleToolDrawerDisplay.bind(this);
+    this.handleToolDrawerDisplayDesktop = this.handleToolDrawerDisplayDesktop.bind(this);
     this.handleShowCollectionView = this.handleShowCollectionView.bind(this);
     this.handleViewChange = this.handleViewChange.bind(this);
     this.setCatalogView = this.setCatalogView.bind(this);
@@ -73,7 +73,7 @@ export default class Catalog extends React.Component {
   handleResize() {
     if (window.innerWidth >= 1050) {
       this.setState({toolDrawerView:'dismiss'});
-      if (this.props.showToolDrawerInCatalogView) {
+      if (this.state.showToolDrawerInCatalogView) {
         this.props.openToolDrawer();
       }
     }
@@ -87,16 +87,14 @@ export default class Catalog extends React.Component {
     }
   }
 
-  toggleToolDrawerDisplay() {
-    this.props.toolDrawerStatus === 'open' ? this.props.closeToolDrawer() : this.props.openToolDrawer();
-    if (this.state.toolDrawerView === 'dismiss') {
-      this.setState({showToolDrawerInCatalogView: !this.state.showToolDrawerInCatalogView});
-    } else if (this.state.toolDrawerView === 'modal') {
-      const scrim = document.getElementById('scrim');
-      scrim.onclick = () => {
-        this.props.closeToolDrawer();
-      };
+  handleToolDrawerDisplayDesktop() {
+    if (this.props.toolDrawerStatus === 'open') {
+      this.props.closeToolDrawer();
+      this.setState({showToolDrawerInCatalogView: false});
+      return;
     }
+    this.props.openToolDrawer();
+    this.setState({showToolDrawerInCatalogView: true});
   }
 
   handleShowCollectionView() {
@@ -149,7 +147,10 @@ export default class Catalog extends React.Component {
       case 'collection':
         return this.handleShowCollectionView();
       case 'orderCart':
-        return <OrderCartViewContainer history={this.props.history} />;
+        return <OrderCartViewContainer
+          history={this.props.history}
+          toolDrawerView={this.state.toolDrawerView}
+          showToolDrawerInCatalogView={this.state.showToolDrawerInCatalogView} />;
       case 'geoFilter':
         return <CollectionFilterMapViewContainer history={this.props.history} />;
       default:
@@ -188,7 +189,7 @@ export default class Catalog extends React.Component {
 
         <HeaderContainer
           toolDrawerView={this.state.toolDrawerView}
-          toggleToolDrawerDisplay={this.toggleToolDrawerDisplay}
+          handleToolDrawerDisplayDesktop={this.handleToolDrawerDisplayDesktop}
           showToolDrawerInCatalogView={this.state.showToolDrawerInCatalogView}
           match={this.props.match}
           history={this.props.history} />

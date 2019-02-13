@@ -13,9 +13,9 @@ export default class Header extends React.Component {
   constructor(props) {
     super(props);
 
-    this.handleBack = this.handleBack.bind(this);
     this.handleOrderCartView = this.handleOrderCartView.bind(this);
     this.handleCatalogView = this.handleCatalogView.bind(this);
+    this.handleToolDrawerDisplayMobile = this.handleToolDrawerDisplayMobile.bind(this);
   }
 
   componentDidMount() {
@@ -37,25 +37,6 @@ export default class Header extends React.Component {
     }
   }
 
-  handleBack() {
-    if (this.props.previousUrl.includes('/catalog/')) {
-      this.props.setViewCatalog();
-      this.props.openToolDrawer();
-      this.props.setUrl(this.props.previousUrl, this.props.history);
-    }
-    else if (this.props.previousUrl.includes('/collection/')) {
-      const collectionUuid = this.props.previousUrl.replace('/collection/', '');
-      this.props.setViewCollection();
-      this.props.selectCollection(collectionUuid);
-      this.props.setUrl(this.props.previousUrl, this.props.history);
-    }
-    else {
-      this.props.setViewCatalog();
-      this.props.openToolDrawer();
-      this.props.setUrl(this.props.previousUrl, this.props.history);
-    }
-  }
-
   handleOrderCartView() {
     if (window.location.pathname !== '/cart/') {
       this.props.clearSelectedCollection();
@@ -74,7 +55,16 @@ export default class Header extends React.Component {
     this.props.setUrl(this.props.catalogFilterUrl, this.props.history);
   }
 
+  handleToolDrawerDisplayMobile() {
+    this.toolDrawer.open = true;
+    const scrim = document.getElementById('scrim');
+    scrim.onclick = () => {
+      this.toolDrawer.open = false;
+    };
+  }
+
   render() {
+    console.log(this.props);
     let dismissClass = 'closed-drawer';
     if (this.props.toolDrawerStatus === 'open' && this.props.toolDrawerView === 'dismiss') {
       dismissClass = 'open-drawer';
@@ -177,14 +167,22 @@ export default class Header extends React.Component {
                 {this.props.view === 'catalog' ?
                   <div>
                     {toolDrawerNotification}
-                    <a
-                      onClick={this.props.toggleToolDrawerDisplay}
-                      className="material-icons mdc-top-app-bar__navigation-icon"
-                      id="tools"
-                      title={this.props.toolDrawerStatus === 'closed' ? 'Open tool drawer' : 'Close tool drawer'}>
-                      {this.props.toolDrawerView === 'dismiss' ?
-                        this.props.toolDrawerStatus === 'closed' ? 'tune' : 'keyboard_arrow_right' : 'tune'}
-                    </a>
+                    {window.innerWidth >= 1050 ?
+                      <a
+                        onClick={this.props.handleToolDrawerDisplayDesktop}
+                        className="material-icons mdc-top-app-bar__navigation-icon"
+                        id="tools"
+                        title={this.props.toolDrawerStatus === 'closed' ? 'Open tool drawer' : 'Close tool drawer'}>
+                        {this.props.toolDrawerView === 'dismiss' ?
+                          this.props.toolDrawerStatus === 'closed' ? 'tune' : 'keyboard_arrow_right' : 'tune'}
+                      </a> :
+                      <a
+                        onClick={this.handleToolDrawerDisplayMobile}
+                        className="material-icons mdc-top-app-bar__navigation-icon"
+                        id="tools"
+                        title='Open tool drawer'>
+                        tune
+                      </a>}
                   </div> : null}
             </section>
           </div>

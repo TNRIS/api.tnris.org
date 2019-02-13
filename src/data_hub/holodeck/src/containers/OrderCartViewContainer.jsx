@@ -12,8 +12,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  setUrl: (newUrl, history) => {
-    dispatch(urlTrackerActions.setUrl(newUrl, history))
+  setUrl: (newUrl) => {
+    dispatch(urlTrackerActions.setUrl(newUrl))
   },
   setViewCatalog: () => {
     dispatch(catalogActions.setViewCatalog());

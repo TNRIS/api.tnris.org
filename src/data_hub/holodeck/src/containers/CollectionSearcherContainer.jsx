@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 
 import CollectionSearcher from '../components/CollectionSearcher';
 import {
@@ -18,7 +19,8 @@ const mapStateToProps = (state) => ({
   collectionSearchQuery: state.collectionSearcher.collectionSearchQuery,
   collectionSearchSuggestions: getSearchSuggestions(state),
   collectionSearchSuggestionsQuery: state.collectionSearcher.collectionSearchSuggestionsQuery,
-  view: state.catalog.view
+  view: state.catalog.view,
+  previousUrl: state.urlTracker.previousUrl
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -40,14 +42,17 @@ const mapDispatchToProps = dispatch => ({
   logFilterChange: (url) => {
     dispatch(urlTrackerActions.logFilterChange(url));
   },
+  url404: () => {
+    dispatch(urlTrackerActions.url404());
+  },
   setViewCatalog: () => {
     dispatch(catalogActions.setViewCatalog());
   }
 })
 
-const CollectionSearcherContainer = connect(
+const CollectionSearcherContainer = withRouter(connect(
   mapStateToProps,
   mapDispatchToProps
-)(CollectionSearcher);
+)(CollectionSearcher));
 
 export default CollectionSearcherContainer;

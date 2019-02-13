@@ -2,7 +2,8 @@ import {
   SET_VIEW_CATALOG,
   SET_VIEW_COLLECTION,
   SET_VIEW_ORDER_CART,
-  SET_VIEW_GEO_FILTER
+  SET_VIEW_GEO_FILTER,
+  POP_BROWSER_STORE
 } from '../constants/catalogActionTypes';
 
 const initialState = {
@@ -34,6 +35,9 @@ export default function catalogReducer(state = initialState, action) {
         ...state,
         view: 'geoFilter'
       };
+
+    case POP_BROWSER_STORE:
+      return Object.assign({}, action.payload.catalog);
 
     default:
       // ALWAYS have a default case in a reducer

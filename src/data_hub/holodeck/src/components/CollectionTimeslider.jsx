@@ -1,5 +1,5 @@
 import React from 'react';
-import { Redirect } from 'react-router';
+import { matchPath } from 'react-router-dom';
 import Range from 'rc-slider/lib/Range';
 
 import 'rc-slider/assets/index.css';
@@ -10,8 +10,7 @@ export default class CollectionTimeslider extends React.Component {
     this.state = {
       range: this.props.collectionTimeslider,
       setMin: this.props.collectionTimeslider[0],
-      setMax: this.props.collectionTimeslider[1],
-      badUrlFlag: false
+      setMax: this.props.collectionTimeslider[1]
     }
     this.handleSetTimeslider = this.handleSetTimeslider.bind(this);
   }
@@ -26,9 +25,14 @@ export default class CollectionTimeslider extends React.Component {
     }
     // on component mount, check the URl to apply any necessary filters
     // first, check if url has a 'filters' parameter
-    if (Object.keys(this.props.match.params).includes('filters')) {
+    const match = matchPath(
+        this.props.location.pathname,
+        { path: '/catalog/:filters' }
+      );
+    const filters = match ? match.params.filters : null;
+    if (filters) {
       try {
-        const allFilters = JSON.parse(decodeURIComponent(this.props.match.params.filters));
+        const allFilters = JSON.parse(decodeURIComponent(filters));
         // second, check if filters param includes range key
         if (Object.keys(allFilters).includes('range')) {
           // third, apply range and set state to reflect it
@@ -40,21 +44,19 @@ export default class CollectionTimeslider extends React.Component {
         }
       } catch (e) {
         console.log(e);
-        this.setState({
-          badUrlFlag: true
-        });
+        if (window.location.pathname !== '/404') { this.props.url404(); }
       }
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.collectionTimeslider[0] === this.state.range[0] &&
-        nextProps.collectionTimeslider[1] === this.state.range[1]) {
-          this.setState({
-            setMin: nextProps.collectionTimeslider[0],
-            setMax: nextProps.collectionTimeslider[1]
-          });
-        }
+  componentDidUpdate(prevProps, prevState) {
+    if(prevProps.collectionTimeslider[0] !== this.props.collectionTimeslider[0] ||
+       prevProps.collectionTimeslider[1] !== this.props.collectionTimeslider[1]) {
+         this.setState({
+           setMin: this.props.collectionTimeslider[0],
+           setMax: this.props.collectionTimeslider[1]
+         });
+    }
   }
 
   handleSetTimeslider(target) {
@@ -75,16 +77,12 @@ export default class CollectionTimeslider extends React.Component {
     }
     const filterString = JSON.stringify(filterObj);
     // if empty filter settings, use the base home url instead of the filter url
-    Object.keys(filterObj).length === 0 ? this.props.setUrl('/', this.props.history) : this.props.setUrl('/catalog/' + encodeURIComponent(filterString), this.props.history);
+    Object.keys(filterObj).length === 0 ? this.props.setUrl('/') : this.props.setUrl('/catalog/' + encodeURIComponent(filterString));
     // log filter change in store
     Object.keys(filterObj).length === 0 ? this.props.logFilterChange('/') : this.props.logFilterChange('/catalog/' + encodeURIComponent(filterString));
 }
 
   render() {
-    if (this.state.badUrlFlag) {
-      return <Redirect to='/404' />;
-    }
-
     return (
       <div className='timeslider-component'>
         <div className="mdc-typography--body2">{this.state.setMin} - {this.state.setMax}</div>

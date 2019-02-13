@@ -17,7 +17,7 @@ export default class CollectionFilterMapView extends React.Component {
               Single click to begin drawing, move cursor to draw a filter extent, single click to finish drawing.
             </p>
           </div>
-          <CollectionFilterMapContainer history={this.props.history} />
+          <CollectionFilterMapContainer />
         </div>
       );
     }

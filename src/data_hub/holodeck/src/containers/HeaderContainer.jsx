@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 
 import { catalogActions,
          collectionActions,
@@ -50,9 +51,9 @@ const mapDispatchToProps = dispatch => ({
   }
 })
 
-const HeaderContainer = connect(
+const HeaderContainer = withRouter(connect(
   mapStateToProps,
   mapDispatchToProps
-)(Header);
+)(Header));
 
 export default HeaderContainer;

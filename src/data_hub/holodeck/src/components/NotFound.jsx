@@ -1,12 +1,16 @@
 import React, { Component } from 'react';
-import Footer from './Footer';
+import { Redirect } from 'react-router';
 import image404 from '../images/404.jpg';
 
 class NotFound extends Component {
 
   render() {
+    if (window.location.pathname !== '/404') {
+      return <Redirect to='/404' />;
+    }
+
     return (
-      <div className="notfound-component">
+      <div className={`notfound-component ${this.props.status}`}>
           <div className="notfound">
             <img
               src={image404}
@@ -14,9 +18,12 @@ class NotFound extends Component {
               className="notfound-image"
               />
             <h2>ERROR 404: Not Found</h2>
-            <p>The page you're looking for does not exist.</p>
+            <p>
+              The page you're looking for does not exist.
+              <br />
+              <a href="/" title="Reset the Holodeck">Reset the Holodeck</a>
+            </p>
           </div>
-        <Footer />
       </div>
     )
   }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Redirect } from 'react-router';
+import { matchPath } from 'react-router-dom';
 import turfExtent from 'turf-extent';
 // the carto core api is a CDN in the app template HTML (not available as NPM package)
 // so we create a constant to represent it so it's available to the component
@@ -8,10 +8,6 @@ const cartodb = window.cartodb;
 export default class CollectionFilter extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      badUrlFlag: false,
-      geographySet: false
-    }
     this.handleOpenFilterMenu = this.handleOpenFilterMenu.bind(this);
     this.handleSetFilter = this.handleSetFilter.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);
@@ -22,9 +18,14 @@ export default class CollectionFilter extends React.Component {
   componentDidMount () {
     // on component mount, check the URl to apply any necessary filters
     // first, check if url has a 'filters' parameter
-    if (Object.keys(this.props.match.params).includes('filters')) {
+    const match = matchPath(
+        this.props.location.pathname,
+        { path: '/catalog/:filters' }
+      );
+    const filters = match ? match.params.filters : null;
+    if (filters) {
       try {
-        const allFilters = JSON.parse(decodeURIComponent(this.props.match.params.filters));
+        const allFilters = JSON.parse(decodeURIComponent(filters));
         // second, check if filters param includes filters key
         if (Object.keys(allFilters).includes('filters')) {
           // third, apply all filters and check those associated checkboxes
@@ -75,15 +76,13 @@ export default class CollectionFilter extends React.Component {
         }
       } catch (e) {
         console.log(e);
-        this.setState({
-          badUrlFlag: true
-        });
+        if (window.location.pathname !== '/404') { this.props.url404(); }
       }
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (Object.keys(nextProps.collectionFilter).length === 0) {
+  componentDidUpdate(prevProps, prevState) {
+    if (JSON.stringify(prevProps.collectionFilter) !== JSON.stringify(this.props.collectionFilter)) {
       const filterComponent = document.getElementById('filter-component');
       const inputArray = filterComponent.querySelectorAll("input");
       inputArray.forEach(input => {
@@ -93,26 +92,18 @@ export default class CollectionFilter extends React.Component {
       labelArray.forEach(label => {
         return label.classList.remove('filter-active');
       });
-      // THIS IS CODE TO COLLAPSE THE FILTER GROUP WHEN ALL FILTERS ARE TURNED OFF.
-      // WAS WRITTEN TO RUN AFTER USER CLICKS THE BUTTON TO CLEAR ALL BUT IT CAUSES
-      // GROUPS TO COLLAPSE WHEN USER MANUALLY UNCHECKS ALL WHICH IS NOT DESIRED
-      // const groupArray = filterComponent.querySelectorAll("ul[id$='-list']");
-      // groupArray.forEach(group => {
-      //   if (!group.classList.contains('hide-filter-list')) {
-      //     group.classList.add('hide-filter-list');
-      //   }
-      //   return group;
-      // });
-      // const iconArray = filterComponent.querySelectorAll("i[id$='-expansion-icon']");
-      // iconArray.forEach(icon => {
-      //   if (icon.innerHTML === 'expand_less') {
-      //     icon.innerHTML = 'expand_more';
-      //   }
-      //   return icon;
-      // });
+      Object.keys(this.props.collectionFilter).map(key => {
+        this.props.collectionFilter[key].map(id => {
+          const hashId = '#' + id;
+          if (document.querySelector(hashId)) {
+            document.querySelector(hashId).checked = true;
+            document.querySelector(`${hashId}-label`).classList.add('filter-active');
+          }
+          return hashId;
+        });
+        return key;
+      });
     }
-
-    nextProps.collectionFilterMapFilter.length > 0 ? this.setState({geographySet:true}) : this.setState({geographySet:false});
   }
 
   handleOpenFilterMenu(e) {
@@ -163,7 +154,7 @@ export default class CollectionFilter extends React.Component {
     }
     const filterString = JSON.stringify(filterObj);
     // if empty filter settings, use the base home url instead of the filter url
-    Object.keys(filterObj).length === 0 ? this.props.setUrl('/', this.props.history) : this.props.setUrl('/catalog/' + encodeURIComponent(filterString), this.props.history);
+    Object.keys(filterObj).length === 0 ? this.props.setUrl('/') : this.props.setUrl('/catalog/' + encodeURIComponent(filterString));
     // log filter change in store
     Object.keys(filterObj).length === 0 ? this.props.logFilterChange('/') : this.props.logFilterChange('/catalog/' + encodeURIComponent(filterString));
   }
@@ -191,11 +182,7 @@ export default class CollectionFilter extends React.Component {
   }
 
   render() {
-    if (this.state.badUrlFlag) {
-      return <Redirect to='/404' />;
-    }
-
-    const filterSet = this.state.geographySet ? "mdc-list-item mdc-list-item--activated filter-list-title" : "mdc-list-item filter-list-title";
+    const filterSet = this.props.collectionFilterMapFilter.length > 0 ? "mdc-list-item mdc-list-item--activated filter-list-title" : "mdc-list-item filter-list-title";
 
     return (
       <div id='filter-component' className='filter-component'>

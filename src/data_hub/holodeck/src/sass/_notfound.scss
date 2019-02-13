@@ -3,6 +3,12 @@ styles for component: NotFound
 */
 
 .notfound-component {
+  width: 100%;
+
+  .open {
+    width: calc(100% - 255px);
+    transition: width 0.3s;
+  }
 
   .notfound {
     text-align: center;
@@ -10,6 +16,7 @@ styles for component: NotFound
 
     .notfound-image {
       padding: 25px;
+      width: 100%;
     }
   }
 

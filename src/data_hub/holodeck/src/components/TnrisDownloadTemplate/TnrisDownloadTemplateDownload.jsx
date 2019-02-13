@@ -42,10 +42,8 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
       this.areaLookup = this.props.resourceAreas;
       this.createMap();
     }
-  }
 
-  componentWillReceiveProps (nextProps) {
-    if (nextProps.selectedCollectionResources.result && nextProps.selectedCollectionResources.result.length === 0) {
+    if (this.props.selectedCollectionResources.result && this.props.selectedCollectionResources.result.length === 0) {
       this.setState({resourceLength:this.props.selectedCollectionResources.result.length});
     }
   }

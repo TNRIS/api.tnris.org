@@ -7,18 +7,11 @@ export default class CatalogCard extends React.Component {
     this.handleKeyPress = this.handleKeyPress.bind(this);
   }
 
-  componentDidMount () {
-    if (Object.keys(this.props.match.params).includes('collectionId') &&
-        this.props.match.params.collectionId === this.props.collection.collection_id) {
-      this.handleCardClick();
-    }
-  }
-
   handleCardClick() {
     this.props.closeToolDrawer();
     this.props.setViewCollection();
     this.props.selectCollection(this.props.collection.collection_id);
-    this.props.setUrl('/collection/' + this.props.collection.collection_id, this.props.history);
+    this.props.setUrl('/collection/' + this.props.collection.collection_id);
   }
 
   handleKeyPress (e) {

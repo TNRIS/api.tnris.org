@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 
 import Catalog from '../components/Catalog';
 import {
@@ -6,8 +7,7 @@ import {
   collectionActions,
   orderCartActions,
   resourceActions,
-  toolDrawerActions,
-  urlTrackerActions } from '../actions';
+  toolDrawerActions } from '../actions';
 import {
   getAllCollections,
   getSortedCollections
@@ -46,17 +46,17 @@ const mapDispatchToProps = dispatch => ({
   openToolDrawer: () => {
     dispatch(toolDrawerActions.openToolDrawer());
   },
-  setUrl: (newUrl, history) => {
-    dispatch(urlTrackerActions.setUrl(newUrl, history))
-  },
   setViewCatalog: () => {
     dispatch(catalogActions.setViewCatalog());
+  },
+  popBrowserStore: (state) => {
+    dispatch(catalogActions.popBrowserStore(state));
   }
 })
 
-const CatalogContainer = connect(
+const CatalogContainer = withRouter(connect(
   mapStateToProps,
   mapDispatchToProps
-)(Catalog);
+)(Catalog));
 
 export default CatalogContainer;

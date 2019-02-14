@@ -78,7 +78,6 @@ class CollectionAdmin(admin.ModelAdmin):
                        # 'short_description',
                        'description',
                        # 'authoritative',
-                       'public',
                        # 'known_issues',
                        # 'coverage_extent',
                        # 'tags',
@@ -86,7 +85,8 @@ class CollectionAdmin(admin.ModelAdmin):
                        'partners',
                        'license_type_id',
                        'thumbnail_image',
-                       'esri_open_data_id'),
+                       'esri_open_data_id',
+                       'public'),
         }),
         ('Links', {
             'classes': ('grp-collapse grp-closed',),
@@ -151,6 +151,16 @@ class CollectionAdmin(admin.ModelAdmin):
             elif len(total_images) == 1:
                 obj.thumbnail_image = total_images[0].image_url
             obj.save()
+
+    def get_form(self, request, obj=None, **kwargs):
+        # if username is 'admin' or user is part of 'Master of Resources' group
+        # then show the Public field. otherwise, hide it
+        if str(request.user) == 'admin' or 'Master of Resources' in str(request.user.groups.all()):
+            if 'public' not in self.fieldsets[0][1]['fields']:
+                self.fieldsets[0][1]['fields'] = self.fieldsets[0][1]['fields'] + ('public',)
+        else:
+            self.fieldsets[0][1]['fields'] = tuple(x for x in self.fieldsets[0][1]['fields'] if x != 'public')
+        return super(CollectionAdmin,self).get_form(request, obj, **kwargs)
 
 
 # views not compiled from joined tables. not managed in admin console

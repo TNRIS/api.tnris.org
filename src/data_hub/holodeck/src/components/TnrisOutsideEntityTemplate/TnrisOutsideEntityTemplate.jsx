@@ -20,6 +20,7 @@ export default class TnrisOutsideEntityTemplate extends React.Component {
     this.topAppBarElement = document.querySelector('.mdc-top-app-bar');
     this.topAppBar = new MDCTopAppBar(this.topAppBarElement);
     this.tabBar = new MDCTabBar(document.querySelector('.mdc-tab-bar'));
+    window.scrollTo(0,0);
   }
 
   setTemplateView(viewString) {

@@ -24,6 +24,7 @@ export default class CollectionFilterMap extends React.Component {
   }
 
   componentDidMount() {
+    window.scrollTo(0,0);
     // define mapbox map
     mapboxgl.accessToken = 'undefined';
     // define the map bounds for Texas at the initial zoom and center,

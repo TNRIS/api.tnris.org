@@ -55,6 +55,8 @@ export default class TnrisDownloadTemplateDetails extends React.Component {
                             <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-8'>
                               {imageCarousel}
                               {description}
+                            </div>
+                            <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-12'>
                               {countyCoverageCard}
                             </div>
                           </div>) : (

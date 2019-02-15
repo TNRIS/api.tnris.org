@@ -138,10 +138,21 @@ styles for component: TnrisOrderTemplateDetails
     .services-link-details {
       padding: 6px;
 
-      #service-link-details-input {
+      .styled-input {
         color: $primary-color;
-        border-bottom-color: rgba(0, 0, 0, 0.12);
+        border: 0.5px solid #b3b3b3;
+        box-sizing: border-box;
+        box-shadow: 0.2px 0.2px 7px #ccc inset;
+        border-radius: 8px;
         margin-bottom: 10px;
+        width: 100%;
+        padding: 12px 16px 14px 16px;
+        outline: none;
+      }
+
+      .styled-input:focus {
+        border: 0.5px solid $primary-color;
+        box-shadow: 0.2px 0.2px 7px $primary-color;
       }
 
       .service-link-details-buttons {

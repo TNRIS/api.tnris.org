@@ -5,8 +5,7 @@ export DB_USER="<database user>"
 export DB_HOST="<database host address>"
 export DB_PORT="<database port>"
 
-export CONTACT_SUBMIT_URL=''
-export CONTACT_UPLOAD_BUCKET=''
+echo "environment variables set!!!"
 
 # the following is only used within ETL scripts (specifically, migrate.py)
 export TNRIS_REPO='<local path to cloned tnris.org website repo>'

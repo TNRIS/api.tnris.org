@@ -19,10 +19,7 @@ export default class ToolDrawer extends React.Component {
   componentDidMount() {
     this.toolDrawer = MDCDrawer.attachTo(document.querySelector('.tool-drawer'));
     if (this.props.view === 'modal') {
-      const scrim = document.getElementById('scrim');
-      scrim.onclick = () => {
-        this.props.closeToolDrawer();
-      };
+      this.props.closeToolDrawer();
     }
   }
 
@@ -34,19 +31,19 @@ export default class ToolDrawer extends React.Component {
     this.props.setCollectionFilterMapFilter([]);
     this.props.setCollectionFilterMapZoom(5.8);
     this.props.setCollectionTimeslider(this.props.collectionTimesliderRange);
-    this.props.setUrl('/', this.props.history);
+    this.props.setUrl('/');
     this.props.logFilterChange('/');
   }
 
   render() {
-    const classname = this.props.view === 'dismiss' ?
+    const drawerTypeClass = this.props.view === 'dismiss' ?
       'mdc-drawer mdc-drawer--dismissible tool-drawer' : 'mdc-drawer mdc-drawer--modal tool-drawer';
-    const fullclass = this.props.toolDrawerStatus === 'open' ? ' mdc-drawer--open' : '';
+    const openClass = this.props.toolDrawerStatus === 'open' && this.props.showToolDrawerInCatalogView ?
+      'mdc-drawer--open' : '';
 
     return (
-
       <div className='tool-drawer-component mdc-typography'>
-        <aside className={`${classname}${fullclass}`} dir='rtl'>
+        <aside className={`${drawerTypeClass} ${openClass}`} dir='rtl'>
           <div className='mdc-drawer__content' dir='ltr'>
 
               <div className='mdc-drawer__header no-scroll'>
@@ -59,26 +56,17 @@ export default class ToolDrawer extends React.Component {
               <div className='sort-title mdc-list-group__subheader'>
                 Sort
               </div>
-              <CollectionSorterContainer
-                className='mdc-list-item'
-                match={this.props.match}
-                history={this.props.history} />
+              <CollectionSorterContainer className='mdc-list-item' />
               {/*<hr className='mdc-list-divider'/>*/}
               <div className='filter-title mdc-list-group__subheader'>
                 Filter
               </div>
-              <CollectionFilterContainer
-                className='mdc-list-item'
-                match={this.props.match}
-                history={this.props.history} />
+              <CollectionFilterContainer className='mdc-list-item' />
               {/*<hr className='mdc-list-divider'/>*/}
               <div className='timeslider-title mdc-list-group__subheader'>
                 Date Range
               </div>
-              <CollectionTimesliderContainer
-                className='mdc-list-item'
-                match={this.props.match}
-                history={this.props.history} />
+              <CollectionTimesliderContainer className='mdc-list-item' />
               {/*<hr className='mdc-list-divider'/>*/}
               <div className='clear-all-filters-container'>
                 <button
@@ -87,16 +75,14 @@ export default class ToolDrawer extends React.Component {
                   Clear All Filters
                 </button>
               </div>
-              {/*<hr className='mdc-list-divider'/>*/}
               <ThemeChooserContainer />
-              {/*<hr className='mdc-list-divider'/>*/}
               <ShareButtons />
             </nav>
 
           </div>
         </aside>
 
-        {this.props.view === 'modal' ? <div className='mdc-drawer-scrim' id='scrim'></div> : ''}
+        {this.props.view === 'modal' ? <div className='mdc-drawer-scrim' id='scrim'></div> : null}
 
       </div>
     );

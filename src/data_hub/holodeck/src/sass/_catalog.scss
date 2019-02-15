@@ -11,18 +11,18 @@ styles for component: Catalog
 
   .open-drawer {
     width: calc(100% - 255px);
-    -webkit-transition: width 2s; /* Safari */
-    transition: width .1s;
+    // -webkit-transition: width 2s; /* Safari */
+    // transition: width .1s;
   }
 
   .closed-drawer {
     width: 100%;
-    -webkit-transition: width 2s; /* Safari */
-    transition: width .1s;
+    // -webkit-transition: width 2s; /* Safari */
+    // transition: width .1s;
   }
 
   .catalog {
-    padding-top: 91px;
+    padding-top: 97px;
 
     .catalog-grid {
       @include mdc-layout-grid(desktop, 30px, 1600px);

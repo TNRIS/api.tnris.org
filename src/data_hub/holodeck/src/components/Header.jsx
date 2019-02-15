@@ -5,17 +5,14 @@ import NotificationBadge from 'react-notification-badge';
 import {Effect} from 'react-notification-badge';
 
 import CollectionSearcherContainer from '../containers/CollectionSearcherContainer';
-// import tnrisGray from '../images/tnris_gray.png';
-// import tnrisWhite from '../images/tnris_white.png';
-// import tnrisFuego from '../images/tnris_fuego.png';
 
 export default class Header extends React.Component {
   constructor(props) {
     super(props);
 
-    this.handleBack = this.handleBack.bind(this);
     this.handleOrderCartView = this.handleOrderCartView.bind(this);
     this.handleCatalogView = this.handleCatalogView.bind(this);
+    this.handleToolDrawerDisplayMobile = this.handleToolDrawerDisplayMobile.bind(this);
   }
 
   componentDidMount() {
@@ -23,110 +20,63 @@ export default class Header extends React.Component {
     this.topAppBarElement = document.querySelector('.mdc-top-app-bar');
     this.topAppBar = new MDCTopAppBar(this.topAppBarElement);
 
-    if (this.props.match.path === "/cart/") {
+    if (this.props.location.pathname === "/cart/") {
       this.props.closeToolDrawer();
       this.props.setViewOrderCart();
       this.props.clearPreviousUrl();
-    }
-
-    else if (Object.keys(this.props.match.params).includes('collectionId')) {
-      const collectionUuid = this.props.match.params['collectionId'];
-      this.props.closeToolDrawer();
-      this.props.setViewCollection();
-      this.props.selectCollection(collectionUuid);
-    }
-  }
-
-  handleBack() {
-    if (this.props.previousUrl.includes('/catalog/')) {
-      this.props.setViewCatalog();
-      this.props.openToolDrawer();
-      this.props.setUrl(this.props.previousUrl, this.props.history);
-    }
-    else if (this.props.previousUrl.includes('/collection/')) {
-      const collectionUuid = this.props.previousUrl.replace('/collection/', '');
-      this.props.setViewCollection();
-      this.props.selectCollection(collectionUuid);
-      this.props.setUrl(this.props.previousUrl, this.props.history);
-    }
-    else {
-      this.props.setViewCatalog();
-      this.props.openToolDrawer();
-      this.props.setUrl(this.props.previousUrl, this.props.history);
     }
   }
 
   handleOrderCartView() {
     if (window.location.pathname !== '/cart/') {
-      this.props.clearSelectedCollection();
+      // this.props.clearSelectedCollection();
       this.props.closeToolDrawer();
       this.props.setViewOrderCart();
-      this.props.setUrl('/cart/', this.props.history);
+      this.props.setUrl('/cart/');
     }
   }
 
   handleCatalogView() {
-    this.props.clearSelectedCollection();
-    this.props.openToolDrawer();
+    if (this.props.toolDrawerView === 'dismiss' && this.props.showToolDrawerInCatalogView) {
+      this.props.openToolDrawer();
+    }
+    // this.props.clearSelectedCollection();
     this.props.setViewCatalog();
-    this.props.setUrl(this.props.catalogFilterUrl, this.props.history);
+    this.props.setUrl(this.props.catalogFilterUrl);
+  }
+
+  handleToolDrawerDisplayMobile() {
+    this.toolDrawer.open = true;
+    const scrim = document.getElementById('scrim');
+    scrim.onclick = () => {
+      this.toolDrawer.open = false;
+    };
   }
 
   render() {
-    let shoppingCartClass = "material-icons mdc-top-app-bar__navigation-icon";
-
-    if (this.props.orders) {
-      shoppingCartClass = Object.keys(this.props.orders).length !== 0 ?
-      "material-icons mdc-top-app-bar__navigation-icon shopping-cart-full" :
-      "material-icons mdc-top-app-bar__navigation-icon shopping-cart-empty";
-    }
-
     let dismissClass = 'closed-drawer';
-
     if (this.props.toolDrawerStatus === 'open' && this.props.toolDrawerView === 'dismiss') {
       dismissClass = 'open-drawer';
     }
-
-    const closedTitle = 'Open tool drawer';
-    const openTitle = 'Close tool drawer';
 
     const shoppingCartCountBadge = Object.keys(this.props.orders).length > 0 ? (
       <NotificationBadge count={Object.keys(this.props.orders).length} effect={Effect.SCALE} frameLength={30}/>
     ) : '';
 
-    const toolDrawerNotification = this.props.toolDrawerStatus === 'closed' && this.props.match.url.includes('filters') ? (
-      <NotificationBadge label='!' count={Object.keys(this.props.orders).length} effect={Effect.SCALE} frameLength={30}/>
-    ) : '';
+    const filters = ['filter', 'geo', 'sort', 'range'];
+    const toolDrawerNotification = this.props.toolDrawerStatus === 'closed' && filters.map(x => this.props.location.pathname.includes(x) ? (
+      <NotificationBadge key={x} label='!' count={1} frameLength={30}/>
+    ) : '');
 
-    // let tnrisLogo;
-    // switch(this.props.theme) {
-    //   case 'light':
-    //     tnrisLogo = tnrisGray;
-    //     break;
-    //   case 'dark':
-    //     tnrisLogo = tnrisGray;
-    //     break;
-    //   case 'earth':
-    //     tnrisLogo = tnrisWhite;
-    //     break;
-    //   case 'fuego':
-    //     tnrisLogo = tnrisFuego;
-    //     break;
-    //   case 'vaporwave':
-    //     tnrisLogo = tnrisWhite;
-    //     break;
-    //   case 'america':
-    //     tnrisLogo = tnrisWhite;
-    //     break;
-    //   case 'hulk':
-    //     tnrisLogo = tnrisWhite;
-    //     break;
-    //   case 'relax':
-    //     tnrisLogo = tnrisWhite;
-    //     break;
-    //   default:
-    //   tnrisLogo = tnrisGray;
-    // }
+    const backToCatalogView = this.props.view !== 'catalog'  || this.props.location.pathname === '/404' ? (
+      <a
+        onClick={this.handleCatalogView}
+        className="material-icons mdc-top-app-bar__navigation-icon"
+        id="tools"
+        title="View Catalog">
+        view_comfy
+      </a>
+    ) : '';
 
     return (
         <header
@@ -147,48 +97,38 @@ export default class Header extends React.Component {
           </div>
           <div className={`header-nav mdc-top-app-bar__row ${dismissClass}`}>
             <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start" role="toolbar">
-              {/*<a href="https://tnris.org" className="mdc-top-app-bar__action-item tnris-logo-text">
-                <img src={tnrisLogo} aria-label="TNRIS Logo" alt="TNRIS Logo" className="logo" />
-              </a>
-              <span className="mdc-top-app-bar__title">Data Holodeck</span>*/}
-              {this.props.view === 'orderCart' ?
-                <a
-                  onClick={this.handleBack}
-                  className="mdc-top-app-bar__action-item"
-                  title="Back"
-                  >
-                  <i className="material-icons mdc-top-app-bar__navigation-icon">arrow_back</i>
-                </a> : ''}
-               <CollectionSearcherContainer match={this.props.match} history={this.props.history} />
+              {backToCatalogView}
+              <CollectionSearcherContainer />
                {this.props.orders && Object.keys(this.props.orders).length !== 0 ?
+                 <div>
+                   {shoppingCartCountBadge}
                   <a
                     onClick={this.handleOrderCartView}
-                    className="mdc-top-app-bar__action-item"
+                    className="material-icons mdc-top-app-bar__navigation-icon"
                     title="View shopping cart">
-                    <div>
-                      {shoppingCartCountBadge}
-                      <i className={shoppingCartClass}>shopping_cart</i>
-                    </div>
-                  </a> : ''}
+                    shopping_cart
+                  </a>
+                </div> : ''}
                 {this.props.view === 'catalog' ?
-                  <a
-                    onClick={this.props.toggleToolDrawerDisplay}
-                    className="mdc-top-app-bar__action-item"
-                    id="tools" title={this.props.toolDrawerStatus === 'closed' ? closedTitle : openTitle}>
-                    <div>
-                      {toolDrawerNotification}
-                      <i
-                        className="material-icons mdc-top-app-bar__navigation-icon">
-                        {this.props.toolDrawerStatus === 'closed' ? 'tune' : 'keyboard_arrow_right'}
-                      </i>
-                    </div>
-                  </a> :
-                  <a
-                    onClick={this.handleCatalogView}
-                    className="mdc-top-app-bar__action-item"
-                    id="tools" title="Catalog">
-                    <i className="material-icons mdc-top-app-bar__navigation-icon">view_comfy</i>
-                  </a>}
+                  <div>
+                    {toolDrawerNotification}
+                    {window.innerWidth >= 1050 ?
+                      <a
+                        onClick={this.props.handleToolDrawerDisplayDesktop}
+                        className="material-icons mdc-top-app-bar__navigation-icon"
+                        id="tools"
+                        title={this.props.toolDrawerStatus === 'closed' ? 'Open tool drawer' : 'Close tool drawer'}>
+                        {this.props.toolDrawerView === 'dismiss' ?
+                          this.props.toolDrawerStatus === 'closed' ? 'tune' : 'keyboard_arrow_right' : 'tune'}
+                      </a> :
+                      <a
+                        onClick={this.handleToolDrawerDisplayMobile}
+                        className="material-icons mdc-top-app-bar__navigation-icon"
+                        id="tools"
+                        title='Open tool drawer'>
+                        tune
+                      </a>}
+                  </div> : null}
             </section>
           </div>
         </header>

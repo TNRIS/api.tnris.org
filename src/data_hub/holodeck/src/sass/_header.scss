@@ -15,14 +15,14 @@ styles for component: Header
 
   .open-drawer {
     width: calc(100% - 255px);
-    -webkit-transition: width 2s; /* Safari */
-    transition: width .1s;
+    // -webkit-transition: width 2s; /* Safari */
+    // transition: width .1s;
   }
 
   .closed-drawer {
     width: 100%;
-    -webkit-transition: width 2s; /* Safari */
-    transition: width .1s;
+    // -webkit-transition: width 2s; /* Safari */
+    // transition: width .1s;
   }
 
   .header-title {
@@ -83,14 +83,6 @@ styles for component: Header
 
       .logo {
         max-height: 100%;
-      }
-
-      .shopping-cart-full {
-        color: $alt-color;
-      }
-
-      .shopping-cart-empty {
-        color: gray;
       }
     }
 

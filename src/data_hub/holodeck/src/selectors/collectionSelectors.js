@@ -169,6 +169,12 @@ export const getFilteredCollections = createSelector(
   (collections, collectionIds, filters) => {
     // Check if collections are ready in the state
     if (collections) {
+      // when no filters are set, return all collection_ids to make all
+      // collections available to the view
+      if (Object.keys(filters).length < 1) {
+        return collectionIds;
+      }
+
       let filteredCollectionIds = [];
       let multiFilteredCollectionIds = [];
       collectionIds.map(collectionId => {
@@ -187,7 +193,9 @@ export const getFilteredCollections = createSelector(
                   } else {
                     // set any duplicate collection_ids from the conditional
                     // above into this array to account for cross filtering
-                    multiFilteredCollectionIds.push(collectionId);
+                    if (multiFilteredCollectionIds.indexOf(collectionId) < 0) {
+                      multiFilteredCollectionIds.push(collectionId);
+                    }
                   }
                 }
                 return propertyValue;
@@ -197,11 +205,6 @@ export const getFilteredCollections = createSelector(
         }
         return collectionId;
       })
-      // when no filters are set, return all collection_ids to make all
-      // collections available to the view
-      if (Object.keys(filters).length < 1) {
-        return collectionIds;
-      }
       // when 1 or more filters are set, return the collection_ids that
       // pass through those filters. The multiFilteredCollectionIds account
       // for cross filtering scenarios.

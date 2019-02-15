@@ -5,6 +5,8 @@ import {
   SET_SORT_OLD,
 } from '../constants/collectionSorterActionTypes';
 
+import { POP_BROWSER_STORE } from '../constants/catalogActionTypes';
+
 const initialState = {
   sortOrder: 'NEW'
 };
@@ -34,6 +36,9 @@ export default function sortReducer(state = initialState, action) {
       return {
         sortOrder: 'ZA'
       };
+
+    case POP_BROWSER_STORE:
+      return Object.assign({}, action.payload.collectionSorter);
 
     default:
       // ALWAYS have a default case in a reducer

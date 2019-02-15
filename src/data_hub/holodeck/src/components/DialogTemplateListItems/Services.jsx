@@ -35,7 +35,7 @@ export default class Services extends React.Component {
         </p>
         <div className="services-link-details">
           <input type="text" id="service-link-details-input"
-                 className="mdc-text-field__input"
+                 className="mdc-text-field__input styled-input"
                  value={this.props.collection.wms_link} readOnly/>
           <div className="service-link-details-buttons">
             <button className="mdc-button mdc-button--raised" onClick={this.copyUrl}>

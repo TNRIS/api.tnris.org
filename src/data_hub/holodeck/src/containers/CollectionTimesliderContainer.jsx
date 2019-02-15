@@ -1,4 +1,6 @@
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
+
 
 import CollectionTimeslider from '../components/CollectionTimeslider';
 import { collectionTimesliderActions, urlTrackerActions } from '../actions';
@@ -18,12 +20,15 @@ const mapDispatchToProps = dispatch => ({
   },
   logFilterChange: (url) => {
     dispatch(urlTrackerActions.logFilterChange(url));
+  },
+  url404: () => {
+    dispatch(urlTrackerActions.url404());
   }
 })
 
-const CollectionTimesliderContainer = connect(
+const CollectionTimesliderContainer = withRouter(connect(
   mapStateToProps,
   mapDispatchToProps
-)(CollectionTimeslider);
+)(CollectionTimeslider));
 
 export default CollectionTimesliderContainer;

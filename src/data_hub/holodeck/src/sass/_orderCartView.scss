@@ -10,4 +10,9 @@ styles for component: OrderCartView
   .mdc-top-app-bar__title {
     color: $primary-color;
   }
+
+  .close-shopping-cart {
+    background-color: #e6e6e6;
+    border-radius: 50%;
+  }
 }

@@ -3,14 +3,16 @@ import React from 'react';
 export default class Footer extends React.Component {
 
   render() {
-
-    let dismissClass = 'closed-drawer';
-    if (this.props.status === 'open' && this.props.view === 'dismiss') {
-      dismissClass = 'open-drawer';
+    console.log(this.props);
+    let drawerStatusClass = 'closed-drawer';
+    if (this.props.view === 'catalog' &&
+      this.props.toolDrawerVariant === 'dismissible' &&
+      this.props.toolDrawerStatus === 'open') {
+      drawerStatusClass = 'open-drawer';
     }
 
     return (
-      <div className={`footer-component ${dismissClass}`} id='master-footer'>
+      <div className={`footer-component ${drawerStatusClass}`} id='master-footer'>
         <div className="footer-component__legal">
           <ul className="legal-links">
             <li>

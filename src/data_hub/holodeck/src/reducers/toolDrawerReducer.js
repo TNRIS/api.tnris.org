@@ -1,10 +1,13 @@
 import {
   CLOSE_TOOL_DRAWER,
-  OPEN_TOOL_DRAWER
+  OPEN_TOOL_DRAWER,
+  SET_DISMISSIBLE_DRAWER,
+  SET_MODAL_DRAWER
 } from '../constants/toolDrawerActionTypes';
 
 const initialState = {
-  toolDrawerStatus: 'open'
+  toolDrawerStatus: 'open',
+  toolDrawerVariant: 'dismissible'
 }
 
 export default function toolDrawerReducer(state = initialState, action) {
@@ -17,14 +20,28 @@ export default function toolDrawerReducer(state = initialState, action) {
       };
 
     case OPEN_TOOL_DRAWER:
-      // Set toolDrawerStaus in the state to open so that we may open the drawer
+      // Set toolDrawerStatus in the state to open so that we may open the drawer
       return {
         ...state,
         toolDrawerStatus: 'open'
       };
 
-      default:
-        // ALWAYS have a default case in a reducer
-        return state;
+    case SET_DISMISSIBLE_DRAWER:
+      // Set toolDrawerVariant in the state to dismissible
+      return {
+        ...state,
+        toolDrawerVariant: 'dismissible'
+      };
+
+    case SET_MODAL_DRAWER:
+      // Set toolDrawerVariant in the state to modal
+      return {
+        ...state,
+        toolDrawerVariant: 'modal'
+      };
+
+    default:
+      // ALWAYS have a default case in a reducer
+      return state;
   }
 }

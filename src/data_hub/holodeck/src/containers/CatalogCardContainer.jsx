@@ -2,7 +2,6 @@ import { connect } from 'react-redux';
 
 import { catalogActions,
          collectionActions,
-         toolDrawerActions,
          urlTrackerActions } from '../actions';
 import CatalogCard from '../components/CatalogCard';
 
@@ -11,9 +10,6 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    closeToolDrawer: () => {
-      dispatch(toolDrawerActions.closeToolDrawer());
-    },
     selectCollection: (collectionId) => {
       dispatch(collectionActions.selectCollection(collectionId));
     },

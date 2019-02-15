@@ -24,6 +24,7 @@ const mapStateToProps = (state) => ({
   theme: state.colorTheme.theme,
   previousUrl: state.urlTracker.previousUrl,
   toolDrawerStatus: state.toolDrawer.toolDrawerStatus,
+  toolDrawerVariant: state.toolDrawer.toolDrawerVariant,
   view: state.catalog.view
 });
 
@@ -45,6 +46,12 @@ const mapDispatchToProps = dispatch => ({
   },
   openToolDrawer: () => {
     dispatch(toolDrawerActions.openToolDrawer());
+  },
+  setDismissibleDrawer: () => {
+    dispatch(toolDrawerActions.setDismissibleDrawer());
+  },
+  setModalDrawer: () => {
+    dispatch(toolDrawerActions.setModalDrawer());
   },
   setViewCatalog: () => {
     dispatch(catalogActions.setViewCatalog());

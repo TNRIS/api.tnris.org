@@ -26,12 +26,13 @@ export default class Services extends React.Component {
 
     return (
       <div className="template-content-div">
+        <div className="mdc-typography--headline5 template-content-div-header">
+          Online Mapping Service
+        </div>
         <p>
-          This dataset is published as a WMS Service! Use the URL below to
-          connect to the service in the mapping software of your choosing.
-          <br />
-          To use WMS services in your CAD or GIS software package, please
-          consult the software help or support information.
+          This dataset is available as an online mapping service. Use the URL
+          below to connect to the service in your software. To use the service
+          in your software package, consult the software help/support information.
         </p>
         <div className="services-link-details">
           <input type="text" id="service-link-details-input"

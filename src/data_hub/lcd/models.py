@@ -325,6 +325,12 @@ class SourceType(models.Model):
         null=True,
         blank=True
     )
+    source_data_website = models.URLField(
+        'Source Data Website',
+        max_length=255,
+        null=True,
+        blank=True
+    )
     source_contact = models.TextField(
         'Source Contact',
         max_length=255,

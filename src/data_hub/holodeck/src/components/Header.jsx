@@ -36,7 +36,6 @@ export default class Header extends React.Component {
   }
 
   render() {
-    console.log(this.props);
     let drawerStatusClass = 'closed-drawer';
     if (this.props.view === 'catalog' &&
       this.props.toolDrawerVariant === 'dismissible' &&

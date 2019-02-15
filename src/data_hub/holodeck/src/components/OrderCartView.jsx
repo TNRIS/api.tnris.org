@@ -7,6 +7,10 @@ class OrderCartView extends React.Component {
     this.handleBack = this.handleBack.bind(this);
   }
 
+  componentDidMount() {
+    window.scrollTo(0,0);
+  }
+
   handleBack() {
     if (this.props.previousUrl.includes('/catalog/')) {
       this.props.setViewCatalog();

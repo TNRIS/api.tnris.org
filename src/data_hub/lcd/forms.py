@@ -148,7 +148,8 @@ class CollectionForm(forms.ModelForm):
             self.fields['thumbnail_image'].choices = self.create_image_choices('image_url', 'image_id', Image, 'image_id')
             self.fields['thumbnail_image'].help_text = self.selected_thumbnail()
             self.fields['description'].help_text = "Provide as much descriptive and historical detail about this data as possible. Frontend search functionality utilizes this field to return this collection as a search result."
-            self.fields['public'].help_text = "Check the 'Public' checkbox to make this collection publically available within the live, production frontend: data.tnris.org"
+            if 'public' in self.fields:
+                self.fields['public'].help_text = "Check the 'Public' checkbox to make this collection publically available within the live, production frontend: data.tnris.org"
             self.fields['esri_open_data_id'].help_text = "ArcGIS Online Open Data Portal 'Group ID'. This is ONLY used by 'outside-entity' template collections for injecting a list of available services directly within the collection 'Description'."
             self.fields['source_type_id'].help_text = "Choose the organization which this collection is owned by/sourced from."
             self.fields['partners'].help_text = "List all organizations/companies associated with the creation, execution, or funding of this collection."

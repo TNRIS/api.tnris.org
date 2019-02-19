@@ -1194,6 +1194,10 @@ class CcrView(models.Model):
         'Source Website',
         max_length=255
     )
+    source_data_website = models.CharField(
+        'Source Website',
+        max_length=255
+    )
     source_contact = models.TextField(
         'Source Contact'
     )

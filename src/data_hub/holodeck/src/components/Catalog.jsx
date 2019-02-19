@@ -51,14 +51,6 @@ export default class Catalog extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    console.log('catalog update', this.props.view);
-    // if (this.props.view !== 'catalog' && this.props.view !== 'geoFilter') {
-    //   if (!this.props.location.pathname.includes('/collection/') &&
-    //     !this.props.location.pathname.includes('/cart/')) {
-    //       console.log('setting catalog');
-    //       this.props.setViewCatalog();
-    //   }
-    // }
     if (prevProps.theme !== this.props.theme) {
       const themedClass = this.props.theme + "-app-theme";
       const html = document.querySelector('html');
@@ -125,43 +117,38 @@ export default class Catalog extends React.Component {
   setCatalogView() {
     const noDataDivClass = this.props.toolDrawerStatus === 'open' ?
       'no-data no-data-open' : 'no-data no-data-closed';
-    if (this.props.view === 'geoFilter') {
-      return <CollectionFilterMapView />
-    }
-    else {
-      const catalogCards = this.props.visibleCollections && this.props.visibleCollections.length < 1 ?
-        <div className={noDataDivClass}>
-          <img
-            src={noDataImage}
-            className="no-data-image"
-            alt="No Data Available"
-            title="No data available with those search terms" />
-        </div> : <div className="catalog-grid mdc-layout-grid">
-            <ul className="mdc-layout-grid__inner">
-              {this.props.visibleCollections ? this.props.visibleCollections.map(collectionId =>
-                <li
-                  className="mdc-layout-grid__cell mdc-layout-grid__cell--span-3-desktop"
-                  key={collectionId}>
-                  <CatalogCardContainer
-                    collection={this.props.collections[collectionId]} />
-                </li>
-              ) : this.loadingMessage}
-            </ul>
-          </div>;
+    const catalogCards = this.props.visibleCollections && this.props.visibleCollections.length < 1 ?
+      <div className={noDataDivClass}>
+        <img
+          src={noDataImage}
+          className="no-data-image"
+          alt="No Data Available"
+          title="No data available with those search terms" />
+      </div> : <div className="catalog-grid mdc-layout-grid">
+          <ul className="mdc-layout-grid__inner">
+            {this.props.visibleCollections ? this.props.visibleCollections.map(collectionId =>
+              <li
+                className="mdc-layout-grid__cell mdc-layout-grid__cell--span-3-desktop"
+                key={collectionId}>
+                <CatalogCardContainer
+                  collection={this.props.collections[collectionId]} />
+              </li>
+            ) : this.loadingMessage}
+          </ul>
+        </div>;
 
-      let drawerStatusClass = 'closed-drawer';
-      if (this.props.toolDrawerStatus === 'open' && this.props.toolDrawerVariant === 'dismissible') {
-        drawerStatusClass = 'open-drawer';
-      }
-      const catalogView = (
-        <div className={`catalog ${drawerStatusClass} mdc-drawer-app-content`}>
-          <ToolDrawerContainer
-          total={this.props.visibleCollections ? this.props.visibleCollections.length : 0} />
-          {catalogCards}
-        </div>
-      )
-      return catalogView;
+    let drawerStatusClass = 'closed-drawer';
+    if (this.props.toolDrawerStatus === 'open' && this.props.toolDrawerVariant === 'dismissible') {
+      drawerStatusClass = 'open-drawer';
     }
+    const catalogView = (
+      <div className={`catalog ${drawerStatusClass} mdc-drawer-app-content`}>
+        <ToolDrawerContainer
+        total={this.props.visibleCollections ? this.props.visibleCollections.length : 0} />
+        {catalogCards}
+      </div>
+    )
+    return catalogView;
   }
 
   render() {
@@ -185,6 +172,7 @@ export default class Catalog extends React.Component {
               <Route path='/collection/:collectionId' exact render={(props) => this.handleShowCollectionView()} />
               <Route path='/catalog/:filters' exact render={(props) => this.setCatalogView()} />
               <Route path='/cart/' exact render={(props) => <OrderCartViewContainer />} />
+              <Route path='/geofilter/' exact component={CollectionFilterMapView} />
               <Route path='/' exact render={(props) => this.setCatalogView()} />
               <Route path='*' render={(props) => <NotFoundContainer />} />
             </Switch>

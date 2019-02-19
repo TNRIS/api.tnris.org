@@ -33,5 +33,7 @@ urlpatterns = [
     path('catalog/<filt>', TemplateView.as_view(template_name='index.html')),
     path('cart/', TemplateView.as_view(template_name='index.html')),
     path('cart', RedirectView.as_view(url='cart/', permanent=False)),
+    path('geofilter/', TemplateView.as_view(template_name='index.html')),
+    path('geofilter', RedirectView.as_view(url='geofilter/', permanent=False)),
     path('', TemplateView.as_view(template_name='index.html')),
 ]

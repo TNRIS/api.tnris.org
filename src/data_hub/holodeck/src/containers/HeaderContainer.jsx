@@ -11,7 +11,6 @@ import Header from '../components/Header';
 const mapStateToProps = state => ({
   collections: getAllCollections(state),
   orders: state.orderCart.orders,
-  previousUrl: state.urlTracker.previousUrl,
   catalogFilterUrl: state.urlTracker.catalogFilterUrl,
   selectedCollection: state.collections.selectedCollection,
   theme: state.colorTheme.theme,

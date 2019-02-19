@@ -1,5 +1,7 @@
 import React from 'react';
 
+// import {MDCMenuSurface} from '@material/menu-surface';
+
 export default class Description extends React.Component {
 
   render() {
@@ -26,19 +28,28 @@ export default class Description extends React.Component {
     });
 
     const services = namesArray.length !== 0 ? (
-      <div id="oe_services">
-        <p>Currently, there are <strong>{namesArray.length}</strong> available services that you can access below, or by visiting the agency's open data portal.</p>
-        <ul>
-          {
-            Object.entries(servicesObj).map((i) => {
-              let key = i[0];
-              let value = i[1];
-              return <li key={key}><a href={value} target="_blank" rel="noopener noreferrer">{key}</a></li>;
-            })
-          }
-        </ul>
+      <div id="oe_services mdc-menu-surface--anchor">
+        <div className="mdc-menu mdc-menu-surface">
+          <p>
+            Currently, there are <strong>{namesArray.length}</strong> available services that you can access below, or by
+            visiting the agency's <a href="" target="_blank">open data portal</a>.
+          </p>
+          <ul className="mdc-list" role="menu" aria-hidden="true" aria-orientation="vertical">
+            {
+              Object.entries(servicesObj).map((i) => {
+                let key = i[0];
+                // let value = i[1];
+                return <li className="mdc-list-item" role="menuitem" key={key}>
+                  <span className="mdc-list-item__text">{key}</span>
+                </li>;
+              })
+            }
+          </ul>
+        </div>
       </div>
       ) : '';
+
+    // <li key={key}><a href={value} target="_blank" rel="noopener noreferrer">{key}</a></li>
 
     return (
       <div className="template-content-div">

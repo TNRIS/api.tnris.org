@@ -48,6 +48,17 @@ export default class Metadata extends React.Component {
       </li>
     ) : "";
 
+    const source_data_site = this.props.collection.source_data_website ? (
+      <li className="mdc-list-item">
+        <span className="mdc-list-item__text">
+          <span className="mdc-list-item__primary-text">
+            <a href={this.props.collection.source_data_website} target="_blank" rel="noopener noreferrer">{this.props.collection.source_data_website}</a>
+          </span>
+          <span className="mdc-list-item__secondary-text">Source Data Website</span>
+        </span>
+      </li>
+    ) : "";
+
     const epsg = this.props.collection.template !== 'outside-entity' && this.props.collection.spatial_reference ? (
       <li className="mdc-list-item">
         <span className="mdc-list-item__text">
@@ -215,6 +226,7 @@ export default class Metadata extends React.Component {
           {partners}
           {source}
           {source_site}
+          {source_data_site}
           {source_contact}
           {epsg}
           {license}

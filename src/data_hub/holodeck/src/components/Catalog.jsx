@@ -8,7 +8,6 @@ import HistoricalAerialTemplate from './HistoricalAerialTemplate/HistoricalAeria
 import OutsideEntityTemplate from './TnrisOutsideEntityTemplate/TnrisOutsideEntityTemplate';
 import TnrisOrderTemplate from './TnrisOrderTemplate/TnrisOrderTemplate';
 import CollectionFilterMapView from './CollectionFilterMapView';
-import NotFound from './NotFound';
 
 import FooterContainer from '../containers/FooterContainer';
 import HeaderContainer from '../containers/HeaderContainer';
@@ -16,6 +15,7 @@ import ToolDrawerContainer from '../containers/ToolDrawerContainer';
 import CatalogCardContainer from '../containers/CatalogCardContainer';
 import TnrisDownloadTemplateContainer from '../containers/TnrisDownloadTemplateContainer';
 import OrderCartViewContainer from '../containers/OrderCartViewContainer';
+import NotFoundContainer from '../containers/NotFoundContainer';
 
 import loadingImage from '../images/loading.gif';
 import noDataImage from '../images/no-data.png';
@@ -51,12 +51,14 @@ export default class Catalog extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (this.props.view !== 'catalog' && this.props.view !== 'geoFilter') {
-      if (!this.props.location.pathname.includes('/collection/') &&
-        !this.props.location.pathname.includes('/cart/')) {
-          this.props.setViewCatalog();
-      }
-    }
+    console.log('catalog update', this.props.view);
+    // if (this.props.view !== 'catalog' && this.props.view !== 'geoFilter') {
+    //   if (!this.props.location.pathname.includes('/collection/') &&
+    //     !this.props.location.pathname.includes('/cart/')) {
+    //       console.log('setting catalog');
+    //       this.props.setViewCatalog();
+    //   }
+    // }
     if (prevProps.theme !== this.props.theme) {
       const themedClass = this.props.theme + "-app-theme";
       const html = document.querySelector('html');
@@ -184,7 +186,7 @@ export default class Catalog extends React.Component {
               <Route path='/catalog/:filters' exact render={(props) => this.setCatalogView()} />
               <Route path='/cart/' exact render={(props) => <OrderCartViewContainer />} />
               <Route path='/' exact render={(props) => this.setCatalogView()} />
-              <Route path='*' render={(props) => <NotFound status={this.props.toolDrawerStatus} />} />
+              <Route path='*' render={(props) => <NotFoundContainer />} />
             </Switch>
           </div>
 

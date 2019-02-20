@@ -109,223 +109,223 @@ When adding new themes you will also need to update:
   @import 'componentSassImporter';
 }
 
-.earth-app-theme {
-  $primary-color: $earth-theme-primary;
-  $secondary-color: lightgreen;
-  $text-color: white;
-  $header-bar: $primary-color;
-  // used for indicators
-  $alt-color: bisque;
-
-  $main-background: burlywood;
-  $nest-background: bisque;
-  $nest-text: saddlebrown;
-  $nest-text-subtle: chocolate;
-  background-color: $main-background;
-
-  //used to color dialog div headers
-  $template-dialog-header: green;
-  $template-dialog-header-script: white;
-
-  $slider-fill: $secondary-color;
-
-  $empty-border: #6E7777;
-  $empty-fill: $main-background;
-
-  $error-text: red;
-  $success-text: green;
-
-  $skin-primary: green;
-  $skin-secondary: lightgreen;
-  $skin-tertiary: #d3f8d3;
-  $skin-text: black;
-
-  @import 'componentSassImporter';
-}
-
-.fuego-app-theme {
-
-  $primary-color: $fuego-theme-primary;
-  $secondary-color: #D588FF;
-  $text-color: #FEEF00;
-  $header-bar: $primary-color;
-  // used for indicators
-  $alt-color: #FEEF00;
-
-  $main-background: #D487FF;
-  $nest-background: #e4c0fc;
-  $nest-text: #8D2522;
-  $nest-text-subtle: white;
-  background-color: $main-background;
-
-  //used to color dialog div headers
-  $template-dialog-header: $primary-color;
-  $template-dialog-header-script: #FEEF00;
-
-  $slider-fill: white;
-
-  $empty-border: #6E7777;
-  $empty-fill: $main-background;
-
-  $error-text: red;
-  $success-text: green;
-
-  $skin-primary: $primary-color;
-  $skin-secondary: #C1D756;
-  $skin-tertiary: #C1D756;
-  $skin-text: white;
-
-  @import 'componentSassImporter';
-}
-
-.vaporwave-app-theme {
-
-  $primary-color: $vaporwave-theme-primary;
-  $secondary-color: #C0F2F9;
-  $text-color: #7D57C3;
-  $header-bar: $primary-color;
-  // used for indicators
-  $alt-color: #7D57C3;
-
-  $main-background: #C0F2F9;
-  $nest-background: white;
-  $nest-text: #7D57C3;
-  $nest-text-subtle: #EFA816;
-  background-color: $main-background;
-
-  //used to color dialog div headers
-  $template-dialog-header: #F141FF;
-  $template-dialog-header-script: white;
-
-  $slider-fill: white;
-
-  $empty-border: #6E7777;
-  $empty-fill: $main-background;
-
-  $error-text: red;
-  $success-text: green;
-
-  $skin-primary: $primary-color;
-  $skin-secondary: #F141FF;
-  $skin-tertiary: #7D57C3;
-  $skin-text: white;
-
-  @import 'componentSassImporter';
-}
-
-.america-app-theme {
-
-  $primary-color: $america-theme-primary;
-  $secondary-color: blue;
-  $text-color: white;
-  $header-bar: $primary-color;
-  // used for indicators
-  $alt-color: blue;
-
-  $main-background: white;
-  $nest-background: whitesmoke;
-  $nest-text: lightred;
-  $nest-text-subtle: #444;
-  background-color: $main-background;
-
-  //used to color dialog div headers
-  $template-dialog-header: blue;
-  $template-dialog-header-script: white;
-
-  $slider-fill: lightgray;
-
-  $empty-border: #6E7777;
-  $empty-fill: $main-background;
-
-  $error-text: red;
-  $success-text: green;
-
-  $skin-primary: $primary-color;
-  $skin-secondary: lightblue;
-  $skin-tertiary: blue;
-  $skin-text: white;
-
-  @import 'componentSassImporter';
-}
-
-.hulk-app-theme {
-
-  $primary-color: $hulk-theme-primary;
-  $secondary-color: #0C7F00;
-  $text-color: white;
-  $header-bar: $primary-color;
-  // used for indicators
-  $alt-color: white;
-
-  $main-background: #0C7F00;
-  $nest-background: #98FF97;
-  $nest-text: #053600;
-  $nest-text-subtle: black;
-  background-color: $main-background;
-
-  //used to color dialog div headers
-  $template-dialog-header: #10B100;
-  $template-dialog-header-script: white;
-
-  $slider-fill: lightgray;
-
-  $empty-border: #6E7777;
-  $empty-fill: $main-background;
-
-  $error-text: red;
-  $success-text: green;
-
-  $skin-primary: #10B100;
-  $skin-secondary: #053600;
-  $skin-tertiary: #053600;
-  $skin-text: white;
-
-  @import 'componentSassImporter';
-}
-
-.relax-app-theme {
-
-  $primary-color: $relax-theme-primary;
-  $secondary-color: #EACA8A;
-  $text-color: white;
-  $header-bar: $primary-color;
-  // used for indicators
-  $alt-color: #EACA8A;
-
-  $main-background: #87BFCF;
-  $nest-background: #E4E8F0;
-  $nest-text: #BD616A;
-  $nest-text-subtle: #3D4453;
-  background-color: $main-background;
-
-  //used to color dialog div headers
-  $template-dialog-header: #EACA8A;
-  $template-dialog-header-script: white;
-
-  $slider-fill: #E4E8F0;
-
-  $empty-border: #6E7777;
-  $empty-fill: $main-background;
-
-  $error-text: red;
-  $success-text: green;
-
-  $skin-primary: #B28DAB;
-  $skin-secondary: #E4E8F0;
-  $skin-tertiary: #EACA8A;
-  $skin-text: #BD616A;
-
-  @import 'componentSassImporter';
-}
+// .earth-app-theme {
+//   $primary-color: $earth-theme-primary;
+//   $secondary-color: lightgreen;
+//   $text-color: white;
+//   $header-bar: $primary-color;
+//   // used for indicators
+//   $alt-color: bisque;
+//
+//   $main-background: burlywood;
+//   $nest-background: bisque;
+//   $nest-text: saddlebrown;
+//   $nest-text-subtle: chocolate;
+//   background-color: $main-background;
+//
+//   //used to color dialog div headers
+//   $template-dialog-header: green;
+//   $template-dialog-header-script: white;
+//
+//   $slider-fill: $secondary-color;
+//
+//   $empty-border: #6E7777;
+//   $empty-fill: $main-background;
+//
+//   $error-text: red;
+//   $success-text: green;
+//
+//   $skin-primary: green;
+//   $skin-secondary: lightgreen;
+//   $skin-tertiary: #d3f8d3;
+//   $skin-text: black;
+//
+//   @import 'componentSassImporter';
+// }
+//
+// .fuego-app-theme {
+//
+//   $primary-color: $fuego-theme-primary;
+//   $secondary-color: #D588FF;
+//   $text-color: #FEEF00;
+//   $header-bar: $primary-color;
+//   // used for indicators
+//   $alt-color: #FEEF00;
+//
+//   $main-background: #D487FF;
+//   $nest-background: #e4c0fc;
+//   $nest-text: #8D2522;
+//   $nest-text-subtle: white;
+//   background-color: $main-background;
+//
+//   //used to color dialog div headers
+//   $template-dialog-header: $primary-color;
+//   $template-dialog-header-script: #FEEF00;
+//
+//   $slider-fill: white;
+//
+//   $empty-border: #6E7777;
+//   $empty-fill: $main-background;
+//
+//   $error-text: red;
+//   $success-text: green;
+//
+//   $skin-primary: $primary-color;
+//   $skin-secondary: #C1D756;
+//   $skin-tertiary: #C1D756;
+//   $skin-text: white;
+//
+//   @import 'componentSassImporter';
+// }
+//
+// .vaporwave-app-theme {
+//
+//   $primary-color: $vaporwave-theme-primary;
+//   $secondary-color: #C0F2F9;
+//   $text-color: #7D57C3;
+//   $header-bar: $primary-color;
+//   // used for indicators
+//   $alt-color: #7D57C3;
+//
+//   $main-background: #C0F2F9;
+//   $nest-background: white;
+//   $nest-text: #7D57C3;
+//   $nest-text-subtle: #EFA816;
+//   background-color: $main-background;
+//
+//   //used to color dialog div headers
+//   $template-dialog-header: #F141FF;
+//   $template-dialog-header-script: white;
+//
+//   $slider-fill: white;
+//
+//   $empty-border: #6E7777;
+//   $empty-fill: $main-background;
+//
+//   $error-text: red;
+//   $success-text: green;
+//
+//   $skin-primary: $primary-color;
+//   $skin-secondary: #F141FF;
+//   $skin-tertiary: #7D57C3;
+//   $skin-text: white;
+//
+//   @import 'componentSassImporter';
+// }
+//
+// .america-app-theme {
+//
+//   $primary-color: $america-theme-primary;
+//   $secondary-color: blue;
+//   $text-color: white;
+//   $header-bar: $primary-color;
+//   // used for indicators
+//   $alt-color: blue;
+//
+//   $main-background: white;
+//   $nest-background: whitesmoke;
+//   $nest-text: lightred;
+//   $nest-text-subtle: #444;
+//   background-color: $main-background;
+//
+//   //used to color dialog div headers
+//   $template-dialog-header: blue;
+//   $template-dialog-header-script: white;
+//
+//   $slider-fill: lightgray;
+//
+//   $empty-border: #6E7777;
+//   $empty-fill: $main-background;
+//
+//   $error-text: red;
+//   $success-text: green;
+//
+//   $skin-primary: $primary-color;
+//   $skin-secondary: lightblue;
+//   $skin-tertiary: blue;
+//   $skin-text: white;
+//
+//   @import 'componentSassImporter';
+// }
+//
+// .hulk-app-theme {
+//
+//   $primary-color: $hulk-theme-primary;
+//   $secondary-color: #0C7F00;
+//   $text-color: white;
+//   $header-bar: $primary-color;
+//   // used for indicators
+//   $alt-color: white;
+//
+//   $main-background: #0C7F00;
+//   $nest-background: #98FF97;
+//   $nest-text: #053600;
+//   $nest-text-subtle: black;
+//   background-color: $main-background;
+//
+//   //used to color dialog div headers
+//   $template-dialog-header: #10B100;
+//   $template-dialog-header-script: white;
+//
+//   $slider-fill: lightgray;
+//
+//   $empty-border: #6E7777;
+//   $empty-fill: $main-background;
+//
+//   $error-text: red;
+//   $success-text: green;
+//
+//   $skin-primary: #10B100;
+//   $skin-secondary: #053600;
+//   $skin-tertiary: #053600;
+//   $skin-text: white;
+//
+//   @import 'componentSassImporter';
+// }
+//
+// .relax-app-theme {
+//
+//   $primary-color: $relax-theme-primary;
+//   $secondary-color: #EACA8A;
+//   $text-color: white;
+//   $header-bar: $primary-color;
+//   // used for indicators
+//   $alt-color: #EACA8A;
+//
+//   $main-background: #87BFCF;
+//   $nest-background: #E4E8F0;
+//   $nest-text: #BD616A;
+//   $nest-text-subtle: #3D4453;
+//   background-color: $main-background;
+//
+//   //used to color dialog div headers
+//   $template-dialog-header: #EACA8A;
+//   $template-dialog-header-script: white;
+//
+//   $slider-fill: #E4E8F0;
+//
+//   $empty-border: #6E7777;
+//   $empty-fill: $main-background;
+//
+//   $error-text: red;
+//   $success-text: green;
+//
+//   $skin-primary: #B28DAB;
+//   $skin-secondary: #E4E8F0;
+//   $skin-tertiary: #EACA8A;
+//   $skin-text: #BD616A;
+//
+//   @import 'componentSassImporter';
+// }
 
 // export colors for use by jsx. specifically, tnrisDownloadTemplateDownload map
 :export {
   lightFill: #7D7D7D; lightText: white;
   darkFill: #7D7D7D; darkText: white;
-  earthFill: lightgreen; earthText: white;
-  fuegoFill: #D588FF; fuegoText: #FEEF00;
-  vaporwaveFill: #D588FF; vaporwaveText: #7D57C3;
-  americaFill: red; americaText: blue;
-  hulkFill: #10B100; hulkText: #053600;
-  relaxFill: #BD616A; relaxText: #87BFCF;
+  // earthFill: lightgreen; earthText: white;
+  // fuegoFill: #D588FF; fuegoText: #FEEF00;
+  // vaporwaveFill: #D588FF; vaporwaveText: #7D57C3;
+  // americaFill: red; americaText: blue;
+  // hulkFill: #10B100; hulkText: #053600;
+  // relaxFill: #BD616A; relaxText: #87BFCF;
         }

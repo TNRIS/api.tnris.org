@@ -3,10 +3,10 @@ import {MDCTopAppBar} from '@material/top-app-bar/index';
 import {MDCTabBar} from '@material/tab-bar';
 import { MDCMenu } from '@material/menu';
 
-import TnrisOrderTemplateOrder from './TnrisOrderTemplateOrder';
 import TnrisOrderTemplateDetails from './TnrisOrderTemplateDetails'
 
 import ContactContainer from '../../containers/ContactContainer';
+import OrderTnrisDataFormContainer from '../../containers/OrderTnrisDataFormContainer';
 
 export default class TnrisOrderTemplate extends React.Component {
   constructor(props) {
@@ -56,7 +56,15 @@ export default class TnrisOrderTemplate extends React.Component {
         showComponent = <TnrisOrderTemplateDetails collection={this.props.collection} />;
         break;
       case 'order':
-        showComponent = <TnrisOrderTemplateOrder />;
+        showComponent = (
+          <div className="tnris-order-template-details">
+            <div className="template-content-div">
+              <div>
+                <OrderTnrisDataFormContainer />
+              </div>
+            </div>
+          </div>
+        );
         break;
       case 'contact':
         showComponent = (

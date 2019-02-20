@@ -1,62 +1,31 @@
 import React from 'react';
 
-// import {MDCMenuSurface} from '@material/menu-surface';
 
 export default class Description extends React.Component {
 
   render() {
 
-    // create service name and url arrays from aggregated string
-    const namesArray = this.props.collection.oe_service_names !== null ? this.props.collection.oe_service_names.split(', ') : [];
-    const servicesArray = this.props.collection.oe_service_urls !== null ? this.props.collection.oe_service_urls.split(', ') : [];
+    let wikiName = this.props.collection.template === 'outside-entity' && this.props.collection.source_name.includes(' ') ? this.props.collection.source_name.split(' ').join('_') : '';
+    let wikiRequestUrl = wikiName !== '' ? `https://en.wikipedia.org/w/api.php?action=query&origin=*&format=json&generator=search&gsrnamespace=0&gsrlimit=5&gsrsearch='${wikiName}'` : '';
 
-    const servicesObj = {};
-
-    namesArray.map((key) => {
-      const compare = key.split(' ').join('_');
-      servicesArray.map((service) => {
-        const stringArray = service.split("/");
-        stringArray.map((i) => {
-          if (i === compare) {
-            servicesObj[key] = servicesArray[servicesArray.indexOf(service)];
-          }
-          return i;
+    if (wikiName !== '') {
+      fetch(wikiRequestUrl)
+        .then(function(response) {
+          return response.json();
         })
-        return service;
-      })
-      return key;
-    });
+        .then(function(outsideJson) {
+          console.log(JSON.stringify(outsideJson));
+        });
+    }
 
-    const services = namesArray.length !== 0 ? (
-      <div id="oe_services mdc-menu-surface--anchor">
-        <div className="mdc-menu mdc-menu-surface">
-          <p>
-            Currently, there are <strong>{namesArray.length}</strong> available services that you can access below, or by
-            visiting the agency's <a href="" target="_blank">open data portal</a>.
-          </p>
-          <ul className="mdc-list" role="menu" aria-hidden="true" aria-orientation="vertical">
-            {
-              Object.entries(servicesObj).map((i) => {
-                let key = i[0];
-                // let value = i[1];
-                return <li className="mdc-list-item" role="menuitem" key={key}>
-                  <span className="mdc-list-item__text">{key}</span>
-                </li>;
-              })
-            }
-          </ul>
-        </div>
-      </div>
-      ) : '';
-
-    // <li key={key}><a href={value} target="_blank" rel="noopener noreferrer">{key}</a></li>
+    console.log(wikiName);
+    console.log(wikiRequestUrl);
 
     return (
       <div className="template-content-div">
         <p>
           {this.props.collection.description}
         </p>
-        {services}
       </div>
     )
   }

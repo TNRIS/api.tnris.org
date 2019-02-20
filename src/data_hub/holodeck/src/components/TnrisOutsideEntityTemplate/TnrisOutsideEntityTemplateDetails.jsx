@@ -4,6 +4,7 @@ import Description from '../DialogTemplateListItems/Description'
 import Metadata from '../DialogTemplateListItems/Metadata'
 import ShareButtons from '../DialogTemplateListItems/ShareButtons'
 import Images from '../DialogTemplateListItems/Images'
+import OeServices from '../DialogTemplateListItems/OeServices'
 
 export default class TnrisOutsideEntityTemplateDetails extends React.Component {
 
@@ -25,6 +26,7 @@ export default class TnrisOutsideEntityTemplateDetails extends React.Component {
                             <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-4'>
                               <Metadata collection={this.props.collection} />
                               <ShareButtons />
+                              <OeServices collection={this.props.collection} />
                             </div>
                             <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-8'>
                               {imageCarousel}
@@ -37,6 +39,7 @@ export default class TnrisOutsideEntityTemplateDetails extends React.Component {
                               <Metadata collection={this.props.collection} />
                               {description}
                               <ShareButtons />
+                              <OeServices collection={this.props.collection} />
                             </div>
                           </div>);
 

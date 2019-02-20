@@ -1,8 +1,16 @@
 /*
-styles for component: TnrisOrderTemplate
+shared styles for collection base Template components
 */
 
-.tnris-order-template {
+.tnris-download-template,
+.tnris-order-template,
+.historical-aerial-template,
+.outside-entity-template {
+  
+  &.dark-theme {
+    background-color: #121515;
+  }
+
   header {
     // @include mdc-top-app-bar-ink-color($text-color);
     @include mdc-top-app-bar-icon-ink-color($text-color);
@@ -83,7 +91,5 @@ styles for component: TnrisOrderTemplate
         display: none;
       }
     }
-
   }
-
 }

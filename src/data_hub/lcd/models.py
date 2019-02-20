@@ -1024,6 +1024,12 @@ class Image(models.Model):
         'Image URL',
         max_length=255
     )
+    caption = models.CharField(
+        'Image Caption',
+        max_length=255,
+        null=True,
+        blank=True
+    )
     created = models.DateTimeField(
         'Created',
         auto_now_add=True

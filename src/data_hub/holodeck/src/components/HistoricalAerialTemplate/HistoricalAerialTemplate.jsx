@@ -53,12 +53,10 @@ export default class HistoricalAerialTemplate extends React.Component {
 
   render() {
     let showComponent;
-    let templateClass;
 
     switch(this.state.view) {
       case 'details':
         showComponent = <HistoricalAerialTemplateDetails collection={this.props.collection} />;
-        templateClass = 'historical-aerial-template';
         break;
       // case 'explore':
       //   showComponent = (<div>Explore Map loaded with LS4 WMS Services</div>);
@@ -73,7 +71,6 @@ export default class HistoricalAerialTemplate extends React.Component {
             </div>
           </div>
         )
-        templateClass = 'historical-aerial-template';
         break;
       case 'contact':
         showComponent = (
@@ -85,11 +82,9 @@ export default class HistoricalAerialTemplate extends React.Component {
             </div>
           </div>
         )
-        templateClass = 'historical-aerial-template';
         break;
       default:
         showComponent = <HistoricalAerialTemplateDetails collection={this.props.collection} />;
-        templateClass = 'historical-aerial-template';
     }
 
     const acquisition = this.props.collection.acquisition_date ? this.props.collection.acquisition_date.substring(0, 4) : '';
@@ -119,7 +114,7 @@ export default class HistoricalAerialTemplate extends React.Component {
     // const exploreListItem = '';
 
     return (
-      <div className={templateClass} tabIndex='0'>
+      <div className='historical-aerial-template' tabIndex='0'>
         <header className="mdc-top-app-bar">
           <div className="mdc-top-app-bar__row">
 

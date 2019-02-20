@@ -14,15 +14,15 @@ class OrderCartView extends React.Component {
   handleBack() {
     if (this.props.previousUrl.includes('/catalog/')) {
       this.props.setViewCatalog();
-      this.props.setUrl(this.props.previousUrl, this.props.history);
+      this.props.setUrl(this.props.previousUrl);
     } else if (this.props.previousUrl.includes('/collection/')) {
         const collectionUuid = this.props.previousUrl.replace('/collection/', '');
         this.props.setViewCollection();
         this.props.selectCollection(collectionUuid);
-        this.props.setUrl(this.props.previousUrl, this.props.history);
+        this.props.setUrl(this.props.previousUrl);
     } else {
         this.props.setViewCatalog();
-        this.props.setUrl(this.props.previousUrl, this.props.history);
+        this.props.setUrl(this.props.previousUrl);
     }
   }
 

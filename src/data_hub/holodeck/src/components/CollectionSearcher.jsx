@@ -167,6 +167,9 @@ export default class CollectionSearcher extends React.Component {
     // log filter change in store
     Object.keys(filterObj).length === 0 ? this.props.logFilterChange('/') :
       this.props.logFilterChange('/catalog/' + encodeURIComponent(filterString));
+    // search was fired so catalog grid is returning. set view to be catalog
+    // to stay in sync
+    this.props.setViewCatalog();
 }
 
   render() {

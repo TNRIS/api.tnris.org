@@ -13,7 +13,9 @@ const mapStateToProps = state => ({
   collectionFilterMapCenter: state.collectionFilterMap.collectionFilterMapCenter,
   collectionFilterMapFilter: state.collectionFilterMap.collectionFilterMapFilter,
   collectionFilterMapZoom: state.collectionFilterMap.collectionFilterMapZoom,
-  theme: state.colorTheme.theme
+  theme: state.colorTheme.theme,
+  catalogFilterUrl: state.urlTracker.catalogFilterUrl,
+  view: state.catalog.view
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -37,6 +39,9 @@ const mapDispatchToProps = dispatch => ({
   },
   setViewCatalog: () => {
     dispatch(catalogActions.setViewCatalog());
+  },
+  setViewGeoFilter: () => {
+    dispatch(catalogActions.setViewGeoFilter());
   }
 })
 

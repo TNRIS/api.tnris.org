@@ -25,6 +25,9 @@ export default class CollectionFilterMap extends React.Component {
 
   componentDidMount() {
     window.scrollTo(0,0);
+    if (this.props.view !== 'geoFilter') {
+      this.props.setViewGeoFilter();
+    }
     // define mapbox map
     mapboxgl.accessToken = 'undefined';
     // define the map bounds for Texas at the initial zoom and center,
@@ -248,8 +251,8 @@ export default class CollectionFilterMap extends React.Component {
 
   handleFilterButtonClick() {
     // update URL to reflect new sort change
-    const prevFilter = this.props.location.pathname.includes('/catalog/') ?
-                       JSON.parse(decodeURIComponent(this.props.location.pathname.replace('/catalog/', '')))
+    const prevFilter = this.props.catalogFilterUrl.includes('/catalog/') ?
+                       JSON.parse(decodeURIComponent(this.props.catalogFilterUrl.replace('/catalog/', '')))
                        : {};
     const filterObj = {...prevFilter, geo: this.props.collectionFilterMapAoi};
 

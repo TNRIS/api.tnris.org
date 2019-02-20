@@ -53,7 +53,7 @@ export default class Header extends React.Component {
       <NotificationBadge key={x} label='!' count={1} frameLength={30}/>
     ) : '');
 
-    const goToCatalogView = this.props.view !== 'catalog'  || this.props.location.pathname === '/404' ? (
+    const goToCatalogView = this.props.view !== 'catalog' ? (
       <a
         onClick={this.handleCatalogView}
         className="material-icons mdc-top-app-bar__navigation-icon"

@@ -3,6 +3,17 @@ import { Redirect } from 'react-router';
 import image404 from '../images/404.jpg';
 
 class NotFound extends Component {
+  componentDidMount() {
+    if (this.props.view !== 'notFound') {
+      this.props.setViewNotFound();
+    }
+  }
+
+  componentDidUpdate() {
+    if (this.props.view !== 'notFound') {
+      this.props.setViewNotFound();
+    }
+  }
 
   render() {
     if (window.location.pathname !== '/404') {
@@ -10,7 +21,7 @@ class NotFound extends Component {
     }
 
     return (
-      <div className={`notfound-component ${this.props.status}`}>
+      <div className="notfound-component">
           <div className="notfound">
             <img
               src={image404}

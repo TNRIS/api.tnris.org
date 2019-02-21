@@ -7,6 +7,7 @@ styles for component: Catalog
 
   .view-container {
     padding-top: 97px;
+    background-color: $main-background;
   }
 
   .mdc-dialog {
@@ -26,6 +27,7 @@ styles for component: Catalog
   }
 
   .catalog {
+    background-color: $main-background;
 
     .catalog-grid {
       @include mdc-layout-grid(desktop, 30px, 1600px);

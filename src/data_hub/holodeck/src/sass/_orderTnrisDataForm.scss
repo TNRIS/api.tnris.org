@@ -31,10 +31,6 @@ styles for component: OrderTnrisDataForm
     textarea {
       color: $nest-text;
     }
-
-    label {
-      background-color: $nest-background;
-    }
   }
 
   .mdc-text-field--focused {
@@ -129,7 +125,7 @@ styles for component: OrderTnrisDataForm
     .mdc-button--raised:not(:disabled),
     .mdc-button--unelevated:not(:disabled) {
       background-color: $primary-color;
-      color: $text-color;
+      color: $button-text;
     }
   }
 

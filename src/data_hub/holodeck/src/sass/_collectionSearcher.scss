@@ -8,7 +8,7 @@ styles for component: CollectionSearcher
     rgba(0, 0, 0, 0.12) 0px 3px 14px 2px;
 
     .search-input {
-      background-color: white;
+      background-color: $main-background;
     }
 }
 
@@ -21,17 +21,27 @@ styles for component: CollectionSearcher
   padding-bottom: .2em;
   overflow: unset;
 
+  .material-icons.mdc-text-field__icon {
+    color: $skin-primary;
+  }
+
   .search-input {
-    background-color: #efefef;
+    background-color: $search-background;
     padding: 5px 60px 5px 50px !important;
     border-bottom: 0;
+    color: $skin-primary;
     caret-color: $skin-primary;
   }
 
   .suggestion-list {
-    background-color: white;
+    background-color: $main-background;
     border-top: 1px solid $skin-tertiary;
     box-shadow: inherit;
+
+    li {
+      color: $skin-primary;
+      background-color: $main-background !important;
+    }
   }
 
   .suggestion-list:hover {

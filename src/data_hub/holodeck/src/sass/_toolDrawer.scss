@@ -13,7 +13,6 @@ styles for component: ToolDrawer
 
   .mdc-drawer {
     @include mdc-drawer-surface-fill-color($main-background);
-    @include mdc-drawer-divider-color($empty-border);
 
     .mdc-drawer__content {
 
@@ -38,7 +37,7 @@ styles for component: ToolDrawer
         min-width: 255px;
         z-index: 999;
         padding: 0 0 0 0;
-        background: $header-bar;
+        background: $main-background;
         min-height: 26px;
 
         top: 48px;
@@ -84,7 +83,7 @@ styles for component: ToolDrawer
         .mdc-button--raised:not(:disabled),
         .mdc-button--unelevated:not(:disabled) {
           background-color: $primary-color;
-          color: $text-color;
+          color: $button-text;
         }
       }
 

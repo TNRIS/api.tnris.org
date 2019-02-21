@@ -17,7 +17,7 @@ styles for component: CollectionTimeslider
   .rc-slider {
     .rc-slider-handle {
       border: solid 2px $primary-color;
-      background-color: $slider-fill;
+      background-color: $secondary-color;
       cursor: pointer;
 
       &:active {
@@ -33,7 +33,7 @@ styles for component: CollectionTimeslider
     }
 
     .rc-slider-track {
-      background-color: $slider-fill;
+      background-color: $secondary-color;
     }
   }
 }

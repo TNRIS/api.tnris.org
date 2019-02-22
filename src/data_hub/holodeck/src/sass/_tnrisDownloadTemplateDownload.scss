@@ -10,7 +10,8 @@ styles for component: TnrisDownloadTemplateDownload
   }
 
   #tnris-download-menu {
-    background: #fff;
+    background: $main-background;
+    color: $nest-text;
     position: absolute;
     z-index: 1;
     top: 164px;
@@ -26,8 +27,8 @@ styles for component: TnrisDownloadTemplateDownload
     }
 
     .mdc-list-item.mdc-list-item--activated {
-      background-color: $alt-color;
-      color: $text-color;
+      background-color: $nest-text;
+      color: $main-background;
     }
   }
 
@@ -62,7 +63,8 @@ styles for component: TnrisDownloadTemplateDownload
   }
 
   #tnris-download-note {
-    background: #fff;
+    background: $main-background;
+    color: $nest-text;
     position: absolute;
     z-index: 2;
     bottom: 5px;
@@ -91,7 +93,8 @@ styles for component: TnrisDownloadTemplateDownload
   }
 
   .tnris-download-template-download__none {
-    color: white;
+    background: $main-background;
+    color: $error-text;
     padding: 35px;
   }
 

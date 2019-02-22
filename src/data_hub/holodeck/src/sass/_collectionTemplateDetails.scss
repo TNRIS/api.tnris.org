@@ -13,7 +13,6 @@ shared styles for collection TemplateDetails components
   // main template content container div - BEGIN
   .template-content-div {
     margin-bottom: 15px;
-    background-color: $nest-background;
     color: $nest-text;
 
     // general elements - BEGIN
@@ -193,7 +192,7 @@ shared styles for collection TemplateDetails components
           margin-right: 5px;
           text-align: center;
           background-color: $primary-color;
-          color: $text-color;
+          color: $button-text;
 
           i {
             margin-right: 5px;
@@ -314,7 +313,7 @@ shared styles for collection TemplateDetails components
 
         .product-table-header {
           font-weight: 500;
-          color: $text-color;
+          color: $button-text;
           background-color: $primary-color;
         }
 
@@ -413,7 +412,7 @@ shared styles for collection TemplateDetails components
             margin-right: 5px;
             text-align: center;
             background-color: $primary-color;
-            color: $text-color;
+            color: $button-text;
 
             i {
               margin-right: 5px;

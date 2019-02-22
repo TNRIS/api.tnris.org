@@ -28,16 +28,16 @@ $nest-text: #444;
 $nest-text-subtle: gray;
 
 $search-background: #efefef;
+$header-border: lightgray;
 
 $error-text: #af0000;
 $success-text: #00870b;
 
 $skin-primary: $nest-text;
-$skin-tertiary: lightgray;
-$skin-text: #f5f5f5;
 
 $footer-light: #444;
 $footer-dark: #222;
+$footer-text: #f5f5f5;
 
 body {
   background-color: $main-background;
@@ -67,20 +67,20 @@ When adding new themes you will also need to update:
   $button-text: lightgray;
 
   $main-background: dimgray;
-  $nest-text: black;
+  $nest-text: #ededed;
   $nest-text-subtle: lightgray;
 
   $search-background: $secondary-color;
+  $header-border: $nest-text-subtle;
 
   $error-text: #af0000;
   $success-text: #00870b;
 
   $skin-primary: lightgray;
-  $skin-tertiary: gray;
-  $skin-text: #f5f5f5;
 
   $footer-light: #444;
   $footer-dark: #222;
+  $footer-text: #f5f5f5;
 
   body {
     background-color: $main-background;

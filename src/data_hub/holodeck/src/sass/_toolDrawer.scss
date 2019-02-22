@@ -44,20 +44,14 @@ styles for component: ToolDrawer
       }
 
       .dataset-counter {
-        // background-color: $primary-color;
-        // color: $skin-text;
         text-align: center;
         height: 26px;
         line-height: 26px;
-
-        .dataset-counter-count {
-          // font-weight: bold;
-        }
       }
 
       .mdc-list-group {
         margin-top: 70px;
-        border-top: solid 1px lightgrey;
+        border-top: solid 1px $header-border;
         padding-top: 0;
 
         .mdc-list-group__subheader {

@@ -4,6 +4,7 @@ styles for component: CatalogCard
 
 .catalog-card-component {
   width: 100%;
+  background-color: $main-background;
 
   .catalog-card__headline {
     font-size: 22px;
@@ -12,11 +13,12 @@ styles for component: CatalogCard
     -webkit-margin-before: 1em;
     -webkit-margin-after: inherit;
     padding-left: 10px;
+    color: $nest-text;
   }
 
   .catalog-card__year {
     font-size: 18px;
-    color: #767676;
+    color: $nest-text-subtle;
     padding-left: 10px;
     margin-top: 0;
     -webkit-margin-before: 0;
@@ -25,19 +27,10 @@ styles for component: CatalogCard
 
   .catalog-card__source {
     font-size: 18px;
-    color: #767676;
+    color: $nest-text-subtle;
     padding-left: 10px;
     margin-top: 0;
     -webkit-margin-before: 0;
-  }
-
-  .acquisition-year {
-    background: rgba(0, 0, 0, 0.6);
-    padding: 0 5px;
-    color: lightgray;
-    text-align: center;
-    position: absolute;
-    right: 0;
   }
 
   &:hover, &:active, &:focus {

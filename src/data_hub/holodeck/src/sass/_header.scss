@@ -11,7 +11,7 @@ styles for component: Header
   @include mdc-top-app-bar-ink-color($skin-primary);
   @include mdc-top-app-bar-icon-ink-color($skin-primary);
   @include mdc-top-app-bar-fill-color($main-background);
-  border-bottom: solid 1px $skin-tertiary;
+  border-bottom: solid 1px $header-border;
 
   .open-drawer {
     width: calc(100% - 255px);
@@ -27,7 +27,7 @@ styles for component: Header
 
   .header-title {
     background-color: $primary-color;
-    color: $skin-text;
+    color: $button-text;
     font-family: pragmatica-web-condensed,sans-serif;
     font-size: 16px;
     font-weight: 100;

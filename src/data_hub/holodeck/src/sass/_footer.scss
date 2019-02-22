@@ -5,7 +5,7 @@ styles for component: Footer
 
 .footer-component {
   background-color: $footer-dark;
-  color: $skin-text;
+  color: $footer-text;
   width: 100%;
   position: absolute;
   left: 0;
@@ -26,7 +26,7 @@ styles for component: Footer
     font-size: 12px;
     text-align: center;
     padding: 10px 0;
-    color: $skin-text;
+    color: $footer-text;
 
     .legal-links {
       margin-top: 0;
@@ -40,7 +40,7 @@ styles for component: Footer
         padding-left: 5px;
 
         a {
-          color: $skin-text;
+          color: $footer-text;
           text-decoration: none;
 
           &:hover {
@@ -82,19 +82,19 @@ styles for component: Footer
           margin-bottom: 5px;
 
           a {
-            color: $skin-text;
+            color: $footer-text;
           }
 
           .footer-sub-menu {
             padding-left: 10px;
-            border-left: 1px solid $skin-text;
+            border-left: 1px solid $footer-text;
           }
         }
       }
 
       a {
         text-decoration: none;
-        color: $skin-text;
+        color: $footer-text;
         font-size: 14px;
 
         &:hover {
@@ -121,7 +121,7 @@ styles for component: Footer
     font-size: 12px;
     padding-bottom: 25px;
     text-align: center;
-    color: $skin-text;
+    color: $footer-text;
 
     @media (min-width: mdc-layout-grid-breakpoint-min(desktop)) {
       bottom: 0;

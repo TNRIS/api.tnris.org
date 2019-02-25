@@ -3,6 +3,7 @@ import { Redirect } from 'react-router';
 import { Route, Switch } from 'react-router';
 import { matchPath } from 'react-router-dom';
 import { MDCDrawer } from "@material/drawer";
+import {MDCSnackbar} from '@material/snackbar';
 
 import HistoricalAerialTemplate from './HistoricalAerialTemplate/HistoricalAerialTemplate';
 import OutsideEntityTemplate from './TnrisOutsideEntityTemplate/TnrisOutsideEntityTemplate';
@@ -68,6 +69,9 @@ export default class Catalog extends React.Component {
   }
 
   handleToolDrawerDisplay() {
+    this.snackbar = new MDCSnackbar(document.querySelector('.mdc-snackbar'));
+    this.snackbar.open();
+    console.log(this.snackbar);
     if (this.props.toolDrawerVariant === 'dismissible') {
       if (this.props.toolDrawerStatus === 'open') {
         this.props.closeToolDrawer();
@@ -179,6 +183,15 @@ export default class Catalog extends React.Component {
           </div>
 
         <FooterContainer />
+        <div className="mdc-snackbar">
+          <div className="mdc-snackbar__surface">
+            <div className="mdc-snackbar__label"
+                 role="status"
+                 aria-live="polite">
+              {this.props.visibleCollections ? `${this.props.visibleCollections.length} datasets found!!` : 0}
+            </div>
+          </div>
+        </div>
 
       </div>
     );

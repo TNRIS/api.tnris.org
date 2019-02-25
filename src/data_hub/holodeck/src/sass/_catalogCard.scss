@@ -5,6 +5,7 @@ styles for component: CatalogCard
 .catalog-card-component {
   width: 100%;
   background-color: $main-background;
+  box-shadow: $catalog-card-shadow;
 
   .catalog-card__headline {
     font-size: 22px;

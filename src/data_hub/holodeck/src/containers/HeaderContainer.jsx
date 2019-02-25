@@ -2,8 +2,6 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 
 import { catalogActions,
-         collectionActions,
-         toolDrawerActions,
          urlTrackerActions } from '../actions';
 import {
   getAllCollections
@@ -13,27 +11,15 @@ import Header from '../components/Header';
 const mapStateToProps = state => ({
   collections: getAllCollections(state),
   orders: state.orderCart.orders,
-  previousUrl: state.urlTracker.previousUrl,
   catalogFilterUrl: state.urlTracker.catalogFilterUrl,
   selectedCollection: state.collections.selectedCollection,
   theme: state.colorTheme.theme,
   view: state.catalog.view,
-  toolDrawerStatus: state.toolDrawer.toolDrawerStatus
+  toolDrawerStatus: state.toolDrawer.toolDrawerStatus,
+  toolDrawerVariant: state.toolDrawer.toolDrawerVariant
 });
 
 const mapDispatchToProps = dispatch => ({
-  clearSelectedCollection: () => {
-    dispatch(collectionActions.clearSelectedCollection());
-  },
-  selectCollection: (collectionId) => {
-    dispatch(collectionActions.selectCollection(collectionId));
-  },
-  openToolDrawer: () => {
-    dispatch(toolDrawerActions.openToolDrawer());
-  },
-  closeToolDrawer: () => {
-    dispatch(toolDrawerActions.closeToolDrawer());
-  },
   setUrl: (newUrl, history) => {
     dispatch(urlTrackerActions.setUrl(newUrl, history));
   },

@@ -6,7 +6,6 @@ import {
   catalogActions,
   collectionActions,
   collectionSearcherActions,
-  toolDrawerActions,
   urlTrackerActions
 } from '../actions';
 import {
@@ -20,15 +19,13 @@ const mapStateToProps = (state) => ({
   collectionSearchSuggestions: getSearchSuggestions(state),
   collectionSearchSuggestionsQuery: state.collectionSearcher.collectionSearchSuggestionsQuery,
   view: state.catalog.view,
-  previousUrl: state.urlTracker.previousUrl
+  previousUrl: state.urlTracker.previousUrl,
+  selectedCollection: state.collections.selectedCollection
 });
 
 const mapDispatchToProps = dispatch => ({
   clearSelectedCollection: () => {
     dispatch(collectionActions.clearSelectedCollection());
-  },
-  openToolDrawer: () => {
-    dispatch(toolDrawerActions.openToolDrawer());
   },
   setCollectionSearchQuery: (collectionSearchQuery) => {
     dispatch(collectionSearcherActions.setCollectionSearchQuery(collectionSearchQuery));

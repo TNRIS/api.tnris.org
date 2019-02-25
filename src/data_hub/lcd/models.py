@@ -325,6 +325,12 @@ class SourceType(models.Model):
         null=True,
         blank=True
     )
+    source_data_website = models.URLField(
+        'Source Data Website',
+        max_length=255,
+        null=True,
+        blank=True
+    )
     source_contact = models.TextField(
         'Source Contact',
         max_length=255,
@@ -1018,6 +1024,12 @@ class Image(models.Model):
         'Image URL',
         max_length=255
     )
+    caption = models.CharField(
+        'Image Caption',
+        max_length=255,
+        null=True,
+        blank=True
+    )
     created = models.DateTimeField(
         'Created',
         auto_now_add=True
@@ -1185,6 +1197,10 @@ class CcrView(models.Model):
         'Source Abbreviation'
     )
     source_website = models.CharField(
+        'Source Website',
+        max_length=255
+    )
+    source_data_website = models.CharField(
         'Source Website',
         max_length=255
     )

@@ -47,7 +47,7 @@ styles for component: ContactTnrisForm
       }
 
       option {
-        background-color: $nest-background;
+        background-color: $main-background;
       }
     }
 
@@ -60,10 +60,6 @@ styles for component: ContactTnrisForm
   div.mdc-text-field--textarea {
     textarea {
       color: $nest-text;
-    }
-
-    label {
-      background-color: $nest-background;
     }
   }
 
@@ -95,7 +91,7 @@ styles for component: ContactTnrisForm
     .mdc-button--raised:not(:disabled),
     .mdc-button--unelevated:not(:disabled) {
       background-color: $primary-color;
-      color: $text-color;
+      color: $button-text;
     }
   }
 

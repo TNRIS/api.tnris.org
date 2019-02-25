@@ -11,7 +11,7 @@ export default class CollectionFilter extends React.Component {
     this.handleOpenFilterMenu = this.handleOpenFilterMenu.bind(this);
     this.handleSetFilter = this.handleSetFilter.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);
-    this.toggleGeoFilter = this.toggleGeoFilter.bind(this);
+    this.showGeoFilter = this.showGeoFilter.bind(this);
     this.handleKeySetFilter = this.handleKeySetFilter.bind(this);
   }
 
@@ -165,7 +165,7 @@ export default class CollectionFilter extends React.Component {
         this.handleOpenFilterMenu(e);
       }
       else {
-        this.toggleGeoFilter();
+        this.showGeoFilter();
       }
     }
   }
@@ -177,8 +177,9 @@ export default class CollectionFilter extends React.Component {
     }
   }
 
-  toggleGeoFilter () {
-    this.props.view === 'catalog' ? this.props.setViewGeoFilter() : this.props.setViewCatalog();
+  showGeoFilter () {
+    this.props.setViewGeoFilter();
+    this.props.setUrl('/geofilter/');
   }
 
   render() {
@@ -241,7 +242,7 @@ export default class CollectionFilter extends React.Component {
           <li key='filter-map-button'>
             <div className={filterSet}
                id='filter-map-button'
-               onClick={() => this.toggleGeoFilter()}
+               onClick={() => this.showGeoFilter()}
                onKeyDown={(e) => this.handleKeyPress(e)}
                tabIndex="0"     >
                by geography

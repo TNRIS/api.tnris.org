@@ -43,8 +43,6 @@ styles for component: OrderCart
       color: $nest-text-subtle;
 
       .mdc-list-item {
-        background-color: $nest-background;
-
         .mdc-list-item__graphic {
           color: $primary-color;
         }
@@ -68,7 +66,6 @@ styles for component: OrderCart
 
     .template-content-div {
       margin-bottom: 15px;
-      background-color: $nest-background;
       padding: 6px 16px 16px 16px;
     }
 
@@ -119,7 +116,6 @@ styles for component: OrderCart
         }
 
         option {
-          background-color: $nest-background;
           color: $nest-text !important;
         }
       }
@@ -179,7 +175,7 @@ styles for component: OrderCart
       .mdc-button--raised:not(:disabled),
       .mdc-button--unelevated:not(:disabled) {
         background-color: $primary-color;
-        color: $text-color;
+        color: $button-text;
       }
     }
 
@@ -188,7 +184,7 @@ styles for component: OrderCart
 
       button {
         background-color: $primary-color;
-        color: $text-color;
+        color: $button-text;
       }
     }
 

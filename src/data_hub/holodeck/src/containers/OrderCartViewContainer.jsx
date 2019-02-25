@@ -4,7 +4,6 @@ import OrderCartView from '../components/OrderCartView';
 
 import { catalogActions,
          collectionActions,
-         toolDrawerActions,
          urlTrackerActions } from '../actions';
 
 const mapStateToProps = state => ({
@@ -23,9 +22,6 @@ const mapDispatchToProps = dispatch => ({
   },
   selectCollection: (collectionId) => {
     dispatch(collectionActions.selectCollection(collectionId));
-  },
-  openToolDrawer: () => {
-    dispatch(toolDrawerActions.openToolDrawer());
   },
 })
 

@@ -1,51 +1,96 @@
 import React from 'react';
 
+
 export default class Description extends React.Component {
+
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      wikiExtract: '',
+      descriptClass: 'fade-text',
+      showButton: true,
+      expandText: 'more'
+    }
+
+    this.getWiki = this.getWiki.bind(this);
+    this.setTextFade = this.setTextFade.bind(this);
+    this.toggleText = this.toggleText.bind(this);
+  }
+
+  getWiki() {
+    // fetch outside entiy description from wiki api
+    // if template is outside entity, assign source_name prop to variable else empty string
+    const wikiName = this.props.collection.template === 'outside-entity' ? this.props.collection.source_name : '';
+    // wikiUrl provides access to the 'extract' key value pair which is the intro paragraph of the wiki article
+    // Unauthenticated CORS requests may be made from any origin by setting the "origin" request parameter to "*"
+    const wikiUrl = `https://en.wikipedia.org/w/api.php?&origin=*&action=query&prop=extracts&format=json&redirects=1&exintro=&titles=${wikiName}`;
+    // reasign 'this' to 'self' so state isn't confused with promise in fetch
+    const self = this;
+
+    if (wikiName !== '') {
+      fetch(wikiUrl).then(function(response) {
+        if (!response.ok) {
+          throw new Error('Could not retrieve Wikipedia response.');
+        }
+        return response.json();
+      })
+      .then(function(data) {
+        const extract = data.query.pages[Object.keys(data.query.pages)[0]].extract;
+        self.setState({wikiExtract: extract});
+        self.setTextFade();
+      })
+    }
+  }
+
+  setTextFade() {
+    const height = this.refs.descript.clientHeight;
+    height < 250 ? this.setState({
+      descriptClass:'',
+      showButton: false
+    }) : this.setState({
+      descriptClass:'fade-text',
+      showButton:true
+    })
+  }
+
+  toggleText() {
+    this.state.expandText === 'more' ? this.setState({
+      expandText:'less',
+      descriptClass:''
+    }) : this.setState({
+      expandText:'more',
+      descriptClass:'fade-text'
+    });
+  }
+
+  componentDidMount() {
+    this.getWiki();
+    this.setTextFade();
+  }
+
 
   render() {
 
-    // create service name and url arrays from aggregated string
-    const namesArray = this.props.collection.oe_service_names !== null ? this.props.collection.oe_service_names.split(', ') : [];
-    const servicesArray = this.props.collection.oe_service_urls !== null ? this.props.collection.oe_service_urls.split(', ') : [];
+    const createMarkup = () => {
+      return {__html: this.state.wikiExtract};
+    }
 
-    const servicesObj = {};
-
-    namesArray.map((key) => {
-      const compare = key.split(' ').join('_');
-      servicesArray.map((service) => {
-        const stringArray = service.split("/");
-        stringArray.map((i) => {
-          if (i === compare) {
-            servicesObj[key] = servicesArray[servicesArray.indexOf(service)];
-          }
-          return i;
-        })
-        return service;
-      })
-      return key;
-    });
-
-    const services = namesArray.length !== 0 ? (
-      <div id="oe_services">
-        <p>Currently, there are <strong>{namesArray.length}</strong> available services that you can access below, or by visiting the agency's open data portal.</p>
-        <ul>
-          {
-            Object.entries(servicesObj).map((i) => {
-              let key = i[0];
-              let value = i[1];
-              return <li key={key}><a href={value} target="_blank" rel="noopener noreferrer">{key}</a></li>;
-            })
-          }
-        </ul>
-      </div>
-      ) : '';
+    const showButton = this.state.showButton ?  (
+      <div className="mdc-button mdc-button--raised expand" onClick={this.toggleText}>
+        <i className="material-icons">{`expand_${this.state.expandText}`}</i>
+        <p>Show {this.state.expandText}...</p>
+      </div>) : '';
 
     return (
       <div className="template-content-div">
-        <p>
-          {this.props.collection.description}
-        </p>
-        {services}
+        <div ref="descript" className={this.state.descriptClass}>
+          <div dangerouslySetInnerHTML={createMarkup()} />
+          <p>
+            {this.props.collection.description}
+          </p>
+        </div>
+        {showButton}
       </div>
     )
   }

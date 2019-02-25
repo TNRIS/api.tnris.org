@@ -5,6 +5,10 @@ styles for component: Catalog
 .catalog-component {
   margin-bottom: 375px; //to make sure footer doesn't hide catalog content
 
+  .view-container {
+    padding-top: 97px;
+  }
+
   .mdc-dialog {
     z-index: 1000;
   }
@@ -22,7 +26,7 @@ styles for component: Catalog
   }
 
   .catalog {
-    padding-top: 97px;
+    background-color: $main-background;
 
     .catalog-grid {
       @include mdc-layout-grid(desktop, 30px, 1600px);

@@ -18,9 +18,6 @@ export default class ToolDrawer extends React.Component {
 
   componentDidMount() {
     this.toolDrawer = MDCDrawer.attachTo(document.querySelector('.tool-drawer'));
-    if (this.props.view === 'modal') {
-      this.props.closeToolDrawer();
-    }
   }
 
   clearAllFilters() {
@@ -36,9 +33,9 @@ export default class ToolDrawer extends React.Component {
   }
 
   render() {
-    const drawerTypeClass = this.props.view === 'dismiss' ?
+    const drawerTypeClass = this.props.toolDrawerVariant=== 'dismissible' ?
       'mdc-drawer mdc-drawer--dismissible tool-drawer' : 'mdc-drawer mdc-drawer--modal tool-drawer';
-    const openClass = this.props.toolDrawerStatus === 'open' && this.props.showToolDrawerInCatalogView ?
+    const openClass = this.props.toolDrawerVariant === 'dismissible' && this.props.toolDrawerStatus === 'open' ?
       'mdc-drawer--open' : '';
 
     return (
@@ -57,17 +54,14 @@ export default class ToolDrawer extends React.Component {
                 Sort
               </div>
               <CollectionSorterContainer className='mdc-list-item' />
-              {/*<hr className='mdc-list-divider'/>*/}
               <div className='filter-title mdc-list-group__subheader'>
                 Filter
               </div>
               <CollectionFilterContainer className='mdc-list-item' />
-              {/*<hr className='mdc-list-divider'/>*/}
               <div className='timeslider-title mdc-list-group__subheader'>
                 Date Range
               </div>
               <CollectionTimesliderContainer className='mdc-list-item' />
-              {/*<hr className='mdc-list-divider'/>*/}
               <div className='clear-all-filters-container'>
                 <button
                   className="mdc-button mdc-button--raised"
@@ -82,7 +76,7 @@ export default class ToolDrawer extends React.Component {
           </div>
         </aside>
 
-        {this.props.view === 'modal' ? <div className='mdc-drawer-scrim' id='scrim'></div> : null}
+        {this.props.toolDrawerVariant === 'modal' ? <div className='mdc-drawer-scrim' id='scrim'></div> : ''}
 
       </div>
     );

@@ -77,6 +77,9 @@ export default class CollectionSearcher extends React.Component {
       this.props.setCollectionSearchQuery('');
       this.props.setCollectionSearchSuggestionsQuery('');
       this.updateUrl('');
+      if (this.props.selectedCollection) {
+        this.props.clearSelectedCollection();
+      }
       this.searchFieldInput.focus();
     } catch(e) {
       console.log(e);
@@ -117,10 +120,9 @@ export default class CollectionSearcher extends React.Component {
         this.updateUrl(event.target.value);
         this.setState({showSuggestionList: false});
         event.target.blur();
-        if (this.props.view !== 'catalog') {
+        if (this.props.selectedCollection) {
           // this.props.setViewCatalog();
-          // this.props.clearSelectedCollection();
-          this.props.openToolDrawer();
+          this.props.clearSelectedCollection();
         }
       } else if (event.keyCode === 27) { // they pressed escape, so drop focus
         event.target.blur();
@@ -140,10 +142,9 @@ export default class CollectionSearcher extends React.Component {
     this.props.setCollectionSearchSuggestionsQuery(selection);
     this.updateUrl(selection);
     this.searchFieldInput.blur();
-    if (this.props.view !== 'catalog') {
-      this.props.setViewCatalog();
-      // this.props.clearSelectedCollection();
-      this.props.openToolDrawer();
+    if (this.props.selectedCollection) {
+      // this.props.setViewCatalog();
+      this.props.clearSelectedCollection();
     }
 
   }
@@ -166,6 +167,9 @@ export default class CollectionSearcher extends React.Component {
     // log filter change in store
     Object.keys(filterObj).length === 0 ? this.props.logFilterChange('/') :
       this.props.logFilterChange('/catalog/' + encodeURIComponent(filterString));
+    // search was fired so catalog grid is returning. set view to be catalog
+    // to stay in sync
+    this.props.setViewCatalog();
 }
 
   render() {
@@ -216,7 +220,6 @@ export default class CollectionSearcher extends React.Component {
                       {...getItemProps({ key: index, index, item })}
                             style={{
                               backgroundColor: highlightedIndex === index ? 'lightgray' : 'white',
-                              // fontWeight: selectedItem === item ? 'bold' : 'normal',
                             }}>
                       {item}
                     </li>

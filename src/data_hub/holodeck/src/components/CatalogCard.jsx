@@ -8,7 +8,6 @@ export default class CatalogCard extends React.Component {
   }
 
   handleCardClick() {
-    this.props.closeToolDrawer();
     this.props.setViewCollection();
     this.props.selectCollection(this.props.collection.collection_id);
     this.props.setUrl('/collection/' + this.props.collection.collection_id);

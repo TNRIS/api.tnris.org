@@ -47,12 +47,10 @@ export default class TnrisOutsideEntityTemplate extends React.Component {
   render() {
 
     let showComponent;
-    let templateClass;
 
     switch(this.state.view) {
       case 'details':
         showComponent = <TnrisOutsideEntityTemplateDetails collection={this.props.collection} />;
-        templateClass = 'outside-entity-template';
         break;
       case 'contact':
         showComponent = (
@@ -64,17 +62,15 @@ export default class TnrisOutsideEntityTemplate extends React.Component {
             </div>
           </div>
         )
-        templateClass = 'outside-entity-template';
         break;
       default:
         showComponent = <TnrisOutsideEntityTemplateDetails collection={this.props.collection} />;
-        templateClass = 'outside-entity-template';
     }
 
 
     return (
 
-      <div className={templateClass} tabIndex='0'>
+      <div className='outside-entity-template' tabIndex='0'>
         <header className="mdc-top-app-bar">
           <div className="mdc-top-app-bar__row">
 

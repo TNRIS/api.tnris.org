@@ -48,6 +48,17 @@ export default class Metadata extends React.Component {
       </li>
     ) : "";
 
+    const source_data_site = this.props.collection.source_data_website ? (
+      <li className="mdc-list-item">
+        <span className="mdc-list-item__text">
+          <span className="mdc-list-item__primary-text">
+            <a href={this.props.collection.source_data_website} target="_blank" rel="noopener noreferrer">{this.props.collection.source_data_website}</a>
+          </span>
+          <span className="mdc-list-item__secondary-text">Source Data Website</span>
+        </span>
+      </li>
+    ) : "";
+
     const epsg = this.props.collection.template !== 'outside-entity' && this.props.collection.spatial_reference ? (
       <li className="mdc-list-item">
         <span className="mdc-list-item__text">
@@ -92,7 +103,9 @@ export default class Metadata extends React.Component {
         <span className="mdc-list-item__text">
           <span className="mdc-list-item__primary-text">
             {
-              this.props.collection.category.includes('_') ? this.props.collection.category.split('_').join(' ') : this.props.collection.category
+              this.props.collection.category.includes('_') ?
+              (this.props.collection.category.split('_').join(' ')).split(',').join(', ') :
+              this.props.collection.category.split(',').join(', ')
             }
           </span>
           <span className="mdc-list-item__secondary-text">Category</span>
@@ -115,7 +128,9 @@ export default class Metadata extends React.Component {
       <li className="mdc-list-item">
         <span className="mdc-list-item__text">
           <span className="mdc-list-item__primary-text">
-            {this.props.collection.file_type}
+            {
+              this.props.collection.file_type.split(',').join(', ')
+            }
           </span>
           <span className="mdc-list-item__secondary-text">File Type</span>
         </span>
@@ -126,7 +141,9 @@ export default class Metadata extends React.Component {
       <li className="mdc-list-item">
         <span className="mdc-list-item__text">
           <span className="mdc-list-item__primary-text">
-            {this.props.collection.resource_types}
+            {
+              this.props.collection.resource_types.split(',').join(', ')
+            }
           </span>
           <span className="mdc-list-item__secondary-text">Download Formats</span>
         </span>
@@ -137,7 +154,9 @@ export default class Metadata extends React.Component {
       <li className="mdc-list-item">
         <span className="mdc-list-item__text">
           <span className="mdc-list-item__primary-text">
-            {this.props.collection.resolution}
+            {
+              this.props.collection.resolution.split(',').join(', ')
+            }
           </span>
           <span className="mdc-list-item__secondary-text">Resolution</span>
         </span>
@@ -148,7 +167,9 @@ export default class Metadata extends React.Component {
       <li className="mdc-list-item">
         <span className="mdc-list-item__text">
           <span className="mdc-list-item__primary-text">
-            {this.props.collection.band_types}
+            {
+              this.props.collection.band_types.split(',').join(', ')
+            }
           </span>
           <span className="mdc-list-item__secondary-text">Bands</span>
         </span>
@@ -205,6 +226,7 @@ export default class Metadata extends React.Component {
           {partners}
           {source}
           {source_site}
+          {source_data_site}
           {source_contact}
           {epsg}
           {license}

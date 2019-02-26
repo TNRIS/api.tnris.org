@@ -3,6 +3,7 @@ import { Redirect } from 'react-router';
 import { Route, Switch } from 'react-router';
 import { matchPath } from 'react-router-dom';
 import { MDCDrawer } from "@material/drawer";
+import {MDCSnackbar} from '@material/snackbar';
 
 import HistoricalAerialTemplate from './HistoricalAerialTemplate/HistoricalAerialTemplate';
 import OutsideEntityTemplate from './TnrisOutsideEntityTemplate/TnrisOutsideEntityTemplate';
@@ -28,6 +29,7 @@ export default class Catalog extends React.Component {
     this.handleToolDrawerDisplay = this.handleToolDrawerDisplay.bind(this);
     this.handleShowCollectionView = this.handleShowCollectionView.bind(this);
     this.setCatalogView = this.setCatalogView.bind(this);
+    this.handleToast = this.handleToast.bind(this);
     this.loadingMessage = (
       <div className="catalog-component__loading">
         <img src={loadingImage} alt="Holodeck Loading..." className="holodeck-loading-image" />
@@ -56,6 +58,15 @@ export default class Catalog extends React.Component {
       const html = document.querySelector('html');
       html.className = themedClass;
     }
+    if (prevProps.visibleCollections && this.props.view === 'catalog' || this.props.view === 'geoFilter') {
+      prevProps.visibleCollections.length !== this.props.visibleCollections.length ? this.handleToast() : '';
+    }
+  }
+
+  handleToast() {
+    this.snackbar = new MDCSnackbar(document.querySelector('.mdc-snackbar'));
+    this.snackbar.labelText = `${this.props.visibleCollections.length} datasets found`;
+    this.snackbar.open();
   }
 
   handleResize() {
@@ -164,21 +175,28 @@ export default class Catalog extends React.Component {
 
     return (
       <div className="catalog-component">
-        <HeaderContainer
-          handleToolDrawerDisplay={this.handleToolDrawerDisplay} />
 
-          <div className='view-container'>
-            <Switch>
-              <Route path='/collection/:collectionId' exact render={(props) => this.handleShowCollectionView()} />
-              <Route path='/catalog/:filters' exact render={(props) => this.setCatalogView()} />
-              <Route path='/cart/' exact render={(props) => <OrderCartViewContainer />} />
-              <Route path='/geofilter/' exact component={CollectionFilterMapView} />
-              <Route path='/' exact render={(props) => this.setCatalogView()} />
-              <Route path='*' render={(props) => <NotFoundContainer />} />
-            </Switch>
-          </div>
+        <HeaderContainer handleToolDrawerDisplay={this.handleToolDrawerDisplay} />
+
+        <div className='view-container'>
+          <Switch>
+            <Route path='/collection/:collectionId' exact render={(props) => this.handleShowCollectionView()} />
+            <Route path='/catalog/:filters' exact render={(props) => this.setCatalogView()} />
+            <Route path='/cart/' exact render={(props) => <OrderCartViewContainer />} />
+            <Route path='/geofilter/' exact component={CollectionFilterMapView} />
+            <Route path='/' exact render={(props) => this.setCatalogView()} />
+            <Route path='*' render={(props) => <NotFoundContainer />} />
+          </Switch>
+        </div>
 
         <FooterContainer />
+
+        <div className=" dataset-toaster mdc-snackbar">
+          <div className="mdc-snackbar__surface">
+            <div className="mdc-snackbar__label" role="status" aria-live="polite">
+            </div>
+          </div>
+        </div>
 
       </div>
     );

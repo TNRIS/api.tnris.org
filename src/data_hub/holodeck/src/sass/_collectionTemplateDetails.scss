@@ -46,7 +46,7 @@ shared styles for collection TemplateDetails components
       bottom: 0;
       left: 0;
       right: 0;
-      background: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
+      background: linear-gradient(rgba($main-background, 0), rgba($main-background, 1));
     }
 
     .expand {
@@ -167,9 +167,9 @@ shared styles for collection TemplateDetails components
 
       .styled-input {
         color: $primary-color;
-        border: 0.5px solid #b3b3b3;
+        border: 0.5px solid $primary-color;
         box-sizing: border-box;
-        box-shadow: 0.2px 0.2px 7px #ccc inset;
+        box-shadow: 0.2px 0.2px 7px $primary-color inset;
         border-radius: 8px;
         margin-bottom: 10px;
         width: 100%;

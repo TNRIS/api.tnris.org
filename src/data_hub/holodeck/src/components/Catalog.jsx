@@ -58,8 +58,12 @@ export default class Catalog extends React.Component {
       const html = document.querySelector('html');
       html.className = themedClass;
     }
-    if (prevProps.visibleCollections && this.props.view === 'catalog' || this.props.view === 'geoFilter') {
-      prevProps.visibleCollections.length !== this.props.visibleCollections.length ? this.handleToast() : '';
+    if (prevProps.visibleCollections) {
+      if (this.props.view === 'catalog' || this.props.view === 'geoFilter') {
+        if (prevProps.visibleCollections.length !== this.props.visibleCollections.length) {
+          this.handleToast();
+        }
+      }
     }
   }
 

@@ -13,6 +13,8 @@ import { getCollectionTimesliderRange } from '../selectors/collectionSelectors';
 import ToolDrawer from '../components/ToolDrawer';
 
 const mapStateToProps = (state) => ({
+  collectionFilter: state.collectionFilter.collectionFilter,
+  collectionFilterMapFilter: state.collectionFilterMap.collectionFilterMapFilter,
   collectionTimesliderRange: getCollectionTimesliderRange(state),
   toolDrawerStatus: state.toolDrawer.toolDrawerStatus,
   toolDrawerVariant: state.toolDrawer.toolDrawerVariant

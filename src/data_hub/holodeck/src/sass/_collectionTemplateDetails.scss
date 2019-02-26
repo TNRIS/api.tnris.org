@@ -46,7 +46,7 @@ shared styles for collection TemplateDetails components
       bottom: 0;
       left: 0;
       right: 0;
-      background: linear-gradient(rgba($main-background, 0), rgba($main-background, 1));
+      background: linear-gradient(rgba($main-background, 0), rgba($main-background, 0.75));
     }
 
     .expand {
@@ -59,9 +59,29 @@ shared styles for collection TemplateDetails components
     // end description component (fade-text)
 
     // source citation component
-    .citation-style {
-      font-size: 14px;
-      width: 100%;
+    .citation-container {
+
+      .citation-style {
+        // font-size: 12px;
+        margin-bottom: 10px;
+      }
+
+      .copy-citation {
+        color: $primary-color;
+        border: 0.5px solid $primary-color;
+        box-sizing: border-box;
+        box-shadow: 0.2px 0.2px 7px $primary-color inset;
+        border-radius: 8px;
+        margin-bottom: 10px;
+        width: 100%;
+        padding: 5px 10px 5px 10px;
+        outline: none;
+      }
+
+      .copy-citation:focus {
+        border: 0.5px solid $primary-color;
+        box-shadow: 0.2px 0.2px 7px $primary-color;
+      }
     }
     // end source citation component
 

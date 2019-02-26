@@ -65,7 +65,9 @@ export default class TnrisDownloadTemplateDetails extends React.Component {
                           <Description collection={this.props.collection} />)
                           : "";
 
-    const sourceCitation = <SourceCitation collection={this.props.collection} />;
+    const sourceCitation = this.props.collection.template === 'tnris-download' ?
+                            <SourceCitation collection={this.props.collection} />
+                          : "";
 
     // using mdc classes to determine grid layout depending on screen size (desktop/tablet)
     // special case with phone or smaller device because order of components changes
@@ -102,6 +104,8 @@ export default class TnrisDownloadTemplateDetails extends React.Component {
                             <ShareButtons />
                           </div>
                         </div>);
+
+    console.log(this.props.collection);
 
     return (
       <div className='tnris-download-template-details'>

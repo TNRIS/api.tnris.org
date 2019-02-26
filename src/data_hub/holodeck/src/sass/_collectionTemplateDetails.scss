@@ -58,6 +58,13 @@ shared styles for collection TemplateDetails components
     }
     // end description component (fade-text)
 
+    // source citation component
+    .citation-style {
+      font-size: 14px;
+      width: 100%;
+    }
+    // end source citation component
+
     // nested images (image carousel) component - BEGIN
     // used by all but historicalAerialTemplateDetails
     .carousel {

@@ -105,7 +105,6 @@ export default class TnrisDownloadTemplateDetails extends React.Component {
                           </div>
                         </div>);
 
-    console.log(this.props.collection);
 
     return (
       <div className='tnris-download-template-details'>

@@ -47,7 +47,6 @@ shared styles for collection TemplateDetails components
       left: 0;
       right: 0;
       background: linear-gradient(rgba($main-background, 0), rgba($main-background, 1));
-      // background: linear-gradient(to bottom right, red, yellow);
     }
 
     .expand {
@@ -56,6 +55,11 @@ shared styles for collection TemplateDetails components
       margin-top: 20px;
       background-color: $primary-color;
       color: $button-text;
+    }
+
+    .wiki-attribution {
+      font-size: 12px;
+      margin-bottom: 10px;
     }
     // end description component (fade-text)
 

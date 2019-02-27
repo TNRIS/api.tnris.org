@@ -30,7 +30,7 @@ shared styles for collection TemplateDetails components
     // used for description component (fade text) - used by all details templates
     .fade-text {
       position: relative;
-      max-height: 250px;
+      max-height: 300px;
       overflow: hidden;
       transition: max-height 2s ease;
 
@@ -46,7 +46,8 @@ shared styles for collection TemplateDetails components
       bottom: 0;
       left: 0;
       right: 0;
-      background: linear-gradient(rgba($main-background, 0), rgba($main-background, 0.75));
+      background: linear-gradient(rgba($main-background, 0), rgba($main-background, 1));
+      // background: linear-gradient(to bottom right, red, yellow);
     }
 
     .expand {

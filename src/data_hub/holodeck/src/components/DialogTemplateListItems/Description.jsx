@@ -45,7 +45,7 @@ export default class Description extends React.Component {
 
   setTextFade() {
     const height = this.refs.descript.clientHeight;
-    height < 250 ? this.setState({
+    height < 300 ? this.setState({
       descriptClass:'',
       showButton: false
     }) : this.setState({

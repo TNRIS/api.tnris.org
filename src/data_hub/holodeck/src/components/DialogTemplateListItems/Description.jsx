@@ -92,7 +92,6 @@ export default class Description extends React.Component {
         <p>Show {this.state.expandText}...</p>
       </div>) : '';
 
-    console.log(this.state.wikiExtract);
 
     return (
       <div className="template-content-div">

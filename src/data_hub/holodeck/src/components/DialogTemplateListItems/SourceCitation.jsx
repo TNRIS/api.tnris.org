@@ -5,10 +5,12 @@ export default class SourceCitation extends React.Component {
     super(props);
     window.innerWidth >= 1000 ? this.state = {
       gridLayout:'desktop',
-      copied: false
+      copied: false,
+      date: new Date()
     } : this.state = {
       gridLayout:'mobile',
-      copied: false
+      copied: false,
+      date: new Date()
     };
 
     this.handleResize = this.handleResize.bind(this);
@@ -33,32 +35,32 @@ export default class SourceCitation extends React.Component {
   }
 
   copySourceCitation () {
-    document.getElementById("citation").select();
-    document.execCommand("copy");
+    const textarea = document.getElementById("citation");
+    textarea.select();
     this.setState({copied: true});
+    document.execCommand("copy");
   }
 
   render() {
 
     const copied = this.state.copied ? "Copied!" : "Copy";
-    const currentDate = new Date();
-    const sourceCitationText = `${this.props.collection.source_name} (${this.props.collection.source_abbreviation}). ${this.props.collection.name}, ${this.props.collection.acquisition_date}. Web. ${currentDate}`
-    const textAreaRows = this.state.gridLayout === 'desktop' ? "7" : "2";
-    const textAreaCols = this.state.gridLayout === 'desktop' ? "20" : "10";
+    const sourceCitationText = `${this.props.collection.source_name} (${this.props.collection.source_abbreviation}). ${this.props.collection.name}, ${this.props.collection.acquisition_date}. Web. ${this.state.date}`
+    const textAreaRows = this.state.gridLayout === 'desktop' ? "4" : "2";
 
     return (
       <div className="template-content-div">
         <div className="citation-container">
-          <div className="mdc-typography--headline5">
-            Source Citation
+          <div className="mdc-typography--subtitle1 citation-header">
+            Dataset Citation
           </div>
-          <div className="citation-style">
+          <div className="mdc-typography--subtitle2 citation-help">
             Copy the text below to cite this dataset.
           </div>
-          <textarea id="citation"
+          <textarea
+            type="text"
+            id="citation"
             className="mdc-text-field__input copy-citation"
             rows={textAreaRows}
-            columns={textAreaCols}
             value={sourceCitationText}
             readOnly>
           </textarea>

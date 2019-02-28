@@ -66,25 +66,29 @@ shared styles for collection TemplateDetails components
     // source citation component
     .citation-container {
 
-      .citation-style {
+      .citation-header {
+        font-size: 16px;
+      }
+
+      .citation-help {
+        font-size: 12px;
         margin-bottom: 10px;
       }
 
       .copy-citation {
-        color: $primary-color;
-        border: 0.5px solid $primary-color;
-        box-sizing: border-box;
-        box-shadow: 0.2px 0.2px 7px $primary-color inset;
+        color: $nest-text;
+        font-size: 12px;
+        line-height: 20px;
+        border: 0.5px solid $header-border;
         border-radius: 8px;
         margin-bottom: 10px;
         width: 100%;
         padding: 5px 10px 5px 10px;
-        outline: none;
+        overflow: hidden;
       }
 
       .copy-citation:focus {
-        border: 0.5px solid $primary-color;
-        box-shadow: 0.2px 0.2px 7px $primary-color;
+        border: 0.5px solid $nest-text;
       }
     }
     // end source citation component

@@ -3,7 +3,8 @@ import { Redirect } from 'react-router';
 import { Route, Switch } from 'react-router';
 import { matchPath } from 'react-router-dom';
 import { MDCDrawer } from "@material/drawer";
-import {MDCSnackbar} from '@material/snackbar';
+import { MDCSnackbar } from '@material/snackbar';
+import { MDCDialog } from '@material/dialog';
 
 import HistoricalAerialTemplate from './HistoricalAerialTemplate/HistoricalAerialTemplate';
 import OutsideEntityTemplate from './TnrisOutsideEntityTemplate/TnrisOutsideEntityTemplate';
@@ -30,6 +31,7 @@ export default class Catalog extends React.Component {
     this.handleShowCollectionView = this.handleShowCollectionView.bind(this);
     this.setCatalogView = this.setCatalogView.bind(this);
     this.handleToast = this.handleToast.bind(this);
+    this.handleCloseBetaNotice = this.handleCloseBetaNotice.bind(this);
     this.loadingMessage = (
       <div className="catalog-component__loading">
         <img src={loadingImage} alt="Holodeck Loading..." className="holodeck-loading-image" />
@@ -61,15 +63,20 @@ export default class Catalog extends React.Component {
     if (prevProps.visibleCollections) {
       if (this.props.view === 'catalog' || this.props.view === 'geoFilter') {
         if (prevProps.visibleCollections.length !== this.props.visibleCollections.length) {
-          this.handleToast();
+          this.handleToast(`${this.props.visibleCollections.length} datasets found`);
         }
       }
     }
   }
 
-  handleToast() {
+  handleCloseBetaNotice() {
+    this.betaDialog = new MDCDialog(document.querySelector('.mdc-dialog'));
+    this.betaDialog.foundation_.adapter_.removeClass('mdc-dialog--open');
+  }
+
+  handleToast(labelText) {
     this.snackbar = new MDCSnackbar(document.querySelector('.mdc-snackbar'));
-    this.snackbar.labelText = `${this.props.visibleCollections.length} datasets found`;
+    this.snackbar.labelText = labelText;
     this.snackbar.open();
   }
 
@@ -167,6 +174,35 @@ export default class Catalog extends React.Component {
   }
 
   render() {
+    // Here lies the beta notice dialog. To remove the notice, remove the reference to this variable
+    // in the returned codeblock below under the 'catalog-component'.
+    const betaDialog = (
+      <div className="beta-notice-dialog mdc-dialog mdc-dialog--open"
+           role="alertdialog"
+           aria-modal="true"
+           aria-labelledby="beta-warning"
+           aria-describedby="my-dialog-content">
+        <div className="mdc-dialog__container">
+          <div className="mdc-dialog__surface">
+            <h2 className="mdc-dialog__title" id="my-dialog-title">Howdy Y'all!</h2>
+            <div className="mdc-dialog__content" id="my-dialog-content">
+              {`This application is currently in beta, so mosy on over to `}<a href='https://tnris.org/'>tnris.org</a>
+              {` if you're afraid of a few little bugs. YEE-HAW!`}
+            </div>
+            <footer className="mdc-dialog__actions">
+              <button type="button"
+                      className="mdc-button mdc-dialog__button"
+                      data-mdc-dialog-action="close"
+                      onClick={this.handleCloseBetaNotice}>
+                <span className="mdc-button__label">OK</span>
+              </button>
+            </footer>
+          </div>
+        </div>
+        <div className="mdc-dialog__scrim"></div>
+      </div>
+    );
+
     const { error, loading } = this.props;
 
     if (error) {
@@ -179,6 +215,8 @@ export default class Catalog extends React.Component {
 
     return (
       <div className="catalog-component">
+
+        {betaDialog}
 
         <HeaderContainer handleToolDrawerDisplay={this.handleToolDrawerDisplay} />
 

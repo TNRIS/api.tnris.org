@@ -64,6 +64,15 @@ styles for component: Header
   .header-nav {
     height: 70px;
 
+    .shopping-cart-icon {
+      margin-left: auto;
+      padding-right: 12px;
+    }
+
+    .tool-drawer-icon {
+      padding-right: 12px;
+    }
+
     .open-drawer {
       width: calc(100% - 255px);
       -webkit-transition: width 2s; /* Safari */

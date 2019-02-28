@@ -14,8 +14,9 @@ styles for component: CollectionSearcher
 
 .search-component {
   width: 25%;
-  // left: 48px;
-  margin-left: auto;
+  position: absolute;
+  left: 50%;
+  margin-left: -12.5%;
   margin-right: auto;
   padding-top: .2em;
   padding-bottom: .2em;

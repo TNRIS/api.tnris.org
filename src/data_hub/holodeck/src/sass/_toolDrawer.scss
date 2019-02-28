@@ -7,7 +7,8 @@ styles for component: ToolDrawer
   .mdc-drawer--dismissible.mdc-drawer--open {
     display: flex;
     position: fixed;
-    top: 26px;
+    // top: 26px;
+    top: 97px;
   }
 
   .mdc-drawer {
@@ -39,7 +40,8 @@ styles for component: ToolDrawer
         background: $main-background;
         min-height: 26px;
 
-        top: 48px;
+        // top: 48px;
+        top: 120px;
       }
 
       .dataset-counter {
@@ -49,8 +51,9 @@ styles for component: ToolDrawer
       }
 
       .mdc-list-group {
-        margin-top: 70px;
-        border-top: solid 1px $header-border;
+        margin-top: 56px;
+        // margin-top: 70px;
+        // border-top: solid 1px $header-border;
         padding-top: 0;
 
         .mdc-list-group__subheader {

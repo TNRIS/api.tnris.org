@@ -187,7 +187,7 @@ export default class Catalog extends React.Component {
             <h2 className="mdc-dialog__title" id="my-dialog-title">Howdy Y'all!</h2>
             <div className="mdc-dialog__content" id="my-dialog-content">
               {`This application is currently in beta, so mosy on over to `}<a href='https://tnris.org/'>tnris.org</a>
-              {` if you're afraid of a few little bugs. YEE-HAW!`}
+              {` if you're afraid of gettin' tangled up with a few breachy bugs. YEE-HAW!`}
             </div>
             <footer className="mdc-dialog__actions">
               <button type="button"

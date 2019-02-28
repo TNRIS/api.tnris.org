@@ -33,6 +33,17 @@ styles for component: Catalog
     }
   }
 
+  .beta-notice-dialog {
+    a {
+      color: $primary-color;
+    }
+
+    button {
+      color: $nest-text;
+      font-size: 1.1rem;
+    }
+  }
+
   .catalog {
     background-color: $main-background;
 

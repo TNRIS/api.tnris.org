@@ -140,7 +140,7 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
         this.layerRef[areaType] = [];
         // set aside the api response with all available resources (downloads)
         // for this areaType
-        const areasList = this.props.resourceAreaTypes[areaType];
+        const areasList = [...new Set(this.props.resourceAreaTypes[areaType])];
         // create the layer control in the DOM
         var link = document.createElement('a');
         link.href = '#';

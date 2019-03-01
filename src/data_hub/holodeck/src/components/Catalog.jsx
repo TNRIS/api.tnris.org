@@ -191,7 +191,7 @@ export default class Catalog extends React.Component {
             </div>
             <footer className="mdc-dialog__actions">
               <button type="button"
-                      className="mdc-button mdc-dialog__button"
+                      className="mdc-button mdc-button--raised"
                       data-mdc-dialog-action="close"
                       onClick={this.handleCloseBetaNotice}>
                 <span className="mdc-button__label">OK</span>

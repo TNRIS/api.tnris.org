@@ -39,7 +39,8 @@ styles for component: Catalog
     }
 
     button {
-      color: $nest-text;
+      color: $button-text;
+      background-color: $primary-color;
       font-size: 1.1rem;
     }
   }

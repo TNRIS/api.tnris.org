@@ -29,7 +29,7 @@ styles for component: Header
     background-color: $primary-color;
     color: $button-text;
     font-family: pragmatica-web-condensed,sans-serif;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 100;
     height: auto;
     letter-spacing: 3px;
@@ -37,26 +37,47 @@ styles for component: Header
     padding: 4px;
     height: 26px;
 
-    @media (max-width: 1080px) {
-      display: none;
-    }
+    // @media (max-width: 1080px) {
+    //   font-size: 10px;
+    // }
 
     section {
       padding: 0;
+
+      // .responsive-image {
+      //   width: 100%;
+      //   height: auto;
+      //   left: 0;
+      // }
 
       .header-title__tnris {
         text-decoration: none;
         text-align: left;
         color: inherit;
-        padding-left: 10px;
+        padding-left: 5px;
+        font-weight: bold;
+
+        @media (max-width: 1130px) and (min-width: 900px) {
+          font-size: 12px;
+        }
+        @media (max-width: 899px) {
+          font-size: 10px;
+        }
       }
 
       .header-title__twdb {
         text-decoration: none;
         text-align: right;
         color: inherit;
-        font-size: 12px;
-        padding-right: 10px;
+        // font-size: 14px;
+        padding-right: 5px;
+
+        @media (max-width: 1130px) and (min-width: 900px) {
+          font-size: 12px;
+        }
+        @media (max-width: 899px) {
+          font-size: 10px;
+        }
       }
     }
   }

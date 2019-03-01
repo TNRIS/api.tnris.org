@@ -8,9 +8,17 @@ import CollectionSearcherContainer from '../containers/CollectionSearcherContain
 export default class Header extends React.Component {
   constructor(props) {
     super(props);
+    // window.innerWidth > 1050 ? this.state = {
+    //   tnrisTitle: 'Texas Natural Resources Information System',
+    //   twdbTitle: 'A Division of the Texas Water Development Board'
+    // } : this.state = {
+    //   tnrisTitle: 'Texas Natural Resources Information System',
+    //   twdbTitle: 'A TWDB Division'
+    // };
 
     this.handleOrderCartView = this.handleOrderCartView.bind(this);
     this.handleCatalogView = this.handleCatalogView.bind(this);
+    // this.handleResize = this.handleResize.bind(this);
   }
 
   componentDidMount() {
@@ -21,7 +29,27 @@ export default class Header extends React.Component {
       this.props.setViewOrderCart();
       this.props.clearPreviousUrl();
     }
+
+    // window.addEventListener("resize", this.handleResize);
   }
+
+  // componentWillUnmount() {
+  //   window.removeEventListener("resize", this.handleResize);
+  // }
+
+  // handleResize() {
+  //   if (window.innerWidth > 1050) {
+  //     this.setState({
+  //       tnrisTitle: 'Texas Natural Resources Information System',
+  //       twdbTitle: 'A Division of the Texas Water Development Board'
+  //     })
+  //   }
+  //   else {
+  //     this.setState({
+  //       twdbTitle: 'A TWDB Division'
+  //     });
+  //   }
+  // }
 
   handleOrderCartView() {
     if (window.location.pathname !== '/cart/') {
@@ -51,20 +79,23 @@ export default class Header extends React.Component {
     const toolDrawerNotification = filters.map(x => this.props.location.pathname.includes(x) ?
       (<NotificationBadge key={x} label='!' count={1} frameLength={30}/>) : '');
 
+    const twdbHeader = "A Division of the Texas Water Development Board";
+
     return (
         <header
           className={`header-component mdc-top-app-bar mdc-top-app-bar--fixed`}
           id="master-header">
           <div className="header-title mdc-top-app-bar__row">
             <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
+              {/*<img src="../images/tnris_logo_white.png" className="responsive-image" alt="" />*/}
               <a className='header-title__tnris' href="https://tnris.org/" tabIndex="0">
+                {/*this.state.tnrisTitle*/}
                 Texas Natural Resources Information System
               </a>
             </section>
             <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
-              <a
-                className='header-title__twdb' href="http://www.twdb.texas.gov/" tabIndex="0">
-                A Division of the Texas Water Development Board
+              <a id="twdb-header-text" className='header-title__twdb' href="http://www.twdb.texas.gov/" tabIndex="0">
+                {twdbHeader}
               </a>
             </section>
           </div>

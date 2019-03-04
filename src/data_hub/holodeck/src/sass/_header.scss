@@ -60,8 +60,11 @@ styles for component: Header
         @media (max-width: 1130px) and (min-width: 900px) {
           font-size: 12px;
         }
-        @media (max-width: 899px) {
+        @media (max-width: 899px) and (min-width: 500px) {
           font-size: 10px;
+        }
+        @media (max-width: 499px) {
+          font-size: 16px;
         }
       }
 
@@ -69,14 +72,16 @@ styles for component: Header
         text-decoration: none;
         text-align: right;
         color: inherit;
-        // font-size: 14px;
         padding-right: 5px;
 
         @media (max-width: 1130px) and (min-width: 900px) {
           font-size: 12px;
         }
-        @media (max-width: 899px) {
+        @media (max-width: 899px) and (min-width: 500px) {
           font-size: 10px;
+        }
+        @media (max-width: 499px) {
+          font-size: 16px;
         }
       }
     }

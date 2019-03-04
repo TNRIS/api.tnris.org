@@ -8,17 +8,17 @@ import CollectionSearcherContainer from '../containers/CollectionSearcherContain
 export default class Header extends React.Component {
   constructor(props) {
     super(props);
-    // window.innerWidth > 1050 ? this.state = {
-    //   tnrisTitle: 'Texas Natural Resources Information System',
-    //   twdbTitle: 'A Division of the Texas Water Development Board'
-    // } : this.state = {
-    //   tnrisTitle: 'Texas Natural Resources Information System',
-    //   twdbTitle: 'A TWDB Division'
-    // };
+    window.innerWidth > 500 ? this.state = {
+      tnrisTitle: 'Texas Natural Resources Information System',
+      twdbTitle: 'A Division of the Texas Water Development Board'
+    } : this.state = {
+      tnrisTitle: 'TNRIS',
+      twdbTitle: 'A TWDB Division'
+    };
 
     this.handleOrderCartView = this.handleOrderCartView.bind(this);
     this.handleCatalogView = this.handleCatalogView.bind(this);
-    // this.handleResize = this.handleResize.bind(this);
+    this.handleResize = this.handleResize.bind(this);
   }
 
   componentDidMount() {
@@ -30,26 +30,27 @@ export default class Header extends React.Component {
       this.props.clearPreviousUrl();
     }
 
-    // window.addEventListener("resize", this.handleResize);
+    window.addEventListener("resize", this.handleResize);
   }
 
-  // componentWillUnmount() {
-  //   window.removeEventListener("resize", this.handleResize);
-  // }
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.handleResize);
+  }
 
-  // handleResize() {
-  //   if (window.innerWidth > 1050) {
-  //     this.setState({
-  //       tnrisTitle: 'Texas Natural Resources Information System',
-  //       twdbTitle: 'A Division of the Texas Water Development Board'
-  //     })
-  //   }
-  //   else {
-  //     this.setState({
-  //       twdbTitle: 'A TWDB Division'
-  //     });
-  //   }
-  // }
+  handleResize() {
+    if (window.innerWidth > 500) {
+      this.setState({
+        tnrisTitle: 'Texas Natural Resources Information System',
+        twdbTitle: 'A Division of the Texas Water Development Board'
+      })
+    }
+    else {
+      this.setState({
+        tnrisTitle: 'TNRIS',
+        twdbTitle: 'A TWDB Division'
+      });
+    }
+  }
 
   handleOrderCartView() {
     if (window.location.pathname !== '/cart/') {
@@ -79,7 +80,7 @@ export default class Header extends React.Component {
     const toolDrawerNotification = filters.map(x => this.props.location.pathname.includes(x) ?
       (<NotificationBadge key={x} label='!' count={1} frameLength={30}/>) : '');
 
-    const twdbHeader = "A Division of the Texas Water Development Board";
+    // const twdbHeader = "A Division of the Texas Water Development Board";
 
     return (
         <header
@@ -89,13 +90,12 @@ export default class Header extends React.Component {
             <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
               {/*<img src="../images/tnris_logo_white.png" className="responsive-image" alt="" />*/}
               <a className='header-title__tnris' href="https://tnris.org/" tabIndex="0">
-                {/*this.state.tnrisTitle*/}
-                Texas Natural Resources Information System
+                {this.state.tnrisTitle}
               </a>
             </section>
             <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
               <a id="twdb-header-text" className='header-title__twdb' href="http://www.twdb.texas.gov/" tabIndex="0">
-                {twdbHeader}
+                {this.state.twdbTitle}
               </a>
             </section>
           </div>

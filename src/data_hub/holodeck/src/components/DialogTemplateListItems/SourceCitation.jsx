@@ -59,12 +59,12 @@ export default class SourceCitation extends React.Component {
           <textarea
             type="text"
             id="citation"
-            className="mdc-text-field__input copy-citation"
+            className="mdc-text-field__input citation"
             rows={textAreaRows}
             value={sourceCitationText}
             readOnly>
           </textarea>
-          <div className="services-link-details">
+          <div className="citation-button-container services-link-details">
             <div className="service-link-details-buttons">
               <button className="mdc-button mdc-button--raised" onClick={this.copySourceCitation}>
                 <i className="material-icons">file_copy</i>{copied}

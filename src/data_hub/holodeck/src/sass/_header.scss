@@ -1,3 +1,4 @@
+@import "breakpoints";
 /*
 styles for component: Header
 */
@@ -37,35 +38,14 @@ styles for component: Header
     padding: 4px;
     height: 26px;
 
-    // @media (max-width: 1080px) {
-    //   font-size: 10px;
-    // }
-
     section {
       padding: 0;
-
-      // .responsive-image {
-      //   width: 100%;
-      //   height: auto;
-      //   left: 0;
-      // }
 
       .header-title__tnris {
         text-decoration: none;
         text-align: left;
         color: inherit;
         padding-left: 5px;
-        font-weight: bold;
-
-        @media (max-width: 1130px) and (min-width: 900px) {
-          font-size: 12px;
-        }
-        @media (max-width: 899px) and (min-width: 500px) {
-          font-size: 10px;
-        }
-        @media (max-width: 499px) {
-          font-size: 16px;
-        }
       }
 
       .header-title__twdb {
@@ -73,15 +53,19 @@ styles for component: Header
         text-align: right;
         color: inherit;
         padding-right: 5px;
+      }
 
-        @media (max-width: 1130px) and (min-width: 900px) {
+      .title-size {
+        font-size: 14px;
+
+        @media (min-width: $breakpoint-tablet) and (max-width: $breakpoint-desktop) {
           font-size: 12px;
         }
-        @media (max-width: 899px) and (min-width: 500px) {
+        @media (min-width: $breakpoint-phone) and (max-width: $breakpoint-tablet) {
           font-size: 10px;
         }
-        @media (max-width: 499px) {
-          font-size: 16px;
+        @media (max-width: $breakpoint-phone) {
+          font-size: 14px;
         }
       }
     }

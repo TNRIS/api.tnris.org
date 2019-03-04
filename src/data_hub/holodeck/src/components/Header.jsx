@@ -3,12 +3,15 @@ import {MDCTopAppBar} from '@material/top-app-bar/index';
 import NotificationBadge from 'react-notification-badge';
 import {Effect} from 'react-notification-badge';
 
+// global sass breakpoint variables to be used in js
+import breakpoints from '../sass/_breakpoints.scss';
+
 import CollectionSearcherContainer from '../containers/CollectionSearcherContainer';
 
 export default class Header extends React.Component {
   constructor(props) {
     super(props);
-    window.innerWidth > 500 ? this.state = {
+    window.innerWidth > parseInt(breakpoints.phone, 10) ? this.state = {
       tnrisTitle: 'Texas Natural Resources Information System',
       twdbTitle: 'A Division of the Texas Water Development Board'
     } : this.state = {
@@ -29,7 +32,6 @@ export default class Header extends React.Component {
       this.props.setViewOrderCart();
       this.props.clearPreviousUrl();
     }
-
     window.addEventListener("resize", this.handleResize);
   }
 
@@ -38,11 +40,11 @@ export default class Header extends React.Component {
   }
 
   handleResize() {
-    if (window.innerWidth > 500) {
+    if (window.innerWidth > parseInt(breakpoints.phone, 10)) {
       this.setState({
         tnrisTitle: 'Texas Natural Resources Information System',
         twdbTitle: 'A Division of the Texas Water Development Board'
-      })
+      });
     }
     else {
       this.setState({
@@ -80,7 +82,14 @@ export default class Header extends React.Component {
     const toolDrawerNotification = filters.map(x => this.props.location.pathname.includes(x) ?
       (<NotificationBadge key={x} label='!' count={1} frameLength={30}/>) : '');
 
-    // const twdbHeader = "A Division of the Texas Water Development Board";
+    const appTitle = window.innerWidth > parseInt(breakpoints.tablet, 10) ? (
+          <section id="app-title" className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start" role="toolbar">
+            <div className="mdc-typography mdc-typography--headline5">
+              Data Catalog
+            </div>
+          </section>)
+          : '';
+
 
     return (
         <header
@@ -89,21 +98,21 @@ export default class Header extends React.Component {
           <div className="header-title mdc-top-app-bar__row">
             <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
               {/*<img src="../images/tnris_logo_white.png" className="responsive-image" alt="" />*/}
-              <a className='header-title__tnris' href="https://tnris.org/" tabIndex="0">
+              <a className='header-title__tnris title-size' href="https://tnris.org/" tabIndex="0">
                 {this.state.tnrisTitle}
               </a>
             </section>
             <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
-              <a id="twdb-header-text" className='header-title__twdb' href="http://www.twdb.texas.gov/" tabIndex="0">
+              <a className='header-title__twdb title-size' href="http://www.twdb.texas.gov/" tabIndex="0">
                 {this.state.twdbTitle}
               </a>
             </section>
           </div>
           <div className={`header-nav mdc-top-app-bar__row ${drawerStatusClass}`}>
+            {appTitle}
             <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
-
               <CollectionSearcherContainer />
-               {this.props.orders && Object.keys(this.props.orders).length !== 0 ?
+             {this.props.orders && Object.keys(this.props.orders).length !== 0 ?
                  <div className="shopping-cart-icon nav-button">
                    {shoppingCartCountBadge}
                   <a

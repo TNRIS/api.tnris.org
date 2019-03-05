@@ -1,0 +1,26 @@
+/*
+styles for component: CountyCoverage
+*/
+
+// only used by tnrisOrderTemplateDetails & HistoricalAerialTemplateDetails
+.county-coverage-component {
+
+  .mdc-typography--body2 {
+      color: $nest-text;
+      padding: 15px;
+  }
+
+  #county-coverage-map {
+    height: 500px;
+    margin: 0 auto;
+
+    .mapboxgl-control-container {
+      .mapboxgl-ctrl-top-left {
+        button {
+          margin-left: 0;
+          margin-right: 0;
+        }
+      }
+    }
+  }
+}

@@ -1,6 +1,5 @@
 import React from 'react';
 
-import CountyCoverageContainer from '../../containers/CountyCoverageContainer'
 import Description from '../DialogTemplateListItems/Description'
 import LidarBlurb from '../DialogTemplateListItems/LidarBlurb'
 import Metadata from '../DialogTemplateListItems/Metadata'
@@ -13,10 +12,6 @@ import Images from '../DialogTemplateListItems/Images'
 export default class TnrisDownloadTemplateDetails extends React.Component {
 
   render() {
-    const countyCoverageCard = this.props.collection.counties ? (
-                                <CountyCoverageContainer counties={this.props.collection.counties} />)
-                                : "";
-
     const imageCarousel = this.props.collection.images ? (
                         <Images
                           thumbnail={this.props.collection.thumbnail_image}
@@ -56,16 +51,12 @@ export default class TnrisDownloadTemplateDetails extends React.Component {
                               {imageCarousel}
                               {description}
                             </div>
-                            <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-12'>
-                              {countyCoverageCard}
-                            </div>
                           </div>) : (
                           <div className="mdc-layout-grid__inner">
                             <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-12'>
                               {imageCarousel}
                               <Metadata collection={this.props.collection} />
                               {description}
-                              {countyCoverageCard}
                               {lidarCard}
                               {servicesCard}
                               {supplementalDownloadsCard}

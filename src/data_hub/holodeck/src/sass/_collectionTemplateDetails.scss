@@ -283,32 +283,6 @@ shared styles for collection TemplateDetails components
     }
     // nested oeservices (outside-entity services) component - END
 
-    // nested countycoverage (map) component - BEGIN
-    // only used by tnrisOrderTemplateDetails & HistoricalAerialTemplateDetails
-    &.county-coverage {
-      padding-bottom: 15px;
-
-      .mdc-typography--body2 {
-          color: $nest-text;
-          padding: 15px;
-      }
-
-      #county-coverage-map {
-        height: 500px;
-        margin: 0 auto;
-
-        .mapboxgl-control-container {
-          .mapboxgl-ctrl-top-left {
-            button {
-              margin-left: 0;
-              margin-right: 0;
-            }
-          }
-        }
-      }
-    }
-    // nested countycoverage (map) component - END
-
     // nested sharebuttons component - BEGIN
     .share-bar {
       width: 100%;

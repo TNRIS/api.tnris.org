@@ -108,7 +108,7 @@ export default class CountyCoverage extends React.Component {
 
   render() {
     return (
-      <div className="template-content-div county-coverage">
+      <div className="county-coverage-component">
         <p className="mdc-typography--body2">
           This dataset either partly or completely covers the counties: <strong>{this.props.counties}</strong>
         </p>

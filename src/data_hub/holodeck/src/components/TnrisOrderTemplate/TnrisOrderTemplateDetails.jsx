@@ -1,6 +1,7 @@
 import React from 'react';
 
 import Description from '../DialogTemplateListItems/Description'
+import SourceCitation from '../DialogTemplateListItems/SourceCitation'
 import LidarBlurb from '../DialogTemplateListItems/LidarBlurb'
 import Metadata from '../DialogTemplateListItems/Metadata'
 import Services from '../DialogTemplateListItems/Services'
@@ -10,6 +11,34 @@ import Images from '../DialogTemplateListItems/Images'
 
 
 export default class TnrisDownloadTemplateDetails extends React.Component {
+  constructor(props) {
+    super(props)
+
+    window.innerWidth >= 1000 ? this.state = {
+      gridLayout:'desktop'
+    } : this.state = {
+      gridLayout:'mobile'
+    };
+
+    this.handleResize = this.handleResize.bind(this);
+  }
+
+  componentDidMount() {
+    window.addEventListener("resize", this.handleResize);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.handleResize);
+  }
+
+  handleResize() {
+    if (window.innerWidth >= 1000) {
+      this.setState({gridLayout:'desktop'});
+    }
+    else {
+      this.setState({gridLayout:'mobile'});
+    }
+  }
 
   render() {
     const imageCarousel = this.props.collection.images ? (
@@ -36,6 +65,10 @@ export default class TnrisDownloadTemplateDetails extends React.Component {
                           <Description collection={this.props.collection} />)
                           : "";
 
+    const sourceCitation = this.props.collection.template === 'tnris-order' ?
+                            <SourceCitation collection={this.props.collection} />
+                          : "";
+
     // using mdc classes to determine grid layout depending on screen size (desktop/tablet)
     // special case with phone or smaller device because order of components changes
     const gridLayout = window.innerWidth >= 1000 ? (
@@ -49,7 +82,14 @@ export default class TnrisDownloadTemplateDetails extends React.Component {
                             </div>
                             <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-8'>
                               {imageCarousel}
-                              {description}
+                              <div className="mdc-layout-grid__inner">
+                                <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-8'>
+                                  {description}
+                                </div>
+                                <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-4'>
+                                  {sourceCitation}
+                                </div>
+                              </div>
                             </div>
                           </div>) : (
                           <div className="mdc-layout-grid__inner">
@@ -57,6 +97,7 @@ export default class TnrisDownloadTemplateDetails extends React.Component {
                               {imageCarousel}
                               <Metadata collection={this.props.collection} />
                               {description}
+                              {sourceCitation}
                               {lidarCard}
                               {servicesCard}
                               {supplementalDownloadsCard}

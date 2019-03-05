@@ -324,10 +324,7 @@ class ChcView(models.Model):
         max_length=255
     )
     images = models.TextField(
-        'Image List'
-    )
-    description = models.TextField(
-        'Description'
+        'Sample Image URL'
     )
     products = models.TextField(
         'Products'
@@ -354,9 +351,6 @@ class ChcView(models.Model):
     )
     scanned_index_ls4_links = models.TextField(
         'Scanned Index LS4 Links'
-    )
-    sample_image_url = models.URLField(
-        'Sample Image URL'
     )
     media_type = models.TextField(
         'Media Type'

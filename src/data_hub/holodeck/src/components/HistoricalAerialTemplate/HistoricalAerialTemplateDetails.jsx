@@ -39,12 +39,15 @@ export default class TnrisDownloadTemplateDetails extends React.Component {
   }
 
   render() {
-    console.log(this.props.collection);
     const imageCarousel = this.props.collection.images ? (
                         <Images
                           thumbnail={this.props.collection.thumbnail_image}
                           images={this.props.collection.images} />)
-                        : "";
+                        : (
+                          <Images
+                            thumbnail={this.props.collection.thumbnail_image}
+                            images="" />
+                        );
 
     const productsCard = this.props.collection.products ? (
                           <HistoricalProducts products={this.props.collection.products} />)

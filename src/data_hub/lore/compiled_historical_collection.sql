@@ -14,6 +14,10 @@ SELECT historical_collection.id as collection_id,
   string_agg(distinct county.name, ', ' order by county.name) as counties,
   agency.name as source_name,
   agency.abbreviation as source_abbreviation,
+  agency.about as about,
+  agency.general_scale as general_scale,
+  agency.media_type as media_type,
+  agency.sample_image_url as sample_image_url,
   array_to_string(ARRAY(SELECT json_build_object('coverage', product.coverage,
                                  'number_of_frames', product.number_of_frames,
                                  'medium', product.medium,
@@ -57,4 +61,8 @@ LEFT JOIN agency ON agency.id=historical_collection.agency_id
 
 GROUP BY historical_collection.id,
          agency.name,
-         agency.abbreviation;
+         agency.abbreviation,
+         agency.about,
+         agency.general_scale,
+         agency.media_type,
+         agency.sample_image_url;

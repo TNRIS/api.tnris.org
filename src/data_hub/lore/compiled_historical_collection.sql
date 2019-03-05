@@ -12,8 +12,8 @@ SELECT historical_collection.id as collection_id,
   historical_collection.frames_service_url,
   historical_collection.mosaic_service_url,
   string_agg(distinct county.name, ', ' order by county.name) as counties,
-  agency.name as agency_name,
-  agency.abbreviation as agency_abbreviation,
+  agency.name as source_name,
+  agency.abbreviation as source_abbreviation,
   array_to_string(ARRAY(SELECT json_build_object('coverage', product.coverage,
                                  'number_of_frames', product.number_of_frames,
                                  'medium', product.medium,
@@ -36,12 +36,17 @@ SELECT historical_collection.id as collection_id,
   'https://s3.amazonaws.com/data.tnris.org/historical_thumbnail.jpg' as thumbnail_image,
   'Historic_Imagery' as category,
   'Historical Use,Research' as recommended_use,
+  'Public Domain (Creative Commons CC0)' as license_name,
+	'CC0' as license_abbreviation,
+	'https://creativecommons.org/publicdomain/zero/1.0/' as license_url,
   array_to_string(ARRAY(SELECT json_build_object('year', photo_index_scanned_ls4_link.year,
                                  'size', photo_index_scanned_ls4_link.size,
                                  'sheet', photo_index_scanned_ls4_link.sheet,
                                  'link', photo_index_scanned_ls4_link.link)
         FROM photo_index_scanned_ls4_link
-        WHERE photo_index_scanned_ls4_link.collection_id=historical_collection.id), ',') as scanned_index_ls4_links
+        WHERE photo_index_scanned_ls4_link.collection_id=historical_collection.id), ',') as scanned_index_ls4_links,
+  'https://s3.amazonaws.com/data.tnris.org/historical_thumbnail.jpg' as images,
+  'test' as description
 
 FROM historical_collection
 

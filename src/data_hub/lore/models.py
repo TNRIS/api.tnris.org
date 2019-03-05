@@ -301,13 +301,29 @@ class ChcView(models.Model):
     counties = models.TextField(
         'Counties'
     )
-    agency_name = models.CharField(
-        'Acquiring Agency Name',
+    source_name = models.CharField(
+        'Source Name',
         max_length=254
     )
-    agency_abbreviation = models.CharField(
-        'Acquiring Agency Abbreviation',
+    source_abbreviation = models.CharField(
+        'Source Abbreviation',
         max_length=20
+    )
+    license_name = models.TextField(
+        'License Name'
+    )
+    license_abbreviation = models.TextField(
+        'License Abbreviation'
+    )
+    license_url = models.CharField(
+        'License URL',
+        max_length=255
+    )
+    images = models.TextField(
+        'Image List'
+    )
+    description = models.TextField(
+        'Description'
     )
     products = models.TextField(
         'Products'

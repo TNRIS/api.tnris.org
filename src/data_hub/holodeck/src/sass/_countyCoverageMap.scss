@@ -4,15 +4,25 @@ styles for component: CountyCoverage
 
 // only used by tnrisOrderTemplateDetails & HistoricalAerialTemplateDetails
 .county-coverage-component {
-
-  .mdc-typography--body2 {
-      color: $nest-text;
-      padding: 15px;
-  }
+  height: 80vh;
 
   #county-coverage-map {
-    height: 500px;
-    margin: 0 auto;
+    position: absolute;
+    top: 154px;
+    bottom: 375px;
+    width: 100%;
+
+    @media (min-width: 600px) and (max-width: 1080px) {
+      top: 128px;
+    }
+
+    @media (max-width: 599px) {
+      top: 112px;
+    }
+
+    .mapboxgl-canvas {
+      height: 100% !important;
+    }
 
     .mapboxgl-control-container {
       .mapboxgl-ctrl-top-left {

@@ -16,6 +16,10 @@ class Agency(models.Model):
     name = models.CharField('Name', max_length=254, unique=True)
     abbreviation = models.CharField('Abbreviation', max_length=20, null=True,
                                     blank=True)
+    sample_image_url = models.URLField('Index Service URL', max_length=256, null=True, blank=True)
+    media_type = models.TextField(null=True, blank=True)
+    general_scale = models.TextField(null=True, blank=True)
+    about = models.TextField(null=True, blank=True)
     created = models.DateTimeField('Created', auto_now_add=True)
     last_modified = models.DateTimeField('Last Modified', auto_now=True)
 
@@ -350,6 +354,18 @@ class ChcView(models.Model):
     )
     scanned_index_ls4_links = models.TextField(
         'Scanned Index LS4 Links'
+    )
+    sample_image_url = models.URLField(
+        'Sample Image URL'
+    )
+    media_type = models.TextField(
+        'Media Type'
+    )
+    general_scale = models.TextField(
+        'General Scale'
+    )
+    about = models.TextField(
+        'About'
     )
 
     def __str__(self):

@@ -17,7 +17,7 @@ SELECT historical_collection.id as collection_id,
   agency.about as about,
   agency.general_scale as general_scale,
   agency.media_type as media_type,
-  agency.sample_image_url as sample_image_url,
+  agency.sample_image_url as images,
   array_to_string(ARRAY(SELECT json_build_object('coverage', product.coverage,
                                  'number_of_frames', product.number_of_frames,
                                  'medium', product.medium,
@@ -48,9 +48,7 @@ SELECT historical_collection.id as collection_id,
                                  'sheet', photo_index_scanned_ls4_link.sheet,
                                  'link', photo_index_scanned_ls4_link.link)
         FROM photo_index_scanned_ls4_link
-        WHERE photo_index_scanned_ls4_link.collection_id=historical_collection.id), ',') as scanned_index_ls4_links,
-  'https://s3.amazonaws.com/data.tnris.org/historical_thumbnail.jpg' as images,
-  'test' as description
+        WHERE photo_index_scanned_ls4_link.collection_id=historical_collection.id), ',') as scanned_index_ls4_links
 
 FROM historical_collection
 

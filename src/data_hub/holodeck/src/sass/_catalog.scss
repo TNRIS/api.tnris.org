@@ -1,3 +1,4 @@
+@import "breakpoints";
 /*
 styles for component: Catalog
 */
@@ -54,14 +55,6 @@ styles for component: Catalog
       .mdc-layout-grid__inner {
         padding-inline-start: unset;
       }
-    }
-
-    @media (min-width: 600px) and (max-width: 1080px) {
-      padding-top: 65px;
-    }
-
-    @media (max-width: 599px) {
-      padding-top: 57px;
     }
 
     ul {

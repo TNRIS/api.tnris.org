@@ -187,8 +187,8 @@ export default class CollectionFilter extends React.Component {
 
     const filterNotSet = "mdc-list-item filter-list-title";
 
-    const mapFilterSet = this.props.collectionFilterMapFilter.length > 0 ?
-      "mdc-list-item mdc-list-item--activated filter-list-title" : "mdc-list-item filter-list-title";
+    // const mapFilterSet = this.props.collectionFilterMapFilter.length > 0 ?
+    //   "mdc-list-item mdc-list-item--activated filter-list-title" : "mdc-list-item filter-list-title";
 
     return (
       <div id='filter-component' className='filter-component'>

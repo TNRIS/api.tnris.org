@@ -53,8 +53,8 @@ shared styles for collection base Template components
       // mobile dropdown buttons
       div.mdc-menu-surface--anchor {
         .mdc-list {
-          @include mdc-menu-surface-fill-color($primary-color);
-          @include mdc-list-item-primary-text-ink-color($button-text);
+          @include mdc-menu-surface-fill-color($main-background);
+          @include mdc-list-item-primary-text-ink-color($nest-text);
 
           i {
             margin-right: 6px;

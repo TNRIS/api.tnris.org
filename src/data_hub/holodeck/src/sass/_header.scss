@@ -61,10 +61,10 @@ styles for component: Header
         @media (min-width: $breakpoint-tablet) and (max-width: $breakpoint-desktop) {
           font-size: 12px;
         }
-        @media (min-width: $breakpoint-phone) and (max-width: $breakpoint-tablet) {
+        @media (min-width: $breakpoint-phone) and (max-width: ($breakpoint-tablet - 1)) {
           font-size: 10px;
         }
-        @media (max-width: $breakpoint-phone) {
+        @media (max-width: ($breakpoint-phone - 1)) {
           font-size: 14px;
         }
       }
@@ -73,6 +73,41 @@ styles for component: Header
 
   .header-nav {
     height: 70px;
+
+    .hidden {
+      display: none;
+    }
+
+    .show {
+      display: flex;
+    }
+
+    .search-container {
+      left: 12px;
+      top: 20px;
+      min-width: 70%;
+      padding: 4px;
+      position: relative;
+
+      @media (max-width: ($breakpoint-phone - 1)) {
+        top: 0;
+      }
+    }
+
+    .collapse-button {
+      position: absolute;
+      top: 20px;
+    }
+
+    #click-to-search {
+      left: 50px;
+    }
+
+    #app-title {
+      .no-style {
+        cursor: pointer;
+      }
+    }
 
     .nav-button {
       padding-right: 12px;

@@ -13,14 +13,28 @@ styles for component: CollectionSearcher
 }
 
 .search-component {
-  width: 25%;
+  width: 33%;
   position: absolute;
   left: 50%;
-  margin-left: -12.5%;
+  margin-left: -16.5%;
   margin-right: auto;
   padding-top: .2em;
   padding-bottom: .2em;
   overflow: unset;
+
+  @media (min-width: $breakpoint-phone) and (max-width: ($breakpoint-tablet - 1)) {
+    width: 80%;
+    position: absolute;
+    left: 5px;
+    margin: auto;
+  }
+
+  @media (max-width: ($breakpoint-phone - 1)) {
+    width: 80%;
+    position: absolute;
+    left: 12px;
+    margin: auto;
+  }
 
   .material-icons.mdc-text-field__icon {
     color: $skin-primary;
@@ -32,6 +46,10 @@ styles for component: CollectionSearcher
     border-bottom: 0;
     color: $skin-primary;
     caret-color: $skin-primary;
+
+    @media (max-width: ($breakpoint-phone - 1)) {
+      padding-left: 15px !important;
+    }
   }
 
   .suggestion-list {
@@ -51,5 +69,9 @@ styles for component: CollectionSearcher
 
   .clear-button {
     top: calc(50% - 43%);
+
+    @media (max-width: ($breakpoint-phone - 1)) {
+      margin-left: 75%;
+    }
   }
 }

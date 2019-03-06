@@ -326,6 +326,7 @@ shared styles for collection TemplateDetails components
         margin: 0 auto;
         display: table;
         padding: 0;
+        width: 100%;
 
         .product-table-header {
           font-weight: 500;
@@ -333,24 +334,17 @@ shared styles for collection TemplateDetails components
           background-color: $primary-color;
         }
 
-        li.mdc-list-item {
+        li.mdc-list-item  {
           padding-left: 0;
           padding-right: 0;
-        }
 
-        li.mdc-list-item > div {
-          display: table-cell;
-          text-align: center;
-          padding: 10px;
-          // width: 120px;
-          border: .5px solid rgba(0, 0, 0, 0.1);
-
-          @media (max-width: mdc-layout-grid-breakpoint-max(phone)) {
-            width: 64px;
-            padding: 0;
-            height: 34px;
-            line-height: 34px;
-            overflow: scroll;
+          div.cell-container {
+            width: 33%;
+            display: table-cell;
+            text-align: center;
+            padding: 10px 0;
+            border-right: .5px solid rgba(0, 0, 0, 0.1);
+            border-left: .5px solid rgba(0, 0, 0, 0.1);
           }
         }
 

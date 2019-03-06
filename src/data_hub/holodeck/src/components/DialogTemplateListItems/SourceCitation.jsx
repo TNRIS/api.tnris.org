@@ -62,6 +62,7 @@ export default class SourceCitation extends React.Component {
             className="mdc-text-field__input citation"
             rows={textAreaRows}
             value={sourceCitationText}
+            onBlur={() => this.setState({copied: false})}
             readOnly>
           </textarea>
           <div className="citation-button-container services-link-details">

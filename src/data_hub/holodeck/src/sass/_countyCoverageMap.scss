@@ -8,17 +8,9 @@ styles for component: CountyCoverage
 
   #county-coverage-map {
     position: absolute;
-    top: 154px;
+    top: 165px;
     bottom: 375px;
     width: 100%;
-
-    @media (min-width: 600px) and (max-width: 1080px) {
-      top: 128px;
-    }
-
-    @media (max-width: 599px) {
-      top: 112px;
-    }
 
     .mapboxgl-canvas {
       height: 100% !important;

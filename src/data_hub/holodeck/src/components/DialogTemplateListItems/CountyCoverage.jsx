@@ -141,6 +141,7 @@ export default class CountyCoverage extends React.Component {
   }
 
   render() {
+    window.scrollTo(0,0);
     return (
       <div className="county-coverage-component">
         <div id='county-coverage-map'></div>

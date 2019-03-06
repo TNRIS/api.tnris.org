@@ -22,6 +22,9 @@ import NotFoundContainer from '../containers/NotFoundContainer';
 import loadingImage from '../images/loading.gif';
 import noDataImage from '../images/no-data.png';
 
+// global sass breakpoint variables to be used in js
+import breakpoints from '../sass/_breakpoints.scss';
+
 export default class Catalog extends React.Component {
   constructor(props) {
     super(props);
@@ -43,7 +46,7 @@ export default class Catalog extends React.Component {
     this.props.fetchCollections();
     this.props.fetchStoredShoppingCart();
     window.addEventListener("resize", this.handleResize);
-    window.innerWidth >= 1050 ? this.props.setDismissibleDrawer() : this.props.setModalDrawer();
+    window.innerWidth >= parseInt(breakpoints.desktop, 10) ? this.props.setDismissibleDrawer() : this.props.setModalDrawer();
     window.onpopstate = (e) => {
       const theState = e.state.state;
       this.props.popBrowserStore(theState);
@@ -81,7 +84,7 @@ export default class Catalog extends React.Component {
   }
 
   handleResize() {
-    if (window.innerWidth >= 1050) {
+    if (window.innerWidth >= parseInt(breakpoints.desktop, 10)) {
       this.props.setDismissibleDrawer();
     }
     else {

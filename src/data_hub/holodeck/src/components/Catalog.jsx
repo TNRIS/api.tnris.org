@@ -35,6 +35,7 @@ export default class Catalog extends React.Component {
     this.setCatalogView = this.setCatalogView.bind(this);
     this.handleToast = this.handleToast.bind(this);
     this.handleCloseBetaNotice = this.handleCloseBetaNotice.bind(this);
+    this.chunkCatalogCards = this.chunkCatalogCards.bind(this);
     this.loadingMessage = (
       <div className="catalog-component__loading">
         <img src={loadingImage} alt="Holodeck Loading..." className="holodeck-loading-image" />
@@ -139,6 +140,33 @@ export default class Catalog extends React.Component {
 
   }
 
+  chunkCatalogCards () {
+    let chunks = []
+    let loop = 0;
+    let s = 0;
+    let e = 900;
+    while (s < this.props.visibleCollections.length) {
+      let chunk = this.props.visibleCollections.slice(s, e);
+      chunks.push(
+        <ul className="mdc-layout-grid__inner" key={loop} count={loop}>
+          {chunk.map((collectionId, index) =>
+            <li
+              className="mdc-layout-grid__cell mdc-layout-grid__cell--span-3-desktop"
+              key={collectionId}
+              idx={index}>
+              <CatalogCardContainer
+                collection={this.props.collections[collectionId]} />
+            </li>
+          )}
+        </ul>
+      )
+      loop += 1;
+      s += 900;
+      e += 900;
+    }
+    return chunks;
+  }
+
   setCatalogView() {
     const noDataDivClass = this.props.toolDrawerStatus === 'open' ?
       'no-data no-data-open' : 'no-data no-data-closed';
@@ -149,18 +177,28 @@ export default class Catalog extends React.Component {
           className="no-data-image"
           alt="No Data Available"
           title="No data available with those search terms" />
-      </div> : <div className="catalog-grid mdc-layout-grid">
-          <ul className="mdc-layout-grid__inner">
-            {this.props.visibleCollections ? this.props.visibleCollections.map(collectionId =>
-              <li
-                className="mdc-layout-grid__cell mdc-layout-grid__cell--span-3-desktop"
-                key={collectionId}>
-                <CatalogCardContainer
-                  collection={this.props.collections[collectionId]} />
-              </li>
-            ) : this.loadingMessage}
-          </ul>
-        </div>;
+      </div> :
+        (!this.props.visibleCollections
+            ? this.loadingMessage
+            : (
+              this.props.visibleCollections.length < 900
+              ? (
+                  <div className="catalog-grid mdc-layout-grid">
+                    <ul className="mdc-layout-grid__inner">
+                      {this.props.visibleCollections.map((collectionId, index) =>
+                        <li
+                          className="mdc-layout-grid__cell mdc-layout-grid__cell--span-3-desktop"
+                          key={collectionId}
+                          count={index}>
+                          <CatalogCardContainer
+                            collection={this.props.collections[collectionId]} />
+                        </li>
+                      )}
+                    </ul>
+                  </div>
+                ) : <div className="catalog-grid mdc-layout-grid">{this.chunkCatalogCards()}</div>
+              )
+        );
 
     let drawerStatusClass = 'closed-drawer';
     if (this.props.toolDrawerStatus === 'open' && this.props.toolDrawerVariant === 'dismissible') {

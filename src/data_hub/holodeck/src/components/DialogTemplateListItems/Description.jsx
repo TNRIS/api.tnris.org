@@ -86,6 +86,10 @@ export default class Description extends React.Component {
       return {__html: this.state.wikiExtract};
     }
 
+    const createMarkupDesc = () => {
+      return {__html: this.props.collection.description};
+    }
+
     const showButton = this.state.showButton ?  (
       <div className="mdc-button mdc-button--raised expand" onClick={this.toggleText}>
         <i className="material-icons">{`expand_${this.state.expandText}`}</i>
@@ -97,9 +101,7 @@ export default class Description extends React.Component {
       <div className="template-content-div">
         <div ref="descript" className={this.state.descriptClass}>
           <div dangerouslySetInnerHTML={createMarkup()} />
-          <p>
-            {this.props.collection.description}
-          </p>
+          <p dangerouslySetInnerHTML={createMarkupDesc()} ></p>
         </div>
         {showButton}
       </div>

@@ -16,7 +16,7 @@ styles for component: Footer
     // transition: width 0.3s;
   }
 
-  @media (min-width: mdc-layout-grid-breakpoint-min(desktop)) {
+  @media (min-width: $breakpoint-desktop) {
     min-height: 375px;
   }
 
@@ -56,7 +56,7 @@ styles for component: Footer
     padding-bottom: 0;
     font-weight: 400;
 
-    @media (min-width: mdc-layout-grid-breakpoint-min(desktop)) {
+    @media (min-width: $breakpoint-desktop) {
       max-width: 1170px;
     }
 
@@ -123,18 +123,13 @@ styles for component: Footer
     text-align: center;
     color: $footer-text;
 
-    @media (min-width: mdc-layout-grid-breakpoint-min(desktop)) {
+    @media (min-width: $breakpoint-desktop) {
       bottom: 0;
       left: 0;
       right: 0;
       margin: auto;
       position: absolute;
     }
-  }
-
-  // greater than tablet breakpoint = keep footer at bottom
-  @media (min-width: mdc-layout-grid-breakpoint-max(tablet)) {
-    bottom: 0;
   }
 
 }

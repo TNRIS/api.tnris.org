@@ -46,7 +46,7 @@ export default class SourceCitation extends React.Component {
 
   render() {
 
-    const copied = this.state.copied ? "Copied!" : "Copy";
+    const copied = this.state.copied ? "Copied!" : "Copy Citation";
     const sourceCitationText = `${this.props.collection.source_name} (${this.props.collection.source_abbreviation}). ${this.props.collection.name}, ${this.props.collection.acquisition_date}. Web. ${this.state.date}`
     const textAreaRows = this.state.gridLayout === 'desktop' ? "4" : "2";
 

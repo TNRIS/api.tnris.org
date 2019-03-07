@@ -1,5 +1,6 @@
 import React from 'react';
 
+import Description from '../DialogTemplateListItems/Description'
 import SourceCitation from '../DialogTemplateListItems/SourceCitation'
 import Metadata from '../DialogTemplateListItems/Metadata'
 import HistoricalProducts from '../DialogTemplateListItems/HistoricalProducts'
@@ -70,22 +71,16 @@ export default class TnrisDownloadTemplateDetails extends React.Component {
                           : "";
 
     const acquisition = this.props.collection.acquisition_date ? this.props.collection.acquisition_date.substring(0, 4) : '';
-    const acq_year = this.props.collection.template !== 'outside-entity' && this.props.collection.acquisition_date ? (
-      <span>{acquisition}</span>
-    ) : "";
 
-    const description = (
-      <div className="template-content-div">
-        {this.props.collection.about ? <p>{this.props.collection.about}</p> : ""}
-        <p>
-          Use the <strong>Order</strong> tab to submit a request to RDC and acquire digital or physical copies of this {this.props.collection.name} {acq_year} Historic Imagery dataset.
-        </p>
-      </div>
-    );
+    const collectionObj = this.props.collection;
+    let descString = this.props.collection.about ? `<p>${this.props.collection.about}</p>` : "";
+    descString += `<p>Use the <strong>Order</strong> tab to submit a request to RDC and acquire digital or physical copies of this ${this.props.collection.name} ${acquisition} dataset.</p>`
+    collectionObj.description = descString;
+
 
     const archiveAbout = (
       <div className="template-content-div">
-        <p className="mdc-typography--headline6">About the Historic Imagery Archive</p>
+        <p className="mdc-typography--headline5">About the Historic Imagery Archive</p>
         <p>
           The Historical Imagery Archive maintained by TNRIS is one of our most used and important data collections. It is comprised of over 1 million frames of photos covering all parts of Texas from dates as far back as the 1920s.
         </p>
@@ -110,7 +105,7 @@ export default class TnrisDownloadTemplateDetails extends React.Component {
                                {imageCarousel}
                                <div className="mdc-layout-grid__inner">
                                  <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-8'>
-                                   {description}
+                                   <Description collection={collectionObj} />
                                  </div>
                                  <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-4'>
                                    {sourceCitation}
@@ -122,7 +117,7 @@ export default class TnrisDownloadTemplateDetails extends React.Component {
                              <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-12'>
                                {imageCarousel}
                                <Metadata collection={this.props.collection} />
-                               {description}
+                               <Description collection={collectionObj} />
                                {sourceCitation}
                                {archiveAbout}
                                {productsCard}
@@ -134,9 +129,7 @@ export default class TnrisDownloadTemplateDetails extends React.Component {
     return (
       <div className='historical-aerial-template-details'>
         <div className='mdc-layout-grid'>
-
           {gridLayout}
-
         </div>
       </div>
     );

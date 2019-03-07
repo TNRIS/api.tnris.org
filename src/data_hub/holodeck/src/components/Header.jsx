@@ -13,8 +13,7 @@ export default class Header extends React.Component {
     super(props);
     this.state = {
       tnrisTitle: 'Texas Natural Resources Information System',
-      twdbTitle: 'A Division of the Texas Water Development Board',
-      collapse: false
+      twdbTitle: 'A Division of the Texas Water Development Board'
     }
 
     this.handleOrderCartView = this.handleOrderCartView.bind(this);
@@ -30,7 +29,9 @@ export default class Header extends React.Component {
       this.props.setViewOrderCart();
       this.props.clearPreviousUrl();
     }
+
     window.addEventListener("resize", this.handleResize);
+    this.handleResize();
   }
 
   componentWillUnmount() {
@@ -41,15 +42,13 @@ export default class Header extends React.Component {
     if (window.innerWidth < parseInt(breakpoints.phone, 10)) {
       this.setState({
         tnrisTitle: 'TNRIS',
-        twdbTitle: 'A TWDB Division',
-        collapse: true
+        twdbTitle: 'A TWDB Division'
       })
     }
     else {
       this.setState({
         tnrisTitle: 'Texas Natural Resources Information System',
-        twdbTitle: 'A Division of the Texas Water Development Board',
-        collapse: false
+        twdbTitle: 'A Division of the Texas Water Development Board'
       })
     }
   }
@@ -69,7 +68,6 @@ export default class Header extends React.Component {
   render() {
     console.log(window.innerWidth);
 
-    const phone = parseInt(breakpoints.phone, 10);
     const tablet = parseInt(breakpoints.tablet, 10);
 
     let drawerStatusClass = 'closed-drawer';
@@ -90,41 +88,10 @@ export default class Header extends React.Component {
     const appTitle = window.innerWidth >= tablet ? (
           <section id="app-title" className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start" role="toolbar">
             <div className="mdc-typography mdc-typography--headline5 no-style"
-              onClick={this.handleCatalogView}
               title="Data Catalog">
               Data Catalog
             </div>
           </section>) : '';
-
-    const alignEndSearch = window.innerWidth >= tablet ? (
-      <CollectionSearcherContainer />) : '';
-
-    const alignStartSearch = window.innerWidth >= phone && window.innerWidth < tablet ? (
-      <div className="search-container">
-        <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start" role="toolbar">
-          <CollectionSearcherContainer />
-        </section>
-      </div>) : '';
-
-    const clickToSearch = () => {
-      console.log('you clicked');
-      const showHide = document.getElementById("click-to-search");
-      const searchIcon = document.getElementById("search-icon");
-      searchIcon ? searchIcon.parentNode.removeChild(searchIcon) : '';
-      showHide.classList.contains("hidden") ? showHide.className = "show" : showHide.className = "hidden";
-    };
-
-    const collapseSearch = this.state.collapse === true ? (
-      <div className="search-container">
-        <section id="collapsed-search" className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start" role="toolbar">
-          <button className="collapse-button mdc-icon-button material-icons" onClick={clickToSearch} title="Search">
-            search
-          </button>
-          <div id="click-to-search" className="hidden search-function">
-            <CollectionSearcherContainer />
-          </div>
-        </section>
-      </div>) : '';
 
     return (
         <header
@@ -144,10 +111,8 @@ export default class Header extends React.Component {
           </div>
           <div className={`header-nav mdc-top-app-bar__row ${drawerStatusClass}`}>
             {appTitle}
-            {alignStartSearch}
-            {collapseSearch}
             <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
-              {alignEndSearch}
+              <CollectionSearcherContainer />
               {this.props.orders && Object.keys(this.props.orders).length !== 0 ?
                  <div className="shopping-cart-icon nav-button">
                    {shoppingCartCountBadge}

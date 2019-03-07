@@ -14,6 +14,10 @@ styles for component: ToolDrawer
   .mdc-drawer {
     @include mdc-drawer-surface-fill-color($main-background);
 
+    @media (max-width: $breakpoint-desktop) {
+      top: 0;
+    }
+
     .mdc-drawer__content {
 
       .mdc-list-group {
@@ -39,9 +43,12 @@ styles for component: ToolDrawer
         padding: 0 0 0 0;
         background: $main-background;
         min-height: 26px;
-
         // top: 48px;
         top: 120px;
+
+        @media (max-width: $breakpoint-desktop) {
+          top: 20px;
+        }
       }
 
       .dataset-counter {

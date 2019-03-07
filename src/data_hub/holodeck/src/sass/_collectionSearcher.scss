@@ -22,11 +22,18 @@ styles for component: CollectionSearcher
   padding-bottom: .2em;
   overflow: unset;
 
-  @media (max-width: $breakpoint-tablet) {
+  @media (min-width: $breakpoint-phone + 100) and (max-width: $breakpoint-tablet) {
+    width: 40%;
+    position: relative;
+    left: 0;
+    margin-right: 12px;
+  }
+
+  @media (max-width: $breakpoint-phone + 99) {
     width: 100%;
     position: relative;
     left: 0;
-    margin-left: 12px;
+    margin-left: 15px;
     margin-right: 12px;
   }
 

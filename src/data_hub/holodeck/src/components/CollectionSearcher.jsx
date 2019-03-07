@@ -146,7 +146,6 @@ export default class CollectionSearcher extends React.Component {
       // this.props.setViewCatalog();
       this.props.clearSelectedCollection();
     }
-
   }
 
   // updates the url to reflect the current state of the search input textField

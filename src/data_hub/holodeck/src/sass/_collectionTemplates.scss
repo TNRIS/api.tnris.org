@@ -63,7 +63,7 @@ shared styles for collection base Template components
       }
 
       // mobile: hide tab bar, display dropdown
-      @media (max-width: mdc-layout-grid-breakpoint-max(tablet)) {
+      @media (max-width: $breakpoint-tablet) {
         .mdc-tab-bar {
           display: none;
         }
@@ -78,7 +78,7 @@ shared styles for collection base Template components
       }
 
       // desktop: display tab bar, hide dropdown
-      @media (min-width: mdc-layout-grid-breakpoint-max(tablet)) {
+      @media (min-width: $breakpoint-tablet) {
         .mdc-tab-bar {
           display: block;
         }

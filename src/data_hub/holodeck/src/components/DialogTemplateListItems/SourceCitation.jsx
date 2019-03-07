@@ -1,9 +1,12 @@
 import React from 'react';
 
+// global sass breakpoint variables to be used in js
+import breakpoints from '../../sass/_breakpoints.scss';
+
 export default class SourceCitation extends React.Component {
   constructor(props) {
     super(props);
-    window.innerWidth >= 1000 ? this.state = {
+    window.innerWidth >= parseInt(breakpoints.desktop, 10) ? this.state = {
       gridLayout:'desktop',
       copied: false,
       date: new Date()
@@ -26,7 +29,7 @@ export default class SourceCitation extends React.Component {
   }
 
   handleResize() {
-    if (window.innerWidth >= 1000) {
+    if (window.innerWidth >= parseInt(breakpoints.desktop, 10)) {
       this.setState({gridLayout:'desktop'});
     }
     else {
@@ -43,7 +46,7 @@ export default class SourceCitation extends React.Component {
 
   render() {
 
-    const copied = this.state.copied ? "Copied!" : "Copy";
+    const copied = this.state.copied ? "Copied!" : "Copy Citation";
     const sourceCitationText = `${this.props.collection.source_name} (${this.props.collection.source_abbreviation}). ${this.props.collection.name}, ${this.props.collection.acquisition_date}. Web. ${this.state.date}`
     const textAreaRows = this.state.gridLayout === 'desktop' ? "4" : "2";
 

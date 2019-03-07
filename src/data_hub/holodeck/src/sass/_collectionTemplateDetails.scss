@@ -182,10 +182,6 @@ shared styles for collection TemplateDetails components
         strong {
           margin-right: 4px;
         }
-
-        @media (max-width: mdc-layout-grid-breakpoint-max(phone)) {
-          height: initial;
-        }
       }
     }
     // nested metadata list component - END
@@ -249,14 +245,6 @@ shared styles for collection TemplateDetails components
     #oe_services {
       margin: 10px;
 
-      @media (min-width: 1500px) {
-        ul {
-          columns: 2;
-          -webkit-columns: 2;
-          -moz-columns: 2;
-        }
-      }
-
       .mdc-button {
         height: auto;
         width: 100%;
@@ -317,11 +305,6 @@ shared styles for collection TemplateDetails components
     &.historical-products {
       padding-bottom: 15px;
 
-      .mdc-typography--body2 {
-          color: $nest-text;
-          padding: 15px;
-      }
-
       .product-table {
         margin: 0 auto;
         display: table;
@@ -348,7 +331,7 @@ shared styles for collection TemplateDetails components
           }
         }
 
-        @media (max-width: mdc-layout-grid-breakpoint-max(phone)) {
+        @media (max-width: $breakpoint-phone) {
           font-size: 12px;
         }
       }
@@ -376,7 +359,7 @@ shared styles for collection TemplateDetails components
               display: table-cell;
               padding: 6px;
 
-              @media (max-width: mdc-layout-grid-breakpoint-max(phone)) {
+              @media (max-width: $breakpoint-phone) {
                 width: 64px;
                 padding: 0;
                 height: 34px;
@@ -394,7 +377,7 @@ shared styles for collection TemplateDetails components
             background-color: rgba(0, 0, 0, 0.1);
           }
 
-          @media (max-width: mdc-layout-grid-breakpoint-max(phone)) {
+          @media (max-width: $breakpoint-phone) {
             font-size: 12px;
           }
         }
@@ -406,15 +389,25 @@ shared styles for collection TemplateDetails components
         #ls4-links-index-input,
         #ls4-links-mosaic-input,
         #ls4-links-frames-input {
-          color: $primary-color;
-          border-bottom-color: rgba(0, 0, 0, 0.12);
+          color: $nest-text;
+          border: 0.5px solid $primary-color;
+          box-sizing: border-box;
+          // box-shadow: 0.2px 0.2px 7px $primary-color inset;
+          // border-radius: 8px;
           margin-bottom: 10px;
-          text-align: center;
+          width: 100%;
+          padding: 12px 16px 14px 16px;
+          outline: none;
+
+          &:focus {
+            border: 0.5px solid $primary-color;
+            box-shadow: 0.2px 0.2px 7px $primary-color;
+          }
         }
 
         .ls4-links-buttons {
           display: flex;
-          justify-content: center;
+          // justify-content: center;
           align-items: center;
 
           button, a {
@@ -428,11 +421,6 @@ shared styles for collection TemplateDetails components
               margin-right: 5px;
             }
           }
-        }
-
-        @media (min-width: mdc-layout-grid-breakpoint-max(tablet)) {
-          max-width: 70%;
-          margin: 0 auto;
         }
       }
     }

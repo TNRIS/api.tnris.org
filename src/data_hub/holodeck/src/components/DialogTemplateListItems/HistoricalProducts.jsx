@@ -20,7 +20,10 @@ export default class HistoricalProducts extends React.Component {
 
     return (
       <div className="template-content-div historical-products">
-        <p className="mdc-typography--body2">
+        <div className="mdc-typography--headline5 template-content-div-header">
+          Products
+        </div>
+        <p>
           Historical imagery projects occasionally produced multiple printed photographs of the same imagery varying in scale, frame size, medium, and print type. The available printed photograph products for this dataset are listed below.
         </p>
         <ul className="mdc-list product-table">

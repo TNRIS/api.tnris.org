@@ -6,6 +6,9 @@ import ShareButtons from '../DialogTemplateListItems/ShareButtons'
 import Images from '../DialogTemplateListItems/Images'
 import OeServices from '../DialogTemplateListItems/OeServices'
 
+// global sass breakpoint variables to be used in js
+import breakpoints from '../../sass/_breakpoints.scss';
+
 export default class TnrisOutsideEntityTemplateDetails extends React.Component {
 
   render() {
@@ -17,7 +20,7 @@ export default class TnrisOutsideEntityTemplateDetails extends React.Component {
 
     // using mdc classes to determine grid layout depending on screen size (desktop/tablet)
     // special case with phone or smaller device because order of components changes
-    const gridLayout = window.innerWidth >= 1000 ? (
+    const gridLayout = window.innerWidth >= parseInt(breakpoints.desktop, 10) ? (
                           <div className="mdc-layout-grid__inner">
                             <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-4'>
                               <Metadata collection={this.props.collection} />

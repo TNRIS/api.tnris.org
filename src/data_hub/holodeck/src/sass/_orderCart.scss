@@ -24,7 +24,7 @@ styles for component: OrderCart
       .mdc-list-item {
         width: calc(100% - 16px);
 
-        @media (max-width: mdc-layout-grid-breakpoint-max(phone)) {
+        @media (max-width: $breakpoint-phone) {
           width: 100%;
           padding: 0;
         }

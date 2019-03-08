@@ -14,7 +14,7 @@ styles for component: TnrisDownloadTemplateDownload
     color: $nest-text;
     position: absolute;
     z-index: 1;
-    top: 164px;
+    top: 175px;
     right: 10px;
     border-radius: 3px;
     border: 1px solid rgba(0,0,0,0.4);
@@ -35,7 +35,7 @@ styles for component: TnrisDownloadTemplateDownload
   #tnris-download-map {
     position: absolute;
     top: 165px;
-    bottom: 375px;
+    bottom: 50px;
     width: 100%;
 
     .mapboxgl-canvas {
@@ -59,7 +59,7 @@ styles for component: TnrisDownloadTemplateDownload
     color: $nest-text;
     position: absolute;
     z-index: 2;
-    bottom: 380px;
+    bottom: 60px;
     left: 5px;
     border-radius: 3px;
     border: 1px solid rgba(0,0,0,0.4);
@@ -73,6 +73,7 @@ styles for component: TnrisDownloadTemplateDownload
     p {
       margin: 0;
       line-height: 20px;
+      max-width: 80vw;
     }
   }
 

@@ -105,6 +105,10 @@ When adding new themes you will also need to update:
       }
     }
 
+    .beta-notice-dialog a {
+      color: $tnris-blue !important;
+    }
+
     .view-container {
 
       .catalog {

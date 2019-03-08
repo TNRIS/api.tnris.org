@@ -67,7 +67,8 @@ export default class ToolDrawer extends React.Component {
                   className="mdc-button mdc-button--raised"
                   onClick={this.clearAllFilters}
                   disabled={Object.keys(this.props.collectionFilter).length < 1 &&
-                    this.props.collectionFilterMapFilter.length < 1 ? true : false}>
+                    this.props.collectionFilterMapFilter.length < 1 &&
+                    !this.props.location.pathname.includes('range') ? true : false}>
                   Clear All Filters
                 </button>
               </div>

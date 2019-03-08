@@ -46,6 +46,11 @@ styles for component: Footer
             margin: 0;
           }
         }
+
+        button {
+          background-color: $primary-color;
+          color: $button-text;
+        }
       }
 
     }

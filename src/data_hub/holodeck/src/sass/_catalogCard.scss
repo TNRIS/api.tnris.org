@@ -8,6 +8,7 @@ styles for component: CatalogCard
   box-shadow: $catalog-card-shadow;
 
   .catalog-card__headline {
+    font-family: 'Roboto Condensed', sans-serif;
     font-size: 22px;
     font-weight: 400;
     margin: 1em 0 inherit 0;

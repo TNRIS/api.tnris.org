@@ -8,10 +8,10 @@ styles for component: OrderCart
   background-color: $main-background;
 
   .order-cart-form-component {
-    @include mdc-text-field-bottom-line-color(rgba(0,0,0,.42));
-    @include mdc-text-field-label-color($primary-color);
+    @include mdc-text-field-bottom-line-color(rgba(0,0,0,0.12));
+    @include mdc-text-field-label-color($nest-text);
     @include mdc-text-field-line-ripple-color($primary-color);
-    @include mdc-text-field-textarea-stroke-color(rgba(0,0,0,.42));
+    @include mdc-text-field-textarea-stroke-color(rgba(0,0,0,.12));
 
     @include mdc-radio-ink-color($primary-color);
     @include mdc-radio-checked-stroke-color($primary-color);
@@ -100,7 +100,7 @@ styles for component: OrderCart
       background-color: initial;
       margin-bottom: 16px;
       display: flex;
-      @include mdc-select-label-color($primary-color);
+      @include mdc-select-label-color($nest-text);
       @include mdc-select-bottom-line-color(rgba(0, 0, 0, 0.12));
       @include mdc-select-focused-bottom-line-color($primary-color);
 

@@ -31,9 +31,9 @@ class OrderCartView extends React.Component {
       <div className="order-cart-view">
         <div className="mdc-top-app-bar__row">
           <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
-            <h2 className="mdc-top-app-bar__title">
+            <span className="mdc-top-app-bar__title">
               Shopping Cart
-            </h2>
+            </span>
           </section>
           <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-end">
             <button

@@ -29,7 +29,7 @@ export default class Footer extends React.Component {
 
     return (
       <div className={`footer-component ${drawerStatusClass}`} id='master-footer'>
-          <ul className="link-container">
+          <ul className="link-container" role="listbox">
 
             <li className="link-container-menu-list">
               <div className="mdc-menu-surface--anchor">
@@ -37,46 +37,30 @@ export default class Footer extends React.Component {
                      onClick={() => this.showLinkMenu('legal_link_menu')}
                      onKeyDown={(e) => this.handleKeyPress(e, 'legal_link_menu')}
                      tabIndex="0">
-                  <i className="material-icons" alt="Legal Links" title="Legal Links">gavel</i>
+                     <span>Legal</span>
                 </div>
                 <div ref="legal_link_menu" className="mdc-menu mdc-menu-surface">
-                  <ul className="mdc-list inner-menu-link-list" role="menu" aria-hidden="true">
-                    <li className="mdc-list-item" role="menuitem" tabIndex="-1">
-                      <a href="https://tnris.org/site-policies#privacy-and-security-policy" target="_blank" rel="noopener noreferrer" tabIndex="0">
+                  <ul className="mdc-list inner-menu-link-list" role="listbox" aria-hidden="true">
+                      <a className="mdc-list-item" href="https://tnris.org/site-policies#privacy-and-security-policy" target="_blank" rel="noopener noreferrer" tabIndex="0">
                         Privacy/Security Policy
                       </a>
-                    </li>
-                    <li className="mdc-list-item" role="menuitem" tabIndex="-1">
-                      <a href="https://tnris.org/site-policies#accessibility-policy" target="_blank" rel="noopener noreferrer" tabIndex="0">
+                      <a className="mdc-list-item" href="https://tnris.org/site-policies#accessibility-policy" target="_blank" rel="noopener noreferrer" tabIndex="0">
                         Accessibility
                       </a>
-                    </li>
-                    <li className="mdc-list-item" role="menuitem" tabIndex="-1">
-                      <a href="http://www.twdb.texas.gov/home/open_records.asp" target="_blank" rel="noopener noreferrer" tabIndex="0">
+                      <a className="mdc-list-item" href="http://www.twdb.texas.gov/home/open_records.asp" target="_blank" rel="noopener noreferrer" tabIndex="0">
                         Open Records Request
                       </a>
-                    </li>
-                    <li className="mdc-list-item" role="menuitem" tabIndex="-1">
-                      <a href="http://www.twdb.texas.gov/home/compact_texan.asp" target="_blank" rel="noopener noreferrer" tabIndex="0">
+                      <a className="mdc-list-item" href="http://www.twdb.texas.gov/home/compact_texan.asp" target="_blank" rel="noopener noreferrer" tabIndex="0">
                         Compact with Texans
                       </a>
-                    </li>
-                    <li className="mdc-list-item" role="menuitem" tabIndex="-1">
-                      <a href="http://www.twdb.texas.gov/home/fraud.asp" target="_blank" rel="noopener noreferrer" tabIndex="0">
+                      <a className="mdc-list-item" href="http://www.twdb.texas.gov/home/fraud.asp" target="_blank" rel="noopener noreferrer" tabIndex="0">
                         Fraud &amp; Waste
                       </a>
-                    </li>
-                    <li className="mdc-list-item" role="menuitem" tabIndex="-1">
-                      <a href="https://www.tsl.texas.gov/trail/index.html" target="_blank" rel="noopener noreferrer" tabIndex="0">TRAIL</a>
-                    </li>
-                    <li className="mdc-list-item" role="menuitem" tabIndex="-1">
-                      <a href="http://www.texas.gov" target="_blank" rel="noopener noreferrer" tabIndex="0">Texas.gov</a>
-                    </li>
-                    <li className="mdc-list-item" role="menuitem" tabIndex="-1">
-                      <a href="http://www.twdb.texas.gov" target="_blank" rel="noopener noreferrer" tabIndex="0">
-                        <abbr title="Texas Water Development Board">TWDB</abbr>
+                      <a className="mdc-list-item" href="https://www.tsl.texas.gov/trail/index.html" target="_blank" rel="noopener noreferrer" tabIndex="0">TRAIL</a>
+                      <a className="mdc-list-item" href="http://www.texas.gov" target="_blank" rel="noopener noreferrer" tabIndex="0">Texas.gov</a>
+                      <a className="mdc-list-item" href="http://www.twdb.texas.gov" target="_blank" rel="noopener noreferrer" tabIndex="0">
+                        Texas Water Development Board
                       </a>
-                    </li>
                   </ul>
                 </div>
               </div>
@@ -88,16 +72,17 @@ export default class Footer extends React.Component {
                      onClick={() => this.showLinkMenu('copyright_menu')}
                      onKeyDown={(e) => this.handleKeyPress(e, 'copyright_menu')}
                      tabIndex="0">
-                  <i className="material-icons" alt="Copyright" title="Copyright">copyright</i>
+                     <span>Copyright</span>
                 </div>
                 <div ref="copyright_menu" className="mdc-menu mdc-menu-surface">
-                  <ul className="mdc-list inner-menu-link-list" role="menu" aria-hidden="true">
+                  <ul className="mdc-list inner-menu-link-list" aria-hidden="true">
                     <p className="nested-item">
                       Content of this site © Texas Natural Resources Information System and Texas Water Development Board unless otherwise noted.
                     </p>
                     <button className="mdc-button mdc-button--raised"
                             onClick={() => this.showLinkMenu('copyright_menu')}
-                            onKeyDown={(e) => this.handleKeyPress(e, 'copyright_menu')}>
+                            onKeyDown={(e) => this.handleKeyPress(e, 'copyright_menu')}
+                            tabIndex="0">
                       <i className="material-icons" alt="Close Copyright" title="Close Copyright">close</i>
                     </button>
                   </ul>
@@ -111,10 +96,10 @@ export default class Footer extends React.Component {
                      onClick={() => this.showLinkMenu('contact_menu')}
                      onKeyDown={(e) => this.handleKeyPress(e, 'contact_menu')}
                      tabIndex="0">
-                  <i className="material-icons" alt="Contact Information" title="Contact Information">phone</i>
+                     <span>Contact</span>
                 </div>
                 <div ref="contact_menu" className="mdc-menu mdc-menu-surface">
-                  <ul className="mdc-list inner-menu-link-list" role="menu" aria-hidden="true">
+                  <ul className="mdc-list inner-menu-link-list" aria-hidden="true">
                     <div className="nested-item location-item">
                       <span><strong>Location</strong></span>
                       <address>
@@ -148,40 +133,28 @@ export default class Footer extends React.Component {
                      onClick={() => this.showLinkMenu('tnris_link_menu')}
                      onKeyDown={(e) => this.handleKeyPress(e, 'tnris_link_menu')}
                      tabIndex="0">
-                  <i className="material-icons" alt="TNRIS Links" title="TNRIS Links">web</i>
+                     <span>Contact</span>
                 </div>
                 <div ref="tnris_link_menu" className="mdc-menu mdc-menu-surface">
-                  <ul className="mdc-list inner-menu-link-list" role="menu" aria-hidden="true">
-                    <li className="mdc-list-item" role="menuitem" tabIndex="-1">
-                      <a href="https://tnris.org/maps-and-data/applications-and-utilities" target="_blank" rel="noopener noreferrer" tabIndex="0">
+                  <ul className="mdc-list inner-menu-link-list" role="listbox" aria-hidden="true">
+                      <a className="mdc-list-item" href="https://tnris.org/maps-and-data/applications-and-utilities" target="_blank" rel="noopener noreferrer" tabIndex="0">
                         Applications and Utilities
                       </a>
-                    </li>
-                    <li className="mdc-list-item" role="menuitem" tabIndex="-1">
-                      <a href="https://tnris.org/research-distribution-center" target="_blank" rel="noopener noreferrer" tabIndex="0">
+                      <a className="mdc-list-item" href="https://tnris.org/research-distribution-center" target="_blank" rel="noopener noreferrer" tabIndex="0">
                         Research &amp; Distribution
                       </a>
-                    </li>
-                    <li className="mdc-list-item" role="menuitem" tabIndex="-1">
-                      <a href="https://tnris.org/stratmap" target="_blank" rel="noopener noreferrer" tabIndex="0">
+                      <a className="mdc-list-item" href="https://tnris.org/stratmap" target="_blank" rel="noopener noreferrer" tabIndex="0">
                         StratMap Program
                       </a>
-                    </li>
-                    <li className="mdc-list-item" role="menuitem" tabIndex="-1">
-                      <a href="https://tnris.org/training" target="_blank" rel="noopener noreferrer" tabIndex="0">
+                      <a className="mdc-list-item" href="https://tnris.org/training" target="_blank" rel="noopener noreferrer" tabIndex="0">
                         Education &amp; Training
                       </a>
-                    </li>
-                    <li className="mdc-list-item" role="menuitem" tabIndex="-1">
-                      <a href="https://tnris.org/about" target="_blank" rel="noopener noreferrer" tabIndex="0">
+                      <a className="mdc-list-item" href="https://tnris.org/about" target="_blank" rel="noopener noreferrer" tabIndex="0">
                         About Us
                       </a>
-                    </li>
-                    <li className="mdc-list-item" role="menuitem" tabIndex="-1">
-                      <a href="https://tnris.org/contact" target="_blank" rel="noopener noreferrer" tabIndex="0">
+                      <a className="mdc-list-item" href="https://tnris.org/contact" target="_blank" rel="noopener noreferrer" tabIndex="0">
                         General Contact
                       </a>
-                    </li>
                   </ul>
                 </div>
               </div>

@@ -4,6 +4,10 @@ import TnrisDownloadMapNote from './TnrisDownloadMapNote';
 import mapboxgl from 'mapbox-gl';
 import styles from '../../sass/index.scss';
 import loadingImage from '../../images/loading.gif';
+
+// global sass breakpoint variables to be used in js
+import breakpoints from '../../sass/_breakpoints.scss';
+
 // the carto core api is a CDN in the app template HTML (not available as NPM package)
 // so we create a constant to represent it so it's available to the component
 const cartodb = window.cartodb;
@@ -21,6 +25,7 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
       this.layerRef = {};
       this.stateMinZoom = 5;
       this.qquadMinZoom = 8;
+      this.downloadBreakpoint = parseInt(breakpoints.download, 10);
   }
 
   componentDidMount() {
@@ -28,7 +33,9 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
     // of downloadable resources hasn't returned we won't launch it
     if (this.props.loadingResources === false && this.props.selectedCollectionResources.result.length > 0) {
       this.areaLookup = this.props.resourceAreas;
-      this.createMap();
+      if (window.innerWidth > this.downloadBreakpoint) {
+        this.createMap();
+      }
     }
     if (this.props.selectedCollectionResources.result && this.props.selectedCollectionResources.result.length === 0) {
       this.setState({resourceLength:this.props.selectedCollectionResources.result.length});
@@ -40,7 +47,9 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
     // returns, the component will update so we launch the map at that time
     if (this.props.loadingResources === false && this.props.selectedCollectionResources.result.length > 0) {
       this.areaLookup = this.props.resourceAreas;
-      this.createMap();
+      if (window.innerWidth > this.downloadBreakpoint) {
+        this.createMap();
+      }
     }
 
     if (this.props.selectedCollectionResources.result && this.props.selectedCollectionResources.result.length === 0) {
@@ -334,6 +343,24 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
   }
 
   render() {
+    if (window.innerWidth <= this.downloadBreakpoint) {
+      window.scrollTo(0,0);
+      return (
+        <div className='tnris-download-template-download'>
+          <div className="tnris-download-template-download__mobile">
+            <p>
+              Due to the average size of data downloads and the map user experience, data downloads have been
+              <strong> disabled</strong> for small browser windows and mobile devices.
+            </p>
+            <p>
+              Please visit this page with a desktop computer or increase the browser window size and refresh
+              the page to download this dataset.
+            </p>
+          </div>
+        </div>
+      )
+    }
+
     const { errorResources, loadingResources } = this.props;
     const loadingMessage = (
       <div className='tnris-download-template-download'>

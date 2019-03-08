@@ -37,7 +37,9 @@ export default class Services extends React.Component {
         <div className="services-link-details">
           <input type="text" id="service-link-details-input"
                  className="mdc-text-field__input styled-input"
-                 value={this.props.collection.wms_link} readOnly/>
+                 value={this.props.collection.wms_link}
+                 onBlur={() => this.setState({copied: false})}
+                 readOnly/>
           <div className="service-link-details-buttons">
             <button className="mdc-button mdc-button--raised" onClick={this.copyUrl}>
               <i className="material-icons">file_copy</i>{copied}

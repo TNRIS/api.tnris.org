@@ -11,13 +11,10 @@ import CollectionSearcherContainer from '../containers/CollectionSearcherContain
 export default class Header extends React.Component {
   constructor(props) {
     super(props);
-    window.innerWidth > parseInt(breakpoints.phone, 10) ? this.state = {
+    this.state = {
       tnrisTitle: 'Texas Natural Resources Information System',
       twdbTitle: 'A Division of the Texas Water Development Board'
-    } : this.state = {
-      tnrisTitle: 'TNRIS',
-      twdbTitle: 'A TWDB Division'
-    };
+    }
 
     this.handleOrderCartView = this.handleOrderCartView.bind(this);
     this.handleCatalogView = this.handleCatalogView.bind(this);
@@ -32,7 +29,9 @@ export default class Header extends React.Component {
       this.props.setViewOrderCart();
       this.props.clearPreviousUrl();
     }
+
     window.addEventListener("resize", this.handleResize);
+    this.handleResize();
   }
 
   componentWillUnmount() {
@@ -40,17 +39,17 @@ export default class Header extends React.Component {
   }
 
   handleResize() {
-    if (window.innerWidth > parseInt(breakpoints.phone, 10)) {
-      this.setState({
-        tnrisTitle: 'Texas Natural Resources Information System',
-        twdbTitle: 'A Division of the Texas Water Development Board'
-      });
-    }
-    else {
+    if (window.innerWidth < parseInt(breakpoints.phone, 10)) {
       this.setState({
         tnrisTitle: 'TNRIS',
         twdbTitle: 'A TWDB Division'
-      });
+      })
+    }
+    else {
+      this.setState({
+        tnrisTitle: 'Texas Natural Resources Information System',
+        twdbTitle: 'A Division of the Texas Water Development Board'
+      })
     }
   }
 
@@ -67,6 +66,9 @@ export default class Header extends React.Component {
   }
 
   render() {
+
+    const tablet = parseInt(breakpoints.tablet, 10);
+
     let drawerStatusClass = 'closed-drawer';
     // if (this.props.view === 'catalog' &&
     //   this.props.toolDrawerVariant === 'dismissible' &&
@@ -82,14 +84,13 @@ export default class Header extends React.Component {
     const toolDrawerNotification = filters.map(x => this.props.location.pathname.includes(x) ?
       (<NotificationBadge key={x} label='!' count={1} frameLength={30}/>) : '');
 
-    const appTitle = window.innerWidth > parseInt(breakpoints.tablet, 10) ? (
+    const appTitle = window.innerWidth >= tablet ? (
           <section id="app-title" className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start" role="toolbar">
-            <div className="mdc-typography mdc-typography--headline5">
+            <div className="mdc-typography mdc-typography--headline5 no-style"
+              title="Data Catalog">
               Data Catalog
             </div>
-          </section>)
-          : '';
-
+          </section>) : '';
 
     return (
         <header
@@ -97,12 +98,11 @@ export default class Header extends React.Component {
           id="master-header">
           <div className="header-title mdc-top-app-bar__row">
             <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
-              {/*<img src="../images/tnris_logo_white.png" className="responsive-image" alt="" />*/}
               <a className='header-title__tnris title-size' href="https://tnris.org/" tabIndex="0">
                 {this.state.tnrisTitle}
               </a>
             </section>
-            <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
+            <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-end">
               <a className='header-title__twdb title-size' href="http://www.twdb.texas.gov/" tabIndex="0">
                 {this.state.twdbTitle}
               </a>
@@ -112,7 +112,7 @@ export default class Header extends React.Component {
             {appTitle}
             <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
               <CollectionSearcherContainer />
-             {this.props.orders && Object.keys(this.props.orders).length !== 0 ?
+              {this.props.orders && Object.keys(this.props.orders).length !== 0 ?
                  <div className="shopping-cart-icon nav-button">
                    {shoppingCartCountBadge}
                   <a

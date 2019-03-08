@@ -9,12 +9,14 @@ import Supplementals from '../DialogTemplateListItems/Supplementals'
 import ShareButtons from '../DialogTemplateListItems/ShareButtons'
 import Images from '../DialogTemplateListItems/Images'
 
+// global sass breakpoint variables to be used in js
+import breakpoints from '../../sass/_breakpoints.scss';
 
 export default class TnrisDownloadTemplateDetails extends React.Component {
   constructor(props) {
     super(props)
 
-    window.innerWidth >= 1000 ? this.state = {
+    window.innerWidth >= parseInt(breakpoints.desktop, 10) ? this.state = {
       gridLayout:'desktop'
     } : this.state = {
       gridLayout:'mobile'
@@ -32,7 +34,7 @@ export default class TnrisDownloadTemplateDetails extends React.Component {
   }
 
   handleResize() {
-    if (window.innerWidth >= 1000) {
+    if (window.innerWidth >= parseInt(breakpoints.desktop, 10)) {
       this.setState({gridLayout:'desktop'});
     }
     else {

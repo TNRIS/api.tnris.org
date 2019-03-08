@@ -2,7 +2,7 @@
 
   #collection-filter-map {
     position:absolute;
-    top: 221px;
+    top: 165px;
     left: 0;
     bottom: 375px;
     width: 100%;
@@ -13,5 +13,37 @@
     right: 25px;
     bottom: 400px;
     background-color: $secondary-color;
+  }
+
+  #collection-filter-map-instructions {
+    background: $main-background;
+    color: $nest-text;
+    position: absolute;
+    z-index: 2;
+    top: 175px;
+    right: 5px;
+    border-radius: 3px;
+    border: 1px solid rgba(0,0,0,0.4);
+    padding: 6px;
+    max-width: 80vw;
+    cursor: pointer;
+
+    .close-icon {
+      cursor: pointer;
+      float: right;
+      font-size: 12px;
+    }
+
+    div.instruction-paragraph {
+      margin-top: 3px;
+      margin-bottom: 3px;
+      text-align: center;
+
+      #instruction-polygon-icon {
+        height: 18px;
+        width: 20px;
+        display: inline-flex;
+      }
+    }
   }
 }

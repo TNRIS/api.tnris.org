@@ -1,4 +1,5 @@
 import React from 'react';
+import CollectionFilterMapInstructions from './CollectionFilterMapInstructions';
 
 import mapboxgl from 'mapbox-gl';
 import MapboxDraw from '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.js';
@@ -294,6 +295,7 @@ export default class CollectionFilterMap extends React.Component {
           onClick={this.handleFilterButtonClick}>
           {this.props.collectionFilterMapFilter.length > 0 ? 'clear map filter' : 'set map filter'}
         </button>
+        <CollectionFilterMapInstructions />
       </div>
     );
   }

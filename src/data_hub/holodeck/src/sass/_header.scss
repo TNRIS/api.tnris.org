@@ -1,4 +1,3 @@
-@import "breakpoints";
 /*
 styles for component: Header
 */
@@ -61,11 +60,8 @@ styles for component: Header
         @media (min-width: $breakpoint-tablet) and (max-width: $breakpoint-desktop) {
           font-size: 12px;
         }
-        @media (min-width: $breakpoint-phone) and (max-width: $breakpoint-tablet) {
+        @media (min-width: $breakpoint-phone) and (max-width: ($breakpoint-tablet - 1)) {
           font-size: 10px;
-        }
-        @media (max-width: $breakpoint-phone) {
-          font-size: 14px;
         }
       }
     }

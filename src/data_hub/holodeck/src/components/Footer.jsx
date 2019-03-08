@@ -133,7 +133,7 @@ export default class Footer extends React.Component {
                      onClick={() => this.showLinkMenu('tnris_link_menu')}
                      onKeyDown={(e) => this.handleKeyPress(e, 'tnris_link_menu')}
                      tabIndex="0">
-                     <span>Contact</span>
+                     <span>Programs</span>
                 </div>
                 <div ref="tnris_link_menu" className="mdc-menu mdc-menu-surface">
                   <ul className="mdc-list inner-menu-link-list" role="listbox" aria-hidden="true">

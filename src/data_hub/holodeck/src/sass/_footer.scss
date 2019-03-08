@@ -7,129 +7,53 @@ styles for component: Footer
   background-color: $footer-dark;
   color: $footer-text;
   width: 100%;
+  height: 50px;
   position: absolute;
   left: 0;
   right: 0;
+  bottom: 0;
+  text-align: center;
 
-  .open-drawer {
+  .link-container {
+    margin: 0 auto;
+    padding: 0;
+
+    li.link-container-menu-list {
+      display: inline-flex;
+      padding-right: 5px;
+      padding-left: 5px;
+
+      .link-menu-control {
+        cursor: pointer;
+
+        i {
+          line-height: 50px;
+        }
+      }
+
+      .mdc-menu {
+        @include mdc-menu-width(4);
+
+        .nested-item {
+          padding-left: 16px;
+          padding-right: 16px;
+
+          &.location-item {
+            text-align: left;
+          }
+
+          p {
+            margin: 0;
+          }
+        }
+      }
+
+    }
+
+  }
+
+  &.open-drawer {
     width: calc(100% - 255px);
     // transition: width 0.3s;
   }
-
-  @media (min-width: $breakpoint-desktop) {
-    min-height: 375px;
-  }
-
-
-  .footer-component__legal {
-    background-color: $footer-light;
-    font-size: 12px;
-    text-align: center;
-    padding: 10px 0;
-    color: $footer-text;
-
-    .legal-links {
-      margin-top: 0;
-      margin-bottom: 0;
-      padding-left: 20px;
-      padding-right: 20px;
-
-      li {
-        display: inline-block;
-        padding-right: 5px;
-        padding-left: 5px;
-
-        a {
-          color: $footer-text;
-          text-decoration: none;
-
-          &:hover {
-            text-decoration: underline;
-          }
-        }
-      }
-    }
-  }
-
-  .mdc-layout-grid {
-    // padding-top: 0;
-    padding-bottom: 0;
-    font-weight: 400;
-
-    @media (min-width: $breakpoint-desktop) {
-      max-width: 1170px;
-    }
-
-    .mdc-layout-grid__cell--span-3-desktop {
-      padding-left: 15px;
-      padding-right: 15px;
-
-      h4 {
-        margin-top: 10px;
-        margin-bottom: 10px;
-        font-weight: 400;
-
-        a {
-          font-size: 18px;
-        }
-      }
-
-      ul {
-        list-style: none;
-        padding-left: 0;
-
-        li {
-          margin-bottom: 5px;
-
-          a {
-            color: $footer-text;
-          }
-
-          .footer-sub-menu {
-            padding-left: 10px;
-            border-left: 1px solid $footer-text;
-          }
-        }
-      }
-
-      a {
-        text-decoration: none;
-        color: $footer-text;
-        font-size: 14px;
-
-        &:hover {
-          text-decoration: underline;
-        }
-      }
-
-      address {
-        font-style: normal;
-        margin-bottom: 5px;
-      }
-
-      .material-icons {
-        font-size: 16px;
-        font-weight: bold;
-        margin-right: 5px;
-        position: relative;
-        top: 3px;
-      }
-    }
-  }
-
-  .footer-component__copyright {
-    font-size: 12px;
-    padding-bottom: 25px;
-    text-align: center;
-    color: $footer-text;
-
-    @media (min-width: $breakpoint-desktop) {
-      bottom: 0;
-      left: 0;
-      right: 0;
-      margin: auto;
-      position: absolute;
-    }
-  }
-
 }

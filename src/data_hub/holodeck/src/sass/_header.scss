@@ -71,7 +71,11 @@ styles for component: Header
     height: 70px;
 
     #app-title {
-      padding-left: 36px;
+      padding-left: 24px;
+
+      .custom-font {
+        font-family: 'Roboto Condensed', sans-serif;
+      }
     }
 
     .nav-button {

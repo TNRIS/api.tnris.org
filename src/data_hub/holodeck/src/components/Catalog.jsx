@@ -168,10 +168,8 @@ export default class Catalog extends React.Component {
   }
 
   setCatalogView() {
-    const noDataDivClass = this.props.toolDrawerStatus === 'open' ?
-      'no-data no-data-open' : 'no-data no-data-closed';
     const catalogCards = this.props.visibleCollections && this.props.visibleCollections.length < 1 ?
-      <div className={noDataDivClass}>
+      <div className='no-data'>
         <img
           src={noDataImage}
           className="no-data-image"

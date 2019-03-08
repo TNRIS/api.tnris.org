@@ -86,7 +86,7 @@ export default class Header extends React.Component {
 
     const appTitle = window.innerWidth >= tablet ? (
           <section id="app-title" className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start" role="toolbar">
-            <div className="mdc-typography mdc-typography--headline5 no-style"
+            <div className="custom-font mdc-typography mdc-typography--headline5 no-style"
               title="Data Catalog">
               Data Catalog
             </div>

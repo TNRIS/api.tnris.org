@@ -349,8 +349,8 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
         <div className='tnris-download-template-download'>
           <div className="tnris-download-template-download__mobile">
             <p>
-              Due to the average size of data downloads and the map user experience, data downloads have been
-              <strong> disabled</strong> for small browser windows and mobile devices.
+              Due to the average size of data downloads and in consideration of the map user experience,
+              data downloads have been <strong>disabled</strong> for small browser windows and mobile devices.
             </p>
             <p>
               Please visit this page with a desktop computer or increase the browser window size and refresh

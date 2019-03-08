@@ -33,12 +33,12 @@ styles for component: ToolDrawer
         max-height: calc(100vh - 46px);
         overflow-x: hidden;
         overflow-y: auto;
-        padding-bottom: 20px;
+        top: 100px;
+        bottom: 0;
 
         @media (max-width: $breakpoint-desktop) {
           top: 10px;
           bottom: 0;
-          padding-bottom: 0;
         }
       }
 

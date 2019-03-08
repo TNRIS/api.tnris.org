@@ -8,7 +8,9 @@ styles for component: OrderCartView
   background-color: $main-background;
 
   .mdc-top-app-bar__title {
-    color: $primary-color;
+    font-size: 1.7rem;
+    font-family: 'Roboto Condensed', sans-serif;
+    color: $nest-text;
   }
 
   .close-shopping-cart {

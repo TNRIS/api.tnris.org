@@ -78,41 +78,12 @@ styles for component: Catalog
     }
 
     .no-data {
-      top: 0;
-      position: relative;
+      margin: 0 auto;
       max-width: 600px;
 
       .no-data-image {
         width: 100%;
         height: auto;
-      }
-    }
-
-    .no-data-open {
-      margin: 0 0 0 28%;
-
-      @media (min-width: 1050px) and (max-width: 1200px) {
-        margin-left: 15%;
-      }
-      @media (min-width: 1201px) and (max-width: 1500px) {
-        margin-left: 22%;
-      }
-    }
-
-    .no-data-closed {
-      margin: 0 0 0 calc(100% / 3);
-
-      @media (max-width: 769px) {
-        margin-left: 1%;
-      }
-      @media (min-width: 770px) and (max-width: 900px) {
-        margin-left: 10%;
-      }
-      @media (min-width: 901px) and (max-width: 1049px) {
-        margin-left: 15%;
-      }
-      @media (min-width: 1050px) and (max-width: 1500px) {
-        margin-left: 25%;
       }
     }
 

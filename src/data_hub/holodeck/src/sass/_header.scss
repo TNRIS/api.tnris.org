@@ -74,6 +74,10 @@ styles for component: Header
   .header-nav {
     height: 70px;
 
+    #app-title {
+      padding-left: 36px;
+    }
+
     .nav-button {
       padding-right: 12px;
     }

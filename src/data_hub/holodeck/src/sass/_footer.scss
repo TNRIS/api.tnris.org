@@ -17,6 +17,7 @@ styles for component: Footer
   .link-container {
     margin: 0 auto;
     padding: 0;
+    font-family: 'Roboto Condensed';
 
     li.link-container-menu-list {
       display: inline-flex;
@@ -26,13 +27,17 @@ styles for component: Footer
       .link-menu-control {
         cursor: pointer;
 
-        i {
+        span {
           line-height: 50px;
         }
       }
 
       .mdc-menu {
         @include mdc-menu-width(4);
+
+        a {
+          color: $primary-color;
+        }
 
         .nested-item {
           padding-left: 16px;
@@ -45,6 +50,11 @@ styles for component: Footer
           p {
             margin: 0;
           }
+        }
+
+        button {
+          background-color: $primary-color;
+          color: $button-text;
         }
       }
 

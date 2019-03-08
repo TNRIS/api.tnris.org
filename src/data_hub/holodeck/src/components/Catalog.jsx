@@ -232,7 +232,9 @@ export default class Catalog extends React.Component {
               <button type="button"
                       className="mdc-button mdc-button--raised"
                       data-mdc-dialog-action="close"
-                      onClick={this.handleCloseBetaNotice}>
+                      onClick={this.handleCloseBetaNotice}
+                      onKeyPress={(e) => e.keyCode === 13 || e.keyCode === 32 ? this.handleCloseBetaNotice() : null}
+                      autoFocus>
                 <span className="mdc-button__label">OK</span>
               </button>
             </footer>

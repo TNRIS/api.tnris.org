@@ -52,6 +52,19 @@ export default class Catalog extends React.Component {
       const theState = e.state.state;
       this.props.popBrowserStore(theState);
     }
+    // apply theme
+    // on component mount, check localstorage for theme to apply
+    if (typeof(Storage) !== void(0)) {
+      const savedTheme = localStorage.getItem("data_theme") ? localStorage.getItem("data_theme") : null;
+      if (savedTheme) {
+        if (this.props.themeOptions.includes(savedTheme)) {
+          this.props.setColorTheme(savedTheme);
+        }
+        else {
+          localStorage.removeItem("data_theme");
+        }
+      }
+    }
   }
 
   componentWillUnmount() {

@@ -3,7 +3,8 @@ import {
 } from '../constants/colorThemeActionTypes';
 
 const initialState = {
-  theme: 'light'
+  theme: 'light',
+  themeOptions: ['light', 'dark']
 }
 
 export default function colorThemeReducer(state = initialState, action) {

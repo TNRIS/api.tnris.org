@@ -46,8 +46,10 @@ export default class Description extends React.Component {
       })
       .then(function(data) {
         const extract = data.query.pages[Object.keys(data.query.pages)[0]].extract;
-        const completeWiki = extract.concat(wikiAttribution);
-        self.setState({wikiExtract: completeWiki});
+        if (extract) {
+          const completeWiki = extract.concat(wikiAttribution);
+          self.setState({wikiExtract: completeWiki});
+        }
         self.setTextFade();
       })
     }

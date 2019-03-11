@@ -19,6 +19,7 @@ export default class Header extends React.Component {
     this.handleOrderCartView = this.handleOrderCartView.bind(this);
     this.handleCatalogView = this.handleCatalogView.bind(this);
     this.handleResize = this.handleResize.bind(this);
+    this.handleKeyPress = this.handleKeyPress.bind(this);
   }
 
   componentDidMount() {
@@ -63,6 +64,20 @@ export default class Header extends React.Component {
   handleCatalogView() {
     this.props.setViewCatalog();
     this.props.setUrl(this.props.catalogFilterUrl);
+  }
+
+  handleKeyPress (e, ref) {
+    if (e.keyCode === 13 || e.keyCode === 32) {
+      if (ref === 'cart') {
+        this.handleOrderCartView();
+      }
+      else if (ref === 'toolDrawer') {
+        this.props.handleToolDrawerDisplay();
+      }
+      else if (ref === 'catalog') {
+        this.handleCatalogView();
+      }
+    }
   }
 
   render() {
@@ -117,8 +132,10 @@ export default class Header extends React.Component {
                    {shoppingCartCountBadge}
                   <a
                     onClick={this.handleOrderCartView}
+                    onKeyDown={(e) => this.handleKeyPress(e, 'cart')}
                     className="material-icons mdc-top-app-bar__navigation-icon"
-                    title="View shopping cart">
+                    title="View shopping cart"
+                    tabIndex="3">
                     shopping_cart
                   </a>
                 </div> : ''}
@@ -127,9 +144,11 @@ export default class Header extends React.Component {
                     {toolDrawerNotification}
                     <a
                       onClick={this.props.handleToolDrawerDisplay}
+                      onKeyDown={(e) => this.handleKeyPress(e, 'toolDrawer')}
                       className="material-icons mdc-top-app-bar__navigation-icon"
                       id="tools"
-                      title={this.props.toolDrawerStatus === 'closed' ? 'Open tool drawer' : 'Close tool drawer'}>
+                      title={this.props.toolDrawerStatus === 'closed' ? 'Open tool drawer' : 'Close tool drawer'}
+                      tabIndex="3">
                       {/*{this.props.toolDrawerVariant === 'dismissible' ?
                         this.props.toolDrawerStatus === 'closed' ? 'menu' : 'tune' : 'tune'}*/}
                         tune
@@ -138,9 +157,11 @@ export default class Header extends React.Component {
                   <div className="catalog-icon nav-button">
                     <a
                       onClick={this.handleCatalogView}
+                      onKeyDown={(e) => this.handleKeyPress(e, 'catalog')}
                       className="material-icons mdc-top-app-bar__navigation-icon"
                       id="tools"
-                      title="View Catalog">
+                      title="View Catalog"
+                      tabIndex="3">
                       view_comfy
                     </a>
                   </div>}

@@ -60,7 +60,7 @@ styles for component: Header
         @media (min-width: $breakpoint-tablet) and (max-width: $breakpoint-desktop) {
           font-size: 12px;
         }
-        @media (min-width: $breakpoint-phone) and (max-width: ($breakpoint-tablet - 1)) {
+        @media (min-width: $breakpoint-phone) and (max-width: $breakpoint-tablet) {
           font-size: 10px;
         }
       }

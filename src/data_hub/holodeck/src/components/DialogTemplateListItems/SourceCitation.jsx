@@ -56,9 +56,9 @@ export default class SourceCitation extends React.Component {
           <div className="mdc-typography--subtitle1 citation-header">
             Dataset Citation
           </div>
-          <div className="mdc-typography--subtitle2 citation-help">
+          {/*}<div className="mdc-typography--subtitle2 citation-help">
             Copy the text below to cite this dataset.
-          </div>
+          </div>*/}
           <textarea
             type="text"
             id="citation"

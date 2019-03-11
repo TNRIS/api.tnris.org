@@ -44,7 +44,7 @@ export default class CollectionFilterMap extends React.Component {
         style: 'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json',
         center: this.props.collectionFilterMapCenter,
         zoom: this.props.collectionFilterMapZoom,
-        maxBounds: texasBounds, // sets texasBounds as max to prevent panning
+        // maxBounds: texasBounds, // sets texasBounds as max to prevent panning
         interactive: true
     });
     this._navControl = new mapboxgl.NavigationControl()

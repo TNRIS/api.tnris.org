@@ -20,7 +20,7 @@ export default class CollectionFilterMapInstructions extends React.Component {
       <div>
         <i className="material-icons close-icon" onClick={() => {this.setState({noteHover:false})}}>close</i>
         <div className="mdc-typography--body1 instruction-paragraph">
-          Use the 'polygon tool' &nbsp;
+          Use the polygon tool &nbsp;
           <div id="instruction-polygon-icon" className="mapbox-gl-draw_polygon"></div>&nbsp;
           in the top left corner of the map to identify a geographic area.
         </div>

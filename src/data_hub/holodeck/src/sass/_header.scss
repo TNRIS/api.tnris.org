@@ -29,17 +29,13 @@ styles for component: Header
     background-color: $primary-color;
     color: $button-text;
     font-family: pragmatica-web-condensed,sans-serif;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 100;
     height: auto;
     letter-spacing: 3px;
     text-transform: uppercase;
     padding: 4px;
     height: 26px;
-
-    @media (max-width: 1080px) {
-      display: none;
-    }
 
     section {
       padding: 0;
@@ -48,21 +44,43 @@ styles for component: Header
         text-decoration: none;
         text-align: left;
         color: inherit;
-        padding-left: 10px;
+        padding-left: 5px;
       }
 
       .header-title__twdb {
         text-decoration: none;
         text-align: right;
         color: inherit;
-        font-size: 12px;
-        padding-right: 10px;
+        padding-right: 5px;
+      }
+
+      .title-size {
+        font-size: 14px;
+
+        @media (min-width: $breakpoint-tablet) and (max-width: $breakpoint-desktop) {
+          font-size: 12px;
+        }
+        @media (min-width: $breakpoint-phone) and (max-width: $breakpoint-tablet) {
+          font-size: 10px;
+        }
       }
     }
   }
 
   .header-nav {
     height: 70px;
+
+    #app-title {
+      padding-left: 24px;
+
+      .custom-font {
+        font-family: 'Roboto Condensed', sans-serif;
+      }
+    }
+
+    .nav-button {
+      padding-right: 12px;
+    }
 
     .open-drawer {
       width: calc(100% - 255px);

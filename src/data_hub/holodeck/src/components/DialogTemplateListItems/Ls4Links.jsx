@@ -30,8 +30,11 @@ export default class Ls4Links extends React.Component {
     if (scans.length > 0) {
       scanLinks = (
         <div className="ls4-scans">
-          <p className="mdc-typography--body2">
-            This Historic Imagery dataset has scanned indexes (.tif format) available for download.
+          <div className="mdc-typography--headline5 template-content-div-header">
+            Scanned Indexes
+          </div>
+          <p>
+            This Historic Imagery dataset has scanned indexes (.tif format) available for download. Use the scanned indexes to view this collection's spatial extent and the identification numbers of the individual frames which comprise it.
           </p>
           <ul className="mdc-list">
             {scans.map((scan, index) => {
@@ -54,9 +57,9 @@ export default class Ls4Links extends React.Component {
     const indexCopied = this.state.indexCopied ? "Copied!" : "Copy URL";
     const indexUrl = this.props.index && this.props.index !== "" ? (
       <div className="ls4-links">
-        <p className="mdc-typography--body2">
-          <strong>Index WMS Service</strong>
-        </p>
+        <div className="mdc-typography--headline5 template-content-div-header">
+          Index WMS Service
+        </div>
         <input type="text" id="ls4-links-index-input"
                className="mdc-text-field__input"
                value={this.props.index} readOnly/>
@@ -71,12 +74,11 @@ export default class Ls4Links extends React.Component {
     const mosaicCopied = this.state.mosaicCopied ? "Copied!" : "Copy URL";
     const mosaicUrl = this.props.mosaic && this.props.mosaic !== "" ? (
       <div className="ls4-links">
-        <p className="mdc-typography--body2">
-          <strong>Mosaic WMS Service</strong>
-          <br />
-          <span className='mdc-typography--caption'>
-            (Comprised only of the currently scanned dataset frames for this dataset)
-          </span>
+        <div className="mdc-typography--headline5 template-content-div-header">
+          Mosaic WMS Service
+        </div>
+        <p className="mdc-typography--caption">
+          (Comprised only of the currently scanned dataset frames)
         </p>
         <input type="text" id="ls4-links-mosaic-input"
                className="mdc-text-field__input"
@@ -92,12 +94,11 @@ export default class Ls4Links extends React.Component {
     const framesCopied = this.state.framesCopied ? "Copied!" : "Copy URL";
     const framesUrl = this.props.frames && this.props.frames !== "" ? (
       <div className="ls4-links">
-        <p className="mdc-typography--body2">
-          <strong>Individual Frames WMS Service</strong>
-          <br />
-          <span className='mdc-typography--caption'>
-            (Comprised only of the currently scanned dataset frames for this dataset)
-          </span>
+        <div className="mdc-typography--headline5 template-content-div-header">
+          Individual Frames WMS Service
+        </div>
+        <p className="mdc-typography--caption">
+          (Comprised only of the currently scanned dataset frames)
         </p>
         <input type="text" id="ls4-links-frames-input"
                className="mdc-text-field__input"

@@ -22,7 +22,9 @@ shared styles for collection base Template components
 
     // collection title, show in left hand section
     .mdc-top-app-bar__title {
+      font-family: 'Roboto Condensed', sans-serif;
       font-size: 1.7rem;
+      color: $nest-text;
     }
 
     // header right hand section, tabs and dropdown - BEGIN
@@ -53,8 +55,8 @@ shared styles for collection base Template components
       // mobile dropdown buttons
       div.mdc-menu-surface--anchor {
         .mdc-list {
-          @include mdc-menu-surface-fill-color($primary-color);
-          @include mdc-list-item-primary-text-ink-color($button-text);
+          @include mdc-menu-surface-fill-color($main-background);
+          @include mdc-list-item-primary-text-ink-color($nest-text);
 
           i {
             margin-right: 6px;
@@ -63,7 +65,7 @@ shared styles for collection base Template components
       }
 
       // mobile: hide tab bar, display dropdown
-      @media (max-width: mdc-layout-grid-breakpoint-max(tablet)) {
+      @media (max-width: $breakpoint-desktop) {
         .mdc-tab-bar {
           display: none;
         }
@@ -78,7 +80,7 @@ shared styles for collection base Template components
       }
 
       // desktop: display tab bar, hide dropdown
-      @media (min-width: mdc-layout-grid-breakpoint-max(tablet)) {
+      @media (min-width: $breakpoint-desktop) {
         .mdc-tab-bar {
           display: block;
         }

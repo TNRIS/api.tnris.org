@@ -176,6 +176,28 @@ export default class Metadata extends React.Component {
       </li>
     ) : "";
 
+    const mediaType = this.props.collection.template === 'historical-aerial' && this.props.collection.media_type ? (
+      <li className="mdc-list-item">
+        <span className="mdc-list-item__text">
+          <span className="mdc-list-item__primary-text metadata-wraptext-list-item">
+            {this.props.collection.media_type}
+          </span>
+          <span className="mdc-list-item__secondary-text">Archive Media Type</span>
+        </span>
+      </li>
+    ) : "";
+
+    const generalScale = this.props.collection.template === 'historical-aerial' && this.props.collection.general_scale ? (
+      <li className="mdc-list-item">
+        <span className="mdc-list-item__text">
+          <span className="mdc-list-item__primary-text">
+            {this.props.collection.general_scale}
+          </span>
+          <span className="mdc-list-item__secondary-text">General Archive Scale</span>
+        </span>
+      </li>
+    ) : "";
+
     // const coverageExtent = this.props.collection.template !== 'outside-entity' && this.props.collection.coverage_extent ? (
     //   <li className="mdc-list-item">
     //     <span className="mdc-list-item__text">
@@ -236,6 +258,9 @@ export default class Metadata extends React.Component {
           {resolution}
           {bandTypes}
           {category}
+
+          {mediaType}
+          {generalScale}
         </ul>
       </div>
     )

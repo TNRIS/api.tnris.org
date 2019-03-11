@@ -16,6 +16,10 @@ class Agency(models.Model):
     name = models.CharField('Name', max_length=254, unique=True)
     abbreviation = models.CharField('Abbreviation', max_length=20, null=True,
                                     blank=True)
+    sample_image_url = models.URLField('Sample Image URL', max_length=256, null=True, blank=True)
+    media_type = models.TextField(null=True, blank=True)
+    general_scale = models.TextField(null=True, blank=True)
+    about = models.TextField(null=True, blank=True)
     created = models.DateTimeField('Created', auto_now_add=True)
     last_modified = models.DateTimeField('Last Modified', auto_now=True)
 
@@ -301,13 +305,26 @@ class ChcView(models.Model):
     counties = models.TextField(
         'Counties'
     )
-    agency_name = models.CharField(
-        'Acquiring Agency Name',
+    source_name = models.CharField(
+        'Source Name',
         max_length=254
     )
-    agency_abbreviation = models.CharField(
-        'Acquiring Agency Abbreviation',
+    source_abbreviation = models.CharField(
+        'Source Abbreviation',
         max_length=20
+    )
+    license_name = models.TextField(
+        'License Name'
+    )
+    license_abbreviation = models.TextField(
+        'License Abbreviation'
+    )
+    license_url = models.CharField(
+        'License URL',
+        max_length=255
+    )
+    images = models.TextField(
+        'Sample Image URL'
     )
     products = models.TextField(
         'Products'
@@ -334,6 +351,15 @@ class ChcView(models.Model):
     )
     scanned_index_ls4_links = models.TextField(
         'Scanned Index LS4 Links'
+    )
+    media_type = models.TextField(
+        'Media Type'
+    )
+    general_scale = models.TextField(
+        'General Scale'
+    )
+    about = models.TextField(
+        'About'
     )
 
     def __str__(self):

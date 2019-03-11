@@ -1,7 +1,7 @@
 import React from 'react';
 
-import CountyCoverageContainer from '../../containers/CountyCoverageContainer'
 import Description from '../DialogTemplateListItems/Description'
+import SourceCitation from '../DialogTemplateListItems/SourceCitation'
 import LidarBlurb from '../DialogTemplateListItems/LidarBlurb'
 import Metadata from '../DialogTemplateListItems/Metadata'
 import Services from '../DialogTemplateListItems/Services'
@@ -9,14 +9,40 @@ import Supplementals from '../DialogTemplateListItems/Supplementals'
 import ShareButtons from '../DialogTemplateListItems/ShareButtons'
 import Images from '../DialogTemplateListItems/Images'
 
+// global sass breakpoint variables to be used in js
+import breakpoints from '../../sass/_breakpoints.scss';
 
 export default class TnrisDownloadTemplateDetails extends React.Component {
+  constructor(props) {
+    super(props)
+
+    window.innerWidth >= parseInt(breakpoints.desktop, 10) ? this.state = {
+      gridLayout:'desktop'
+    } : this.state = {
+      gridLayout:'mobile'
+    };
+
+    this.handleResize = this.handleResize.bind(this);
+  }
+
+  componentDidMount() {
+    window.addEventListener("resize", this.handleResize);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.handleResize);
+  }
+
+  handleResize() {
+    if (window.innerWidth >= parseInt(breakpoints.desktop, 10)) {
+      this.setState({gridLayout:'desktop'});
+    }
+    else {
+      this.setState({gridLayout:'mobile'});
+    }
+  }
 
   render() {
-    const countyCoverageCard = this.props.collection.counties ? (
-                                <CountyCoverageContainer counties={this.props.collection.counties} />)
-                                : "";
-
     const imageCarousel = this.props.collection.images ? (
                         <Images
                           thumbnail={this.props.collection.thumbnail_image}
@@ -41,9 +67,13 @@ export default class TnrisDownloadTemplateDetails extends React.Component {
                           <Description collection={this.props.collection} />)
                           : "";
 
+    const sourceCitation = this.props.collection.template === 'tnris-order' ?
+                            <SourceCitation collection={this.props.collection} />
+                          : "";
+
     // using mdc classes to determine grid layout depending on screen size (desktop/tablet)
     // special case with phone or smaller device because order of components changes
-    const gridLayout = window.innerWidth >= 1000 ? (
+    const gridLayout = window.innerWidth >= parseInt(breakpoints.desktop, 10) ? (
                           <div className="mdc-layout-grid__inner">
                             <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-4'>
                               <Metadata collection={this.props.collection} />
@@ -54,10 +84,14 @@ export default class TnrisDownloadTemplateDetails extends React.Component {
                             </div>
                             <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-8'>
                               {imageCarousel}
-                              {description}
-                            </div>
-                            <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-12'>
-                              {countyCoverageCard}
+                              <div className="mdc-layout-grid__inner">
+                                <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-8'>
+                                  {description}
+                                </div>
+                                <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-4'>
+                                  {sourceCitation}
+                                </div>
+                              </div>
                             </div>
                           </div>) : (
                           <div className="mdc-layout-grid__inner">
@@ -65,7 +99,7 @@ export default class TnrisDownloadTemplateDetails extends React.Component {
                               {imageCarousel}
                               <Metadata collection={this.props.collection} />
                               {description}
-                              {countyCoverageCard}
+                              {sourceCitation}
                               {lidarCard}
                               {servicesCard}
                               {supplementalDownloadsCard}

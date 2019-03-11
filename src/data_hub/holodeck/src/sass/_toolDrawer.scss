@@ -6,13 +6,16 @@ styles for component: ToolDrawer
 
   .mdc-drawer--dismissible.mdc-drawer--open {
     display: flex;
-    // transition: display .1s;
     position: fixed;
-    top: 26px;
+    top: 97px;
   }
 
   .mdc-drawer {
     @include mdc-drawer-surface-fill-color($main-background);
+
+    @media (max-width: $breakpoint-desktop) {
+      top: 0;
+    }
 
     .mdc-drawer__content {
 
@@ -30,7 +33,13 @@ styles for component: ToolDrawer
         max-height: calc(100vh - 46px);
         overflow-x: hidden;
         overflow-y: auto;
-        padding-bottom: 20px;
+        top: 100px;
+        bottom: 0;
+
+        @media (max-width: $breakpoint-desktop) {
+          top: 10px;
+          bottom: 0;
+        }
       }
 
       .mdc-drawer__header {
@@ -39,19 +48,22 @@ styles for component: ToolDrawer
         padding: 0 0 0 0;
         background: $main-background;
         min-height: 26px;
+        top: 120px;
 
-        top: 48px;
+        @media (max-width: $breakpoint-desktop) {
+          top: 20px;
+        }
       }
 
       .dataset-counter {
+        color: $nest-text;
         text-align: center;
         height: 26px;
         line-height: 26px;
       }
 
       .mdc-list-group {
-        margin-top: 70px;
-        border-top: solid 1px $header-border;
+        margin-top: 56px;
         padding-top: 0;
 
         .mdc-list-group__subheader {

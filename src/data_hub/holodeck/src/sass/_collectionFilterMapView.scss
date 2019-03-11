@@ -2,18 +2,12 @@
 styles for component: CollectionFilterMapView
 */
 
-.filter-map-view{
+.filter-map-view {
   height: 80vh;
 
-  .instruction-header {
-    text-align: center;
-    color: $nest-text;
-    margin: 0 0 8px;;
-    padding-left: 20px;
-    padding-right: 20px;
-
-    p {
-      margin: 0;
-    }
+  h2 {
+    font-size: 1.7rem;
+    font-family: 'Roboto Condensed', sans-serif;
+    color: #444;
   }
 }

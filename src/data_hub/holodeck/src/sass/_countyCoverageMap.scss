@@ -1,0 +1,28 @@
+/*
+styles for component: CountyCoverage
+*/
+
+// only used by tnrisOrderTemplateDetails & HistoricalAerialTemplateDetails
+.county-coverage-component {
+  height: 80vh;
+
+  #county-coverage-map {
+    position: absolute;
+    top: 165px;
+    bottom: 50px;
+    width: 100%;
+
+    .mapboxgl-canvas {
+      height: 100% !important;
+    }
+
+    .mapboxgl-control-container {
+      .mapboxgl-ctrl-top-left {
+        button {
+          margin-left: 0;
+          margin-right: 0;
+        }
+      }
+    }
+  }
+}

@@ -1,6 +1,7 @@
 import React from 'react';
 
 import Description from '../DialogTemplateListItems/Description'
+import SourceCitation from '../DialogTemplateListItems/SourceCitation'
 import LidarBlurb from '../DialogTemplateListItems/LidarBlurb'
 import Metadata from '../DialogTemplateListItems/Metadata'
 import Services from '../DialogTemplateListItems/Services'
@@ -8,12 +9,14 @@ import Supplementals from '../DialogTemplateListItems/Supplementals'
 import ShareButtons from '../DialogTemplateListItems/ShareButtons'
 import Images from '../DialogTemplateListItems/Images'
 
+// global sass breakpoint variables to be used in js
+import breakpoints from '../../sass/_breakpoints.scss';
 
 export default class TnrisDownloadTemplateDetails extends React.Component {
   constructor(props) {
     super(props)
 
-    window.innerWidth >= 1000 ? this.state = {
+    window.innerWidth >= parseInt(breakpoints.desktop, 10) ? this.state = {
       gridLayout:'desktop'
     } : this.state = {
       gridLayout:'mobile'
@@ -31,7 +34,7 @@ export default class TnrisDownloadTemplateDetails extends React.Component {
   }
 
   handleResize() {
-    if (window.innerWidth >= 1000) {
+    if (window.innerWidth >= parseInt(breakpoints.desktop, 10)) {
       this.setState({gridLayout:'desktop'});
     }
     else {
@@ -64,33 +67,46 @@ export default class TnrisDownloadTemplateDetails extends React.Component {
                           <Description collection={this.props.collection} />)
                           : "";
 
+    const sourceCitation = this.props.collection.template === 'tnris-download' ?
+                            <SourceCitation collection={this.props.collection} />
+                          : "";
+
     // using mdc classes to determine grid layout depending on screen size (desktop/tablet)
     // special case with phone or smaller device because order of components changes
     const gridLayout = this.state.gridLayout === 'desktop' ? (
-                          <div className="mdc-layout-grid__inner">
-                            <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-4'>
-                              <Metadata collection={this.props.collection} />
-                              {lidarCard}
-                              {servicesCard}
-                              {supplementalDownloadsCard}
-                              <ShareButtons />
+                        <div className="mdc-layout-grid__inner">
+                          <div className="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">
+                            <Metadata collection={this.props.collection} />
+                            {lidarCard}
+                            {servicesCard}
+                            {supplementalDownloadsCard}
+                            <ShareButtons />
+                          </div>
+                          <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-8'>
+                            {imageCarousel}
+                            <div className="mdc-layout-grid__inner">
+                              <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-8'>
+                                {description}
+                              </div>
+                              <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-4'>
+                                {sourceCitation}
+                              </div>
                             </div>
-                            <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-8'>
-                              {imageCarousel}
-                              {description}
-                            </div>
-                          </div>) : (
-                          <div className="mdc-layout-grid__inner">
-                            <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-12'>
-                              {imageCarousel}
-                              <Metadata collection={this.props.collection} />
-                              {description}
-                              {lidarCard}
-                              {servicesCard}
-                              {supplementalDownloadsCard}
-                              <ShareButtons />
-                            </div>
-                          </div>);
+                          </div>
+                        </div>) : (
+                        <div className="mdc-layout-grid__inner">
+                          <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-12'>
+                            {imageCarousel}
+                            <Metadata collection={this.props.collection} />
+                            {description}
+                            {sourceCitation}
+                            {lidarCard}
+                            {servicesCard}
+                            {supplementalDownloadsCard}
+                            <ShareButtons />
+                          </div>
+                        </div>);
+
 
     return (
       <div className='tnris-download-template-details'>

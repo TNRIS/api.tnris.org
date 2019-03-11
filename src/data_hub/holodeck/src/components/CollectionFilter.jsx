@@ -183,7 +183,9 @@ export default class CollectionFilter extends React.Component {
   }
 
   render() {
-    const filterSet = this.props.collectionFilterMapFilter.length > 0 ? "mdc-list-item mdc-list-item--activated filter-list-title" : "mdc-list-item filter-list-title";
+    const filterSet = "mdc-list-item filter-list-title mdc-list-item--activated";
+
+    const filterNotSet = "mdc-list-item filter-list-title";
 
     return (
       <div id='filter-component' className='filter-component'>
@@ -191,24 +193,21 @@ export default class CollectionFilter extends React.Component {
           {
             Object.keys(this.props.collectionFilterChoices).map(choice =>
               <li key={choice}>
-                <div
-                  className='mdc-list-item filter-list-title'
-                  id={`${choice}-title`}
-                  onClick={e => this.handleOpenFilterMenu(e)}
-                  onKeyDown={(e) => this.handleKeyPress(e)}
-                  tabIndex="0">
-                  {`by ${choice.replace(/_/, ' ')}`}
-                  <i
-                    className='mdc-list-item__meta material-icons'
-                    id={`${choice}-expansion-icon`}>expand_more</i>
+                <div className={Object.keys(this.props.collectionFilter).includes(choice) ? filterSet : filterNotSet}
+                     id={`${choice}-title`}
+                     onClick={e => this.handleOpenFilterMenu(e)}
+                     onKeyDown={(e) => this.handleKeyPress(e)}
+                     tabIndex="0">
+                     {`by ${choice.replace(/_/, ' ')}`}
+                  <i className='mdc-list-item__meta material-icons'
+                     id={`${choice}-expansion-icon`}>expand_more</i>
                 </div>
                   <ul className='mdc-list hide-filter-list' id={`${choice}-list`}>
                     {
                       this.props.collectionFilterChoices[choice].map((choiceValue, i) =>{
                         const labelValue = choiceValue.replace(/_/g, ' ');
-                        return (<li
-                          className='mdc-list-item'
-                          key={choiceValue}>
+                        return (<li className='mdc-list-item'
+                                    key={choiceValue}>
                           <div className='mdc-form-field'>
                             <div className='mdc-checkbox'>
                               <input type='checkbox'
@@ -240,12 +239,12 @@ export default class CollectionFilter extends React.Component {
             )
           }
           <li key='filter-map-button'>
-            <div className={filterSet}
-               id='filter-map-button'
-               onClick={() => this.showGeoFilter()}
-               onKeyDown={(e) => this.handleKeyPress(e)}
-               tabIndex="0"     >
-               by geography
+            <div className={this.props.collectionFilterMapFilter.length > 0 ? filterSet : filterNotSet}
+                 id='filter-map-button'
+                 onClick={() => this.showGeoFilter()}
+                 onKeyDown={(e) => this.handleKeyPress(e)}
+                 tabIndex="0">
+                 by geography
             </div>
           </li>
         </ul>

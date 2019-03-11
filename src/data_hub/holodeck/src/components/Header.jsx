@@ -3,14 +3,22 @@ import {MDCTopAppBar} from '@material/top-app-bar/index';
 import NotificationBadge from 'react-notification-badge';
 import {Effect} from 'react-notification-badge';
 
+// global sass breakpoint variables to be used in js
+import breakpoints from '../sass/_breakpoints.scss';
+
 import CollectionSearcherContainer from '../containers/CollectionSearcherContainer';
 
 export default class Header extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      tnrisTitle: 'Texas Natural Resources Information System',
+      twdbTitle: 'A Division of the Texas Water Development Board'
+    }
 
     this.handleOrderCartView = this.handleOrderCartView.bind(this);
     this.handleCatalogView = this.handleCatalogView.bind(this);
+    this.handleResize = this.handleResize.bind(this);
   }
 
   componentDidMount() {
@@ -20,6 +28,28 @@ export default class Header extends React.Component {
     if (this.props.location.pathname === "/cart/") {
       this.props.setViewOrderCart();
       this.props.clearPreviousUrl();
+    }
+
+    window.addEventListener("resize", this.handleResize);
+    this.handleResize();
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.handleResize);
+  }
+
+  handleResize() {
+    if (window.innerWidth < parseInt(breakpoints.phone, 10)) {
+      this.setState({
+        tnrisTitle: 'TNRIS',
+        twdbTitle: 'A TWDB Division'
+      })
+    }
+    else {
+      this.setState({
+        tnrisTitle: 'Texas Natural Resources Information System',
+        twdbTitle: 'A Division of the Texas Water Development Board'
+      })
     }
   }
 
@@ -36,32 +66,31 @@ export default class Header extends React.Component {
   }
 
   render() {
+
+    const tablet = parseInt(breakpoints.tablet, 10);
+
     let drawerStatusClass = 'closed-drawer';
-    if (this.props.view === 'catalog' &&
-      this.props.toolDrawerVariant === 'dismissible' &&
-      this.props.toolDrawerStatus === 'open') {
-      drawerStatusClass = 'open-drawer';
-    }
+    // if (this.props.view === 'catalog' &&
+    //   this.props.toolDrawerVariant === 'dismissible' &&
+    //   this.props.toolDrawerStatus === 'open') {
+    //   drawerStatusClass = 'open-drawer';
+    // }
 
     const shoppingCartCountBadge = Object.keys(this.props.orders).length > 0 ? (
       <NotificationBadge count={Object.keys(this.props.orders).length} effect={Effect.SCALE} frameLength={30}/>
     ) : '';
 
     const filters = ['filter', 'geo', 'sort', 'range'];
-    const toolDrawerNotification = this.props.toolDrawerStatus === 'closed' &&
-      filters.map(x => this.props.location.pathname.includes(x) ? (
-      <NotificationBadge key={x} label='!' count={1} frameLength={30}/>
-    ) : '');
+    const toolDrawerNotification = filters.map(x => this.props.location.pathname.includes(x) ?
+      (<NotificationBadge key={x} label='!' count={1} frameLength={30}/>) : '');
 
-    const goToCatalogView = this.props.view !== 'catalog' ? (
-      <a
-        onClick={this.handleCatalogView}
-        className="material-icons mdc-top-app-bar__navigation-icon"
-        id="tools"
-        title="View Catalog">
-        view_comfy
-      </a>
-    ) : '';
+    const appTitle = window.innerWidth >= tablet ? (
+          <section id="app-title" className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start" role="toolbar">
+            <div className="custom-font mdc-typography mdc-typography--headline5 no-style"
+              title="Data Catalog">
+              Data Catalog
+            </div>
+          </section>) : '';
 
     return (
         <header
@@ -69,23 +98,22 @@ export default class Header extends React.Component {
           id="master-header">
           <div className="header-title mdc-top-app-bar__row">
             <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
-              <a className='header-title__tnris' href="https://tnris.org/" tabIndex="0">
-                Texas Natural Resources Information System
+              <a className='header-title__tnris title-size' href="https://tnris.org/" tabIndex="0">
+                {this.state.tnrisTitle}
               </a>
             </section>
-            <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
-              <a
-                className='header-title__twdb' href="http://www.twdb.texas.gov/" tabIndex="0">
-                A Division of the Texas Water Development Board
+            <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-end">
+              <a className='header-title__twdb title-size' href="http://www.twdb.texas.gov/" tabIndex="0">
+                {this.state.twdbTitle}
               </a>
             </section>
           </div>
           <div className={`header-nav mdc-top-app-bar__row ${drawerStatusClass}`}>
-            <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start" role="toolbar">
-              {goToCatalogView}
+            {appTitle}
+            <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
               <CollectionSearcherContainer />
-               {this.props.orders && Object.keys(this.props.orders).length !== 0 ?
-                 <div>
+              {this.props.orders && Object.keys(this.props.orders).length !== 0 ?
+                 <div className="shopping-cart-icon nav-button">
                    {shoppingCartCountBadge}
                   <a
                     onClick={this.handleOrderCartView}
@@ -95,17 +123,27 @@ export default class Header extends React.Component {
                   </a>
                 </div> : ''}
                 {this.props.view === 'catalog' ?
-                  <div>
+                  <div className="tool-drawer-icon nav-button">
                     {toolDrawerNotification}
                     <a
                       onClick={this.props.handleToolDrawerDisplay}
                       className="material-icons mdc-top-app-bar__navigation-icon"
                       id="tools"
                       title={this.props.toolDrawerStatus === 'closed' ? 'Open tool drawer' : 'Close tool drawer'}>
-                      {this.props.toolDrawerVariant === 'dismissible' ?
-                        this.props.toolDrawerStatus === 'closed' ? 'tune' : 'keyboard_arrow_right' : 'tune'}
+                      {/*{this.props.toolDrawerVariant === 'dismissible' ?
+                        this.props.toolDrawerStatus === 'closed' ? 'menu' : 'tune' : 'tune'}*/}
+                        tune
                     </a>
-                  </div> : null}
+                  </div> :
+                  <div className="catalog-icon nav-button">
+                    <a
+                      onClick={this.handleCatalogView}
+                      className="material-icons mdc-top-app-bar__navigation-icon"
+                      id="tools"
+                      title="View Catalog">
+                      view_comfy
+                    </a>
+                  </div>}
             </section>
           </div>
         </header>

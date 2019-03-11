@@ -15,11 +15,13 @@ CURRENTLY: light
 // need to set the primary globally so the theme chooser has access to them all
 // these won't be overwritten
 $default-theme-primary: white;
-$dark-theme-primary: #282828;
+$dark-theme-primary: #222;
+
+$tnris-blue: #1E8DC1;
 
 // set the rest of them
 // these will all be overwritten
-$primary-color: #1E8DC1;
+$primary-color: $tnris-blue;
 $secondary-color: #BADBFF;
 $button-text: white;
 
@@ -70,9 +72,9 @@ When adding new themes you will also need to update:
   $secondary-color: #999999;
   $button-text: lightgray;
 
-  $main-background: dimgray;
+  $main-background: #383838;
   $nest-text: #ededed;
-  $nest-text-subtle: lightgray;
+  $nest-text-subtle: #555;
 
   $search-background: $secondary-color;
   $header-border: $nest-text-subtle;
@@ -92,6 +94,67 @@ When adding new themes you will also need to update:
 
   body {
     background-color: $main-background;
+
+    .search-component {
+      .search-input {
+        background-color: #333;
+      }
+
+      ::placeholder {
+        color: $nest-text-subtle !important;
+      }
+    }
+
+    .beta-notice-dialog a {
+      color: $tnris-blue !important;
+    }
+
+    .view-container {
+
+      .catalog {
+        // background-color: $dark-theme-primary;
+      }
+
+      .mdc-drawer {
+        border-left-color: $nest-text-subtle;
+
+        .mdc-list-item--activated {
+          color: $tnris-blue;
+          background-color: $main-background;
+        }
+      }
+
+      a {
+      color: $tnris-blue !important;
+      }
+
+      li {
+        border-bottom-color: $nest-text-subtle !important;
+
+        .mdc-list-item__secondary-text {
+          color: $nest-text;
+        }
+      }
+
+      // desktop tabs for collection template headers
+      div.mdc-tab-bar {
+        .mdc-tab:not(.mdc-tab--active) {
+          span {
+            color: grey !important;
+          }
+        }
+      }
+
+      .contact-tnris-form-component {
+        .mdc-text-field {
+          border-bottom-color: $nest-text-subtle;
+        }
+
+        .mdc-select:not(.mdc-select--disabled) {
+          @include mdc-select-bottom-line-color($nest-text-subtle);
+        }
+      }
+    }
   }
 
   @import 'componentSassImporter';

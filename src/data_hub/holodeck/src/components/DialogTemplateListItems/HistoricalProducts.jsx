@@ -20,20 +20,23 @@ export default class HistoricalProducts extends React.Component {
 
     return (
       <div className="template-content-div historical-products">
-        <p className="mdc-typography--body2">
+        <div className="mdc-typography--headline5 template-content-div-header">
+          Products
+        </div>
+        <p>
           Historical imagery projects occasionally produced multiple printed photographs of the same imagery varying in scale, frame size, medium, and print type. The available printed photograph products for this dataset are listed below.
         </p>
         <ul className="mdc-list product-table">
             <li className="mdc-list-item product-table-header">
-              <div>Product #</div>
-              <div>Medium</div>
-              <div>Print Type</div>
+              <div className="cell-container">Product #</div>
+              <div className="cell-container">Medium</div>
+              <div className="cell-container">Print Type</div>
             </li>
             {uniqueProducts.map((product, index) =>
               <li key={product} className="mdc-list-item">
-                <div>{index + 1}</div>
-                <div>{product.split(",")[0]}</div>
-                <div>{product.split(",")[1]}</div>
+                <div className="cell-container">{index + 1}</div>
+                <div className="cell-container">{product.split(",")[0]}</div>
+                <div className="cell-container">{product.split(",")[1]}</div>
               </li>
             )}
         </ul>

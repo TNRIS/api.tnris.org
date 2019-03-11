@@ -14,7 +14,7 @@ styles for component: TnrisDownloadTemplateDownload
     color: $nest-text;
     position: absolute;
     z-index: 1;
-    top: 164px;
+    top: 175px;
     right: 10px;
     border-radius: 3px;
     border: 1px solid rgba(0,0,0,0.4);
@@ -34,17 +34,9 @@ styles for component: TnrisDownloadTemplateDownload
 
   #tnris-download-map {
     position: absolute;
-    top: 154px;
-    bottom: 0;
+    top: 165px;
+    bottom: 50px;
     width: 100%;
-
-    @media (min-width: 600px) and (max-width: 1080px) {
-      top: 128px;
-    }
-
-    @media (max-width: 599px) {
-      top: 112px;
-    }
 
     .mapboxgl-canvas {
       height: 100% !important;
@@ -67,7 +59,7 @@ styles for component: TnrisDownloadTemplateDownload
     color: $nest-text;
     position: absolute;
     z-index: 2;
-    bottom: 5px;
+    bottom: 60px;
     left: 5px;
     border-radius: 3px;
     border: 1px solid rgba(0,0,0,0.4);
@@ -81,7 +73,15 @@ styles for component: TnrisDownloadTemplateDownload
     p {
       margin: 0;
       line-height: 20px;
+      max-width: 80vw;
     }
+  }
+
+  .tnris-download-template-download__mobile {
+    background: $main-background;
+    color: $nest-text;
+    padding: 35px;
+    text-align: center;
   }
 
   .tnris-download-template-download__loading {

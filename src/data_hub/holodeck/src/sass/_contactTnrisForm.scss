@@ -3,10 +3,10 @@ styles for component: ContactTnrisForm
 */
 
 .contact-tnris-form-component {
-  @include mdc-text-field-bottom-line-color(rgba(0,0,0,.42));
-  @include mdc-text-field-label-color($primary-color);
+  @include mdc-text-field-bottom-line-color(rgba(0, 0, 0, 0.12));
+  @include mdc-text-field-label-color($nest-text);
   @include mdc-text-field-line-ripple-color($primary-color);
-  @include mdc-text-field-textarea-stroke-color(rgba(0,0,0,.42));
+  @include mdc-text-field-textarea-stroke-color(rgba(0, 0, 0, 0.12));
 
   padding: 0px 15px 15px 15px;
   overflow-y: auto;
@@ -31,7 +31,7 @@ styles for component: ContactTnrisForm
     background-color: initial;
     margin-bottom: 16px;
     display: flex;
-    @include mdc-select-label-color($primary-color);
+    @include mdc-select-label-color($nest-text);
     @include mdc-select-bottom-line-color(rgba(0, 0, 0, 0.12));
     @include mdc-select-focused-bottom-line-color($primary-color);
 
@@ -58,13 +58,15 @@ styles for component: ContactTnrisForm
   }
 
   div.mdc-text-field--textarea {
+    border-bottom-color: rgba(0, 0, 0, 0.12);
+
     textarea {
       color: $nest-text;
     }
   }
 
   .mdc-text-field--focused {
-    border-color: $primary-color;
+    border-bottom: 1px solid $primary-color;
   }
 
   .mdc-text-field--invalid {

@@ -4,7 +4,8 @@ import { colorThemeActions } from '../actions';
 import ThemeChooser from '../components/ThemeChooser';
 
 const mapStateToProps = state => ({
-  theme: state.colorTheme.theme
+  theme: state.colorTheme.theme,
+  themeOptions: state.colorTheme.themeOptions
 });
 
 const mapDispatchToProps = dispatch => ({

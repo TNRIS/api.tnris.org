@@ -29,7 +29,11 @@ export default class TnrisOutsideEntityTemplateDetails extends React.Component {
                             </div>
                             <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-8'>
                               {imageCarousel}
-                              <Description collection={this.props.collection} />
+                              <div className="mdc-layout-grid__inner">
+                                <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-8'>
+                                  <Description collection={this.props.collection} />
+                                </div>
+                              </div>
                             </div>
                           </div>) : (
                           <div className="mdc-layout-grid__inner">

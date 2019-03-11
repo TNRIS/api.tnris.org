@@ -35,10 +35,10 @@ export default class CollectionFilterMap extends React.Component {
     // these will keep the map bounds centered around Texas. Probably
     // will need to calc an appropriate bounds or initial zoom for all
     // different screen sizes.
-    const texasBounds = [
-      [-108.83792172606844, 25.535364049344025], // Southwest coordinates
-      [-89.8448562738755, 36.78883840623598] // Northeast coordinates
-    ]
+    // const texasBounds = [
+    //   [-108.83792172606844, 25.535364049344025], // Southwest coordinates
+    //   [-89.8448562738755, 36.78883840623598] // Northeast coordinates
+    // ]
     this._map = new mapboxgl.Map({
         container: 'collection-filter-map', // container id
         style: 'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json',

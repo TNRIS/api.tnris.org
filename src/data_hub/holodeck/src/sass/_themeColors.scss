@@ -68,13 +68,13 @@ When adding new themes you will also need to update:
 */
 
 .dark-app-theme {
-  $primary-color: $dark-theme-primary;
+  $primary-color: $tnris-blue;
   $secondary-color: #999999;
   $button-text: lightgray;
 
   $main-background: #383838;
   $nest-text: #ededed;
-  $nest-text-subtle: #555;
+  $nest-text-subtle: gray;
 
   $search-background: $secondary-color;
   $header-border: $nest-text-subtle;
@@ -109,6 +109,12 @@ When adding new themes you will also need to update:
       color: $tnris-blue !important;
     }
 
+    header {
+      .header-title {
+        background-color: $dark-theme-primary !important;
+      }
+    }
+
     .view-container {
 
       .catalog {
@@ -122,10 +128,6 @@ When adding new themes you will also need to update:
           color: $tnris-blue;
           background-color: $main-background;
         }
-      }
-
-      a {
-      color: $tnris-blue !important;
       }
 
       li {

@@ -250,6 +250,12 @@ class OrderTnrisDataForm extends Component {
               invalid: 'Your zipfile exceeds the 20 MB limit. Please choose another zipfile.'
             });
           }
+          else if (document.getElementById('order-partial-aoi-file').files[0].name.substr(document.getElementById('order-partial-aoi-file').files[0].name.length - 4) !== '.zip') {
+            this.setState({
+              display: 'form',
+              invalid: 'Your file must be a zipfile (.zip extension). Please choose a zipfile.'
+            });
+          }
           else {
             cartInfo['type'] = 'AOI';
             cartInfo['files'] = document.getElementById('order-partial-aoi-file').files;
@@ -535,12 +541,12 @@ class OrderTnrisDataForm extends Component {
               </div>
               <label htmlFor="order-partial-aoi-input">Area of Interest Boundary File (TNRIS Preferred Option)</label>
             </div>
-            <div className='mdc-typography--caption'>Select a zipped (.zip) Shapefile or KML to upload. Maximum allowed file size is 20 MB. <a href="http://geojson.io" target="_blank" rel="noopener noreferrer">Don't have a shapefile? Draw one here!</a></div>
+            <div className='mdc-typography--caption'>Only zipfiles (.zip) accepted. Select a Shapefile or KML within a compressed zipfile to upload. Maximum allowed file size is 20 MB. <a href="http://geojson.io" target="_blank" rel="noopener noreferrer">Don't have a shapefile? Draw one here!</a></div>
             <div className={uploadAoiClass}>
               <input type="file"
                      id="order-partial-aoi-file"
                      name="aoiUpload"
-                     accept=".zip,application/octet-stream,application/zip,application/x-zip,application/x-zip-compressed"
+                     accept=".zip"
                      onChange={this.handleChange}
               />
             </div>

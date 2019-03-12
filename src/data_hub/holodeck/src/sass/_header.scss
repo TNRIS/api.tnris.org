@@ -28,28 +28,38 @@ styles for component: Header
   .header-title {
     background-color: $primary-color;
     color: $button-text;
-    font-family: pragmatica-web-condensed,sans-serif;
     font-size: 14px;
     font-weight: 100;
     height: auto;
     letter-spacing: 3px;
-    text-transform: uppercase;
     padding: 4px;
     height: 26px;
 
     section {
       padding: 0;
 
+      .tnris-logo {
+        width: 45px;
+        height: auto;
+        margin-right: 5px;
+        // align-items: baseline;
+      }
+
       .header-title__tnris {
+        font-family: 'Roboto Condensed', sans-serif;
         text-decoration: none;
         text-align: left;
+        text-transform: uppercase;
+        align-items: baseline;
         color: inherit;
         padding-left: 5px;
       }
 
       .header-title__twdb {
         text-decoration: none;
+        text-transform: none !important;
         text-align: right;
+        align-items: baseline;
         color: inherit;
         padding-right: 5px;
       }
@@ -63,6 +73,9 @@ styles for component: Header
         @media (min-width: $breakpoint-phone) and (max-width: $breakpoint-tablet) {
           font-size: 10px;
         }
+        @media (max-width: $breakpoint-phone) {
+          font-size: 12px;
+        }
       }
     }
   }
@@ -74,6 +87,8 @@ styles for component: Header
       padding-left: 24px;
 
       .custom-font {
+        outline: none;
+        cursor: pointer;
         font-family: 'Roboto Condensed', sans-serif;
       }
     }

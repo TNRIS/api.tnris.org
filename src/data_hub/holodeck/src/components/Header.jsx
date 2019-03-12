@@ -91,7 +91,7 @@ export default class Header extends React.Component {
     //   drawerStatusClass = 'open-drawer';
     // }
 
-    const shoppingCartCountBadge = Object.keys(this.props.orders).length > 0 ? (
+    const shoppingCartCountBadge = this.props.orders && Object.keys(this.props.orders).length > 0 ? (
       <NotificationBadge count={Object.keys(this.props.orders).length} effect={Effect.SCALE} frameLength={30}/>
     ) : '';
 

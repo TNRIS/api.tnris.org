@@ -185,7 +185,28 @@ export function uploadOrderFile(collectionId, cartInfo) {
                formData.append('acl', 'private');
                formData.append('success_action_status', '201');
                formData.append('success_action_redirect', '');
-               formData.append('Content-Type', file.type);
+               // if a zipfile upload, declare as application/zip as per contact-app policy requirement
+               // otherwise, use the individual file type
+               let contentType;
+               if (cartInfo.type === 'AOI') {
+                 switch (file.type) {
+                   case 'application/zip':
+                    contentType = 'application/zip';
+                    break;
+                   case 'application/x-zip-compressed':
+                    contentType = 'application/zip';
+                    break;
+                   case 'application/x-zip':
+                    contentType = 'application/zip';
+                    break;
+                   default:
+                    contentType = file.type;
+                 }
+               }
+               else {
+                 contentType = file.type;
+               }
+               formData.append('Content-Type', contentType);
                formData.append('Content-Length', file.size);
                formData.append('AWSAccessKeyId', s3policy.key);
                formData.append('Policy', s3policy.policy);

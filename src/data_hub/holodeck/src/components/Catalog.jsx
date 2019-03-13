@@ -44,13 +44,17 @@ export default class Catalog extends React.Component {
   }
 
   componentDidMount() {
+    console.log("mount");
     this.props.fetchCollections();
     this.props.fetchStoredShoppingCart();
     window.addEventListener("resize", this.handleResize);
     window.innerWidth >= parseInt(breakpoints.desktop, 10) ? this.props.setDismissibleDrawer() : this.props.setModalDrawer();
     window.onpopstate = (e) => {
-      const theState = e.state.state;
-      this.props.popBrowserStore(theState);
+      console.log(e.state);
+      if (e.state) {
+        const theState = e.state.state;
+        this.props.popBrowserStore(theState);
+      }
     }
     // apply theme
     // on component mount, check localstorage for theme to apply

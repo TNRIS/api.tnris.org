@@ -57,15 +57,17 @@ export default class Header extends React.Component {
   }
 
   handleOrderCartView() {
-    if (window.location.pathname !== '/cart/') {
+    if (this.props.view !== 'orderCart') {
       this.props.setViewOrderCart();
       this.props.setUrl('/cart/');
     }
   }
 
   handleCatalogView() {
-    this.props.setViewCatalog();
-    this.props.setUrl(this.props.catalogFilterUrl);
+    if (this.props.view !== 'catalog') {
+      this.props.setViewCatalog();
+      this.props.setUrl(this.props.catalogFilterUrl);
+    }
   }
 
   handleKeyPress (e, ref) {

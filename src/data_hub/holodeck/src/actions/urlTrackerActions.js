@@ -13,7 +13,20 @@ export const setUrl = (newUrl) => {
   ReactGA.pageview(newUrl);
   return (dispatch) => {
     const curState = store.getState();
-    dispatch(push(newUrl, curState));
+    const pushStateObj = {
+      catalog: curState.catalog,
+      collectionFilterMap: curState.collectionFilterMap,
+      collectionFilter: curState.collectionFilter,
+      collections: {selectedCollection: curState.collections.selectedCollection},
+      collectionSearcher: curState.collectionSearcher,
+      collectionSorter: curState.collectionSorter,
+      collectionTimeslider: curState.collectionTimeslider
+    }
+
+    const serialized = JSON.stringify(pushStateObj);
+    console.log(serialized.length);
+
+    dispatch(push(newUrl, pushStateObj));
     dispatch({
       type: SET_URL,
       payload: {previousUrl: currentUrl}

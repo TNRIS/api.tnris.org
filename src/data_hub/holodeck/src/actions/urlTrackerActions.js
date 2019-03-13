@@ -63,6 +63,6 @@ export const url404 = () => {
       collectionSorter: curState.collectionSorter,
       collectionTimeslider: curState.collectionTimeslider
     }
-    dispatch(replace('/404', replaceState));
+    dispatch(replace('/404', replaceStateObj));
   }
 }

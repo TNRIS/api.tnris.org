@@ -52,8 +52,17 @@ export const clearPreviousUrl = () => {
 };
 
 export const url404 = () => {
-  const curState = store.getState();
   return (dispatch) => {
-    dispatch(replace('/404', curState));
+    const curState = store.getState();
+    const replaceStateObj = {
+      catalog: curState.catalog,
+      collectionFilterMap: curState.collectionFilterMap,
+      collectionFilter: curState.collectionFilter,
+      collections: {selectedCollection: curState.collections.selectedCollection},
+      collectionSearcher: curState.collectionSearcher,
+      collectionSorter: curState.collectionSorter,
+      collectionTimeslider: curState.collectionTimeslider
+    }
+    dispatch(replace('/404', replaceState));
   }
 }

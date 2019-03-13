@@ -575,7 +575,7 @@ class OrderCart extends Component {
               </div>
               <label htmlFor="hard-drive-tnris-hd-input">TNRIS Provided Hard Drive (1 TB)</label>
             </div>
-            <div className='mdc-typography--caption'>If the total order size is over 1 TB of data, you will be required to provide your own hard drive.</div>
+            <div className='mdc-typography--caption'>TNRIS does not provide multiple 1 TB hard drives for orders larger than 1 TB. If the total order size is over 1 TB of data, you will be required to provide your own hard drive.</div>
             <div id="hard-drive-tnris-flash" className="mdc-form-field">
               <div className="mdc-radio">
                 <input className="mdc-radio__native-control"

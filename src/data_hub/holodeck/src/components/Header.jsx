@@ -119,9 +119,15 @@ export default class Header extends React.Component {
           id="master-header">
           <div className="header-title mdc-top-app-bar__row">
             <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
-              <img className="tnris-logo" src={tnrisLogo} alt="" />
-              <a className='header-title__tnris title-size' href="https://tnris.org/" tabIndex="0">
-                {this.state.tnrisTitle}
+              <a href="https://tnris.org">
+                <img className="tnris-logo" src={tnrisLogo} alt="" title="tnris.org" />
+              </a>
+              <a
+                className='header-title__tnris title-size'
+                href="https://tnris.org/"
+                tabIndex="0"
+                title="tnris.org">
+                  {this.state.tnrisTitle}
               </a>
             </section>
             <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-end">

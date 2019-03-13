@@ -50,6 +50,13 @@ styles for component: OrderCart
         .mdc-list-item__text {
           .mdc-list-item__primary-text {
             color: $primary-color;
+            a {
+              text-decoration: inherit;
+              color: $primary-color;
+            }
+            a:hover {
+              cursor: pointer;
+            }
           }
 
           .mdc-list-item__secondary-text {

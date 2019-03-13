@@ -27,6 +27,9 @@ export default class CollectionFilterMapInstructions extends React.Component {
         <div className="mdc-typography--body1 instruction-paragraph">
           Single click to begin drawing, move cursor to draw a filter extent, single click to finish drawing.
         </div>
+        <div className="mdc-typography--body1 instruction-paragraph">
+          When finished drawing, click the "Set Map Filter" button to apply a filter of the drawn extent.
+        </div>
       </div>
     ) : (
       <div className="mdc-typography--body1">Instructions</div>

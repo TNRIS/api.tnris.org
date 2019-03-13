@@ -111,7 +111,17 @@ export default class Header extends React.Component {
               tabIndex="3">
                 Data Catalog
             </a>
-          </section>) : '';
+          </section>) : (
+          <section id="app-title" className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start" role="toolbar">
+            <a
+              className="material-icons mdc-top-app-bar__navigation-icon"
+              title="View Catalog"
+              onClick={this.handleCatalogView}
+              onKeyDown={(e) => this.handleKeyPress(e, 'catalog')}
+              tabIndex="3">
+                view_comfy
+            </a>
+          </section>);
 
     return (
         <header

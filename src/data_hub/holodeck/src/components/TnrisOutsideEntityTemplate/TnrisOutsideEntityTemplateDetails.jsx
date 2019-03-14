@@ -18,6 +18,18 @@ export default class TnrisOutsideEntityTemplateDetails extends React.Component {
                           images={this.props.collection.images} />)
                         : "";
 
+    const externalEntityBlurb = (
+      <div className="template-content-div external-entity-blurb-container">
+        <div className="mdc-typography--subtitle1">
+          External Entity Disclaimer
+        </div>
+        <p className="external-entity-blurb">
+          Datasets and information on the {this.props.collection.name} are maintained by entities other than TNRIS.
+          The provided links and emails will take from the TNRIS site and directly to the external entity.
+        </p>
+      </div>
+    )
+
     // using mdc classes to determine grid layout depending on screen size (desktop/tablet)
     // special case with phone or smaller device because order of components changes
     const gridLayout = window.innerWidth >= parseInt(breakpoints.desktop, 10) ? (
@@ -33,6 +45,9 @@ export default class TnrisOutsideEntityTemplateDetails extends React.Component {
                                 <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-8'>
                                   <Description collection={this.props.collection} />
                                 </div>
+                                <div className='mdc-layout-grid__cell mdc-layout-grid__cell--span-4'>
+                                  {externalEntityBlurb}
+                                </div>
                               </div>
                             </div>
                           </div>) : (
@@ -41,6 +56,7 @@ export default class TnrisOutsideEntityTemplateDetails extends React.Component {
                               {imageCarousel}
                               <Metadata collection={this.props.collection} />
                               <Description collection={this.props.collection} />
+                              {externalEntityBlurb}
                               <ShareButtons />
                               <OeServices collection={this.props.collection} />
                             </div>

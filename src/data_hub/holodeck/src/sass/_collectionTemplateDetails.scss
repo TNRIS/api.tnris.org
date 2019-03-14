@@ -34,6 +34,10 @@ shared styles for collection TemplateDetails components
       overflow: hidden;
       transition: max-height 2s ease;
 
+      .mw-empty-elt {
+        display: none;
+      }
+
       &.-expanded {
         max-height: 100vh;
       }
@@ -299,6 +303,35 @@ shared styles for collection TemplateDetails components
       }
     }
     // nested sharebuttons component - END
+
+    // nested external entity blurb - BEGIN
+    // only used by TnrisOutsideEntityTemplateDetails
+    &.external-entity-blurb-container {
+
+      .mdc-typography--subtitle1 {
+        font-size: 16px;
+      }
+
+      .external-entity-blurb {
+        color: $nest-text;
+        font-size: 12px;
+        line-height: 20px;
+        border: 0.5px solid $primary-color;
+        // border: 0.5px solid $header-border;
+        // border-radius: 8px;
+        margin-bottom: 10px;
+        width: 100%;
+        padding: 5px 10px 5px 10px;
+        overflow: hidden;
+      }
+
+      .citation:focus {
+        // border: 0.5px solid $nest-text;
+        border: 0.5px solid $primary-color;
+        box-shadow: 0.2px 0.2px 7px $primary-color;
+      }
+    }
+    // nested external entity blurb - END
 
     // nested historicalproducts component - BEGIN
     // only used by historicalAerialTemplateDetails

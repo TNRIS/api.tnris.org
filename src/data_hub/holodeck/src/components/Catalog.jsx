@@ -9,8 +9,8 @@ import { MDCDialog } from '@material/dialog';
 import HistoricalAerialTemplate from './HistoricalAerialTemplate/HistoricalAerialTemplate';
 import OutsideEntityTemplate from './TnrisOutsideEntityTemplate/TnrisOutsideEntityTemplate';
 import TnrisOrderTemplate from './TnrisOrderTemplate/TnrisOrderTemplate';
-import CollectionFilterMapView from './CollectionFilterMapView';
 
+import CollectionFilterMapViewContainer from '../containers/CollectionFilterMapViewContainer';
 import FooterContainer from '../containers/FooterContainer';
 import HeaderContainer from '../containers/HeaderContainer';
 import ToolDrawerContainer from '../containers/ToolDrawerContainer';
@@ -281,7 +281,7 @@ export default class Catalog extends React.Component {
             <Route path='/collection/:collectionId' exact render={(props) => this.handleShowCollectionView()} />
             <Route path='/catalog/:filters' exact render={(props) => this.setCatalogView()} />
             <Route path='/cart/' exact render={(props) => <OrderCartViewContainer />} />
-            <Route path='/geofilter/' exact component={CollectionFilterMapView} />
+            <Route path='/geofilter/' exact render={(props) => <CollectionFilterMapViewContainer />} />
             <Route path='/' exact render={(props) => this.setCatalogView()} />
             <Route path='*' render={(props) => <NotFoundContainer />} />
           </Switch>

@@ -25,7 +25,6 @@ export default class CollectionFilterMap extends React.Component {
   }
 
   componentDidMount() {
-    window.scrollTo(0,0);
     if (this.props.view !== 'geoFilter') {
       this.props.setViewGeoFilter();
     }

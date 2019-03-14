@@ -607,7 +607,7 @@ class OrderTnrisDataForm extends Component {
           {lidarFields}
           {historicalFields}
 
-          <p className="invalid-prompt">{invalid}</p>
+          <p className="order-tnris-data-message invalid-prompt">{invalid}</p>
 
           <div className="submit-button">
             <input type="submit" value="Add to Shopping Cart" id="order-tnris-data-submit" className="mdc-button mdc-button--raised"/>
@@ -618,7 +618,7 @@ class OrderTnrisDataForm extends Component {
 
     else if (this.state.display === 'cart') {
       showHTML = (
-        <div className="order-tnris-data-cart push-footer">
+        <div className="order-tnris-data-message">
           <p className="mdc-typography--body2">
             This dataset is already in the shopping cart.
           </p>
@@ -630,7 +630,7 @@ class OrderTnrisDataForm extends Component {
     }
     else if (this.state.display === 'added') {
       showHTML = (
-        <div className="order-tnris-data-cart push-footer">
+        <div className="order-tnris-data-message">
           <p className="mdc-typography--body2">
             This dataset has been added to the shopping cart.
           </p>
@@ -642,7 +642,7 @@ class OrderTnrisDataForm extends Component {
     }
     else if (this.state.display === 'uploading') {
       showHTML = (
-        <div className="order-tnris-data-cart push-footer">
+        <div className="order-tnris-data-message">
           <div className='mdc-typography--headline6'>
             Uploading files...
           </div>

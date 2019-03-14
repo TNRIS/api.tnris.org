@@ -135,10 +135,6 @@ styles for component: OrderTnrisDataForm
     }
   }
 
-  .push-footer {
-    margin-bottom: 300px;
-  }
-
   .order-cart-form-error {
     span {
       color: $error-text;
@@ -147,6 +143,10 @@ styles for component: OrderTnrisDataForm
 
   div.hidden-field {
     display: none;
+  }
+
+  .order-tnris-data-message {
+    text-align: center;
   }
 
 

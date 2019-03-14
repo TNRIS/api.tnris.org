@@ -20,7 +20,8 @@ export const setUrl = (newUrl) => {
       collections: {selectedCollection: curState.collections.selectedCollection},
       collectionSearcher: curState.collectionSearcher,
       collectionSorter: curState.collectionSorter,
-      collectionTimeslider: curState.collectionTimeslider
+      collectionTimeslider: curState.collectionTimeslider,
+      urlTracker: curState.urlTracker
     }
 
     dispatch(push(newUrl, pushStateObj));
@@ -58,7 +59,8 @@ export const url404 = () => {
       collections: {selectedCollection: curState.collections.selectedCollection},
       collectionSearcher: curState.collectionSearcher,
       collectionSorter: curState.collectionSorter,
-      collectionTimeslider: curState.collectionTimeslider
+      collectionTimeslider: curState.collectionTimeslider,
+      urlTracker: curState.urlTracker
     }
     dispatch(replace('/404', replaceStateObj));
   }

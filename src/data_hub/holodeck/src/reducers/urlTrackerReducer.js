@@ -4,6 +4,8 @@ import {
   CLEAR_PREVIOUS_URL
 } from '../constants/urlTrackerActionTypes';
 
+import { POP_BROWSER_STORE } from '../constants/catalogActionTypes';
+
 const initialState = {
   previousUrl: window.location.pathname,
   catalogFilterUrl: "/"
@@ -31,6 +33,9 @@ export default function urlTrackerReducer(state = initialState, action) {
         ...state,
         previousUrl: "/"
       };
+
+    case POP_BROWSER_STORE:
+      return Object.assign({}, action.payload.urlTracker);
 
     default:
       // ALWAYS have a default case in a reducer

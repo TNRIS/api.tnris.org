@@ -24,8 +24,17 @@ export default class TnrisDownloadTemplate extends React.Component {
     this.topAppBar = new MDCTopAppBar(this.topAppBarElement);
     this.tabBar = new MDCTabBar(document.querySelector('.mdc-tab-bar'));
     window.scrollTo(0,0);
-    // retrieve download resources
+    // retrieve download resources while setting aside the collection_id
+    // as a browser pop forward may cause an update and a new fetching of
+    // resourcesto be necessary
+    this.mountedCollection = this.props.collection.collection_id;
     this.props.fetchCollectionResources(this.props.collection.collection_id);
+  }
+
+  componentDidUpdate() {
+    if (this.mountedCollection !== this.props.collection.collection_id) {
+      this.props.fetchCollectionResources(this.props.collection.collection_id);
+    }
   }
 
   setTemplateView(viewString) {
@@ -57,7 +66,7 @@ export default class TnrisDownloadTemplate extends React.Component {
 
   render() {
     let showComponent;
-    
+
     switch(this.state.view) {
       case 'details':
         showComponent = <TnrisDownloadTemplateDetails collection={this.props.collection} />;

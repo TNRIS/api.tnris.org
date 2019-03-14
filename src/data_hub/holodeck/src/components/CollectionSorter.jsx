@@ -23,9 +23,7 @@ class CollectionSorter extends React.Component {
         // second, check if filters param includes sort key
         if (Object.keys(allFilters).includes('sort')) {
           // third, apply sort to store and component
-          console.log('set sort');
           if (this.props.sortOrder !== allFilters.sort) {
-            console.log('fresh load');
             this.setSort(allFilters.sort);
           }
         }

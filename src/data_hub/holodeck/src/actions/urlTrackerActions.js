@@ -23,9 +23,6 @@ export const setUrl = (newUrl) => {
       collectionTimeslider: curState.collectionTimeslider
     }
 
-    const serialized = JSON.stringify(pushStateObj);
-    console.log(serialized.length);
-
     dispatch(push(newUrl, pushStateObj));
     dispatch({
       type: SET_URL,

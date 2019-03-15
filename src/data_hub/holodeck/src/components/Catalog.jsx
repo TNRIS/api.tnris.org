@@ -21,6 +21,7 @@ import NotFoundContainer from '../containers/NotFoundContainer';
 
 import loadingImage from '../images/loading.gif';
 import noDataImage from '../images/no-data.png';
+import noDataImage666 from '../images/no-data-satan.png';
 
 // global sass breakpoint variables to be used in js
 import breakpoints from '../sass/_breakpoints.scss';
@@ -59,7 +60,7 @@ export default class Catalog extends React.Component {
     if (typeof(Storage) !== void(0)) {
       const savedTheme = localStorage.getItem("data_theme") ? localStorage.getItem("data_theme") : null;
       if (savedTheme) {
-        if (this.props.themeOptions.includes(savedTheme)) {
+        if (this.props.themeOptions.includes(savedTheme) || savedTheme === 'satan') {
           this.props.setColorTheme(savedTheme);
         }
         else {
@@ -186,7 +187,7 @@ export default class Catalog extends React.Component {
     const catalogCards = this.props.visibleCollections && this.props.visibleCollections.length < 1 ?
       <div className='no-data'>
         <img
-          src={noDataImage}
+          src={this.props.theme !== 'satan' ? noDataImage : noDataImage666}
           className="no-data-image"
           alt="No Data Available"
           title="No data available with those search terms" />

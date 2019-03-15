@@ -124,6 +124,9 @@ export default class CollectionSearcher extends React.Component {
           // this.props.setViewCatalog();
           this.props.clearSelectedCollection();
         }
+        if (event.target.value === '666') {
+          this.props.setColorTheme('satan');
+        }
       } else if (event.keyCode === 27) { // they pressed escape, so drop focus
         event.target.blur();
       }

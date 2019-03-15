@@ -6,7 +6,8 @@ import {
   catalogActions,
   collectionActions,
   collectionSearcherActions,
-  urlTrackerActions
+  urlTrackerActions,
+  colorThemeActions
 } from '../actions';
 import {
   getAllCollections,
@@ -44,6 +45,9 @@ const mapDispatchToProps = dispatch => ({
   },
   setViewCatalog: () => {
     dispatch(catalogActions.setViewCatalog());
+  },
+  setColorTheme: (theme) => {
+    dispatch(colorThemeActions.setColorTheme(theme));
   }
 })
 

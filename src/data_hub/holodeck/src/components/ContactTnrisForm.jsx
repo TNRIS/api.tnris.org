@@ -182,7 +182,7 @@ class ContactTnrisForm extends Component {
           </div>
 
           <ReCAPTCHA className="recaptcha-container" sitekey="6Lf8GP8SAAAAAFx2H53RtfDO18x7S1q_0pGNdmbd" onChange={this.recaptchaChange} />
-          <p className="invalid-prompt">{this.state.invalid}</p>
+          <p className="order-tnris-data-message invalid-prompt">{this.state.invalid}</p>
 
           <div className="submit-button">
             <input type="submit" value="Submit" id="contact-tnris-submit" className="mdc-button mdc-button--raised"/>
@@ -192,7 +192,7 @@ class ContactTnrisForm extends Component {
     }
     else if (this.state.display === 'success') {
       showHTML = (
-        <div className="contact-tnris-form-success push-footer">
+        <div className="order-tnris-data-message contact-tnris-form-success">
           <p className="mdc-typography--body2">
             <span><strong>Success!</strong></span>
             <br />
@@ -203,7 +203,7 @@ class ContactTnrisForm extends Component {
     }
     else if (this.state.display === 'error') {
       showHTML = (
-        <div className="contact-tnris-form-error push-footer">
+        <div className="order-tnris-data-message contact-tnris-form-error">
           <p className="mdc-typography--body2">
             <span><strong>Error!</strong></span>
             <br />
@@ -217,7 +217,7 @@ class ContactTnrisForm extends Component {
     }
     else if (this.state.display === 'submitting') {
       showHTML = (
-        <div className="contact-tnris-form-submitting push-footer">
+        <div className="order-tnris-data-message contact-tnris-form-submitting">
           <p className="mdc-typography--body2">
             <span><strong>Submitting form...</strong></span>
           </p>

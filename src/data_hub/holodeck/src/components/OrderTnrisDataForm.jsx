@@ -80,6 +80,7 @@ class OrderTnrisDataForm extends Component {
     document.querySelectorAll('.mdc-text-field-helper-text').forEach((ht) => {
       new MDCTextFieldHelperText(ht);
     });
+    window.scrollTo(0,0);
   }
 
   componentDidUpdate () {

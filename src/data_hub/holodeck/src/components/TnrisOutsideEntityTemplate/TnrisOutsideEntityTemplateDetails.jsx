@@ -11,6 +11,10 @@ import breakpoints from '../../sass/_breakpoints.scss';
 
 export default class TnrisOutsideEntityTemplateDetails extends React.Component {
 
+  componentDidMount () {
+    window.scrollTo(0,0);
+  }
+
   render() {
     const imageCarousel = this.props.collection.images ? (
                         <Images

@@ -39,6 +39,7 @@ class ContactOutsideForm extends Component {
     });
     new MDCRipple(document.querySelector('#contact-tnris-submit'));
     new MDCSelect(document.querySelector('.mdc-select'));
+    window.scrollTo(0,0);
   }
 
   componentWillUpdate(nextProps) {

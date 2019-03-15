@@ -206,7 +206,7 @@ export default class TnrisDownloadTemplate extends React.Component {
                       onClick={() => this.setTemplateView("download")}>Download
                       {/*<i className="mdc-tab__icon material-icons">save_alt</i>*/}
                     </div>
-                    <div className={this.state.view === 'download' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
+                    <div className={this.state.view === 'order' ? 'mdc-list-item  mdc-list-item--activated' : 'mdc-list-item'}
                       onClick={() => this.setTemplateView("order")}>Order
                       {/*<i className="mdc-tab__icon material-icons">shopping_basket</i>*/}
                     </div>

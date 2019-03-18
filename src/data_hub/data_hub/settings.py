@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admindocs',
+    'django.contrib.sitemaps',
     'rest_framework',
     'rest_framework_swagger',
     'storages',
@@ -169,3 +170,5 @@ WEBPACK_LOADER = {
         'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats.dev.json'),
     }
 }
+
+SITE_ID = 1

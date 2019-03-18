@@ -11,7 +11,6 @@ class StaticSitemap(Sitemap):
         return [
             'holodeck',
             'api_schema',
-            'shopping_cart',
             'geofilter'
         ]
 

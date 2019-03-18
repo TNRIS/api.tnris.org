@@ -28,8 +28,8 @@ export default class TnrisOutsideEntityTemplateDetails extends React.Component {
           External Entity Disclaimer
         </div>
         <p className="external-entity-blurb">
-          Datasets and information on the {this.props.collection.name} are maintained by entities other than TNRIS.
-          The provided links and emails will take from the TNRIS site and directly to the external entity.
+          {this.props.collection.name} datasets and information are maintained by entities other than TNRIS.
+          The provided links and emails will take the user from the TNRIS site directly to the external entity.
         </p>
       </div>
     )

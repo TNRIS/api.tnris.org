@@ -54,9 +54,9 @@ styles for component: CollectionSearcher
     border-top: 1px solid $header-border;
     box-shadow: inherit;
 
-    @media (max-width: $breakpoint-phone) {
-      width: 145%;
-    }
+    // @media (max-width: $breakpoint-phone) {
+    //   width: 145%;
+    // }
 
     li {
       color: $skin-primary;

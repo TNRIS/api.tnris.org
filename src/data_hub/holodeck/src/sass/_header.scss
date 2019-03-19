@@ -30,39 +30,40 @@ styles for component: Header
     color: $button-text;
     font-size: 14px;
     font-weight: 100;
-    height: auto;
-    letter-spacing: 3px;
     padding: 4px;
-    height: 26px;
+    height: 35px;
 
     section {
       padding: 0;
 
       .tnris-logo {
         width: auto;
-        height: 24px;
+        height: 30px;
         margin-right: 10px;
-        padding-top: 3px;
-        padding-left: 5px;
+        padding: 4px 0 0 5px;
       }
 
       .header-title__tnris {
         font-family: 'Roboto Condensed', sans-serif;
         text-decoration: none;
+        letter-spacing: 3px;
         text-align: left;
         text-transform: uppercase;
         align-items: baseline;
         color: inherit;
-        padding-left: 5px;
+        padding-top: 12px;
+        margin-left: 5px;
       }
 
       .header-title__twdb {
         text-decoration: none;
+        letter-spacing: 0;
         text-transform: none !important;
         text-align: right;
         align-items: baseline;
         color: inherit;
-        padding-right: 5px;
+        padding-top: 12px;
+        margin-right: 5px;
       }
 
       .title-size {

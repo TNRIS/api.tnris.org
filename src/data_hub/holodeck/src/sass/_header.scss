@@ -53,6 +53,10 @@ styles for component: Header
         color: inherit;
         padding-top: 12px;
         margin-left: 5px;
+
+        @media (min-width: $breakpoint-phone) and (max-width: 649px) {
+          padding-top: 4px;
+        }
       }
 
       .header-title__twdb {
@@ -64,6 +68,10 @@ styles for component: Header
         color: inherit;
         padding-top: 12px;
         margin-right: 5px;
+
+        @media (min-width: $breakpoint-phone) and (max-width: 649px) {
+          padding-top: 4px;
+        }
       }
 
       .title-size {

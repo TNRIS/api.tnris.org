@@ -22,18 +22,27 @@ handler404 = TemplateView.as_view(template_name='index.html')
 
 from .views import HealthCheckView
 
+from data_hub.sitemap import StaticSitemap, CollectionSitemap
+from django.contrib.sitemaps.views import sitemap
+
+sitemaps = {
+ 'pages': StaticSitemap,
+ 'collections': CollectionSitemap,
+}
+
 urlpatterns = [
+    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
     path('grappelli/', include('grappelli.urls')), # grappelli URLS
     path('admin/doc/', include('django.contrib.admindocs.urls')), # django admindocs
     path('admin/', admin.site.urls), # admin site
     path('admin', RedirectView.as_view(url='admin/', permanent=False)), # admin site
     path('api/v1/', include('lcd.urls')),
     path('health/', HealthCheckView.as_view()),
-    path('collection/<coll>', TemplateView.as_view(template_name='index.html')),
-    path('catalog/<filt>', TemplateView.as_view(template_name='index.html')),
-    path('cart/', TemplateView.as_view(template_name='index.html')),
+    path('collection/<coll>', TemplateView.as_view(template_name='index.html'), name='collection'),
+    path('catalog/<filt>', TemplateView.as_view(template_name='index.html'), name='catalog_filtered'),
+    path('cart/', TemplateView.as_view(template_name='index.html'), name='shopping_cart'),
     path('cart', RedirectView.as_view(url='cart/', permanent=False)),
-    path('geofilter/', TemplateView.as_view(template_name='index.html')),
+    path('geofilter/', TemplateView.as_view(template_name='index.html'), name='geofilter'),
     path('geofilter', RedirectView.as_view(url='geofilter/', permanent=False)),
-    path('', TemplateView.as_view(template_name='index.html')),
+    path('', TemplateView.as_view(template_name='index.html'), name='holodeck'),
 ]

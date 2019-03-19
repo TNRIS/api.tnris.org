@@ -4,8 +4,6 @@ import uuid
 import boto3
 import os
 
-from django.db import models
-
 
 """
 ********** Domain Tables **********

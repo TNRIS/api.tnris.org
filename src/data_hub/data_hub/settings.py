@@ -38,6 +38,25 @@ APPEND_SLASH = False
 
 # If you're using prerender.io (the default backend):
 SEO_JS_PRERENDER_TOKEN = os.environ.get('SEO_TOKEN', '')
+SEO_JS_ENABLED = True
+SEO_JS_USER_AGENTS = [
+    "Googlebot",
+    "Yahoo",
+    "bingbot",
+    "Badiu",
+    "Ask Jeeves",
+    "baiduspider",
+    "facebookexternalhit",
+    "twitterbot",
+    "rogerbot",
+    "linkedinbot",
+    "embedly",
+    "quoralink preview'",
+    "showyoubot",
+    "outbrain",
+    "pinterest",
+    "developersgoogle.com/+/web/snippet"
+]
 
 # Application definition
 
@@ -73,8 +92,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.contrib.admindocs.middleware.XViewMiddleware',
-    'django_seo_js.middleware.EscapedFragmentMiddleware',  # If you're using #!
-    'django_seo_js.middleware.UserAgentMiddleware'  # If you want to detect by user agent
+    'django_seo_js.middleware.UserAgentMiddleware',  # If you want to detect by user agent
+    'django_seo_js.middleware.EscapedFragmentMiddleware'  # If you're using #!
 ]
 
 ROOT_URLCONF = 'data_hub.urls'

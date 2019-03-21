@@ -16,7 +16,8 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
   constructor(props) {
       super(props);
       this.state = {
-        resourceLength: null
+        resourceLength: null,
+        areaTypesLength: 1
       };
       // bind our map builder functions
       this.createMap = this.createMap.bind(this);
@@ -128,6 +129,12 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
     } else if (areaTypesAry.includes('quad')) {
       startLayer = 'quad';
     }
+    // areaTypes length in state turns on display of layer menu if more than 1 layer
+    if (areaTypesAry.length !== this.state.areaTypesLength) {
+      this.setState({
+        areaTypesLength:areaTypesAry.length
+      });
+    }
 
     // set initial minZoom
     // naip and top qquad layers get qqMinZoom, everything else is state zoom
@@ -139,6 +146,12 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
     }
     else {
       map.setMinZoom(this.stateMinZoom);
+    }
+
+    // reset layer menu in case of component update
+    var menuItems = document.getElementById('tnris-download-menu');
+    while (menuItems.firstChild) {
+      menuItems.removeChild(menuItems.firstChild);
     }
 
     // iterate our area_types so we can add them to different layers for
@@ -182,7 +195,7 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
             e.stopPropagation();
             this.toggleLayers(e, map, areaType);
         };
-        var menuItems = document.getElementById('tnris-download-menu');
+        // add areaType layer to layer menu
         menuItems.appendChild(link);
 
         // get total number of resources available for download
@@ -388,9 +401,11 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
       )
     }
 
+    const menuDisplayClass = this.state.areaTypesLength > 1 ? 'mdc-list' : 'mdc-list hidden-layer-menu';
+
     return (
       <div className='tnris-download-template-download'>
-        <nav id='tnris-download-menu' className='mdc-list'></nav>
+        <nav id='tnris-download-menu' className={menuDisplayClass}></nav>
         <div id='tnris-download-map'></div>
         <TnrisDownloadMapNote />
       </div>

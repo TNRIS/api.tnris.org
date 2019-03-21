@@ -23,7 +23,9 @@ class CollectionSorter extends React.Component {
         // second, check if filters param includes sort key
         if (Object.keys(allFilters).includes('sort')) {
           // third, apply sort to store and component
-          this.setSort(allFilters.sort);
+          if (this.props.sortOrder !== allFilters.sort) {
+            this.setSort(allFilters.sort);
+          }
         }
       } catch (e) {
         console.log(e);
@@ -33,36 +35,38 @@ class CollectionSorter extends React.Component {
   }
 
   setSort(order) {
-    switch(order) {
-      case 'NEW':
-        this.props.sortNew();
-        break;
-      case 'OLD':
-        this.props.sortOld();
-        break;
-      case 'AZ':
-        this.props.sortAZ();
-        break;
-      case 'ZA':
-        this.props.sortZA();
-        break;
-      default:
-        this.props.sortNew();
+    if (this.props.sortOrder !== order) {
+      switch(order) {
+        case 'NEW':
+          this.props.sortNew();
+          break;
+        case 'OLD':
+          this.props.sortOld();
+          break;
+        case 'AZ':
+          this.props.sortAZ();
+          break;
+        case 'ZA':
+          this.props.sortZA();
+          break;
+        default:
+          this.props.sortNew();
+      }
+      // update URL to reflect new sort change
+      const prevFilter = this.props.history.location.pathname.includes('/catalog/') ?
+                         JSON.parse(decodeURIComponent(this.props.history.location.pathname.replace('/catalog/', '')))
+                         : {};
+      const filterObj = {...prevFilter, sort: order};
+      // if the default sort 'NEW' then remove from the url
+      if (filterObj['sort'] === 'NEW') {
+        delete filterObj['sort'];
+      }
+      const filterString = JSON.stringify(filterObj);
+      // if empty filter settings, use the base home url instead of the filter url
+      Object.keys(filterObj).length === 0 ? this.props.setUrl('/') : this.props.setUrl('/catalog/' + encodeURIComponent(filterString));
+      // log filter change in store
+      Object.keys(filterObj).length === 0 ? this.props.logFilterChange('/') : this.props.logFilterChange('/catalog/' + encodeURIComponent(filterString));
     }
-    // update URL to reflect new sort change
-    const prevFilter = this.props.history.location.pathname.includes('/catalog/') ?
-                       JSON.parse(decodeURIComponent(this.props.history.location.pathname.replace('/catalog/', '')))
-                       : {};
-    const filterObj = {...prevFilter, sort: order};
-    // if the default sort 'NEW' then remove from the url
-    if (filterObj['sort'] === 'NEW') {
-      delete filterObj['sort'];
-    }
-    const filterString = JSON.stringify(filterObj);
-    // if empty filter settings, use the base home url instead of the filter url
-    Object.keys(filterObj).length === 0 ? this.props.setUrl('/') : this.props.setUrl('/catalog/' + encodeURIComponent(filterString));
-    // log filter change in store
-    Object.keys(filterObj).length === 0 ? this.props.logFilterChange('/') : this.props.logFilterChange('/catalog/' + encodeURIComponent(filterString));
   }
 
   handleKeyPress (e, order) {

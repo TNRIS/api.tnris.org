@@ -110,7 +110,10 @@ export default function collectionReducer(state = initialState, action) {
       };
 
     case POP_BROWSER_STORE:
-      return Object.assign({}, action.payload.collections);
+      return {
+        ...state,
+        selectedCollection: action.payload.collections.selectedCollection
+      };
 
     default:
       // ALWAYS have a default case in a reducer

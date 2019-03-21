@@ -167,6 +167,7 @@ src/data_hub/static/*
 !src/data_hub/static/.gitkeep
 !src/data_hub/static/favicon*
 !src/data_hub/static/data_with_pipe.jpg
+!src/data_hub/static/robots.txt
 
 src/data_hub/webpack-stats\.prod\.json
 

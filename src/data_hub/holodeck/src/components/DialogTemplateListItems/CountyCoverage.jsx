@@ -144,6 +144,9 @@ export default class CountyCoverage extends React.Component {
     window.scrollTo(0,0);
     return (
       <div className="county-coverage-component">
+        <div id='county-coverage-notice' className='mdc-typography--body1'>
+          Imagery may have incomplete coverage for a particular county and may be of varying quality.
+        </div>
         <div id='county-coverage-map'></div>
       </div>
     )

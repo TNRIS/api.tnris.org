@@ -28,40 +28,63 @@ styles for component: Header
   .header-title {
     background-color: $primary-color;
     color: $button-text;
-    font-family: pragmatica-web-condensed,sans-serif;
     font-size: 14px;
     font-weight: 100;
-    height: auto;
-    letter-spacing: 3px;
-    text-transform: uppercase;
     padding: 4px;
-    height: 26px;
+    height: 35px;
 
     section {
       padding: 0;
 
+      .tnris-logo {
+        width: auto;
+        height: 30px;
+        margin-right: 10px;
+        padding: 4px 0 0 5px;
+      }
+
       .header-title__tnris {
+        font-family: 'Roboto Condensed', sans-serif;
         text-decoration: none;
+        letter-spacing: 3px;
         text-align: left;
+        text-transform: uppercase;
+        align-items: baseline;
         color: inherit;
-        padding-left: 5px;
+        padding-top: 12px;
+        margin-left: 5px;
+
+        @media (min-width: $breakpoint-phone) and (max-width: 649px) {
+          padding-top: 4px;
+        }
       }
 
       .header-title__twdb {
         text-decoration: none;
+        letter-spacing: 0;
+        text-transform: none !important;
         text-align: right;
+        align-items: baseline;
         color: inherit;
-        padding-right: 5px;
+        padding-top: 12px;
+        margin-right: 5px;
+
+        @media (min-width: $breakpoint-phone) and (max-width: 649px) {
+          padding-top: 4px;
+        }
       }
 
       .title-size {
         font-size: 14px;
 
-        @media (min-width: $breakpoint-tablet) and (max-width: $breakpoint-desktop) {
+        @media (min-width: $breakpoint-download) and (max-width: $breakpoint-desktop) {
           font-size: 12px;
         }
-        @media (min-width: $breakpoint-phone) and (max-width: $breakpoint-tablet) {
+        @media (min-width: $breakpoint-phone) and (max-width: $breakpoint-download) {
           font-size: 10px;
+        }
+        @media (max-width: $breakpoint-phone) {
+          font-size: 12px;
         }
       }
     }
@@ -74,6 +97,8 @@ styles for component: Header
       padding-left: 24px;
 
       .custom-font {
+        outline: none;
+        cursor: pointer;
         font-family: 'Roboto Condensed', sans-serif;
       }
     }

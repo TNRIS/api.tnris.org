@@ -1,11 +1,16 @@
 {% load render_bundle from webpack_loader %}
 {% load static %}
+{% load django_seo_js %}
 <!DOCTYPE html>
 <html>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <title>TNRIS Data</title>
+
+    <!-- google seo verification -->
+    <meta name="google-site-verification" content="5Xox_S7BfosqdAqjHnbDM0lhfldKjwjiGdSHTN2ZC20" />
+    {% seo_js_head %}
 
     <!-- <link rel="icon" href="{% static "favicon.ico" %}" type="image/x-icon"> -->
     <!-- favicon and shortcuts -->

@@ -8,6 +8,8 @@ import breakpoints from '../sass/_breakpoints.scss';
 
 import CollectionSearcherContainer from '../containers/CollectionSearcherContainer';
 
+import tnrisLogo from '../images/tnris_logo.svg';
+
 export default class Header extends React.Component {
   constructor(props) {
     super(props);
@@ -42,7 +44,7 @@ export default class Header extends React.Component {
   handleResize() {
     if (window.innerWidth < parseInt(breakpoints.phone, 10)) {
       this.setState({
-        tnrisTitle: 'TNRIS',
+        tnrisTitle: '',
         twdbTitle: 'A TWDB Division'
       })
     }
@@ -55,15 +57,17 @@ export default class Header extends React.Component {
   }
 
   handleOrderCartView() {
-    if (window.location.pathname !== '/cart/') {
+    if (this.props.view !== 'orderCart') {
       this.props.setViewOrderCart();
       this.props.setUrl('/cart/');
     }
   }
 
   handleCatalogView() {
-    this.props.setViewCatalog();
-    this.props.setUrl(this.props.catalogFilterUrl);
+    if (this.props.view !== 'catalog') {
+      this.props.setViewCatalog();
+      this.props.setUrl(this.props.catalogFilterUrl);
+    }
   }
 
   handleKeyPress (e, ref) {
@@ -91,7 +95,7 @@ export default class Header extends React.Component {
     //   drawerStatusClass = 'open-drawer';
     // }
 
-    const shoppingCartCountBadge = Object.keys(this.props.orders).length > 0 ? (
+    const shoppingCartCountBadge = this.props.orders && Object.keys(this.props.orders).length > 0 ? (
       <NotificationBadge count={Object.keys(this.props.orders).length} effect={Effect.SCALE} frameLength={30}/>
     ) : '';
 
@@ -101,11 +105,25 @@ export default class Header extends React.Component {
 
     const appTitle = window.innerWidth >= tablet ? (
           <section id="app-title" className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start" role="toolbar">
-            <div className="custom-font mdc-typography mdc-typography--headline5 no-style"
-              title="Data Catalog">
-              Data Catalog
-            </div>
-          </section>) : '';
+            <a
+              className="custom-font mdc-typography mdc-typography--headline5"
+              title="View Catalog"
+              onClick={this.handleCatalogView}
+              onKeyDown={(e) => this.handleKeyPress(e, 'catalog')}
+              tabIndex="3">
+                Data Catalog
+            </a>
+          </section>) : (
+          <section id="app-title" className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start" role="toolbar">
+            <a
+              className="material-icons mdc-top-app-bar__navigation-icon"
+              title="View Catalog"
+              onClick={this.handleCatalogView}
+              onKeyDown={(e) => this.handleKeyPress(e, 'catalog')}
+              tabIndex="3">
+                view_comfy
+            </a>
+          </section>);
 
     return (
         <header
@@ -113,8 +131,15 @@ export default class Header extends React.Component {
           id="master-header">
           <div className="header-title mdc-top-app-bar__row">
             <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
-              <a className='header-title__tnris title-size' href="https://tnris.org/" tabIndex="0">
-                {this.state.tnrisTitle}
+              <a href="https://tnris.org">
+                <img className="tnris-logo" src={tnrisLogo} alt="" title="tnris.org" />
+              </a>
+              <a
+                className='header-title__tnris title-size'
+                href="https://tnris.org/"
+                tabIndex="0"
+                title="tnris.org">
+                  {this.state.tnrisTitle}
               </a>
             </section>
             <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-end">
@@ -153,18 +178,7 @@ export default class Header extends React.Component {
                         this.props.toolDrawerStatus === 'closed' ? 'menu' : 'tune' : 'tune'}*/}
                         tune
                     </a>
-                  </div> :
-                  <div className="catalog-icon nav-button">
-                    <a
-                      onClick={this.handleCatalogView}
-                      onKeyDown={(e) => this.handleKeyPress(e, 'catalog')}
-                      className="material-icons mdc-top-app-bar__navigation-icon"
-                      id="tools"
-                      title="View Catalog"
-                      tabIndex="3">
-                      view_comfy
-                    </a>
-                  </div>}
+                  </div> : ''}
             </section>
           </div>
         </header>

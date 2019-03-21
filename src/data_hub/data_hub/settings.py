@@ -36,6 +36,28 @@ CORS_ORIGIN_ALLOW_ALL = True
 
 APPEND_SLASH = False
 
+# If you're using prerender.io (the default backend):
+SEO_JS_PRERENDER_TOKEN = os.environ.get('SEO_TOKEN', '')
+SEO_JS_ENABLED = True
+SEO_JS_USER_AGENTS = [
+    "Googlebot",
+    "Yahoo",
+    "bingbot",
+    "Badiu",
+    "Ask Jeeves",
+    "baiduspider",
+    "facebookexternalhit",
+    "twitterbot",
+    "rogerbot",
+    "linkedinbot",
+    "embedly",
+    "quoralink preview'",
+    "showyoubot",
+    "outbrain",
+    "pinterest",
+    "developersgoogle.com/+/web/snippet"
+]
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -52,10 +74,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admindocs',
+    'django.contrib.sitemaps',
     'rest_framework',
     'rest_framework_swagger',
     'storages',
-    'webpack_loader'
+    'webpack_loader',
+    'django_seo_js'
 ]
 
 MIDDLEWARE = [
@@ -67,7 +91,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.contrib.admindocs.middleware.XViewMiddleware'
+    'django.contrib.admindocs.middleware.XViewMiddleware',
+    'django_seo_js.middleware.UserAgentMiddleware',  # If you want to detect by user agent
+    'django_seo_js.middleware.EscapedFragmentMiddleware'  # If you're using #!
 ]
 
 ROOT_URLCONF = 'data_hub.urls'
@@ -169,3 +195,5 @@ WEBPACK_LOADER = {
         'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats.dev.json'),
     }
 }
+
+SITE_ID = 1

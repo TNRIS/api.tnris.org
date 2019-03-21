@@ -10,7 +10,7 @@ export default class Supplementals extends React.Component {
         </span>
         <span className="mdc-list-item__meta">
           <a href={this.props.collection.tile_index_url}>
-            <i className="material-icons">description</i>Download Zipfile
+            <i className="material-icons">description</i>Download
           </a>
         </span>
       </li>
@@ -23,7 +23,7 @@ export default class Supplementals extends React.Component {
         </span>
         <span className="mdc-list-item__meta">
           <a href={this.props.collection.supplemental_report_url}>
-            <i className="material-icons">description</i>Download Zipfile
+            <i className="material-icons">description</i>Download
           </a>
         </span>
       </li>
@@ -36,7 +36,7 @@ export default class Supplementals extends React.Component {
         </span>
         <span className="mdc-list-item__meta">
           <a href={this.props.collection.lidar_breaklines_url}>
-            <i className="material-icons">description</i>Download Zipfile
+            <i className="material-icons">description</i>Download
           </a>
         </span>
       </li>

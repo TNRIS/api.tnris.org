@@ -104,26 +104,24 @@ export default class Header extends React.Component {
       (<NotificationBadge key={x} label='!' count={1} frameLength={30}/>) : '');
 
     const appTitle = window.innerWidth >= tablet ? (
-          <section id="app-title" className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start" role="toolbar">
             <a
+              id="app-title"
               className="custom-font mdc-typography mdc-typography--headline5"
               title="View Catalog"
               onClick={this.handleCatalogView}
               onKeyDown={(e) => this.handleKeyPress(e, 'catalog')}
               tabIndex="3">
                 Data Catalog
-            </a>
-          </section>) : (
-          <section id="app-title" className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start" role="toolbar">
+            </a>) : (
             <a
+              id="app-title"
               className="material-icons mdc-top-app-bar__navigation-icon"
               title="View Catalog"
               onClick={this.handleCatalogView}
               onKeyDown={(e) => this.handleKeyPress(e, 'catalog')}
               tabIndex="3">
                 view_comfy
-            </a>
-          </section>);
+            </a>);
 
     return (
         <header
@@ -149,7 +147,9 @@ export default class Header extends React.Component {
             </section>
           </div>
           <div className={`header-nav mdc-top-app-bar__row ${drawerStatusClass}`}>
-            {appTitle}
+            <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start" role="toolbar">
+              {appTitle}
+            </section>
             <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
               <CollectionSearcherContainer />
               {this.props.orders && Object.keys(this.props.orders).length !== 0 ?

@@ -90,9 +90,11 @@ styles for component: Header
     height: 70px;
 
     #app-title {
-      padding-left: 24px;
+      margin-left: 24px;
+      cursor: pointer;
 
       @media (max-width: $breakpoint-phone) {
+        margin-left: 0;
         padding-left: 12px;
       }
 

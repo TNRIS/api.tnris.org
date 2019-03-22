@@ -69,20 +69,20 @@ When adding new themes you will also need to update:
 */
 
 .dark-app-theme {
-  $primary-color: $tnris-blue;
+  $primary-color: $dark-theme-primary;
   $secondary-color: #999999;
   $button-text: lightgray;
 
   $main-background: #383838;
   $nest-text: #ededed;
-  $nest-text-subtle: gray;
+  $nest-text-subtle: #555;
 
   $search-background: $secondary-color;
-  $header-border: $nest-text-subtle;
+  $header-border: #282828;
 
-  $catalog-card-shadow: 0px 2px 6px -1px rgba(255,255,255, 0.2),
-                         0px 1px 1px 0px rgba(255,255,255, 0.14),
-                         0px 1px 3px 0px rgba(255,255,255, 0.12);
+  // $catalog-card-shadow: 0px 2px 6px -1px rgba(255,255,255, 0.2),
+  //                        0px 1px 1px 0px rgba(255,255,255, 0.14),
+  //                        0px 1px 3px 0px rgba(255,255,255, 0.12);
 
   $error-text: #af0000;
   $success-text: #00870b;
@@ -94,7 +94,7 @@ When adding new themes you will also need to update:
   $footer-text: #f5f5f5;
 
   body {
-    background-color: $main-background;
+    background-color: #282828;
 
     .search-component {
       .search-input {
@@ -110,25 +110,33 @@ When adding new themes you will also need to update:
       color: $tnris-blue !important;
     }
 
-    header {
-      .header-title {
-        background-color: $dark-theme-primary !important;
-      }
-    }
-
     .view-container {
 
       .catalog {
-        // background-color: $dark-theme-primary;
+        background-color: #282828;
+      }
+
+      .tnris-download-template,
+      .tnris-order-template,
+      .historical-aerial-template,
+      .outside-entity-template {
+        background-color: #282828;
+
+        header {
+          background-color: #282828;
+        }
       }
 
       .mdc-drawer {
-        border-left-color: $nest-text-subtle;
 
         .mdc-list-item--activated {
           color: $tnris-blue;
           background-color: $main-background;
         }
+      }
+
+      a {
+      color: $tnris-blue !important;
       }
 
       li {

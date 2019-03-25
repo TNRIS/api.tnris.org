@@ -2,7 +2,8 @@
 -- associated lookup tables. This SQL only needs to be run after initial database
 -- creation
 DROP VIEW IF EXISTS "compiled_historical_collection";
-CREATE VIEW "compiled_historical_collection" as
+
+CREATE MATERIALIZED VIEW "compiled_historical_collection" as
 SELECT historical_collection.id as collection_id,
   historical_collection.collection,
   historical_collection.from_date,
@@ -63,4 +64,6 @@ GROUP BY historical_collection.id,
          agency.about,
          agency.general_scale,
          agency.media_type,
-         agency.sample_image_url;
+         agency.sample_image_url
+
+WITH DATA;

@@ -3,7 +3,7 @@
 -- creation
 DROP VIEW IF EXISTS "collection_catalog_record";
 
-CREATE VIEW "collection_catalog_record" as
+CREATE MATERIALIZED VIEW "collection_catalog_record" as
 SELECT collection.collection_id,
   collection.name,
   collection.acquisition_date,
@@ -180,4 +180,6 @@ GROUP BY collection.collection_id,
 				license_type.license_abbreviation,
 				license_type.license_url,
 				template_type.template,
-        template_type.filter_name;
+        template_type.filter_name
+
+WITH DATA;

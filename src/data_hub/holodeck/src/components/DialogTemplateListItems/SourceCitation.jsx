@@ -8,12 +8,10 @@ export default class SourceCitation extends React.Component {
     super(props);
     window.innerWidth >= parseInt(breakpoints.desktop, 10) ? this.state = {
       gridLayout:'desktop',
-      copied: false,
-      date: new Date()
+      copied: false
     } : this.state = {
       gridLayout:'mobile',
-      copied: false,
-      date: new Date()
+      copied: false
     };
 
     this.handleResize = this.handleResize.bind(this);
@@ -47,7 +45,9 @@ export default class SourceCitation extends React.Component {
   render() {
 
     const copied = this.state.copied ? "Copied!" : "Copy Citation";
-    const sourceCitationText = `${this.props.collection.source_name} (${this.props.collection.source_abbreviation}). ${this.props.collection.name}, ${this.props.collection.acquisition_date}. Web. ${this.state.date}`
+    const now = new Date();
+    const dateString = new Date(now.getTime() - (now.getTimezoneOffset() * 60000)).toISOString().split("T")[0];
+    const sourceCitationText = `${this.props.collection.source_name} (${this.props.collection.source_abbreviation}). ${this.props.collection.name}, ${this.props.collection.acquisition_date}. Web. ${dateString}.`
     const textAreaRows = this.state.gridLayout === 'desktop' ? "4" : "2";
 
     return (
@@ -56,9 +56,6 @@ export default class SourceCitation extends React.Component {
           <div className="mdc-typography--subtitle1 citation-header">
             Dataset Citation
           </div>
-          {/*}<div className="mdc-typography--subtitle2 citation-help">
-            Copy the text below to cite this dataset.
-          </div>*/}
           <textarea
             type="text"
             id="citation"

@@ -130,7 +130,7 @@ export default class Header extends React.Component {
           <div className="header-title mdc-top-app-bar__row">
             <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
               <a href="https://tnris.org">
-                <img className="tnris-logo" src={tnrisLogo} alt="" title="tnris.org" />
+                <img className="tnris-logo" src={tnrisLogo} alt="TNRIS Logo" title="tnris.org" />
               </a>
               <a
                 className='header-title__tnris title-size'

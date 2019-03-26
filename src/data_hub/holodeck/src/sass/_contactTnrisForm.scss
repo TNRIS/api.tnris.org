@@ -9,6 +9,7 @@ styles for component: ContactTnrisForm
   @include mdc-text-field-textarea-stroke-color(rgba(0, 0, 0, 0.12));
 
   padding: 0px 15px 15px 15px;
+  min-height: 200px;
   overflow-y: auto;
   overflow-x: hidden;
 

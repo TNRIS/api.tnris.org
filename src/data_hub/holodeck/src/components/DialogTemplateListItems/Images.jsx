@@ -8,7 +8,6 @@ export default class Images extends React.Component {
     carousel_images = carousel_images.filter(item => item !== this.props.thumbnail);
     carousel_images.unshift(this.props.thumbnail);
     const multiImage = carousel_images.length > 1 ? true : false;
-
     return (
 
       <div className="template-content-div">
@@ -26,7 +25,7 @@ export default class Images extends React.Component {
             {
               carousel_images.map(url => (
                 <div className='carousel-image' key={url}>
-                  <img src={url} alt='' />
+                  <img src={url} alt={`${this.props.collection_name}`} />
                 </div>
                 )
               )

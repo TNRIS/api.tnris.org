@@ -91,18 +91,17 @@ styles for component: Header
 
     #app-title {
       margin-left: 24px;
-      cursor: pointer;
+      font-family: 'Roboto Condensed', sans-serif;
 
       @media (max-width: $breakpoint-phone) {
         margin-left: 0;
         padding-left: 12px;
       }
+    }
 
-      .custom-font {
-        outline: none;
-        cursor: pointer;
-        font-family: 'Roboto Condensed', sans-serif;
-      }
+    .back-to-hub {
+      outline: none;
+      cursor: pointer !important;
     }
 
     .nav-button {

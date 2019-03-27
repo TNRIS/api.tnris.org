@@ -1,21 +1,39 @@
-"id","name","abbreviation","created","last_modified"
-"179746f3-5501-4457-a8af-65fb855b1601","William-Stackhouse","","2018-02-01 19:29:32.394+00","2018-02-01 19:29:32.394+00"
-"1917c756-1769-4a13-9c0c-cbbf431bf225","United States Geological Survey","USGS","2018-02-01 19:44:13.608+00","2018-02-01 19:44:13.608+00"
-"2129e2f4-ab5a-44c5-b8da-410bb957ab52","Texas General Land Office","GLO","2018-01-11 06:00:00+00","2018-01-11 06:00:00+00"
-"31c60322-e11f-49ac-8bfc-4b6a9a2ebaca","Wallace","Wallace","2018-01-11 06:00:00+00","2018-01-11 06:00:00+00"
-"3ebff4da-c9e5-4f4f-9fee-918efb070238","Agricultural Stabilization and Conservation Service","ASCS","2018-01-11 06:00:00+00","2018-01-11 06:00:00+00"
-"69959c48-256d-4320-89e6-31f27d017c35","Texas Parks and Wildlife Department","TPWD","2018-01-11 06:00:00+00","2018-01-11 06:00:00+00"
-"71ef171c-cec1-4de8-8118-e5846ee5fbc6","Ammann","","2018-01-11 06:00:00+00","2018-01-11 06:00:00+00"
-"7d869597-0e15-4a11-9537-e20bd8ced9f1","Texas Department of Transportation","TxDOT","2018-01-11 06:00:00+00","2018-01-11 06:00:00+00"
-"80335589-0545-4dc5-9e1d-e52bde964cf1","Texas A&M Forest Service","TFS","2018-01-11 06:00:00+00","2018-01-11 06:00:00+00"
-"a5371b1b-c88c-40fb-bd2a-1436ee5e1c3d","National Hi-Altitude","","2018-01-11 06:00:00+00","2018-01-11 06:00:00+00"
-"e1981f3b-b7eb-49cd-ba64-6c9dc068c1a8","Miller","","2018-01-11 06:00:00+00","2018-01-11 06:00:00+00"
-"e1c4a0cc-2dd7-4a9f-93e9-017d88bf1e80","Fairchild","","2018-01-11 06:00:00+00","2018-01-11 06:00:00+00"
-"fbe7f830-523e-4c7a-949f-0403405f7506","Tobin","","2018-01-11 06:00:00+00","2018-01-11 06:00:00+00"
-"fc7f2321-d7c3-46aa-84fb-9818e826557a","United States Air Force","USAF","2018-01-11 06:00:00+00","2018-01-11 06:00:00+00"
-"ff3ae8ed-564f-4531-9849-868fefabb3cb","United States Department of Agriculture","USDA","2018-01-11 06:00:00+00","2018-01-11 06:00:00+00"
-"5a165bb0-be1e-4361-9d1b-a0023211b269","Capital Area Council of Governments","CAPCOG","2018-06-07 15:26:21.085777+00","2018-06-07 15:26:21.085797+00"
-"4c8f450b-e13b-4248-b9fe-769f83c581d6","Army Map Service","AMS","2018-01-11 06:00:00+00","2018-06-15 14:45:03.461185+00"
-"a41dd2e0-aaf0-4281-a253-0b7182bdfa27","Houston Aerial Surveys","HAS","2018-06-27 18:12:49.444869+00","2018-06-27 18:12:49.44489+00"
-"b0360113-67f9-4b0c-b2cd-4894bdc3a3ea","City of Austin","","2018-06-27 20:53:52.216789+00","2018-06-27 20:53:52.216809+00"
-"bd40aa08-cb36-416f-a3aa-86d0f955c522","Texas Forestry Service","TFS","2018-06-29 13:55:25.658797+00","2018-06-29 13:55:25.658818+00"
+"id","name","abbreviation","created","last_modified","about","general_scale","media_type","sample_image_url"
+"69959c48-256d-4320-89e6-31f27d017c35","Texas Parks and Wildlife Department","TPWD","2018-01-11 06:00:00+00","2018-01-11 06:00:00+00","","","",""
+"fbe7f830-523e-4c7a-949f-0403405f7506","Tobin","","2018-01-11 06:00:00+00","2018-01-11 06:00:00+00","","","",""
+"5a165bb0-be1e-4361-9d1b-a0023211b269","Capital Area Council of Governments","CAPCOG","2018-06-07 15:26:21.085777+00","2018-06-07 15:26:21.085797+00","","","",""
+"a41dd2e0-aaf0-4281-a253-0b7182bdfa27","Houston Aerial Surveys","HAS","2018-06-27 18:12:49.444869+00","2018-06-27 18:12:49.44489+00","","","",""
+"bd40aa08-cb36-416f-a3aa-86d0f955c522","Texas Forestry Service","TFS","2018-06-29 13:55:25.658797+00","2018-06-29 13:55:25.658818+00","","","",""
+"71ef171c-cec1-4de8-8118-e5846ee5fbc6","Ammann","AMNN","2018-01-11 06:00:00+00","2018-10-23 15:00:37.415502+00","","","",""
+"b0360113-67f9-4b0c-b2cd-4894bdc3a3ea","City of Austin","COA","2018-06-27 20:53:52.216789+00","2018-10-23 15:00:50.025031+00","","","",""
+"e1c4a0cc-2dd7-4a9f-93e9-017d88bf1e80","Fairchild","FCD","2018-01-11 06:00:00+00","2018-10-23 15:01:09.650697+00","","","",""
+"3ebff4da-c9e5-4f4f-9fee-918efb070238","Agricultural Stabilization and Conservation Service","ASCS","2018-01-11 06:00:00+00","2019-03-05 19:57:45.803828+00","","1:2000","Black and White, Color Infrared, Natural Color prints. Line Indexes also available for most counties",""
+"179746f3-5501-4457-a8af-65fb855b1601","William-Stackhouse","WM-SH","2018-02-01 19:29:32.394+00","2018-10-23 15:01:49.384589+00","","","",""
+"31c60322-e11f-49ac-8bfc-4b6a9a2ebaca","Wallace","WLCE","2018-01-11 06:00:00+00","2018-10-23 15:02:32.396895+00","","","",""
+"80335589-0545-4dc5-9e1d-e52bde964cf1","Texas A&M Forest Service","TAMFS","2018-01-11 06:00:00+00","2018-10-23 15:03:12.889518+00","","","",""
+"6e8f17cf-9cfa-4608-9646-a4dd1cd16e9d","Markhurd","MKD","2018-12-14 14:40:45.329158+00","2018-12-14 14:40:45.329179+00","","","",""
+"76132403-3ee6-49f1-ab53-fda881670c90","Tyler County Appraisal District","TCAD","2019-02-14 21:27:35.15556+00","2019-02-14 21:27:35.15556+00","","","",""
+"ce099562-6847-4de4-ac25-b43372e4dd9c","Bergstrom Air Force Base","BAFB","2018-11-14 20:42:55.4193+00","2018-11-14 20:42:55.4193+00","","","",""
+"db2705cb-0434-4064-b620-24fe20a9a8da","International Water and Borderlands Commission","IBWC","2018-12-12 15:08:57.409444+00","2018-12-12 15:08:57.409444+00","","","",""
+"df5ac578-5021-4aea-a437-aa004957789f","National Aeronautics and Space Administration","NASA","2018-11-14 19:56:12.737797+00","2018-11-14 19:56:12.737797+00","","","",""
+"e8ac90c4-42dd-4960-ac9f-79727bcdf6db","Lower Colorado River Authority","LCRA","2018-11-30 21:25:38.566361+00","2018-11-30 21:25:38.566361+00","","","",""
+"7d869597-0e15-4a11-9537-e20bd8ced9f1","Texas Department of Transportation","TxDOT","2018-01-11 06:00:00+00","2019-03-05 21:46:12.427579+00","Texas Department of Transportation's (TXDOT) aerial film archives include high altitude block-area stereo coverage of most of the state's urban counties and some rural areas. The earliest flight was made in 1956. The majority of the urban areas were first flown in the late 1970s and early 1980s.
+
+TxDOT is the Texas state agency responsible for construction and maintenance of the state’s immense highway system. It also oversees aviation, rail, and public transportation systems in the state.","1:24000","Black and White prints. Line Indexes also available for most counties","https://s3.amazonaws.com/data.tnris.org/historical_sample_txdot.jpg"
+"e1981f3b-b7eb-49cd-ba64-6c9dc068c1a8","Miller","MLR","2018-01-11 06:00:00+00","2019-03-06 14:11:25.640596+00","TNRIS houses most of Miller’s historical imagery collection in addition to hard copy maps. The collection is primarily of the central Texas area and covers the mid 1960s through 1990s.
+
+Miller Imaging and Digital Solutions, previously Miller Blueprint, is a family owned business located in Austin, TX that has been creating photographs, maps, and other printed material for close to a century.","1:24000","Black and White prints","https://s3.amazonaws.com/data.tnris.org/historical_sample_miller.jpg"
+"2129e2f4-ab5a-44c5-b8da-410bb957ab52","Texas General Land Office","GLO","2018-01-11 06:00:00+00","2019-03-06 14:11:13.763395+00","TNRIS houses collections from the Texas General Land Office (GLO) from the early 1970s to the 1980s. The majority of the collections archived at TNRIS are of the Texas coast, neighboring cities and communities, and of mining sites owned by the GLO in west Texas.
+
+The GLO was the first Texas public agency established in 1836 responsible for managing lands and mineral rights owned by the state. The agency has historical imagery collections for Texas from the 1930s to present.","1:3000","Black and White, Color Infrared, Natural Color prints","https://s3.amazonaws.com/data.tnris.org/historical_sample_glo.jpg"
+"4c8f450b-e13b-4248-b9fe-769f83c581d6","Army Map Service","AMS","2018-01-11 06:00:00+00","2019-03-06 14:11:02.094303+00","TNRIS houses extensive Army Map Service (AMS) high altitude collections of Texas from the late 1940s to mid 1950s.
+
+The AMS of the U.S. Army Corps of Engineers was the premier map making agency of the U.S. Department of Defense from 1941-1968. The major task of the AMS was the compilation, publication, and distribution of aerial imagery, military topographic maps, and related products required by the Armed Forces of the United States.","1:60000","Black and White prints","https://s3.amazonaws.com/data.tnris.org/historical_sample_ams.jpg"
+"ff3ae8ed-564f-4531-9849-868fefabb3cb","United States Department of Agriculture","USDA","2018-01-11 06:00:00+00","2019-03-06 14:11:54.256888+00","The USDA is home to one of the country’s largest aerial film libraries housing more than 10 million images. Images date back from 1955 to present with coverage of most of the United States and its territories.","1:2000","Black and White, Color Infrared, Natural Color prints. Line Indexes also available for most counties","https://s3.amazonaws.com/data.tnris.org/historical_sample_usda.jpg"
+"a5371b1b-c88c-40fb-bd2a-1436ee5e1c3d","National Hi-Altitude","NHA","2018-01-11 06:00:00+00","2019-03-05 19:57:24.535004+00","TNRIS houses collections from the National High Altitude Program (NHAP) 1980-1989","1:60000","Black and White, Color Infrared, Natural Color prints. Line Indexes also available for most counties",""
+"fc7f2321-d7c3-46aa-84fb-9818e826557a","United States Air Force","USAF","2018-01-11 06:00:00+00","2019-03-06 14:11:39.157139+00","TNRIS has a small collection of images from the United States Air Force (USAF) spanning the mid 1950s to late 1960s.
+
+The Air Force Historical Research Agency, established in 1943, was designated custodian of documents, narratives, reports, orders, and photographs for the Air Force in times of war and peace. The AFHR serves as a resource for scholars, researchers, government agencies, and the general public.","1:56000","Black and White prints","https://s3.amazonaws.com/data.tnris.org/historical_sample_usaf.jpg"
+"1917c756-1769-4a13-9c0c-cbbf431bf225","United States Geological Survey","USGS","2018-02-01 19:44:13.608+00","2019-03-06 14:12:10.607222+00","TNRIS houses extensive United States Geological Survey (USGS) collections encompassing the state of Texas. Dates of collections span from the early 1930s to the late 2000s. TNRIS also houses collections from the National High Altitude Program (NHAP) 1980-1989 and the National Aerial Photography Program (NAPP) 1987-2003 both being USGS interagency coordinated programs.
+
+The Aerial Photography Single Frame Records collection is a large and diverse group of imagery acquired by federal organizations from 1937 to present. The USGS, one of the participating federal organizations, houses it’s historical imagery at the USGS Long Term Archive (LTA) at the National Center for Earth Resources Observations and Sciences (EROS) in Sioux Falls, SD.","1:3000 – 1:125000","Black and White, Color, and Color Infrared prints","https://s3.amazonaws.com/data.tnris.org/historical_sample_usgs.jpg"

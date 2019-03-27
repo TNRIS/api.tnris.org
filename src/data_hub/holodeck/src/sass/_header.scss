@@ -15,53 +15,72 @@ styles for component: Header
 
   .open-drawer {
     width: calc(100% - 255px);
-    // -webkit-transition: width 2s; /* Safari */
-    // transition: width .1s;
   }
 
   .closed-drawer {
     width: 100%;
-    // -webkit-transition: width 2s; /* Safari */
-    // transition: width .1s;
   }
 
   .header-title {
     background-color: $primary-color;
     color: $button-text;
-    font-family: pragmatica-web-condensed,sans-serif;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 100;
-    height: auto;
-    letter-spacing: 3px;
-    text-transform: uppercase;
     padding: 4px;
-    height: 26px;
+    height: 35px;
 
     section {
       padding: 0;
 
+      .tnris-logo {
+        width: auto;
+        height: 30px;
+        margin-right: 10px;
+        padding: 4px 0 0 5px;
+      }
+
       .header-title__tnris {
+        font-family: 'Roboto Condensed', sans-serif;
         text-decoration: none;
+        letter-spacing: 3px;
         text-align: left;
+        text-transform: uppercase;
+        align-items: baseline;
         color: inherit;
-        padding-left: 5px;
+        padding-top: 12px;
+        margin-left: 5px;
+
+        @media (min-width: $breakpoint-phone) and (max-width: 649px) {
+          padding-top: 4px;
+        }
       }
 
       .header-title__twdb {
         text-decoration: none;
+        letter-spacing: 0;
+        text-transform: none !important;
         text-align: right;
+        align-items: baseline;
         color: inherit;
-        padding-right: 5px;
+        padding-top: 12px;
+        margin-right: 5px;
+
+        @media (min-width: $breakpoint-phone) and (max-width: 649px) {
+          padding-top: 4px;
+        }
       }
 
       .title-size {
         font-size: 14px;
 
-        @media (min-width: $breakpoint-tablet) and (max-width: $breakpoint-desktop) {
+        @media (min-width: $breakpoint-download) and (max-width: $breakpoint-desktop) {
           font-size: 12px;
         }
-        @media (min-width: $breakpoint-phone) and (max-width: $breakpoint-tablet) {
+        @media (min-width: $breakpoint-phone) and (max-width: $breakpoint-download) {
           font-size: 10px;
+        }
+        @media (max-width: $breakpoint-phone) {
+          font-size: 12px;
         }
       }
     }
@@ -71,15 +90,27 @@ styles for component: Header
     height: 70px;
 
     #app-title {
-      padding-left: 24px;
+      margin-left: 24px;
+      font-family: 'Roboto Condensed', sans-serif;
 
-      .custom-font {
-        font-family: 'Roboto Condensed', sans-serif;
+      @media (max-width: $breakpoint-phone) {
+        margin-left: 0;
+        padding-left: 12px;
       }
+    }
+
+    .back-to-hub {
+      outline: none;
+      cursor: pointer !important;
     }
 
     .nav-button {
       padding-right: 12px;
+
+      @media (max-width: $breakpoint-phone) {
+        padding-right: 0;
+      }
+
     }
 
     .open-drawer {

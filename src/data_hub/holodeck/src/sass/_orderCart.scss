@@ -37,6 +37,10 @@ styles for component: OrderCart
           }
         }
       }
+
+      .empty-cart-message {
+        text-align: center;
+      }
     }
 
     .mdc-list {
@@ -50,6 +54,13 @@ styles for component: OrderCart
         .mdc-list-item__text {
           .mdc-list-item__primary-text {
             color: $primary-color;
+            a {
+              text-decoration: inherit;
+              color: $primary-color;
+            }
+            a:hover {
+              cursor: pointer;
+            }
           }
 
           .mdc-list-item__secondary-text {
@@ -189,23 +200,25 @@ styles for component: OrderCart
     }
 
     .order-cart-form-success {
+      text-align: center;
       span {
         color: $success-text;
       }
     }
 
     .order-cart-form-error {
+      text-align: center;
       span {
         color: red;
       }
     }
 
+    .order-cart-form-submitting {
+      text-align: center;
+    }
+
     div.hidden-field {
       display: none;
     }
-  }
-
-  .push-footer {
-    margin-bottom: 300px;
   }
 }

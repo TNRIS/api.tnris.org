@@ -13,7 +13,18 @@ export const setUrl = (newUrl) => {
   ReactGA.pageview(newUrl);
   return (dispatch) => {
     const curState = store.getState();
-    dispatch(push(newUrl, curState));
+    const pushStateObj = {
+      catalog: curState.catalog,
+      collectionFilterMap: curState.collectionFilterMap,
+      collectionFilter: curState.collectionFilter,
+      collections: {selectedCollection: curState.collections.selectedCollection},
+      collectionSearcher: curState.collectionSearcher,
+      collectionSorter: curState.collectionSorter,
+      collectionTimeslider: curState.collectionTimeslider,
+      urlTracker: curState.urlTracker
+    }
+
+    dispatch(push(newUrl, pushStateObj));
     dispatch({
       type: SET_URL,
       payload: {previousUrl: currentUrl}
@@ -39,8 +50,18 @@ export const clearPreviousUrl = () => {
 };
 
 export const url404 = () => {
-  const curState = store.getState();
   return (dispatch) => {
-    dispatch(replace('/404', curState));
+    const curState = store.getState();
+    const replaceStateObj = {
+      catalog: curState.catalog,
+      collectionFilterMap: curState.collectionFilterMap,
+      collectionFilter: curState.collectionFilter,
+      collections: {selectedCollection: curState.collections.selectedCollection},
+      collectionSearcher: curState.collectionSearcher,
+      collectionSorter: curState.collectionSorter,
+      collectionTimeslider: curState.collectionTimeslider,
+      urlTracker: curState.urlTracker
+    }
+    dispatch(replace('/404', replaceStateObj));
   }
 }

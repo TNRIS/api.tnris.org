@@ -8,6 +8,8 @@ import breakpoints from '../sass/_breakpoints.scss';
 
 import CollectionSearcherContainer from '../containers/CollectionSearcherContainer';
 
+import tnrisLogo from '../images/tnris_logo.svg';
+
 export default class Header extends React.Component {
   constructor(props) {
     super(props);
@@ -19,6 +21,7 @@ export default class Header extends React.Component {
     this.handleOrderCartView = this.handleOrderCartView.bind(this);
     this.handleCatalogView = this.handleCatalogView.bind(this);
     this.handleResize = this.handleResize.bind(this);
+    this.handleKeyPress = this.handleKeyPress.bind(this);
   }
 
   componentDidMount() {
@@ -41,7 +44,7 @@ export default class Header extends React.Component {
   handleResize() {
     if (window.innerWidth < parseInt(breakpoints.phone, 10)) {
       this.setState({
-        tnrisTitle: 'TNRIS',
+        tnrisTitle: '',
         twdbTitle: 'A TWDB Division'
       })
     }
@@ -54,15 +57,31 @@ export default class Header extends React.Component {
   }
 
   handleOrderCartView() {
-    if (window.location.pathname !== '/cart/') {
+    if (this.props.view !== 'orderCart') {
       this.props.setViewOrderCart();
       this.props.setUrl('/cart/');
     }
   }
 
   handleCatalogView() {
-    this.props.setViewCatalog();
-    this.props.setUrl(this.props.catalogFilterUrl);
+    if (this.props.view !== 'catalog') {
+      this.props.setViewCatalog();
+      this.props.setUrl(this.props.catalogFilterUrl);
+    }
+  }
+
+  handleKeyPress (e, ref) {
+    if (e.keyCode === 13 || e.keyCode === 32) {
+      if (ref === 'cart') {
+        this.handleOrderCartView();
+      }
+      else if (ref === 'toolDrawer') {
+        this.props.handleToolDrawerDisplay();
+      }
+      else if (ref === 'catalog') {
+        this.handleCatalogView();
+      }
+    }
   }
 
   render() {
@@ -76,7 +95,7 @@ export default class Header extends React.Component {
     //   drawerStatusClass = 'open-drawer';
     // }
 
-    const shoppingCartCountBadge = Object.keys(this.props.orders).length > 0 ? (
+    const shoppingCartCountBadge = this.props.orders && Object.keys(this.props.orders).length > 0 ? (
       <NotificationBadge count={Object.keys(this.props.orders).length} effect={Effect.SCALE} frameLength={30}/>
     ) : '';
 
@@ -84,13 +103,30 @@ export default class Header extends React.Component {
     const toolDrawerNotification = filters.map(x => this.props.location.pathname.includes(x) ?
       (<NotificationBadge key={x} label='!' count={1} frameLength={30}/>) : '');
 
-    const appTitle = window.innerWidth >= tablet ? (
-          <section id="app-title" className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start" role="toolbar">
-            <div className="custom-font mdc-typography mdc-typography--headline5 no-style"
-              title="Data Catalog">
-              Data Catalog
-            </div>
-          </section>) : '';
+    const appTitle = window.innerWidth >= tablet && this.props.view === 'catalog' ? (
+            <p
+              id="app-title"
+              className="mdc-typography mdc-typography--headline5"
+              title = "dataHub">
+                dataHub
+            </p>) : window.innerWidth >= tablet && this.props.view !== 'catalog' ? (
+            <a
+              id="app-title"
+              className="back-to-hub mdc-typography mdc-typography--headline5"
+              title="back to dataHub"
+              onClick={this.handleCatalogView}
+              onKeyDown={(e) => this.handleKeyPress(e, 'catalog')}
+              tabIndex="3">
+                dataHub
+            </a>) : window.innerWidth < tablet && this.props.view !== 'catalog' ? (
+            <a
+              className="material-icons mdc-top-app-bar__navigation-icon"
+              title="back to dataHub"
+              onClick={this.handleCatalogView}
+              onKeyDown={(e) => this.handleKeyPress(e, 'catalog')}
+              tabIndex="3">
+                view_comfy
+            </a>) : '';
 
     return (
         <header
@@ -98,8 +134,15 @@ export default class Header extends React.Component {
           id="master-header">
           <div className="header-title mdc-top-app-bar__row">
             <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
-              <a className='header-title__tnris title-size' href="https://tnris.org/" tabIndex="0">
-                {this.state.tnrisTitle}
+              <a href="https://tnris.org">
+                <img className="tnris-logo" src={tnrisLogo} alt="TNRIS Logo" title="tnris.org" />
+              </a>
+              <a
+                className='header-title__tnris title-size'
+                href="https://tnris.org/"
+                tabIndex="0"
+                title="tnris.org">
+                  {this.state.tnrisTitle}
               </a>
             </section>
             <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-end">
@@ -109,7 +152,9 @@ export default class Header extends React.Component {
             </section>
           </div>
           <div className={`header-nav mdc-top-app-bar__row ${drawerStatusClass}`}>
-            {appTitle}
+            <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start" role="toolbar">
+              {appTitle}
+            </section>
             <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
               <CollectionSearcherContainer />
               {this.props.orders && Object.keys(this.props.orders).length !== 0 ?
@@ -117,8 +162,10 @@ export default class Header extends React.Component {
                    {shoppingCartCountBadge}
                   <a
                     onClick={this.handleOrderCartView}
+                    onKeyDown={(e) => this.handleKeyPress(e, 'cart')}
                     className="material-icons mdc-top-app-bar__navigation-icon"
-                    title="View shopping cart">
+                    title="View shopping cart"
+                    tabIndex="3">
                     shopping_cart
                   </a>
                 </div> : ''}
@@ -127,23 +174,16 @@ export default class Header extends React.Component {
                     {toolDrawerNotification}
                     <a
                       onClick={this.props.handleToolDrawerDisplay}
+                      onKeyDown={(e) => this.handleKeyPress(e, 'toolDrawer')}
                       className="material-icons mdc-top-app-bar__navigation-icon"
                       id="tools"
-                      title={this.props.toolDrawerStatus === 'closed' ? 'Open tool drawer' : 'Close tool drawer'}>
+                      title={this.props.toolDrawerStatus === 'closed' ? 'Open tool drawer' : 'Close tool drawer'}
+                      tabIndex="3">
                       {/*{this.props.toolDrawerVariant === 'dismissible' ?
                         this.props.toolDrawerStatus === 'closed' ? 'menu' : 'tune' : 'tune'}*/}
                         tune
                     </a>
-                  </div> :
-                  <div className="catalog-icon nav-button">
-                    <a
-                      onClick={this.handleCatalogView}
-                      className="material-icons mdc-top-app-bar__navigation-icon"
-                      id="tools"
-                      title="View Catalog">
-                      view_comfy
-                    </a>
-                  </div>}
+                  </div> : ''}
             </section>
           </div>
         </header>

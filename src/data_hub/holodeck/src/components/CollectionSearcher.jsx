@@ -8,16 +8,14 @@ export default class CollectionSearcher extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      searchFieldValue: '',
-      showSuggestionList: false
+      searchFieldValue: ''
     }
 
-    this.handleBlur = this.handleBlur.bind(this);
     this.handleClearSearch = this.handleClearSearch.bind(this);
-    this.handleFocus = this.handleFocus.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleKeyUp = this.handleKeyUp.bind(this);
-    this.handleSelect = this.handleSelect.bind(this);
+    this.handleKeyDown = this.handleKeyDown.bind(this);
+    this.handleSearch = this.handleSearch.bind(this);
+    this.handleStateChange = this.handleStateChange.bind(this);
     this.updateUrl = this.updateUrl.bind(this);
   }
 
@@ -54,32 +52,13 @@ export default class CollectionSearcher extends React.Component {
     }
   }
 
-  // if the input loses focus, hide the suggestionList
-  handleBlur() {
-    this.setState({showSuggestionList: false});
-  }
-
-  // if the input gains focus and has value, show the suggestionList
-  handleFocus(event) {
-    if (event.target.value) {
-      this.setState({showSuggestionList: true});
-    }
-  }
-
   // clears the text from the search input, resets the local state, and resets
   // the collectionSearchSuggestionsQuery to empty in the app's state
   handleClearSearch() {
     try {
-      this.setState({
-        searchFieldValue: '',
-        showSuggestionList: false
-      });
-      this.props.setCollectionSearchQuery('');
+      this.handleSearch('');
       this.props.setCollectionSearchSuggestionsQuery('');
-      this.updateUrl('');
-      if (this.props.selectedCollection) {
-        this.props.clearSelectedCollection();
-      }
+      this.setState({searchFieldValue: ''});
       this.searchFieldInput.focus();
     } catch(e) {
       console.log(e);
@@ -92,16 +71,10 @@ export default class CollectionSearcher extends React.Component {
   handleInputChange(event) {
     try {
       if (event.target.value) {
-        this.setState({
-          searchFieldValue: event.target.value,
-          showSuggestionList: true
-        });
+        this.setState({searchFieldValue: event.target.value});
         this.props.setCollectionSearchSuggestionsQuery(event.target.value);
       } else {
-        this.setState({
-          searchFieldValue: '',
-          showSuggestionList: false
-        });
+        this.setState({searchFieldValue: ''});
         this.props.setCollectionSearchSuggestionsQuery('');
       }
     } catch(e) {
@@ -111,21 +84,29 @@ export default class CollectionSearcher extends React.Component {
 
   // handles firing the search if the user presses enter or blurs the input if
   // they press escape while in the search textField
-  handleKeyUp(event) {
+  handleKeyDown(event) {
     try {
       // we check if the user pressed the enter or escape key
       if (event.keyCode === 13) { // they pressed enter, so fire the search
         event.preventDefault(); // ensure it is only our code that is run
-        this.props.setCollectionSearchQuery(event.target.value);
-        this.updateUrl(event.target.value);
-        this.setState({showSuggestionList: false});
-        event.target.blur();
-        if (this.props.selectedCollection) {
-          // this.props.setViewCatalog();
-          this.props.clearSelectedCollection();
-        }
-      } else if (event.keyCode === 27) { // they pressed escape, so drop focus
-        event.target.blur();
+        this.handleSearch(event.target.value);
+        this.searchFieldInput.blur();
+      }
+      else if (event.keyCode === 27) { // they pressed escape, so drop focus
+        this.searchFieldInput.blur();
+      }
+    } catch(e) {
+      console.log(e);
+    }
+  }
+
+  // handles firing search
+  handleSearch(value) {
+    try {
+      this.props.setCollectionSearchQuery(value);
+      this.updateUrl(value);
+      if (this.props.selectedCollection) {
+        this.props.clearSelectedCollection();
       }
     } catch(e) {
       console.log(e);
@@ -133,18 +114,19 @@ export default class CollectionSearcher extends React.Component {
   }
 
   // handles firing the search if the user selects an item from the suggestionList
-  handleSelect(selection) {
-    this.setState({
-      searchFieldValue: selection,
-      showSuggestionList: false
-    });
-    this.props.setCollectionSearchQuery(selection);
-    this.props.setCollectionSearchSuggestionsQuery(selection);
-    this.updateUrl(selection);
-    this.searchFieldInput.blur();
-    if (this.props.selectedCollection) {
-      // this.props.setViewCatalog();
-      this.props.clearSelectedCollection();
+  // or presses enter while a member of the suggestionList is highlighted
+  handleStateChange(changes, stateAndHelpers) {
+    this.setState({previousChanges: changes});
+    if (changes.type === '__autocomplete_keydown_enter__') {
+      // if they choose an item with the arrow keys and not the mouse pointer
+      // then press enter, otherwise the keydown method from above is fired
+      if (this.state.previousChanges.type === '__autocomplete_keydown_arrow_down__') {
+        this.handleSearch(stateAndHelpers.selectedItem);
+        this.searchFieldInput.blur();
+      }
+    } else if (changes.type === '__autocomplete_click_item__') {
+      this.handleSearch(stateAndHelpers.selectedItem);
+      this.searchFieldInput.blur();
     }
   }
 
@@ -174,12 +156,13 @@ export default class CollectionSearcher extends React.Component {
   render() {
     return (
       <Downshift
-        onChange={selection => this.handleSelect(selection)}
+        onStateChange={(changes, stateAndHelpers) => this.handleStateChange(changes, stateAndHelpers)}
         itemToString={item => (item ? item.value : '')}
       >
         {({
           getInputProps,
           getItemProps,
+          getMenuProps,
           isOpen,
           inputValue,
           highlightedIndex,
@@ -197,9 +180,7 @@ export default class CollectionSearcher extends React.Component {
                 value: this.state.searchFieldValue,
                 placeholder: "Search",
                 onChange: this.handleInputChange,
-                onKeyUp: this.handleKeyUp,
-                onFocus: this.handleFocus,
-                onBlur: this.handleBlur
+                onKeyDown: event => this.handleKeyDown(event)
             })}>
             </input>
             {this.props.collectionSearchSuggestionsQuery ?
@@ -210,13 +191,19 @@ export default class CollectionSearcher extends React.Component {
                 onClick={this.handleClearSearch}>
                 clear
               </button> : ''}
-              {this.state.showSuggestionList && this.props.collectionSearchSuggestions !== undefined &&
+              {isOpen && this.props.collectionSearchSuggestions !== undefined &&
                 this.props.collectionSearchSuggestions.length !== 0 ?
-                <ul className="suggestion-list downshift-dropdown mdc-list">
+                <ul
+                  className="suggestion-list downshift-dropdown mdc-list"
+                  {...getMenuProps()}>
                   {this.props.collectionSearchSuggestions.slice(0,5).map((item, index) =>
                     <li
                       className="dropdown-item mdc-list-item"
-                      {...getItemProps({ key: index, index, item })}
+                      {...getItemProps({
+                        item,
+                        index,
+                        key: index
+                      })}
                             style={{
                               backgroundColor: highlightedIndex === index ? 'lightgray' : 'white',
                             }}>

@@ -33,6 +33,7 @@ class OrderCart extends Component {
       this.handleChange = this.handleChange.bind(this);
       this.recaptchaChange = this.recaptchaChange.bind(this);
       this.handleKeyRemoval = this.handleKeyRemoval.bind(this);
+      this.handleCartItemClick = this.handleCartItemClick.bind(this);
   }
 
   componentDidMount() {
@@ -234,6 +235,12 @@ class OrderCart extends Component {
     }
   }
 
+  handleCartItemClick(e) {
+    this.props.setViewCollection();
+    this.props.selectCollection(e.target.name);
+    this.props.setUrl('/collection/' + e.target.name);
+  }
+
   render() {
     // default filler for empty cart
     let showHTML = (
@@ -245,7 +252,7 @@ class OrderCart extends Component {
     const zipfileDownloadLidarBlurb = this.state.delivery === 'Zipfile Download' ? <div className='mdc-typography--caption'><strong>Note:</strong> Lidar datasets are often very large, and TNRIS cannot offer digital downloads for datasets larger than 10 GB. If the ordered dataset is larger than 10 GB, you have the option of either providing a factory-sealed external hard drive (or multiple factory-sealed external hard drives) or purchasing them at cost from TNRIS.</div> : "";
     // empty cart html
     const emptyCartMessage = (
-      <ul className="mdc-list push-footer">
+      <ul className="mdc-list empty-cart-message">
         <li><strong>There are no datasets in your cart.</strong></li>
         <li>Although only some datasets are available for download, all datasets are available for ordering directly from TNRIS. To order a dataset(s), click the Catalog icon above, open a dataset card, and choose the Order tab in the top right.</li>
       </ul>
@@ -265,7 +272,7 @@ class OrderCart extends Component {
           <li key={collectionId} className="mdc-list-item">
             <span className="mdc-list-item__graphic material-icons" aria-hidden="true">whatshot</span>
             <span className="mdc-list-item__text">
-              <span className="mdc-list-item__primary-text">{compiledDisplayName}</span>
+              <span className="mdc-list-item__primary-text"><a name={collectionId} onClick={this.handleCartItemClick}>{compiledDisplayName}</a></span>
               <span className="mdc-list-item__secondary-text">{this.props.orders[collectionId].coverage} Coverage{partialType}{attachments}{formats}</span>
             </span>
             <span className="mdc-list-item__meta material-icons"
@@ -575,7 +582,7 @@ class OrderCart extends Component {
               </div>
               <label htmlFor="hard-drive-tnris-hd-input">TNRIS Provided Hard Drive (1 TB)</label>
             </div>
-            <div className='mdc-typography--caption'>If the total order size is over 1 TB of data, you will be required to provide your own hard drive.</div>
+            <div className='mdc-typography--caption'>TNRIS does not provide multiple 1 TB hard drives for orders larger than 1 TB. If the total order size is over 1 TB of data, you will be required to provide your own hard drive.</div>
             <div id="hard-drive-tnris-flash" className="mdc-form-field">
               <div className="mdc-radio">
                 <input className="mdc-radio__native-control"

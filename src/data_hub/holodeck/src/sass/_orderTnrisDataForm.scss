@@ -17,6 +17,7 @@ styles for component: OrderTnrisDataForm
   }
 
   padding: 0px 15px 15px 15px;
+  min-height: 200px;
   overflow-y: auto;
   overflow-x: hidden;
 
@@ -135,10 +136,6 @@ styles for component: OrderTnrisDataForm
     }
   }
 
-  .push-footer {
-    margin-bottom: 300px;
-  }
-
   .order-cart-form-error {
     span {
       color: $error-text;
@@ -147,6 +144,10 @@ styles for component: OrderTnrisDataForm
 
   div.hidden-field {
     display: none;
+  }
+
+  .order-tnris-data-message {
+    text-align: center;
   }
 
 

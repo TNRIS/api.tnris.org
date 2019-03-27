@@ -80,6 +80,7 @@ class OrderTnrisDataForm extends Component {
     document.querySelectorAll('.mdc-text-field-helper-text').forEach((ht) => {
       new MDCTextFieldHelperText(ht);
     });
+    window.scrollTo(0,0);
   }
 
   componentDidUpdate () {
@@ -248,6 +249,12 @@ class OrderTnrisDataForm extends Component {
             this.setState({
               display: 'form',
               invalid: 'Your zipfile exceeds the 20 MB limit. Please choose another zipfile.'
+            });
+          }
+          else if (document.getElementById('order-partial-aoi-file').files[0].name.substr(document.getElementById('order-partial-aoi-file').files[0].name.length - 4) !== '.zip') {
+            this.setState({
+              display: 'form',
+              invalid: 'Your file must be a zipfile (.zip extension). Please choose a zipfile.'
             });
           }
           else {
@@ -535,12 +542,12 @@ class OrderTnrisDataForm extends Component {
               </div>
               <label htmlFor="order-partial-aoi-input">Area of Interest Boundary File (TNRIS Preferred Option)</label>
             </div>
-            <div className='mdc-typography--caption'>Select a zipped (.zip) Shapefile or KML to upload. Maximum allowed file size is 20 MB. <a href="http://geojson.io" target="_blank" rel="noopener noreferrer">Don't have a shapefile? Draw one here!</a></div>
+            <div className='mdc-typography--caption'>Only zipfiles (.zip) accepted. Select a Shapefile or KML within a compressed zipfile to upload. Maximum allowed file size is 20 MB. <a href="http://geojson.io" target="_blank" rel="noopener noreferrer">Don't have a shapefile? Draw one here!</a></div>
             <div className={uploadAoiClass}>
               <input type="file"
                      id="order-partial-aoi-file"
                      name="aoiUpload"
-                     accept=".zip,application/octet-stream,application/zip,application/x-zip,application/x-zip-compressed"
+                     accept=".zip"
                      onChange={this.handleChange}
               />
             </div>
@@ -601,7 +608,7 @@ class OrderTnrisDataForm extends Component {
           {lidarFields}
           {historicalFields}
 
-          <p className="invalid-prompt">{invalid}</p>
+          <p className="order-tnris-data-message invalid-prompt">{invalid}</p>
 
           <div className="submit-button">
             <input type="submit" value="Add to Shopping Cart" id="order-tnris-data-submit" className="mdc-button mdc-button--raised"/>
@@ -612,7 +619,7 @@ class OrderTnrisDataForm extends Component {
 
     else if (this.state.display === 'cart') {
       showHTML = (
-        <div className="order-tnris-data-cart push-footer">
+        <div className="order-tnris-data-message">
           <p className="mdc-typography--body2">
             This dataset is already in the shopping cart.
           </p>
@@ -624,7 +631,7 @@ class OrderTnrisDataForm extends Component {
     }
     else if (this.state.display === 'added') {
       showHTML = (
-        <div className="order-tnris-data-cart push-footer">
+        <div className="order-tnris-data-message">
           <p className="mdc-typography--body2">
             This dataset has been added to the shopping cart.
           </p>
@@ -636,7 +643,7 @@ class OrderTnrisDataForm extends Component {
     }
     else if (this.state.display === 'uploading') {
       showHTML = (
-        <div className="order-tnris-data-cart push-footer">
+        <div className="order-tnris-data-message">
           <div className='mdc-typography--headline6'>
             Uploading files...
           </div>

@@ -5,6 +5,7 @@ import Catalog from '../components/Catalog';
 import {
   catalogActions,
   collectionActions,
+  colorThemeActions,
   orderCartActions,
   resourceActions,
   toolDrawerActions } from '../actions';
@@ -22,6 +23,7 @@ const mapStateToProps = (state) => ({
   sortOrder: state.collectionSorter.sortOrder,
   visibleCollections: getSortedCollections(state),
   theme: state.colorTheme.theme,
+  themeOptions: state.colorTheme.themeOptions,
   previousUrl: state.urlTracker.previousUrl,
   toolDrawerStatus: state.toolDrawer.toolDrawerStatus,
   toolDrawerVariant: state.toolDrawer.toolDrawerVariant,
@@ -58,6 +60,9 @@ const mapDispatchToProps = dispatch => ({
   },
   popBrowserStore: (state) => {
     dispatch(catalogActions.popBrowserStore(state));
+  },
+  setColorTheme: (theme) => {
+    dispatch(colorThemeActions.setColorTheme(theme));
   }
 })
 

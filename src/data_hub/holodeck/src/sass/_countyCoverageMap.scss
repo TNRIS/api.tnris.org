@@ -25,4 +25,19 @@ styles for component: CountyCoverage
       }
     }
   }
+
+  #county-coverage-notice {
+    background: $main-background;
+    color: $nest-text;
+    position: absolute;
+    z-index: 2;
+    top: 175px;
+    right: 5px;
+    border-radius: 3px;
+    border: 1px solid rgba(0,0,0,0.4);
+    padding: 6px;
+    text-align: center;
+    max-width: 80vw;
+  }
+
 }

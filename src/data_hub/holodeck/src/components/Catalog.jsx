@@ -9,8 +9,8 @@ import { MDCDialog } from '@material/dialog';
 import HistoricalAerialTemplate from './HistoricalAerialTemplate/HistoricalAerialTemplate';
 import OutsideEntityTemplate from './TnrisOutsideEntityTemplate/TnrisOutsideEntityTemplate';
 import TnrisOrderTemplate from './TnrisOrderTemplate/TnrisOrderTemplate';
-import CollectionFilterMapView from './CollectionFilterMapView';
 
+import CollectionFilterMapViewContainer from '../containers/CollectionFilterMapViewContainer';
 import FooterContainer from '../containers/FooterContainer';
 import HeaderContainer from '../containers/HeaderContainer';
 import ToolDrawerContainer from '../containers/ToolDrawerContainer';
@@ -21,6 +21,7 @@ import NotFoundContainer from '../containers/NotFoundContainer';
 
 import loadingImage from '../images/loading.gif';
 import noDataImage from '../images/no-data.png';
+import noDataImage666 from '../images/no-data-satan.png';
 
 // global sass breakpoint variables to be used in js
 import breakpoints from '../sass/_breakpoints.scss';
@@ -49,8 +50,23 @@ export default class Catalog extends React.Component {
     window.addEventListener("resize", this.handleResize);
     window.innerWidth >= parseInt(breakpoints.desktop, 10) ? this.props.setDismissibleDrawer() : this.props.setModalDrawer();
     window.onpopstate = (e) => {
-      const theState = e.state.state;
-      this.props.popBrowserStore(theState);
+      if (e.state) {
+        const theState = e.state.state;
+        this.props.popBrowserStore(theState);
+      }
+    }
+    // apply theme
+    // on component mount, check localstorage for theme to apply
+    if (typeof(Storage) !== void(0)) {
+      const savedTheme = localStorage.getItem("data_theme") ? localStorage.getItem("data_theme") : null;
+      if (savedTheme) {
+        if (this.props.themeOptions.includes(savedTheme) || savedTheme === 'satan') {
+          this.props.setColorTheme(savedTheme);
+        }
+        else {
+          localStorage.removeItem("data_theme");
+        }
+      }
     }
   }
 
@@ -171,7 +187,7 @@ export default class Catalog extends React.Component {
     const catalogCards = this.props.visibleCollections && this.props.visibleCollections.length < 1 ?
       <div className='no-data'>
         <img
-          src={noDataImage}
+          src={this.props.theme !== 'satan' ? noDataImage : noDataImage666}
           className="no-data-image"
           alt="No Data Available"
           title="No data available with those search terms" />
@@ -266,7 +282,7 @@ export default class Catalog extends React.Component {
             <Route path='/collection/:collectionId' exact render={(props) => this.handleShowCollectionView()} />
             <Route path='/catalog/:filters' exact render={(props) => this.setCatalogView()} />
             <Route path='/cart/' exact render={(props) => <OrderCartViewContainer />} />
-            <Route path='/geofilter/' exact component={CollectionFilterMapView} />
+            <Route path='/geofilter/' exact render={(props) => <CollectionFilterMapViewContainer />} />
             <Route path='/' exact render={(props) => this.setCatalogView()} />
             <Route path='*' render={(props) => <NotFoundContainer />} />
           </Switch>

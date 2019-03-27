@@ -103,25 +103,30 @@ export default class Header extends React.Component {
     const toolDrawerNotification = filters.map(x => this.props.location.pathname.includes(x) ?
       (<NotificationBadge key={x} label='!' count={1} frameLength={30}/>) : '');
 
-    const appTitle = window.innerWidth >= tablet ? (
+    const appTitle = window.innerWidth >= tablet && this.props.view === 'catalog' ? (
+            <p
+              id="app-title"
+              className="mdc-typography mdc-typography--headline5"
+              title = "dataHub">
+                dataHub
+            </p>) : window.innerWidth >= tablet && this.props.view !== 'catalog' ? (
             <a
               id="app-title"
-              className="custom-font mdc-typography mdc-typography--headline5"
-              title="View Catalog"
+              className="back-to-hub mdc-typography mdc-typography--headline5"
+              title="back to dataHub"
               onClick={this.handleCatalogView}
               onKeyDown={(e) => this.handleKeyPress(e, 'catalog')}
               tabIndex="3">
-                Data Catalog
-            </a>) : (
+                dataHub
+            </a>) : window.innerWidth < tablet && this.props.view !== 'catalog' ? (
             <a
-              id="app-title"
               className="material-icons mdc-top-app-bar__navigation-icon"
-              title="View Catalog"
+              title="back to dataHub"
               onClick={this.handleCatalogView}
               onKeyDown={(e) => this.handleKeyPress(e, 'catalog')}
               tabIndex="3">
                 view_comfy
-            </a>);
+            </a>) : '';
 
     return (
         <header
@@ -130,7 +135,7 @@ export default class Header extends React.Component {
           <div className="header-title mdc-top-app-bar__row">
             <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
               <a href="https://tnris.org">
-                <img className="tnris-logo" src={tnrisLogo} alt="" title="tnris.org" />
+                <img className="tnris-logo" src={tnrisLogo} alt="TNRIS Logo" title="tnris.org" />
               </a>
               <a
                 className='header-title__tnris title-size'

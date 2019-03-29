@@ -1,3 +1,10 @@
+--
+-- NOT USED IN PRODUCTION. SAVED ONLY FOR REFERENCE
+-- THIS WAS TEST SQL FOR TRIGGERS TO REFRESH THE MATERIALIZED VIEW
+-- PERFORMANCE BUSTED IN ADMIN CONSOLE AS THIS CODE TOOK TOO LONG TO EXECUTE
+-- THIS FUNCTIONALITY WAS MIGRATED TO 'lambda-refresh_materialized_views'
+--
+
 -- CHC materialized view refresh
 DROP TRIGGER IF EXISTS historical_collection_change ON historical_collection;
 DROP TRIGGER IF EXISTS county_relate_change ON county_relate;

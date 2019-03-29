@@ -107,21 +107,21 @@ export default class Header extends React.Component {
             <p
               id="app-title"
               className="mdc-typography mdc-typography--headline5"
-              title = "dataHub">
-                dataHub
+              title = "DataHub">
+                DataHub
             </p>) : window.innerWidth >= tablet && this.props.view !== 'catalog' ? (
             <a
               id="app-title"
               className="back-to-hub mdc-typography mdc-typography--headline5"
-              title="back to dataHub"
+              title="back to DataHub"
               onClick={this.handleCatalogView}
               onKeyDown={(e) => this.handleKeyPress(e, 'catalog')}
               tabIndex="3">
-                dataHub
+                DataHub
             </a>) : window.innerWidth < tablet && this.props.view !== 'catalog' ? (
             <a
               className="material-icons mdc-top-app-bar__navigation-icon"
-              title="back to dataHub"
+              title="back to DataHub"
               onClick={this.handleCatalogView}
               onKeyDown={(e) => this.handleKeyPress(e, 'catalog')}
               tabIndex="3">

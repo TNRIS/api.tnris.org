@@ -16,6 +16,10 @@ conn_string = "dbname='%s' user='%s' host='%s' password='%s' port='%s'" % (datab
 conn = psycopg2.connect(conn_string)
 cur = conn.cursor()
 
+# delete currently populated links
+cur.execute('DELETE FROM photo_index_scanned_ls4_link')
+conn.commit()
+
 # query temp etl view to compile all the ref info for collections
 tablename = 'etl_scanned_index'
 query = "SELECT * FROM %s;" % tablename
@@ -70,7 +74,7 @@ for r in response:
     else:
         # print('multi county: ', county, '// or agency: ', agency)
         continue
-print(total_collections)
+print('historical collections: %s' % total_collections)
 # print(dupes)
 
 #########
@@ -98,13 +102,14 @@ def get_objects(token=''):
         get_objects(response['NextContinuationToken'])
 
 get_objects()
-print(len(objects))
+print('scans: %s' % len(objects))
 total_size = 0
 total_processed = 0
+no_collection_found = []
 # iterate the s3 scanned files and disassemble to find their related collection_id
 # from the ref object
 for i in objects:
-    # print(i)
+    print(i)
     parts = i['Key'].split("/")
     county = parts[1]
     agency = parts[-1].split('_')[0]
@@ -127,10 +132,11 @@ for i in objects:
     except:
         # print(agency, county, year, sheet)
         try:
-            collection_id = alt_ref[agency][county][year]
+            collection_id = ref[agency][county][year]
             total_processed += 1
         except:
             print(agency, county, year, sheet)
+            no_collection_found.append([agency, county, year, sheet])
             continue
     # insert into the Database
     newUuid = uuid.uuid4()
@@ -146,5 +152,8 @@ cur.close()
 conn.close()
 print(str(len(objects)) + ' total scanned indexes in s3')
 print(str(total_processed) + ' total indexes added to database')
+for c in no_collection_found:
+    print(c)
+print(len(no_collection_found))
 
 print("that's all folks!!")

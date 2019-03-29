@@ -47,7 +47,7 @@ export default class ShareButtons extends React.Component {
 
   render() {
     const shareUrl = `https://data.tnris.org${window.location.pathname}`;
-    const shareTitle = "Check out this TNRIS dataHub collection!";
+    const shareTitle = "Check out this TNRIS DataHub data!";
     const shareCombo = `${shareTitle} ${shareUrl}`;
 
     // react-share use of url for twitter doesn't like the brackets in a filtered

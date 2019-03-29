@@ -42,10 +42,13 @@ response = cur.fetchall()
 for r in response:
     # all but last character should be the area_code of the quad it belongs to
     code = r[6][:-1]
-    # get quad area_type_id based on area_code
-    quad_uuid = quad_code[code]
-    # qq_ref[qquad area_type_id] = quad area_type_id
-    qq_ref[r[0]] = quad_uuid
+    try:
+        # get quad area_type_id based on area_code
+        quad_uuid = quad_code[code]
+        # qq_ref[qquad area_type_id] = quad area_type_id
+        qq_ref[r[0]] = quad_uuid
+    except:
+        print('qquad has no quad: %s' % r[6])
 print('qquad to quad built')
 
 # quad to county relationship
@@ -73,7 +76,7 @@ for r in response:
 print('county uuid list created')
 
 # get all collections with joined template for the interation
-query = "select collection.collection_id, template_type.template from collection left join template_type on template_type.template_type_id=collection.template_type_id;"
+query = "select collection.collection_id, template_type.template from collection left join template_type on template_type.template_type_id=collection.template_type_id where collection.public = true;"
 cur.execute(query)
 response = cur.fetchall()
 bad_areas = []
@@ -143,18 +146,23 @@ for r in response:
                 # if qquad, lookup related quad, then use it to lookup county
                 # and add it to the list
                 elif 'qquad':
-                    related_quad = qq_ref[a_t_id]
-                    print(related_quad)
                     try:
-                        related_cnty_uuid_list = quad_cnty_ref[related_quad]
-                        for rcul in related_cnty_uuid_list:
-                            # but only add to the list if not already in there
-                            if rcul not in these_county_uuids:
-                                these_county_uuids.append(rcul)
+                        related_quad = qq_ref[a_t_id]
+                        print(related_quad)
+                        try:
+                            related_cnty_uuid_list = quad_cnty_ref[related_quad]
+                            for rcul in related_cnty_uuid_list:
+                                # but only add to the list if not already in there
+                                if rcul not in these_county_uuids:
+                                    these_county_uuids.append(rcul)
+                        except:
+                            print('bad qquad related quad: ' + related_quad)
+                            if related_quad not in bad_areas:
+                                bad_areas.append(related_quad)
                     except:
-                        print('bad qquad related quad: ' + related_quad)
-                        if related_quad not in bad_areas:
-                            bad_areas.append(related_quad)
+                        print('bad qquad related quad: ' + a_t_id)
+                        if a_t_id not in bad_areas:
+                            bad_areas.append(a_t_id)
                 else:
                     # not a county, quad, or qquad? that shouldn't be possible
                     print("WHAAAAA?????")
@@ -164,9 +172,9 @@ for r in response:
                 # insert into the Database
                 newUuid = uuid.uuid4()
                 timestamp = datetime.datetime.now()
-                print(c)
+                # print(c)
                 newQuery = "INSERT INTO collection_county_relate (id, created, last_modified, collection_id, area_type_id) VALUES ('%s', '%s', '%s', '%s', '%s')" % (newUuid, timestamp, timestamp, coll_id, c)
-                print(newQuery)
+                # print(newQuery)
                 cur.execute(newQuery)
                 conn.commit()
 

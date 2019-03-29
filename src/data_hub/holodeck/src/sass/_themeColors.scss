@@ -114,6 +114,10 @@ When adding new themes you will also need to update:
 
       .catalog {
         background-color: #282828;
+
+        .mdc-typography--subtitle1 {
+          color: gray;
+        }
       }
 
       .tnris-download-template,
@@ -128,6 +132,10 @@ When adding new themes you will also need to update:
       }
 
       .mdc-drawer {
+
+        .mdc-list-group__subheader {
+          color: gray !important;
+        }
 
         .mdc-list-item--activated {
           color: $tnris-blue;
@@ -152,6 +160,42 @@ When adding new themes you will also need to update:
         .mdc-tab:not(.mdc-tab--active) {
           span {
             color: grey !important;
+          }
+        }
+      }
+
+      .order-tnris-data-form-component {
+        .mdc-typography--caption {
+          color: gray;
+        }
+
+        .mdc-form-field {
+          input {
+            color: gray;
+          }
+
+          .mdc-switch {
+            .mdc-switch__track {
+              background-color: gray;
+              border-color: gray;
+            }
+          }
+
+          .mdc-switch--checked {
+            .mdc-switch__track, .mdc-switch__thumb {
+              background-color: $tnris-blue !important;
+              border-color: $tnris-blue !important;
+            }
+          }
+        }
+
+        .mdc-floating-label {
+          color: gray;
+        }
+
+        .mdc-radio__native-control:enabled:checked + .mdc-radio__background {
+          .mdc-radio__outer-circle, .mdc-radio__inner-circle {
+            border-color: $tnris-blue;
           }
         }
       }

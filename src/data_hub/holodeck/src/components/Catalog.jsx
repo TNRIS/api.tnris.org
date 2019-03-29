@@ -5,7 +5,6 @@ import { matchPath } from 'react-router-dom';
 import { MDCDrawer } from "@material/drawer";
 import { MDCSnackbar } from '@material/snackbar';
 import { MDCDialog } from '@material/dialog';
-import { css } from '@emotion/core';
 import { GridLoader } from 'react-spinners';
 
 import HistoricalAerialTemplate from './HistoricalAerialTemplate/HistoricalAerialTemplate';
@@ -21,7 +20,7 @@ import TnrisDownloadTemplateContainer from '../containers/TnrisDownloadTemplateC
 import OrderCartViewContainer from '../containers/OrderCartViewContainer';
 import NotFoundContainer from '../containers/NotFoundContainer';
 
-import loadingImage from '../images/loading.gif';
+// import loadingImage from '../images/loading.gif';
 import noDataImage from '../images/no-data.png';
 import noDataImage666 from '../images/no-data-satan.png';
 
@@ -243,34 +242,34 @@ export default class Catalog extends React.Component {
   render() {
     // Here lies the beta notice dialog. To remove the notice, remove the reference to this variable
     // in the returned codeblock below under the 'catalog-component'.
-    const betaDialog = (
-      <div className="beta-notice-dialog mdc-dialog mdc-dialog--open"
-           role="alertdialog"
-           aria-modal="true"
-           aria-labelledby="beta-warning"
-           aria-describedby="my-dialog-content">
-        <div className="mdc-dialog__container">
-          <div className="mdc-dialog__surface">
-            <h2 className="mdc-dialog__title" id="my-dialog-title">Howdy Y'all!</h2>
-            <div className="mdc-dialog__content" id="my-dialog-content">
-              {`This application is currently in beta, so mosy on over to `}<a href='https://tnris.org/'>tnris.org</a>
-              {` if'n you're afraid of tanglin' with a few breachy bugs. YEE-HAW!`}
-            </div>
-            <footer className="mdc-dialog__actions">
-              <button type="button"
-                      className="mdc-button mdc-button--raised"
-                      data-mdc-dialog-action="close"
-                      onClick={this.handleCloseBetaNotice}
-                      onKeyPress={(e) => e.keyCode === 13 || e.keyCode === 32 ? this.handleCloseBetaNotice() : null}
-                      autoFocus>
-                <span className="mdc-button__label">OK</span>
-              </button>
-            </footer>
-          </div>
-        </div>
-        <div className="mdc-dialog__scrim"></div>
-      </div>
-    );
+    // const betaDialog = (
+    //   <div className="beta-notice-dialog mdc-dialog mdc-dialog--open"
+    //        role="alertdialog"
+    //        aria-modal="true"
+    //        aria-labelledby="beta-warning"
+    //        aria-describedby="my-dialog-content">
+    //     <div className="mdc-dialog__container">
+    //       <div className="mdc-dialog__surface">
+    //         <h2 className="mdc-dialog__title" id="my-dialog-title">Howdy Y'all!</h2>
+    //         <div className="mdc-dialog__content" id="my-dialog-content">
+    //           {`This application is currently in beta, so mosy on over to `}<a href='https://tnris.org/'>tnris.org</a>
+    //           {` if'n you're afraid of tanglin' with a few breachy bugs. YEE-HAW!`}
+    //         </div>
+    //         <footer className="mdc-dialog__actions">
+    //           <button type="button"
+    //                   className="mdc-button mdc-button--raised"
+    //                   data-mdc-dialog-action="close"
+    //                   onClick={this.handleCloseBetaNotice}
+    //                   onKeyPress={(e) => e.keyCode === 13 || e.keyCode === 32 ? this.handleCloseBetaNotice() : null}
+    //                   autoFocus>
+    //             <span className="mdc-button__label">OK</span>
+    //           </button>
+    //         </footer>
+    //       </div>
+    //     </div>
+    //     <div className="mdc-dialog__scrim"></div>
+    //   </div>
+    // );
 
     const { error, loading } = this.props;
 

@@ -9,6 +9,8 @@ DROP TRIGGER IF EXISTS use_relate_change ON use_relate;
 DROP TRIGGER IF EXISTS resource_type_relate_change ON resource_type_relate;
 DROP TRIGGER IF EXISTS image_change ON image;
 
+DROP FUNCTION IF EXISTS refresh_ccr_view();
+
 -- the function
 CREATE OR REPLACE FUNCTION refresh_ccr_view()
   RETURNS trigger AS $$

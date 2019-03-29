@@ -5,6 +5,8 @@ import { matchPath } from 'react-router-dom';
 import { MDCDrawer } from "@material/drawer";
 import { MDCSnackbar } from '@material/snackbar';
 import { MDCDialog } from '@material/dialog';
+import { css } from '@emotion/core';
+import { GridLoader } from 'react-spinners';
 
 import HistoricalAerialTemplate from './HistoricalAerialTemplate/HistoricalAerialTemplate';
 import OutsideEntityTemplate from './TnrisOutsideEntityTemplate/TnrisOutsideEntityTemplate';
@@ -37,9 +39,19 @@ export default class Catalog extends React.Component {
     this.handleToast = this.handleToast.bind(this);
     this.handleCloseBetaNotice = this.handleCloseBetaNotice.bind(this);
     this.chunkCatalogCards = this.chunkCatalogCards.bind(this);
+    // this.loadingMessage = (
+    //   <div className="catalog-component__loading">
+    //     <img src={loadingImage} alt="Holodeck Loading..." className="holodeck-loading-image" />
+    //   </div>
+    // );
     this.loadingMessage = (
-      <div className="catalog-component__loading">
-        <img src={loadingImage} alt="Holodeck Loading..." className="holodeck-loading-image" />
+      <div className='sweet-loading-animation'>
+        <GridLoader
+          sizeUnit={"px"}
+          size={25}
+          color={'#1E8DC1'}
+          loading={true}
+        />
       </div>
     );
   }
@@ -273,7 +285,7 @@ export default class Catalog extends React.Component {
     return (
       <div className="catalog-component">
 
-        {betaDialog}
+        {/*{betaDialog}*/}
 
         <HeaderContainer handleToolDrawerDisplay={this.handleToolDrawerDisplay} />
 

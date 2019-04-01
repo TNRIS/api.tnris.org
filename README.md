@@ -68,7 +68,7 @@ for deployment and we don't want un-needed packages included.
 1. go through the development steps and run the function locally to ensure it is running as expected
 2. enable the lambda function's virtual environment. Example: `workon lambda-areas_view` (for virtualenv wrapper)
 3. cd into the repo root with `cd ~/data.tnris.org`
-4. run `make pack-lambda_areas_view` to copy the python dependencies from the virtual env into the lambda function folder
+4. run `make pack-lambda-areas_view` to copy the python dependencies from the virtual env into the lambda function folder
 5. hop over to the tnris deployments repo to run the rest
 
 

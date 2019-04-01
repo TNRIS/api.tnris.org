@@ -91,6 +91,9 @@ export default class CollectionSearcher extends React.Component {
         event.preventDefault(); // ensure it is only our code that is run
         this.handleSearch(event.target.value);
         this.searchFieldInput.blur();
+        if (event.target.value === '666') {
+          this.props.setColorTheme('satan');
+        }
       }
       else if (event.keyCode === 27) { // they pressed escape, so drop focus
         this.searchFieldInput.blur();

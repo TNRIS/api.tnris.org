@@ -1,9 +1,10 @@
 import React from 'react';
+import { GridLoader } from 'react-spinners';
 import TnrisDownloadMapNote from './TnrisDownloadMapNote';
 
 import mapboxgl from 'mapbox-gl';
 import styles from '../../sass/index.scss';
-import loadingImage from '../../images/loading.gif';
+// import loadingImage from '../../images/loading.gif';
 
 // global sass breakpoint variables to be used in js
 import breakpoints from '../../sass/_breakpoints.scss';
@@ -376,10 +377,18 @@ export default class TnrisDownloadTemplateDownload extends React.Component {
 
     const { errorResources, loadingResources } = this.props;
     const loadingMessage = (
-      <div className='tnris-download-template-download'>
-        <div className="tnris-download-template-download__loading">
-          <img src={loadingImage} alt="Holodeck Loading..." className="holodeck-loading-image" />
-        </div>
+      // <div className='tnris-download-template-download'>
+      //   <div className="tnris-download-template-download__loading">
+      //     <img src={loadingImage} alt="Holodeck Loading..." className="holodeck-loading-image" />
+      //   </div>
+      // </div>
+      <div className='sweet-loading-animation'>
+        <GridLoader
+          sizeUnit={"px"}
+          size={25}
+          color={'#1E8DC1'}
+          loading={true}
+        />
       </div>
       );
 

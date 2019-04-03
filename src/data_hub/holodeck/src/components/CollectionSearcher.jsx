@@ -119,6 +119,9 @@ export default class CollectionSearcher extends React.Component {
   // handles firing the search if the user selects an item from the suggestionList
   // or presses enter while a member of the suggestionList is highlighted
   handleStateChange(changes, stateAndHelpers) {
+    console.log(changes);
+    console.log(stateAndHelpers);
+    console.log(this.state);
     this.setState({previousChanges: changes});
     if (changes.type === '__autocomplete_keydown_enter__') {
       // if they choose an item with the arrow keys and not the mouse pointer

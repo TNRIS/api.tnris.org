@@ -1,6 +1,7 @@
 -- Create compiled_historical_collection view for API to hit. Aggregates values from all
 -- associated lookup tables. This SQL only needs to be run after initial database
 -- creation
+-- Main collection api endpoint for LORE historical datasets: api/v1/historical
 DROP VIEW IF EXISTS "compiled_historical_collection";
 
 CREATE MATERIALIZED VIEW "compiled_historical_collection" as

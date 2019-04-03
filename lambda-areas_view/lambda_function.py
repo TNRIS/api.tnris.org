@@ -46,7 +46,7 @@ def lambda_handler(event, context):
     # upload the csv to s3
     print('uploading to s3')
     client = boto3.client('s3')
-    client.upload_file(temp_csv, 'data.tnris.org', 'areas_view.csv', ExtraArgs={'ACL':'public-read'})
+    client.upload_file(temp_csv, 'data.tnris.org', 'carto-resources/areas_view.csv', ExtraArgs={'ACL':'public-read'})
 
     # delete the local csv
     print('removing local csv file')

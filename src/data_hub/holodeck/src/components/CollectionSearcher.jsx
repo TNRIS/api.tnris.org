@@ -120,14 +120,18 @@ export default class CollectionSearcher extends React.Component {
   // or presses enter while a member of the suggestionList is highlighted
   handleStateChange(changes, stateAndHelpers) {
     this.setState({previousChanges: changes});
-    if (changes.type === '__autocomplete_keydown_enter__') {
+    // we need to check the changes type to determine what the user is doing.
+    // Downshift has a tricky feature where they use a string for the type in dev
+    // and an integer in prod, so we have to check for either situation.
+    if (changes.type === '__autocomplete_keydown_enter__' || changes.type === 6) {
       // if they choose an item with the arrow keys and not the mouse pointer
       // then press enter, otherwise the keydown method from above is fired
-      if (this.state.previousChanges.type === '__autocomplete_keydown_arrow_down__') {
+      if (this.state.previousChanges.type === '__autocomplete_keydown_arrow_down__' ||
+        this.state.previousChanges.type === 4) {
         this.handleSearch(stateAndHelpers.selectedItem);
         this.searchFieldInput.blur();
       }
-    } else if (changes.type === '__autocomplete_click_item__') {
+    } else if (changes.type === '__autocomplete_click_item__' || changes.type === 9) {
       this.handleSearch(stateAndHelpers.selectedItem);
       this.searchFieldInput.blur();
     }

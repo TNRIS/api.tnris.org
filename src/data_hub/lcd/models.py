@@ -345,7 +345,7 @@ class SourceType(models.Model):
     )
 
     def __str__(self):
-        return self.source_name
+        return "%s (%s)" % (self.source_name, self.source_abbreviation)
 
 
 class TemplateType(models.Model):

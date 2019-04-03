@@ -1,6 +1,7 @@
 -- Create collection_catalog_records view for API to hit. Aggregates values from all
 -- associated lookup tables. This SQL only needs to be run after initial database
 -- creation
+-- Main collection api endpoint for LCD non-historical datasets: api/v1/collections
 DROP VIEW IF EXISTS "collection_catalog_record";
 
 CREATE MATERIALIZED VIEW "collection_catalog_record" as

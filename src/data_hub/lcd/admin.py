@@ -4,7 +4,6 @@ from django.contrib import admin
 #     CountyDropdownFilter
 from .forms import CollectionForm, ResourceForm, ImageForm
 from .models import (
-    AcdcView,
     AreaType,
     CategoryRelate,
     CategoryType,
@@ -26,21 +25,6 @@ from .models import (
     UseRelate,
     UseType
 )
-
-
-# views not compiled from joined tables. not managed in admin console
-# @admin.register(AcdcView)
-# class AcdcViewAdmin(admin.ModelAdmin):
-#     model = AcdcView
-#     ordering = ('name',)
-
-# AreaType is solidified as statewide, counties, quads, qquads, & national grid
-# not managed in admin console as it shouldn't be changing
-# @admin.register(AreaType)
-# class AreaTypeAdmin(admin.ModelAdmin):
-#     model = AreaType
-#     ordering = ('area_type_name',)
-
 
 # Relate tables managed through 'Collection' form as collection records are
 # required to create/manage relate records

@@ -2,7 +2,7 @@
 -- This SQL only needs to be run after initial database creation
 -- Main collection api endpoint for all collections (historical and non) area associations: api/v1/areas
 -- Used in areas_view CSV generator lambda function which ultimately syncs with Carto for geofilter
-DROP VIEW IF EXISTS "areas";
+DROP MATERIALIZED VIEW IF EXISTS "areas";
 
 CREATE MATERIALIZED VIEW "areas" as
 

@@ -3,7 +3,8 @@
 -- Main collection api endpoint for all collections (historical and non) area associations: api/v1/areas
 -- Used in areas_view CSV generator lambda function which ultimately syncs with Carto for geofilter
 DROP VIEW IF EXISTS "areas";
-CREATE VIEW "areas" as
+
+CREATE MATERIALIZED VIEW "areas" as
 
 WITH historical_county_join as (
   -- use county lookup table to attribute county names to area_types
@@ -118,4 +119,6 @@ GROUP BY
   area_type.area_type,
   historical_county_join.collections,
   outside_entity_state_join.collections,
-  order_county_join.collections;
+  order_county_join.collections
+
+WITH DATA;

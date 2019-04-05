@@ -2,6 +2,7 @@ import { connect } from 'react-redux';
 
 import { catalogActions,
          collectionActions,
+         collectionSearcherActions,
          urlTrackerActions } from '../actions';
 import CatalogCard from '../components/CatalogCard';
 
@@ -12,6 +13,12 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = (dispatch) => ({
     selectCollection: (collectionId) => {
       dispatch(collectionActions.selectCollection(collectionId));
+    },
+    setCollectionSearchQuery: (collectionSearchQuery) => {
+      dispatch(collectionSearcherActions.setCollectionSearchQuery(collectionSearchQuery));
+    },
+    setCollectionSearchSuggestionsQuery: (collectionSearchSuggestionsQuery) => {
+      dispatch(collectionSearcherActions.setCollectionSearchSuggestionsQuery(collectionSearchSuggestionsQuery));
     },
     setUrl: (newUrl, history) => {
       dispatch(urlTrackerActions.setUrl(newUrl, history))

@@ -10,6 +10,8 @@ export default class CatalogCard extends React.Component {
   handleCardClick() {
     this.props.setViewCollection();
     this.props.selectCollection(this.props.collection.collection_id);
+    this.props.setCollectionSearchQuery('');
+    this.props.setCollectionSearchSuggestionsQuery('');
     this.props.setUrl('/collection/' + this.props.collection.collection_id);
   }
 

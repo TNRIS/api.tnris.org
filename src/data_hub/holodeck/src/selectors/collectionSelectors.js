@@ -86,6 +86,22 @@ export const getSearchIndex = createSelector(
   }
 );
 
+// Establishes the parameters for the elasticlunr search we're going to run.
+// These are passed to getSearchedCollections and getSearchSuggestions below.
+export const searchParams = {
+  fields: {
+    name: {boost: 7},
+    acquisition_date: {boost: 6},
+    description: {boost: 5},
+    counties: {boost: 4},
+    source_name: {boost: 3},
+    source_abbreviation: {boost: 2},
+    oe_service_names: {boost: 1}
+  },
+  expand: true,
+  bool: "AND"
+};
+
 // Sets up the choices available to the CollectionFilter component fom the
 // available properties in the collections object.
 export const getCollectionFilterChoices = createSelector(
@@ -271,19 +287,7 @@ export const getSearchedCollections = createSelector(
       let searchedCollectionIds = [];
       if (searchQuery) {
         let queryResult = searchIndex.search(
-          searchQuery, {
-            fields: {
-              name: {boost: 7},
-              acquisition_date: {boost: 6},
-              description: {boost: 5},
-              counties: {boost: 4},
-              source_name: {boost: 3},
-              source_abbreviation: {boost: 2},
-              oe_service_names: {boost: 1}
-          },
-          expand: true,
-          bool: "AND"
-        });
+          searchQuery, searchParams);
         if (!Array.isArray(queryResult) || !queryResult.length) {
           searchedCollectionIds = [];
         } else {
@@ -393,19 +397,7 @@ export const getSearchSuggestions = createSelector(
       let searchedCollectionNames = [];
       if (searchQuery) {
         let queryResult = searchIndex.search(
-          searchQuery, {
-            fields: {
-              name: {boost: 7},
-              acquisition_date: {boost: 6},
-              description: {boost: 5},
-              counties: {boost: 4},
-              source_name: {boost: 3},
-              source_abbreviation: {boost: 2},
-              oe_service_names: {boost: 1}
-          },
-          expand: true,
-          bool: "AND"
-        });
+          searchQuery, searchParams);
         if (!Array.isArray(queryResult) || !queryResult.length) {
           searchedCollectionNames = [];
         } else {

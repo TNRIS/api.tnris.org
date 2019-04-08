@@ -56,7 +56,9 @@ export default class CollectionSearcher extends React.Component {
   // the collectionSearchSuggestionsQuery to empty in the app's state
   handleClearSearch() {
     try {
-      this.handleSearch('');
+      if (this.props.view === 'catalog') {
+        this.handleSearch('');
+      }
       this.props.setCollectionSearchSuggestionsQuery('');
       this.setState({searchFieldValue: ''});
       this.searchFieldInput.focus();

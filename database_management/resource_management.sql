@@ -1,8 +1,9 @@
 -- Create resource_management view for API to hit. Aggregates unique list
 -- of resources per collection with resource_type joins
 -- Main collection api endpoint for LCD non-historical dataset resources/downloads (download map): api/v1/resources
-DROP VIEW IF EXISTS "resource_management";
-CREATE VIEW "resource_management" as
+DROP MATERIALIZED VIEW IF EXISTS "resource_management";
+
+CREATE MATERIALIZED VIEW "resource_management" as
 SELECT resource.resource_id,
   resource.resource,
   resource.filesize,
@@ -24,4 +25,6 @@ GROUP BY resource.resource_id,
          resource.collection_id,
          resource_type.resource_type_name,
          resource_type.resource_type_abbreviation,
-         area_type.area_type;
+         area_type.area_type
+
+ WITH DATA;

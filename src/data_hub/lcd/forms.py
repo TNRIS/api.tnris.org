@@ -27,12 +27,12 @@ import os
 import boto3, uuid
 
 class PictureWidget(forms.widgets.Widget):
-    def render(self, name, value, attrs=None, renderer=None):
+    def render(self, name, value, attrs=None):
         html = Template("""<input type="file" name="$name" id="id_$name"><label for="img_$name">Current: $link</label><img id="img_$name" src="$link" style="max-width:500px;"/>""")
         return mark_safe(html.substitute(link=value,name=name))
 
 class ZipfileWidget(forms.widgets.Widget):
-    def render(self, name, value, attrs=None, renderer=None):
+    def render(self, name, value, attrs=None):
         html = Template("""<input type="file" name="$name" id="id_$name"><label for="img_$name">Current: $link</label>""")
         return mark_safe(html.substitute(link=value,name=name))
 

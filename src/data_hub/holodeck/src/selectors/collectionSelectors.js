@@ -90,12 +90,13 @@ export const getSearchIndex = createSelector(
 // These are passed to getSearchedCollections and getSearchSuggestions below.
 export const searchParams = {
   fields: {
-    name: {boost: 7},
-    acquisition_date: {boost: 6},
-    description: {boost: 5},
-    counties: {boost: 4},
-    source_name: {boost: 3},
-    source_abbreviation: {boost: 2},
+    name: {boost: 8},
+    acquisition_date: {boost: 7},
+    description: {boost: 6},
+    counties: {boost: 5},
+    source_name: {boost: 4},
+    source_abbreviation: {boost: 3},
+    partners: {boost: 2},
     oe_service_names: {boost: 1}
   },
   expand: true,

@@ -397,7 +397,7 @@ class ResourceForm(forms.ModelForm):
     # on instance construction fire functions to retrieve initial/dropdown values
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        if self.instance:
+        if self.instance.created is None:
             # fire function to create the Collection field dropdown
             self.fields['collection'].choices = self.create_collection_field()
 

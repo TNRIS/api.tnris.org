@@ -95,7 +95,7 @@ export default class Catalog extends React.Component {
       if (this.props.view === 'catalog' || this.props.view === 'geoFilter') {
         if (prevProps.visibleCollections.length !== this.props.visibleCollections.length) {
           this.handleToast(
-            this.props.visibleCollections.length > 1 ?
+            this.props.visibleCollections.length !== 1 ?
             `${this.props.visibleCollections.length} datasets found` :
             `${this.props.visibleCollections.length} dataset found`
           );

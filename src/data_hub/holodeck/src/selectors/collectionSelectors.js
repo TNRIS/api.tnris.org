@@ -56,7 +56,7 @@ export const getSearchIndex = createSelector(
     ];
 
     // default text string seperator is:  /[\s\-]+/
-    // here, we overwrite it to that dashes are not used as a seperator,
+    // here, we overwrite it so that dashes are not used as a seperator,
     // only spaces. dash seperator is an issue for strings like 'H-GAC'
     elasticlunr.tokenizer.setSeperator(/[\s]+/);
 
@@ -65,6 +65,7 @@ export const getSearchIndex = createSelector(
         this.addField(field);
         return field;
       })
+      this.addField('all_fields');
       this.setRef('collection_id');
     });
 
@@ -73,11 +74,20 @@ export const getSearchIndex = createSelector(
     // document, then add it to the index.
     if (collections.result) {
       collections.result.map(collectionId => {
-        let doc = {'collection_id': collectionId};
+        // To enable cross field searches:
+        // the search document will contain all field values listed above in
+        // the searchFields object as well as an 'all_fields' property which is
+        // the concatenation of all values into a single string.
+        let doc = {'collection_id': collectionId, 'all_fields': []};
         searchFields.map(field => {
-          doc[field] = collections.entities.collectionsById[collectionId][field];
+          let fieldValue = collections.entities.collectionsById[collectionId][field];
+          doc[field] = fieldValue;
+          if (fieldValue !== undefined) {
+            doc['all_fields'].push(fieldValue);
+          }
           return field;
         })
+        doc['all_fields'] = doc['all_fields'].join(" ");
         searchIndex.addDoc(doc);
         return collectionId;
       })
@@ -86,18 +96,17 @@ export const getSearchIndex = createSelector(
   }
 );
 
-// Establishes the parameters for the elasticlunr search we're going to run.
-// These are passed to getSearchedCollections and getSearchSuggestions below.
 export const searchParams = {
   fields: {
-    name: {boost: 8},
-    acquisition_date: {boost: 7},
-    description: {boost: 6},
-    counties: {boost: 5},
-    source_name: {boost: 4},
-    source_abbreviation: {boost: 3},
-    partners: {boost: 2},
-    oe_service_names: {boost: 1}
+    name: {boost: 1},
+    acquisition_date: {boost: 1},
+    description: {boost: 1},
+    counties: {boost: 1},
+    source_name: {boost: 1},
+    source_abbreviation: {boost: 1},
+    partners: {boost: 1},
+    oe_service_names: {boost: 1},
+    all_fields: {boost: 1}
   },
   expand: true,
   bool: "AND"

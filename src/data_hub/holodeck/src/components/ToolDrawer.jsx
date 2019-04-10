@@ -46,7 +46,7 @@ export default class ToolDrawer extends React.Component {
               <div className='mdc-drawer__header no-scroll'>
                 <div className='dataset-counter'>
                   <span>
-                    {this.props.total > 1 ? `${this.props.total} Datasets Found` : `${this.props.total} Dataset Found`}
+                    {this.props.total !== 1 ? `${this.props.total} Datasets Found` : `${this.props.total} Dataset Found`}
                   </span>
                 </div>
               </div>

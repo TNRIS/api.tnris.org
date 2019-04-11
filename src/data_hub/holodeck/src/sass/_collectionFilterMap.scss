@@ -32,6 +32,10 @@
       cursor: pointer;
       float: right;
       font-size: 12px;
+
+      &:hover {
+        background-color: #ccc;
+      }
     }
 
     div.instruction-paragraph {

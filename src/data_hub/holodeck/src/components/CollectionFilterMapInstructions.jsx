@@ -4,7 +4,7 @@ export default class CollectionFilterMapInstructions extends React.Component {
   constructor(props) {
       super(props);
       this.state = {
-        noteHover: false
+        noteHover: true
       };
       this.toggleInstructions = this.toggleInstructions.bind(this);
   }

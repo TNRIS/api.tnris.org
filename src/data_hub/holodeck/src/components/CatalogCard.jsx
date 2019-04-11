@@ -28,7 +28,7 @@ export default class CatalogCard extends React.Component {
 
     return (
       <div
-        className="catalog-card-component mdc-card mdc-card__primary-action"
+        className="catalog-card-component mdc-card"
         onClick={this.handleCardClick}
         onKeyDown={(e) => this.handleKeyPress(e)}
         tabIndex="2">

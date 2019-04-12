@@ -28,13 +28,11 @@ export default class HistoricalProducts extends React.Component {
         </p>
         <ul className="mdc-list product-table">
             <li className="mdc-list-item product-table-header">
-              <div className="cell-container">Product #</div>
               <div className="cell-container">Medium</div>
               <div className="cell-container">Print Type</div>
             </li>
             {uniqueProducts.map((product, index) =>
               <li key={product} className="mdc-list-item">
-                <div className="cell-container">{index + 1}</div>
                 <div className="cell-container">{product.split(",")[0]}</div>
                 <div className="cell-container">{product.split(",")[1]}</div>
               </li>

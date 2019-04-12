@@ -620,7 +620,7 @@ class OrderCart extends Component {
           <div className='mdc-typography--headline6'>
             Payment Method*
           </div>
-          <div className='mdc-typography--body2'>Notice: TNRIS does not accept American Express</div>
+          <div className='mdc-typography--body2'>Once a quote for your order has been completed TNRIS will contact you for payment details.</div>
           <div id="payment-cc" className="mdc-form-field">
             <div className="mdc-radio">
               <input className="mdc-radio__native-control"
@@ -636,8 +636,9 @@ class OrderCart extends Component {
                 <div className="mdc-radio__inner-circle"></div>
               </div>
             </div>
-            <label htmlFor="payment-cc-input">Credit Card (TNRIS will call for credit card number)</label>
+            <label htmlFor="payment-cc-input">Credit Card</label>
           </div>
+          <div className='mdc-typography--caption'>Notice: TNRIS does not accept American Express</div>
           <div id="payment-check" className="mdc-form-field">
             <div className="mdc-radio">
               <input className="mdc-radio__native-control"
@@ -669,7 +670,7 @@ class OrderCart extends Component {
                 <div className="mdc-radio__inner-circle"></div>
               </div>
             </div>
-            <label htmlFor="payment-fedex-input">Fedex Account (TNRIS will call for Fedex Customer Account Number)</label>
+            <label htmlFor="payment-fedex-input">Fedex Account</label>
           </div>
           <div id="payment-pickup" className="mdc-form-field">
             <div className="mdc-radio">

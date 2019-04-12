@@ -4,8 +4,16 @@ export default class TnrisDownloadMapNote extends React.Component {
   constructor(props) {
       super(props);
       this.state = {
-        noteHover: false
+        noteHover: false,
+        noteInstruct: true
       };
+      this.toggleInstructions = this.toggleInstructions.bind(this);
+  }
+
+  toggleInstructions () {
+    this.setState({
+      noteInstruct: !this.state.noteInstruct
+    });
   }
 
   render() {
@@ -19,9 +27,30 @@ export default class TnrisDownloadMapNote extends React.Component {
       <i className="material-icons">toys</i>
     );
 
+    const noteInstruct = this.state.noteInstruct ? (
+      <div>
+        <i className="material-icons close-icon" title="Minimize instructions" onClick={() => {this.toggleInstructions()}}>close</i>
+        <p title="Download Instructions">
+          Click a polygon in the map to view available downloads and information.
+        </p>
+      </div>
+    ) : (
+      <i className="material-icons" title="Download Instructions" onClick={() => {this.toggleInstructions()}}>info</i>
+    );
+
     return (
-      <div id='tnris-download-note' className='mdc-typography--caption' onMouseEnter={() => {this.setState({noteHover:true})}} onMouseLeave={() => {this.setState({noteHover:false})}}>
-        {noteContent}
+      <div>
+        <div id='tnris-download-instructions'
+          className='mdc-typography--caption'>
+          {noteInstruct}
+        </div>
+
+        <div id='tnris-download-note'
+          className='mdc-typography--caption'
+          onMouseEnter={() => {this.setState({noteHover:true})}}
+          onMouseLeave={() => {this.setState({noteHover:false})}}>
+          {noteContent}
+        </div>
       </div>
     );
   }

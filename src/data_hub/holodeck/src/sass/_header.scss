@@ -90,7 +90,7 @@ styles for component: Header
     height: 70px;
 
     #app-title {
-      margin-left: 24px;
+      padding-left: 20px;
       font-family: 'Roboto Condensed', sans-serif;
 
       @media (max-width: $breakpoint-phone) {
@@ -100,6 +100,7 @@ styles for component: Header
     }
 
     .back-to-hub {
+      padding-left: 20px;
       outline: none;
       cursor: pointer !important;
     }

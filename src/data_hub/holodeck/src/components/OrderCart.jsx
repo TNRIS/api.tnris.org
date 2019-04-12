@@ -25,6 +25,7 @@ class OrderCart extends Component {
         delivery: '',
         hardDrive: '',
         payment: '',
+        notes: '',
         display: 'form',
         recaptcha: '',
         invalid: ''
@@ -214,6 +215,7 @@ class OrderCart extends Component {
         'Delivery': this.state.delivery,
         'HardDrive': this.state.hardDrive,
         'Payment': this.state.payment,
+        'Notes': this.state.notes,
         'Order': orders,
         'form_id': 'data-tnris-org-order',
         'recaptcha': this.state.recaptcha
@@ -259,7 +261,7 @@ class OrderCart extends Component {
     );
     // if cart not empty, iterate datasets and display their order details,
     // otherwise show emptyCartMessage
-    const cartItems = Object.keys(this.props.orders).length !== 0 ?
+    const cartItems = Object.keys(this.props.orders).length !== 0 && this.state.display === 'form'?
       Object.keys(this.props.orders).map(collectionId => {
         const collectionYear = this.props.collections[collectionId].acquisition_date ? this.props.collections[collectionId].acquisition_date.substring(0, 4) + ' ' : '';
         const compiledDisplayName = collectionYear + this.props.collections[collectionId].name;
@@ -485,6 +487,17 @@ class OrderCart extends Component {
                    onChange={this.handleChange}
                    tabIndex="0" />
                  <label className="mdc-floating-label" htmlFor="order-cart-organization-input">Organization</label>
+            <div className="mdc-line-ripple"></div>
+          </div>
+
+          <div className="mdc-text-field mdc-text-field--textarea">
+            <textarea className="mdc-text-field__input"
+                      rows="3"
+                      name="notes"
+                      onChange={this.handleChange}
+                      tabIndex="0">
+            </textarea>
+            <label className="mdc-floating-label" htmlFor="ct-question-input">General notes or comments about this order...</label>
             <div className="mdc-line-ripple"></div>
           </div>
 

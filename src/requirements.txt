@@ -19,7 +19,7 @@ djangorestframework==3.8.2
 docutils==0.14
 idna==2.7
 itypes==1.1.0
-Jinja2==2.10
+Jinja2==2.10.1
 jmespath==0.9.3
 kombu==4.2.1
 Markdown==2.6.11

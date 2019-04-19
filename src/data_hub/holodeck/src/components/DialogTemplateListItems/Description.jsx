@@ -101,6 +101,9 @@ export default class Description extends React.Component {
 
     return (
       <div className="template-content-div">
+        <div className='mdc-typography--headline5 template-content-div-header'>
+          Description
+        </div>
         <div ref="descript" className={this.state.descriptClass}>
           <div dangerouslySetInnerHTML={createMarkup()} />
           <p dangerouslySetInnerHTML={createMarkupDesc()} ></p>

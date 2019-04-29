@@ -1,11 +1,18 @@
 import React from 'react';
 
+// global sass breakpoint variables to be used in js
+import breakpoints from '../sass/_breakpoints.scss';
+
 export default class CollectionFilterMapInstructions extends React.Component {
   constructor(props) {
       super(props);
-      this.state = {
+
+      window.innerWidth >= parseInt(breakpoints.desktop, 10) ? this.state = {
+        noteHover: true
+      } : this.state = {
         noteHover: false
       };
+
       this.toggleInstructions = this.toggleInstructions.bind(this);
   }
 
@@ -16,6 +23,7 @@ export default class CollectionFilterMapInstructions extends React.Component {
   }
 
   render() {
+
     const noteContent = this.state.noteHover ? (
       <div>
         <i className="material-icons close-icon" onClick={() => {this.setState({noteHover:false})}}>close</i>

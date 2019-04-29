@@ -68,6 +68,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'grappelli.dashboard',
     'grappelli',
+    'admin_view_permission',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.sessions',

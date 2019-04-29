@@ -38,7 +38,7 @@ export default class CollectionFilterMapView extends React.Component {
             <button
               className="close-shopping-cart mdc-icon-button material-icons"
               onClick={this.handleBack}
-              title="Close shopping cart">
+              title="Close geography filter">
               close
             </button>
           </section>

@@ -120,7 +120,7 @@ export default class Header extends React.Component {
                 DataHub
             </a>) : window.innerWidth < tablet && this.props.view !== 'catalog' ? (
             <a
-              className="material-icons mdc-top-app-bar__navigation-icon"
+              className="back-to-hub material-icons mdc-top-app-bar__navigation-icon"
               title="back to DataHub"
               onClick={this.handleCatalogView}
               onKeyDown={(e) => this.handleKeyPress(e, 'catalog')}

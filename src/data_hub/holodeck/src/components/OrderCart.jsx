@@ -25,6 +25,7 @@ class OrderCart extends Component {
         delivery: '',
         hardDrive: '',
         payment: '',
+        notes: '',
         display: 'form',
         recaptcha: '',
         invalid: ''
@@ -214,6 +215,7 @@ class OrderCart extends Component {
         'Delivery': this.state.delivery,
         'HardDrive': this.state.hardDrive,
         'Payment': this.state.payment,
+        'Notes': this.state.notes,
         'Order': orders,
         'form_id': 'data-tnris-org-order',
         'recaptcha': this.state.recaptcha
@@ -259,7 +261,7 @@ class OrderCart extends Component {
     );
     // if cart not empty, iterate datasets and display their order details,
     // otherwise show emptyCartMessage
-    const cartItems = Object.keys(this.props.orders).length !== 0 ?
+    const cartItems = Object.keys(this.props.orders).length !== 0 && this.state.display === 'form'?
       Object.keys(this.props.orders).map(collectionId => {
         const collectionYear = this.props.collections[collectionId].acquisition_date ? this.props.collections[collectionId].acquisition_date.substring(0, 4) + ' ' : '';
         const compiledDisplayName = collectionYear + this.props.collections[collectionId].name;
@@ -488,6 +490,17 @@ class OrderCart extends Component {
             <div className="mdc-line-ripple"></div>
           </div>
 
+          <div className="mdc-text-field mdc-text-field--textarea">
+            <textarea className="mdc-text-field__input"
+                      rows="3"
+                      name="notes"
+                      onChange={this.handleChange}
+                      tabIndex="0">
+            </textarea>
+            <label className="mdc-floating-label" htmlFor="ct-question-input">General notes or comments about this order...</label>
+            <div className="mdc-line-ripple"></div>
+          </div>
+
           <div className='mdc-typography--headline6'>
             Delivery Method*
           </div>
@@ -620,7 +633,7 @@ class OrderCart extends Component {
           <div className='mdc-typography--headline6'>
             Payment Method*
           </div>
-          <div className='mdc-typography--body2'>Notice: TNRIS does not accept American Express</div>
+          <div className='mdc-typography--body2'>Once a quote for your order has been completed TNRIS will contact you for payment details.</div>
           <div id="payment-cc" className="mdc-form-field">
             <div className="mdc-radio">
               <input className="mdc-radio__native-control"
@@ -636,8 +649,9 @@ class OrderCart extends Component {
                 <div className="mdc-radio__inner-circle"></div>
               </div>
             </div>
-            <label htmlFor="payment-cc-input">Credit Card (TNRIS will call for credit card number)</label>
+            <label htmlFor="payment-cc-input">Credit Card</label>
           </div>
+          <div className='mdc-typography--caption'>Notice: TNRIS does not accept American Express</div>
           <div id="payment-check" className="mdc-form-field">
             <div className="mdc-radio">
               <input className="mdc-radio__native-control"
@@ -669,7 +683,7 @@ class OrderCart extends Component {
                 <div className="mdc-radio__inner-circle"></div>
               </div>
             </div>
-            <label htmlFor="payment-fedex-input">Fedex Account (TNRIS will call for Fedex Customer Account Number)</label>
+            <label htmlFor="payment-fedex-input">Fedex Account</label>
           </div>
           <div id="payment-pickup" className="mdc-form-field">
             <div className="mdc-radio">

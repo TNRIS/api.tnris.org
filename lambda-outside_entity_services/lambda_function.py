@@ -29,37 +29,40 @@ def lambda_handler(event, context):
     for r in response:
         esri_open_data_id = r[2]
         collection_id = r[0]
-        if esri_open_data_id is not None:
-            print(r)
-            apiUrl = 'https://www.arcgis.com/sharing/rest/content/groups/%s?f=pjson' % esri_open_data_id
-            print(apiUrl)
-            urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-            http = urllib3.PoolManager()
-            req = http.request('GET', apiUrl)
-            data = json.loads(req.data)
-            services = data['items']
-            if len(services) > 0:
-                cur.execute("DELETE FROM outside_entity_services WHERE collection_id = '%s'" % collection_id)
-                for s in services:
-                    name = s['name']
-                    url = s['url']
-                    if url is not None and name is not None:
-                        print(name)
-                        cur.execute("INSERT INTO {table} ({id},{url},{col},{name}) VALUES ('{v1}','{v2}','{v3}','{v4}');".format(
-                            table='outside_entity_services',
-                            id='service_id',
-                            url='service_url',
-                            col='collection_id',
-                            name='service_name',
-                            v1=uuid.uuid4(),
-                            v2=url,
-                            v3=collection_id,
-                            v4=name.replace('_', ' '))
-                        )
-                        try:
-                            conn.commit()
-                        except:
-                            print('bad!')
+        if esri_open_data_id is not None and esri_open_data_id != '':
+            try:
+                print(r)
+                apiUrl = 'https://www.arcgis.com/sharing/rest/content/groups/%s?f=pjson' % esri_open_data_id
+                print(apiUrl)
+                urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+                http = urllib3.PoolManager()
+                req = http.request('GET', apiUrl)
+                data = json.loads(req.data)
+                services = data['items']
+                if len(services) > 0:
+                    cur.execute("DELETE FROM outside_entity_services WHERE collection_id = '%s'" % collection_id)
+                    for s in services:
+                        name = s['name']
+                        url = s['url']
+                        if url is not None and name is not None:
+                            print(name)
+                            cur.execute("INSERT INTO {table} ({id},{url},{col},{name}) VALUES ('{v1}','{v2}','{v3}','{v4}');".format(
+                                table='outside_entity_services',
+                                id='service_id',
+                                url='service_url',
+                                col='collection_id',
+                                name='service_name',
+                                v1=uuid.uuid4(),
+                                v2=url,
+                                v3=collection_id,
+                                v4=name.replace('_', ' '))
+                            )
+                            try:
+                                conn.commit()
+                            except:
+                                print('bad database commit!')
+            except:
+                print('bad url or data!')
 
     cur.close()
     conn.close()

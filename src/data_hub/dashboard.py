@@ -74,6 +74,16 @@ class CustomIndexDashboard(Dashboard):
                     'lore.models.Collection'),
         ))
 
+        self.children.append(modules.AppList(
+            title='Map Collections/Series',
+            collapsible=True,
+            column=1,
+            css_classes=('grp-collapse grp-closed',),
+            models=('msd.models.MapCollection',
+                    'msd.models.MapSize',
+                    'msd.models.PixelsPerInch'),
+        ))
+
         # append a recent actions module
         self.children.append(modules.RecentActions(
             title='Recent Actions',

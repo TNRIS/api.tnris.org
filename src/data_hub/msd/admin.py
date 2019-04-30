@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from django.contrib import admin
+from .forms import MapCollectionForm
 from .models import (MapCollection,
                      MapDataRelate,
                      MapDownload,
@@ -31,7 +32,7 @@ class PixelsPerInchAdmin(admin.ModelAdmin):
 
 class MapDownloadAdmin(admin.StackedInline):
     classes = ('grp-collapse grp-closed',)
-    inline_classes = ('grp-collapse grp-closed',)
+    inline_classes = ('grp-collapse grp-open',)
     model = MapDownload
     extra = 0
 
@@ -39,11 +40,11 @@ class MapDownloadAdmin(admin.StackedInline):
 @admin.register(MapCollection)
 class MapCollectionAdmin(admin.ModelAdmin):
     model = MapCollection
-    # form = CollectionForm
+    form = MapCollectionForm
     fieldsets = (
         ('Map Collection/Series Information', {
              'fields': ('name', 'publish_date', 'description', 'public',
-                       'thumbnail_link')
+                       'thumbnail_link', 'data_collections')
         }),
     )
     inlines = [MapDownloadAdmin]
@@ -53,13 +54,3 @@ class MapCollectionAdmin(admin.ModelAdmin):
     ordering = ('name',)
     search_fields = ('name', 'publish_date', 'description')
     list_filter = ('public',)
-
-    # def county_names(self, collection):
-    #     county_relates = (
-    #         CountyRelate.objects.filter(collection=collection)
-    #             .select_related('county').values_list("county__name")
-    #     )
-    #     counties = sorted([c[0] for c in county_relates])
-    #     return "{}".format(", ".join(name for name in counties))
-    #
-    # county_names.short_description = "Counties in Collection"

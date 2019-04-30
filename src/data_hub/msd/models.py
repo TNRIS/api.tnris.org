@@ -72,6 +72,7 @@ class MapDataRelate(models.Model):
     )
     map_collection_id = models.ForeignKey(
         'MapCollection',
+        db_column='map_collection_id',
         on_delete=models.CASCADE,
         related_name='map_collection'
     )
@@ -109,7 +110,7 @@ class MapCollection(models.Model):
         verbose_name_plural = 'Map Collections'
         ordering = ('name',)
 
-    id = models.UUIDField(
+    map_collection_id = models.UUIDField(
         'Map Collection ID',
         primary_key=True,
         default=uuid.uuid4,
@@ -192,7 +193,7 @@ class MapDownload(models.Model):
     class Meta:
         db_table = 'map_download'
         verbose_name = 'Map Download'
-        verbose_name_plural = 'Map Downlaods'
+        verbose_name_plural = 'Map Downloads'
         unique_together = (
             'map_collection_id',
             'download_url'
@@ -206,15 +207,16 @@ class MapDownload(models.Model):
     )
     map_collection_id = models.ForeignKey(
         'MapCollection',
+        db_column='map_collection_id',
         on_delete=models.CASCADE,
         related_name='map_collection_download'
     )
-    map_size_id = models.ForeignKey(
+    map_size = models.ForeignKey(
         'MapSize',
         on_delete=models.CASCADE,
         related_name='map_collection_download'
     )
-    pixels_per_inch_id = models.ForeignKey(
+    pixels_per_inch = models.ForeignKey(
         'PixelsPerInch',
         on_delete=models.CASCADE,
         related_name='map_collection_download'
@@ -250,4 +252,4 @@ class MapDownload(models.Model):
     #     super().delete(*args, **kwargs)
 
     def __str__(self):
-        return self.download_url
+        return self.label + " - " + self.download_url

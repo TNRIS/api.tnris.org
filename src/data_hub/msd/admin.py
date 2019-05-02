@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from django.contrib import admin
-from .forms import MapCollectionForm
+from .forms import MapCollectionForm, MapDownloadForm
 from .models import (MapCollection,
                      MapDataRelate,
                      MapDownload,
@@ -29,28 +29,51 @@ class PixelsPerInchAdmin(admin.ModelAdmin):
 
 
 # inlines
-
-class MapDownloadAdmin(admin.StackedInline):
-    classes = ('grp-collapse grp-closed',)
-    inline_classes = ('grp-collapse grp-open',)
+@admin.register(MapDownload)
+class MapDownloadAdmin(admin.ModelAdmin):
     model = MapDownload
-    extra = 0
+    form = MapDownloadForm
+    ordering = ('map_collection_id', 'label')
+    list_display = (
+        'map_collection_id', 'label', 'map_size', 'pixels_per_inch'
+    )
+
+    # remove default action 'delete_selected' so s3 files will be deleted by the
+    # model's overridden delete method. also so user permissions don't have to be
+    # handled.
+    def get_actions(self, request):
+        actions = super(MapDownloadAdmin, self).get_actions(request)
+        if 'delete_selected' in actions:
+            del actions['delete_selected']
+        return actions
+
 
 # primary
 @admin.register(MapCollection)
 class MapCollectionAdmin(admin.ModelAdmin):
     model = MapCollection
     form = MapCollectionForm
-    fieldsets = (
-        ('Map Collection/Series Information', {
-             'fields': ('name', 'publish_date', 'description', 'public',
-                       'thumbnail_link', 'data_collections')
-        }),
+    fields = (
+        'name',
+        'publish_date',
+        'description',
+        'public',
+        'thumbnail_link',
+        'delete_thumbnail',
+        'data_collections'
     )
-    inlines = [MapDownloadAdmin]
     list_display = (
         'name', 'publish_date', 'public'
     )
     ordering = ('name',)
     search_fields = ('name', 'publish_date', 'description')
     list_filter = ('public',)
+
+    # remove default action 'delete_selected' so s3 files will be deleted by the
+    # model's overridden delete method. also so user permissions don't have to be
+    # handled.
+    def get_actions(self, request):
+        actions = super(MapCollectionAdmin, self).get_actions(request)
+        if 'delete_selected' in actions:
+            del actions['delete_selected']
+        return actions

@@ -80,6 +80,7 @@ class CustomIndexDashboard(Dashboard):
             column=1,
             css_classes=('grp-collapse grp-closed',),
             models=('msd.models.MapCollection',
+                    'msd.models.MapDownload',
                     'msd.models.MapSize',
                     'msd.models.PixelsPerInch'),
         ))

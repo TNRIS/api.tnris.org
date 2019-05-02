@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 import uuid
+import boto3
 
 from django.db import models
 
@@ -92,7 +93,7 @@ class MapDataRelate(models.Model):
     )
 
     def __str__(self):
-        return self.category_type_id.category
+        return str(self.map_collection_id) + "_" + str(self.data_collection_id)
 
 
 """
@@ -151,35 +152,33 @@ class MapCollection(models.Model):
         auto_now=True
     )
 
-    # def delete_s3_files(self):
-    #     # do that boto dance
-    #     client = boto3.client('s3')
-    #     # set aside list for compiling keys
-    #     key_list = []
-    #     # list Objects
-    #     collection_prefix = str(self.collection_id) + '/assets'
-    #     response = client.list_objects_v2(
-    #         Bucket='data.tnris.org',
-    #         Prefix=collection_prefix
-    #     )
-    #
-    #     if 'Contents' in response.keys():
-    #         # add image keys to list
-    #         for image in response['Contents']:
-    #             key_list.append({'Key':image['Key']})
-    #
-    #         response = client.delete_objects(
-    #             Bucket='data.tnris.org',
-    #             Delete={'Objects': key_list}
-    #         )
-    #         print('%s s3 files: delete success!' % self.name)
-    #     return
-    #
-    # # overwrite default model delete method so that all associated
-    # # s3 files get deleted as well
-    # def delete(self, *args, **kwargs):
-    #     self.delete_s3_files()
-    #     super().delete(*args, **kwargs)
+    def delete_s3_files(self):
+        # do that boto dance
+        client = boto3.client('s3')
+        # set aside list for compiling keys
+        key_list = []
+        # list Objects
+        collection_prefix = str(self.map_collection_id) + '/assets'
+        response = client.list_objects_v2(
+            Bucket='data.tnris.org',
+            Prefix=collection_prefix
+        )
+        if 'Contents' in response.keys():
+            # add image keys to list
+            for file in response['Contents']:
+                key_list.append({'Key':file['Key']})
+            response = client.delete_objects(
+                Bucket='data.tnris.org',
+                Delete={'Objects': key_list}
+            )
+            print('%s s3 files: delete success!' % self.name)
+        return
+
+    # overwrite default model delete method so that all associated
+    # s3 files get deleted as well
+    def delete(self, *args, **kwargs):
+        self.delete_s3_files()
+        super().delete(*args, **kwargs)
 
     def __str__(self):
         return self.name
@@ -222,8 +221,8 @@ class MapDownload(models.Model):
         related_name='map_collection_download'
     )
     download_url = models.URLField(
-        'Image URL',
-        max_length=255
+        'Download URL',
+        max_length=350
     )
     label = models.CharField(
         'Map Label',
@@ -240,16 +239,15 @@ class MapDownload(models.Model):
         auto_now=True
     )
     # delete s3 image files
-    # def delete(self, *args, **kwargs):
-    #     client = boto3.client('s3')
-    #     key = str(self).replace('https://s3.amazonaws.com/data.tnris.org/', '')
-    #     print(key)
-    #     response = client.delete_object(
-    #         Bucket='data.tnris.org',
-    #         Key=key
-    #     )
-    #     print(self)
-    #     super().delete(*args, **kwargs)
+    def delete(self, *args, **kwargs):
+        client = boto3.client('s3')
+        key = str(self).replace('https://s3.amazonaws.com/data.tnris.org/', '')
+        response = client.delete_object(
+            Bucket='data.tnris.org',
+            Key=key
+        )
+        print(self)
+        super().delete(*args, **kwargs)
 
     def __str__(self):
-        return self.label + " - " + self.download_url
+        return str(self.download_url)

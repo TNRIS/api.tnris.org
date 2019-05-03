@@ -251,3 +251,52 @@ class MapDownload(models.Model):
 
     def __str__(self):
         return str(self.download_url)
+
+
+"""
+********** Database Views **********
+**** Used as the API endpoints ****
+"""
+
+class MsdView(models.Model):
+    """
+    Master Systems Display view presents MapCollection table with all
+    associated relates joined
+    """
+
+    class Meta:
+        managed = False
+        db_table = "master_systems_display"
+        verbose_name = 'Master Systems Display'
+        verbose_name_plural = 'Master Systems Display'
+
+    collection_id = models.UUIDField(
+        'Map Collection ID',
+        primary_key=True
+    )
+    name = models.CharField(
+        'Name',
+        max_length=100
+    )
+    publish_date = models.DateField(
+        'Publish Date'
+    )
+    description = models.TextField(
+        'Description'
+    )
+    thumbnail_link = models.CharField(
+        'Thumbnail Link',
+        max_length=255
+    )
+    public = models.BooleanField(
+        'Public'
+    )
+    data_collections = models.TextField(
+        'Data Collections'
+    )
+    map_downloads = models.TextField(
+        'Map Downloads'
+    )
+
+    def __str__(self):
+        return self.name

@@ -1,13 +1,13 @@
 -- Create master_systems_display view for API to hit. Aggregates values from all
 -- associated lookup tables. This SQL only needs to be run after initial database
 -- creation
--- Main collection api endpoint for MSD historical datasets: api/v1/maps
+-- Main collection api endpoint for MSD historical datasets: api/v1/map/collections/
 DROP MATERIALIZED VIEW IF EXISTS "master_systems_display";
 
 CREATE MATERIALIZED VIEW "master_systems_display" as
 SELECT map_collection.map_collection_id as collection_id,
   map_collection.name,
-  map_collection.publish_date as acquisition_date,
+  map_collection.publish_date,
   map_collection.description,
   map_collection.thumbnail_link,
   map_collection.public,

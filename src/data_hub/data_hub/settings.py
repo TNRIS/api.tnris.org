@@ -63,6 +63,7 @@ SEO_JS_USER_AGENTS = [
 INSTALLED_APPS = [
     'lcd',
     'lore',
+    'msd',
     'corsheaders',
     'django_admin_listfilter_dropdown',
     'django.contrib.contenttypes',

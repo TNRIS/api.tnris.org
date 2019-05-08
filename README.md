@@ -1,4 +1,4 @@
-# data.tnris.org
+# api.tnris.org
 
 ![data](src/data_hub/static/data_with_pipe.jpg)
 

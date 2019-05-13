@@ -1,1 +1,0 @@
-export const SET_COLOR_THEME = 'SET_COLOR_THEME';

@@ -38,11 +38,4 @@ urlpatterns = [
     path('admin', RedirectView.as_view(url='admin/', permanent=False)), # admin site
     path('api/v1/', include('lcd.urls')),
     path('health/', HealthCheckView.as_view()),
-    path('collection/<coll>', TemplateView.as_view(template_name='index.html'), name='collection'),
-    path('catalog/<filt>', TemplateView.as_view(template_name='index.html'), name='catalog_filtered'),
-    path('cart/', TemplateView.as_view(template_name='index.html'), name='shopping_cart'),
-    path('cart', RedirectView.as_view(url='cart/', permanent=False)),
-    path('geofilter/', TemplateView.as_view(template_name='index.html'), name='geofilter'),
-    path('geofilter', RedirectView.as_view(url='geofilter/', permanent=False)),
-    path('', TemplateView.as_view(template_name='index.html'), name='holodeck'),
 ]

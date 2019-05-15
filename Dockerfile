@@ -54,7 +54,7 @@ COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY gunicorn.conf /etc/supervisor/conf.d/gunicorn.conf
 
 # Expose port
-EXPOSE 1968
+EXPOSE 1969
 
 # Run entrypoint script
 ENTRYPOINT ["/docker-entrypoint.sh"]

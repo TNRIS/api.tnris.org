@@ -55,7 +55,7 @@ class CollectionViewSet(viewsets.ReadOnlyModelViewSet):
                     value = None
                 args[field] = value
         # get records using query
-        queryset = ChcView.objects.filter(**args)
+        queryset = ChcView.objects.filter(**args).order_by('collection_id')
         return queryset
 
 

@@ -43,7 +43,11 @@ class CustomIndexDashboard(Dashboard):
                      'lore.models.FrameSize',
                      'lore.models.Scale',
                      'lore.models.County',
-                     'lore.models.Collection'),
+                      'lore.models.Collection',
+                     'msd.models.MapCollection',
+                     'msd.models.MapDownload',
+                     'msd.models.MapSize',
+                     'msd.models.PixelsPerInch'),
         ))
 
         self.children.append(modules.AppList(

@@ -20,5 +20,5 @@ class MapCollectionViewSet(viewsets.ReadOnlyModelViewSet):
                     value = None
                 args[field] = value
         # get records using query
-        queryset = MsdView.objects.filter(**args)
+        queryset = MsdView.objects.filter(**args).order_by('collection_id')
         return queryset

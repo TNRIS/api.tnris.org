@@ -23,7 +23,7 @@ class CollectionViewSet(viewsets.ReadOnlyModelViewSet):
                     value = None
                 args[field] = value
         # get records using query
-        queryset = CcrView.objects.filter(**args)
+        queryset = CcrView.objects.filter(**args).order_by('collection_id')
         return queryset
 
 

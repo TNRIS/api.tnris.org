@@ -252,6 +252,8 @@ class Collection(models.Model):
     frames_service_url = models.URLField('Frames Service URL', max_length=256, null=True, blank=True)
     mosaic_service_url = models.URLField('Mosaic Service URL', max_length=256, null=True, blank=True)
     ls4_link = models.CharField(max_length=200, null=True, blank=True)
+    qr_code_url = models.URLField('QR Code URL', max_length=256, null=True, blank=True)
+    number_of_boxes = models.PositiveIntegerField('Number of Boxes', null=True, blank=True)
 
     def __str__(self):
         return self.collection

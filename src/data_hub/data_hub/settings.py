@@ -167,7 +167,7 @@ USE_TZ = True
 
 
 # Grappelli Settings
-GRAPPELLI_ADMIN_TITLE = "TNRIS Data Hub"
+GRAPPELLI_ADMIN_TITLE = "TNRIS Application Programming Interface (API) Console"
 GRAPPELLI_SWITCH_USER = True
 GRAPPELLI_INDEX_DASHBOARD = 'dashboard.CustomIndexDashboard'
 

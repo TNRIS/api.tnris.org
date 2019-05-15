@@ -38,4 +38,5 @@ urlpatterns = [
     path('admin', RedirectView.as_view(url='admin/', permanent=False)), # admin site
     path('api/v1/', include('lcd.urls')),
     path('health/', HealthCheckView.as_view()),
+    path('', RedirectView.as_view(url='admin/', permanent=False)), # redirect home to admin
 ]

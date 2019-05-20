@@ -51,7 +51,7 @@ errors = []
 counter = 0
 for r in res:
     # build object for inserting into spreadsheet
-    endpoint_url = "https://data.tnris.org/admin/lore/collection/%s/change/" % (r[0])
+    endpoint_url = "https://api.tnris.org/admin/lore/collection/%s/change/" % (r[0])
     google_api_url = "https://chart.googleapis.com/chart?chs=150x150&cht=qr&chl=" + endpoint_url
     upload_key = "%s/assets/qr_code.png" % (r[0])
     qr_url = "https://s3.amazonaws.com/data.tnris.org/%s" % (upload_key)
@@ -71,6 +71,7 @@ for r in res:
     }
     # download image
     path = "/tmp/qr_code.png"
+    print(google_api_url)
     request.urlretrieve(google_api_url, path)
 
     # upload to s3 Bucket
@@ -102,6 +103,14 @@ print('historical collections: %s' % len(res))
 ###########
 cur.close()
 conn.close()
+print("ERRORS:--------------------------")
+print("ERRORS:--------------------------")
+print("ERRORS:--------------------------")
+print("ERRORS:--------------------------")
+print("ERRORS:--------------------------")
+print("ERRORS:--------------------------")
+print("ERRORS:--------------------------")
+print("ERRORS:--------------------------")
 print("ERRORS:--------------------------")
 for e in errors:
     print(e)

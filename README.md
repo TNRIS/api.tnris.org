@@ -22,7 +22,7 @@ Built with:
 3. Install python dependencies:
    * `cd ~/data.tnris.org/src`
    * `pip install -r requirements.txt`
-4. Copy set-env-secrets-example.sh (found in ~/data.tnris.org/src/data_hub/) and rename it set-env-secrets.sh; paste the data.tnris.org RDS pw into the file. * This file is not tracked in version control.
+4. Copy set-env-secrets-example.sh (found in ~/data.tnris.org/src/data_hub/) and rename it set-env-secrets.sh; paste the data.tnris.org RDS pw into the file. * This file is not tracked in version control. **--or--** place a copy of `vault-password.txt` into the root of this repo `~/api.tnris.org`. You might need to change spaces to newlines. cd into the root folder and run `make pull-secrets` to quickly download, decrypt, and properly place the secrets file.
 5. Source the set-env-secrets.sh in your virtual environtment using command `source /path/to/your/file/set-env-secrets.sh`
 #### React/Node Setup
 6. `cd ~/data.tnris.org/src/data_hub/holodeck`

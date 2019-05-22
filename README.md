@@ -1,7 +1,5 @@
 # api.tnris.org
 
-![data](src/data_hub/static/data_with_pipe.jpg)
-
 ## API and content management system for TNRIS data!
 * Check out the wiki to learn about the data model and other curiosities
 

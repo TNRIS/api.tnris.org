@@ -28,8 +28,8 @@ conn = psycopg2.connect(conn_string)
 cur = conn.cursor()
 
 # delete currently populated links
-cur.execute('DELETE FROM photo_index_scanned_ls4_link')
-conn.commit()
+# cur.execute('DELETE FROM photo_index_scanned_ls4_link')
+# conn.commit()
 
 # query temp etl view to compile all the ref info for collections
 tablename = 'etl_scanned_index'
@@ -150,12 +150,12 @@ for i in objects:
             no_collection_found.append([agency, county, year, sheet])
             continue
     # insert into the Database
-    newUuid = uuid.uuid4()
-    timestamp = datetime.datetime.now()
-    newQuery = "INSERT INTO photo_index_scanned_ls4_link (id, collection_id, year, size, sheet, link, created, last_modified) VALUES ('%s', '%s', %s, '%s', '%s', '%s', '%s', '%s')" % (newUuid, collection_id, year, size, sheet, link, timestamp, timestamp)
-    print(newQuery)
-    cur.execute(newQuery)
-    conn.commit()
+    # newUuid = uuid.uuid4()
+    # timestamp = datetime.datetime.now()
+    # newQuery = "INSERT INTO photo_index_scanned_ls4_link (id, collection_id, year, size, sheet, link, created, last_modified) VALUES ('%s', '%s', %s, '%s', '%s', '%s', '%s', '%s')" % (newUuid, collection_id, year, size, sheet, link, timestamp, timestamp)
+    # print(newQuery)
+    # cur.execute(newQuery)
+    # conn.commit()
 
 print(total_size)
 ###########

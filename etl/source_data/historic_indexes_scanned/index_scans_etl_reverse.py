@@ -29,6 +29,8 @@ cur = conn.cursor()
 client = boto3.client('s3')
 all_keys = []
 count_keys = []
+print("---------------------------------------------------")
+print("The following are keys in the s3/cloudberry which have dpi in the name:")
 def get_objects(token=''):
     if token == '':
         response = client.list_objects_v2(
@@ -48,24 +50,39 @@ def get_objects(token=''):
             all_keys.append(key)
             all_keys.append(key2)
             count_keys.append(key)
-            # print(key)
+            if 'dpi' in key:
+                print(key)
 
     if response['IsTruncated']:
         get_objects(response['NextContinuationToken'])
 
 get_objects()
+print("---------------------------------------------------")
+print("TOTALS:")
 print('s3 scans count: %s' % len(count_keys))
 # query temp etl view to compile all the ref info for collections
 tablename = 'photo_index_scanned_ls4_link'
 query = "SELECT link FROM %s;" % tablename
 cur.execute(query)
 response = cur.fetchall()
+all_links = [r[0] for r in response]
 print('database records count: %s' % len(response))
+print("---------------------------------------------------")
 print("The following are keys in the database which are not in s3/cloudberry:")
-for r in response:
-    link = r[0]
+for link in all_links:
     if link not in all_keys:
         print(link)
+
+print("---------------------------------------------------")
+print("The following are keys in the s3/cloudberry which are not in the database:")
+
+for c in count_keys:
+    if c not in all_links:
+        alt_link = c.replace('https://s3.amazonaws.com/tnris-ls4/', 'https://tnris-ls4.s3.amazonaws.com/')
+        if alt_link not in all_links:
+            print(c.replace('https://s3.amazonaws.com/tnris-ls4/', ''))
+
+
 cur.close()
 conn.close()
 

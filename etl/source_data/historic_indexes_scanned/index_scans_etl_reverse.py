@@ -30,7 +30,7 @@ client = boto3.client('s3')
 all_keys = []
 count_keys = []
 print("---------------------------------------------------")
-print("The following are keys in the s3/cloudberry which have dpi in the name:")
+print("The following are keys which have dpi in the name (only non-800dpi permitted):")
 def get_objects(token=''):
     if token == '':
         response = client.list_objects_v2(
@@ -82,7 +82,7 @@ for c in count_keys:
         if alt_link not in all_links:
             print(c.replace('https://s3.amazonaws.com/tnris-ls4/', ''))
 
-
+print("---------------------------------------------------")
 cur.close()
 conn.close()
 

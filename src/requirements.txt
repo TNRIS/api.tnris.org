@@ -15,7 +15,7 @@ django-grappelli==2.11.1
 django-rest-swagger==2.2.0
 django-seo-js==0.3.2
 django-storages==1.6.6
-djangorestframework==3.8.2
+djangorestframework==3.9.4
 docutils==0.14
 idna==2.7
 itypes==1.1.0

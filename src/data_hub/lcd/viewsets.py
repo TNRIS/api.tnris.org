@@ -43,7 +43,7 @@ class ResourceViewSet(viewsets.ReadOnlyModelViewSet):
                     value = None
                 args[field] = value
         # get records using query
-        queryset = RemView.objects.filter(**args)
+        queryset = RemView.objects.filter(**args).order_by('resource_id')
         return queryset
 
 
@@ -63,5 +63,5 @@ class AreaViewSet(viewsets.ReadOnlyModelViewSet):
                     value = None
                 args[field] = value
         # get records using query
-        queryset = AreasView.objects.filter(**args)
+        queryset = AreasView.objects.filter(**args).order_by('area_type_id')
         return queryset

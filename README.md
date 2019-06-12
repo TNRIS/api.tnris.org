@@ -1,4 +1,5 @@
 # api.tnris.org
+Django RESTful API and PostgreSQL backend database management system for maintaining and serving TNRIS's available data and content.
 
 ## API and content management system for TNRIS data!
 * Check out the wiki to learn about the data model and other curiosities

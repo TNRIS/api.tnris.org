@@ -28,6 +28,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     'data.tnris.org',
+    'api.tnris.org',
     'localhost',
     '127.0.0.1'
 ]
@@ -80,7 +81,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_swagger',
     'storages',
-    'webpack_loader',
     'django_seo_js'
 ]
 
@@ -102,7 +102,7 @@ ROOT_URLCONF = 'data_hub.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates'), ],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -167,7 +167,7 @@ USE_TZ = True
 
 
 # Grappelli Settings
-GRAPPELLI_ADMIN_TITLE = "TNRIS Data Hub"
+GRAPPELLI_ADMIN_TITLE = "TNRIS Application Programming Interface (API) Console"
 GRAPPELLI_SWITCH_USER = True
 GRAPPELLI_INDEX_DASHBOARD = 'dashboard.CustomIndexDashboard'
 
@@ -189,13 +189,6 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 1000
-}
-
-WEBPACK_LOADER = {
-    'DEFAULT': {
-        'BUNDLE_DIR_NAME': 'bundles/',
-        'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats.dev.json'),
-    }
 }
 
 SITE_ID = 1

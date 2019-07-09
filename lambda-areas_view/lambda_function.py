@@ -12,7 +12,7 @@ def lambda_handler(event, context):
 
     urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
     http = urllib3.PoolManager()
-    url = 'https://data.tnris.org/api/v1/areas'
+    url = 'https://api.tnris.org/api/v1/areas'
     results = []
 
     # iteratively go get all records from the API

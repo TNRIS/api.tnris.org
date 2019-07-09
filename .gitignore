@@ -188,3 +188,6 @@ lambda-outside_entity_services/*
 lambda-refresh_materialized_views/*
 !lambda-refresh_materialized_views/lambda_function.py
 !lambda-refresh_materialized_views/requirements.txt
+
+vault-password\.txt
+.vault/

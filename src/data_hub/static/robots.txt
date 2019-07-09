@@ -1,5 +1,0 @@
-User-agent: *
-Disallow: /admin/
-Disallow: /health/
-
-Sitemap: https://data.tnris.org/sitemap.xml

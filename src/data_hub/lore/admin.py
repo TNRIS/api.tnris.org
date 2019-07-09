@@ -80,7 +80,7 @@ class CollectionAdmin(admin.ModelAdmin):
         ('Collection Information', {
              'fields': ('collection', 'agency', 'from_date', 'to_date',
                        'index_service_url', 'frames_service_url', 'mosaic_service_url',
-                       'counties', 'public'),
+                       'counties', 'number_of_boxes', 'public', 'qr_code_url'),
         }),
         ('Remarks', {
             'fields': ('remarks',)
@@ -99,6 +99,7 @@ class CollectionAdmin(admin.ModelAdmin):
         CollectionAgencyNameFilter,
         CollectionCountyFilter
     )
+    readonly_fields=('qr_code_url',)
 
     def county_names(self, collection):
         county_relates = (

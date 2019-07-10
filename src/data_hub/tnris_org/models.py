@@ -26,7 +26,8 @@ class TnrisImageUrl(models.Model):
     )
     image_name = models.CharField(
         'Image Name',
-        max_length=200
+        max_length=200,
+        editable=False
     )
     image_url = models.URLField(
         'Image URL',
@@ -72,7 +73,8 @@ class TnrisDocUrl(models.Model):
     )
     doc_name = models.CharField(
         'Document Name',
-        max_length=200
+        max_length=200,
+        editable=False
     )
     doc_url = models.URLField(
         'Document URL',

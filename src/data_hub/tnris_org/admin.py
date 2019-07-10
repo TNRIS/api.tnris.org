@@ -12,5 +12,13 @@ from .models import (
 class TnrisImageUrlAdmin(admin.ModelAdmin):
     model = TnrisImageUrl
     form = ImageForm
-    ordering = ('category',)
-    list_display = ('category', 'filter_name')
+    ordering = ('image_name',)
+    list_display = ('image_name', 'image_url')
+
+
+@admin.register(TnrisDocUrl)
+class TnrisDocUrlAdmin(admin.ModelAdmin):
+    model = TnrisDocUrl
+    form = DocForm
+    ordering = ('doc_name',)
+    list_display = ('doc_name', 'doc_url')

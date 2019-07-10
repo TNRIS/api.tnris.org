@@ -24,9 +24,13 @@ class TnrisImageUrl(models.Model):
         default=uuid.uuid4,
         editable=False
     )
+    image_name = models.CharField(
+        'Image Name',
+        max_length=200
+    )
     image_url = models.URLField(
         'Image URL',
-        max_length=255,
+        max_length=255
     )
     created = models.DateTimeField(
         'Created',
@@ -39,7 +43,7 @@ class TnrisImageUrl(models.Model):
     # delete s3 image files
     def delete(self, *args, **kwargs):
         client = boto3.client('s3')
-        key = str(self).replace('https://tnris-org-static.s3.amazonaws.com/images/', '')
+        key = str(self).replace('https://tnris-org-static.s3.amazonaws.com/', '')
         print(key)
         response = client.delete_object(
             Bucket='tnris-org-static',
@@ -66,6 +70,10 @@ class TnrisDocUrl(models.Model):
         default=uuid.uuid4,
         editable=False
     )
+    doc_name = models.CharField(
+        'Document Name',
+        max_length=200
+    )
     doc_url = models.URLField(
         'Document URL',
         max_length=255,
@@ -81,7 +89,7 @@ class TnrisDocUrl(models.Model):
     # delete s3 image files
     def delete(self, *args, **kwargs):
         client = boto3.client('s3')
-        key = str(self).replace('https://tnris-org-static.s3.amazonaws.com/documents/', '')
+        key = str(self).replace('https://tnris-org-static.s3.amazonaws.com/', '')
         print(key)
         response = client.delete_object(
             Bucket='tnris-org-static',

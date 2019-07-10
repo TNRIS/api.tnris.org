@@ -29,38 +29,26 @@ def get_s3_images(bucket):
     total_count = 0
     img_count = 0
     doc_count = 0
+    slash_count = 0
 
     base_url = 'https://tnris-org-static.s3.amazonaws.com/'
 
     while True:
         resp = client.list_objects_v2(**kwargs)
 
-        # print('resp =', resp)
-
         for obj in resp['Contents']:
-            # print(obj)
+            key = obj['Key']
             total_count += 1
-            if obj['Key'].startswith(images) and obj['Key'] not in unique_images:
-                filename = obj['Key'].rsplit('/')[-1]
-                print(filename)
-                client.copy_object(Bucket=bucket, CopySource=bucket + '/' + obj['Key'], Key=images + filename)
-                # client.delete_object(Bucket=bucket, Key=bucket + '/' + obj['Key'])
-                unique_images.append(base_url + images + filename)
-                img_count += 1
-            # else:
-                # unique_docs.append(base_url + obj['Key'])
-                # doc_count += 1
-            # if obj['Key'].endswith(suffix):
-            #     key_path = obj['Key']
-            #     image = key_path.rsplit('/')[-1].rstrip()
 
-                # if image in old_names:
-                #     count += 1
-                #     new_name = key_path.replace(image, str(uuid.uuid4()) + suffix)
-                #     # print(bucket + '/' + key_path)
-                #     # print(str(count) + ': ' + key_path + ' --> ' + new_name)
-                #     print('#{c} copying {k} to new file {n}...'.format(c=count, k=key_path, n=new_name))
-                #     client.copy_object(Bucket=bucket, CopySource=bucket + '/' + key_path, Key=new_name)
+            # print(key)
+
+            if key.startswith(images) and key not in unique_images:
+                unique_images.append(base_url + key)
+                img_count += 1
+
+            elif key.startswith(docs) and key not in unique_docs:
+                unique_docs.append(base_url + key)
+                doc_count += 1
 
 
         try:
@@ -68,10 +56,9 @@ def get_s3_images(bucket):
         except KeyError:
             break
 
-    print('image count:', img_count)
-    # print('doc_count:', doc_count)
-    # print('total count:', total_count)
-    print('unique images:', unique_images)
+    print('total count ---->', total_count, 'images:', img_count, 'docs:', doc_count)
+
+    # print('unique images:', unique_images)
     # print('unique docs:', unique_docs)
 
 

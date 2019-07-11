@@ -10,13 +10,13 @@ import os
 """
 
 
-class TnrisImageUrl(models.Model):
+class TnrisImage(models.Model):
     """Tnris.org image resource table containing an S3 bucket url for each image"""
 
     class Meta:
-        db_table = 'tnris_image_url'
-        verbose_name = 'Tnris Image Url'
-        verbose_name_plural = 'Tnris Image Urls'
+        db_table = 'tnris_image'
+        verbose_name = 'Tnris Image'
+        verbose_name_plural = 'Tnris Images'
 
     image_id = models.UUIDField(
         'Image ID',
@@ -45,7 +45,7 @@ class TnrisImageUrl(models.Model):
     def delete(self, *args, **kwargs):
         client = boto3.client('s3')
         key = str(self).replace('https://tnris-org-static.s3.amazonaws.com/', '')
-        print(key)
+        print(key, 'successfully deleted')
         response = client.delete_object(
             Bucket='tnris-org-static',
             Key=key
@@ -57,26 +57,26 @@ class TnrisImageUrl(models.Model):
         return self.image_url
 
 
-class TnrisDocUrl(models.Model):
+class TnrisDocument(models.Model):
     """Tnris.org document resource table containing an S3 bucket url for each document"""
 
     class Meta:
-        db_table = 'tnris_doc_url'
-        verbose_name = 'Tnris Document Url'
-        verbose_name_plural = 'Tnris Document Urls'
+        db_table = 'tnris_document'
+        verbose_name = 'Tnris Document'
+        verbose_name_plural = 'Tnris Documents'
 
-    doc_id = models.UUIDField(
+    document_id = models.UUIDField(
         'Document ID',
         primary_key=True,
         default=uuid.uuid4,
         editable=False
     )
-    doc_name = models.CharField(
+    document_name = models.CharField(
         'Document Name',
         max_length=200,
         editable=False
     )
-    doc_url = models.URLField(
+    document_url = models.URLField(
         'Document URL',
         max_length=255,
     )
@@ -88,11 +88,11 @@ class TnrisDocUrl(models.Model):
         'Last Modified',
         auto_now=True
     )
-    # delete s3 image files
+    # delete s3 doc files
     def delete(self, *args, **kwargs):
         client = boto3.client('s3')
         key = str(self).replace('https://tnris-org-static.s3.amazonaws.com/', '')
-        print(key)
+        print(key, 'successfully deleted')
         response = client.delete_object(
             Bucket='tnris-org-static',
             Key=key
@@ -101,4 +101,4 @@ class TnrisDocUrl(models.Model):
         super().delete(*args, **kwargs)
 
     def __str__(self):
-        return self.doc_url
+        return self.document_url

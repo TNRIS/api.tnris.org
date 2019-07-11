@@ -1,24 +1,26 @@
 from django.contrib import admin
 
 # Register your models here.
-from .forms import ImageForm, DocForm
+from .forms import ImageForm, DocumentForm
 from .models import (
-    TnrisImageUrl,
-    TnrisDocUrl
+    TnrisImage,
+    TnrisDocument
 )
 
 
-@admin.register(TnrisImageUrl)
-class TnrisImageUrlAdmin(admin.ModelAdmin):
-    model = TnrisImageUrl
+@admin.register(TnrisImage)
+class TnrisImageAdmin(admin.ModelAdmin):
+    model = TnrisImage
     form = ImageForm
     ordering = ('image_name',)
-    list_display = ('image_name', 'image_url')
+    list_display = ('image_name', 'image_url', 'created')
+    search_fields = ('image_name', 'image_url')
 
 
-@admin.register(TnrisDocUrl)
-class TnrisDocUrlAdmin(admin.ModelAdmin):
-    model = TnrisDocUrl
-    form = DocForm
-    ordering = ('doc_name',)
-    list_display = ('doc_name', 'doc_url')
+@admin.register(TnrisDocument)
+class TnrisDocumentAdmin(admin.ModelAdmin):
+    model = TnrisDocument
+    form = DocumentForm
+    ordering = ('document_name',)
+    list_display = ('document_name', 'document_url', 'created')
+    search_fields = ('document_name', 'document_url')

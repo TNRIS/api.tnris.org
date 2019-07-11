@@ -56,11 +56,12 @@ class ImageForm(forms.ModelForm):
         files = self.files
         # if files and field not marked for deletion then upload to s3
         for f in files:
+            print(f)
             ext = os.path.splitext(str(files[f]))[1]
-            valid_extensions = ['.jpg', '.png', '.gif', '.jpeg']
+            valid_extensions = ['.jpg', '.png', '.gif', '.jpeg', '.svg']
             print(ext)
             if not ext.lower() in valid_extensions:
-                raise ValidationError(u"Unsupported file extension. Only .jpg, .png, .gif, and .jpeg file extensions supported.")
+                raise ValidationError(u"Unsupported file extension. Only .jpg, .png, .gif, and .jpeg file extensions supported for Tnris Images")
 
             self.handle_image(f, files[f])
 
@@ -100,10 +101,10 @@ class DocumentForm(forms.ModelForm):
         # if files and field not marked for deletion then upload to s3
         for f in files:
             ext = os.path.splitext(str(files[f]))[1]
-            invalid_extensions = ['.jpg', '.png', '.gif', '.jpeg']
+            invalid_extensions = ['.jpg', '.png', '.gif', '.jpeg', '.svg']
             print(ext)
             if ext.lower() in invalid_extensions:
-                raise ValidationError(u"Unsupported file extension. All images should be uploaded using 'Tnris Image Urls'.")
+                raise ValidationError(u"Unsupported file extension. All images should be uploaded using 'Tnris Images'.")
 
             self.handle_doc(f, files[f])
 

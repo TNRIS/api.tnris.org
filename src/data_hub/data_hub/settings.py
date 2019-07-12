@@ -65,6 +65,7 @@ INSTALLED_APPS = [
     'lcd',
     'lore',
     'msd',
+    'tnris_org',
     'corsheaders',
     'django_admin_listfilter_dropdown',
     'django.contrib.contenttypes',

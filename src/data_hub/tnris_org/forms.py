@@ -50,18 +50,21 @@ class ImageForm(forms.ModelForm):
         setattr(self.instance, "image_name", str(file))
         return
 
-    # custom handling of images on save method
+    # custom handling of images on save
     def save(self, commit=True):
         # check for files
         files = self.files
-        # if files and field not marked for deletion then upload to s3
         for f in files:
-            print(f)
+            print(str(files[f]))
             ext = os.path.splitext(str(files[f]))[1]
             valid_extensions = ['.jpg', '.png', '.gif', '.jpeg', '.svg']
-            print(ext)
+            # validation to prevent non-standard image formats or other files from being uploaded
             if not ext.lower() in valid_extensions:
                 raise ValidationError(u"Unsupported file extension. Only .jpg, .png, .gif, and .jpeg file extensions supported for Tnris Images")
+            # validation to check if image file name already exists in database
+            name_set = TnrisImage.objects.filter(image_name=str(files[f]))
+            if len(name_set) > 0:
+                raise ValidationError(u"Image file name already exists. Rename your file.")
 
             self.handle_image(f, files[f])
 
@@ -94,17 +97,21 @@ class DocumentForm(forms.ModelForm):
         setattr(self.instance, "document_name", str(file))
         return
 
-    # custom handling of documents on save method
+    # custom handling of documents on save
     def save(self, commit=True):
         # check for files
         files = self.files
-        # if files and field not marked for deletion then upload to s3
         for f in files:
+            print(str(files[f]))
             ext = os.path.splitext(str(files[f]))[1]
             invalid_extensions = ['.jpg', '.png', '.gif', '.jpeg', '.svg']
-            print(ext)
+            # validation to prevent image formats from being uploaded
             if ext.lower() in invalid_extensions:
-                raise ValidationError(u"Unsupported file extension. All images should be uploaded using 'Tnris Images'.")
+                raise ValidationError(u"Unsupported file extension. All images should be uploaded to 'Tnris Images', only document type files should be uploaded here.")
+            # validation to check if document file name already exists in database
+            name_set = TnrisDocument.objects.filter(document_name=str(files[f]))
+            if len(name_set) > 0:
+                raise ValidationError(u"Document file name already exists. Rename your file.")
 
             self.handle_doc(f, files[f])
 

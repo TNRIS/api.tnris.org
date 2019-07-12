@@ -47,7 +47,9 @@ class CustomIndexDashboard(Dashboard):
                      'msd.models.MapCollection',
                      'msd.models.MapDownload',
                      'msd.models.MapSize',
-                     'msd.models.PixelsPerInch'),
+                     'msd.models.PixelsPerInch',
+                     'tnris_org.models.TnrisImage',
+                     'tnris_org.models.TnrisDocument'),
         ))
 
         self.children.append(modules.AppList(
@@ -87,6 +89,15 @@ class CustomIndexDashboard(Dashboard):
                     'msd.models.MapDownload',
                     'msd.models.MapSize',
                     'msd.models.PixelsPerInch'),
+        ))
+
+        self.children.append(modules.AppList(
+            title='Website Content',
+            collapsible=True,
+            column=1,
+            css_classes=('grp-collapse grp-closed',),
+            models=('tnris_org.models.TnrisImage',
+                    'tnris_org.models.TnrisDocument'),
         ))
 
         # append a recent actions module

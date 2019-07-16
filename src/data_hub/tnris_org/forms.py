@@ -6,7 +6,7 @@ from string import Template
 from django.utils.safestring import mark_safe
 
 from django.db.utils import ProgrammingError
-from .models import (TnrisImage, TnrisDocument)
+from .models import (TnrisImage, TnrisDocument, TnrisTraining, TnrisForumTraining)
 import os
 import boto3, uuid
 
@@ -122,3 +122,27 @@ class DocumentForm(forms.ModelForm):
             self.handle_doc(f, files[f])
 
         return super(DocumentForm, self).save(commit=commit)
+
+
+class TnrisTrainingForm(forms.ModelForm):
+    class Meta:
+        model = TnrisTraining
+        fields = ('__all__')
+
+    start_date_time = forms.DateTimeField(help_text="Accepted date and time input formats: '10/25/06 14:30', '10/25/2006 14:30', '2006-10-25 14:30'")
+    end_date_time = forms.DateTimeField(help_text="Accepted date and time input formats: '10/25/06 14:30', '10/25/2006 14:30', '2006-10-25 14:30'")
+    cost = forms.DecimalField(help_text="Example of accepted formats for training cost: '50.00', '999', '99.99'")
+    registration_open = forms.BooleanField(required=False, help_text="Default is unchecked or False. Check the box to change registration to open or True.")
+    public = forms.BooleanField(required=False, help_text="Check the box to make this training record visible on the website. Default is unchecked.")
+
+
+class TnrisForumTrainingForm(forms.ModelForm):
+    class Meta:
+        model = TnrisForumTraining
+        fields = ('__all__')
+
+    start_date_time = forms.DateTimeField(help_text="Accepted date and time input formats: '10/25/06 14:30', '10/25/2006 14:30', '2006-10-25 14:30'")
+    end_date_time = forms.DateTimeField(help_text="Accepted date and time input formats: '10/25/06 14:30', '10/25/2006 14:30', '2006-10-25 14:30'")
+    cost = forms.DecimalField(help_text="Example of accepted formats for training cost: '50.00', '999', '99.99'")
+    registration_open = forms.BooleanField(required=False, help_text="Default is unchecked or False. Check the box to change registration to open or True.")
+    public = forms.BooleanField(required=False, help_text="Check the box to make this training record visible on the website. Default is unchecked.")

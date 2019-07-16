@@ -105,7 +105,7 @@ class TnrisDocument(models.Model):
 
 
 class TnrisTraining(models.Model):
-    """Training courses scheduled and organized by Tnris"""
+    """Regular training courses scheduled by Tnris"""
 
     class Meta:
         db_table = 'tnris_training'
@@ -116,51 +116,65 @@ class TnrisTraining(models.Model):
         'Training ID',
         primary_key=True,
         default=uuid.uuid4,
-        editable=False
+        editable=False,
+        blank=False
     )
-    from_date = models.DateField(
-        'Training Start Date'
+    start_date_time = models.DateTimeField(
+        'Training Start Date & Time',
+        blank=False
     )
-    to_date = models.DateField(
-        'Training End Date'
+    end_date_time = models.DateTimeField(
+        'Training End Date & Time',
+        blank=False
     )
     title = models.CharField(
         'Training Title',
-        max_length=255
-    )
-    from_time = models.TimeField(
-        'Training Start Time'
-    )
-    to_time = models.TimeField(
-        'Training End Time'
+        max_length=255,
+        blank=False
     )
     instructor = models.CharField(
         'Training Instructor',
-        max_length=255
+        max_length=100,
+        blank=False
     )
     cost = models.DecimalField(
         'Training Cost',
         max_digits=6,
-        decimal_places=2
+        decimal_places=2,
+        blank=False
     )
     registration_open = models.BooleanField(
         'Registration Open',
         default=False,
         null=False
     )
+    public = models.BooleanField(
+        'Public',
+        default=False,
+        null=False
+    )
     instructor_bio = models.TextField(
-        'Training Instructor Bio'
+        'Training Instructor Bio',
+        blank=True
     )
     description = models.TextField(
         'Training Description'
     )
+    created = models.DateTimeField(
+        'Created',
+        auto_now_add=True
+    )
+    last_modified = models.DateTimeField(
+        'Last Modified',
+        auto_now=True
+    )
 
     def __str__(self):
-        return self.class_title
+        return self.title
 
 
 class TnrisForumTraining(models.Model):
-    """Training courses scheduled and organized by Tnris specifically for the Texas GIS Forum"""
+    """Texas GIS Forum training courses scheduled by Tnris"""
 
     class Meta:
         db_table = 'tnris_forum_training'
@@ -171,55 +185,80 @@ class TnrisForumTraining(models.Model):
         'Training ID',
         primary_key=True,
         default=uuid.uuid4,
-        editable=False
+        editable=False,
+        blank=False
     )
     training_day = models.PositiveSmallIntegerField(
-        'Training Day'
+        'Forum Training Day',
+        blank=False
     )
     title = models.CharField(
         'Training Title',
-        max_length=255
+        max_length=255,
+        blank=False
     )
-    from_time = models.TimeField(
-        'Training Start Time'
+    start_date_time = models.DateTimeField(
+        'Training Start Date & Time',
+        blank=False
     )
-    to_time = models.TimeField(
-        'Training End Time'
-    )
-    location = models.CharField(
-        'Training Location',
-        max_length=255
+    end_date_time = models.DateTimeField(
+        'Training End Date & Time',
+        blank=False
     )
     instructor = models.CharField(
         'Training Instructor',
-        max_length=255
+        max_length=100,
+        blank=False
     )
     cost = models.DecimalField(
         'Training Cost',
         max_digits=6,
-        decimal_places=2
+        decimal_places=2,
+        blank=False
     )
     registration_open = models.BooleanField(
         'Registration Open',
         default=False,
         null=False
     )
+    public = models.BooleanField(
+        'Public',
+        default=False,
+        null=False
+    )
+    location = models.CharField(
+        'Training Location',
+        max_length=255,
+        blank=False
+    )
+    room = models.CharField(
+        'Training Room',
+        max_length=255,
+        blank=False
+    )
+    max_students = models.PositiveSmallIntegerField(
+        'Max Student Amount',
+        blank=True
+    )
     instructor_bio = models.TextField(
-        'Training Instructor Bio'
+        'Training Instructor Bio',
+        blank=True
     )
     description = models.TextField(
         'Training Description'
     )
     teaser = models.TextField(
-        'Training Teaser'
+        'Training Teaser',
+        blank=True
     )
-    room = models.CharField(
-        'Training Room',
-        max_length=255
+    created = models.DateTimeField(
+        'Created',
+        auto_now_add=True
     )
-    max_students = models.PositiveSmallIntegerField(
-        'Max Student Amount'
+    last_modified = models.DateTimeField(
+        'Last Modified',
+        auto_now=True
     )
 
     def __str__(self):
-        return self.class_title
+        return self.title

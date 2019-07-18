@@ -131,9 +131,10 @@ class TnrisTrainingForm(forms.ModelForm):
 
     start_date_time = forms.DateTimeField(help_text="Accepted date and time input formats: '10/25/06 14:30', '10/25/2006 14:30', '2006-10-25 14:30'")
     end_date_time = forms.DateTimeField(help_text="Accepted date and time input formats: '10/25/06 14:30', '10/25/2006 14:30', '2006-10-25 14:30'")
-    cost = forms.DecimalField(help_text="Example of accepted formats for training cost: '50.00', '999', '99.99'")
-    registration_open = forms.BooleanField(required=False, help_text="Default is unchecked or False. Check the box to change registration to open or True.")
+    cost = forms.DecimalField(help_text="Example of accepted formats for training cost: '50.00', '999', '99.99'. Max of 6 digits and 2 decimal places.")
+    registration_open = forms.BooleanField(required=False, help_text="Check the box to change registration to open. Default is unchecked.")
     public = forms.BooleanField(required=False, help_text="Check the box to make this training record visible on the website. Default is unchecked.")
+    max_students = forms.IntegerField(required=False, help_text="Enter max number of students for class room.")
 
 
 class TnrisForumTrainingForm(forms.ModelForm):
@@ -143,6 +144,7 @@ class TnrisForumTrainingForm(forms.ModelForm):
 
     start_date_time = forms.DateTimeField(help_text="Accepted date and time input formats: '10/25/06 14:30', '10/25/2006 14:30', '2006-10-25 14:30'")
     end_date_time = forms.DateTimeField(help_text="Accepted date and time input formats: '10/25/06 14:30', '10/25/2006 14:30', '2006-10-25 14:30'")
-    cost = forms.DecimalField(help_text="Example of accepted formats for training cost: '50.00', '999', '99.99'")
-    registration_open = forms.BooleanField(required=False, help_text="Default is unchecked or False. Check the box to change registration to open or True.")
+    cost = forms.DecimalField(help_text="Example of accepted formats for training cost: '50.00', '999', '99.99'. Max of 6 digits and 2 decimal places.")
+    registration_open = forms.BooleanField(required=False, help_text="Check the box to change registration to open. Default is unchecked.")
     public = forms.BooleanField(required=False, help_text="Check the box to make this training record visible on the website. Default is unchecked.")
+    max_students = forms.IntegerField(required=False, help_text="Enter max number of students for class room.")

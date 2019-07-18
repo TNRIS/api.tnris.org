@@ -234,11 +234,12 @@ class TnrisForumTraining(models.Model):
     room = models.CharField(
         'Training Room',
         max_length=255,
-        blank=False
+        blank=True
     )
     max_students = models.PositiveSmallIntegerField(
         'Max Student Amount',
-        blank=True
+        blank=True,
+        null=True
     )
     instructor_bio = models.TextField(
         'Training Instructor Bio',

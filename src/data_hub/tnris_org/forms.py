@@ -6,20 +6,26 @@ from string import Template
 from django.utils.safestring import mark_safe
 
 from django.db.utils import ProgrammingError
-from .models import (TnrisImage, TnrisDocument)
+from .models import (TnrisImage, TnrisDocument, TnrisTraining, TnrisForumTraining)
 import os
 import boto3, uuid
 
 
 class PictureWidget(forms.widgets.Widget):
     def render(self, name, value, attrs=None):
-        html = Template("""<input type="file" name="$name" id="id_$name"><label for="img_$name">Current: <a href="$link" target="_blank">$link</a></label><img id="img_$name" src="$link"/>""")
+        if value is None:
+            html = Template("""<input type="file" name="$name" id="id_$name"><label for="img_$name">Current: <a href="$link" target="_blank">$link</a></label><img id="img_$name" src="$link"/>""")
+        else:
+            html = Template("""<input type="file" name="$name" id="id_$name" disabled><label for="img_$name">Current: <a href="$link" target="_blank">$link</a></label><img id="img_$name" src="$link"/>""")
         return mark_safe(html.substitute(link=value,name=name))
 
 
 class DocumentWidget(forms.widgets.Widget):
     def render(self, name, value, attrs=None):
-        html = Template("""<input type="file" name="$name" id="id_$name"><label for="doc_$name">Current: <a href="$link">$link</a></label>""")
+        if value is None:
+            html = Template("""<input type="file" name="$name" id="id_$name"><label for="doc_$name">Current: <a href="$link">$link</a></label>""")
+        else:
+            html = Template("""<input type="file" name="$name" id="id_$name" disabled><label for="doc_$name">Current: <a href="$link">$link</a></label>""")
         return mark_safe(html.substitute(link=value,name=name))
 
 
@@ -51,7 +57,7 @@ class ImageForm(forms.ModelForm):
         return
 
     # custom handling of images on save
-    def save(self, commit=True):
+    def clean(self, commit=True):
         # check for files
         files = self.files
         for f in files:
@@ -98,7 +104,7 @@ class DocumentForm(forms.ModelForm):
         return
 
     # custom handling of documents on save
-    def save(self, commit=True):
+    def clean(self, commit=True):
         # check for files
         files = self.files
         for f in files:
@@ -116,3 +122,29 @@ class DocumentForm(forms.ModelForm):
             self.handle_doc(f, files[f])
 
         return super(DocumentForm, self).save(commit=commit)
+
+
+class TnrisTrainingForm(forms.ModelForm):
+    class Meta:
+        model = TnrisTraining
+        fields = ('__all__')
+
+    start_date_time = forms.DateTimeField(help_text="Accepted date and time input formats: '10/25/06 14:30', '10/25/2006 14:30', '2006-10-25 14:30'")
+    end_date_time = forms.DateTimeField(help_text="Accepted date and time input formats: '10/25/06 14:30', '10/25/2006 14:30', '2006-10-25 14:30'")
+    cost = forms.DecimalField(help_text="Example of accepted formats for training cost: '50.00', '999', '99.99'. Max of 6 digits and 2 decimal places.")
+    registration_open = forms.BooleanField(required=False, help_text="Check the box to change registration to open. Default is unchecked.")
+    public = forms.BooleanField(required=False, help_text="Check the box to make this training record visible on the website. Default is unchecked.")
+    max_students = forms.IntegerField(required=False, help_text="Enter max number of students for class room.")
+
+
+class TnrisForumTrainingForm(forms.ModelForm):
+    class Meta:
+        model = TnrisForumTraining
+        fields = ('__all__')
+
+    start_date_time = forms.DateTimeField(help_text="Accepted date and time input formats: '10/25/06 14:30', '10/25/2006 14:30', '2006-10-25 14:30'")
+    end_date_time = forms.DateTimeField(help_text="Accepted date and time input formats: '10/25/06 14:30', '10/25/2006 14:30', '2006-10-25 14:30'")
+    cost = forms.DecimalField(help_text="Example of accepted formats for training cost: '50.00', '999', '99.99'. Max of 6 digits and 2 decimal places.")
+    registration_open = forms.BooleanField(required=False, help_text="Check the box to change registration to open. Default is unchecked.")
+    public = forms.BooleanField(required=False, help_text="Check the box to make this training record visible on the website. Default is unchecked.")
+    max_students = forms.IntegerField(required=False, help_text="Enter max number of students for class room.")

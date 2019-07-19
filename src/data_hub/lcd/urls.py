@@ -21,6 +21,7 @@ from .viewsets import CollectionViewSet, ResourceViewSet, AreaViewSet
 from .views import resource_update_progress
 import lore
 import msd
+import tnris_org
 
 
 router = routers.DefaultRouter(trailing_slash=False)
@@ -36,5 +37,6 @@ urlpatterns = [
     path('data_hub-auth/?', include('rest_framework.urls', namespace='lcd_rest_framework')),
     path('resource-update-progress/', resource_update_progress, name='resource-update-progress'),
     path('historical/', include('lore.urls')),
-    path('map/', include('msd.urls'))
+    path('map/', include('msd.urls')),
+    path('tnris_org/', include('tnris_org.urls'))
 ]

@@ -43,11 +43,15 @@ class CustomIndexDashboard(Dashboard):
                      'lore.models.FrameSize',
                      'lore.models.Scale',
                      'lore.models.County',
-                      'lore.models.Collection',
+                     'lore.models.Collection',
                      'msd.models.MapCollection',
                      'msd.models.MapDownload',
                      'msd.models.MapSize',
-                     'msd.models.PixelsPerInch'),
+                     'msd.models.PixelsPerInch',
+                     'tnris_org.models.TnrisImage',
+                     'tnris_org.models.TnrisDocument',
+                     'tnris_org.models.TnrisTraining',
+                     'tnris_org.models.TnrisForumTraining'),
         ))
 
         self.children.append(modules.AppList(
@@ -87,6 +91,17 @@ class CustomIndexDashboard(Dashboard):
                     'msd.models.MapDownload',
                     'msd.models.MapSize',
                     'msd.models.PixelsPerInch'),
+        ))
+
+        self.children.append(modules.AppList(
+            title='Website Content',
+            collapsible=True,
+            column=1,
+            css_classes=('grp-collapse grp-closed',),
+            models=('tnris_org.models.TnrisImage',
+                    'tnris_org.models.TnrisDocument',
+                    'tnris_org.models.TnrisTraining',
+                    'tnris_org.models.TnrisForumTraining'),
         ))
 
         # append a recent actions module

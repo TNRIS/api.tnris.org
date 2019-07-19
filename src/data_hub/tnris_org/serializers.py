@@ -5,6 +5,12 @@ from datetime import datetime
 
 
 class TnrisTrainingSerializer(serializers.ModelSerializer):
+    # add serializer method field 'year' to api
+    year = serializers.SerializerMethodField('get_training_year')
+
+    def get_training_year(self, obj):
+        return obj.start_date_time.strftime("%Y")
+
     class Meta:
         model = TnrisTraining
         fields = '__all__'
@@ -15,6 +21,12 @@ class TnrisTrainingSerializer(serializers.ModelSerializer):
 
 
 class TnrisForumTrainingSerializer(serializers.ModelSerializer):
+    # add serializer method field 'year' to api
+    year = serializers.SerializerMethodField('get_training_year')
+
+    def get_training_year(self, obj):
+        return obj.start_date_time.strftime("%Y")
+
     class Meta:
         model = TnrisForumTraining
         fields = '__all__'

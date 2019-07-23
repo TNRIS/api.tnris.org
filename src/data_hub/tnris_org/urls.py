@@ -24,9 +24,9 @@ router = routers.DefaultRouter(trailing_slash=False)
 router.register(r'training/?', TnrisTrainingViewSet, base_name="TnrisTraining")
 router.register(r'forum_training/?', TnrisForumTrainingViewSet, base_name="TnrisForumTraining")
 
-schema_view = get_swagger_view(title='Maps API')
+schema_view = get_swagger_view(title='TNRIS.org API')
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('schema/', schema_view)
+    # path('schema/', schema_view)
 ]

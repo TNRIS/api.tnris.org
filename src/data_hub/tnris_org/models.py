@@ -169,6 +169,10 @@ class TnrisTraining(models.Model):
         auto_now=True
     )
 
+    @property
+    def year(self):
+        return self.start_date_time.strftime("%Y")
+
     def __str__(self):
         return self.title
 
@@ -260,6 +264,10 @@ class TnrisForumTraining(models.Model):
         'Last Modified',
         auto_now=True
     )
+
+    @property
+    def year(self):
+        return self.start_date_time.strftime("%Y")
 
     def __str__(self):
         return self.title

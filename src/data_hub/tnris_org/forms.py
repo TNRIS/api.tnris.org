@@ -54,6 +54,7 @@ class ImageForm(forms.ModelForm):
         # update link in database table
         setattr(self.instance, field, "https://tnris-org-static.s3.amazonaws.com/" + key)
         setattr(self.instance, "image_name", str(file))
+        self.cleaned_data = self.instance.__dict__
         return
 
     # custom handling of images on save
@@ -74,7 +75,9 @@ class ImageForm(forms.ModelForm):
 
             self.handle_image(f, files[f])
 
-        return super(ImageForm, self).save(commit=commit)
+        super(ImageForm, self).save(commit=commit)
+        return
+        
 
 
 class DocumentForm(forms.ModelForm):
@@ -101,6 +104,7 @@ class DocumentForm(forms.ModelForm):
         # update link in database table
         setattr(self.instance, field, "https://tnris-org-static.s3.amazonaws.com/" + key)
         setattr(self.instance, "document_name", str(file))
+        self.cleaned_data = self.instance.__dict__
         return
 
     # custom handling of documents on save
@@ -121,7 +125,8 @@ class DocumentForm(forms.ModelForm):
 
             self.handle_doc(f, files[f])
 
-        return super(DocumentForm, self).save(commit=commit)
+        super(DocumentForm, self).save(commit=commit)
+        return
 
 
 class TnrisTrainingForm(forms.ModelForm):

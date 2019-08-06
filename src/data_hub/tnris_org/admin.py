@@ -38,8 +38,16 @@ class TnrisTrainingAdmin(admin.ModelAdmin):
     model = TnrisTraining
     form = TnrisTrainingForm
     ordering = ('title',)
-    list_display = ('title', 'instructor', 'start_date_time', 'end_date_time')
+    list_display = ('title',
+                    'instructor',
+                    'start_date_time',
+                    'end_date_time',
+                    'registration_open',
+                    'public')
     search_fields = ('title', 'instructor')
+    list_filter = (
+        'instructor', 'registration_open', 'public'
+    )
 
 
 @admin.register(TnrisForumTraining)
@@ -47,5 +55,14 @@ class TnrisForumTrainingAdmin(admin.ModelAdmin):
     model = TnrisForumTraining
     form = TnrisForumTrainingForm
     ordering = ('title',)
-    list_display = ('title', 'instructor', 'start_date_time', 'end_date_time')
+    list_display = ('title',
+                    'instructor',
+                    'start_date_time',
+                    'end_date_time',
+                    'registration_open',
+                    'public',
+                    'year')
     search_fields = ('title', 'instructor')
+    list_filter = (
+        'instructor', 'registration_open', 'public'
+    )

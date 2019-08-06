@@ -77,7 +77,7 @@ class ImageForm(forms.ModelForm):
 
         super(ImageForm, self).save(commit=commit)
         return
-        
+
 
 
 class DocumentForm(forms.ModelForm):
@@ -139,7 +139,6 @@ class TnrisTrainingForm(forms.ModelForm):
     cost = forms.DecimalField(help_text="Example of accepted formats for training cost: '50.00', '999', '99.99'. Max of 6 digits and 2 decimal places.")
     registration_open = forms.BooleanField(required=False, help_text="Check the box to change registration to open. Default is unchecked.")
     public = forms.BooleanField(required=False, help_text="Check the box to make this training record visible on the website. Default is unchecked.")
-    max_students = forms.IntegerField(required=False, help_text="Enter max number of students for class room.")
 
 
 class TnrisForumTrainingForm(forms.ModelForm):

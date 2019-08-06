@@ -35,23 +35,14 @@ class CustomIndexDashboard(Dashboard):
             collapsible=True,
             column=1,
             css_classes=('grp-collapse grp-closed',),
-            exclude=('django.contrib.*',
-                     'lcd.models.Collection',
-                     'lcd.models.ResourceType',
-                     'lcd.models.Resource',
-                     'lore.models.Agency',
-                     'lore.models.FrameSize',
-                     'lore.models.Scale',
-                     'lore.models.County',
-                     'lore.models.Collection',
-                     'msd.models.MapCollection',
-                     'msd.models.MapDownload',
-                     'msd.models.MapSize',
-                     'msd.models.PixelsPerInch',
-                     'tnris_org.models.TnrisImage',
-                     'tnris_org.models.TnrisDocument',
-                     'tnris_org.models.TnrisTraining',
-                     'tnris_org.models.TnrisForumTraining'),
+            models=('lcd.models.CategoryType',
+                    'lcd.models.EpsgType',
+                    'lcd.models.FileType',
+                    'lcd.models.LicenseType',
+                    'lcd.models.ResolutionType',
+                    'lcd.models.SourceType',
+                    'lcd.models.TemplateType',
+                    'lcd.models.UseType'),
         ))
 
         self.children.append(modules.AppList(
@@ -67,7 +58,8 @@ class CustomIndexDashboard(Dashboard):
             collapsible=True,
             column=1,
             css_classes=('grp-collapse grp-closed',),
-            models=('lcd.models.Resource','lcd.models.ResourceType'),
+            models=('lcd.models.Resource',
+                    'lcd.models.ResourceType'),
         ))
 
         self.children.append(modules.AppList(

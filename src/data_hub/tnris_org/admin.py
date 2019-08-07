@@ -13,6 +13,9 @@ from .models import (
     TnrisTraining,
     TnrisForumTraining
 )
+from .filters import (
+    TnrisForumTrainingYearFilter,
+)
 
 
 @admin.register(TnrisImage)
@@ -64,5 +67,7 @@ class TnrisForumTrainingAdmin(admin.ModelAdmin):
                     'year')
     search_fields = ('title', 'instructor')
     list_filter = (
-        'instructor', 'registration_open', 'public'
+        TnrisForumTrainingYearFilter,
+        'registration_open',
+        'public'
     )

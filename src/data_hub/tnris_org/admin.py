@@ -47,5 +47,5 @@ class TnrisForumTrainingAdmin(admin.ModelAdmin):
     model = TnrisForumTraining
     form = TnrisForumTrainingForm
     ordering = ('title',)
-    list_display = ('title', 'instructor', 'start_date_time', 'end_date_time')
-    search_fields = ('title', 'instructor')
+    list_display = ('title', 'start_date_time', 'end_date_time')
+    search_fields = ('title',)

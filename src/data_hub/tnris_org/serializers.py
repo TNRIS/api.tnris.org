@@ -15,7 +15,6 @@ class TnrisTrainingSerializer(serializers.ModelSerializer):
                   'instructor',
                   'cost',
                   'registration_open',
-                  'instructor_bio',
                   'description',
                   'created',
                   'last_modified',

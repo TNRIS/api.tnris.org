@@ -61,8 +61,35 @@ class TnrisDocumentAdmin(admin.ModelAdmin):
     model = TnrisDocument
     form = DocumentForm
     ordering = ('document_name',)
-    list_display = ('document_name', 'document_url', 'created')
+    list_display = ('document_name', 'document_url_link', 'tiny_preview', 'created')
     search_fields = ('document_name', 'document_url')
+
+    def document_url_link(self, obj):
+        htmlId = "i" + str(obj.document_id).replace("-","")
+        js = """
+        <script type="text/javascript">
+            function {id}Function() {{
+                var copyText = document.getElementById("{id}");
+                copyText.select();
+                document.execCommand("copy");
+            }}
+        </script>
+        <style>.field-document_url_link{{width:60%;}}</style>
+        """.replace('{id}', htmlId)
+        js = format_html(js)
+        return format_html(
+            u'{0}<a style="cursor:pointer;border:solid 1px;padding:3px;" onclick="{1}Function();">COPY URL</a><input style="width:90%;margin-left:5px;" type="text" id="{2}" value="{3}" readonly>',
+            js,
+            htmlId,
+            htmlId,
+            obj.document_url
+        )
+
+    def tiny_preview(self, obj):
+        return format_html(
+            u'<embed sandbox style="max-width: 120px;" src="{0}"></embed>',
+            obj.document_url
+        )
 
 
 @admin.register(TnrisTraining)

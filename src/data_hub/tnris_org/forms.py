@@ -14,7 +14,7 @@ import boto3, uuid
 class PictureWidget(forms.widgets.Widget):
     def render(self, name, value, attrs=None):
         if value is None:
-            html = Template("""<input type="file" name="$name" id="id_$name"><label for="img_$name">Current: <a href="$link" target="_blank">$link</a></label><img id="img_$name" src="$link"/>""")
+            html = Template("""<input type="file" name="$name" id="id_$name"><label for="img_$name">Current: <a href="#">$link</a></label>""")
         else:
             html = Template("""<input type="file" name="$name" id="id_$name" disabled><label for="img_$name">Current: <a href="$link" target="_blank">$link</a></label><img id="img_$name" src="$link"/>""")
         return mark_safe(html.substitute(link=value,name=name))
@@ -23,9 +23,9 @@ class PictureWidget(forms.widgets.Widget):
 class DocumentWidget(forms.widgets.Widget):
     def render(self, name, value, attrs=None):
         if value is None:
-            html = Template("""<input type="file" name="$name" id="id_$name"><label for="doc_$name">Current: <a href="$link">$link</a></label>""")
+            html = Template("""<input type="file" name="$name" id="id_$name"><label for="doc_$name">Current: <a href="#">$link</a></label>""")
         else:
-            html = Template("""<input type="file" name="$name" id="id_$name" disabled><label for="doc_$name">Current: <a href="$link">$link</a></label>""")
+            html = Template("""<input type="file" name="$name" id="id_$name" disabled><label for="doc_$name">Current: <a href="$link">$link</a></label><br><embed style="max-width:80%;max-height:600px;" src="$link"></embed>""")
         return mark_safe(html.substitute(link=value,name=name))
 
 

@@ -115,7 +115,7 @@ class TnrisForumTrainingAdmin(admin.ModelAdmin):
     form = TnrisForumTrainingForm
     ordering = ('title',)
     list_display = ('title',
-                    'instructor',
+                    'training_instructor',
                     'start_date_time',
                     'end_date_time',
                     'registration_open',

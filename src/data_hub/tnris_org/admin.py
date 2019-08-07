@@ -5,13 +5,15 @@ from .forms import (
     ImageForm,
     DocumentForm,
     TnrisTrainingForm,
-    TnrisForumTrainingForm
+    TnrisForumTrainingForm,
+    TnrisInstructorForm
 )
 from .models import (
     TnrisImage,
     TnrisDocument,
     TnrisTraining,
-    TnrisForumTraining
+    TnrisForumTraining,
+    TnrisInstructor
 )
 
 
@@ -49,3 +51,12 @@ class TnrisForumTrainingAdmin(admin.ModelAdmin):
     ordering = ('title',)
     list_display = ('title', 'start_date_time', 'end_date_time')
     search_fields = ('title',)
+
+
+@admin.register(TnrisInstructor)
+class TnrisInstructorAdmin(admin.ModelAdmin):
+    model = TnrisInstructor
+    form = TnrisInstructorForm
+    ordering = ('name',)
+    list_display = ('name', 'company', 'headshot')
+    search_fields = ('name',)

@@ -317,3 +317,6 @@ class TnrisInstructor(models.Model):
         'Last Modified',
         auto_now=True
     )
+
+    def __str__(self):
+        return self.name

@@ -51,7 +51,8 @@ class CustomIndexDashboard(Dashboard):
                      'tnris_org.models.TnrisImage',
                      'tnris_org.models.TnrisDocument',
                      'tnris_org.models.TnrisTraining',
-                     'tnris_org.models.TnrisForumTraining'),
+                     'tnris_org.models.TnrisForumTraining',
+                     'tnris_org.models.TnrisInstructor'),
         ))
 
         self.children.append(modules.AppList(
@@ -101,7 +102,8 @@ class CustomIndexDashboard(Dashboard):
             models=('tnris_org.models.TnrisImage',
                     'tnris_org.models.TnrisDocument',
                     'tnris_org.models.TnrisTraining',
-                    'tnris_org.models.TnrisForumTraining'),
+                    'tnris_org.models.TnrisForumTraining',
+                    'tnris_org.models.TnrisInstructor'),
         ))
 
         # append a recent actions module

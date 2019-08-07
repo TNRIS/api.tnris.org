@@ -6,7 +6,7 @@ from string import Template
 from django.utils.safestring import mark_safe
 
 from django.db.utils import ProgrammingError
-from .models import (TnrisImage, TnrisDocument, TnrisTraining, TnrisForumTraining)
+from .models import (TnrisImage, TnrisDocument, TnrisTraining, TnrisForumTraining, TnrisInstructor)
 import os
 import boto3, uuid
 
@@ -16,7 +16,7 @@ class PictureWidget(forms.widgets.Widget):
         if value is None:
             html = Template("""<input type="file" name="$name" id="id_$name"><label for="img_$name">Current: <a href="$link" target="_blank">$link</a></label><img id="img_$name" src="$link"/>""")
         else:
-            html = Template("""<input type="file" name="$name" id="id_$name" disabled><label for="img_$name">Current: <a href="$link" target="_blank">$link</a></label><img id="img_$name" src="$link"/>""")
+            html = Template("""<input type="file" name="$name" id="id_$name" disabled><label for="img_$name">Current: <a href="$link" target="_blank">$link</a></label><br><img id="img_$name" src="$link"/>""")
         return mark_safe(html.substitute(link=value,name=name))
 
 
@@ -26,6 +26,15 @@ class DocumentWidget(forms.widgets.Widget):
             html = Template("""<input type="file" name="$name" id="id_$name"><label for="doc_$name">Current: <a href="$link">$link</a></label>""")
         else:
             html = Template("""<input type="file" name="$name" id="id_$name" disabled><label for="doc_$name">Current: <a href="$link">$link</a></label>""")
+        return mark_safe(html.substitute(link=value,name=name))
+
+
+class HeadshotWidget(forms.widgets.Widget):
+    def render(self, name, value, attrs=None):
+        if value is None:
+            html = Template("""<input type="text" name="$name" id="id_$name" style="width:758px;"></input>""")
+        else:
+            html = Template("""<input type="text" name="$name" id="id_$name" style="width:758px;"></input><br><label for="img_$name">Current: <a href="$link" target="_blank">$link</a></label><img id="img_$name" src="$link"/>""")
         return mark_safe(html.substitute(link=value,name=name))
 
 
@@ -148,7 +157,34 @@ class TnrisForumTrainingForm(forms.ModelForm):
 
     start_date_time = forms.DateTimeField(help_text="Accepted date and time input formats: '10/25/06 14:30', '10/25/2006 14:30', '2006-10-25 14:30'")
     end_date_time = forms.DateTimeField(help_text="Accepted date and time input formats: '10/25/06 14:30', '10/25/2006 14:30', '2006-10-25 14:30'")
+    training_instructor = forms.MultipleChoiceField(required=True, widget=forms.SelectMultiple(attrs={'title': 'Hold down ctrl to select multiple instructors',}), choices=[], help_text="Select all instructors that will be participating in the training.")
     cost = forms.DecimalField(help_text="Example of accepted formats for training cost: '50.00', '999', '99.99'. Max of 6 digits and 2 decimal places.")
     registration_open = forms.BooleanField(required=False, help_text="Check the box to change registration to open. Default is unchecked.")
     public = forms.BooleanField(required=False, help_text="Check the box to make this training record visible on the website. Default is unchecked.")
     max_students = forms.IntegerField(required=False, help_text="Enter max number of students for class room.")
+
+
+    # general function to create a form dropdown for instructors
+    def instructor_choices(self, id_field, label_field, type_table, order_field):
+        # get the relate type choices from the type table
+        try:
+            choices = (
+                (b, getattr(b, label_field)) for b in type_table.objects.all().order_by(order_field))
+        except ProgrammingError:
+            choices = ()
+        return choices
+
+    # on instance construction fire functions to retrieve initial values
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance:
+            self.fields['training_instructor'].choices = self.instructor_choices('instructor_id', 'name', TnrisInstructor, 'name')
+
+
+class TnrisInstructorForm(forms.ModelForm):
+    class Meta:
+        model = TnrisInstructor
+        fields = ('__all__')
+
+    bio = forms.CharField(required=False, widget=forms.Textarea(attrs={"rows":25, "cols":20}), help_text="Enter plain text, no html or markdown.")
+    headshot = forms.URLField(required=False, widget=HeadshotWidget, help_text="Paste the S3 url for this instructor's headshot photo here. Example: 'https://tnris-org-static.s3.amazonaws.com/images/name_headshot.jpg'")

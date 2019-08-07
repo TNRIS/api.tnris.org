@@ -7,9 +7,6 @@ class TnrisForumTrainingYearFilter(admin.SimpleListFilter):
     title = _('Forum Year')
     parameter_name = 'year'
 
-    def sorter(val):
-        return val[0]
-
     def lookups(self, request, model_admin):
         start_dates = TnrisForumTraining.objects.values_list('start_date_time', 'start_date_time').order_by('start_date_time')
         years = list(sorted(set([(s.year, d.year) for (s, d) in start_dates]), key=lambda x: x[1]))

@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.utils.html import format_html
 
 # Register your models here.
 from .forms import (
@@ -23,8 +24,36 @@ class TnrisImageAdmin(admin.ModelAdmin):
     model = TnrisImage
     form = ImageForm
     ordering = ('image_name',)
-    list_display = ('image_name', 'image_url', 'created')
+    list_display = ('image_name', 'image_url_link', 'tiny_preview', 'created')
     search_fields = ('image_name', 'image_url')
+
+    def image_url_link(self, obj):
+        htmlId = "i" + str(obj.image_id).replace("-","")
+        js = """
+        <script type="text/javascript">
+            function {id}Function() {{
+                var copyText = document.getElementById("{id}");
+                copyText.select();
+                document.execCommand("copy");
+            }}
+        </script>
+        <style>.field-image_url_link{{width:60%;}}</style>
+        """.replace('{id}', htmlId)
+        js = format_html(js)
+        return format_html(
+            u'{0}<a style="cursor:pointer;border:solid 1px;padding:3px;" onclick="{1}Function();">COPY URL</a><input style="width:90%;margin-left:5px;" type="text" id="{2}" value="{3}" readonly>',
+            js,
+            htmlId,
+            htmlId,
+            obj.image_url
+        )
+
+    def tiny_preview(self, obj):
+        return format_html(
+            u'<a href="{0}" title="Click to view in full"><img style="max-width:100px;cursor:pointer;" src="{1}" /></a>',
+            obj.image_url,
+            obj.image_url
+        )
 
 
 @admin.register(TnrisDocument)

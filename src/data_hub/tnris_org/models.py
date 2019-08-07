@@ -153,10 +153,6 @@ class TnrisTraining(models.Model):
         default=False,
         null=False
     )
-    instructor_bio = models.TextField(
-        'Training Instructor Bio',
-        blank=True
-    )
     description = models.TextField(
         'Training Description'
     )

@@ -8,14 +8,15 @@ from .forms import (
     DocumentForm,
     TnrisTrainingForm,
     TnrisForumTrainingForm,
-    TnrisInstructorForm
+    TnrisInstructorTypeForm
 )
 from .models import (
     TnrisImage,
     TnrisDocument,
     TnrisTraining,
     TnrisForumTraining,
-    TnrisInstructor
+    TnrisInstructorType,
+    TnrisInstructorRelate
 )
 from .filters import (
     TnrisForumTrainingYearFilter,
@@ -138,10 +139,10 @@ class TnrisForumTrainingAdmin(admin.ModelAdmin):
     )
 
 
-@admin.register(TnrisInstructor)
-class TnrisInstructorAdmin(admin.ModelAdmin):
-    model = TnrisInstructor
-    form = TnrisInstructorForm
+@admin.register(TnrisInstructorType)
+class TnrisInstructorTypeAdmin(admin.ModelAdmin):
+    model = TnrisInstructorType
+    form = TnrisInstructorTypeForm
     ordering = ('name',)
     list_display = ('name', 'company', 'headshot')
     search_fields = ('name',)

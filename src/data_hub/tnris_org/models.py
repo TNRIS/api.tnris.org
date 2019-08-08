@@ -265,17 +265,17 @@ class TnrisForumTraining(models.Model):
 """
 
 
-class TnrisInstructor(models.Model):
+class TnrisInstructorType(models.Model):
     """Instructor domain table for TnrisForumTraining"""
 
     class Meta:
-        db_table = 'tnris_instructor'
-        verbose_name = 'Tnris Instructor'
-        verbose_name_plural = 'Tnris Instructors'
-        ordering = ['name']
+        db_table = 'tnris_instructor_type'
+        verbose_name = 'Tnris Instructor Type'
+        verbose_name_plural = 'Tnris Instructor Types'
+        ordering = ('name',)
 
-    instructor_id = models.UUIDField(
-        'Instructor ID',
+    instructor_type_id = models.UUIDField(
+        'Instructor Type ID',
         primary_key=True,
         default=uuid.uuid4,
         editable=False,
@@ -340,16 +340,16 @@ class TnrisInstructorRelate(models.Model):
         editable=False
     )
     instructor_relate_id = models.ForeignKey(
-        'TnrisInstructor',
+        'TnrisInstructorType',
         db_column='instructor_relate_id',
         on_delete=models.CASCADE,
-        related_name='tnrs_instructor_ids'
+        related_name='tnris_instructor_type_ids'
     )
     training_relate_id = models.ForeignKey(
         'TnrisForumTraining',
         db_column='training_relate_id',
         on_delete=models.CASCADE,
-        related_name='tnris_training_ids'
+        related_name='tnris_forum_training_ids'
     )
     created = models.DateTimeField(
         'Created',

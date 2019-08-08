@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import (TnrisTraining, TnrisForumTraining, TnrisInstructor)
+from .models import (TnrisTraining, TnrisForumTraining)
 from datetime import datetime
 
 
@@ -27,7 +27,7 @@ class TnrisTrainingSerializer(serializers.ModelSerializer):
 
 class TnrisForumTrainingSerializer(serializers.ModelSerializer):
     class Meta:
-        model = TnrisForumTraining, TnrisInstructor
+        model = TnrisForumTraining
         fields = ('training_id',
                   'year', # models.py property method (field does not exist in db)
                   'start_date_time',

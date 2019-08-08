@@ -6,7 +6,13 @@ from string import Template
 from django.utils.safestring import mark_safe
 
 from django.db.utils import ProgrammingError
-from .models import (TnrisImage, TnrisDocument, TnrisTraining, TnrisForumTraining, TnrisInstructor)
+from .models import (
+    TnrisImage,
+    TnrisDocument,
+    TnrisTraining,
+    TnrisForumTraining,
+    TnrisInstructorType
+)
 import os
 import boto3, uuid
 
@@ -177,7 +183,7 @@ class TnrisForumTrainingForm(forms.ModelForm):
 
     start_date_time = forms.DateTimeField(help_text="Accepted date and time input formats: '10/25/06 14:30', '10/25/2006 14:30', '2006-10-25 14:30'")
     end_date_time = forms.DateTimeField(help_text="Accepted date and time input formats: '10/25/06 14:30', '10/25/2006 14:30', '2006-10-25 14:30'")
-    # training_instructor = forms.MultipleChoiceField(required=True, widget=forms.SelectMultiple(attrs={'title': 'Hold down ctrl to select multiple instructors',}), choices=[], help_text="Select all instructors that will be participating in the training.")
+    instructors = forms.MultipleChoiceField(required=True, widget=forms.SelectMultiple(attrs={'title': 'Hold down ctrl to select multiple instructors',}), choices=[], help_text="Select all instructors that will be participating in the training.")
     cost = forms.DecimalField(help_text="Example of accepted formats for training cost: '50.00', '999', '99.99'. Max of 6 digits and 2 decimal places.")
     registration_open = forms.BooleanField(required=False, help_text="Check the box to change registration to open. Default is unchecked.")
     public = forms.BooleanField(required=False, help_text="Check the box to make this training record visible on the website. Default is unchecked.")
@@ -195,15 +201,15 @@ class TnrisForumTrainingForm(forms.ModelForm):
         return choices
 
     # on instance construction fire functions to retrieve initial values
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        if self.instance:
-            self.fields['training_instructor'].choices = self.instructor_choices('instructor_id', 'name', TnrisInstructor, 'name')
+    # def __init__(self, *args, **kwargs):
+    #     super().__init__(*args, **kwargs)
+    #     if self.instance:
+    #         self.fields['instructors'].choices = self.instructor_choices('instructor_id', 'name', TnrisInstructorType, 'name')
 
 
-class TnrisInstructorForm(forms.ModelForm):
+class TnrisInstructorTypeForm(forms.ModelForm):
     class Meta:
-        model = TnrisInstructor
+        model = TnrisInstructorType
         fields = ('__all__')
 
     bio = forms.CharField(required=False, widget=forms.Textarea(attrs={"rows":25, "cols":20}), help_text="Enter plain text, no html or markdown.")

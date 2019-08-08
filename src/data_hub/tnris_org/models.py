@@ -153,10 +153,6 @@ class TnrisTraining(models.Model):
         default=False,
         null=False
     )
-    instructor_bio = models.TextField(
-        'Training Instructor Bio',
-        blank=True
-    )
     description = models.TextField(
         'Training Description'
     )
@@ -209,10 +205,11 @@ class TnrisForumTraining(models.Model):
         'Training End Date & Time',
         blank=False
     )
-    instructor = models.CharField(
-        'Training Instructor',
-        max_length=100,
-        blank=False
+    training_instructor = models.ForeignKey(
+        'TnrisInstructor',
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True
     )
     cost = models.DecimalField(
         'Training Cost',
@@ -245,10 +242,6 @@ class TnrisForumTraining(models.Model):
         blank=True,
         null=True
     )
-    instructor_bio = models.TextField(
-        'Training Instructor Bio',
-        blank=True
-    )
     description = models.TextField(
         'Training Description'
     )
@@ -271,3 +264,56 @@ class TnrisForumTraining(models.Model):
 
     def __str__(self):
         return self.title
+
+
+"""
+********** Domain Tables **********
+"""
+
+
+class TnrisInstructor(models.Model):
+    """Instructor domain table for TnrisForumTraining"""
+
+    class Meta:
+        db_table = 'tnris_instructor'
+        verbose_name = 'Tnris Instructor'
+        verbose_name_plural = 'Tnris Instructors'
+        ordering = ['name']
+
+    instructor_id = models.UUIDField(
+        'Instructor ID',
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False,
+        blank=False
+    )
+    name = models.CharField(
+        'Instructor Name',
+        max_length=100,
+        blank=False
+    )
+    company = models.CharField(
+        'Instructor Company',
+        max_length=100,
+        blank=True,
+        null=True
+    )
+    bio = models.TextField(
+        'Instructor Bio',
+        blank=True,
+        null=True
+    )
+    headshot = models.URLField(
+        'Image URL',
+        max_length=255,
+        blank=True,
+        null=True
+    )
+    created = models.DateTimeField(
+        'Created',
+        auto_now_add=True
+    )
+    last_modified = models.DateTimeField(
+        'Last Modified',
+        auto_now=True
+    )

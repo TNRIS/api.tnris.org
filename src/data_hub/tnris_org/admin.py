@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.utils.html import format_html
+from datetime import datetime
 
 # Register your models here.
 from .forms import (
@@ -86,9 +87,16 @@ class TnrisDocumentAdmin(admin.ModelAdmin):
         )
 
     def tiny_preview(self, obj):
+        # tiny preview of .pdf files errors/breaks on page load when src is cached.
+        # this means all tiny previews display on hard reload, but .pdfs don't on 
+        # normal reload. so, we append a current datetime query string to the request
+        # so the browser recognizes each load as a new request and doesn't load the
+        # cached version.
+        no_cache = str(datetime.today())
         return format_html(
-            u'<embed sandbox style="max-width: 120px;" src="{0}"></embed>',
-            obj.document_url
+            u'<embed style="max-width: 120px;" src="{0}?d={1}"></embed>',
+            obj.document_url,
+            no_cache
         )
 
 

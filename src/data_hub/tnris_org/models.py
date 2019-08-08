@@ -333,8 +333,8 @@ class TnrisInstructorRelate(models.Model):
             'training_relate_id'
         )
 
-    instructor_relate_id = models.UUIDField(
-        'Instructor Relate ID',
+    id = models.UUIDField(
+        'Relate Primary Key',
         primary_key=True,
         default=uuid.uuid4,
         editable=False
@@ -343,13 +343,13 @@ class TnrisInstructorRelate(models.Model):
         'TnrisInstructor',
         db_column='instructor_relate_id',
         on_delete=models.CASCADE,
-        related_name='instructor_id'
+        related_name='tnrs_instructor_ids'
     )
     training_relate_id = models.ForeignKey(
         'TnrisForumTraining',
         db_column='training_relate_id',
         on_delete=models.CASCADE,
-        related_name='training_id'
+        related_name='tnris_training_ids'
     )
     created = models.DateTimeField(
         'Created',

@@ -34,7 +34,6 @@ class TnrisForumTrainingSerializer(serializers.ModelSerializer):
                   'end_date_time',
                   'training_day',
                   'title',
-                  'training_instructor',
                   'cost',
                   'registration_open',
                   'location',

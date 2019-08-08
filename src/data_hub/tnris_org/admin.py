@@ -90,7 +90,7 @@ class TnrisDocumentAdmin(admin.ModelAdmin):
 
     def tiny_preview(self, obj):
         # tiny preview of .pdf files errors/breaks on page load when src is cached.
-        # this means all tiny previews display on hard reload, but .pdfs don't on 
+        # this means all tiny previews display on hard reload, but .pdfs don't on
         # normal reload. so, we append a current datetime query string to the request
         # so the browser recognizes each load as a new request and doesn't load the
         # cached version.
@@ -125,7 +125,6 @@ class TnrisForumTrainingAdmin(admin.ModelAdmin):
     form = TnrisForumTrainingForm
     ordering = ('title',)
     list_display = ('title',
-                    'training_instructor',
                     'start_date_time',
                     'end_date_time',
                     'registration_open',

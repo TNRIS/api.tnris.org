@@ -13,19 +13,39 @@ import boto3, uuid
 
 class PictureWidget(forms.widgets.Widget):
     def render(self, name, value, attrs=None):
+        js = """
+        <script type="text/javascript">
+            function copyFunction() {
+                var copyText = document.getElementById("currentUrl");
+                copyText.select();
+                document.execCommand("copy");
+            }
+        </script>
+        """
+
         if value is None:
-            html = Template("""<input type="file" name="$name" id="id_$name"><label for="img_$name">Current: <a href="$link" target="_blank">$link</a></label><img id="img_$name" src="$link"/>""")
+            html = Template("""<input type="file" name="$name" id="id_$name"><label for="img_$name">Current: <a href="#">$link</a></label>""")
         else:
-            html = Template("""<input type="file" name="$name" id="id_$name" disabled><label for="img_$name">Current: <a href="$link" target="_blank">$link</a></label><br><img id="img_$name" src="$link"/>""")
+            html = Template("""{0}<input type="file" name="$name" id="id_$name" disabled><a style="cursor:pointer;border:solid 1px;padding:3px;margin-left:15px;" onclick="copyFunction();">COPY URL</a><input style="width:50%;margin-left:5px;" type="text" id="currentUrl" value="$link" readonly><br><img id="img_$name" src="$link"/>""".format(js))
         return mark_safe(html.substitute(link=value,name=name))
 
 
 class DocumentWidget(forms.widgets.Widget):
     def render(self, name, value, attrs=None):
+        js = """
+        <script type="text/javascript">
+            function copyFunction() {
+                var copyText = document.getElementById("currentUrl");
+                copyText.select();
+                document.execCommand("copy");
+            }
+        </script>
+        """
+
         if value is None:
-            html = Template("""<input type="file" name="$name" id="id_$name"><label for="doc_$name">Current: <a href="$link">$link</a></label>""")
+            html = Template("""<input type="file" name="$name" id="id_$name"><label for="doc_$name">Current: <a href="#">$link</a></label>""")
         else:
-            html = Template("""<input type="file" name="$name" id="id_$name" disabled><label for="doc_$name">Current: <a href="$link">$link</a></label>""")
+            html = Template("""{0}<input type="file" name="$name" id="id_$name" disabled><a style="cursor:pointer;border:solid 1px;padding:3px;margin-left:15px;" onclick="copyFunction();">COPY URL</a><input style="width:50%;margin-left:5px;" type="text" id="currentUrl" value="$link" readonly><br><embed style="max-width:80%;max-height:600px;" src="$link"></embed>""".format(js))
         return mark_safe(html.substitute(link=value,name=name))
 
 

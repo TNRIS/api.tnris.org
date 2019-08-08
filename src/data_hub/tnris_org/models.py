@@ -205,12 +205,6 @@ class TnrisForumTraining(models.Model):
         'Training End Date & Time',
         blank=False
     )
-    training_instructor = models.ForeignKey(
-        'TnrisInstructor',
-        on_delete=models.CASCADE,
-        blank=True,
-        null=True
-    )
     cost = models.DecimalField(
         'Training Cost',
         max_digits=6,
@@ -320,3 +314,48 @@ class TnrisInstructor(models.Model):
 
     def __str__(self):
         return self.name
+
+
+"""
+********** Relate Tables **********
+"""
+
+
+class TnrisInstructorRelate(models.Model):
+    """Relate table between TnrisForumTraining and TnrisInstructor tables"""
+
+    class Meta:
+        db_table = 'tnris_instructor_relate'
+        verbose_name = 'Tnris Instructor Relate'
+        verbose_name_plural = 'Tnris Instructor Relates'
+        unique_together = (
+            'instructor_relate_id',
+            'training_relate_id'
+        )
+
+    instructor_relate_id = models.UUIDField(
+        'Instructor Relate ID',
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False
+    )
+    instructor_relate_id = models.ForeignKey(
+        'TnrisInstructor',
+        db_column='instructor_relate_id',
+        on_delete=models.CASCADE,
+        related_name='instructor_id'
+    )
+    training_relate_id = models.ForeignKey(
+        'TnrisForumTraining',
+        db_column='training_relate_id',
+        on_delete=models.CASCADE,
+        related_name='training_id'
+    )
+    created = models.DateTimeField(
+        'Created',
+        auto_now_add=True
+    )
+    last_modified = models.DateTimeField(
+        'Last Modified',
+        auto_now=True
+    )

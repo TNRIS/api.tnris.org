@@ -41,6 +41,4 @@ class TnrisForumTrainingViewSet(viewsets.ReadOnlyModelViewSet):
                 args[field] = value
         # get records using query
         queryset = TnrisForumTraining.objects.filter(**args).order_by('title', 'start_date_time', 'end_date_time')
-        instructor = TnrisInstructor.objects.filter()
-        print(instructor)
         return queryset

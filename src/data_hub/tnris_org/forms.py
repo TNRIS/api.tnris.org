@@ -201,10 +201,11 @@ class TnrisForumTrainingForm(forms.ModelForm):
         return choices
 
     # on instance construction fire functions to retrieve initial values
-    # def __init__(self, *args, **kwargs):
-    #     super().__init__(*args, **kwargs)
-    #     if self.instance:
-    #         self.fields['instructors'].choices = self.instructor_choices('instructor_id', 'name', TnrisInstructorType, 'name')
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance:
+            self.fields['instructors'].choices = self.instructor_choices('instructor_id', 'name', TnrisInstructorType, 'name')
+            self.attribute_initial_values('instructors', TnrisInstructorRelate, '')
 
 
 class TnrisInstructorTypeForm(forms.ModelForm):

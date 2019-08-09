@@ -11,7 +11,8 @@ from .models import (
     TnrisDocument,
     TnrisTraining,
     TnrisForumTraining,
-    TnrisInstructorType
+    TnrisInstructorType,
+    TnrisInstructorRelate
 )
 import os
 import boto3, uuid
@@ -183,7 +184,7 @@ class TnrisForumTrainingForm(forms.ModelForm):
 
     start_date_time = forms.DateTimeField(help_text="Accepted date and time input formats: '10/25/06 14:30', '10/25/2006 14:30', '2006-10-25 14:30'")
     end_date_time = forms.DateTimeField(help_text="Accepted date and time input formats: '10/25/06 14:30', '10/25/2006 14:30', '2006-10-25 14:30'")
-    instructors = forms.MultipleChoiceField(required=True, widget=forms.SelectMultiple(attrs={'title': 'Hold down ctrl to select multiple instructors',}), choices=[], help_text="Select all instructors that will be participating in the training.")
+    instructors = forms.MultipleChoiceField(required=False, widget=forms.SelectMultiple(attrs={'title': 'Hold down ctrl to select multiple instructors',}), choices=[], help_text="Select all instructors that will be participating in the training.")
     cost = forms.DecimalField(help_text="Example of accepted formats for training cost: '50.00', '999', '99.99'. Max of 6 digits and 2 decimal places.")
     registration_open = forms.BooleanField(required=False, help_text="Check the box to change registration to open. Default is unchecked.")
     public = forms.BooleanField(required=False, help_text="Check the box to make this training record visible on the website. Default is unchecked.")
@@ -195,17 +196,69 @@ class TnrisForumTrainingForm(forms.ModelForm):
         # get the relate type choices from the type table
         try:
             choices = (
-                (b, getattr(b, label_field)) for b in type_table.objects.all().order_by(order_field))
+                (getattr(b, id_field), getattr(b, label_field)) for b in type_table.objects.all().order_by(order_field))
         except ProgrammingError:
             choices = ()
         return choices
+
+    # generic function to retrieve the initial relate values from the relate table
+    def attribute_initial_values(self, name, relate_table, id_field):
+        # attribute initial values to self as list object
+        attr_name = 'initial_' + name
+        setattr(self, attr_name, [])
+        # get records from relate table and update initial values list
+        setattr(self, attr_name, [
+            b[0] for b in relate_table.objects.values_list(id_field).filter(training_relate_id=self.instance.training_id)
+        ])
+        self.fields[name].initial = getattr(self, attr_name)
+        return
 
     # on instance construction fire functions to retrieve initial values
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if self.instance:
-            self.fields['instructors'].choices = self.instructor_choices('instructor_id', 'name', TnrisInstructorType, 'name')
-            self.attribute_initial_values('instructors', TnrisInstructorRelate, '')
+            self.fields['instructors'].choices = self.instructor_choices('instructor_type_id', 'name', TnrisInstructorType, 'name')
+            self.attribute_initial_values('instructors', TnrisInstructorRelate, 'instructor_relate_id')
+
+    # generic function to update relate table with form input changes
+    def update_relate_table(self, name, relate_table, relate_field, id_field, type_table):
+        attr_name = 'initial_' + name
+        # get selected relate values from form input
+        updated = self.cleaned_data[name]
+        print(updated)
+        # create list of strings of initial values for comparison
+        initial_str = [
+            str(u) for u in getattr(self, attr_name)
+        ]
+        # create lists of differences: removed relates and new added relates
+        removes = [b for b in initial_str if b not in updated]
+        adds = [b for b in updated if b not in initial_str]
+        print(adds, removes)
+        # delete removals from relate table
+        for remove in removes:
+            args = {}
+            args[relate_field] = remove
+            relate_table.objects.filter(
+                **args).filter(training_relate_id=self.instance.training_id).delete()
+        # create adds in relate table
+        for add in adds:
+            training_record = TnrisForumTraining.objects.get(training_id=self.instance.training_id)
+            args = {'training_relate_id': training_record}
+            print(args)
+            type_arg = {}
+            type_arg[id_field] = add
+            type_record = type_table.objects.get(**type_arg)
+            args[relate_field] = type_record
+
+            relate_table(**args).save()
+        return
+
+    # custom handling of various relationships on save method
+    def save(self, commit=True):
+        # on save fire function to apply updates to relate tables
+        self.update_relate_table('instructors', TnrisInstructorRelate, 'instructor_relate_id', 'instructor_type_id', TnrisInstructorType)
+
+        return super(TnrisForumTrainingForm, self).save(commit=commit)
 
 
 class TnrisInstructorTypeForm(forms.ModelForm):

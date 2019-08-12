@@ -242,7 +242,7 @@ class TnrisForumTrainingForm(forms.ModelForm):
                 **args).filter(training_relate_id=self.instance.training_id).delete()
         # create adds in relate table
         for add in adds:
-            training_record = TnrisForumTraining.objects.get(training_id=self.instance.training_id)
+            training_record = super(TnrisForumTrainingForm, self).save(commit=False)
             args = {'training_relate_id': training_record}
             print(args)
             type_arg = {}

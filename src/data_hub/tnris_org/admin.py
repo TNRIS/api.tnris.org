@@ -113,7 +113,7 @@ class TnrisTrainingAdmin(admin.ModelAdmin):
                     'end_date_time',
                     'registration_open',
                     'public')
-    search_fields = ('title', 'location')
+    search_fields = ('title')
     list_filter = (
         'instructor', 'registration_open', 'public'
     )
@@ -130,7 +130,7 @@ class TnrisForumTrainingAdmin(admin.ModelAdmin):
                     'registration_open',
                     'public',
                     'year')
-    search_fields = ('title', 'location')
+    search_fields = ('title')
     list_filter = (
         TnrisForumTrainingYearFilter,
         'registration_open',

@@ -6,26 +6,62 @@ from string import Template
 from django.utils.safestring import mark_safe
 
 from django.db.utils import ProgrammingError
-from .models import (TnrisImage, TnrisDocument, TnrisTraining, TnrisForumTraining)
+from .models import (
+    TnrisImage,
+    TnrisDocument,
+    TnrisTraining,
+    TnrisForumTraining,
+    TnrisInstructorType,
+    TnrisInstructorRelate
+)
 import os
 import boto3, uuid
 
 
 class PictureWidget(forms.widgets.Widget):
     def render(self, name, value, attrs=None):
+        js = """
+        <script type="text/javascript">
+            function copyFunction() {
+                var copyText = document.getElementById("currentUrl");
+                copyText.select();
+                document.execCommand("copy");
+            }
+        </script>
+        """
+
         if value is None:
-            html = Template("""<input type="file" name="$name" id="id_$name"><label for="img_$name">Current: <a href="$link" target="_blank">$link</a></label><img id="img_$name" src="$link"/>""")
+            html = Template("""<input type="file" name="$name" id="id_$name"><label for="img_$name">Current: <a href="#">$link</a></label>""")
         else:
-            html = Template("""<input type="file" name="$name" id="id_$name" disabled><label for="img_$name">Current: <a href="$link" target="_blank">$link</a></label><img id="img_$name" src="$link"/>""")
+            html = Template("""{0}<input type="file" name="$name" id="id_$name" disabled><a style="cursor:pointer;border:solid 1px;padding:3px;margin-left:15px;" onclick="copyFunction();">COPY URL</a><input style="width:50%;margin-left:5px;" type="text" id="currentUrl" value="$link" readonly><br><img id="img_$name" src="$link"/>""".format(js))
         return mark_safe(html.substitute(link=value,name=name))
 
 
 class DocumentWidget(forms.widgets.Widget):
     def render(self, name, value, attrs=None):
+        js = """
+        <script type="text/javascript">
+            function copyFunction() {
+                var copyText = document.getElementById("currentUrl");
+                copyText.select();
+                document.execCommand("copy");
+            }
+        </script>
+        """
+
         if value is None:
-            html = Template("""<input type="file" name="$name" id="id_$name"><label for="doc_$name">Current: <a href="$link">$link</a></label>""")
+            html = Template("""<input type="file" name="$name" id="id_$name"><label for="doc_$name">Current: <a href="#">$link</a></label>""")
         else:
-            html = Template("""<input type="file" name="$name" id="id_$name" disabled><label for="doc_$name">Current: <a href="$link">$link</a></label>""")
+            html = Template("""{0}<input type="file" name="$name" id="id_$name" disabled><a style="cursor:pointer;border:solid 1px;padding:3px;margin-left:15px;" onclick="copyFunction();">COPY URL</a><input style="width:50%;margin-left:5px;" type="text" id="currentUrl" value="$link" readonly><br><embed style="max-width:80%;max-height:600px;" src="$link"></embed>""".format(js))
+        return mark_safe(html.substitute(link=value,name=name))
+
+
+class HeadshotWidget(forms.widgets.Widget):
+    def render(self, name, value, attrs=None):
+        if value is None:
+            html = Template("""<input type="text" name="$name" id="id_$name" style="width:758px;"></input>""")
+        else:
+            html = Template("""<input type="text" name="$name" id="id_$name" style="width:758px;"></input><br><label for="img_$name">Current: <a href="$link" target="_blank">$link</a></label><img id="img_$name" src="$link" style="max-height:250px; max-width:250px; margin:20px 20px;"/>""")
         return mark_safe(html.substitute(link=value,name=name))
 
 
@@ -77,7 +113,7 @@ class ImageForm(forms.ModelForm):
 
         super(ImageForm, self).save(commit=commit)
         return
-        
+
 
 
 class DocumentForm(forms.ModelForm):
@@ -139,7 +175,6 @@ class TnrisTrainingForm(forms.ModelForm):
     cost = forms.DecimalField(help_text="Example of accepted formats for training cost: '50.00', '999', '99.99'. Max of 6 digits and 2 decimal places.")
     registration_open = forms.BooleanField(required=False, help_text="Check the box to change registration to open. Default is unchecked.")
     public = forms.BooleanField(required=False, help_text="Check the box to make this training record visible on the website. Default is unchecked.")
-    max_students = forms.IntegerField(required=False, help_text="Enter max number of students for class room.")
 
 
 class TnrisForumTrainingForm(forms.ModelForm):
@@ -149,7 +184,87 @@ class TnrisForumTrainingForm(forms.ModelForm):
 
     start_date_time = forms.DateTimeField(help_text="Accepted date and time input formats: '10/25/06 14:30', '10/25/2006 14:30', '2006-10-25 14:30'")
     end_date_time = forms.DateTimeField(help_text="Accepted date and time input formats: '10/25/06 14:30', '10/25/2006 14:30', '2006-10-25 14:30'")
+    instructors = forms.MultipleChoiceField(required=False, widget=forms.SelectMultiple(attrs={'title': 'Hold down ctrl to select multiple instructors',}), choices=[], help_text="Select all instructors that will be participating in the training.")
     cost = forms.DecimalField(help_text="Example of accepted formats for training cost: '50.00', '999', '99.99'. Max of 6 digits and 2 decimal places.")
     registration_open = forms.BooleanField(required=False, help_text="Check the box to change registration to open. Default is unchecked.")
     public = forms.BooleanField(required=False, help_text="Check the box to make this training record visible on the website. Default is unchecked.")
     max_students = forms.IntegerField(required=False, help_text="Enter max number of students for class room.")
+
+
+    # general function to create a form dropdown for instructors
+    def instructor_choices(self, id_field, label_field, type_table, order_field):
+        # get the relate type choices from the type table
+        try:
+            choices = (
+                (getattr(b, id_field), getattr(b, label_field)) for b in type_table.objects.all().order_by(order_field))
+        except ProgrammingError:
+            choices = ()
+        return choices
+
+    # generic function to retrieve the initial relate values from the relate table
+    def attribute_initial_values(self, name, relate_table, id_field):
+        # attribute initial values to self as list object
+        attr_name = 'initial_' + name
+        setattr(self, attr_name, [])
+        # get records from relate table and update initial values list
+        setattr(self, attr_name, [
+            b[0] for b in relate_table.objects.values_list(id_field).filter(training_relate_id=self.instance.training_id)
+        ])
+        self.fields[name].initial = getattr(self, attr_name)
+        return
+
+    # on instance construction fire functions to retrieve initial values
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance:
+            self.fields['instructors'].choices = self.instructor_choices('instructor_type_id', 'name', TnrisInstructorType, 'name')
+            self.attribute_initial_values('instructors', TnrisInstructorRelate, 'instructor_relate_id')
+
+    # generic function to update relate table with form input changes
+    def update_relate_table(self, name, relate_table, relate_field, id_field, type_table):
+        attr_name = 'initial_' + name
+        # get selected relate values from form input
+        updated = self.cleaned_data[name]
+        print(updated)
+        # create list of strings of initial values for comparison
+        initial_str = [
+            str(u) for u in getattr(self, attr_name)
+        ]
+        # create lists of differences: removed relates and new added relates
+        removes = [b for b in initial_str if b not in updated]
+        adds = [b for b in updated if b not in initial_str]
+        print(adds, removes)
+        # delete removals from relate table
+        for remove in removes:
+            args = {}
+            args[relate_field] = remove
+            relate_table.objects.filter(
+                **args).filter(training_relate_id=self.instance.training_id).delete()
+        # create adds in relate table
+        for add in adds:
+            training_record = super(TnrisForumTrainingForm, self).save(commit=False)
+            args = {'training_relate_id': training_record}
+            print(args)
+            type_arg = {}
+            type_arg[id_field] = add
+            type_record = type_table.objects.get(**type_arg)
+            args[relate_field] = type_record
+
+            relate_table(**args).save()
+        return
+
+    # custom handling of various relationships on save method
+    def save(self, commit=True):
+        # on save fire function to apply updates to relate tables
+        self.update_relate_table('instructors', TnrisInstructorRelate, 'instructor_relate_id', 'instructor_type_id', TnrisInstructorType)
+
+        return super(TnrisForumTrainingForm, self).save(commit=commit)
+
+
+class TnrisInstructorTypeForm(forms.ModelForm):
+    class Meta:
+        model = TnrisInstructorType
+        fields = ('__all__')
+
+    bio = forms.CharField(required=False, widget=forms.Textarea(attrs={"rows":25, "cols":20}), help_text="Enter plain text, no html or markdown.")
+    headshot = forms.URLField(required=False, widget=HeadshotWidget, help_text="Paste the S3 url for this instructor's headshot photo in the input above.<br><strong>Example headshot url:</strong> 'https://tnris-org-static.s3.amazonaws.com/images/name_headshot.jpg'<br><strong>*NOTE:</strong> Headshot preview in this form may not reflect actual size of the image.")

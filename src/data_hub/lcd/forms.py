@@ -186,7 +186,7 @@ class CollectionForm(forms.ModelForm):
                 **args).filter(collection_id=self.instance.collection_id).delete()
         # create adds in relate table
         for add in adds:
-            collection_record = Collection.objects.get(collection_id=self.instance.collection_id)
+            collection_record = super(CollectionForm, self).save(commit=False)
             args = {'collection_id': collection_record}
             type_arg = {}
             type_arg[id_field] = add

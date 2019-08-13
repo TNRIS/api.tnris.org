@@ -1,6 +1,11 @@
 from rest_framework import serializers
 
-from .models import (TnrisTraining, TnrisForumTraining)
+from .models import (
+    TnrisTraining,
+    TnrisForumTraining,
+    TnrisInstructorType,
+    CompleteForumTrainingView
+)
 from datetime import datetime
 
 
@@ -15,7 +20,6 @@ class TnrisTrainingSerializer(serializers.ModelSerializer):
                   'instructor',
                   'cost',
                   'registration_open',
-                  'instructor_bio',
                   'description',
                   'created',
                   'last_modified',
@@ -24,6 +28,16 @@ class TnrisTrainingSerializer(serializers.ModelSerializer):
     # format date/time for api rest endpoint to use on front end
     start_date_time = serializers.DateTimeField(format="%A, %B %d %I:%M %p")
     end_date_time = serializers.DateTimeField(format="%A, %B %d %I:%M %p")
+
+
+class TnrisInstructorTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TnrisInstructorType
+        fields = ('instructor_type_id',
+                  'name',
+                  'company',
+                  'bio',
+                  'headshot',)
 
 
 class TnrisForumTrainingSerializer(serializers.ModelSerializer):
@@ -35,17 +49,39 @@ class TnrisForumTrainingSerializer(serializers.ModelSerializer):
                   'end_date_time',
                   'training_day',
                   'title',
-                  'instructor',
                   'cost',
                   'registration_open',
                   'location',
                   'room',
                   'max_students',
-                  'instructor_bio',
                   'description',
                   'teaser',
                   'created',
                   'last_modified',
+                  'public',)
+
+    # format date/time for api rest endpoint to use on front end
+    start_date_time = serializers.DateTimeField(format="%A, %B %d %I:%M %p")
+    end_date_time = serializers.DateTimeField(format="%A, %B %d %I:%M %p")
+
+
+class CompleteForumTrainingViewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CompleteForumTrainingView
+        fields = ('training_id',
+                  'year', # models.py property method (field does not exist in db)
+                  'start_date_time',
+                  'end_date_time',
+                  'training_day',
+                  'title',
+                  'cost',
+                  'registration_open',
+                  'location',
+                  'room',
+                  'max_students',
+                  'description',
+                  'teaser',
+                  'instructor_info',
                   'public',)
 
     # format date/time for api rest endpoint to use on front end

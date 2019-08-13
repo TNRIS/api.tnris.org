@@ -153,10 +153,6 @@ class TnrisTraining(models.Model):
         default=False,
         null=False
     )
-    instructor_bio = models.TextField(
-        'Training Instructor Bio',
-        blank=True
-    )
     description = models.TextField(
         'Training Description'
     )
@@ -209,11 +205,6 @@ class TnrisForumTraining(models.Model):
         'Training End Date & Time',
         blank=False
     )
-    instructor = models.CharField(
-        'Training Instructor',
-        max_length=100,
-        blank=False
-    )
     cost = models.DecimalField(
         'Training Cost',
         max_digits=6,
@@ -245,10 +236,6 @@ class TnrisForumTraining(models.Model):
         blank=True,
         null=True
     )
-    instructor_bio = models.TextField(
-        'Training Instructor Bio',
-        blank=True
-    )
     description = models.TextField(
         'Training Description'
     )
@@ -271,3 +258,177 @@ class TnrisForumTraining(models.Model):
 
     def __str__(self):
         return self.title
+
+
+"""
+********** Domain Tables **********
+"""
+
+
+class TnrisInstructorType(models.Model):
+    """Instructor domain table for TnrisForumTraining"""
+
+    class Meta:
+        db_table = 'tnris_instructor_type'
+        verbose_name = 'Tnris Instructor Type'
+        verbose_name_plural = 'Tnris Instructor Types'
+        ordering = ('name',)
+
+    instructor_type_id = models.UUIDField(
+        'Instructor Type ID',
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False,
+        blank=False
+    )
+    name = models.CharField(
+        'Instructor Name',
+        max_length=100,
+        blank=False
+    )
+    company = models.CharField(
+        'Instructor Company',
+        max_length=100,
+        blank=True,
+        null=True
+    )
+    bio = models.TextField(
+        'Instructor Bio',
+        blank=True,
+        null=True
+    )
+    headshot = models.URLField(
+        'Image URL',
+        max_length=255,
+        blank=True,
+        null=True
+    )
+    created = models.DateTimeField(
+        'Created',
+        auto_now_add=True
+    )
+    last_modified = models.DateTimeField(
+        'Last Modified',
+        auto_now=True
+    )
+
+    def __str__(self):
+        return self.name
+
+
+"""
+********** Relate Tables **********
+"""
+
+
+class TnrisInstructorRelate(models.Model):
+    """Relate table between TnrisForumTraining and TnrisInstructor tables"""
+
+    class Meta:
+        db_table = 'tnris_instructor_relate'
+        verbose_name = 'Tnris Instructor Relate'
+        verbose_name_plural = 'Tnris Instructor Relates'
+        unique_together = (
+            'instructor_relate_id',
+            'training_relate_id'
+        )
+
+    id = models.UUIDField(
+        'Relate Primary Key',
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False
+    )
+    instructor_relate_id = models.ForeignKey(
+        'TnrisInstructorType',
+        db_column='instructor_relate_id',
+        on_delete=models.CASCADE,
+        related_name='tnris_instructor_type_ids'
+    )
+    training_relate_id = models.ForeignKey(
+        'TnrisForumTraining',
+        db_column='training_relate_id',
+        on_delete=models.CASCADE,
+        related_name='tnris_forum_training_ids'
+    )
+    created = models.DateTimeField(
+        'Created',
+        auto_now_add=True
+    )
+    last_modified = models.DateTimeField(
+        'Last Modified',
+        auto_now=True
+    )
+
+
+"""
+********** Database Views **********
+**** Used for the joined/related API endpoint ****
+"""
+
+class CompleteForumTrainingView(models.Model):
+  """
+  Complete Forum Training view presents forum training records with related instructor domains included
+  """
+
+  class Meta:
+      managed = False
+      db_table = 'complete_forum_training'
+      verbose_name = 'Complete Forum Training'
+      verbose_name_plural = 'Complete Forum Trainings'
+
+  training_id = models.UUIDField(
+      'Training ID',
+      primary_key=True
+  )
+  training_day = models.PositiveSmallIntegerField(
+      'Forum Training Day'
+  )
+  title = models.CharField(
+      'Training Title',
+      max_length=255
+  )
+  start_date_time = models.DateTimeField(
+      'Training Start Date & Time'
+  )
+  end_date_time = models.DateTimeField(
+      'Training End Date & Time'
+  )
+  cost = models.DecimalField(
+      'Training Cost',
+      max_digits=6,
+      decimal_places=2
+  )
+  registration_open = models.BooleanField(
+      'Registration Open'
+  )
+  public = models.BooleanField(
+      'Public'
+  )
+  location = models.CharField(
+      'Training Location',
+      max_length=255
+  )
+  room = models.CharField(
+      'Training Room',
+      max_length=255
+  )
+  max_students = models.PositiveSmallIntegerField(
+      'Max Student Amount'
+  )
+  description = models.TextField(
+      'Training Description'
+  )
+  teaser = models.TextField(
+      'Training Teaser'
+  )
+  instructor_info = models.TextField(
+      'Instructor Info'
+  )
+
+  @property
+  def year(self):
+      return self.start_date_time.strftime("%Y")
+
+  def __str__(self):
+      return str(self.training_id)

@@ -15,8 +15,7 @@ from .models import (
     TnrisDocument,
     TnrisTraining,
     TnrisForumTraining,
-    TnrisInstructorType,
-    TnrisInstructorRelate
+    TnrisInstructorType
 )
 from .filters import (
     TnrisForumTrainingYearFilter,
@@ -114,7 +113,7 @@ class TnrisTrainingAdmin(admin.ModelAdmin):
                     'end_date_time',
                     'registration_open',
                     'public')
-    search_fields = ('title', 'instructor')
+    search_fields = ('title')
     list_filter = (
         'instructor', 'registration_open', 'public'
     )
@@ -131,7 +130,7 @@ class TnrisForumTrainingAdmin(admin.ModelAdmin):
                     'registration_open',
                     'public',
                     'year')
-    search_fields = ('title', 'instructor')
+    search_fields = ('title')
     list_filter = (
         TnrisForumTrainingYearFilter,
         'registration_open',
@@ -145,4 +144,4 @@ class TnrisInstructorTypeAdmin(admin.ModelAdmin):
     form = TnrisInstructorTypeForm
     ordering = ('name',)
     list_display = ('name', 'company', 'headshot')
-    search_fields = ('name',)
+    search_fields = ('name', 'company')

@@ -14,6 +14,8 @@ from .serializers import (
     CompleteForumTrainingViewSerializer
 )
 
+
+# actual db table; regular training api endpoint
 class TnrisTrainingViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = TnrisTrainingSerializer
     http_method_names = ['get']
@@ -34,6 +36,7 @@ class TnrisTrainingViewSet(viewsets.ReadOnlyModelViewSet):
         return queryset
 
 
+# actual db table; regular forum training api endpoint without instructor info
 class TnrisForumTrainingViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = TnrisForumTrainingSerializer
     http_method_names = ['get']
@@ -54,6 +57,7 @@ class TnrisForumTrainingViewSet(viewsets.ReadOnlyModelViewSet):
         return queryset
 
 
+# actual db table; api endpoint for instructor domain
 class TnrisInstructorTypeViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = TnrisInstructorTypeSerializer
     http_method_names = ['get']
@@ -64,6 +68,7 @@ class TnrisInstructorTypeViewSet(viewsets.ReadOnlyModelViewSet):
         return queryset
 
 
+# db view, not actual table; api endpoint for complete training records with instructor info
 class CompleteForumTrainingViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = CompleteForumTrainingViewSerializer
     http_method_names = ['get']

@@ -18,11 +18,18 @@ from rest_framework import routers
 from rest_framework_swagger.views import get_swagger_view
 from rest_framework.schemas import get_schema_view
 
-from .viewsets import (TnrisTrainingViewSet, TnrisForumTrainingViewSet)
+from .viewsets import (
+    TnrisTrainingViewSet,
+    TnrisForumTrainingViewSet,
+    TnrisInstructorTypeViewSet,
+    CompleteForumTrainingViewSet
+)
 
 router = routers.DefaultRouter(trailing_slash=False)
 router.register(r'training/?', TnrisTrainingViewSet, base_name="TnrisTraining")
 router.register(r'forum_training/?', TnrisForumTrainingViewSet, base_name="TnrisForumTraining")
+router.register(r'complete_forum_training/?', CompleteForumTrainingViewSet, base_name="CompleteForumTrainingView")
+router.register(r'instructor_type/?', TnrisInstructorTypeViewSet, base_name="TnrisInstructorType")
 
 schema_view = get_swagger_view(title='TNRIS.org API')
 

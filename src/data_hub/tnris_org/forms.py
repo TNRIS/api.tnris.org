@@ -61,7 +61,7 @@ class HeadshotWidget(forms.widgets.Widget):
         if value is None:
             html = Template("""<input type="text" name="$name" id="id_$name" style="width:758px;"></input>""")
         else:
-            html = Template("""<input type="text" name="$name" id="id_$name" style="width:758px;"></input><br><label for="img_$name">Current: <a href="$link" target="_blank">$link</a></label><img id="img_$name" src="$link"/>""")
+            html = Template("""<input type="text" name="$name" id="id_$name" style="width:758px;"></input><br><label for="img_$name">Current: <a href="$link" target="_blank">$link</a></label><img id="img_$name" src="$link" style="max-height:250px; max-width:250px; margin:20px 20px;"/>""")
         return mark_safe(html.substitute(link=value,name=name))
 
 
@@ -267,4 +267,4 @@ class TnrisInstructorTypeForm(forms.ModelForm):
         fields = ('__all__')
 
     bio = forms.CharField(required=False, widget=forms.Textarea(attrs={"rows":25, "cols":20}), help_text="Enter plain text, no html or markdown.")
-    headshot = forms.URLField(required=False, widget=HeadshotWidget, help_text="Paste the S3 url for this instructor's headshot photo here. Example: 'https://tnris-org-static.s3.amazonaws.com/images/name_headshot.jpg'")
+    headshot = forms.URLField(required=False, widget=HeadshotWidget, help_text="Paste the S3 url for this instructor's headshot photo in the input above.<br><strong>Example headshot url:</strong> 'https://tnris-org-static.s3.amazonaws.com/images/name_headshot.jpg'<br><strong>*NOTE:</strong> Headshot preview in this form may not reflect actual size of the image.")

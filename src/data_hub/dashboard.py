@@ -94,7 +94,7 @@ class CustomIndexDashboard(Dashboard):
                     'tnris_org.models.TnrisDocument',
                     'tnris_org.models.TnrisTraining',
                     'tnris_org.models.TnrisForumTraining',
-                    'tnris_org.models.TnrisInstructor'),
+                    'tnris_org.models.TnrisInstructorType'),
         ))
 
         # append a recent actions module

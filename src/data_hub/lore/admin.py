@@ -90,10 +90,10 @@ class CollectionAdmin(admin.ModelAdmin):
                MicroficheIndexInlineAdmin, ProductInlineAdmin,
                ScannedPhotoIndexLinkInlineAdmin]
     list_display = (
-        'collection', 'agency', 'from_date', 'to_date', 'county_names', 'public'
+        'collection', 'id', 'agency', 'from_date', 'to_date', 'county_names', 'public'
     )
     ordering = ('agency__name', 'from_date')
-    search_fields = ('collection', 'id', 'to_date')
+    search_fields = ('collection', 'id', 'from_date', 'to_date')
     list_filter = (
         'public',
         CollectionAgencyNameFilter,

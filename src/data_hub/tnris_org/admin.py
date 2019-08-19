@@ -15,7 +15,8 @@ from .models import (
     TnrisDocument,
     TnrisTraining,
     TnrisForumTraining,
-    TnrisInstructorType
+    TnrisInstructorType,
+    TnrisGioCalendarEvent
 )
 from .filters import (
     TnrisForumTrainingYearFilter,
@@ -145,3 +146,17 @@ class TnrisInstructorTypeAdmin(admin.ModelAdmin):
     ordering = ('name',)
     list_display = ('name', 'company', 'headshot')
     search_fields = ('name', 'company')
+
+
+@admin.register(TnrisGioCalendarEvent)
+class TnrisGioCalendarEventAdmin(admin.ModelAdmin):
+    model = TnrisGioCalendarEvent
+    ordering = ('title',)
+    list_display = ('title',
+                    'location',
+                    'start_date',
+                    'start_time',
+                    'end_time',
+                    'end_date',
+                    'public')
+    search_fields = ('title', 'location', 'start_date', 'end_date')

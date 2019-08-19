@@ -6,7 +6,7 @@ import os
 
 
 """
-********** TNRIS.ORG Static File/Resource Tables (Images, Docs, Training) **********
+********** TNRIS.ORG Static File/Resource Tables (Images, Docs, Training, GIO Calendar) **********
 """
 
 
@@ -255,6 +255,111 @@ class TnrisForumTraining(models.Model):
     @property
     def year(self):
         return self.start_date_time.strftime("%Y")
+
+    def __str__(self):
+        return self.title
+
+
+class TnrisGioCalendarEvent(models.Model):
+    """GIO Calendar Events"""
+
+    class Meta:
+        db_table = 'tnris_gio_calendar_event'
+        verbose_name = 'Tnris GIO Calendar Event'
+        verbose_name_plural = 'Tnris GIO Calendar Events'
+
+    id = models.UUIDField(
+        'Event ID',
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False,
+        blank=False
+    )
+    start_date = models.DateField(
+        'Event Start Date',
+        blank=False,
+        null=False
+    )
+    end_date = models.DateField(
+        'Event End Date',
+        blank=True,
+        null=True
+    )
+    start_time = models.TimeField(
+        'Event Start Time',
+        blank=True,
+        null=True
+    )
+    end_time = models.TimeField(
+        'Event End Time',
+        blank=True,
+        null=True
+    )
+    title = models.CharField(
+        'Event Title',
+        max_length=255,
+        blank=False
+    )
+    short_description = models.CharField(
+        'Short Description',
+        max_length=255,
+        blank=True,
+        null=True
+    )
+    location = models.CharField(
+        'Event Location',
+        max_length=150,
+        blank=True,
+        null=True
+    )
+    street_address = models.CharField(
+        'Street Address',
+        max_length=150,
+        blank=True,
+        null=True
+    )
+    city = models.CharField(
+        'City',
+        max_length=50,
+        blank=True,
+        null=True
+    )
+    state = models.CharField(
+        'State Abbreviation',
+        max_length=2,
+        blank=True,
+        null=True
+    )
+    zipcode = models.CharField(
+        'Zipcode',
+        max_length=10,
+        blank=True,
+        null=True
+    )
+    event_url = models.URLField(
+        'Event URL',
+        max_length=255,
+        blank=True,
+        null=True
+    )
+    public = models.BooleanField(
+        'Public',
+        default=False,
+        null=False
+    )
+    community_meeting = models.BooleanField(
+        'Community Meeting',
+        default=False,
+        null=False
+    )
+    created = models.DateTimeField(
+        'Created',
+        auto_now_add=True
+    )
+    last_modified = models.DateTimeField(
+        'Last Modified',
+        auto_now=True
+    )
 
     def __str__(self):
         return self.title

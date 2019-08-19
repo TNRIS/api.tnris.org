@@ -128,11 +128,24 @@ class DocumentForm(forms.ModelForm):
 
     # function to upload document to s3 and update dbase link
     def handle_doc(self, field, file):
+        # set proper content type base on file extension
+        content_type = 'binary/octet-stream'
+        ext = os.path.splitext(str(file))[-1]
+        ext_ref = {
+            '.pdf': 'application/pdf',
+            '.zip': 'application/zip',
+            '.jpg': 'image',
+            '.png': 'image',
+            '.wav': 'audio/x-wav'
+        }
+        if ext.lower() in ext_ref.keys():
+            content_type = ext_ref[ext.lower()]
         # upload image
         key = "documents/%s" % (file)
         response = self.client.put_object(
             Bucket='tnris-org-static',
             ACL='public-read',
+            ContentType=content_type,
             Key=key,
             Body=file
         )

@@ -77,12 +77,20 @@ class ImageForm(forms.ModelForm):
 
     # function to upload image to s3 and update dbase link
     def handle_image(self, field, file):
+        # set proper content type base on file extension
+        content_type = 'image'
+        ext = os.path.splitext(str(file))[-1]
+        ext_ref = {
+            '.svg': 'image/svg+xml'
+        }
+        if ext.lower() in ext_ref.keys():
+            content_type = ext_ref[ext.lower()]
         # upload image
         key = "images/%s" % (file)
         response = self.client.put_object(
             Bucket='tnris-org-static',
             ACL='public-read',
-            ContentType='image',
+            ContentType=content_type,
             Key=key,
             Body=file
         )

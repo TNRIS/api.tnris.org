@@ -345,7 +345,8 @@ class TnrisGioCalendarEvent(models.Model):
     public = models.BooleanField(
         'Public',
         default=False,
-        null=False
+        null=False,
+        help_text="Display on website!"
     )
     community_meeting = models.BooleanField(
         'Community Meeting',

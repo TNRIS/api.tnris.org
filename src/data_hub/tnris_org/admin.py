@@ -160,3 +160,29 @@ class TnrisGioCalendarEventAdmin(admin.ModelAdmin):
                     'end_date',
                     'public')
     search_fields = ('title', 'location', 'start_date', 'end_date')
+
+    fieldsets = (
+        ('Basic Info', {
+            'classes': ('grp-collapse', 'grp-open'),
+            'fields': ('title',
+                       'location',
+                       'start_date',
+                       'end_date',
+                       'start_time',
+                       'end_time'),
+        }),
+        ('More Details', {
+            'classes': ('grp-collapse', 'grp-closed'),
+            'fields': ('short_description',
+                       'event_url',
+                       'community_meeting',
+                       'public'),
+        }),
+        ('Address Specifics', {
+            'classes': ('grp-collapse', 'grp-closed'),
+            'fields': ('street_address',
+                       'city',
+                       'state',
+                       'zipcode'),
+        })
+    )

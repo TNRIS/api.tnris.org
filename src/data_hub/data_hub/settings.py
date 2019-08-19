@@ -192,4 +192,13 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 1000
 }
 
+TIME_INPUT_FORMATS = [
+    '%I:%M %p',  # 6:22 PM
+    '%I:%M:%S %p',  # 6:22:44 PM
+    '%I %p',  # 6 PM
+    '%H:%M:%S',     # '14:30:59'
+    '%H:%M:%S.%f',  # '14:30:59.000200'
+    '%H:%M',        # '14:30'
+]
+
 SITE_ID = 1

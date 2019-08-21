@@ -121,20 +121,20 @@ class TnrisGioCalendarEventSerializer(serializers.ModelSerializer):
         pd = ''
         # if end_date is not populated or is same as start_date, just use start_date
         if ed is None or sd == ed:
-            pd = sd.strftime('%B %d, %Y')
+            pd = sd.strftime('%B %-d, %Y')
         # otherwise, handle end_date
         else:
             # if different years, format range with month, day, & year
             if sd.year != ed.year:
-                pd = sd.strftime('%B %d, %Y') + "-" + ed.strftime('%B %d, %Y')
+                pd = sd.strftime('%B %-d, %Y') + "-" + ed.strftime('%B %-d, %Y')
             # otherwise, handle month difference
             else:
                 # if different months, format range with month, day and shared year
                 if sd.month != ed.month:
-                    pd = sd.strftime('%B %d') + "-" + ed.strftime('%B %d, %Y')
+                    pd = sd.strftime('%B %-d') + "-" + ed.strftime('%B %-d, %Y')
                 # otherwise, format range with day and shared month & year
                 else:
-                    pd = sd.strftime('%B %d') + "-" + ed.strftime('%d, %Y')
+                    pd = sd.strftime('%B %-d') + "-" + ed.strftime('%-d, %Y')
         return pd
 
     def get_pretty_time(self, obj):

@@ -140,8 +140,8 @@ class TnrisGioCalendarEventSerializer(serializers.ModelSerializer):
     def get_pretty_time(self, obj):
         st = obj.start_time
         et = obj.end_time
-        pt = ''
-        # if both start_time and end_time populated
+        pt = None
+        # if both start_time and end_time populated, make pretty
         if st is not None and et is not None:
             pt = "%s-%s" % (st.strftime('%I:%M%p').lstrip("0"),
                             et.strftime('%I:%M%p').lstrip("0"))

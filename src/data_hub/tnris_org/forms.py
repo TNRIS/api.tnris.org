@@ -1,6 +1,5 @@
 from django import forms
 from django.core.exceptions import ValidationError
-from django.contrib.admin.widgets import AdminDateWidget
 
 from string import Template
 from django.utils.safestring import mark_safe
@@ -77,12 +76,20 @@ class ImageForm(forms.ModelForm):
 
     # function to upload image to s3 and update dbase link
     def handle_image(self, field, file):
+        # set proper content type base on file extension
+        content_type = 'image'
+        ext = os.path.splitext(str(file))[-1]
+        ext_ref = {
+            '.svg': 'image/svg+xml'
+        }
+        if ext.lower() in ext_ref.keys():
+            content_type = ext_ref[ext.lower()]
         # upload image
         key = "images/%s" % (file)
         response = self.client.put_object(
             Bucket='tnris-org-static',
             ACL='public-read',
-            ContentType='image',
+            ContentType=content_type,
             Key=key,
             Body=file
         )
@@ -183,11 +190,15 @@ class TnrisTrainingForm(forms.ModelForm):
         model = TnrisTraining
         fields = ('__all__')
 
-    start_date_time = forms.DateTimeField(help_text="Accepted date and time input formats: '10/25/06 14:30', '10/25/2006 14:30', '2006-10-25 14:30'")
-    end_date_time = forms.DateTimeField(help_text="Accepted date and time input formats: '10/25/06 14:30', '10/25/2006 14:30', '2006-10-25 14:30'")
     cost = forms.DecimalField(help_text="Example of accepted formats for training cost: '50.00', '999', '99.99'. Max of 6 digits and 2 decimal places.")
     registration_open = forms.BooleanField(required=False, help_text="Check the box to change registration to open. Default is unchecked.")
     public = forms.BooleanField(required=False, help_text="Check the box to make this training record visible on the website. Default is unchecked.")
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance:
+            self.fields['start_date_time'].help_text = mark_safe("Accepted date formats: '10/25/06', '10/25/2006', '2006-10-25'.<br>Accepted time formats: '13:30' (military hour & minute), '02:00 PM' (12 hour clock & minute with AM/PM)")
+            self.fields['end_date_time'].help_text = mark_safe("Accepted date formats: '10/25/06', '10/25/2006', '2006-10-25'.<br>Accepted time formats: '13:30' (military hour & minute), '02:00 PM' (12 hour clock & minute with AM/PM)")
 
 
 class TnrisForumTrainingForm(forms.ModelForm):
@@ -195,8 +206,6 @@ class TnrisForumTrainingForm(forms.ModelForm):
         model = TnrisForumTraining
         fields = ('__all__')
 
-    start_date_time = forms.DateTimeField(help_text="Accepted date and time input formats: '10/25/06 14:30', '10/25/2006 14:30', '2006-10-25 14:30'")
-    end_date_time = forms.DateTimeField(help_text="Accepted date and time input formats: '10/25/06 14:30', '10/25/2006 14:30', '2006-10-25 14:30'")
     instructors = forms.MultipleChoiceField(required=False, widget=forms.SelectMultiple(attrs={'title': 'Hold down ctrl to select multiple instructors',}), choices=[], help_text="Select all instructors that will be participating in the training. To select more than one Instructor, hold Ctrl and click the name(s).")
     cost = forms.DecimalField(help_text="Example of accepted formats for training cost: '50.00', '999', '99.99'. Max of 6 digits and 2 decimal places.")
     registration_open = forms.BooleanField(required=False, help_text="Check the box to change registration to open. Default is unchecked.")
@@ -232,6 +241,9 @@ class TnrisForumTrainingForm(forms.ModelForm):
         if self.instance:
             self.fields['instructors'].choices = self.instructor_choices('instructor_type_id', 'name', TnrisInstructorType, 'name')
             self.attribute_initial_values('instructors', TnrisInstructorRelate, 'instructor_relate_id')
+            self.fields['start_date_time'].help_text = mark_safe("Accepted date formats: '10/25/06', '10/25/2006', '2006-10-25'.<br>Accepted time formats: '13:30' (military hour & minute), '02:00 PM' (12 hour clock & minute with AM/PM)")
+            self.fields['end_date_time'].help_text = mark_safe("Accepted date formats: '10/25/06', '10/25/2006', '2006-10-25'.<br>Accepted time formats: '13:30' (military hour & minute), '02:00 PM' (12 hour clock & minute with AM/PM)")
+
 
     # generic function to update relate table with form input changes
     def update_relate_table(self, name, relate_table, relate_field, id_field, type_table):

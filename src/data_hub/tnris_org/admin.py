@@ -151,13 +151,13 @@ class TnrisInstructorTypeAdmin(admin.ModelAdmin):
 @admin.register(TnrisGioCalendarEvent)
 class TnrisGioCalendarEventAdmin(admin.ModelAdmin):
     model = TnrisGioCalendarEvent
-    ordering = ('title',)
+    ordering = ('start_date',)
     list_display = ('title',
                     'location',
                     'start_date',
+                    'end_date',
                     'start_time',
                     'end_time',
-                    'end_date',
                     'public')
     search_fields = ('title', 'location', 'start_date', 'end_date')
 

@@ -4,7 +4,8 @@ from .models import (
     TnrisTraining,
     TnrisForumTraining,
     TnrisInstructorType,
-    CompleteForumTrainingView
+    CompleteForumTrainingView,
+    TnrisGioCalendarEvent
 )
 from datetime import datetime
 
@@ -87,3 +88,61 @@ class CompleteForumTrainingViewSerializer(serializers.ModelSerializer):
     # format date/time for api rest endpoint to use on front end
     start_date_time = serializers.DateTimeField(format="%A, %B %d %I:%M %p")
     end_date_time = serializers.DateTimeField(format="%A, %B %d %I:%M %p")
+
+
+class TnrisGioCalendarEventSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TnrisGioCalendarEvent
+        # fields = '__all__'
+        fields = ('title',
+                  'location',
+                  'start_date',
+                  'end_date',
+                  'start_time',
+                  'end_time',
+                  'short_description',
+                  'event_url',
+                  'community_meeting',
+                  'public',
+                  'street_address',
+                  'city',
+                  'state',
+                  'zipcode',
+                  'pretty_date',
+                  'pretty_time')
+
+    # pretty format date/time for api rest endpoint to use on front end
+    pretty_date = serializers.SerializerMethodField()
+    pretty_time = serializers.SerializerMethodField()
+
+    def get_pretty_date(self, obj):
+        sd = obj.start_date
+        ed = obj.end_date
+        pd = ''
+        # if end_date is not populated or is same as start_date, just use start_date
+        if ed is None or sd == ed:
+            pd = sd.strftime('%B %d, %Y')
+        # otherwise, handle end_date
+        else:
+            # if different years, format range with month, day, & year
+            if sd.year != ed.year:
+                pd = sd.strftime('%B %d, %Y') + "-" + ed.strftime('%B %d, %Y')
+            # otherwise, handle month difference
+            else:
+                # if different months, format range with month, day and shared year
+                if sd.month != ed.month:
+                    pd = sd.strftime('%B %d') + "-" + ed.strftime('%B %d, %Y')
+                # otherwise, format range with day and shared month & year
+                else:
+                    pd = sd.strftime('%B %d') + "-" + ed.strftime('%d, %Y')
+        return pd
+
+    def get_pretty_time(self, obj):
+        st = obj.start_time
+        et = obj.end_time
+        pt = ''
+        # if both start_time and end_time populated
+        if st is not None and et is not None:
+            pt = "%s-%s" % (st.strftime('%I:%M%p').lstrip("0"),
+                            et.strftime('%I:%M%p').lstrip("0"))
+        return pt

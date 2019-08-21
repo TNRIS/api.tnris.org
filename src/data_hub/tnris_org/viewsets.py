@@ -1,17 +1,20 @@
 from rest_framework import viewsets
 from rest_framework.response import Response
+from datetime import datetime
 
 from .models import (
     TnrisTraining,
     TnrisForumTraining,
     TnrisInstructorType,
-    CompleteForumTrainingView
+    CompleteForumTrainingView,
+    TnrisGioCalendarEvent
 )
 from .serializers import (
     TnrisTrainingSerializer,
     TnrisForumTrainingSerializer,
     TnrisInstructorTypeSerializer,
-    CompleteForumTrainingViewSerializer
+    CompleteForumTrainingViewSerializer,
+    TnrisGioCalendarEventSerializer
 )
 
 
@@ -86,4 +89,30 @@ class CompleteForumTrainingViewSet(viewsets.ReadOnlyModelViewSet):
                 args[field] = value
         # get records using query
         queryset = CompleteForumTrainingView.objects.filter(**args).order_by('title', 'start_date_time', 'end_date_time')
+        return queryset
+
+
+# actual db table; gio calendar events api endpoint
+class TnrisGioCalendarEventViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = TnrisGioCalendarEventSerializer
+    http_method_names = ['get']
+
+    def get_queryset(self):
+        # return only public records for today or in the future
+        # and ignore all events with a start_date older than today
+        args = {
+            'public': True,
+            'start_date__gte': datetime.today()
+        }
+        null_list = ['null', 'Null', 'none', 'None']
+        # create argument object of query clauses
+        for field in self.request.query_params.keys():
+            if field != 'limit' and field != 'offset':
+                value = self.request.query_params.get(field)
+                # convert null queries
+                if value in null_list:
+                    value = None
+                args[field] = value
+        # get records using query. order by chronological start
+        queryset = TnrisGioCalendarEvent.objects.filter(**args).order_by('start_date', 'start_time')
         return queryset

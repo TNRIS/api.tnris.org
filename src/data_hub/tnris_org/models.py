@@ -353,6 +353,11 @@ class TnrisGioCalendarEvent(models.Model):
         default=False,
         null=False
     )
+    solutions_group_meeting = models.BooleanField(
+        'Solutions Group Meeting',
+        default=False,
+        null=False
+    )
     created = models.DateTimeField(
         'Created',
         auto_now_add=True

@@ -103,6 +103,7 @@ class TnrisGioCalendarEventSerializer(serializers.ModelSerializer):
                   'short_description',
                   'event_url',
                   'community_meeting',
+                  'solutions_group_meeting',
                   'public',
                   'street_address',
                   'city',

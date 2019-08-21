@@ -176,6 +176,7 @@ class TnrisGioCalendarEventAdmin(admin.ModelAdmin):
             'fields': ('short_description',
                        'event_url',
                        'community_meeting',
+                       'solutions_group_meeting',
                        'public'),
         }),
         ('Address Specifics', {

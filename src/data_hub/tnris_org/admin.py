@@ -22,6 +22,12 @@ from .filters import (
     TnrisTrainingFiscalYearFilter,
     TnrisForumTrainingYearFilter,
 )
+from .bulk_actions import (
+    close_registration,
+    open_registration,
+    close_to_public,
+    open_to_public
+)
 
 
 @admin.register(TnrisImage)
@@ -123,6 +129,13 @@ class TnrisTrainingAdmin(admin.ModelAdmin):
         'registration_open',
         'public'
     )
+    # bulk update actions
+    actions = [
+        close_registration,
+        open_registration,
+        close_to_public,
+        open_to_public
+    ]
 
 
 @admin.register(TnrisForumTraining)
@@ -142,6 +155,13 @@ class TnrisForumTrainingAdmin(admin.ModelAdmin):
         'registration_open',
         'public'
     )
+    # bulk update actions
+    actions = [
+        close_registration,
+        open_registration,
+        close_to_public,
+        open_to_public
+    ]
 
 
 @admin.register(TnrisInstructorType)

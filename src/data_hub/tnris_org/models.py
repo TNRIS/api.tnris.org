@@ -169,6 +169,12 @@ class TnrisTraining(models.Model):
     def year(self):
         return self.start_date_time.strftime("%Y")
 
+    @property
+    def fiscal_year(self):
+        # if class start date month is before sept, use same year for
+        # fiscal year. otherwise, add 1 for 'next' year
+        return self.start_date_time.year if self.start_date_time.month < 9 else self.start_date_time.year + 1
+
     def __str__(self):
         return self.title
 

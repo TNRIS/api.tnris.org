@@ -19,6 +19,7 @@ from .models import (
     TnrisGioCalendarEvent
 )
 from .filters import (
+    TnrisTrainingFiscalYearFilter,
     TnrisForumTrainingYearFilter,
 )
 
@@ -113,10 +114,14 @@ class TnrisTrainingAdmin(admin.ModelAdmin):
                     'start_date_time',
                     'end_date_time',
                     'registration_open',
-                    'public')
+                    'public',
+                    'fiscal_year')
     search_fields = ('title', 'description')
     list_filter = (
-        'instructor', 'registration_open', 'public'
+        TnrisTrainingFiscalYearFilter,
+        'instructor',
+        'registration_open',
+        'public'
     )
 
 

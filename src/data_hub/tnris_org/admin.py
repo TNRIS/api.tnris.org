@@ -19,7 +19,14 @@ from .models import (
     TnrisGioCalendarEvent
 )
 from .filters import (
+    TnrisTrainingFiscalYearFilter,
     TnrisForumTrainingYearFilter,
+)
+from .bulk_actions import (
+    close_registration,
+    open_registration,
+    close_to_public,
+    open_to_public
 )
 
 
@@ -113,11 +120,22 @@ class TnrisTrainingAdmin(admin.ModelAdmin):
                     'start_date_time',
                     'end_date_time',
                     'registration_open',
-                    'public')
+                    'public',
+                    'fiscal_year')
     search_fields = ('title', 'description')
     list_filter = (
-        'instructor', 'registration_open', 'public'
+        TnrisTrainingFiscalYearFilter,
+        'instructor',
+        'registration_open',
+        'public'
     )
+    # bulk update actions
+    actions = [
+        close_registration,
+        open_registration,
+        close_to_public,
+        open_to_public
+    ]
 
 
 @admin.register(TnrisForumTraining)
@@ -137,6 +155,13 @@ class TnrisForumTrainingAdmin(admin.ModelAdmin):
         'registration_open',
         'public'
     )
+    # bulk update actions
+    actions = [
+        close_registration,
+        open_registration,
+        close_to_public,
+        open_to_public
+    ]
 
 
 @admin.register(TnrisInstructorType)
@@ -176,6 +201,7 @@ class TnrisGioCalendarEventAdmin(admin.ModelAdmin):
             'fields': ('short_description',
                        'event_url',
                        'community_meeting',
+                       'solutions_group_meeting',
                        'public'),
         }),
         ('Address Specifics', {

@@ -37,6 +37,9 @@ class MapDownloadAdmin(admin.ModelAdmin):
     list_display = (
         'map_collection_id', 'label', 'map_size', 'pixels_per_inch'
     )
+    list_filter = (
+        'map_collection_id', 'label', 'map_size', 'pixels_per_inch'
+    )
 
     # remove default action 'delete_selected' so s3 files will be deleted by the
     # model's overridden delete method. also so user permissions don't have to be
@@ -60,7 +63,8 @@ class MapCollectionAdmin(admin.ModelAdmin):
         'public',
         'thumbnail_link',
         'delete_thumbnail',
-        'data_collections'
+        'data_collections',
+        'more_info_link'
     )
     list_display = (
         'name', 'publish_date', 'public'

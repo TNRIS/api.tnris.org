@@ -180,10 +180,7 @@ class EpsgTypeAdmin(admin.ModelAdmin):
 class FileTypeAdmin(admin.ModelAdmin):
     model = FileType
     ordering = ('file_type',)
-
-
-
-
+    
 
 @admin.register(LicenseType)
 class LicenseTypeAdmin(admin.ModelAdmin):

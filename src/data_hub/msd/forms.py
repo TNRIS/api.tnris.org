@@ -1,5 +1,5 @@
 from django import forms
-# from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError
 # from django.db.utils import ProgrammingError
 
 from .models import MapCollection, MapDataRelate, MapDownload, MapSize, PixelsPerInch
@@ -8,7 +8,7 @@ from lcd.models import Collection
 from string import Template
 from django.utils.safestring import mark_safe
 
-import boto3
+import boto3, os
 
 
 class PictureWidget(forms.widgets.Widget):
@@ -35,11 +35,24 @@ class MapDownloadForm(forms.ModelForm):
 
     download_url = forms.FileField(required=False, widget=PdfWidget, help_text="Upload map download file. PDF is recommended. 75MB max size.")
 
-    # FILE UPLOAD FOR THUMBNAIL IMAGE
+    # FILE UPLOAD FOR DOWNLOAD FILE (PDF SUGGESTED)
     # boto3 s3 object
     client = boto3.client('s3')
 
     def handle_upload(self, file):
+        # set proper content type base on file extension
+        content_type = 'binary/octet-stream'
+        ext = os.path.splitext(str(file))[-1]
+        ext_ref = {
+            '.pdf': 'application/pdf',
+            '.zip': 'application/zip',
+            '.jpg': 'image',
+            '.png': 'image',
+            '.wav': 'audio/x-wav',
+            '.svg': 'image/svg+xml'
+        }
+        if ext.lower() in ext_ref.keys():
+            content_type = ext_ref[ext.lower()]
         # upload new download file
         special_characters = [' ', '-', '(', ')']
         filename = file._name
@@ -49,6 +62,7 @@ class MapDownloadForm(forms.ModelForm):
         response = self.client.put_object(
             Bucket='data.tnris.org',
             ACL='public-read',
+            ContentType=content_type,
             Key=key,
             Body=file
         )
@@ -129,12 +143,13 @@ class MapCollectionForm(forms.ModelForm):
         response = self.client.put_object(
             Bucket='data.tnris.org',
             ACL='public-read',
+            ContentType='image',
             Key=key,
             Body=file
         )
         print('%s upload success!' % key)
         # update link in database table
-        setattr(self.instance, 'thumbnail_link', "https://s3.amazonaws.com/data.tnris.org/" + key)
+        self.cleaned_data[field] = "https://s3.amazonaws.com/data.tnris.org/" + key
         return
 
     # generic function to delete s3 objects fired by check of checkboxes on adminform
@@ -147,7 +162,25 @@ class MapCollectionForm(forms.ModelForm):
         )
         print('%s delete success!' % key)
         # clear link from database table
-        setattr(self.instance, field, None)
+        self.cleaned_data[field] = None
+        return
+
+    # custom handling of thumbnail image on save
+    def clean(self, commit=True):
+        # check for files
+        files = self.files
+        for f in files:
+            print(str(files[f]))
+            ext = os.path.splitext(str(files[f]))[1]
+            # validation to prevent non-jpg image format from being uploaded
+            if ext.lower() != '.jpg':
+                raise ValidationError(u"Unsupported thumbnail file extension. Only .jpg format permitted!")
+            if f == 'thumbnail_link' and self.cleaned_data['delete_thumbnail'] is False:
+                self.handle_thumbnail(f, files[f])
+        # handle s3 deletions
+        if self.cleaned_data['delete_thumbnail'] is True:
+            self.delete_thumbnail_from_s3('thumbnail_link')
+        super(MapCollectionForm, self).save(commit=commit)
         return
 
     def save(self, commit=True):
@@ -164,15 +197,4 @@ class MapCollectionForm(forms.ModelForm):
         for add in adds:
             data_collection_rec = Collection.objects.get(collection_id=add)
             MapDataRelate(data_collection_id=data_collection_rec, map_collection_id=self.instance).save()
-
-        # handle thumbnail upload
-        files = self.files
-        for f in files:
-            if f == 'thumbnail_link' and self.cleaned_data['delete_thumbnail'] is False:
-                self.handle_thumbnail(f, files[f])
-            else:
-                print("where did this file come from???? shouldn't be possible.")
-        # handle s3 deletions
-        if self.cleaned_data['delete_thumbnail'] is True:
-                self.delete_thumbnail_from_s3('thumbnail_link')
         return super(MapCollectionForm, self).save(commit=commit)

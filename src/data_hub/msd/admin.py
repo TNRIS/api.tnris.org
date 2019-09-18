@@ -63,7 +63,8 @@ class MapCollectionAdmin(admin.ModelAdmin):
         'public',
         'thumbnail_link',
         'delete_thumbnail',
-        'data_collections'
+        'data_collections',
+        'more_info_link'
     )
     list_display = (
         'name', 'publish_date', 'public'

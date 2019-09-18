@@ -104,7 +104,7 @@ class MapCollectionForm(forms.ModelForm):
             'data_collections': 'Hold down CTRL to add/remove multiple data collections.',
         }
         fields = ('name', 'publish_date', 'description', 'public',
-                  'thumbnail_link', 'data_collections')
+                  'thumbnail_link', 'data_collections', 'more_info_link')
 
     thumbnail_link = forms.FileField(required=False, widget=PictureWidget, help_text=".JPG Format Only!")
     delete_thumbnail = forms.BooleanField(required=False)

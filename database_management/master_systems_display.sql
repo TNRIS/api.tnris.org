@@ -10,6 +10,7 @@ SELECT map_collection.map_collection_id as collection_id,
   map_collection.publish_date,
   map_collection.description,
   map_collection.thumbnail_link,
+  map_collection.more_info_link,
   map_collection.public,
   -- json list of data collections
   array_to_string(ARRAY(SELECT json_build_object(collection.collection_id, collection.name)

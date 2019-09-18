@@ -139,6 +139,12 @@ class MapCollection(models.Model):
         null=True,
         blank=True
     )
+    more_info_link = models.URLField(
+        'More Info Link',
+        max_length=350,
+        null=True,
+        blank=True
+    )
     public = models.BooleanField(
         'Public',
         default=False
@@ -287,6 +293,10 @@ class MsdView(models.Model):
     thumbnail_link = models.CharField(
         'Thumbnail Link',
         max_length=255
+    )
+    more_info_link = models.CharField(
+        'More Info Link',
+        max_length=350
     )
     public = models.BooleanField(
         'Public'

@@ -22,9 +22,10 @@ from .models import (Collection,
                      ResourceType,
                      ResourceTypeRelate,
                      UseRelate,
-                     UseType)
+                     UseType,
+                     XlargeSupplemental)
 import os
-import boto3, uuid
+import boto3, botocore, uuid
 
 class PictureWidget(forms.widgets.Widget):
     def render(self, name, value, attrs=None):
@@ -518,4 +519,90 @@ class ResourceForm(forms.ModelForm):
         # return last record for form to validate and commit all new records
         progress_tracker = [0, 0]
         super(ResourceForm, self).save(commit=False)
+        return
+
+
+class XlargeSupplementalForm(forms.ModelForm):
+    class Meta:
+        model = XlargeSupplemental
+        fields = ('__all__')
+
+    # boto3 s3 object
+    s3 = boto3.resource('s3')
+
+    # specific function to create the Collection field dropdown
+    def create_collection_field(self):
+        # get the Collection choices from the Collection table
+        try:
+            choices = []
+            for b in Collection.objects.all().order_by('name'):
+                if b.acquisition_date is not None and b.template_type_id.template != 'outside-entity':
+                    year = b.acquisition_date.split("-")[0] + " "
+                else:
+                    year = ""
+                disp_name = year + b.name
+                choices.append((b.collection_id, disp_name))
+
+        except ProgrammingError:
+            choices = ()
+        # return the choices
+        return choices
+
+    # create collection dropdown with empty choices as placeholder
+    collection = forms.ChoiceField(required=True, label="Collection", choices=[])
+
+    supplemental_choices = [
+        ('lidar_breaklines_url', 'Lidar Breaklines'),
+        ('supplemental_report_url', 'Supplemental Report'),
+        ('tile_index_url', 'Tile Index')
+    ]
+    supplemental_type = forms.ChoiceField(required=True, label="Supplemental Type", choices=[])
+
+    # on instance construction fire functions to retrieve initial/dropdown values
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # fire function to create the Collection field dropdown
+        self.fields['collection'].choices = self.create_collection_field()
+        self.fields['supplemental_type'].choices = self.supplemental_choices
+
+    # generic function to retrieve the associated Collection object
+    def get_collection_obj(self, collection_id):
+        record = Collection.objects.get(collection_id=collection_id)
+        return record
+
+    # generic function to verify zipfile exists in s3 with proper key
+    def verify_s3_zipfile(self, key):
+        try:
+            self.s3.Object('data.tnris.org', key).load()
+        except botocore.exceptions.ClientError as e:
+            if e.response['Error']['Code'] == "404":
+                raise forms.ValidationError('Zipfile not in s3! Could not find the data.tnris.org bucket key: %s' % (key))
+            else:
+                raise forms.ValidationError('Error verifying zipfile in s3. Try again or contact IS team.')
+        else:
+            print('s3 zipfile found.')
+            return
+
+    # custom handling in save method for adding multiple new records
+    def clean(self):
+        # get the collection
+        try:
+            collection_obj = self.get_collection_obj(self.cleaned_data['collection'])
+        except:
+            raise forms.ValidationError('Could not retrieve "%s" from the collection table. This is extremely peculiar... What did you do???' % (self.cleaned_data['collection']))
+        # format filename
+        urlized_nm = collection_obj.name.lower().replace(', ', '-').replace(' & ', '-').replace(' ', '-').replace('(', '').replace(')', '').replace('\\', '-').replace('/', '-').replace('&', '').replace(',', '-')
+        supp_field = self.cleaned_data['supplemental_type']
+        sfx = '-' + supp_field.lower().replace('_url', '.zip').replace('_', '-')
+        upload_nm = urlized_nm + sfx
+        # uploaded zipfile url
+        key = "%s/assets/%s" % (collection_obj.collection_id, upload_nm)
+        url = "https://s3.amazonaws.com/data.tnris.org/%s" % (key)
+        # verify the file has been uploaded to s3
+        self.verify_s3_zipfile(key)
+        # verified! make the dbase update
+        print("updating %s collection's %s field with value %s" % (collection_obj.collection_id, supp_field, url))
+        setattr(collection_obj, supp_field, url)
+        collection_obj.save()
+        self.instance.key = key
         return

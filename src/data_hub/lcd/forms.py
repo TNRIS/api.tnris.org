@@ -29,7 +29,20 @@ import boto3, botocore, uuid
 
 class PictureWidget(forms.widgets.Widget):
     def render(self, name, value, attrs=None):
-        html = Template("""<input type="file" name="$name" id="id_$name"><label for="img_$name">Current: $link</label><img id="img_$name" src="$link" style="max-width:500px;"/>""")
+        js = """
+        <script type="text/javascript">
+            function copyFunction() {
+                var copyText = document.getElementById("currentUrl");
+                copyText.select();
+                document.execCommand("copy");
+            }
+        </script>
+        """
+
+        if value is None:
+            html = Template("""<input type="file" name="$name" id="id_$name"><label for="img_$name">Current: <a href="#">$link</a></label>""")
+        else:
+            html = Template("""{0}<a style="cursor:pointer;border:solid 1px;padding:3px;margin-left:15px;" onclick="copyFunction();">COPY URL</a><input style="width:50%;margin-left:5px;" type="text" id="currentUrl" value="$link" readonly><br><img id="img_$name" src="$link" style="max-width:500px;"/>""".format(js))
         return mark_safe(html.substitute(link=value,name=name))
 
 class ZipfileWidget(forms.widgets.Widget):
@@ -45,7 +58,7 @@ class ImageForm(forms.ModelForm):
             'caption': 'Caption will not be saved until chosen image is uploaded and saved to database.',
         }
 
-    image_url = forms.FileField(required=True, widget=PictureWidget, help_text="Choose an image file and 'Save' this form to upload & save it to the database. After saving, you can populate a Caption and re-save to apply. Attempting to overwrite with a new file will only create a new record.")
+    image_url = forms.FileField(required=True, widget=PictureWidget, help_text="Choose an image file and 'Save' this form to upload & save it to the database. After saving, you can populate a Caption and re-save to apply.")
 
 
 class CollectionForm(forms.ModelForm):

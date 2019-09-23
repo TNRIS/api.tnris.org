@@ -1321,3 +1321,20 @@ class AreasView(models.Model):
 
   def __str__(self):
       return str(self.area_type_id)
+
+
+"""
+********** Dummy Models **********
+**** Used for fake admin forms ****
+"""
+
+class XlargeSupplemental(models.Model):
+    class Meta:
+        verbose_name = 'X-Large Supplemental'
+        verbose_name_plural = 'X-Large Supplementals'
+
+    # placeholder for string representation applied at save of add form
+    key = 'Xlarge Supplemental'
+
+    def __str__(self):
+        return self.key

@@ -2,7 +2,7 @@ from django.contrib import admin
 
 # from .filters import CollectionAgencyNameFilter, CollectionCountyFilter, \
 #     CountyDropdownFilter
-from .forms import CollectionForm, ResourceForm, ImageForm
+from .forms import CollectionForm, ResourceForm, ImageForm, XlargeSupplementalForm
 from .models import (
     AreaType,
     CategoryRelate,
@@ -23,7 +23,8 @@ from .models import (
     SourceType,
     TemplateType,
     UseRelate,
-    UseType
+    UseType,
+    XlargeSupplemental
 )
 
 # Relate tables managed through 'Collection' form as collection records are
@@ -182,9 +183,6 @@ class FileTypeAdmin(admin.ModelAdmin):
     ordering = ('file_type',)
 
 
-
-
-
 @admin.register(LicenseType)
 class LicenseTypeAdmin(admin.ModelAdmin):
     model = LicenseType
@@ -309,3 +307,26 @@ class UseTypeAdmin(admin.ModelAdmin):
 # class UseRelateAdmin(admin.ModelAdmin):
 #     model = UseRelate
 #     ordering = ('use_type_id',)
+
+@admin.register(XlargeSupplemental)
+class XlargeSupplementalAdmin(admin.ModelAdmin):
+    model = XlargeSupplemental
+    form = XlargeSupplementalForm
+
+    # override the /xlargesupplemental/add/ form
+    def add_view(self,request,extra_context=None):
+        # reset the declared_fields attr to be what it was on load
+        self.form.declared_fields = self.original_declared_fields
+        # set custom flag attributes for admin templates
+        self.opts.xlargesupplemental_change_flag = False
+        self.opts.xlargesupplemental_add_flag = True
+        # turn off alternative save buttons
+        extra_context = extra_context or {}
+        extra_context['show_save_and_continue'] = False
+        return super(XlargeSupplementalAdmin,self).add_view(request, extra_context=extra_context)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # on initialization, set aside declared_fields attribute
+        # so it can be re-applied based on form view
+        self.original_declared_fields = self.form.declared_fields

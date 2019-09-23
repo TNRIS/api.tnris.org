@@ -269,6 +269,10 @@
                 {% for fieldset in adminform %}
                     {% include "admin/includes/resource_fieldset.html" %}
                 {% endfor %}
+              {% elif opts.xlargesupplemental_add_flag %}
+                {% for fieldset in adminform %}
+                    {% include "admin/includes/xlarge_supplemental_fieldset.html" %}
+                {% endfor %}
               {% else %}
                 {% for fieldset in adminform %}
                     {% include "admin/includes/fieldset.html" %}

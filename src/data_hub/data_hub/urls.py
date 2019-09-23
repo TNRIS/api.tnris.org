@@ -34,6 +34,8 @@ urlpatterns = [
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
     path('grappelli/', include('grappelli.urls')), # grappelli URLS
     path('admin/doc/', include('django.contrib.admindocs.urls')), # django admindocs
+    path('admin/lcd/xlargesupplemental/', RedirectView.as_view(url='add/', permanent=False)), # no list view for xlarge supplemental model
+    path('admin/lcd/xlargesupplemental/<int:id>/change/', RedirectView.as_view(url='/admin/lcd/xlargesupplemental/add/', permanent=False)), # no change view for xlarge supplemental model
     path('admin/', admin.site.urls), # admin site
     path('admin', RedirectView.as_view(url='admin/', permanent=False)), # admin site
     path('api/v1/', include('lcd.urls')),

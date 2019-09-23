@@ -59,7 +59,8 @@ class CustomIndexDashboard(Dashboard):
             column=1,
             css_classes=('grp-collapse grp-closed',),
             models=('lcd.models.Resource',
-                    'lcd.models.ResourceType'),
+                    'lcd.models.ResourceType',
+                    'lcd.models.XlargeSupplemental'),
         ))
 
         self.children.append(modules.AppList(

@@ -99,6 +99,15 @@ class CustomIndexDashboard(Dashboard):
                     'tnris_org.models.TnrisGioCalendarEvent'),
         ))
 
+        self.children.append(modules.AppList(
+            title='Contact Forms Config',
+            collapsible=True,
+            column=1,
+            css_classes=('grp-collapse grp-closed',),
+            models=('contact.models.EmailTemplate',
+                    'contact.models.GeneralContact'),
+        ))
+
         # append a recent actions module
         self.children.append(modules.RecentActions(
             title='Recent Actions',

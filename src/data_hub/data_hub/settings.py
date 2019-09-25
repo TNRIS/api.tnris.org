@@ -66,6 +66,7 @@ INSTALLED_APPS = [
     'lore',
     'msd',
     'tnris_org',
+    'contact',
     'corsheaders',
     'django_admin_listfilter_dropdown',
     'django.contrib.contenttypes',

@@ -22,6 +22,7 @@ from .views import resource_update_progress
 import lore
 import msd
 import tnris_org
+import contact
 
 
 router = routers.DefaultRouter(trailing_slash=False)
@@ -38,5 +39,6 @@ urlpatterns = [
     path('resource-update-progress/', resource_update_progress, name='resource-update-progress'),
     path('historical/', include('lore.urls')),
     path('map/', include('msd.urls')),
-    path('tnris_org/', include('tnris_org.urls'))
+    path('tnris_org/', include('tnris_org.urls')),
+    path('contact/', include('contact.urls'))
 ]

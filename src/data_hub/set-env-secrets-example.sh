@@ -4,6 +4,7 @@ export DB_NAME="<database name>"
 export DB_USER="<database user>"
 export DB_HOST="<database host address>"
 export DB_PORT="<database port>"
+export RECAPTCHA_SECRET="<recaptcha secret>"
 export SEO_TOKEN="<prerender.io account token>"
 
 echo "environment variables set!!!"

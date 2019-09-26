@@ -4,10 +4,12 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from urllib.parse import urlparse
 from django.conf import settings
+from django.core.mail import EmailMessage
 import requests
-import os, json
+import os, json, re
 
 from .models import (
+    EmailTemplate,
     GeneralContact
 )
 from .serializers import (
@@ -35,12 +37,56 @@ class CorsPostPermission(AllowAny):
         u = urlparse(request.META['HTTP_REFERER'])
         return u.hostname in self.whitelisted_domains
 
+
+# template-to-model relationship reference.
+# would be best if could be stored in database table, but saving model
+# objects as field values is not obvious
+class FormSubmissionReference:
+    contact = {
+        'serializer': GeneralContactSerializer,
+        'template': EmailTemplate.objects.get(email_template_id='864e1c30-6b6e-44b9-b8f0-0b56b74aa432')
+    }
+
+
 # form submission endpoint
 class SubmitFormViewSet(viewsets.ViewSet):
     """
     Handle form submission
     """
     permission_classes = [CorsPostPermission]
+
+    # inject form values into email template body
+    def compile_email_body(self, template_body, dict):
+        injected = template_body
+        # loop form value keys and replace in template
+        for k in dict.keys():
+            var = "{{%s}}" % k
+            injected = injected.replace(var, dict[k])
+        # replace all template values which weren't in the form (optional form fields)
+        injected = re.sub(r'\{\{.*?\}\}', '', injected)
+        return injected
+
+    # generic function for sending email associated with form submission
+    # emails send to supportsystem to create tickets in the ticketing system
+    # which are ultimately managed by IS, RDC, and StratMap
+    def send_email(self,
+                   subject,
+                   body,
+                   send_from=os.environ.get('MAIL_DEFAULT_FROM'),
+                   send_to=os.environ.get('MAIL_DEFAULT_TO'),
+                   send_bcc=os.environ.get('MAIL_DEFAULT_FROM'),
+                   reply_to='unknown@tnris.org'):
+        email = EmailMessage(
+                    subject,
+                    body,
+                    send_from,
+                    [send_to],
+                    [send_bcc],
+                    reply_to=[reply_to]
+                )
+        email.send(fail_silently=False)
+        return
+
 
     def create(self, request, format=None):
         # if in DEBUG mode, assume local development and use localhost recaptcha secret
@@ -49,13 +95,18 @@ class SubmitFormViewSet(viewsets.ViewSet):
         recaptcha_verify_url = 'https://www.google.com/recaptcha/api/siteverify'
         recaptcha_data = {'secret': recaptcha_secret, 'response': request.data['recaptcha']}
         verify_req = requests.post(url=recaptcha_verify_url, data=recaptcha_data)
+        # get reference dictionary for objects to complete submission
+        ref = getattr(FormSubmissionReference, request.data['form_id'])
         # if recaptcha verification a success, add to database
         if json.loads(verify_req.text)['success']:
             formatted = {k.lower().replace(' ', '_'): v for k, v in request.data.items()}
-            serializer = GeneralContactSerializer(data=formatted)
+            formatted['url'] = request.META['HTTP_REFERER']
+            serializer = ref['serializer'](data=formatted)
             if serializer.is_valid():
                 serializer.save()
-                return Response('Form Subtmitted Successfully!', status=status.HTTP_201_CREATED)
+                body = self.compile_email_body(ref['template'].email_template_body, formatted)
+                self.send_email(ref['template'].email_template_subject, body, reply_to=formatted['email'])
+                return Response('Form Submitted Successfully!', status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response('Recaptcha Verification Failed.', status=status.HTTP_400_BAD_REQUEST)

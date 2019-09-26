@@ -118,13 +118,6 @@ class GeneralContact(models.Model):
         null=True,
         blank=True
     )
-    # email_template = models.ForeignKey(
-    #     'EmailTemplate',
-    #     db_column='email_template_id',
-    #     on_delete=models.CASCADE,
-    #     null=False,
-    #     blank=False
-    # )
     created = models.DateTimeField(
         'Created',
         auto_now_add=True
@@ -135,4 +128,4 @@ class GeneralContact(models.Model):
     )
 
     def __str__(self):
-        return self.name + self.created.strftime('%Y-%m-%d %H:%M')
+        return self.name + " " + self.created.strftime('%Y-%m-%d %H:%M')

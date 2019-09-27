@@ -2,7 +2,6 @@ from rest_framework.permissions import AllowAny
 from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.response import Response
-from urllib.parse import urlparse
 from django.conf import settings
 from django.core.mail import EmailMessage
 import requests, os, json, re, datetime, base64, hmac, hashlib
@@ -35,8 +34,8 @@ class CorsPostPermission(AllowAny):
     ]
 
     def has_permission(self, request, view):
-        u = urlparse(request.META['HTTP_HOST'])
-        return u.hostname in self.whitelisted_domains
+        u = request.META['HTTP_HOST']
+        return u in self.whitelisted_domains
 
 
 # template-to-model relationship reference.
@@ -118,7 +117,7 @@ class ZipPolicyViewSet(viewsets.ViewSet):
     """
     Get zipfile upload policy for s3
     """
-    permission_classes = [AllowAny]
+    permission_classes = [CorsPostPermission]
 
     def list(self, request, format=None):
         # setup options needed to create signature

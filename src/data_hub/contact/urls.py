@@ -20,12 +20,16 @@ from rest_framework.schemas import get_schema_view
 
 from .viewsets import (
     SubmitFormViewSet,
-    ZipPolicyViewSet
+    ZipPolicyViewSet,
+    # ImagePolicyViewSet,
+    # FilePolicyViewSet
 )
 
 router = routers.DefaultRouter(trailing_slash=False)
 router.register(r'submit/?', SubmitFormViewSet, base_name="SubmitForm")
 router.register(r'policy/zip-upload', ZipPolicyViewSet, base_name="ZipPolicy")
+# router.register(r'policy/image-upload', ImagePolicyViewSet, base_name="ImagePolicy")
+# router.register(r'policy/file-upload', FilePolicyViewSet, base_name="FilePolicy")
 
 schema_view = get_swagger_view(title='Contact API')
 

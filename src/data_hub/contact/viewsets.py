@@ -113,6 +113,56 @@ class SubmitFormViewSet(viewsets.ViewSet):
 
 
 # POLICY ENDPOINTS
+def default_policy_opts(length, content_type):
+    # setup options needed to create signature
+    bucket = os.environ.get('S3_UPLOAD_BUCKET')
+    secret = os.environ.get('S3_UPLOAD_SECRET')
+    key = os.environ.get('S3_UPLOAD_KEY')
+    # create time string in UTC zulu time. expire signature in 15 minutes
+    expires = datetime.datetime.utcnow() + datetime.timedelta(minutes=15)
+    expires_formatted = expires.isoformat(timespec='milliseconds') + 'Z'
+    opts = {
+        'length': length,
+        'type': content_type,
+        'expires': expires_formatted,
+        'bucket': bucket,
+        'secret': secret,
+        'key': key,
+        'acl': 'private',
+        'conditions': [
+            ['starts-with', '$success_action_status', ''],
+            ['starts-with', '$success_action_redirect', ''],
+            ['starts-with', '$key', ''],
+            ['starts-with', '$Content-Type', content_type],
+            ['starts-with', '$Content-Length', ''],
+            ['content-length-range', 1, length]
+        ]
+    }
+    return opts
+
+def build_signed_policy(opts):
+    # create base64 policy
+    con = opts['conditions']
+    ext = [{'bucket': opts['bucket']}, {'acl': opts['acl']}]
+    con.extend(ext)
+    policy_data = {
+        'expiration': opts['expires'],
+        'conditions': con
+    }
+    # convert json of policy parameters into string and encode
+    dumped = json.dumps(policy_data)
+    encoded = base64.b64encode(dumped.encode("utf-8"))
+    # create hash signature
+    m = hmac.new(opts['secret'].encode("utf-8"), encoded, hashlib.sha1).digest()
+    hashed = base64.b64encode(m)
+    signed_policy = {
+        'policy': encoded,
+        'signature': hashed,
+        'key': opts['key']
+    }
+    return signed_policy
+
+
 class ZipPolicyViewSet(viewsets.ViewSet):
     """
     Get zipfile upload policy for s3
@@ -120,47 +170,39 @@ class ZipPolicyViewSet(viewsets.ViewSet):
     permission_classes = [CorsPostPermission]
 
     def list(self, request, format=None):
-        # setup options needed to create signature
-        bucket = os.environ.get('S3_UPLOAD_BUCKET')
-        secret = os.environ.get('S3_UPLOAD_SECRET')
-        key = os.environ.get('S3_UPLOAD_KEY')
-        # create time string in UTC zulu time
-        expires = datetime.datetime.utcnow() + datetime.timedelta(minutes=15)
-        expires_formatted = expires.isoformat(timespec='milliseconds') + 'Z'
-        opts = {
-            'length': 20971520,
-            'type': 'application/zip',
-            'expires': expires_formatted,
-            'bucket': bucket,
-            'secret': secret,
-            'key': key,
-            'acl': 'private',
-            'conditions': [
-                ['starts-with', '$success_action_status', ''],
-                ['starts-with', '$success_action_redirect', ''],
-                ['starts-with', '$key', ''],
-                ['starts-with', '$Content-Type', 'application/zip'],
-                ['starts-with', '$Content-Length', ''],
-                ['content-length-range', 1, 20971520] # 20MB
-            ]
-        }
-        # create base64 policy
-        con = opts['conditions']
-        ext = [{'bucket': opts['bucket']}, {'acl': opts['acl']}]
-        con.extend(ext)
-        policy_data = {
-            'expiration': opts['expires'],
-            'conditions': con
-        }
-        # convert json of policy parameters into string and encode
-        dumped = json.dumps(policy_data)
-        encoded = base64.b64encode(dumped.encode("utf-8"))
-        # create hash signature
-        m = hmac.new(opts['secret'].encode("utf-8"), encoded, hashlib.sha1).digest()
-        hashed = base64.b64encode(m)
-        signed_policy = {
-            'policy': encoded,
-            'signature': hashed,
-            'key': opts['key']
-        }
+        try:
+            opts = default_policy_opts(20971520, 'application/zip') # 20MB
+            signed_policy = build_signed_policy(opts)
+        except Exception as e:
+            return Response(e, status=status.HTTP_400_BAD_REQUEST)
+        return Response(signed_policy, status=status.HTTP_201_CREATED)
+
+
+class ImagePolicyViewSet(viewsets.ViewSet):
+    """
+    Get image upload policy for s3
+    """
+    permission_classes = [CorsPostPermission]
+
+    def list(self, request, format=None):
+        try:
+            opts = default_policy_opts(5242880, 'image') # 5MB
+            signed_policy = build_signed_policy(opts)
+        except Exception as e:
+            return Response(e, status=status.HTTP_400_BAD_REQUEST)
+        return Response(signed_policy, status=status.HTTP_201_CREATED)
+
+
+class FilePolicyViewSet(viewsets.ViewSet):
+    """
+    Get generic file upload policy for s3
+    """
+    permission_classes = [CorsPostPermission]
+
+    def list(self, request, format=None):
+        try:
+            opts = default_policy_opts(5242880, '') # 5MB
+            signed_policy = build_signed_policy(opts)
+        except Exception as e:
+            return Response(e, status=status.HTTP_400_BAD_REQUEST)
         return Response(signed_policy, status=status.HTTP_201_CREATED)

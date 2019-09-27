@@ -5,8 +5,7 @@ from rest_framework.response import Response
 from urllib.parse import urlparse
 from django.conf import settings
 from django.core.mail import EmailMessage
-import requests
-import os, json, re
+import requests, os, json, re, datetime, base64, hmac, hashlib
 
 from .models import (
     EmailTemplate,
@@ -26,7 +25,9 @@ class CorsPostPermission(AllowAny):
         'glidden.tnris.org',
         'haish.tnris.org',
         'lake-gallery.tnris.org',
-        'localhost',
+        'localhost:8000',
+        'localhost:8020',
+        'localhost:3000',
         'razor-wire.tnris.org',
         'tnris.org',
         'washburn.tnris.org',
@@ -34,7 +35,7 @@ class CorsPostPermission(AllowAny):
     ]
 
     def has_permission(self, request, view):
-        u = urlparse(request.META['HTTP_REFERER'])
+        u = urlparse(request.META['HTTP_HOST'])
         return u.hostname in self.whitelisted_domains
 
 
@@ -100,7 +101,7 @@ class SubmitFormViewSet(viewsets.ViewSet):
         # if recaptcha verification a success, add to database
         if json.loads(verify_req.text)['success']:
             formatted = {k.lower().replace(' ', '_'): v for k, v in request.data.items()}
-            formatted['url'] = request.META['HTTP_REFERER']
+            formatted['url'] = request.META['HTTP_HOST']
             serializer = ref['serializer'](data=formatted)
             if serializer.is_valid():
                 serializer.save()
@@ -110,3 +111,57 @@ class SubmitFormViewSet(viewsets.ViewSet):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response('Recaptcha Verification Failed.', status=status.HTTP_400_BAD_REQUEST)
+
+
+# POLICY ENDPOINTS
+class ZipPolicyViewSet(viewsets.ViewSet):
+    """
+    Get zipfile upload policy for s3
+    """
+    permission_classes = [AllowAny]
+
+    def list(self, request, format=None):
+        # setup options needed to create signature
+        bucket = os.environ.get('S3_UPLOAD_BUCKET')
+        secret = os.environ.get('S3_UPLOAD_SECRET')
+        key = os.environ.get('S3_UPLOAD_KEY')
+        # create time string in UTC zulu time
+        expires = datetime.datetime.utcnow() + datetime.timedelta(minutes=15)
+        expires_formatted = expires.isoformat(timespec='milliseconds') + 'Z'
+        opts = {
+            'length': 20971520,
+            'type': 'application/zip',
+            'expires': expires_formatted,
+            'bucket': bucket,
+            'secret': secret,
+            'key': key,
+            'acl': 'private',
+            'conditions': [
+                ['starts-with', '$success_action_status', ''],
+                ['starts-with', '$success_action_redirect', ''],
+                ['starts-with', '$key', ''],
+                ['starts-with', '$Content-Type', 'application/zip'],
+                ['starts-with', '$Content-Length', ''],
+                ['content-length-range', 1, 20971520] # 20MB
+            ]
+        }
+        # create base64 policy
+        con = opts['conditions']
+        ext = [{'bucket': opts['bucket']}, {'acl': opts['acl']}]
+        con.extend(ext)
+        policy_data = {
+            'expiration': opts['expires'],
+            'conditions': con
+        }
+        # convert json of policy parameters into string and encode
+        dumped = json.dumps(policy_data)
+        encoded = base64.b64encode(dumped.encode("utf-8"))
+        # create hash signature
+        m = hmac.new(opts['secret'].encode("utf-8"), encoded, hashlib.sha1).digest()
+        hashed = base64.b64encode(m)
+        signed_policy = {
+            'policy': encoded,
+            'signature': hashed,
+            'key': opts['key']
+        }
+        return Response(signed_policy, status=status.HTTP_201_CREATED)

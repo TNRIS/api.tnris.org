@@ -7,11 +7,11 @@ from django.core.mail import EmailMessage
 import requests, os, json, re, datetime, base64, hmac, hashlib
 
 from .models import (
-    EmailTemplate,
-    GeneralContact
+    EmailTemplate
 )
 from .serializers import (
-    GeneralContactSerializer
+    GeneralContactSerializer,
+    TexasImageryServiceContactSerializer
 )
 
 # custom permissions for cors control
@@ -45,6 +45,10 @@ class FormSubmissionReference:
     contact = {
         'serializer': GeneralContactSerializer,
         'template': EmailTemplate.objects.get(email_template_id='864e1c30-6b6e-44b9-b8f0-0b56b74aa432')
+    }
+    google_contact = {
+        'serializer': TexasImageryServiceContactSerializer,
+        'template': EmailTemplate.objects.get(email_template_id='a4c815c4-08bb-4dad-a14f-6b72cc8d6171')
     }
 
 
@@ -96,7 +100,7 @@ class SubmitFormViewSet(viewsets.ViewSet):
         recaptcha_data = {'secret': recaptcha_secret, 'response': request.data['recaptcha']}
         verify_req = requests.post(url=recaptcha_verify_url, data=recaptcha_data)
         # get reference dictionary for objects to complete submission
-        ref = getattr(FormSubmissionReference, request.data['form_id'])
+        ref = getattr(FormSubmissionReference, request.data['form_id'].replace('-', '_'))
         # if recaptcha verification a success, add to database
         if json.loads(verify_req.text)['success']:
             formatted = {k.lower().replace(' ', '_'): v for k, v in request.data.items()}

@@ -58,7 +58,10 @@ class EmailTemplate(models.Model):
 
 
 class GeneralContact(models.Model):
-    """General Contact form on tnris.org"""
+    """
+    General Contact form on tnris.org
+    https://tnris.org/contact/
+    """
 
     class Meta:
         db_table = 'contact_general'
@@ -117,6 +120,77 @@ class GeneralContact(models.Model):
         max_length=50,
         null=True,
         blank=True
+    )
+    created = models.DateTimeField(
+        'Created',
+        auto_now_add=True
+    )
+    last_modified = models.DateTimeField(
+        'Last Modified',
+        auto_now=True
+    )
+
+    def __str__(self):
+        return self.name + " " + self.created.strftime('%Y-%m-%d %H:%M')
+
+
+class TexasImageryServiceContact(models.Model):
+    """
+    Texas Imagery Service Contact form on tnris.org
+    https://tnris.org/texas-imagery-service/
+    """
+
+    class Meta:
+        db_table = 'contact_texasimageryservice'
+        verbose_name = 'Texas Imagery Service Question or Comment'
+        verbose_name_plural = 'Texas Imagery Service Questions or Comments'
+
+    texasimageryservice_contact_id = models.UUIDField(
+        'Texas Imagery Service Contact ID',
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False
+    )
+    name = models.CharField(
+        'Name',
+        max_length=150,
+        null=False,
+        blank=False
+    )
+    reason = models.CharField(
+        'Reason',
+        max_length=80,
+        null=False,
+        blank=False
+    )
+    issue_screenshot = models.URLField(
+        'Issue Screenshot URL',
+        max_length=255,
+        null=True,
+        blank=True
+    )
+    email = models.CharField(
+        'Email',
+        max_length=150,
+        null=False,
+        blank=False
+    )
+    phone = models.CharField(
+        'Phone',
+        max_length=20,
+        null=True,
+        blank=True
+    )
+    government_agency_or_affiliation = models.CharField(
+        'Government Agency or Affiliation',
+        max_length=150,
+        null=True,
+        blank=True
+    )
+    question_or_comments = models.TextField(
+        'Question or Comment',
+        null=False,
+        blank=False
     )
     created = models.DateTimeField(
         'Created',

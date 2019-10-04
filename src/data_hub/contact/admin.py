@@ -1,7 +1,9 @@
 from django.contrib import admin
 from .models import (
     EmailTemplate,
-    GeneralContact
+    GeneralContact,
+    TexasImageryServiceContact,
+    TexasImageryServiceRequest
 )
 # Register your models here.
 @admin.register(EmailTemplate)
@@ -27,6 +29,46 @@ class GeneralContactAdmin(admin.ModelAdmin):
         'organization',
         'industry',
         'question_or_comments',
+        'created'
+    )
+    ordering = ('-created',)
+
+    def get_readonly_fields(self, request, obj=None):
+        if obj:
+            self.readonly_fields = [field.name for field in obj.__class__._meta.fields]
+        return self.readonly_fields
+
+
+@admin.register(TexasImageryServiceContact)
+class TexasImageryServiceContactAdmin(admin.ModelAdmin):
+    model = TexasImageryServiceContact
+    list_display = (
+        'name',
+        'reason',
+        'email',
+        'phone',
+        'government_agency_or_affiliation',
+        'question_or_comments',
+        'created'
+    )
+    ordering = ('-created',)
+
+    def get_readonly_fields(self, request, obj=None):
+        if obj:
+            self.readonly_fields = [field.name for field in obj.__class__._meta.fields]
+        return self.readonly_fields
+
+
+@admin.register(TexasImageryServiceRequest)
+class TexasImageryServiceRequestAdmin(admin.ModelAdmin):
+    model = TexasImageryServiceRequest
+    list_display = (
+        'name',
+        'email',
+        'phone',
+        'organization',
+        'contractor_access',
+        'relevant_project_of_partnership',
         'created'
     )
     ordering = ('-created',)

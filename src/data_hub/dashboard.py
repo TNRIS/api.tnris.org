@@ -105,7 +105,9 @@ class CustomIndexDashboard(Dashboard):
             column=1,
             css_classes=('grp-collapse grp-closed',),
             models=('contact.models.EmailTemplate',
-                    'contact.models.GeneralContact'),
+                    'contact.models.GeneralContact',
+                    'contact.models.TexasImageryServiceContact',
+                    'contact.models.TexasImageryServiceRequest'),
         ))
 
         # append a recent actions module

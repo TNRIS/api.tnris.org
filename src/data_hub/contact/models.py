@@ -161,7 +161,13 @@ class TexasImageryServiceContact(models.Model):
         'Reason',
         max_length=80,
         null=False,
-        blank=False
+        blank=False,
+        default='Feedback/General Inquiry',
+        choices=[
+            ('Feedback/General Inquiry', 'Feedback/General Inquiry'),
+            ('Issue Reporting', 'Issue Reporting')
+        ],
+        help_text="Reason for contacting"
     )
     issue_screenshot = models.URLField(
         'Issue Screenshot URL',
@@ -191,6 +197,156 @@ class TexasImageryServiceContact(models.Model):
         'Question or Comment',
         null=False,
         blank=False
+    )
+    created = models.DateTimeField(
+        'Created',
+        auto_now_add=True
+    )
+    last_modified = models.DateTimeField(
+        'Last Modified',
+        auto_now=True
+    )
+
+    def __str__(self):
+        return self.name + " " + self.created.strftime('%Y-%m-%d %H:%M')
+
+
+class TexasImageryServiceRequest(models.Model):
+    """
+    Texas Imagery Service Request form on tnris.org
+    https://tnris.org/google-request/
+    """
+
+    class Meta:
+        db_table = 'contact_texasimageryservice_request'
+        verbose_name = 'Texas Imagery Service Request'
+        verbose_name_plural = 'Texas Imagery Service Requests'
+
+    texasimageryservice_request_id = models.UUIDField(
+        'Texas Imagery Service Request ID',
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False
+    )
+    name = models.CharField(
+        'Name',
+        max_length=150,
+        null=False,
+        blank=False
+    )
+    email = models.CharField(
+        'Email',
+        max_length=150,
+        null=False,
+        blank=False
+    )    
+    phone = models.CharField(
+        'Phone',
+        max_length=20,
+        null=True,
+        blank=True
+    )
+    organization = models.CharField(
+        'Organization',
+        max_length=150,
+        null=True,
+        blank=True
+    )
+    contractor_access = models.CharField(
+        'Contractor Access',
+        max_length=3,
+        null=True,
+        blank=True,
+        default='No',
+        choices=[
+            ('Yes', 'Yes'),
+            ('No', 'No')
+        ],
+        help_text="Are you requesting access on behalf of a contractor currently under contract with your agency?"
+    )
+    relevant_project_of_partnership = models.CharField(
+        'Relevant Project of Partnership',
+        max_length=150,
+        null=True,
+        blank=True,
+        help_text="Name of project or relevant partnership for which imagery will be used:"
+    )
+    company_name = models.CharField(
+        'Company Name',
+        max_length=150,
+        null=True,
+        blank=True,
+        help_text="Business name of contracting company performing the work:"
+    )
+    name_of_qualifying_agency = models.CharField(
+        'Name of Qualifying Agency',
+        max_length=150,
+        null=True,
+        blank=True,
+        help_text="Name of the qualifying agency for which you are performing work under the project or formal partnership:"
+    )
+    email_of_qualifying_agency = models.CharField(
+        'Email of Qualifying Agency',
+        max_length=150,
+        null=True,
+        blank=True,
+        help_text="Contact email at qualifying agency with which you are formally partnering or performing contracted work:"
+    )
+    anticipated_project_end_date = models.CharField(
+        'Anticipated Project End Date',
+        max_length=150,
+        null=True,
+        blank=True
+    )
+    end_date = models.CharField(
+        'End Date likely to be extended?',
+        max_length=8,
+        null=True,
+        blank=True,
+        default='N/A',
+        choices=[
+            ('N/A', 'N/A'),
+            ('No', 'No'),
+            ('Possible', 'Possible'),
+            ('Likely', 'Likely')
+        ],
+        help_text="Is the anticipated end date likely to be extended?"
+    )
+    best_effort = models.BooleanField(
+        'Best Effort',
+        default=False,
+        help_text="Imagery web services are provided as a ‘best effort’ level service; there is no implied or explicit high availability service-level agreement for the imagery web services."
+    )
+    no_distribution = models.BooleanField(
+        'No Distribution',
+        default=False,
+        help_text="The organization-specific web service URL or other credentials for accessing the imagery as a service may not to be distributed outside of your organization. Usage statistics will be kept to inform the acquisition of future imagery updates and to support sustained funding for the license."
+    )
+    horizontal_accuracy = models.BooleanField(
+        'Horizontal Accuracy',
+        default=False,
+        help_text="Stated horizontal positional accuracy of the imagery is expected to achieve or exceed one meter (CE90) in most areas without significant vertical relief. Higher precision is expected in urban areas, where existing supplemental ground control was more abundant."
+    )
+    datum_transformation = models.BooleanField(
+        'Datum Transformation',
+        default=False,
+        help_text="A datum transformation may be required to achieve the highest level of positional accuracy, especially when reprojecting imagery between NAD27, NAD83, and WGS84-based datums."
+    )
+    contractors = models.BooleanField(
+        'Contractors',
+        default=False,
+        help_text="Contractors or formal partners performing work on behalf of a licensee must apply separately for access to the imagery service if it is to be used outside the immediate licensee's physical facilities or network."
+    )
+    reselling = models.BooleanField(
+        'reselling',
+        default=False,
+        help_text="Imagery files may not be resold, leased, rented or redistributed outside of your immediate organization or used for projects not identified to and approved by TNRIS. Providing mass downloads of any imagery files or derivative works containing the imagery is not permitted."
+    )
+    primary_contact_signature = models.CharField(
+        'Primary Contact Signature',
+        max_length=150,
+        null=True,
+        blank=True
     )
     created = models.DateTimeField(
         'Created',

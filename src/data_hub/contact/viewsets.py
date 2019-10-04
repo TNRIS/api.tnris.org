@@ -11,7 +11,8 @@ from .models import (
 )
 from .serializers import (
     GeneralContactSerializer,
-    TexasImageryServiceContactSerializer
+    TexasImageryServiceContactSerializer,
+    TexasImageryServiceRequestSerializer
 )
 
 # custom permissions for cors control
@@ -49,6 +50,10 @@ class FormSubmissionReference:
     google_contact = {
         'serializer': TexasImageryServiceContactSerializer,
         'template': EmailTemplate.objects.get(email_template_id='a4c815c4-08bb-4dad-a14f-6b72cc8d6171')
+    }
+    google_request = {
+        'serializer': TexasImageryServiceRequestSerializer,
+        'template': EmailTemplate.objects.get(email_template_id='f53fa987-f67e-4660-8173-46dbae12b40c')
     }
 
 

@@ -1,12 +1,17 @@
 from django.contrib import admin
 from .models import (
     EmailTemplate,
+    ForumJobBoardSubmission,
     GeneralContact,
     PosterGallerySubmission,
     TexasImageryServiceContact,
     TexasImageryServiceRequest
 )
-from .filters import PosterGallerySubmissionForumYearFilter
+from .filters import (
+    ForumJobBoardSubmissionForumYearFilter,
+    PosterGallerySubmissionForumYearFilter
+)
+
 # Register your models here.
 @admin.register(EmailTemplate)
 class EmailTemplateAdmin(admin.ModelAdmin):
@@ -18,6 +23,28 @@ class EmailTemplateAdmin(admin.ModelAdmin):
     )
     readonly_fields = ('email_template_id',)
     ordering = ('email_template_type',)
+
+
+@admin.register(ForumJobBoardSubmission)
+class ForumJobBoardSubmissionAdmin(admin.ModelAdmin):
+    model = ForumJobBoardSubmission
+    list_display = (
+        'name',
+        'email',
+        'phone',
+        'organization',
+        'other_notes',
+        'forum_year'
+    )
+    ordering = ('-created',)
+    list_filter = (
+        ForumJobBoardSubmissionForumYearFilter,
+    )
+
+    def get_readonly_fields(self, request, obj=None):
+        if obj:
+            self.readonly_fields = [field.name for field in obj.__class__._meta.fields]
+        return self.readonly_fields
 
 
 @admin.register(GeneralContact)

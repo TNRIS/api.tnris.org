@@ -1,12 +1,19 @@
 from rest_framework import serializers
 
 from .models import (
+    ForumJobBoardSubmission,
     GeneralContact,
     PosterGallerySubmission,
     TexasImageryServiceContact,
     TexasImageryServiceRequest
 )
 
+
+class ForumJobBoardSubmissionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ForumJobBoardSubmission
+        fields = ('__all__')
+        
 
 class GeneralContactSerializer(serializers.ModelSerializer):
     class Meta:

@@ -26,7 +26,8 @@ class EmailTemplate(models.Model):
         'Email Template Type',
         max_length=50,
         null=False,
-        blank=False
+        blank=False,
+        help_text="Layman text/name of Form Submission table/model class."
     )
     email_template_subject = models.CharField(
         'Email Template Subject',
@@ -55,6 +56,75 @@ class EmailTemplate(models.Model):
 """
 *********************** FORM SUBMISSION TABLES *************************
 """
+
+
+class ForumJobBoardSubmission(models.Model):
+    """
+    Forum job board submission form on tnris.org forum pages
+    https://tnris.org/texas-gis-forum/<<year>>/job-board
+    """
+
+    class Meta:
+        db_table = 'contact_forumjobboard_submission'
+        verbose_name = 'Forum Job Board Submission'
+        verbose_name_plural = 'Forum Job Board Submissions'
+
+    forumjobboard_submission_id = models.UUIDField(
+        'Forum Job Board Submission ID',
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False
+    )
+    name = models.CharField(
+        'Name',
+        max_length=150,
+        null=False,
+        blank=False
+    )
+    email = models.CharField(
+        'Email',
+        max_length=150,
+        null=False,
+        blank=False
+    )
+    phone = models.CharField(
+        'Phone',
+        max_length=20,
+        null=True,
+        blank=True
+    )
+    organization = models.CharField(
+        'Organization',
+        max_length=20,
+        null=True,
+        blank=True
+    )
+    job_description_upload = models.URLField(
+        'Job Description Upload URL',
+        max_length=360,
+        null=True,
+        blank=True
+    )
+    other_notes = models.TextField(
+        'Other Notes',
+        null=True,
+        blank=True
+    )
+    created = models.DateTimeField(
+        'Created',
+        auto_now_add=True
+    )
+    last_modified = models.DateTimeField(
+        'Last Modified',
+        auto_now=True
+    )
+
+    @property
+    def forum_year(self):
+        return self.created.strftime("%Y")
+
+    def __str__(self):
+        return self.name + " " + self.created.strftime('%Y-%m-%d %H:%M')
 
 
 class GeneralContact(models.Model):

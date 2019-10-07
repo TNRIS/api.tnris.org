@@ -10,6 +10,7 @@ from .models import (
     EmailTemplate
 )
 from .serializers import (
+    ForumJobBoardSubmissionSerializer,
     GeneralContactSerializer,
     PosterGallerySubmissionSerializer,
     TexasImageryServiceContactSerializer,
@@ -55,6 +56,10 @@ class FormSubmissionReference:
     google_request = {
         'serializer': TexasImageryServiceRequestSerializer,
         'template': EmailTemplate.objects.get(email_template_id='f53fa987-f67e-4660-8173-46dbae12b40c')
+    }
+    jobboard = {
+        'serializer': ForumJobBoardSubmissionSerializer,
+        'template': EmailTemplate.objects.get(email_template_id='6b522cc6-91e1-447a-b6a9-b5e5cc60fd01')
     }
     postergallery = {
         'serializer': PosterGallerySubmissionSerializer,
@@ -114,7 +119,7 @@ class SubmitFormViewSet(viewsets.ViewSet):
         # if recaptcha verification a success, add to database
         if json.loads(verify_req.text)['success']:
             formatted = {k.lower().replace(' ', '_'): v for k, v in request.data.items()}
-            formatted['url'] = request.META['HTTP_HOST']
+            formatted['url'] = request.META['HTTP_REFERER'] if 'HTTP_REFERER' in request.META.keys() else request.META['HTTP_HOST']
             serializer = ref['serializer'](data=formatted)
             if serializer.is_valid():
                 serializer.save()

@@ -134,6 +134,75 @@ class GeneralContact(models.Model):
         return self.name + " " + self.created.strftime('%Y-%m-%d %H:%M')
 
 
+class PosterGallerySubmission(models.Model):
+    """
+    Poster Gallery Submission form on tnris.org
+    https://tnris.org/texas-gis-forum/<<year>>/poster-gallery
+    """
+
+    class Meta:
+        db_table = 'contact_postergallery_submission'
+        verbose_name = 'Poster Gallery Submission'
+        verbose_name_plural = 'Poster Gallery Submissions'
+
+    postergallery_submission_id = models.UUIDField(
+        'Poster Gallery Submission ID',
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False
+    )
+    name = models.CharField(
+        'Name',
+        max_length=150,
+        null=False,
+        blank=False
+    )
+    email = models.CharField(
+        'Email',
+        max_length=150,
+        null=False,
+        blank=False
+    )
+    title = models.CharField(
+        'Title',
+        max_length=300,
+        null=True,
+        blank=True
+    )
+    description = models.TextField(
+        'Description',
+        null=True,
+        blank=True
+    )
+    phone = models.CharField(
+        'Phone',
+        max_length=20,
+        null=True,
+        blank=True
+    )
+    organization = models.CharField(
+        'Organization',
+        max_length=150,
+        null=True,
+        blank=True
+    )
+    created = models.DateTimeField(
+        'Created',
+        auto_now_add=True
+    )
+    last_modified = models.DateTimeField(
+        'Last Modified',
+        auto_now=True
+    )
+
+    @property
+    def forum_year(self):
+        return self.created.strftime("%Y")
+
+    def __str__(self):
+        return self.name + " " + self.created.strftime('%Y-%m-%d %H:%M')
+
+
 class TexasImageryServiceContact(models.Model):
     """
     Texas Imagery Service Contact form on tnris.org

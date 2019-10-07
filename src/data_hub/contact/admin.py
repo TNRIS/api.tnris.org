@@ -2,9 +2,11 @@ from django.contrib import admin
 from .models import (
     EmailTemplate,
     GeneralContact,
+    PosterGallerySubmission,
     TexasImageryServiceContact,
     TexasImageryServiceRequest
 )
+from .filters import PosterGallerySubmissionForumYearFilter
 # Register your models here.
 @admin.register(EmailTemplate)
 class EmailTemplateAdmin(admin.ModelAdmin):
@@ -32,6 +34,27 @@ class GeneralContactAdmin(admin.ModelAdmin):
         'created'
     )
     ordering = ('-created',)
+
+    def get_readonly_fields(self, request, obj=None):
+        if obj:
+            self.readonly_fields = [field.name for field in obj.__class__._meta.fields]
+        return self.readonly_fields
+
+
+@admin.register(PosterGallerySubmission)
+class PosterGallerySubmissionAdmin(admin.ModelAdmin):
+    model = PosterGallerySubmission
+    list_display = (
+        'name',
+        'email',
+        'phone',
+        'title',
+        'forum_year'
+    )
+    ordering = ('-created',)
+    list_filter = (
+        PosterGallerySubmissionForumYearFilter,
+    )
 
     def get_readonly_fields(self, request, obj=None):
         if obj:

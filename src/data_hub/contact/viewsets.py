@@ -11,6 +11,7 @@ from .models import (
 )
 from .serializers import (
     GeneralContactSerializer,
+    PosterGallerySubmissionSerializer,
     TexasImageryServiceContactSerializer,
     TexasImageryServiceRequestSerializer
 )
@@ -54,6 +55,10 @@ class FormSubmissionReference:
     google_request = {
         'serializer': TexasImageryServiceRequestSerializer,
         'template': EmailTemplate.objects.get(email_template_id='f53fa987-f67e-4660-8173-46dbae12b40c')
+    }
+    postergallery = {
+        'serializer': PosterGallerySubmissionSerializer,
+        'template': EmailTemplate.objects.get(email_template_id='3ae57e81-dd3b-4ec0-8e34-a2609579f3c9')
     }
 
 

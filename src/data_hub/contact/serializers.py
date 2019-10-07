@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from .models import (
     GeneralContact,
+    PosterGallerySubmission,
     TexasImageryServiceContact,
     TexasImageryServiceRequest
 )
@@ -10,6 +11,12 @@ from .models import (
 class GeneralContactSerializer(serializers.ModelSerializer):
     class Meta:
         model = GeneralContact
+        fields = ('__all__')
+
+
+class PosterGallerySubmissionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PosterGallerySubmission
         fields = ('__all__')
 
 

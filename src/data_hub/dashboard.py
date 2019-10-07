@@ -106,6 +106,7 @@ class CustomIndexDashboard(Dashboard):
             css_classes=('grp-collapse grp-closed',),
             models=('contact.models.EmailTemplate',
                     'contact.models.GeneralContact',
+                    'contact.models.PosterGallerySubmission',
                     'contact.models.TexasImageryServiceContact',
                     'contact.models.TexasImageryServiceRequest'),
         ))

@@ -3,12 +3,14 @@ from .models import (
     EmailTemplate,
     ForumJobBoardSubmission,
     GeneralContact,
+    GeorodeoCallForPresentationsSubmission,
     PosterGallerySubmission,
     TexasImageryServiceContact,
     TexasImageryServiceRequest
 )
 from .filters import (
     ForumJobBoardSubmissionForumYearFilter,
+    GeorodeoCallForPresentationsSubmissionYearFilter,
     PosterGallerySubmissionForumYearFilter
 )
 
@@ -61,6 +63,29 @@ class GeneralContactAdmin(admin.ModelAdmin):
         'created'
     )
     ordering = ('-created',)
+
+    def get_readonly_fields(self, request, obj=None):
+        if obj:
+            self.readonly_fields = [field.name for field in obj.__class__._meta.fields]
+        return self.readonly_fields
+
+
+@admin.register(GeorodeoCallForPresentationsSubmission)
+class GeorodeoCallForPresentationsSubmissionAdmin(admin.ModelAdmin):
+    model = GeorodeoCallForPresentationsSubmission
+    list_display = (
+        'name',
+        'email',
+        'phone',
+        'organizationtitle',
+        'category',
+        'title',
+        'georodeo_year'
+    )
+    ordering = ('-created',)
+    list_filter = (
+        GeorodeoCallForPresentationsSubmissionYearFilter,
+    )
 
     def get_readonly_fields(self, request, obj=None):
         if obj:

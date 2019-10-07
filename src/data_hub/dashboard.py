@@ -107,6 +107,7 @@ class CustomIndexDashboard(Dashboard):
             models=('contact.models.EmailTemplate',
                     'contact.models.ForumJobBoardSubmission',
                     'contact.models.GeneralContact',
+                    'contact.models.GeorodeoCallForPresentationsSubmission',
                     'contact.models.PosterGallerySubmission',
                     'contact.models.TexasImageryServiceContact',
                     'contact.models.TexasImageryServiceRequest'),

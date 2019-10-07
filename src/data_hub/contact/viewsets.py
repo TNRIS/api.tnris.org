@@ -12,6 +12,7 @@ from .models import (
 from .serializers import (
     ForumJobBoardSubmissionSerializer,
     GeneralContactSerializer,
+    GeorodeoCallForPresentationsSubmissionSerializer,
     PosterGallerySubmissionSerializer,
     TexasImageryServiceContactSerializer,
     TexasImageryServiceRequestSerializer
@@ -48,6 +49,10 @@ class FormSubmissionReference:
     contact = {
         'serializer': GeneralContactSerializer,
         'template': EmailTemplate.objects.get(email_template_id='864e1c30-6b6e-44b9-b8f0-0b56b74aa432')
+    }
+    georodeocfp = {
+        'serializer': GeorodeoCallForPresentationsSubmissionSerializer,
+        'template': EmailTemplate.objects.get(email_template_id='eefab9df-ded0-4bb5-a798-588d5ccf1de5')
     }
     google_contact = {
         'serializer': TexasImageryServiceContactSerializer,

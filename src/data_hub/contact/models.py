@@ -204,6 +204,98 @@ class GeneralContact(models.Model):
         return self.name + " " + self.created.strftime('%Y-%m-%d %H:%M')
 
 
+class GeorodeoCallForPresentationsSubmission(models.Model):
+    """
+    Georodeo Call for Presentations submission form on tnris.org georodeo pages
+    https://tnris.org/georodeo/call-for-presentations
+    """
+
+    class Meta:
+        db_table = 'contact_georodeocallforpresentations_submission'
+        verbose_name = 'Georodeo Call for Presentations Submission'
+        verbose_name_plural = 'Georodeo Call for Presentations Submissions'
+
+    georodeocallforpresentations_submission_id = models.UUIDField(
+        'Georodeo Call for Presentations Submission ID',
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False
+    )
+    name = models.CharField(
+        'Name',
+        max_length=150,
+        null=False,
+        blank=False
+    )
+    organizationtitle = models.CharField(
+        'Organization & Title',
+        max_length=60,
+        null=True,
+        blank=True,
+        help_text="Presenter organizaion name and position title"
+    )
+    email = models.CharField(
+        'Email',
+        max_length=150,
+        null=False,
+        blank=False
+    )
+    phone = models.CharField(
+        'Phone',
+        max_length=20,
+        null=True,
+        blank=True
+    )
+    bio = models.TextField(
+        'Presenter Bio',
+        null=True,
+        blank=True
+    )
+    category = models.CharField(
+        'Category',
+        max_length=100,
+        null=True,
+        blank=True
+    )
+    title = models.CharField(
+        'Title',
+        max_length=100,
+        null=True,
+        blank=True
+    )
+    description = models.TextField(
+        'Description',
+        null=True,
+        blank=True
+    )
+    supplementallink = models.TextField(
+        'Supplemental Link',
+        null=True,
+        blank=True
+    )
+    presenterheadshotphoto = models.URLField(
+        'Presenter Headshot Photo URL',
+        max_length=360,
+        null=True,
+        blank=True
+    )
+    created = models.DateTimeField(
+        'Created',
+        auto_now_add=True
+    )
+    last_modified = models.DateTimeField(
+        'Last Modified',
+        auto_now=True
+    )
+
+    @property
+    def georodeo_year(self):
+        return self.created.strftime("%Y")
+
+    def __str__(self):
+        return self.name + " " + self.created.strftime('%Y-%m-%d %H:%M')
+
+
 class PosterGallerySubmission(models.Model):
     """
     Poster Gallery Submission form on tnris.org

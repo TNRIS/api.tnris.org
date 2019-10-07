@@ -3,6 +3,7 @@ from rest_framework import serializers
 from .models import (
     ForumJobBoardSubmission,
     GeneralContact,
+    GeorodeoCallForPresentationsSubmission,
     PosterGallerySubmission,
     TexasImageryServiceContact,
     TexasImageryServiceRequest
@@ -18,6 +19,12 @@ class ForumJobBoardSubmissionSerializer(serializers.ModelSerializer):
 class GeneralContactSerializer(serializers.ModelSerializer):
     class Meta:
         model = GeneralContact
+        fields = ('__all__')
+
+
+class GeorodeoCallForPresentationsSubmissionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GeorodeoCallForPresentationsSubmission
         fields = ('__all__')
 
 

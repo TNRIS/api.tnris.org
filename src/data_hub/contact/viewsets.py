@@ -14,6 +14,7 @@ from .serializers import (
     GeneralContactSerializer,
     GeorodeoCallForPresentationsSubmissionSerializer,
     GeorodeoRegistrationSerializer,
+    LakesOfTexasContactSerializer,
     PosterGallerySubmissionSerializer,
     TexasImageryServiceContactSerializer,
     TexasImageryServiceRequestSerializer
@@ -83,6 +84,11 @@ class FormSubmissionReference:
         'template': EmailTemplate.objects.get(email_template_id='6b522cc6-91e1-447a-b6a9-b5e5cc60fd01'),
         'external': False
     }
+    lakes_of_texas = {
+        'serializer': LakesOfTexasContactSerializer,
+        'template': EmailTemplate.objects.get(email_template_id='0ba9a0e9-e2bd-4990-9151-bcbada0c9973'),
+        'external': False
+    }
     postergallery = {
         'serializer': PosterGallerySubmissionSerializer,
         'template': EmailTemplate.objects.get(email_template_id='3ae57e81-dd3b-4ec0-8e34-a2609579f3c9'),
@@ -135,7 +141,14 @@ class SubmitFormViewSet(viewsets.ViewSet):
         # otherwise, use product account secret environment variable
         recaptcha_secret = '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe' if settings.DEBUG else os.environ.get('RECAPTCHA_SECRET')
         recaptcha_verify_url = 'https://www.google.com/recaptcha/api/siteverify'
-        recaptcha_data = {'secret': recaptcha_secret, 'response': request.data['recaptcha']}
+        # this 'if' clause is temporary. a fix for lake-gallery issue 139.
+        # after recaptcha is added to the lakes of texas frontend form, this
+        # if/else can go away and the """response: request.data['recaptcha']""" 
+        # should be used for all forms.
+        if request.data['form_id'] != 'lakes-of-texas':
+            recaptcha_data = {'secret': recaptcha_secret, 'response': request.data['recaptcha']}
+        else:
+            recaptcha_data = {'secret': recaptcha_secret, 'response': 'lakesoftexasform'}
         verify_req = requests.post(url=recaptcha_verify_url, data=recaptcha_data)
         # get reference dictionary for objects to complete submission
         ref = getattr(FormSubmissionReference, request.data['form_id'].replace('-', '_'))

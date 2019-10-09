@@ -5,6 +5,7 @@ from .models import (
     GeneralContact,
     GeorodeoCallForPresentationsSubmission,
     GeorodeoRegistration,
+    LakesOfTexasContact,
     PosterGallerySubmission,
     TexasImageryServiceContact,
     TexasImageryServiceRequest
@@ -113,6 +114,24 @@ class GeorodeoRegistrationAdmin(admin.ModelAdmin):
     list_filter = (
         GeorodeoRegistrationYearFilter,
     )
+
+    def get_readonly_fields(self, request, obj=None):
+        if obj:
+            self.readonly_fields = [field.name for field in obj.__class__._meta.fields]
+        return self.readonly_fields
+
+
+@admin.register(LakesOfTexasContact)
+class LakesOfTexasContactAdmin(admin.ModelAdmin):
+    model = LakesOfTexasContact
+    list_display = (
+        'name',
+        'email',
+        'phone',
+        'industry',
+        'message'
+    )
+    ordering = ('-created',)
 
     def get_readonly_fields(self, request, obj=None):
         if obj:

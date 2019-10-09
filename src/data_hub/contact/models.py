@@ -440,6 +440,65 @@ class GeorodeoRegistration(models.Model):
         return self.firstname + " " + self.lastname + " " + self.created.strftime('%Y-%m-%d %H:%M')
 
 
+class LakesOfTexasContact(models.Model):
+    """
+    Lakes of Texas app contact form on lake-gallery.tnris.org
+    https://lake-gallery.tnris.org/about/#Contact
+    """
+
+    class Meta:
+        db_table = 'contact_lakesoftexas'
+        verbose_name = 'Lakes of Texas Question or Comment'
+        verbose_name_plural = 'Lakes of Texas Questions or Comments'
+
+    lakesoftexas_contact_id = models.UUIDField(
+        'Lakes of Texas Contact ID',
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False
+    )
+    name = models.CharField(
+        'Name',
+        max_length=150,
+        null=True,
+        blank=True
+    )
+    email = models.CharField(
+        'Email',
+        max_length=150,
+        null=True,
+        blank=True
+    )
+    phone = models.CharField(
+        'Phone',
+        max_length=20,
+        null=True,
+        blank=True
+    )
+    industry = models.CharField(
+        'Industry',
+        max_length=50,
+        null=True,
+        blank=True
+    )
+    message = models.TextField(
+        'Question or Comment',
+        null=True,
+        blank=True
+    )
+    created = models.DateTimeField(
+        'Created',
+        auto_now_add=True
+    )
+    last_modified = models.DateTimeField(
+        'Last Modified',
+        auto_now=True
+    )
+
+    def __str__(self):
+        return self.name + " " + self.created.strftime('%Y-%m-%d %H:%M')
+
+
 class PosterGallerySubmission(models.Model):
     """
     Poster Gallery Submission form on tnris.org

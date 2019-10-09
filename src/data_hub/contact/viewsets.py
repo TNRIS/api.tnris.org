@@ -10,6 +10,7 @@ from .models import (
     EmailTemplate
 )
 from .serializers import (
+    DataHubContactSerializer,
     ForumJobBoardSubmissionSerializer,
     GeneralContactSerializer,
     GeorodeoCallForPresentationsSubmissionSerializer,
@@ -49,7 +50,7 @@ class CorsPostPermission(AllowAny):
 # objects as field values is not obvious
 class FormSubmissionReference:
     # :::::SAMPLE TEMPLATE:::::
-    # <<form_id>> = {
+    # <<form_id (with underscores replacing dashes)>> = {
     #     'serializer': <<model serializer for saving record>>,
     #     'template': EmailTemplate.objects.get(email_template_id='<<uuid of email template to use for sending email>>'),
     #     'external': <<True or False boolean. True to email send response to submitter. False to email support system and create a ticket>>
@@ -57,6 +58,11 @@ class FormSubmissionReference:
     contact = {
         'serializer': GeneralContactSerializer,
         'template': EmailTemplate.objects.get(email_template_id='864e1c30-6b6e-44b9-b8f0-0b56b74aa432'),
+        'external': False
+    }
+    data_tnris_org_inquiry = {
+        'serializer': DataHubContactSerializer,
+        'template': EmailTemplate.objects.get(email_template_id='2c498d82-a208-4fa6-a77c-6bbb9bb67b55'),
         'external': False
     }
     georodeocfp = {
@@ -162,10 +168,20 @@ class SubmitFormViewSet(viewsets.ViewSet):
                 body = self.compile_email_body(ref['template'].email_template_body, formatted)
                 sender = formatted['email'] if ref['external'] else os.environ.get('MAIL_DEFAULT_TO')
                 self.send_email(ref['template'].email_template_subject, body, send_to=sender, reply_to=formatted['email'])
-                return Response('Form Submitted Successfully!', status=status.HTTP_201_CREATED)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                return Response({
+                        'status': 'success',
+                        'message': 'Form Submitted Successfully!'
+                    }, status=status.HTTP_201_CREATED)
+            return Response({
+                    'status': 'error',
+                    'message': 'Serializer Save Failed.',
+                    'error': serializer.errors
+                }, status=status.HTTP_400_BAD_REQUEST)
         else:
-            return Response('Recaptcha Verification Failed.', status=status.HTTP_400_BAD_REQUEST)
+            return Response({
+                    'status': 'error',
+                    'message': 'Recaptcha Verification Failed.'
+                }, status=status.HTTP_400_BAD_REQUEST)
 
 
 # POLICY ENDPOINTS

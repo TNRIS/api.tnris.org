@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import (
+    DataHubContact,
     EmailTemplate,
     ForumJobBoardSubmission,
     GeneralContact,
@@ -18,6 +19,26 @@ from .filters import (
 )
 
 # Register your models here.
+@admin.register(DataHubContact)
+class DataHubContactAdmin(admin.ModelAdmin):
+    model = DataHubContact
+    list_display = (
+        'name',
+        'email',
+        'collection',
+        'uuid',
+        'category',
+        'software',
+        'message'
+    )
+    ordering = ('-created',)
+
+    def get_readonly_fields(self, request, obj=None):
+        if obj:
+            self.readonly_fields = [field.name for field in obj.__class__._meta.fields]
+        return self.readonly_fields
+
+
 @admin.register(EmailTemplate)
 class EmailTemplateAdmin(admin.ModelAdmin):
     model = EmailTemplate

@@ -58,6 +58,76 @@ class EmailTemplate(models.Model):
 """
 
 
+class DataHubContact(models.Model):
+    """
+    DataHub contact form on data.tnris.org opened collection cards (Dataset Inquiry)
+    https://data.tnris.org/collection/<<collection id>> (Contact Tab)
+    """
+
+    class Meta:
+        db_table = 'contact_datahub'
+        verbose_name = 'DataHub Question or Comment'
+        verbose_name_plural = 'DataHub Questions or Comments'
+
+    datahub_contact_id = models.UUIDField(
+        'General Contact ID',
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False
+    )
+    name = models.CharField(
+        'Name',
+        max_length=150,
+        null=True,
+        blank=True
+    )
+    email = models.CharField(
+        'Email',
+        max_length=150,
+        null=True,
+        blank=True
+    )
+    collection = models.CharField(
+        'Collection Name',
+        max_length=200,
+        null=True,
+        blank=True
+    )
+    uuid = models.UUIDField(
+        'Collection UUID',
+        null=True,
+        blank=True
+    )
+    category = models.CharField(
+        'Category',
+        max_length=350,
+        null=True,
+        blank=True
+    )
+    software = models.CharField(
+        'Software',
+        max_length=100,
+        null=True,
+        blank=True
+    )
+    message = models.TextField(
+        'Question or Comment',
+        null=True,
+        blank=True
+    )
+    created = models.DateTimeField(
+        'Created',
+        auto_now_add=True
+    )
+    last_modified = models.DateTimeField(
+        'Last Modified',
+        auto_now=True
+    )
+
+    def __str__(self):
+        return self.name + " " + self.created.strftime('%Y-%m-%d %H:%M')
+
+
 class ForumJobBoardSubmission(models.Model):
     """
     Forum job board submission form on tnris.org forum pages

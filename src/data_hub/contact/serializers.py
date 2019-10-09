@@ -4,6 +4,7 @@ from .models import (
     ForumJobBoardSubmission,
     GeneralContact,
     GeorodeoCallForPresentationsSubmission,
+    GeorodeoRegistration,
     PosterGallerySubmission,
     TexasImageryServiceContact,
     TexasImageryServiceRequest
@@ -25,6 +26,12 @@ class GeneralContactSerializer(serializers.ModelSerializer):
 class GeorodeoCallForPresentationsSubmissionSerializer(serializers.ModelSerializer):
     class Meta:
         model = GeorodeoCallForPresentationsSubmission
+        fields = ('__all__')
+
+
+class GeorodeoRegistrationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GeorodeoRegistration
         fields = ('__all__')
 
 

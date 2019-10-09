@@ -296,6 +296,150 @@ class GeorodeoCallForPresentationsSubmission(models.Model):
         return self.name + " " + self.created.strftime('%Y-%m-%d %H:%M')
 
 
+class GeorodeoRegistration(models.Model):
+    """
+    Georodeo Registration form on tnris.org georodeo pages
+    https://tnris.org/georodeo/registration
+    """
+
+    class Meta:
+        db_table = 'contact_georodeoregistration'
+        verbose_name = 'Georodeo Registration'
+        verbose_name_plural = 'Georodeo Registrations'
+
+    georodeoregistration_id = models.UUIDField(
+        'Georodeo Registration ID',
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False
+    )
+    firstname = models.CharField(
+        'First Name',
+        max_length=150,
+        null=False,
+        blank=False
+    )
+    lastname = models.CharField(
+        'Last Name',
+        max_length=150,
+        null=False,
+        blank=False
+    )
+    email = models.CharField(
+        'Email',
+        max_length=150,
+        null=False,
+        blank=False
+    )
+    organization = models.CharField(
+        'Organization',
+        max_length=60,
+        null=True,
+        blank=True
+    )
+    title = models.CharField(
+        'Position Title',
+        max_length=60,
+        null=True,
+        blank=True
+    )
+    vegetarian = models.CharField(
+        'Vegetarian',
+        max_length=3,
+        null=True,
+        blank=True,
+        default='No',
+        choices=[
+            ('Yes', 'Yes'),
+            ('No', 'No')
+        ],
+        help_text="Would you like to reserve a vegetarian lunch?"
+    )
+    attendingsocial = models.CharField(
+        'Attending Social',
+        max_length=3,
+        null=True,
+        blank=True,
+        default='No',
+        choices=[
+            ('Yes', 'Yes'),
+            ('No', 'No')
+        ],
+        help_text="Do you plan on attending the post-event social?"
+    )
+    tnrisemails = models.CharField(
+        'TNRIS Emails',
+        max_length=3,
+        null=True,
+        blank=True,
+        default='No',
+        choices=[
+            ('Yes', 'Yes'),
+            ('No', 'No')
+        ],
+        help_text="Would you like to receive emails from TNRIS related to future events?"
+    )
+    partneremails = models.CharField(
+        'Partner Emails',
+        max_length=3,
+        null=True,
+        blank=True,
+        default='No',
+        choices=[
+            ('Yes', 'Yes'),
+            ('No', 'No')
+        ],
+        help_text="Would you like to receive emails from sponsors and partners?"
+    )
+    previouslyattended = models.CharField(
+        'Previously Attended',
+        max_length=3,
+        null=True,
+        blank=True,
+        default='No',
+        choices=[
+            ('Yes', 'Yes'),
+            ('No', 'No')
+        ],
+        help_text="Have you ever attended the GeoRodeo before?"
+    )
+    experience = models.CharField(
+        'Experience Level',
+        max_length=60,
+        null=True,
+        blank=True,
+        default="N/A",
+        help_text="Non-Existent, Beginner, Intermediate, Kind of a Big Deal..., Elite Level Hacker, etc."
+    )
+    tools = models.TextField(
+        'Tools',
+        null=True,
+        blank=True,
+        help_text="What coding languages, tools, and/or libraries do you use?"
+    )
+    expectations = models.TextField(
+        'Expectations',
+        null=True,
+        blank=True,
+        help_text="What do you expect to hear about or learn at the GeoRodeo?"
+    )
+    created = models.DateTimeField(
+        'Created',
+        auto_now_add=True
+    )
+    last_modified = models.DateTimeField(
+        'Last Modified',
+        auto_now=True
+    )
+
+    @property
+    def georodeo_year(self):
+        return self.created.strftime("%Y")
+
+    def __str__(self):
+        return self.firstname + " " + self.lastname + " " + self.created.strftime('%Y-%m-%d %H:%M')
+
+
 class PosterGallerySubmission(models.Model):
     """
     Poster Gallery Submission form on tnris.org

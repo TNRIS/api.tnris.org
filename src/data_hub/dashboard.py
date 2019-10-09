@@ -108,6 +108,7 @@ class CustomIndexDashboard(Dashboard):
                     'contact.models.ForumJobBoardSubmission',
                     'contact.models.GeneralContact',
                     'contact.models.GeorodeoCallForPresentationsSubmission',
+                    'contact.models.GeorodeoRegistration',
                     'contact.models.PosterGallerySubmission',
                     'contact.models.TexasImageryServiceContact',
                     'contact.models.TexasImageryServiceRequest'),

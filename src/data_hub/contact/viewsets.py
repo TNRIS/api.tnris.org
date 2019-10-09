@@ -13,6 +13,7 @@ from .serializers import (
     ForumJobBoardSubmissionSerializer,
     GeneralContactSerializer,
     GeorodeoCallForPresentationsSubmissionSerializer,
+    GeorodeoRegistrationSerializer,
     PosterGallerySubmissionSerializer,
     TexasImageryServiceContactSerializer,
     TexasImageryServiceRequestSerializer
@@ -46,29 +47,46 @@ class CorsPostPermission(AllowAny):
 # would be best if could be stored in database table, but saving model
 # objects as field values is not obvious
 class FormSubmissionReference:
+    # :::::SAMPLE TEMPLATE:::::
+    # <<form_id>> = {
+    #     'serializer': <<model serializer for saving record>>,
+    #     'template': EmailTemplate.objects.get(email_template_id='<<uuid of email template to use for sending email>>'),
+    #     'external': <<True or False boolean. True to email send response to submitter. False to email support system and create a ticket>>
+    # }
     contact = {
         'serializer': GeneralContactSerializer,
-        'template': EmailTemplate.objects.get(email_template_id='864e1c30-6b6e-44b9-b8f0-0b56b74aa432')
+        'template': EmailTemplate.objects.get(email_template_id='864e1c30-6b6e-44b9-b8f0-0b56b74aa432'),
+        'external': False
     }
     georodeocfp = {
         'serializer': GeorodeoCallForPresentationsSubmissionSerializer,
-        'template': EmailTemplate.objects.get(email_template_id='eefab9df-ded0-4bb5-a798-588d5ccf1de5')
+        'template': EmailTemplate.objects.get(email_template_id='eefab9df-ded0-4bb5-a798-588d5ccf1de5'),
+        'external': False
+    }
+    georodeo_regis = {
+        'serializer': GeorodeoRegistrationSerializer,
+        'template': EmailTemplate.objects.get(email_template_id='0374caef-91fe-4cd7-893e-b100f6d8f969'),
+        'external': True
     }
     google_contact = {
         'serializer': TexasImageryServiceContactSerializer,
-        'template': EmailTemplate.objects.get(email_template_id='a4c815c4-08bb-4dad-a14f-6b72cc8d6171')
+        'template': EmailTemplate.objects.get(email_template_id='a4c815c4-08bb-4dad-a14f-6b72cc8d6171'),
+        'external': False
     }
     google_request = {
         'serializer': TexasImageryServiceRequestSerializer,
-        'template': EmailTemplate.objects.get(email_template_id='f53fa987-f67e-4660-8173-46dbae12b40c')
+        'template': EmailTemplate.objects.get(email_template_id='f53fa987-f67e-4660-8173-46dbae12b40c'),
+        'external': False
     }
     jobboard = {
         'serializer': ForumJobBoardSubmissionSerializer,
-        'template': EmailTemplate.objects.get(email_template_id='6b522cc6-91e1-447a-b6a9-b5e5cc60fd01')
+        'template': EmailTemplate.objects.get(email_template_id='6b522cc6-91e1-447a-b6a9-b5e5cc60fd01'),
+        'external': False
     }
     postergallery = {
         'serializer': PosterGallerySubmissionSerializer,
-        'template': EmailTemplate.objects.get(email_template_id='3ae57e81-dd3b-4ec0-8e34-a2609579f3c9')
+        'template': EmailTemplate.objects.get(email_template_id='3ae57e81-dd3b-4ec0-8e34-a2609579f3c9'),
+        'external': False
     }
 
 
@@ -129,7 +147,8 @@ class SubmitFormViewSet(viewsets.ViewSet):
             if serializer.is_valid():
                 serializer.save()
                 body = self.compile_email_body(ref['template'].email_template_body, formatted)
-                self.send_email(ref['template'].email_template_subject, body, reply_to=formatted['email'])
+                sender = formatted['email'] if ref['external'] else os.environ.get('MAIL_DEFAULT_TO')
+                self.send_email(ref['template'].email_template_subject, body, send_to=sender, reply_to=formatted['email'])
                 return Response('Form Submitted Successfully!', status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         else:

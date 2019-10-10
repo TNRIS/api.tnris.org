@@ -222,6 +222,83 @@ class DataHubOrder(models.Model):
         return self.name + " " + self.created.strftime('%Y-%m-%d %H:%M')
 
 
+class DataHubOutsideEntityContact(models.Model):
+    """
+    DataHub contact form on data.tnris.org outside entity cards (Outside Entity Data Inquiry)
+    https://data.tnris.org/collection/<<collection id>> (Contact Tab)
+    """
+
+    class Meta:
+        db_table = 'contact_datahub_outsideentity'
+        verbose_name = 'DataHub Outside Entity Question or Comment'
+        verbose_name_plural = 'DataHub Outside Entity Questions or Comments'
+
+    datahub_outsideentity_id = models.UUIDField(
+        'DataHub Outside Entity Contact ID',
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False
+    )
+    name = models.CharField(
+        'Name',
+        max_length=150,
+        null=True,
+        blank=True
+    )
+    email = models.CharField(
+        'Email',
+        max_length=150,
+        null=True,
+        blank=True
+    )
+    category = models.CharField(
+        'Category',
+        max_length=350,
+        null=True,
+        blank=True
+    )
+    software = models.CharField(
+        'Software',
+        max_length=100,
+        null=True,
+        blank=True
+    )
+    send_to_email = models.CharField(
+        'Sent to Email',
+        max_length=150,
+        null=True,
+        blank=True
+    )
+    send_to_name = models.CharField(
+        'Sent to Name',
+        max_length=150,
+        null=True,
+        blank=True
+    )
+    tnris_link = models.URLField(
+        'TNRIS Outside Entity Card URL',
+        max_length=360,
+        null=True,
+        blank=True
+    )
+    message = models.TextField(
+        'Question or Comment',
+        null=True,
+        blank=True
+    )
+    created = models.DateTimeField(
+        'Created',
+        auto_now_add=True
+    )
+    last_modified = models.DateTimeField(
+        'Last Modified',
+        auto_now=True
+    )
+
+    def __str__(self):
+        return self.name + " " + self.created.strftime('%Y-%m-%d %H:%M')
+
+
 class ForumJobBoardSubmission(models.Model):
     """
     Forum job board submission form on tnris.org forum pages

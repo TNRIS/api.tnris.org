@@ -2,6 +2,7 @@ from django.contrib import admin
 from .models import (
     DataHubContact,
     DataHubOrder,
+    DataHubOutsideEntityContact,
     EmailTemplate,
     ForumJobBoardSubmission,
     GeneralContact,
@@ -41,7 +42,7 @@ class DataHubContactAdmin(admin.ModelAdmin):
 
 
 @admin.register(DataHubOrder)
-class DataHubContactAdmin(admin.ModelAdmin):
+class DataHubOrderAdmin(admin.ModelAdmin):
     model = DataHubOrder
     list_display = (
         'name',
@@ -53,6 +54,27 @@ class DataHubContactAdmin(admin.ModelAdmin):
         'harddrive',
         'delivery',
         'payment',
+        'created'
+    )
+    ordering = ('-created',)
+
+    def get_readonly_fields(self, request, obj=None):
+        if obj:
+            self.readonly_fields = [field.name for field in obj.__class__._meta.fields]
+        return self.readonly_fields
+
+
+@admin.register(DataHubOutsideEntityContact)
+class DataHubOutsideEntityContactAdmin(admin.ModelAdmin):
+    model = DataHubOutsideEntityContact
+    list_display = (
+        'name',
+        'email',
+        'category',
+        'software',
+        'send_to_email',
+        'send_to_name',
+        'message',
         'created'
     )
     ordering = ('-created',)

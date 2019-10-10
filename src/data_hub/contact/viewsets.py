@@ -12,6 +12,7 @@ from .models import (
 from .serializers import (
     DataHubContactSerializer,
     DataHubOrderSerializer,
+    DataHubOutsideEntityContactSerializer,
     ForumJobBoardSubmissionSerializer,
     GeneralContactSerializer,
     GeorodeoCallForPresentationsSubmissionSerializer,
@@ -54,57 +55,62 @@ class FormSubmissionReference:
     # <<form_id (with underscores replacing dashes)>> = {
     #     'serializer': <<model serializer for saving record>>,
     #     'template': EmailTemplate.objects.get(email_template_id='<<uuid of email template to use for sending email>>'),
-    #     'external': <<True or False boolean. True to email send response to submitter. False to email support system and create a ticket>>
+    #     'sendpoint': <<string 'default' to send to ticketing system, otherwise, string of form object key with email address to send to>>
     # }
     contact = {
         'serializer': GeneralContactSerializer,
         'template': EmailTemplate.objects.get(email_template_id='864e1c30-6b6e-44b9-b8f0-0b56b74aa432'),
-        'external': False
+        'sendpoint': 'default'
     }
     data_tnris_org_inquiry = {
         'serializer': DataHubContactSerializer,
         'template': EmailTemplate.objects.get(email_template_id='2c498d82-a208-4fa6-a77c-6bbb9bb67b55'),
-        'external': False
+        'sendpoint': 'default'
     }
     data_tnris_org_order = {
         'serializer': DataHubOrderSerializer,
         'template': EmailTemplate.objects.get(email_template_id='58ec6e8f-94a6-4d87-9fc9-ab6da273ff41'),
-        'external': False
+        'sendpoint': 'default'
+    }
+    data_tnris_org_outside_entity = {
+        'serializer': DataHubOutsideEntityContactSerializer,
+        'template': EmailTemplate.objects.get(email_template_id='5207ac58-9cbc-486d-bac8-7b5872a39bf9'),
+        'sendpoint': 'send_to_email'
     }
     georodeocfp = {
         'serializer': GeorodeoCallForPresentationsSubmissionSerializer,
         'template': EmailTemplate.objects.get(email_template_id='eefab9df-ded0-4bb5-a798-588d5ccf1de5'),
-        'external': False
+        'sendpoint': 'default'
     }
     georodeo_regis = {
         'serializer': GeorodeoRegistrationSerializer,
         'template': EmailTemplate.objects.get(email_template_id='0374caef-91fe-4cd7-893e-b100f6d8f969'),
-        'external': True
+        'sendpoint': 'email'
     }
     google_contact = {
         'serializer': TexasImageryServiceContactSerializer,
         'template': EmailTemplate.objects.get(email_template_id='a4c815c4-08bb-4dad-a14f-6b72cc8d6171'),
-        'external': False
+        'sendpoint': 'default'
     }
     google_request = {
         'serializer': TexasImageryServiceRequestSerializer,
         'template': EmailTemplate.objects.get(email_template_id='f53fa987-f67e-4660-8173-46dbae12b40c'),
-        'external': False
+        'sendpoint': 'default'
     }
     jobboard = {
         'serializer': ForumJobBoardSubmissionSerializer,
         'template': EmailTemplate.objects.get(email_template_id='6b522cc6-91e1-447a-b6a9-b5e5cc60fd01'),
-        'external': False
+        'sendpoint': 'default'
     }
     lakes_of_texas = {
         'serializer': LakesOfTexasContactSerializer,
         'template': EmailTemplate.objects.get(email_template_id='0ba9a0e9-e2bd-4990-9151-bcbada0c9973'),
-        'external': False
+        'sendpoint': 'default'
     }
     postergallery = {
         'serializer': PosterGallerySubmissionSerializer,
         'template': EmailTemplate.objects.get(email_template_id='3ae57e81-dd3b-4ec0-8e34-a2609579f3c9'),
-        'external': False
+        'sendpoint': 'default'
     }
 
 
@@ -172,7 +178,8 @@ class SubmitFormViewSet(viewsets.ViewSet):
             if serializer.is_valid():
                 serializer.save()
                 body = self.compile_email_body(ref['template'].email_template_body, formatted)
-                sender = formatted['email'] if ref['external'] else os.environ.get('MAIL_DEFAULT_TO')
+                # send to ticketing system unless sendpoint has alternative key value in ref
+                sender = os.environ.get('MAIL_DEFAULT_TO') if ref['sendpoint'] == 'default' else formatted[ref['sendpoint']]
                 self.send_email(ref['template'].email_template_subject, body, send_to=sender, reply_to=formatted['email'])
                 return Response({
                         'status': 'success',

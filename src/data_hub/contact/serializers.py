@@ -3,6 +3,7 @@ from rest_framework import serializers
 from .models import (
     DataHubContact,
     DataHubOrder,
+    DataHubOutsideEntityContact,
     ForumJobBoardSubmission,
     GeneralContact,
     GeorodeoCallForPresentationsSubmission,
@@ -23,6 +24,12 @@ class DataHubContactSerializer(serializers.ModelSerializer):
 class DataHubOrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = DataHubOrder
+        fields = ('__all__')
+
+
+class DataHubOutsideEntityContactSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DataHubOutsideEntityContact
         fields = ('__all__')
 
         

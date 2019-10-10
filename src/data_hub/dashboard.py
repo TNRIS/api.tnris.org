@@ -106,6 +106,7 @@ class CustomIndexDashboard(Dashboard):
             css_classes=('grp-collapse grp-closed',),
             models=('contact.models.DataHubContact',
                     'contact.models.DataHubOrder',
+                    'contact.models.DataHubOutsideEntityContact',
                     'contact.models.EmailTemplate',
                     'contact.models.ForumJobBoardSubmission',
                     'contact.models.GeneralContact',

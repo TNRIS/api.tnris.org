@@ -18,6 +18,7 @@ from .serializers import (
     GeorodeoCallForPresentationsSubmissionSerializer,
     GeorodeoRegistrationSerializer,
     LakesOfTexasContactSerializer,
+    OrderMapSerializer,
     PosterGallerySubmissionSerializer,
     TexasImageryServiceContactSerializer,
     TexasImageryServiceRequestSerializer
@@ -107,6 +108,11 @@ class FormSubmissionReference:
         'template': EmailTemplate.objects.get(email_template_id='0ba9a0e9-e2bd-4990-9151-bcbada0c9973'),
         'sendpoint': 'default'
     }
+    order_map = {
+        'serializer': OrderMapSerializer,
+        'template': EmailTemplate.objects.get(email_template_id='dab3de9a-2fa4-410c-ac1f-845ceff5b913'),
+        'sendpoint': 'default'
+    }
     postergallery = {
         'serializer': PosterGallerySubmissionSerializer,
         'template': EmailTemplate.objects.get(email_template_id='3ae57e81-dd3b-4ec0-8e34-a2609579f3c9'),
@@ -127,7 +133,7 @@ class SubmitFormViewSet(viewsets.ViewSet):
         # loop form value keys and replace in template
         for k in dict.keys():
             var = "{{%s}}" % k
-            injected = injected.replace(var, dict[k])
+            injected = injected.replace(var, str(dict[k]))
         # replace all template values which weren't in the form (optional form fields)
         injected = re.sub(r'\{\{.*?\}\}', '', injected)
         return injected

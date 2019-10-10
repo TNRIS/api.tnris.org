@@ -113,6 +113,7 @@ class CustomIndexDashboard(Dashboard):
                     'contact.models.GeorodeoCallForPresentationsSubmission',
                     'contact.models.GeorodeoRegistration',
                     'contact.models.LakesOfTexasContact',
+                    'contact.models.OrderMap',
                     'contact.models.PosterGallerySubmission',
                     'contact.models.TexasImageryServiceContact',
                     'contact.models.TexasImageryServiceRequest'),

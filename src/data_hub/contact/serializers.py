@@ -9,6 +9,7 @@ from .models import (
     GeorodeoCallForPresentationsSubmission,
     GeorodeoRegistration,
     LakesOfTexasContact,
+    OrderMap,
     PosterGallerySubmission,
     TexasImageryServiceContact,
     TexasImageryServiceRequest
@@ -60,6 +61,12 @@ class GeorodeoRegistrationSerializer(serializers.ModelSerializer):
 class LakesOfTexasContactSerializer(serializers.ModelSerializer):
     class Meta:
         model = LakesOfTexasContact
+        fields = ('__all__')
+
+
+class OrderMapSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrderMap
         fields = ('__all__')
 
 

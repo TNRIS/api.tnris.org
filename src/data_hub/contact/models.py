@@ -416,7 +416,7 @@ class GeneralContact(models.Model):
     )
     organization = models.CharField(
         'Organization',
-        max_length=20,
+        max_length=100,
         null=True,
         blank=True
     )
@@ -724,6 +724,263 @@ class LakesOfTexasContact(models.Model):
     )
     message = models.TextField(
         'Question or Comment',
+        null=True,
+        blank=True
+    )
+    created = models.DateTimeField(
+        'Created',
+        auto_now_add=True
+    )
+    last_modified = models.DateTimeField(
+        'Last Modified',
+        auto_now=True
+    )
+
+    def __str__(self):
+        return self.name + " " + self.created.strftime('%Y-%m-%d %H:%M')
+
+
+class OrderMap(models.Model):
+    """
+    Order Map form on tnris.org
+    https://tnris.org/order-map
+    """
+
+    class Meta:
+        db_table = 'contact_ordermap'
+        verbose_name = 'Map Order'
+        verbose_name_plural = 'Map Orders'
+
+    map_order_id = models.UUIDField(
+        'Map Order ID',
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False
+    )
+    # Federal Print fields
+    map_option = models.CharField(
+        'Map Option',
+        max_length=10,
+        null=True,
+        blank=True,
+        choices=[
+            ('USGS', 'USGS'),
+            ('NWI', 'NWI'),
+            ('FEMA', 'FEMA')
+        ],
+        help_text="For Federal Prints only."
+    )
+    map_description = models.TextField(
+        'Map Description',
+        null=True,
+        blank=True,
+        help_text="List all quads/panels and specify quantity for each map. For Federal Prints only."
+    )
+    # Pre-made Map fields
+    map_collection_name = models.CharField(
+        'Map Collection Name',
+        max_length=300,
+        null=True,
+        blank=True,
+        help_text="For Pre-made Maps only."
+    )
+    map_sheet = models.CharField(
+        'Map Sheet',
+        max_length=300,
+        null=True,
+        blank=True,
+        help_text="For Pre-made Maps only."
+    )
+    legislative_request = models.BooleanField(
+        'Legislative Request?',
+        default=False,
+        help_text="For Pre-made Maps only."
+    )
+    # Custom Map Fields
+    map_size = models.CharField(
+        'Map Size',
+        max_length=20,
+        null=True,
+        blank=True,
+        choices=[
+            ('8.5_by_11', '8.5_by_11'),
+            ('11_by_17', '11_by_17'),
+            ('24_by_24', '24_by_24'),
+            ('24_by_28', '24_by_28'),
+            ('30_by_30', '30_by_30'),
+            ('36_by_36', '36_by_36'),
+            ('60_by_60', '60_by_60'),
+            ('custom_xlarge', 'custom_xlarge')
+        ],
+        help_text="For Custom Maps only."
+    )
+    custom_map_size = models.CharField(
+        'Custom Map Size',
+        max_length=100,
+        null=True,
+        blank=True,
+        help_text="Custom sizes requests are only accepted for sizes greater than 60 x 60. For Custom Maps only."
+    )
+    map_scale = models.CharField(
+        'Map Scale',
+        max_length=100,
+        null=True,
+        blank=True,
+        help_text="For Custom Maps only."
+    )
+    map_title = models.CharField(
+        'Map Title',
+        max_length=200,
+        null=True,
+        blank=True,
+        help_text="For Custom Maps only."
+    )
+    map_date = models.CharField(
+        'Map Date',
+        max_length=100,
+        null=True,
+        blank=True,
+        help_text="For Custom Maps only."
+    )
+    # General Info/Shared Fields
+    type_of_data = models.CharField(
+        'Type of Data',
+        max_length=25,
+        null=True,
+        blank=True,
+        default='Maps',
+         choices=[
+            ('N/A', 'N/A'),
+            ('Maps', 'Maps')
+        ]
+    )
+    type_of_map = models.CharField(
+        'Type of Map',
+        max_length=20,
+        null=True,
+        blank=True,
+        choices=[
+            ('Federal Print', 'Federal Print'),
+            ('Pre-Made Print', 'Pre-Made Print'),
+            ('Custom', 'Custom')
+        ]
+    )
+    additional_info = models.TextField(
+        'Additional Info',
+        null=True,
+        blank=True
+    )
+    name = models.CharField(
+        'Name',
+        max_length=150,
+        null=True,
+        blank=True
+    )
+    organization = models.CharField(
+        'Organization',
+        max_length=100,
+        null=True,
+        blank=True
+    )
+    industry = models.CharField(
+        'Industry',
+        max_length=50,
+        null=True,
+        blank=True
+    )
+    industry_other = models.CharField(
+        'Industry (Other)',
+        max_length=50,
+        null=True,
+        blank=True
+    )
+    address_1 = models.CharField(
+        'Address 1',
+        max_length=150,
+        null=True,
+        blank=True
+    )
+    address_2 = models.CharField(
+        'Address 2',
+        max_length=150,
+        null=True,
+        blank=True
+    )
+    city = models.CharField(
+        'City',
+        max_length=75,
+        null=True,
+        blank=True
+    )
+    state = models.CharField(
+        'State',
+        max_length=50,
+        null=True,
+        blank=True
+    )
+    zip = models.CharField(
+        'Zip',
+        max_length=15,
+        null=True,
+        blank=True
+    )
+    email = models.CharField(
+        'Email',
+        max_length=150,
+        null=True,
+        blank=True
+    )
+    phone = models.CharField(
+        'Phone',
+        max_length=20,
+        null=True,
+        blank=True
+    )
+    fax = models.CharField(
+        'Fax',
+        max_length=20,
+        null=True,
+        blank=True
+    )
+    delivery_method = models.CharField(
+        'Delivery Method',
+        max_length=30,
+        null=True,
+        blank=True,
+        choices=[
+            ('Digital Download', 'Digital Download'),
+            ('USPS', 'USPS'),
+            ('FedEx', 'FedEx'),
+            ('FedEx Customer Charged', 'FedEx Customer Charged')
+        ]
+    )
+    fedex_customer_number = models.CharField(
+        'FedEx Customer Number',
+        max_length=100,
+        null=True,
+        blank=True
+    )
+    payment_method = models.CharField(
+        'Payment Method',
+        max_length=30,
+        null=True,
+        blank=True,
+        choices=[
+            ('Credit Card', 'Credit Card'),
+            ('Check', 'Check'),
+            ('Pay at Pickup', 'Pay at Pickup'),
+            ('Purchase Order', 'Purchase Order')
+        ]
+    )
+    check_number = models.CharField(
+        'Check Number',
+        max_length=60,
+        null=True,
+        blank=True
+    )
+    purchase_order_number = models.CharField(
+        'Purchase Order Number',
+        max_length=60,
         null=True,
         blank=True
     )

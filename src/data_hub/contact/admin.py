@@ -32,7 +32,8 @@ class DataHubContactAdmin(admin.ModelAdmin):
         'uuid',
         'category',
         'software',
-        'message'
+        'message',
+        'created'
     )
     ordering = ('-created',)
 
@@ -107,7 +108,8 @@ class ForumJobBoardSubmissionAdmin(admin.ModelAdmin):
         'phone',
         'organization',
         'other_notes',
-        'forum_year'
+        'forum_year',
+        'created'
     )
     ordering = ('-created',)
     list_filter = (
@@ -131,6 +133,7 @@ class GeneralContactAdmin(admin.ModelAdmin):
         'organization',
         'industry',
         'question_or_comments',
+        'created',
         'created'
     )
     ordering = ('-created',)
@@ -151,6 +154,7 @@ class GeorodeoCallForPresentationsSubmissionAdmin(admin.ModelAdmin):
         'organizationtitle',
         'category',
         'title',
+        'created',
         'georodeo_year'
     )
     ordering = ('-created',)
@@ -176,6 +180,7 @@ class GeorodeoRegistrationAdmin(admin.ModelAdmin):
         'attendingsocial',
         'previouslyattended',
         'experience',
+        'created',
         'georodeo_year'
     )
     ordering = ('-created',)
@@ -197,7 +202,8 @@ class LakesOfTexasContactAdmin(admin.ModelAdmin):
         'email',
         'phone',
         'industry',
-        'message'
+        'message',
+        'created'
     )
     ordering = ('-created',)
 
@@ -219,7 +225,8 @@ class LakesOfTexasContactAdmin(admin.ModelAdmin):
         'email',
         'phone',
         'delivery_method',
-        'payment_method'
+        'payment_method',
+        'created'
     )
     ordering = ('-created',)
     fieldsets = (
@@ -281,6 +288,7 @@ class PosterGallerySubmissionAdmin(admin.ModelAdmin):
         'email',
         'phone',
         'title',
+        'created',
         'forum_year'
     )
     ordering = ('-created',)

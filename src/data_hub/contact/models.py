@@ -776,7 +776,7 @@ class OrderMap(models.Model):
         blank=True,
         help_text="List all quads/panels and specify quantity for each map. For Federal Prints only."
     )
-    # Pre-made Map fields
+    # Pre-Made Map fields
     map_collection_name = models.CharField(
         'Map Collection Name',
         max_length=300,

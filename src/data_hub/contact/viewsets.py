@@ -11,6 +11,7 @@ from .models import (
 )
 from .serializers import (
     DataHubContactSerializer,
+    DataHubOrderSerializer,
     ForumJobBoardSubmissionSerializer,
     GeneralContactSerializer,
     GeorodeoCallForPresentationsSubmissionSerializer,
@@ -63,6 +64,11 @@ class FormSubmissionReference:
     data_tnris_org_inquiry = {
         'serializer': DataHubContactSerializer,
         'template': EmailTemplate.objects.get(email_template_id='2c498d82-a208-4fa6-a77c-6bbb9bb67b55'),
+        'external': False
+    }
+    data_tnris_org_order = {
+        'serializer': DataHubOrderSerializer,
+        'template': EmailTemplate.objects.get(email_template_id='58ec6e8f-94a6-4d87-9fc9-ab6da273ff41'),
         'external': False
     }
     georodeocfp = {

@@ -1,6 +1,7 @@
 from django.contrib import admin
 from .models import (
     DataHubContact,
+    DataHubOrder,
     EmailTemplate,
     ForumJobBoardSubmission,
     GeneralContact,
@@ -30,6 +31,29 @@ class DataHubContactAdmin(admin.ModelAdmin):
         'category',
         'software',
         'message'
+    )
+    ordering = ('-created',)
+
+    def get_readonly_fields(self, request, obj=None):
+        if obj:
+            self.readonly_fields = [field.name for field in obj.__class__._meta.fields]
+        return self.readonly_fields
+
+
+@admin.register(DataHubOrder)
+class DataHubContactAdmin(admin.ModelAdmin):
+    model = DataHubOrder
+    list_display = (
+        'name',
+        'email',
+        'phone',
+        'address',
+        'organization',
+        'industry',
+        'harddrive',
+        'delivery',
+        'payment',
+        'created'
     )
     ordering = ('-created',)
 

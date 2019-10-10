@@ -70,7 +70,7 @@ class DataHubContact(models.Model):
         verbose_name_plural = 'DataHub Questions or Comments'
 
     datahub_contact_id = models.UUIDField(
-        'General Contact ID',
+        'DataHub Contact ID',
         primary_key=True,
         default=uuid.uuid4,
         editable=False
@@ -112,6 +112,100 @@ class DataHubContact(models.Model):
     )
     message = models.TextField(
         'Question or Comment',
+        null=True,
+        blank=True
+    )
+    created = models.DateTimeField(
+        'Created',
+        auto_now_add=True
+    )
+    last_modified = models.DateTimeField(
+        'Last Modified',
+        auto_now=True
+    )
+
+    def __str__(self):
+        return self.name + " " + self.created.strftime('%Y-%m-%d %H:%M')
+
+
+class DataHubOrder(models.Model):
+    """
+    DataHub order cart form on data.tnris.org (Dataset Order)
+    https://data.tnris.org/cart/
+    """
+
+    class Meta:
+        db_table = 'contact_datahub_order'
+        verbose_name = 'DataHub Order'
+        verbose_name_plural = 'DataHub Orders'
+
+    datahub_order_id = models.UUIDField(
+        'DataHub Order ID',
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False
+    )
+    name = models.CharField(
+        'Name',
+        max_length=150,
+        null=True,
+        blank=True
+    )
+    email = models.CharField(
+        'Email',
+        max_length=150,
+        null=True,
+        blank=True
+    )
+    phone = models.CharField(
+        'Phone',
+        max_length=20,
+        null=True,
+        blank=True
+    )
+    address = models.CharField(
+        'Address',
+        max_length=250,
+        null=True,
+        blank=True
+    )
+    organization = models.CharField(
+        'Organization',
+        max_length=60,
+        null=True,
+        blank=True
+    )
+    industry = models.CharField(
+        'Industry',
+        max_length=50,
+        null=True,
+        blank=True
+    )
+    harddrive = models.CharField(
+        'Hard Drive',
+        max_length=50,
+        null=True,
+        blank=True
+    )
+    delivery = models.CharField(
+        'Delivery Method',
+        max_length=50,
+        null=True,
+        blank=True
+    )
+    payment = models.CharField(
+        'Payment',
+        max_length=50,
+        null=True,
+        blank=True
+    )
+    notes = models.TextField(
+        'Notes',
+        null=True,
+        blank=True
+    )
+    order = models.TextField(
+        'Order',
         null=True,
         blank=True
     )

@@ -1160,6 +1160,7 @@ class TexasImageryServiceRequest(models.Model):
         default=uuid.uuid4,
         editable=False
     )
+    # Form fields - Submitted information
     name = models.CharField(
         'Name',
         max_length=150,
@@ -1174,23 +1175,22 @@ class TexasImageryServiceRequest(models.Model):
     )    
     phone = models.CharField(
         'Phone',
-        max_length=20,
+        max_length=35,
         null=True,
         blank=True
     )
     organization = models.CharField(
         'Organization',
-        max_length=150,
+        max_length=200,
         null=True,
         blank=True
     )
     contractor_access = models.CharField(
         'Contractor Access',
         max_length=3,
-        null=True,
-        blank=True,
-        default='No',
+        default='N/A',
         choices=[
+            ('N/A', 'N/A'),
             ('Yes', 'Yes'),
             ('No', 'No')
         ],
@@ -1198,7 +1198,7 @@ class TexasImageryServiceRequest(models.Model):
     )
     relevant_project_of_partnership = models.CharField(
         'Relevant Project of Partnership',
-        max_length=150,
+        max_length=250,
         null=True,
         blank=True,
         help_text="Name of project or relevant partnership for which imagery will be used:"
@@ -1233,8 +1233,6 @@ class TexasImageryServiceRequest(models.Model):
     end_date = models.CharField(
         'End Date likely to be extended?',
         max_length=8,
-        null=True,
-        blank=True,
         default='N/A',
         choices=[
             ('N/A', 'N/A'),
@@ -1279,6 +1277,51 @@ class TexasImageryServiceRequest(models.Model):
         max_length=150,
         null=True,
         blank=True
+    )
+    # Internal Management fields
+    username = models.CharField(
+        'Username',
+        max_length=80,
+        null=True,
+        blank=True
+    )
+    password = models.CharField(
+        'Password',
+        max_length=80,
+        null=True,
+        blank=True
+    )
+    credentialed_url = models.URLField(
+        'Credentialed URL',
+        max_length=200,
+        null=True,
+        blank=True
+    )
+    non_credentialed_wmts_link = models.URLField(
+        'Non-Credentialed WMTS Link',
+        max_length=200,
+        null=True,
+        blank=True
+    )
+    non_credentialed_wms_link = models.URLField(
+        'Non-Credentialed WMS Link',
+        max_length=200,
+        null=True,
+        blank=True
+    )
+    comment = models.TextField(
+        'Comment',
+        null=True,
+        blank=True
+    )
+    notes = models.TextField(
+        'Notes',
+        null=True,
+        blank=True
+    )
+    active = models.BooleanField(
+        'Active?',
+        default=False,
     )
     created = models.DateTimeField(
         'Created',

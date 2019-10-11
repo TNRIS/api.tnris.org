@@ -326,17 +326,56 @@ class TexasImageryServiceContactAdmin(admin.ModelAdmin):
 class TexasImageryServiceRequestAdmin(admin.ModelAdmin):
     model = TexasImageryServiceRequest
     list_display = (
+        'organization',
+        'active',
         'name',
         'email',
         'phone',
-        'organization',
         'contractor_access',
         'relevant_project_of_partnership',
+        'non_credentialed_wmts_link',
+        'non_credentialed_wms_link',
         'created'
     )
-    ordering = ('-created',)
+    ordering = ('organization',)
+    readonly_fields = ('best_effort',
+                       'no_distribution',
+                       'horizontal_accuracy',
+                       'datum_transformation',
+                       'contractors',
+                       'reselling')
 
-    def get_readonly_fields(self, request, obj=None):
-        if obj:
-            self.readonly_fields = [field.name for field in obj.__class__._meta.fields]
-        return self.readonly_fields
+    fieldsets = (
+        ('Submitted Request', {
+            'classes': ('grp-collapse',),
+            'fields': ('name',
+                    'email',
+                    'phone',
+                    'organization',
+                    'contractor_access',
+                    'relevant_project_of_partnership',
+                    'company_name',
+                    'name_of_qualifying_agency',
+                    'email_of_qualifying_agency',
+                    'anticipated_project_end_date',
+                    'end_date',
+                    'primary_contact_signature',
+                    'best_effort',
+                    'no_distribution',
+                    'horizontal_accuracy',
+                    'datum_transformation',
+                    'contractors',
+                    'reselling')
+        }),
+        ('Internal Management', {
+            'classes': ('grp-collapse grp-closed',),
+            'fields': ('username',
+                    'password',
+                    'credentialed_url',
+                    'non_credentialed_wmts_link',
+                    'non_credentialed_wms_link',
+                    'comment',
+                    'notes',
+                    'active')
+        })
+    )

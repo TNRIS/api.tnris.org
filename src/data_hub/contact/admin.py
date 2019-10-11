@@ -342,6 +342,8 @@ class TexasImageryServiceRequestAdmin(admin.ModelAdmin):
                        'datum_transformation',
                        'contractors',
                        'reselling')
+    list_filter = ('active','contractor_access')
+    search_fields = ('organization', 'name', 'email', 'non_credentialed_wms_link', 'comment', 'notes')
 
     fieldsets = (
         ('Submitted Request', {

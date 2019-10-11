@@ -29,6 +29,27 @@ class EmailTemplate(models.Model):
         blank=False,
         help_text="Layman text/name of Form Submission table/model class."
     )
+    form_id = models.CharField(
+        'Form ID',
+        max_length=40,
+        null=False,
+        blank=False,
+        unique=True,
+        help_text="'forum_id' value from form submission object."
+    )
+    sendpoint = models.CharField(
+        'Sendpoint',
+        max_length=20,
+        null=False,
+        blank=False,
+        default='default',
+        choices=[
+            ('default', 'default'),
+            ('email', 'email'),
+            ('send_to_email', 'send_to_email')
+        ],
+        help_text="'default' to send to ticketing system. otherwise, form object key with email address to send to."
+    )
     email_template_subject = models.CharField(
         'Email Template Subject',
         max_length=100,

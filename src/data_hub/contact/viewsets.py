@@ -54,69 +54,43 @@ class CorsPostPermission(AllowAny):
 class FormSubmissionReference:
     # :::::SAMPLE TEMPLATE:::::
     # <<form_id (with underscores replacing dashes)>> = {
-    #     'serializer': <<model serializer for saving record>>,
-    #     'template': EmailTemplate.objects.get(email_template_id='<<uuid of email template to use for sending email>>'),
-    #     'sendpoint': <<string 'default' to send to ticketing system, otherwise, string of form object key with email address to send to>>
+    #     'serializer': <<model serializer for saving record>>
     # }
     contact = {
-        'serializer': GeneralContactSerializer,
-        'template': EmailTemplate.objects.get(email_template_id='864e1c30-6b6e-44b9-b8f0-0b56b74aa432'),
-        'sendpoint': 'default'
+        'serializer': GeneralContactSerializer
     }
     data_tnris_org_inquiry = {
-        'serializer': DataHubContactSerializer,
-        'template': EmailTemplate.objects.get(email_template_id='2c498d82-a208-4fa6-a77c-6bbb9bb67b55'),
-        'sendpoint': 'default'
+        'serializer': DataHubContactSerializer
     }
     data_tnris_org_order = {
-        'serializer': DataHubOrderSerializer,
-        'template': EmailTemplate.objects.get(email_template_id='58ec6e8f-94a6-4d87-9fc9-ab6da273ff41'),
-        'sendpoint': 'default'
+        'serializer': DataHubOrderSerializer
     }
     data_tnris_org_outside_entity = {
-        'serializer': DataHubOutsideEntityContactSerializer,
-        'template': EmailTemplate.objects.get(email_template_id='5207ac58-9cbc-486d-bac8-7b5872a39bf9'),
-        'sendpoint': 'send_to_email'
+        'serializer': DataHubOutsideEntityContactSerializer
     }
     georodeocfp = {
-        'serializer': GeorodeoCallForPresentationsSubmissionSerializer,
-        'template': EmailTemplate.objects.get(email_template_id='eefab9df-ded0-4bb5-a798-588d5ccf1de5'),
-        'sendpoint': 'default'
+        'serializer': GeorodeoCallForPresentationsSubmissionSerializer
     }
     georodeo_regis = {
-        'serializer': GeorodeoRegistrationSerializer,
-        'template': EmailTemplate.objects.get(email_template_id='0374caef-91fe-4cd7-893e-b100f6d8f969'),
-        'sendpoint': 'email'
+        'serializer': GeorodeoRegistrationSerializer
     }
     google_contact = {
-        'serializer': TexasImageryServiceContactSerializer,
-        'template': EmailTemplate.objects.get(email_template_id='a4c815c4-08bb-4dad-a14f-6b72cc8d6171'),
-        'sendpoint': 'default'
+        'serializer': TexasImageryServiceContactSerializer
     }
     google_request = {
-        'serializer': TexasImageryServiceRequestSerializer,
-        'template': EmailTemplate.objects.get(email_template_id='f53fa987-f67e-4660-8173-46dbae12b40c'),
-        'sendpoint': 'default'
+        'serializer': TexasImageryServiceRequestSerializer
     }
     jobboard = {
-        'serializer': ForumJobBoardSubmissionSerializer,
-        'template': EmailTemplate.objects.get(email_template_id='6b522cc6-91e1-447a-b6a9-b5e5cc60fd01'),
-        'sendpoint': 'default'
+        'serializer': ForumJobBoardSubmissionSerializer
     }
     lakes_of_texas = {
-        'serializer': LakesOfTexasContactSerializer,
-        'template': EmailTemplate.objects.get(email_template_id='0ba9a0e9-e2bd-4990-9151-bcbada0c9973'),
-        'sendpoint': 'default'
+        'serializer': LakesOfTexasContactSerializer
     }
     order_map = {
-        'serializer': OrderMapSerializer,
-        'template': EmailTemplate.objects.get(email_template_id='dab3de9a-2fa4-410c-ac1f-845ceff5b913'),
-        'sendpoint': 'default'
+        'serializer': OrderMapSerializer
     }
     postergallery = {
-        'serializer': PosterGallerySubmissionSerializer,
-        'template': EmailTemplate.objects.get(email_template_id='3ae57e81-dd3b-4ec0-8e34-a2609579f3c9'),
-        'sendpoint': 'default'
+        'serializer': PosterGallerySubmissionSerializer
     }
 
 
@@ -176,6 +150,13 @@ class SubmitFormViewSet(viewsets.ViewSet):
         verify_req = requests.post(url=recaptcha_verify_url, data=recaptcha_data)
         # get reference dictionary for objects to complete submission
         ref = getattr(FormSubmissionReference, request.data['form_id'].replace('-', '_'))
+        try:
+            email_template = EmailTemplate.objects.get(form_id=request.data['form_id'])
+        except:
+            return Response({
+                    'status': 'error',
+                    'message': 'form_id not registered.'
+                }, status=status.HTTP_400_BAD_REQUEST)
         # if recaptcha verification a success, add to database
         if json.loads(verify_req.text)['success']:
             formatted = {k.lower().replace(' ', '_'): v for k, v in request.data.items()}
@@ -183,10 +164,11 @@ class SubmitFormViewSet(viewsets.ViewSet):
             serializer = ref['serializer'](data=formatted)
             if serializer.is_valid():
                 serializer.save()
-                body = self.compile_email_body(ref['template'].email_template_body, formatted)
-                # send to ticketing system unless sendpoint has alternative key value in ref
-                sender = os.environ.get('MAIL_DEFAULT_TO') if ref['sendpoint'] == 'default' else formatted[ref['sendpoint']]
-                self.send_email(ref['template'].email_template_subject, body, send_to=sender, reply_to=formatted['email'])
+                body = self.compile_email_body(email_template.email_template_body, formatted)
+                # send to ticketing system unless sendpoint has alternative key value in email template record
+                sender = os.environ.get('MAIL_DEFAULT_TO') if email_template.sendpoint == 'default' else formatted[email_template.sendpoint]
+                replyer = formatted['email'] if 'email' in formatted.keys() else ''
+                self.send_email(email_template.email_template_subject, body, send_to=sender, reply_to=replyer)
                 return Response({
                         'status': 'success',
                         'message': 'Form Submitted Successfully!'

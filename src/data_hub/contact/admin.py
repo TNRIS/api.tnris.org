@@ -93,7 +93,9 @@ class EmailTemplateAdmin(admin.ModelAdmin):
     list_display = (
         'email_template_type',
         'email_template_subject',
-        'email_template_id'
+        'email_template_id',
+        'form_id',
+        'sendpoint'
     )
     readonly_fields = ('email_template_id',)
     ordering = ('email_template_type',)

@@ -332,8 +332,6 @@ class TexasImageryServiceRequestAdmin(admin.ModelAdmin):
         'email',
         'phone',
         'contractor_access',
-        'relevant_project_of_partnership',
-        'non_credentialed_wmts_link',
         'non_credentialed_wms_link',
         'created'
     )

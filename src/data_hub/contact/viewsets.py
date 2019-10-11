@@ -4,25 +4,13 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from django.conf import settings
 from django.core.mail import EmailMessage
-import requests, os, json, re, datetime, base64, hmac, hashlib
+import requests, os, json, re, datetime, base64, hmac, hashlib, sys
 
 from .models import (
     EmailTemplate
 )
-from .serializers import (
-    DataHubContactSerializer,
-    DataHubOrderSerializer,
-    DataHubOutsideEntityContactSerializer,
-    ForumJobBoardSubmissionSerializer,
-    GeneralContactSerializer,
-    GeorodeoCallForPresentationsSubmissionSerializer,
-    GeorodeoRegistrationSerializer,
-    LakesOfTexasContactSerializer,
-    OrderMapSerializer,
-    PosterGallerySubmissionSerializer,
-    TexasImageryServiceContactSerializer,
-    TexasImageryServiceRequestSerializer
-)
+
+from .serializers import *
 
 # custom permissions for cors control
 class CorsPostPermission(AllowAny):
@@ -46,52 +34,6 @@ class CorsPostPermission(AllowAny):
     def has_permission(self, request, view):
         u = request.META['HTTP_HOST']
         return u in self.whitelisted_domains
-
-
-# template-to-model relationship reference.
-# would be best if could be stored in database table, but saving model
-# objects as field values is not obvious
-class FormSubmissionReference:
-    # :::::SAMPLE TEMPLATE:::::
-    # <<form_id (with underscores replacing dashes)>> = {
-    #     'serializer': <<model serializer for saving record>>
-    # }
-    contact = {
-        'serializer': GeneralContactSerializer
-    }
-    data_tnris_org_inquiry = {
-        'serializer': DataHubContactSerializer
-    }
-    data_tnris_org_order = {
-        'serializer': DataHubOrderSerializer
-    }
-    data_tnris_org_outside_entity = {
-        'serializer': DataHubOutsideEntityContactSerializer
-    }
-    georodeocfp = {
-        'serializer': GeorodeoCallForPresentationsSubmissionSerializer
-    }
-    georodeo_regis = {
-        'serializer': GeorodeoRegistrationSerializer
-    }
-    google_contact = {
-        'serializer': TexasImageryServiceContactSerializer
-    }
-    google_request = {
-        'serializer': TexasImageryServiceRequestSerializer
-    }
-    jobboard = {
-        'serializer': ForumJobBoardSubmissionSerializer
-    }
-    lakes_of_texas = {
-        'serializer': LakesOfTexasContactSerializer
-    }
-    order_map = {
-        'serializer': OrderMapSerializer
-    }
-    postergallery = {
-        'serializer': PosterGallerySubmissionSerializer
-    }
 
 
 # form submission endpoint
@@ -148,8 +90,7 @@ class SubmitFormViewSet(viewsets.ViewSet):
         else:
             recaptcha_data = {'secret': recaptcha_secret, 'response': 'lakesoftexasform'}
         verify_req = requests.post(url=recaptcha_verify_url, data=recaptcha_data)
-        # get reference dictionary for objects to complete submission
-        ref = getattr(FormSubmissionReference, request.data['form_id'].replace('-', '_'))
+        # get email template for form. if bad form, return error
         try:
             email_template = EmailTemplate.objects.get(form_id=request.data['form_id'])
         except:
@@ -161,7 +102,7 @@ class SubmitFormViewSet(viewsets.ViewSet):
         if json.loads(verify_req.text)['success']:
             formatted = {k.lower().replace(' ', '_'): v for k, v in request.data.items()}
             formatted['url'] = request.META['HTTP_REFERER'] if 'HTTP_REFERER' in request.META.keys() else request.META['HTTP_HOST']
-            serializer = ref['serializer'](data=formatted)
+            serializer = getattr(sys.modules[__name__], email_template.serializer_classname)(data=formatted)
             if serializer.is_valid():
                 serializer.save()
                 body = self.compile_email_body(email_template.email_template_body, formatted)

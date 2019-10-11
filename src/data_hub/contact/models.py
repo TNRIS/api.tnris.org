@@ -50,6 +50,14 @@ class EmailTemplate(models.Model):
         ],
         help_text="'default' to send to ticketing system. otherwise, form object key with email address to send to."
     )
+    serializer_classname = models.CharField(
+        'Serializer Classname',
+        max_length=70,
+        null=False,
+        blank=False,
+        unique=True,
+        help_text="Serializer classname from serializers.py file. Must be exact. Typically is: '<<model class name>>Serializer'"
+    )
     email_template_subject = models.CharField(
         'Email Template Subject',
         max_length=100,

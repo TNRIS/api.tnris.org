@@ -214,7 +214,7 @@ class LakesOfTexasContactAdmin(admin.ModelAdmin):
 
 
 @admin.register(OrderMap)
-class LakesOfTexasContactAdmin(admin.ModelAdmin):
+class OrderMapAdmin(admin.ModelAdmin):
     model = OrderMap
     list_display = (
         'type_of_data',

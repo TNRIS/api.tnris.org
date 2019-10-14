@@ -56,7 +56,7 @@ class EmailTemplate(models.Model):
         null=False,
         blank=False,
         unique=True,
-        help_text="Serializer classname from serializers.py file. Must be exact. Typically is: '<<model class name>>Serializer'"
+        help_text="Serializer classname from serializers.py file. Must be exact. Typically is: '<-ModelClassname->Serializer'"
     )
     email_template_subject = models.CharField(
         'Email Template Subject',
@@ -67,7 +67,14 @@ class EmailTemplate(models.Model):
     email_template_body = models.TextField(
         'Email Template Body',
         null=False,
-        blank=False
+        blank=False,
+        help_text="Form field values can be used by surrounding the database field name with double curly brackets. Ex: {{field_name}}",
+        default="""A form has been submitted from: {{url}}
+Form ID: {{form_id}}
+
+Form parameters
+==================
+"""
     )
     created = models.DateTimeField(
         'Created',

@@ -100,7 +100,7 @@ class CustomIndexDashboard(Dashboard):
         ))
 
         self.children.append(modules.AppList(
-            title='Contact Forms Config',
+            title='Contact!',
             collapsible=True,
             column=1,
             css_classes=('grp-collapse grp-closed',),

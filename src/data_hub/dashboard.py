@@ -99,6 +99,26 @@ class CustomIndexDashboard(Dashboard):
                     'tnris_org.models.TnrisGioCalendarEvent'),
         ))
 
+        self.children.append(modules.AppList(
+            title='Contact!',
+            collapsible=True,
+            column=1,
+            css_classes=('grp-collapse grp-closed',),
+            models=('contact.models.DataHubContact',
+                    'contact.models.DataHubOrder',
+                    'contact.models.DataHubOutsideEntityContact',
+                    'contact.models.EmailTemplate',
+                    'contact.models.ForumJobBoardSubmission',
+                    'contact.models.GeneralContact',
+                    'contact.models.GeorodeoCallForPresentationsSubmission',
+                    'contact.models.GeorodeoRegistration',
+                    'contact.models.LakesOfTexasContact',
+                    'contact.models.OrderMap',
+                    'contact.models.PosterGallerySubmission',
+                    'contact.models.TexasImageryServiceContact',
+                    'contact.models.TexasImageryServiceRequest'),
+        ))
+
         # append a recent actions module
         self.children.append(modules.RecentActions(
             title='Recent Actions',

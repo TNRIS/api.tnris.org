@@ -191,3 +191,5 @@ lambda-refresh_materialized_views/*
 
 vault-password\.txt
 .vault/
+
+etl/source_data/texasimageryservicerequest.csv

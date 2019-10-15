@@ -1,4 +1,7 @@
 from django.contrib import admin
+from django.http import HttpResponse
+import csv, datetime
+
 from .models import (
     DataHubContact,
     DataHubOrder,
@@ -21,10 +24,31 @@ from .filters import (
     PosterGallerySubmissionForumYearFilter
 )
 
+# List Display Custom Action Mixins
+class ExportSelectedToCsvMixin:
+    def export_selected_to_csv(self, request, queryset):
+        meta = self.model._meta
+        field_names = [field.name for field in meta.fields]
+        date_str = datetime.date.today().strftime("%Y%m%d")
+
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename=texas_imagery_service_requests_{}.csv'.format(date_str)
+        writer = csv.writer(response)
+
+        writer.writerow(field_names)
+        for obj in queryset:
+            row = writer.writerow([getattr(obj, field) for field in field_names])
+
+        return response
+
+    export_selected_to_csv.short_description = 'Export Selected to CSV'
+
+
 # Register your models here.
 @admin.register(DataHubContact)
-class DataHubContactAdmin(admin.ModelAdmin):
+class DataHubContactAdmin(admin.ModelAdmin, ExportSelectedToCsvMixin):
     model = DataHubContact
+    actions = ["export_selected_to_csv"]
     list_display = (
         'name',
         'email',
@@ -44,8 +68,9 @@ class DataHubContactAdmin(admin.ModelAdmin):
 
 
 @admin.register(DataHubOrder)
-class DataHubOrderAdmin(admin.ModelAdmin):
+class DataHubOrderAdmin(admin.ModelAdmin, ExportSelectedToCsvMixin):
     model = DataHubOrder
+    actions = ["export_selected_to_csv"]
     list_display = (
         'name',
         'email',
@@ -67,8 +92,9 @@ class DataHubOrderAdmin(admin.ModelAdmin):
 
 
 @admin.register(DataHubOutsideEntityContact)
-class DataHubOutsideEntityContactAdmin(admin.ModelAdmin):
+class DataHubOutsideEntityContactAdmin(admin.ModelAdmin, ExportSelectedToCsvMixin):
     model = DataHubOutsideEntityContact
+    actions = ["export_selected_to_csv"]
     list_display = (
         'name',
         'email',
@@ -102,8 +128,9 @@ class EmailTemplateAdmin(admin.ModelAdmin):
 
 
 @admin.register(ForumJobBoardSubmission)
-class ForumJobBoardSubmissionAdmin(admin.ModelAdmin):
+class ForumJobBoardSubmissionAdmin(admin.ModelAdmin, ExportSelectedToCsvMixin):
     model = ForumJobBoardSubmission
+    actions = ["export_selected_to_csv"]
     list_display = (
         'name',
         'email',
@@ -125,8 +152,9 @@ class ForumJobBoardSubmissionAdmin(admin.ModelAdmin):
 
 
 @admin.register(GeneralContact)
-class GeneralContactAdmin(admin.ModelAdmin):
+class GeneralContactAdmin(admin.ModelAdmin, ExportSelectedToCsvMixin):
     model = GeneralContact
+    actions = ["export_selected_to_csv"]
     list_display = (
         'name',
         'email',
@@ -147,8 +175,9 @@ class GeneralContactAdmin(admin.ModelAdmin):
 
 
 @admin.register(GeorodeoCallForPresentationsSubmission)
-class GeorodeoCallForPresentationsSubmissionAdmin(admin.ModelAdmin):
+class GeorodeoCallForPresentationsSubmissionAdmin(admin.ModelAdmin, ExportSelectedToCsvMixin):
     model = GeorodeoCallForPresentationsSubmission
+    actions = ["export_selected_to_csv"]
     list_display = (
         'name',
         'email',
@@ -171,8 +200,9 @@ class GeorodeoCallForPresentationsSubmissionAdmin(admin.ModelAdmin):
 
 
 @admin.register(GeorodeoRegistration)
-class GeorodeoRegistrationAdmin(admin.ModelAdmin):
+class GeorodeoRegistrationAdmin(admin.ModelAdmin, ExportSelectedToCsvMixin):
     model = GeorodeoRegistration
+    actions = ["export_selected_to_csv"]
     list_display = (
         'firstname',
         'lastname',
@@ -197,8 +227,9 @@ class GeorodeoRegistrationAdmin(admin.ModelAdmin):
 
 
 @admin.register(LakesOfTexasContact)
-class LakesOfTexasContactAdmin(admin.ModelAdmin):
+class LakesOfTexasContactAdmin(admin.ModelAdmin, ExportSelectedToCsvMixin):
     model = LakesOfTexasContact
+    actions = ["export_selected_to_csv"]
     list_display = (
         'name',
         'email',
@@ -216,8 +247,9 @@ class LakesOfTexasContactAdmin(admin.ModelAdmin):
 
 
 @admin.register(OrderMap)
-class OrderMapAdmin(admin.ModelAdmin):
+class OrderMapAdmin(admin.ModelAdmin, ExportSelectedToCsvMixin):
     model = OrderMap
+    actions = ["export_selected_to_csv"]
     list_display = (
         'type_of_data',
         'type_of_map',
@@ -283,8 +315,9 @@ class OrderMapAdmin(admin.ModelAdmin):
 
 
 @admin.register(PosterGallerySubmission)
-class PosterGallerySubmissionAdmin(admin.ModelAdmin):
+class PosterGallerySubmissionAdmin(admin.ModelAdmin, ExportSelectedToCsvMixin):
     model = PosterGallerySubmission
+    actions = ["export_selected_to_csv"]
     list_display = (
         'name',
         'email',
@@ -305,8 +338,9 @@ class PosterGallerySubmissionAdmin(admin.ModelAdmin):
 
 
 @admin.register(TexasImageryServiceContact)
-class TexasImageryServiceContactAdmin(admin.ModelAdmin):
+class TexasImageryServiceContactAdmin(admin.ModelAdmin, ExportSelectedToCsvMixin):
     model = TexasImageryServiceContact
+    actions = ["export_selected_to_csv"]
     list_display = (
         'name',
         'reason',
@@ -325,8 +359,9 @@ class TexasImageryServiceContactAdmin(admin.ModelAdmin):
 
 
 @admin.register(TexasImageryServiceRequest)
-class TexasImageryServiceRequestAdmin(admin.ModelAdmin):
+class TexasImageryServiceRequestAdmin(admin.ModelAdmin, ExportSelectedToCsvMixin):
     model = TexasImageryServiceRequest
+    actions = ["export_selected_to_csv"]
     list_display = (
         'organization',
         'active',

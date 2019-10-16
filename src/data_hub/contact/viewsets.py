@@ -34,7 +34,6 @@ class CorsPostPermission(AllowAny):
 
     def has_permission(self, request, view):
         u = urlparse(request.META['HTTP_REFERER']).hostname if 'HTTP_REFERER' in request.META.keys() else request.META['HTTP_HOST']
-        print(u)
         return u in self.whitelisted_domains
 
 
@@ -112,19 +111,9 @@ class SubmitFormViewSet(viewsets.ViewSet):
                 sender = os.environ.get('MAIL_DEFAULT_TO') if email_template.sendpoint == 'default' else formatted[email_template.sendpoint]
                 replyer = formatted['email'] if 'email' in formatted.keys() else ''
                 self.send_email(email_template.email_template_subject, body, send_to=sender, reply_to=replyer)
-                h = str(request.META['HTTP_HOST']) if 'HTTP_HOST' in request.META.keys() else 'nope'
-                r = str(request.META['HTTP_REFERER']) if 'HTTP_REFERER' in request.META.keys() else 'nope'
-                rh = str(request.META['REMOTE_HOST']) if 'REMOTE_HOST' in request.META.keys() else 'nope'
-                sn = str(request.META['SERVER_NAME']) if 'SERVER_NAME' in request.META.keys() else 'nope'
-                u = urlparse(request.META['HTTP_REFERER']).hostname if 'HTTP_REFERER' in request.META.keys() else 'no referer'
                 return Response({
                         'status': 'success',
-                        'message': 'Form Submitted Successfully!',
-                        'host': h,
-                        'referer': r,
-                        'remoteHost': rh,
-                        'serverName': sn,
-                        'refHostname': u
+                        'message': 'Form Submitted Successfully!'
                     }, status=status.HTTP_201_CREATED)
             return Response({
                     'status': 'error',
@@ -134,7 +123,8 @@ class SubmitFormViewSet(viewsets.ViewSet):
         else:
             return Response({
                     'status': 'error',
-                    'message': 'Recaptcha Verification Failed.'
+                    'message': 'Recaptcha Verification Failed.',
+                    'error': 
                 }, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -199,11 +189,6 @@ class ZipPolicyViewSet(viewsets.ViewSet):
         try:
             opts = default_policy_opts(20971520, 'application/zip') # 20MB
             signed_policy = build_signed_policy(opts)
-            signed_policy['host'] = str(request.META['HTTP_HOST']) if 'HTTP_HOST' in request.META.keys() else 'nope'
-            signed_policy['referer'] = str(request.META['HTTP_REFERER']) if 'HTTP_REFERER' in request.META.keys() else 'nope'
-            signed_policy['remoteHost'] = str(request.META['REMOTE_HOST']) if 'REMOTE_HOST' in request.META.keys() else 'nope'
-            signed_policy['serverName'] = str(request.META['SERVER_NAME']) if 'SERVER_NAME' in request.META.keys() else 'nope'
-            signed_policy['refHostname'] = urlparse(request.META['HTTP_REFERER']).hostname if 'HTTP_REFERER' in request.META.keys() else 'no referer'
         except Exception as e:
             return Response(e, status=status.HTTP_400_BAD_REQUEST)
         return Response(signed_policy, status=status.HTTP_201_CREATED)
@@ -219,11 +204,6 @@ class ImagePolicyViewSet(viewsets.ViewSet):
         try:
             opts = default_policy_opts(5242880, 'image') # 5MB
             signed_policy = build_signed_policy(opts)
-            signed_policy['host'] = str(request.META['HTTP_HOST']) if 'HTTP_HOST' in request.META.keys() else 'nope'
-            signed_policy['referer'] = str(request.META['HTTP_REFERER']) if 'HTTP_REFERER' in request.META.keys() else 'nope'
-            signed_policy['remoteHost'] = str(request.META['REMOTE_HOST']) if 'REMOTE_HOST' in request.META.keys() else 'nope'
-            signed_policy['serverName'] = str(request.META['SERVER_NAME']) if 'SERVER_NAME' in request.META.keys() else 'nope'
-            signed_policy['refHostname'] = urlparse(request.META['HTTP_REFERER']).hostname if 'HTTP_REFERER' in request.META.keys() else 'no referer'
         except Exception as e:
             return Response(e, status=status.HTTP_400_BAD_REQUEST)
         return Response(signed_policy, status=status.HTTP_201_CREATED)
@@ -239,11 +219,6 @@ class FilePolicyViewSet(viewsets.ViewSet):
         try:
             opts = default_policy_opts(5242880, '') # 5MB
             signed_policy = build_signed_policy(opts)
-            signed_policy['host'] = str(request.META['HTTP_HOST']) if 'HTTP_HOST' in request.META.keys() else 'nope'
-            signed_policy['referer'] = str(request.META['HTTP_REFERER']) if 'HTTP_REFERER' in request.META.keys() else 'nope'
-            signed_policy['remoteHost'] = str(request.META['REMOTE_HOST']) if 'REMOTE_HOST' in request.META.keys() else 'nope'
-            signed_policy['serverName'] = str(request.META['SERVER_NAME']) if 'SERVER_NAME' in request.META.keys() else 'nope'
-            signed_policy['refHostname'] = urlparse(request.META['HTTP_REFERER']).hostname if 'HTTP_REFERER' in request.META.keys() else 'no referer'
         except Exception as e:
             return Response(e, status=status.HTTP_400_BAD_REQUEST)
         return Response(signed_policy, status=status.HTTP_201_CREATED)

@@ -123,8 +123,7 @@ class SubmitFormViewSet(viewsets.ViewSet):
         else:
             return Response({
                     'status': 'error',
-                    'message': 'Recaptcha Verification Failed.',
-                    'error': 
+                    'message': 'Recaptcha Verification Failed.'
                 }, status=status.HTTP_400_BAD_REQUEST)
 
 

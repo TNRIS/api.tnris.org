@@ -16,6 +16,7 @@ from .serializers import *
 # custom permissions for cors control
 class CorsPostPermission(AllowAny):
     whitelisted_domains = [
+        'api.tnris.org',
         'beta.tnris.org',
         'data.tnris.org',
         'ellwood.tnris.org',

@@ -85,10 +85,12 @@ class CollectionForm(forms.ModelForm):
 
     supplemental_report_url = forms.FileField(required=False, widget=ZipfileWidget, help_text="Maximum filesize 75MB")
     lidar_breaklines_url = forms.FileField(required=False, widget=ZipfileWidget, help_text="Maximum filesize 75MB")
+    lidar_buildings_url = forms.FileField(required=False, widget=ZipfileWidget, help_text="Maximum filesize 75MB")
     tile_index_url = forms.FileField(required=False, widget=ZipfileWidget, help_text="Maximum filesize 75MB")
 
     delete_supplemental_report_url = forms.BooleanField(required=False)
     delete_lidar_breaklines_url = forms.BooleanField(required=False)
+    delete_lidar_buildings_url = forms.BooleanField(required=False)
     delete_tile_index_url = forms.BooleanField(required=False)
 
     # boto3 s3 object
@@ -297,6 +299,7 @@ class CollectionForm(forms.ModelForm):
         new_key_field = {}
         z_files = [('-supplemental-report.zip', 'supplemental_report_url'),
                    ('-lidar-breaklines.zip', 'lidar_breaklines_url'),
+                   ('-lidar-buildings.zip', 'lidar_buildings_url'),
                    ('-tile-index.zip', 'tile_index_url')]
         urlized_og_nm = og_name.lower().replace(', ', '-').replace(' & ', '-').replace(' ', '-').replace('(', '').replace(')', '').replace('\\', '-').replace('/', '-').replace('&', '').replace(',', '-')
         urlized_new_nm = self.cleaned_data['name'].lower().replace(', ', '-').replace(' & ', '-').replace(' ', '-').replace('(', '').replace(')', '').replace('\\', '-').replace('/', '-').replace('&', '').replace(',', '-')
@@ -347,7 +350,7 @@ class CollectionForm(forms.ModelForm):
         # check for files
         files = self.files
         image_fields = ['overview_image', 'thumbnail_image', 'natural_image', 'urban_image']
-        zipfile_fields = ['supplemental_report_url', 'lidar_breaklines_url', 'tile_index_url']
+        zipfile_fields = ['supplemental_report_url', 'lidar_breaklines_url', 'lidar_buildings_url', 'tile_index_url']
         # if files and field not marked for deletion then upload to s3
         for f in files:
             delete_checkbox = 'delete_' + f
@@ -367,6 +370,7 @@ class CollectionForm(forms.ModelForm):
                           'delete_urban_image',
                           'delete_supplemental_report_url',
                           'delete_lidar_breaklines_url',
+                          'delete_lidar_buildings_url',
                           'delete_tile_index_url']
         for d in deletion_flags:
             if self.cleaned_data[d] is True:
@@ -566,6 +570,7 @@ class XlargeSupplementalForm(forms.ModelForm):
 
     supplemental_choices = [
         ('lidar_breaklines_url', 'Lidar Breaklines'),
+        ('lidar_buildings_url', 'Lidar Buildings'),
         ('supplemental_report_url', 'Supplemental Report'),
         ('tile_index_url', 'Tile Index')
     ]

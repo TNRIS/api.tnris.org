@@ -82,14 +82,7 @@ class SubmitFormViewSet(viewsets.ViewSet):
         # otherwise, use product account secret environment variable
         recaptcha_secret = '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe' if settings.DEBUG else os.environ.get('RECAPTCHA_SECRET')
         recaptcha_verify_url = 'https://www.google.com/recaptcha/api/siteverify'
-        # this 'if' clause is temporary. a fix for lake-gallery issue 139.
-        # after recaptcha is added to the lakes of texas frontend form, this
-        # if/else can go away and the """response: request.data['recaptcha']""" 
-        # should be used for all forms.
-        if request.data['form_id'] != 'lakes-of-texas':
-            recaptcha_data = {'secret': recaptcha_secret, 'response': request.data['recaptcha']}
-        else:
-            recaptcha_data = {'secret': recaptcha_secret, 'response': 'lakesoftexasform'}
+        recaptcha_data = {'secret': recaptcha_secret, 'response': request.data['recaptcha']}
         verify_req = requests.post(url=recaptcha_verify_url, data=recaptcha_data)
         # get email template for form. if bad form, return error
         try:

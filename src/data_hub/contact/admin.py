@@ -30,9 +30,10 @@ class ExportSelectedToCsvMixin:
         meta = self.model._meta
         field_names = [field.name for field in meta.fields]
         date_str = datetime.date.today().strftime("%Y%m%d")
+        model_name = self.model.__name__
 
         response = HttpResponse(content_type='text/csv')
-        response['Content-Disposition'] = 'attachment; filename=texas_imagery_service_requests_{}.csv'.format(date_str)
+        response['Content-Disposition'] = 'attachment; filename=%s_%s.csv' % (model_name, date_str)
         writer = csv.writer(response)
 
         writer.writerow(field_names)

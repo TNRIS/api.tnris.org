@@ -55,6 +55,7 @@ class DataHubContactAdmin(admin.ModelAdmin, ExportSelectedToCsvMixin):
         'email',
         'collection',
         'uuid',
+        'acquisition_date',
         'category',
         'software',
         'message',

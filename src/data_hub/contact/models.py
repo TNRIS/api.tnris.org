@@ -134,6 +134,12 @@ class DataHubContact(models.Model):
         null=True,
         blank=True
     )
+    acquisition_date = models.CharField(
+        'Acquisition Date',
+        max_length=20,
+        null=True,
+        blank=True
+    )
     category = models.CharField(
         'Category',
         max_length=350,

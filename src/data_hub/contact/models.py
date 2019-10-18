@@ -679,7 +679,6 @@ class GeorodeoRegistration(models.Model):
         max_length=3,
         null=True,
         blank=True,
-        default='No',
         choices=[
             ('Yes', 'Yes'),
             ('No', 'No')
@@ -691,7 +690,6 @@ class GeorodeoRegistration(models.Model):
         max_length=60,
         null=True,
         blank=True,
-        default="N/A",
         help_text="Non-Existent, Beginner, Intermediate, Kind of a Big Deal..., Elite Level Hacker, etc."
     )
     tools = models.TextField(

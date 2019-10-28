@@ -746,6 +746,7 @@ class Collection(models.Model):
             'tile_index_url',
             'supplemental_report_url',
             'lidar_breaklines_url',
+            'lidar_buildings_url',
             'coverage_extent',
             'tags',
             'license_type_id',
@@ -843,6 +844,12 @@ class Collection(models.Model):
     )
     lidar_breaklines_url = models.URLField(
         'Lidar Breaklines URL',
+        max_length=255,
+        null=True,
+        blank=True
+    )
+    lidar_buildings_url = models.URLField(
+        'Lidar Buildings URL',
         max_length=255,
         null=True,
         blank=True
@@ -1157,6 +1164,9 @@ class CcrView(models.Model):
     )
     lidar_breaklines_url = models.URLField(
         'Lidar Breaklines URL'
+    )
+    lidar_buildings_url = models.URLField(
+        'Lidar Buildings URL'
     )
     coverage_extent = models.TextField(
         'Coverage Extent'

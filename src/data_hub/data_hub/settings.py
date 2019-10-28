@@ -37,6 +37,11 @@ CORS_ORIGIN_ALLOW_ALL = True
 
 APPEND_SLASH = False
 
+# Contact SES Email config
+EMAIL_BACKEND = 'django_ses.SESBackend'
+AWS_ACCESS_KEY_ID = os.environ.get('AWS_SES_ACCESS_KEY')
+AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SES_SECRET_KEY')
+
 # If you're using prerender.io (the default backend):
 SEO_JS_PRERENDER_TOKEN = os.environ.get('SEO_TOKEN', '')
 SEO_JS_ENABLED = True
@@ -66,6 +71,7 @@ INSTALLED_APPS = [
     'lore',
     'msd',
     'tnris_org',
+    'contact',
     'corsheaders',
     'django_admin_listfilter_dropdown',
     'django.contrib.contenttypes',

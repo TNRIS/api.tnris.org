@@ -102,7 +102,11 @@ class SubmitFormViewSet(viewsets.ViewSet):
                 body = self.compile_email_body(email_template.email_template_body, formatted)
                 # send to ticketing system unless sendpoint has alternative key value in email template record
                 sender = os.environ.get('MAIL_DEFAULT_TO') if email_template.sendpoint == 'default' else formatted[email_template.sendpoint]
-                replyer = formatted['email'] if 'email' in formatted.keys() else ''
+                replyer = formatted['email'] if 'email' in formatted.keys() else 'unknown@tnris.org'
+                if 'name' in formatted.keys():
+                    replyer = '%s <%s>' % (formatted['name'], formatted['email'])
+                elif 'firstname' in formatted.keys() and 'lastname' in formatted.keys():
+                    replyer = '%s %s <%s>' % (formatted['firstname'], formatted['lastname'], formatted['email'])
                 self.send_email(email_template.email_template_subject, body, send_to=sender, reply_to=replyer)
                 return Response({
                         'status': 'success',

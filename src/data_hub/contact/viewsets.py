@@ -63,14 +63,12 @@ class SubmitFormViewSet(viewsets.ViewSet):
                    body,
                    send_from=os.environ.get('MAIL_DEFAULT_FROM'),
                    send_to=os.environ.get('MAIL_DEFAULT_TO'),
-                   send_bcc=os.environ.get('MAIL_DEFAULT_FROM'),
                    reply_to='unknown@tnris.org'):
         email = EmailMessage(
                     subject,
                     body,
                     send_from,
                     [send_to],
-                    [send_bcc],
                     reply_to=[reply_to]
                 )
         email.send(fail_silently=False)

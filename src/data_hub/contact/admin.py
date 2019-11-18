@@ -372,9 +372,10 @@ class TexasImageryServiceRequestAdmin(admin.ModelAdmin, ExportSelectedToCsvMixin
         'phone',
         'contractor_access',
         'non_credentialed_wms_link',
+        'notes',
         'created'
     )
-    ordering = ('organization',)
+    ordering = ('-created',)
     readonly_fields = ('best_effort',
                        'no_distribution',
                        'horizontal_accuracy',
@@ -382,7 +383,7 @@ class TexasImageryServiceRequestAdmin(admin.ModelAdmin, ExportSelectedToCsvMixin
                        'contractors',
                        'reselling')
     list_filter = ('active','contractor_access')
-    search_fields = ('organization', 'name', 'email', 'non_credentialed_wms_link', 'comment', 'notes')
+    search_fields = ('organization', 'name', 'email', 'non_credentialed_wms_link', 'notes')
 
     fieldsets = (
         ('Submitted Request', {
@@ -413,7 +414,6 @@ class TexasImageryServiceRequestAdmin(admin.ModelAdmin, ExportSelectedToCsvMixin
                     'credentialed_url',
                     'non_credentialed_wmts_link',
                     'non_credentialed_wms_link',
-                    'comment',
                     'notes',
                     'active')
         })

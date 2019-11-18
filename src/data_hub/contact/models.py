@@ -1349,11 +1349,6 @@ class TexasImageryServiceRequest(models.Model):
         null=True,
         blank=True
     )
-    comment = models.TextField(
-        'Comment',
-        null=True,
-        blank=True
-    )
     notes = models.TextField(
         'Notes',
         null=True,

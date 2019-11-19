@@ -15,6 +15,7 @@ from .models import (
     FileType,
     Image,
     LicenseType,
+    Quote,
     ResolutionRelate,
     ResolutionType,
     Resource,
@@ -332,3 +333,10 @@ class XlargeSupplementalAdmin(admin.ModelAdmin):
         # on initialization, set aside declared_fields attribute
         # so it can be re-applied based on form view
         self.original_declared_fields = self.form.declared_fields
+
+
+@admin.register(Quote)
+class QuoteAdmin(admin.ModelAdmin):
+    model = Quote
+    ordering = ('author',)
+    list_display = ('author', 'quote', 'created')

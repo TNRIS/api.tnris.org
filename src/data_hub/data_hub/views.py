@@ -1,6 +1,8 @@
 from django.http import HttpResponse
 from django.views.generic import View
 from django.shortcuts import render
+from lcd.models import Quote
+import random
 
 
 class HealthCheckView(View):
@@ -11,10 +13,19 @@ class HealthCheckView(View):
 error code handling
 """
 
+def random_rec():
+    count = Quote.objects.all().count()
+    random_index = random.randint(0, count - 1)
+    return Quote.objects.all()[random_index]
+
+
 def bad_request(request, exception):
+    q = random_rec()
     context = {
         'status': 400,
-        'text': 'Bad Request'
+        'text': 'Bad Request',
+        'author': q.author,
+        'quote': q.quote
     }
     response = render(request, 'data_hub/error.html', context)
     response.status_code = 400
@@ -22,9 +33,12 @@ def bad_request(request, exception):
 
 
 def permission_denied(request, exception):
+    q = random_rec()
     context = {
         'status': 403,
-        'text': 'Permission Denied'
+        'text': 'Permission Denied',
+        'author': q.author,
+        'quote': q.quote
     }
     response = render(request, 'data_hub/error.html', context)
     response.status_code = 403
@@ -32,9 +46,12 @@ def permission_denied(request, exception):
 
 
 def page_not_found(request, exception):
+    q = random_rec()
     context = {
         'status': 404,
-        'text': 'Page Not Found'
+        'text': 'Page Not Found',
+        'author': q.author,
+        'quote': q.quote
     }
     response = render(request, 'data_hub/error.html', context)
     response.status_code = 404
@@ -42,9 +59,12 @@ def page_not_found(request, exception):
 
 
 def server_error(request, exception):
+    q = random_rec()
     context = {
         'status': 500,
-        'text': 'Server Error'
+        'text': 'Server Error',
+        'author': q.author,
+        'quote': q.quote
     }
     response = render(request, 'data_hub/error.html', context)
     response.status_code = 500

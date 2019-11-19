@@ -8,9 +8,10 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css?family=Indie+Flower&display=swap" rel="stylesheet">
     <style>
-      htm, body {
+      html, body {
         font-family: 'Indie Flower', cursive;
         background-color: #FFFFC7;
+        color: #473335;
       }
       .navbar {
         background-color: #548687;
@@ -36,8 +37,13 @@
         animation-iteration-count: infinite;
         font-weight: bold;
       }
-      .main-content {
+      .container {
         margin-top: 30px;
+      }
+      .quote {
+        margin: 0 auto;
+        margin-top: 50px;
+        font-size: x-large;
       }
       @keyframes shake {
         0%   {transform: rotate(0deg);}
@@ -77,7 +83,7 @@
         </a>
       </span>
     </nav>
-    <div class="container main-content">
+    <div class="container">
       <div class="row">
         <div class="col">
           <h1 class="uh-oh">Uh-oh...</h1>
@@ -87,6 +93,15 @@
             {{status}}: {{text}}
           </div>
         </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row text-center">
+        <p class="quote">
+          "{{quote}}"
+          <br />
+          -- {{author}}
+        </p>
       </div>
       <div class="row">
         <img id="error-image" class="error-image" src="" />
@@ -104,7 +119,9 @@
         "sgt.png",
         "snake.png",
         "razor.png",
-        "hart.png"
+        "hart.png",
+        "michaels.png",
+        "road.png"
       ];
       var i =a[Math.floor(Math.random()*a.length)];
       document.getElementById("error-image").src="https://tnris-public-data.s3.amazonaws.com/api.tnris.org/"+i;

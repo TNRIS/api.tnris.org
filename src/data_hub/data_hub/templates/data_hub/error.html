@@ -22,7 +22,21 @@
       .main-content {
         margin-top: 30px;
       }
-      .error-display {
+      @keyframes shake {
+        0%   {transform: rotate(0deg);}
+        25%  {transform: rotate(5deg);}
+        50%  {transform: rotate(0deg);}
+        75% {transform: rotate(-5deg);}
+        100% {transform: rotate(0deg);}
+      }
+      .alert {
+        font-size: 2rem;
+        padding: 0;
+        animation-name: shake;
+        animation-duration: 6s;
+        animation-iteration-count: infinite;
+      }
+      .error-image {
         max-width: 50%;
         max-height: 50%;
         position: fixed;
@@ -58,7 +72,7 @@
         </div>
       </div>
       <div class="row">
-        <img class="error-display" src="https://tnris-public-data.s3.amazonaws.com/api.tnris.org/{{key}}" />
+        <img class="error-image" src="https://tnris-public-data.s3.amazonaws.com/api.tnris.org/{{key}}" />
       </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

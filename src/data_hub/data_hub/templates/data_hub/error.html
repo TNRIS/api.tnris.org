@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <title>API Uh-oh... | {{code}}</title>
+    <title>API Uh-oh... | {{status}}</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="shortcut icon" href="https://tnris-public-data.s3.amazonaws.com/api.tnris.org/favicon.ico">
@@ -16,8 +16,25 @@
         background-color: #548687;
         box-shadow: 0px 0px 10px #473335;
       }
-      .navbar-brand > a, .navbar-text > a, .uh-oh {
-        color: #473335;
+      .navbar-brand > a, .navbar-text > a {
+        color: white;
+      }
+      @keyframes rainbow {
+        0%   {color: red;}
+        33%  {color: white;}
+        66%  {color: blue;}
+      }
+      .uh-oh {
+        color: red;
+        text-shadow:
+          -1px -1px 0 #000,  
+          1px -1px 0 #000,
+          -1px 1px 0 #000,
+          1px 1px 0 #000;
+        animation-name: rainbow;
+        animation-duration: 4s;
+        animation-iteration-count: infinite;
+        font-weight: bold;
       }
       .main-content {
         margin-top: 30px;
@@ -26,7 +43,7 @@
         0%   {transform: rotate(0deg);}
         25%  {transform: rotate(5deg);}
         50%  {transform: rotate(0deg);}
-        75% {transform: rotate(-5deg);}
+        75%  {transform: rotate(-5deg);}
         100% {transform: rotate(0deg);}
       }
       .alert {
@@ -67,16 +84,30 @@
         </div>
         <div class="col text-center font-weight-bold text-uppercase">
           <div class="alert alert-danger" role="alert">
-            {{code}}: {{text}}
+            {{status}}: {{text}}
           </div>
         </div>
       </div>
       <div class="row">
-        <img class="error-image" src="https://tnris-public-data.s3.amazonaws.com/api.tnris.org/{{key}}" />
+        <img id="error-image" class="error-image" src="" />
       </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var a = [
+        "giant.png",
+        "macho.png",
+        "flair.png",
+        "hulk.png",
+        "sgt.png",
+        "snake.png",
+        "razor.png",
+        "hart.png"
+      ];
+      var i =a[Math.floor(Math.random()*a.length)];
+      document.getElementById("error-image").src="https://tnris-public-data.s3.amazonaws.com/api.tnris.org/"+i;
+    </script>
   </body>
 </html>

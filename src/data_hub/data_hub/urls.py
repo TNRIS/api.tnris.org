@@ -24,17 +24,11 @@ from django.conf.urls import (
 from django.views.generic import TemplateView
 from django.views.generic.base import RedirectView
 
-from .views import (
-    HealthCheckView,
-    bad_request,
-    permission_denied,
-    page_not_found,
-    server_error
-)
-handler400 = bad_request
-handler403 = permission_denied
-handler404 = page_not_found
-handler500 = server_error
+from .views import HealthCheckView
+handler400 = 'data_hub.views.bad_request'
+handler403 = 'data_hub.views.permission_denied'
+handler404 = 'data_hub.views.page_not_found'
+handler500 = 'data_hub.views.server_error'
 
 from data_hub.sitemap import StaticSitemap, CollectionSitemap
 from django.contrib.sitemaps.views import sitemap

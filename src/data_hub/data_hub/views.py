@@ -11,44 +11,40 @@ class HealthCheckView(View):
 error code handling
 """
 
-def bad_request(request):
+def bad_request(request, exception):
     context = {
-        'code': 400,
-        'text': 'Bad Request',
-        'key': 'hulk.png'
+        'status': 400,
+        'text': 'Bad Request'
     }
     response = render(request, 'data_hub/error.html', context)
     response.status_code = 400
     return response
 
 
-def permission_denied(request):
+def permission_denied(request, exception):
     context = {
-        'code': 403,
-        'text': 'Permission Denied',
-        'key': 'flair.png'
+        'status': 403,
+        'text': 'Permission Denied'
     }
     response = render(request, 'data_hub/error.html', context)
     response.status_code = 403
     return response
 
 
-def page_not_found(request):
+def page_not_found(request, exception):
     context = {
-        'code': 404,
-        'text': 'Page Not Found',
-        'key': 'giant.png'
+        'status': 404,
+        'text': 'Page Not Found'
     }
     response = render(request, 'data_hub/error.html', context)
     response.status_code = 404
     return response
 
 
-def server_error(request):
+def server_error(request, exception):
     context = {
-        'code': 500,
-        'text': 'Server Error',
-        'key': 'macho.png'
+        'status': 500,
+        'text': 'Server Error'
     }
     response = render(request, 'data_hub/error.html', context)
     response.status_code = 500

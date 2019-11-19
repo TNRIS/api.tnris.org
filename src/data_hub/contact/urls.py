@@ -35,5 +35,4 @@ schema_view = get_swagger_view(title='Contact API')
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('schema/', schema_view)
 ]

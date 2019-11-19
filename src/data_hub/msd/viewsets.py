@@ -5,6 +5,9 @@ from .models import MsdView
 from .serializers import (MapCollectionSerializer)
 
 class MapCollectionViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    Retrieve TNRIS & TWDB map collection metadata and downloads
+    """
     serializer_class = MapCollectionSerializer
     http_method_names = ['get']
 

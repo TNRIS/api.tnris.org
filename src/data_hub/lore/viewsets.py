@@ -9,12 +9,18 @@ import boto3
 
 
 class CountyViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    Retrieve Texas county names & FIPS codes
+    """
     queryset = County.objects.all()
     serializer_class = CountySerializer
     http_method_names = ['get']
 
 
 class ProductViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    Retrieve TNRIS historical imagery collection physical products information
+    """
     serializer_class = ProductSerializer
     http_method_names = ['get']
 
@@ -40,6 +46,9 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class CollectionViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    Retrieve TNRIS historical imagery collection metadata & information
+    """
     serializer_class = CollectionSerializer
     http_method_names = ['get']
 
@@ -60,6 +69,9 @@ class CollectionViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class MapserverViewSet(viewsets.ViewSet):
+    """
+    Retrieve TNRIS historical collection server information
+    """
     permission_classes = (AllowAny,)
 
     def list(self, request):

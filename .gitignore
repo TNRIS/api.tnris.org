@@ -150,24 +150,10 @@ crashlytics.properties
 crashlytics-build.properties
 fabric.properties
 
-### JetBrains Patch ###
-# Comment Reason: https://github.com/joeblau/gitignore.io/issues/186#issuecomment-215987721
-
-# *.iml
-# modules.xml
-# .idea/misc.xml
-# *.ipr
-
 # tnrisis ignores
 src/data_hub/set-env-secrets.sh
 src/data_hub/assets/
 src/data_hub/webpack-stats.dev.json
-
-src/data_hub/static/*
-!src/data_hub/static/.gitkeep
-!src/data_hub/static/favicon*
-!src/data_hub/static/data_with_pipe.jpg
-!src/data_hub/static/robots.txt
 
 src/data_hub/webpack-stats\.prod\.json
 

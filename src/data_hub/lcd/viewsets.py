@@ -7,6 +7,9 @@ from .serializers import (CollectionSerializer,
 
 
 class CollectionViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    Retrieve TNRIS dataset collection metadata and information
+    """
     serializer_class = CollectionSerializer
     http_method_names = ['get']
 
@@ -28,6 +31,9 @@ class CollectionViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class ResourceViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    Retrieve TNRIS dataset collection resources/downloads
+    """
     serializer_class = ResourceSerializer
     http_method_names = ['get']
 
@@ -48,6 +54,9 @@ class ResourceViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class AreaViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    Retrieve TNRIS resource/download areas
+    """
     serializer_class = AreaSerializer
     http_method_names = ['get']
 

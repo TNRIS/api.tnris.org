@@ -20,6 +20,9 @@ from .serializers import (
 
 # actual db table; regular training api endpoint
 class TnrisTrainingViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    Retrieve current TNRIS training schedule
+    """
     serializer_class = TnrisTrainingSerializer
     http_method_names = ['get']
 
@@ -41,6 +44,9 @@ class TnrisTrainingViewSet(viewsets.ReadOnlyModelViewSet):
 
 # actual db table; regular forum training api endpoint without instructor info
 class TnrisForumTrainingViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    Retrieve TNRIS Texas GIS Forum event training records
+    """
     serializer_class = TnrisForumTrainingSerializer
     http_method_names = ['get']
 
@@ -62,6 +68,9 @@ class TnrisForumTrainingViewSet(viewsets.ReadOnlyModelViewSet):
 
 # actual db table; api endpoint for instructor domain
 class TnrisInstructorTypeViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    Retrieve TNRIS training instructor details
+    """
     serializer_class = TnrisInstructorTypeSerializer
     http_method_names = ['get']
 
@@ -73,6 +82,9 @@ class TnrisInstructorTypeViewSet(viewsets.ReadOnlyModelViewSet):
 
 # db view, not actual table; api endpoint for complete training records with instructor info
 class CompleteForumTrainingViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    Retrieve all TNRIS training records with instructor information
+    """
     serializer_class = CompleteForumTrainingViewSerializer
     http_method_names = ['get']
 
@@ -94,6 +106,9 @@ class CompleteForumTrainingViewSet(viewsets.ReadOnlyModelViewSet):
 
 # actual db table; gio calendar events api endpoint
 class TnrisGioCalendarEventViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    Retrieve all future TNRIS GIO calendar events
+    """
     serializer_class = TnrisGioCalendarEventSerializer
     http_method_names = ['get']
 

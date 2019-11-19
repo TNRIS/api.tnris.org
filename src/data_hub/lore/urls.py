@@ -31,6 +31,5 @@ schema_view = get_swagger_view(title='Historical Imagery API')
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('schema/', schema_view),
     path('historical_aerials-auth/?', include('rest_framework.urls', namespace='lore_rest_framework'))
 ]

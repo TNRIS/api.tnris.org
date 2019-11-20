@@ -1348,3 +1348,50 @@ class XlargeSupplemental(models.Model):
 
     def __str__(self):
         return self.key
+
+
+"""
+********** Error Code Tables **********
+**** Used for error handling and fun ****
+"""
+
+
+class Quote(models.Model):
+    """
+    Table for logging quotes
+    """
+
+    class Meta:
+        db_table = 'quote_log'
+        verbose_name = 'Quote'
+        verbose_name_plural = 'Quotes'
+        ordering = ('author',)
+
+    quote_id = models.UUIDField(
+        'Quote ID',
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False
+    )
+    author = models.CharField(
+        'Author',
+        max_length=80,
+        null=False,
+        blank=False
+    )
+    quote = models.TextField(
+        'Quote',
+        null=False,
+        blank=False
+    )
+    created = models.DateTimeField(
+        'Created',
+        auto_now_add=True
+    )
+    last_modified = models.DateTimeField(
+        'Last Modified',
+        auto_now=True
+    )
+
+    def __str__(self):
+        return self.author + " " + self.created.strftime('%Y-%m-%d %H:%M')

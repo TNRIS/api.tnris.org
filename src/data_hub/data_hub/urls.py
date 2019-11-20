@@ -15,12 +15,20 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf.urls import (
+    handler400,
+    handler403,
+    handler404,
+    handler500
+)
 from django.views.generic import TemplateView
 from django.views.generic.base import RedirectView
 
-handler404 = TemplateView.as_view(template_name='index.html')
-
 from .views import HealthCheckView
+handler400 = 'data_hub.views.bad_request'
+handler403 = 'data_hub.views.permission_denied'
+handler404 = 'data_hub.views.page_not_found'
+handler500 = 'data_hub.views.server_error'
 
 from data_hub.sitemap import StaticSitemap, CollectionSitemap
 from django.contrib.sitemaps.views import sitemap

@@ -67,6 +67,7 @@ SEO_JS_USER_AGENTS = [
 # Application definition
 
 INSTALLED_APPS = [
+    'data_hub',
     'lcd',
     'lore',
     'msd',

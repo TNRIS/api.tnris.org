@@ -40,7 +40,7 @@ class CorsPostPermission(AllowAny):
 # form submission endpoint
 class SubmitFormViewSet(viewsets.ViewSet):
     """
-    Handle form submission
+    Handle TNRIS form submissions (Restricted Access)
     """
     permission_classes = [CorsPostPermission]
 
@@ -175,7 +175,7 @@ def build_signed_policy(opts):
 
 class ZipPolicyViewSet(viewsets.ViewSet):
     """
-    Get zipfile upload policy for s3
+    Get client form zipfile upload policy for s3 (Restricted Access)
     """
     permission_classes = [CorsPostPermission]
 
@@ -190,7 +190,7 @@ class ZipPolicyViewSet(viewsets.ViewSet):
 
 class ImagePolicyViewSet(viewsets.ViewSet):
     """
-    Get image upload policy for s3
+    Get client form image upload policy for s3 (Restricted Access)
     """
     permission_classes = [CorsPostPermission]
 
@@ -205,7 +205,7 @@ class ImagePolicyViewSet(viewsets.ViewSet):
 
 class FilePolicyViewSet(viewsets.ViewSet):
     """
-    Get generic file upload policy for s3
+    Get client form generic file upload policy for s3 (Restricted Access)
     """
     permission_classes = [CorsPostPermission]
 

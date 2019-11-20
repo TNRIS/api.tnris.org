@@ -27,6 +27,5 @@ schema_view = get_swagger_view(title='Maps API')
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('schema/', schema_view),
     path('master_systems_display-auth/?', include('rest_framework.urls', namespace='msd_rest_framework'))
 ]

@@ -39,9 +39,6 @@ RUN pip3 install awscli --upgrade
 ENV PYTHONPATH $PYTHONPATH: /src/data_hub
 ENV DJANGO_SETTINGS_MODULE data_hub.production_settings
 
-# Setup staticfiles
-RUN chmod -R 777 /src/data_hub/static
-
 # Setup nginx
 RUN rm /etc/nginx/sites-enabled/default
 COPY django.conf /etc/nginx/sites-available/

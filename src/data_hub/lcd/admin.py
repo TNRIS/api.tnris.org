@@ -61,12 +61,8 @@ class CollectionAdmin(admin.ModelAdmin):
             'fields': ('name',
                        'template_type_id',
                        'acquisition_date',
-                       # 'short_description',
+                       'publication_date',
                        'description',
-                       # 'authoritative',
-                       # 'known_issues',
-                       # 'coverage_extent',
-                       # 'tags',
                        'source_type_id',
                        'partners',
                        'license_type_id',
@@ -79,7 +75,6 @@ class CollectionAdmin(admin.ModelAdmin):
             'fields': ('wms_link',
                        'popup_link',
                        'supplemental_report_url',
-                       # 'carto_map_id',
                        'delete_supplemental_report_url',
                        'lidar_breaklines_url',
                        'delete_lidar_breaklines_url',
@@ -92,7 +87,6 @@ class CollectionAdmin(admin.ModelAdmin):
             'classes': ('grp-collapse grp-closed',),
             'fields': (('projections', 'categories'),
                        ('file_types', 'resolutions'),
-                       # ('uses', 'counties'))
                        ('counties',))
         })
     )

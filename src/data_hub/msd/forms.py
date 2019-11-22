@@ -114,7 +114,8 @@ class MapCollectionForm(forms.ModelForm):
         data_collection_choices = (
             (c.collection_id, str(c.acquisition_date)[:4].replace('None', '') + ' ' + c.name) for c in Collection.objects.all().order_by("name", "acquisition_date")
             )
-    except ProgrammingError:
+    except Exception as e:
+        print(e)
         data_collection_choices = ()
 
     def __init__(self, *args, **kwargs):

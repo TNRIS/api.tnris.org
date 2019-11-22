@@ -149,7 +149,13 @@ class TnrisForumTrainingAdmin(admin.ModelAdmin):
                     'registration_open',
                     'public',
                     'year')
-    search_fields = ('title', 'description')
+    search_fields = (
+        'title',
+        'description',
+        'tnris_forum_training_ids__instructor_relate_id__name',
+        'tnris_forum_training_ids__instructor_relate_id__company',
+        'tnris_forum_training_ids__instructor_relate_id__bio'
+    )
     list_filter = (
         TnrisForumTrainingYearFilter,
         'registration_open',

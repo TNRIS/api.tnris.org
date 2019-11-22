@@ -771,6 +771,12 @@ class Collection(models.Model):
         null=True,
         blank=True
     )
+    publication_date = models.TextField(
+        'Publication Date',
+        max_length=200,
+        null=True,
+        blank=True
+    )
     short_description = models.TextField(
         'Short Description',
         max_length=400,
@@ -1111,7 +1117,7 @@ class CcrView(models.Model):
         managed = False
         db_table = "collection_catalog_record"
         verbose_name = 'Collection Catalog Record'
-        verbose_name_plural = 'Cthumbollection Catalog Records'
+        verbose_name_plural = 'Collection Catalog Records'
 
     collection_id = models.UUIDField(
         'Collection ID',
@@ -1122,6 +1128,9 @@ class CcrView(models.Model):
     )
     acquisition_date = models.TextField(
         'Acquisition Date'
+    )
+    publication_date = models.TextField(
+        'Publication Date'
     )
     short_description = models.TextField(
         'Short Description'

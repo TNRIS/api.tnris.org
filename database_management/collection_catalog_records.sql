@@ -8,6 +8,7 @@ CREATE MATERIALIZED VIEW "collection_catalog_record" as
 SELECT collection.collection_id,
   collection.name,
   collection.acquisition_date,
+  collection.publication_date,
 	collection.short_description,
 	collection.description,
   collection.partners,

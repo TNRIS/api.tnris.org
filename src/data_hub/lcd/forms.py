@@ -70,6 +70,7 @@ class CollectionForm(forms.ModelForm):
     # adjust some field types so their form inputs are pretty
     name = forms.CharField(widget=forms.TextInput(attrs={'style':'width:758px'}),max_length=150, help_text="Create a concise name not redundant to metadata. Do not include a year or date. The year will be auto-appended in the frontend.")
     acquisition_date = forms.DateField(required=False, widget=AdminDateWidget(), help_text="Last date of the data acquisition. Format: YYYY-MM-DD")
+    publication_date = forms.DateField(required=False, widget=AdminDateWidget(), help_text="Date TNRIS published collection to the public. Format: YYYY-MM-DD")
     known_issues = forms.CharField(required=False, widget=forms.Textarea(), initial='None')
     carto_map_id = forms.CharField(required=False, widget=forms.TextInput(attrs={'style':'width:758px'}),max_length=50)
 

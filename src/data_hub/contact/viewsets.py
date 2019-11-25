@@ -5,7 +5,11 @@ from rest_framework.response import Response
 from urllib.parse import urlparse
 from django.conf import settings
 from django.core.mail import EmailMessage
-import requests, os, json, re, datetime, base64, hmac, hashlib, sys
+import requests, os, json, re, sys
+# policy imports
+import logging
+import boto3
+from botocore.exceptions import ClientError
 
 from .models import (
     EmailTemplate
@@ -123,23 +127,32 @@ class SubmitFormViewSet(viewsets.ViewSet):
 
 
 # POLICY ENDPOINTS
-def default_policy_opts(length, content_type):
-    # setup options needed to create signature
+def create_presigned_post(key, content_type, length, expiration=900):
+    """Generate a presigned URL S3 POST request to upload a file
+
+    :param key: string
+    :param content_type: string
+    :param length: integer
+    :param fields: Dictionary of prefilled form fields
+    :param conditions: List of conditions to include in the policy
+    :param expiration: Time in seconds for the presigned URL to remain valid. default 15min
+    :return: Dictionary with the following keys:
+        url: URL to post to
+        fields: Dictionary of form fields and values to submit with the POST
+    :return: None if error.
+    """
     bucket = os.environ.get('S3_UPLOAD_BUCKET')
-    secret = os.environ.get('S3_UPLOAD_SECRET')
-    key = os.environ.get('S3_UPLOAD_KEY')
-    # create time string in UTC zulu time. expire signature in 15 minutes
-    expires = datetime.datetime.utcnow() + datetime.timedelta(minutes=15)
-    expires_formatted = expires.isoformat(timespec='milliseconds') + 'Z'
-    opts = {
-        'length': length,
-        'type': content_type,
-        'expires': expires_formatted,
-        'bucket': bucket,
-        'secret': secret,
-        'key': key,
+    fields = {
         'acl': 'private',
-        'conditions': [
+        'Content-Type': content_type,
+        'Content-Length': length,
+        'success_action_status': '201',
+        'success_action_redirect': ''
+    }
+    # if in conditions array, must be in fields dictionary and client
+    # side form inputs/fields as well
+    conditions = [
+            {'acl':'private'},
             ['starts-with', '$success_action_status', ''],
             ['starts-with', '$success_action_redirect', ''],
             ['starts-with', '$key', ''],
@@ -147,72 +160,62 @@ def default_policy_opts(length, content_type):
             ['starts-with', '$Content-Length', ''],
             ['content-length-range', 1, length]
         ]
-    }
-    return opts
+    # Generate a presigned S3 POST URL
+    s3_client = boto3.client('s3',
+        aws_access_key_id=os.environ.get('S3_UPLOAD_KEY'),
+        aws_secret_access_key=os.environ.get('S3_UPLOAD_SECRET')
+    )
+    try:
+        response = s3_client.generate_presigned_post(bucket,
+                                                     key,
+                                                     Fields=fields,
+                                                     Conditions=conditions,
+                                                     ExpiresIn=expiration)
+    except ClientError as e:
+        logging.error(e)
+        return None
 
-def build_signed_policy(opts):
-    # create base64 policy
-    con = opts['conditions']
-    ext = [{'bucket': opts['bucket']}, {'acl': opts['acl']}]
-    con.extend(ext)
-    policy_data = {
-        'expiration': opts['expires'],
-        'conditions': con
-    }
-    # convert json of policy parameters into string and encode
-    dumped = json.dumps(policy_data)
-    encoded = base64.b64encode(dumped.encode("utf-8"))
-    # create hash signature
-    m = hmac.new(opts['secret'].encode("utf-8"), encoded, hashlib.sha1).digest()
-    hashed = base64.b64encode(m)
-    signed_policy = {
-        'policy': encoded,
-        'signature': hashed,
-        'key': opts['key']
-    }
-    return signed_policy
+    # The response contains the presigned URL and required fields
+    return response
 
 
 class ZipPolicyViewSet(viewsets.ViewSet):
     """
-    Get client form zipfile upload policy for s3 (Restricted Access)
+    Get client form zipfile presigned url for s3 (Restricted Access)
     """
     permission_classes = [CorsPostPermission]
 
-    def list(self, request, format=None):
+    def create(self, request, format=None):
         try:
-            opts = default_policy_opts(20971520, 'application/zip') # 20MB
-            signed_policy = build_signed_policy(opts)
+            presigned = create_presigned_post(request.data['key'], 'application/zip', 20971520)  # 20MB
         except Exception as e:
             return Response(e, status=status.HTTP_400_BAD_REQUEST)
-        return Response(signed_policy, status=status.HTTP_201_CREATED)
+        return Response(presigned, status=status.HTTP_201_CREATED)
 
 
 class ImagePolicyViewSet(viewsets.ViewSet):
     """
-    Get client form image upload policy for s3 (Restricted Access)
+    Get client form image presigned url for s3 (Restricted Access)
     """
     permission_classes = [CorsPostPermission]
 
-    def list(self, request, format=None):
+    def create(self, request, format=None):
         try:
-            opts = default_policy_opts(5242880, 'image') # 5MB
-            signed_policy = build_signed_policy(opts)
+            presigned = create_presigned_post(request.data['key'], 'image', 5242880)  # 5MB
         except Exception as e:
             return Response(e, status=status.HTTP_400_BAD_REQUEST)
-        return Response(signed_policy, status=status.HTTP_201_CREATED)
+        return Response(presigned, status=status.HTTP_201_CREATED)
 
 
 class FilePolicyViewSet(viewsets.ViewSet):
     """
-    Get client form generic file upload policy for s3 (Restricted Access)
+    Get client form generic file presigned url for s3 (Restricted Access)
     """
     permission_classes = [CorsPostPermission]
 
-    def list(self, request, format=None):
+    def create(self, request, format=None):
         try:
-            opts = default_policy_opts(5242880, '') # 5MB
-            signed_policy = build_signed_policy(opts)
+            presigned = create_presigned_post(request.data['key'], '', 5242880)  # 5MB
         except Exception as e:
             return Response(e, status=status.HTTP_400_BAD_REQUEST)
-        return Response(signed_policy, status=status.HTTP_201_CREATED)
+        return Response(presigned, status=status.HTTP_201_CREATED)

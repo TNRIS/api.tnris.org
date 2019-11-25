@@ -10,6 +10,7 @@ import requests, os, json, re, sys
 import logging
 import boto3
 from botocore.exceptions import ClientError
+from botocore.client import Config
 
 from .models import (
     EmailTemplate
@@ -163,7 +164,8 @@ def create_presigned_post(key, content_type, length, expiration=900):
     # Generate a presigned S3 POST URL
     s3_client = boto3.client('s3',
         aws_access_key_id=os.environ.get('S3_UPLOAD_KEY'),
-        aws_secret_access_key=os.environ.get('S3_UPLOAD_SECRET')
+        aws_secret_access_key=os.environ.get('S3_UPLOAD_SECRET'),
+        config=Config(signature_version='s3v4')
     )
     try:
         response = s3_client.generate_presigned_post(bucket,

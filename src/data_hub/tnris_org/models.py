@@ -359,6 +359,12 @@ class TnrisGioCalendarEvent(models.Model):
         default=False,
         null=False
     )
+    community_meeting_agenda_url = models.URLField(
+        'Community Meeting Agenda URL',
+        max_length=255,
+        blank=True,
+        null=True
+    )
     solutions_group_meeting = models.BooleanField(
         'Solutions Group Meeting',
         default=False,

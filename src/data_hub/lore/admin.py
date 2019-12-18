@@ -96,8 +96,9 @@ class CollectionAdmin(admin.ModelAdmin):
     search_fields = ('collection', 'id', 'from_date', 'to_date')
     list_filter = (
         'public',
+        'Products__clean_status',
         CollectionAgencyNameFilter,
-        CollectionCountyFilter
+        CollectionCountyFilter,
     )
     readonly_fields=('qr_code_url',)
 

@@ -98,7 +98,7 @@ class CollectionAdmin(admin.ModelAdmin):
         'public',
         'Products__clean_status',
         CollectionAgencyNameFilter,
-        CollectionCountyFilter,
+        CollectionCountyFilter
     )
     readonly_fields=('qr_code_url',)
 

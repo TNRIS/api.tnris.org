@@ -222,6 +222,7 @@ class Product(models.Model):
     )
     print_type = models.CharField('Print Type', max_length=3,
                                   choices=PRINT_TYPE_CHOICE)
+    clean_status = models.BooleanField('Clean Status', default=False)
     physical_location = models.TextField('Physical Location', null=True, blank=True)
     remarks = models.TextField(null=True, blank=True)
     created = models.DateTimeField('Created', auto_now_add=True)

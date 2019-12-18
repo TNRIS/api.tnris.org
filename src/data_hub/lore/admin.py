@@ -92,10 +92,11 @@ class CollectionAdmin(admin.ModelAdmin):
     list_display = (
         'collection', 'id', 'agency', 'from_date', 'to_date', 'county_names', 'public'
     )
-    ordering = ('agency__name', 'from_date')
+    ordering = ('from_date', 'agency__name')
     search_fields = ('collection', 'id', 'from_date', 'to_date')
     list_filter = (
         'public',
+        'Products__clean_status',
         CollectionAgencyNameFilter,
         CollectionCountyFilter
     )

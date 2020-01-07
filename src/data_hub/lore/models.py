@@ -246,6 +246,7 @@ class Collection(models.Model):
     to_date = models.DateField('To Date', null=True, blank=True)
     agency = models.ForeignKey('Agency', on_delete=models.CASCADE, related_name='agency')
     public = models.BooleanField('Public', default=True)
+    fully_scanned = models.BooleanField('Fully Scanned', default=False)
     remarks = models.TextField(null=True, blank=True)
     created = models.DateTimeField('Created', auto_now_add=True)
     last_modified = models.DateTimeField('Last Modified', auto_now=True)
@@ -292,6 +293,9 @@ class ChcView(models.Model):
     )
     public = models.BooleanField(
         'Public'
+    )
+    fully_scanned = models.BooleanField(
+        'Fully Scanned'
     )
     index_service_url = models.CharField(
         'Index Service URL',

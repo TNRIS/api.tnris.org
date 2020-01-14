@@ -10,7 +10,7 @@ class ProductForm(forms.ModelForm):
         model = Product
         fields = '__all__'
 
-    clean_status = forms.BooleanField(label='Clean Status', help_text='Clean Status refers to collections that have been reviewed and are ready to been scanned, no erasing of frames needed. Default is False/Unchecked.')
+    clean_status = forms.BooleanField(label='Clean Status', help_text='Clean Status refers to collections that have been reviewed and are ready to been scanned, no erasing of frames needed. Default is False/Unchecked.', required=False)
 
     def clean(self):
         try:

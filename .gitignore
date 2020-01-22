@@ -178,6 +178,10 @@ lambda-refresh_materialized_views/*
 !lambda-refresh_materialized_views/lambda_function.py
 !lambda-refresh_materialized_views/requirements.txt
 
+lambda-update_database_record_utility/*
+!lambda-update_database_record_utility/lambda_function.py
+!lambda-update_database_record_utility/requirements.txt
+
 vault-password\.txt
 .vault/
 

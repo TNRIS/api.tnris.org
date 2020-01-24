@@ -21,6 +21,7 @@ def lambda_handler(event, context):
         where = event['where']
     except:
         print('No "where" key in event!!!')
+        event['where'] = None
     # connect to database
     conn = psycopg2.connect(conn_string)
     cur = conn.cursor()
@@ -30,7 +31,7 @@ def lambda_handler(event, context):
 
     q = "UPDATE %s SET %s = %s;" % (table, field, value)
 
-    if 'where' in event.keys() and event['where'] != '':
+    if event['where'] != None:
         q = q.replace(";", " WHERE %s;" % where)
 
     print(q)

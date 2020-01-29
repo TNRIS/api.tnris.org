@@ -1,14 +1,22 @@
 from django import forms
 from django.core.exceptions import ValidationError
-# from django.db.utils import ProgrammingError
-
-from .models import MapCollection, MapDataRelate, MapDownload, MapSize, PixelsPerInch
-from lcd.models import Collection
 
 from string import Template
 from django.utils.safestring import mark_safe
 
-import boto3, os
+from django.db.utils import ProgrammingError
+from .models import (
+    MapCollection,
+    MapDataRelate,
+    MapDownload,
+    MapSize,
+    PixelsPerInch
+)
+
+import os
+import boto3
+
+from lcd.models import Collection
 
 
 class PictureWidget(forms.widgets.Widget):
@@ -19,8 +27,18 @@ class PictureWidget(forms.widgets.Widget):
 
 class PdfWidget(forms.widgets.Widget):
     def render(self, name, value, attrs=None):
+        js = """
+        <script type="text/javascript">
+            function copyFunction() {
+                var copyText = document.getElementById("currentUrl");
+                copyText.select();
+                document.execCommand("copy");
+            }
+        </script>
+        """
+
         if value:
-            html = Template("""<label for="img_$name" style='font-weight:bold;'>$link</label>""")
+            html = Template("""{0}<div style="margin-bottom:10px;"><a style="cursor:pointer;border:solid 1px;padding:3px;" onclick="copyFunction();">COPY URL</a></div><div alt="$link" style="margin-bottom:10px;"><input id="currentUrl" value="$link" readonly style="width: 80%;padding:3px;cursor:default;"></input></div>""".format(js))
         else:
             html = Template("""<input type="file" name="$name" id="id_$name"></input>""")
         return mark_safe(html.substitute(link=value,name=name))

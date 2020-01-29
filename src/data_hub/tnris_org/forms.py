@@ -32,7 +32,7 @@ class PictureWidget(forms.widgets.Widget):
         if value is None:
             html = Template("""<input type="file" name="$name" id="id_$name"><label for="img_$name">Current: <a href="#">$link</a></label>""")
         else:
-            html = Template("""{0}<a style="cursor:pointer;border:solid 1px;padding:3px;margin-left:15px;" onclick="copyFunction();">COPY URL</a><input style="width:50%;margin-left:5px;" type="text" id="currentUrl" value="$link" readonly><br><img id="img_$name" src="$link"/>""".format(js))
+            html = Template("""{0}<a style="cursor:pointer;border:solid 1px;padding:3px;margin-left:15px;" onclick="copyFunction();">COPY URL</a><input style="width:50%;margin-left:5px;" type="text" id="currentUrl" value="$link" readonly></input><br><img id="img_$name" src="$link"/>""".format(js))
         return mark_safe(html.substitute(link=value,name=name))
 
 
@@ -51,7 +51,7 @@ class DocumentWidget(forms.widgets.Widget):
         if value is None:
             html = Template("""<input type="file" name="$name" id="id_$name"><label for="doc_$name">Current: <a href="#">$link</a></label>""")
         else:
-            html = Template("""{0}<a style="cursor:pointer;border:solid 1px;padding:3px;margin-left:15px;" onclick="copyFunction();">COPY URL</a><input style="width:50%;margin-left:5px;" type="text" id="currentUrl" value="$link" readonly><br><embed style="max-width:80%;max-height:600px;" src="$link"></embed>""".format(js))
+            html = Template("""{0}<a style="cursor:pointer;border:solid 1px;padding:3px;margin-left:15px;" onclick="copyFunction();">COPY URL</a><input style="width:50%;margin-left:5px;" type="text" id="currentUrl" value="$link" readonly></input>""".format(js))
         return mark_safe(html.substitute(link=value,name=name))
 
 
@@ -69,7 +69,7 @@ class ImageForm(forms.ModelForm):
         model = TnrisImage
         fields = ('__all__')
 
-    image_url = forms.FileField(required=False, widget=PictureWidget, help_text="Choose an image file and 'Save' this form to upload & save it to the database. Attempting to overwrite with a new file will only create a new record.")
+    image_url = forms.FileField(required=False, widget=PictureWidget, help_text="Choose an image file and 'Save' this form to upload & save it to the database. Attempting to overwrite with a new file will only create a new record. The best method to overwrite would be to delete the existing file and re-upload a new file with the same name.")
 
     # boto3 s3 object
     client = boto3.client('s3')
@@ -128,7 +128,7 @@ class DocumentForm(forms.ModelForm):
         model = TnrisDocument
         fields = ('__all__')
 
-    document_url = forms.FileField(required=False, widget=DocumentWidget, help_text="Choose a document file and 'Save' this form to upload & save it to the database. Attempting to overwrite with a new file will only create a new record.")
+    document_url = forms.FileField(required=False, widget=DocumentWidget, help_text="Choose a document file and 'Save' this form to upload & save it to the database. Attempting to overwrite with a new file will only create a new record. The best method to overwrite would be to delete the existing file and re-upload a new file with the same name.")
 
     # boto3 s3 object
     client = boto3.client('s3')

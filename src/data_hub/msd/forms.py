@@ -19,7 +19,10 @@ class PictureWidget(forms.widgets.Widget):
 
 class PdfWidget(forms.widgets.Widget):
     def render(self, name, value, attrs=None):
-        html = Template("""<input type="file" name="$name" id="id_$name"><label for="img_$name" style='font-weight:bold;'>Current: $link</label>""")
+        if value:
+            html = Template("""<label for="img_$name" style='font-weight:bold;'>Current: $link</label>""")
+        else:
+            html = Template("""<input type="file" name="$name" id="id_$name"></input>""")
         return mark_safe(html.substitute(link=value,name=name))
 
 
@@ -33,7 +36,7 @@ class MapDownloadForm(forms.ModelForm):
             'label'
             )
 
-    download_url = forms.FileField(required=False, widget=PdfWidget, help_text="Upload map download file. PDF is recommended. 75MB max size.")
+    download_url = forms.FileField(required=False, widget=PdfWidget, help_text="Upload map download file. PDF is recommended. 75MB max size. Overwriting files is not allowed. Delete the record and create a new one with the new file if you are attempting to overwrite.")
 
     # FILE UPLOAD FOR DOWNLOAD FILE (PDF SUGGESTED)
     # boto3 s3 object

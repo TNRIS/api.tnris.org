@@ -52,7 +52,7 @@ class TnrisImageAdmin(admin.ModelAdmin):
         """.replace('{id}', htmlId)
         js = format_html(js)
         return format_html(
-            u'{0}<a style="cursor:pointer;border:solid 1px;padding:3px;" onclick="{1}Function();">COPY URL</a><input style="width:90%;margin-left:5px;" type="text" id="{2}" value="{3}" readonly>',
+            u'{0}<div style="margin-bottom:10px;"><a style="cursor:pointer;border:solid 1px;padding:3px;" onclick="{1}Function();">COPY URL</a></div><div><input style="width:90%;" type="text" id="{2}" value="{3}" readonly></input></div>',
             js,
             htmlId,
             htmlId,
@@ -89,7 +89,7 @@ class TnrisDocumentAdmin(admin.ModelAdmin):
         """.replace('{id}', htmlId)
         js = format_html(js)
         return format_html(
-            u'{0}<a style="cursor:pointer;border:solid 1px;padding:3px;" onclick="{1}Function();">COPY URL</a><input style="width:90%;margin-left:5px;" type="text" id="{2}" value="{3}" readonly>',
+            u'{0}<div style="margin-bottom:10px;"><a style="cursor:pointer;border:solid 1px;padding:3px;" onclick="{1}Function();">COPY URL</a></div><div><input style="width:90%;" type="text" id="{2}" value="{3}" readonly></input></div>',
             js,
             htmlId,
             htmlId,

@@ -32,7 +32,7 @@ class PictureWidget(forms.widgets.Widget):
         if value is None:
             html = Template("""<input type="file" name="$name" id="id_$name"><label for="img_$name">Current: <a href="#">$link</a></label>""")
         else:
-            html = Template("""{0}<a style="cursor:pointer;border:solid 1px;padding:3px;margin-left:15px;" onclick="copyFunction();">COPY URL</a><input style="width:50%;margin-left:5px;" type="text" id="currentUrl" value="$link" readonly></input><br><img id="img_$name" src="$link"/>""".format(js))
+            html = Template("""{0}<div style="margin-bottom:10px;"><a style="cursor:pointer;border:solid 1px;padding:3px;" onclick="copyFunction();">COPY URL</a></div><div style="margin-bottom:10px;"><input style="width:50%;" type="text" id="currentUrl" value="$link" readonly></input></div><div style="margin-bottom:10px;"><img id="img_$name" src="$link"/></div>""".format(js))
         return mark_safe(html.substitute(link=value,name=name))
 
 
@@ -51,7 +51,7 @@ class DocumentWidget(forms.widgets.Widget):
         if value is None:
             html = Template("""<input type="file" name="$name" id="id_$name"><label for="doc_$name">Current: <a href="#">$link</a></label>""")
         else:
-            html = Template("""{0}<a style="cursor:pointer;border:solid 1px;padding:3px;margin-left:15px;" onclick="copyFunction();">COPY URL</a><input style="width:50%;margin-left:5px;" type="text" id="currentUrl" value="$link" readonly></input>""".format(js))
+            html = Template("""{0}<div style="margin-bottom:10px;"><a style="cursor:pointer;border:solid 1px;padding:3px;" onclick="copyFunction();">COPY URL</a></div><div style="margin-bottom:10px;"><input style="width:50%;" type="text" id="currentUrl" value="$link" readonly></input></div>""".format(js))
         return mark_safe(html.substitute(link=value,name=name))
 
 

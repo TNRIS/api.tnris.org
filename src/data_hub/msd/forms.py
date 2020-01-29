@@ -20,7 +20,7 @@ class PictureWidget(forms.widgets.Widget):
 class PdfWidget(forms.widgets.Widget):
     def render(self, name, value, attrs=None):
         if value:
-            html = Template("""<label for="img_$name" style='font-weight:bold;'>Current: $link</label>""")
+            html = Template("""<label for="img_$name" style='font-weight:bold;'>$link</label>""")
         else:
             html = Template("""<input type="file" name="$name" id="id_$name"></input>""")
         return mark_safe(html.substitute(link=value,name=name))

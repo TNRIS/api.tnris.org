@@ -52,7 +52,7 @@ class TnrisImageAdmin(admin.ModelAdmin):
         """.replace('{id}', htmlId)
         js = format_html(js)
         return format_html(
-            u'{0}<a style="cursor:pointer;border:solid 1px;padding:3px;" onclick="{1}Function();">COPY URL</a><input style="width:90%;margin-left:5px;" type="text" id="{2}" value="{3}" readonly>',
+            u'{0}<div style="margin-bottom:10px;"><a style="cursor:pointer;border:solid 1px;padding:3px;" onclick="{1}Function();">COPY URL</a></div><div><input style="width:90%;" type="text" id="{2}" value="{3}" readonly></input></div>',
             js,
             htmlId,
             htmlId,
@@ -72,7 +72,7 @@ class TnrisDocumentAdmin(admin.ModelAdmin):
     model = TnrisDocument
     form = DocumentForm
     ordering = ('document_name',)
-    list_display = ('document_name', 'document_url_link', 'tiny_preview', 'created')
+    list_display = ('document_name', 'document_url_link', 'created')
     search_fields = ('document_name', 'document_url')
 
     def document_url_link(self, obj):
@@ -89,24 +89,11 @@ class TnrisDocumentAdmin(admin.ModelAdmin):
         """.replace('{id}', htmlId)
         js = format_html(js)
         return format_html(
-            u'{0}<a style="cursor:pointer;border:solid 1px;padding:3px;" onclick="{1}Function();">COPY URL</a><input style="width:90%;margin-left:5px;" type="text" id="{2}" value="{3}" readonly>',
+            u'{0}<div style="margin-bottom:10px;"><a style="cursor:pointer;border:solid 1px;padding:3px;" onclick="{1}Function();">COPY URL</a></div><div><input style="width:90%;" type="text" id="{2}" value="{3}" readonly></input></div>',
             js,
             htmlId,
             htmlId,
             obj.document_url
-        )
-
-    def tiny_preview(self, obj):
-        # tiny preview of .pdf files errors/breaks on page load when src is cached.
-        # this means all tiny previews display on hard reload, but .pdfs don't on
-        # normal reload. so, we append a current datetime query string to the request
-        # so the browser recognizes each load as a new request and doesn't load the
-        # cached version.
-        no_cache = str(datetime.today())
-        return format_html(
-            u'<embed style="max-width: 120px;" src="{0}?d={1}"></embed>',
-            obj.document_url,
-            no_cache
         )
 
 

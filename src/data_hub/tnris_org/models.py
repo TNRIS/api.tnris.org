@@ -80,6 +80,11 @@ class TnrisDocument(models.Model):
         'Document URL',
         max_length=255,
     )
+    sgm_note = models.BooleanField(
+        'Solutions Group Note',
+        default=False,
+        null=False
+    )
     created = models.DateTimeField(
         'Created',
         auto_now_add=True

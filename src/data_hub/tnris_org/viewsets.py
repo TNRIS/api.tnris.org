@@ -145,5 +145,6 @@ class TnrisSGMDocumentViewSet(viewsets.ReadOnlyModelViewSet):
     def get_queryset(self):
         # get records using query
         args = {'sgm_note': True}
+        # order by document file name
         queryset = TnrisDocument.objects.filter(**args).order_by('document_name')
         return queryset

@@ -129,6 +129,7 @@ class DocumentForm(forms.ModelForm):
         fields = ('__all__')
 
     document_url = forms.FileField(required=False, widget=DocumentWidget, help_text="Choose a document file and 'Save' this form to upload & save it to the database. Attempting to overwrite with a new file will only create a new record. The best method to overwrite would be to delete the existing file and re-upload a new file with the same name.")
+    sgm_note = forms.BooleanField(required=False, label="GIS Solutions Group Notes", help_text="Check this box to identify this as a Solutions Group Notes document. This is required to view the document on tnris.org.")
 
     # boto3 s3 object
     client = boto3.client('s3')

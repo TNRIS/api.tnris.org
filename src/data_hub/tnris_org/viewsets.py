@@ -7,14 +7,16 @@ from .models import (
     TnrisForumTraining,
     TnrisInstructorType,
     CompleteForumTrainingView,
-    TnrisGioCalendarEvent
+    TnrisGioCalendarEvent,
+    TnrisDocument
 )
 from .serializers import (
     TnrisTrainingSerializer,
     TnrisForumTrainingSerializer,
     TnrisInstructorTypeSerializer,
     CompleteForumTrainingViewSerializer,
-    TnrisGioCalendarEventSerializer
+    TnrisGioCalendarEventSerializer,
+    TnrisSGMDocumentSerializer
 )
 
 
@@ -130,4 +132,18 @@ class TnrisGioCalendarEventViewSet(viewsets.ReadOnlyModelViewSet):
                 args[field] = value
         # get records using query. order by chronological start
         queryset = TnrisGioCalendarEvent.objects.filter(**args).order_by('start_date', 'start_time')
+        return queryset
+
+
+class TnrisSGMDocumentViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    Retrieve all Solutions Group Meeting Documents for tnris.org frontend
+    """
+    serializer_class = TnrisSGMDocumentSerializer
+    http_method_names = ['get']
+
+    def get_queryset(self):
+        # get records using query
+        args = {'sgm_note': True}
+        queryset = TnrisDocument.objects.filter(**args).order_by('document_name')
         return queryset

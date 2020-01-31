@@ -5,7 +5,8 @@ from .models import (
     TnrisForumTraining,
     TnrisInstructorType,
     CompleteForumTrainingView,
-    TnrisGioCalendarEvent
+    TnrisGioCalendarEvent,
+    TnrisDocument
 )
 from datetime import datetime
 
@@ -148,3 +149,14 @@ class TnrisGioCalendarEventSerializer(serializers.ModelSerializer):
             pt = "%s-%s" % (st.strftime('%I:%M%p').lstrip("0"),
                             et.strftime('%I:%M%p').lstrip("0"))
         return pt
+
+
+class TnrisSGMDocumentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TnrisDocument
+        fields = ('document_id',
+                  'document_name',
+                  'document_url',
+                  'sgm_note',
+                  'created',
+                  'last_modified',)

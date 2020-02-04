@@ -63,6 +63,7 @@ class ProductInlineAdmin(admin.StackedInline):
     model = Product
     form = ProductForm
     extra = 0
+    ordering = ('frame_size__frame_size', 'physical_location')
 
 
 class CountyRelateInlineAdmin(admin.StackedInline):

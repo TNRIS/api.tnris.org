@@ -80,7 +80,7 @@ class CollectionAdmin(admin.ModelAdmin):
         ('Collection Information', {
              'fields': ('collection', 'agency', 'from_date', 'to_date',
                        'index_service_url', 'frames_service_url', 'mosaic_service_url',
-                       'counties', 'number_of_boxes', 'public', 'fully_scanned', 'qr_code_url'),
+                       'counties', 'number_of_boxes', 'photo_index_only', 'public', 'fully_scanned', 'qr_code_url'),
         }),
         ('Remarks', {
             'fields': ('remarks',)

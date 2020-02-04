@@ -14,15 +14,6 @@ class ProductForm(forms.ModelForm):
 
     clean_status = forms.BooleanField(label='Clean Status', help_text='Clean Status refers to collections that have been reviewed and are ready to been scanned, no erasing of frames needed. Default is False/Unchecked.', required=False)
 
-    def clean(self):
-        try:
-            if (self.cleaned_data.get('number_of_frames')
-                    < self.cleaned_data.get('scanned')):
-                raise ValidationError("Scanned must be >= number of frames")
-        except Exception:
-            raise ValidationError("Scanned must be >= number of frames")
-        return self.cleaned_data
-
 
 class CollectionForm(forms.ModelForm):
     class Meta:

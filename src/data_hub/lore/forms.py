@@ -8,18 +8,11 @@ from .models import Collection, County, CountyRelate, Product
 class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
-        fields = '__all__'
+        # hide scale and scanned fields based on issue #53; still present in model.
+        fields = ('frame_size', 'coverage', 'number_of_frames', 'medium',
+                  'print_type', 'clean_status', 'physical_location', 'remarks')
 
     clean_status = forms.BooleanField(label='Clean Status', help_text='Clean Status refers to collections that have been reviewed and are ready to been scanned, no erasing of frames needed. Default is False/Unchecked.', required=False)
-
-    def clean(self):
-        try:
-            if (self.cleaned_data.get('number_of_frames')
-                    < self.cleaned_data.get('scanned')):
-                raise ValidationError("Scanned must be >= number of frames")
-        except Exception:
-            raise ValidationError("Scanned must be >= number of frames")
-        return self.cleaned_data
 
 
 class CollectionForm(forms.ModelForm):

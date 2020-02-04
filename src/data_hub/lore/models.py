@@ -245,6 +245,7 @@ class Collection(models.Model):
     from_date = models.DateField('From Date', null=True, blank=True)
     to_date = models.DateField('To Date', null=True, blank=True)
     agency = models.ForeignKey('Agency', on_delete=models.CASCADE, related_name='agency')
+    photo_index_only = models.BooleanField('Photo Index Only', default=False)
     public = models.BooleanField('Public', default=True)
     fully_scanned = models.BooleanField('Fully Scanned', default=False)
     remarks = models.TextField(null=True, blank=True)
@@ -290,6 +291,9 @@ class ChcView(models.Model):
     )
     acquisition_date = models.DateField(
         'To Date (Acquisition)'
+    )
+    photo_index_only = models.BooleanField(
+        'Photo Index Only'
     )
     public = models.BooleanField(
         'Public'

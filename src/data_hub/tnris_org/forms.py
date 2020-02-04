@@ -18,7 +18,7 @@ import boto3, uuid
 
 
 class PictureWidget(forms.widgets.Widget):
-    def render(self, name, value, attrs=None):
+    def render(self, name, value, attrs=None, renderer=None):
         js = """
         <script type="text/javascript">
             function copyFunction() {
@@ -37,7 +37,7 @@ class PictureWidget(forms.widgets.Widget):
 
 
 class DocumentWidget(forms.widgets.Widget):
-    def render(self, name, value, attrs=None):
+    def render(self, name, value, attrs=None, renderer=None):
         js = """
         <script type="text/javascript">
             function copyFunction() {
@@ -56,7 +56,7 @@ class DocumentWidget(forms.widgets.Widget):
 
 
 class HeadshotWidget(forms.widgets.Widget):
-    def render(self, name, value, attrs=None):
+    def render(self, name, value, attrs=None, renderer=None):
         if value is None:
             html = Template("""<input type="text" name="$name" id="id_$name" style="width:758px;"></input>""")
         else:

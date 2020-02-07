@@ -32,7 +32,7 @@ class PictureWidget(forms.widgets.Widget):
         if value is None:
             html = Template("""<input type="file" name="$name" id="id_$name"><label for="img_$name">Current: <a href="#">$link</a></label>""")
         else:
-            html = Template("""{0}<div style="margin-bottom:10px;"><a style="cursor:pointer;border:solid 1px;padding:3px;" onclick="copyFunction();">COPY URL</a></div><div style="margin-bottom:10px;"><input style="width:50%;" type="text" id="currentUrl" value="$link" readonly></input></div><div style="margin-bottom:10px;"><img id="img_$name" src="$link"/></div>""".format(js))
+            html = Template("""{0}<div style="margin-bottom:10px;"><a style="cursor:pointer;border:solid 1px;padding:3px;" onclick="copyFunction();">COPY URL</a></div><div style="margin-bottom:10px;"><input style="width:50%;" type="text" id="currentUrl" value="$link" readonly></input></div><div style="margin-bottom:10px;"><img id="img_$name" style="max-height:500px; width:auto;" src="$link"/></div>""".format(js))
         return mark_safe(html.substitute(link=value,name=name))
 
 

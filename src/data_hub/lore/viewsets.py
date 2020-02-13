@@ -95,7 +95,8 @@ class MapserverViewSet(viewsets.ViewSet):
                 get_mapfiles(response['NextContinuationToken'])
             else:
                 return keys
-        all_keys = get_mapfiles('')
+        get_mapfiles('')
+        all_keys = keys
         for key in all_keys:
             key_obj = {}
             pos = all_keys.index(key)

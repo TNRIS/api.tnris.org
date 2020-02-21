@@ -1,5 +1,4 @@
 amqp==2.3.2
-asgiref==3.2.3
 billiard==3.5.0.4
 boto==2.49.0
 boto3==1.7.46
@@ -8,12 +7,12 @@ certifi==2018.4.16
 chardet==3.0.4
 coreapi==2.3.3
 coreschema==0.0.4
-Django==2.2.9
+Django==2.0.13
 django-admin-list-filter-dropdown==1.0.1
 django-admin-view-permission==1.9
 django-cors-headers==2.2.1
 django-filter==1.1.0
-django-grappelli==2.13.3
+django-grappelli==2.11.1
 django-rest-swagger==2.2.0
 django-seo-js==0.3.2
 django-ses==0.8.12

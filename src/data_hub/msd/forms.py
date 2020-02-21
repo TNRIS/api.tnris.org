@@ -20,13 +20,13 @@ from lcd.models import Collection
 
 
 class PictureWidget(forms.widgets.Widget):
-    def render(self, name, value, attrs=None):
+    def render(self, name, value, attrs=None, renderer=None):
         html = Template("""<input type="file" name="$name" id="id_$name"><label for="img_$name" style='font-weight:bold;'>Current: $link</label><img id="img_$name" src="$link" style="max-width:500px;"/>""")
         return mark_safe(html.substitute(link=value,name=name))
 
 
 class PdfWidget(forms.widgets.Widget):
-    def render(self, name, value, attrs=None):
+    def render(self, name, value, attrs=None, renderer=None):
         js = """
         <script type="text/javascript">
             function copyFunction() {

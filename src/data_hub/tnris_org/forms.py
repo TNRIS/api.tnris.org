@@ -53,7 +53,7 @@ class DocumentWidget(forms.widgets.Widget):
 
 
 class HeadshotWidget(forms.widgets.Widget):
-    def render(self, name, value, attrs=None):
+    def render(self, name, value, attrs=None, renderer=None):
         if value is None:
             html = Template("""
                 <input type="text" name="$name" id="id_$name" style="width:758px;"></input>

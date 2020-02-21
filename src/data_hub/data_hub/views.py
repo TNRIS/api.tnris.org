@@ -58,7 +58,7 @@ def page_not_found(request, exception):
     return response
 
 
-def server_error(request):
+def server_error(request, exception):
     q = random_rec()
     context = {
         'status': 500,

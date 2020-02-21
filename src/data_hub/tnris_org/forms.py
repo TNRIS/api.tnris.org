@@ -19,48 +19,52 @@ import boto3, uuid
 
 class PictureWidget(forms.widgets.Widget):
     def render(self, name, value, attrs=None):
-        js = """
-        <script type="text/javascript">
-            function copyFunction() {
-                var copyText = document.getElementById("currentUrl");
-                copyText.select();
-                document.execCommand("copy");
-            }
-        </script>
-        """
 
         if value is None:
-            html = Template("""<input type="file" name="$name" id="id_$name"><label for="img_$name">Current: <a href="#">$link</a></label>""")
+            html = Template("""
+                <input type="file" name="$name" id="id_$name"></input>
+            """)
         else:
-            html = Template("""{0}<div style="margin-bottom:10px;"><a style="cursor:pointer;border:solid 1px;padding:3px;" onclick="copyFunction();">COPY URL</a></div><div style="margin-bottom:10px;"><input style="width:50%;" type="text" id="currentUrl" value="$link" readonly></input></div><div style="margin-bottom:10px;"><img id="img_$name" src="$link"/></div>""".format(js))
+            html = Template("""
+                <div style="margin-bottom:10px;">
+                    <input style="width:90%;" type="text" id="currentUrl" value="$link" readonly></input>
+                </div>
+                <div style="margin-bottom:10px;">
+                    <img id="img_$name" style="max-height:500px; max-width: 95%;" src="$link"/>
+                </div>
+            """)
         return mark_safe(html.substitute(link=value,name=name))
 
 
 class DocumentWidget(forms.widgets.Widget):
     def render(self, name, value, attrs=None):
-        js = """
-        <script type="text/javascript">
-            function copyFunction() {
-                var copyText = document.getElementById("currentUrl");
-                copyText.select();
-                document.execCommand("copy");
-            }
-        </script>
-        """
 
         if value is None:
-            html = Template("""<input type="file" name="$name" id="id_$name"><label for="doc_$name">Current: <a href="#">$link</a></label>""")
+            html = Template("""
+                <input type="file" name="$name" id="id_$name"></input>
+            """)
         else:
-            html = Template("""{0}<div style="margin-bottom:10px;"><a style="cursor:pointer;border:solid 1px;padding:3px;" onclick="copyFunction();">COPY URL</a></div><div style="margin-bottom:10px;"><input style="width:50%;" type="text" id="currentUrl" value="$link" readonly></input></div>""".format(js))
+            html = Template("""
+                <div style="margin-bottom:10px;">
+                    <input style="width:90%;" type="text" id="currentUrl" value="$link" readonly></input>
+                </div>
+            """)
         return mark_safe(html.substitute(link=value,name=name))
 
 
 class HeadshotWidget(forms.widgets.Widget):
-    def render(self, name, value, attrs=None):
+    def render(self, name, value, attrs=None, renderer=None):
         if value is None:
-            html = Template("""<input type="text" name="$name" id="id_$name" style="width:758px;"></input>""")
+            html = Template("""
+                <input type="text" name="$name" id="id_$name" style="width:758px;"></input>
+            """)
         else:
-            html = Template("""<input type="text" name="$name" id="id_$name" style="width:758px;"></input><br><label for="img_$name">Current: <a href="$link" target="_blank">$link</a></label><img id="img_$name" src="$link" style="max-height:250px; max-width:250px; margin:20px 20px;"/>""")
+            html = Template("""
+                <input type="text" name="$name" id="id_$name" style="width:758px;"></input>
+                <br>
+                <label for="img_$name">Current: <a href="$link" target="_blank">$link</a></label>
+                <img id="img_$name" src="$link" style="max-height:250px; max-width:250px; margin:20px 20px;"/>
+            """)
         return mark_safe(html.substitute(link=value,name=name))
 
 
@@ -69,7 +73,7 @@ class ImageForm(forms.ModelForm):
         model = TnrisImage
         fields = ('__all__')
 
-    image_url = forms.FileField(required=False, widget=PictureWidget, help_text="Choose an image file and 'Save' this form to upload & save it to the database. Attempting to overwrite with a new file will only create a new record. The best method to overwrite would be to delete the existing file and re-upload a new file with the same name.")
+    image_url = forms.FileField(required=False, widget=PictureWidget, help_text="Choose an image file and 'Save' this form to upload & save it to the database. To replace this image with a new one, delete the image and create a new one.")
 
     # boto3 s3 object
     client = boto3.client('s3')

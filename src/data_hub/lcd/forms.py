@@ -29,25 +29,27 @@ import boto3, botocore, uuid
 
 class PictureWidget(forms.widgets.Widget):
     def render(self, name, value, attrs=None):
-        js = """
-        <script type="text/javascript">
-            function copyFunction() {
-                var copyText = document.getElementById("currentUrl");
-                copyText.select();
-                document.execCommand("copy");
-            }
-        </script>
-        """
 
         if value is None:
-            html = Template("""<input type="file" name="$name" id="id_$name"><label for="img_$name">Current: <a href="#">$link</a></label>""")
+            html = Template("""
+                <input type="file" name="$name" id="id_$name"></input>
+            """)
         else:
-            html = Template("""{0}<a style="cursor:pointer;border:solid 1px;padding:3px;margin-left:15px;" onclick="copyFunction();">COPY URL</a><input style="width:50%;margin-left:5px;" type="text" id="currentUrl" value="$link" readonly><br><img id="img_$name" src="$link" style="max-width:500px;"/>""".format(js))
+            html = Template("""
+                <div style="margin-bottom:10px;">
+                    <input style="width:90%;" type="text" id="currentUrl" value="$link" readonly></input>
+                </div>
+                <div style="margin-bottom:10px;">
+                    <img id="img_$name" src="$link" style="max-height:500px; max-width:95%;"/>
+                </div>
+            """)
         return mark_safe(html.substitute(link=value,name=name))
 
 class ZipfileWidget(forms.widgets.Widget):
     def render(self, name, value, attrs=None):
-        html = Template("""<input type="file" name="$name" id="id_$name"><label for="img_$name">Current: $link</label>""")
+        html = Template("""
+            <input type="file" name="$name" id="id_$name"><label for="img_$name">Current: $link</label>
+        """)
         return mark_safe(html.substitute(link=value,name=name))
 
 class ImageForm(forms.ModelForm):

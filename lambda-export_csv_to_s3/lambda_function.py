@@ -1,7 +1,7 @@
 # --------------- IMPORTS ---------------
 import io, os, sys, psycopg2
 import boto3
-import datetime, csv
+import datetime, csv, tempfile
 
 # Database Connection Info
 database = os.environ.get('DB_NAME')
@@ -74,26 +74,20 @@ def lambda_handler(event, context):
     # use postgres copy function to grab db_view and delimit with comma, include header info
     sql = "COPY (SELECT * FROM %s) TO STDOUT WITH CSV DELIMITER ',' HEADER;" % (db_view)
 
-    print(sql)
-
     # write sql to .csv file
-    with open('/home/john/Desktop/' + file, 'w') as csv_file:
-        # the_writer = csv.writer(csv_file)
+    with tempfile.NamedTemporaryFile('w') as csv_file:
         cur.copy_expert(sql, csv_file)
-        # resource.Object(bucket, csv_file).put(Body=the_file.getvalue())
-
-    # file = str(file)
-    # cur.copy_expert(sql, file)
-    # resource.Object(bucket, file).put(Body=file.getvalue())
-
-    # boto stuff
-    # response = self.client.put_object(
-    #     Bucket='tnris-public-data',
-    #     ACL='public-read',
-    #     ContentType='text/csv',
-    #     Key=key,
-    #     Body=file
-    # )
+        # key = s3.key.Key(bucket, sub)
+        # key.set_contents_from_filename(csv_file.name)
+        # s3.Object(bucket, csv_file).put(Body=the_file.getvalue())
+        # boto stuff
+        response = s3.put_object(
+            Bucket=bucket,
+            ACL='public-read',
+            ContentType='text/csv',
+            Key=sub,
+            Body=csv_file
+        )
 
     # completed
     print("goodbye :-}")

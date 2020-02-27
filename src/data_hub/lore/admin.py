@@ -3,11 +3,11 @@ from __future__ import unicode_literals
 
 from django.contrib import admin
 
-from .filters import CollectionAgencyNameFilter, CollectionCountyFilter, \
-    CountyDropdownFilter
+from .filters import (CollectionAgencyNameFilter, CollectionCountyFilter,
+                      CountyDropdownFilter)
 from .forms import CollectionForm, ProductForm
 from .models import (Agency, Collection, County, CountyRelate, FrameSize,
-                     LineIndex, MicroficheIndex, PhotoIndex, Product, Scale,
+                     LineIndex, MicroficheIndex, PhotoIndex, Product,
                      ScannedPhotoIndexLink)
 
 
@@ -22,11 +22,6 @@ class AgencyAdmin(admin.ModelAdmin):
 class FrameSizeAdmin(admin.ModelAdmin):
     model = FrameSize
     ordering = ('frame_size',)
-
-
-class ScaleAdmin(admin.ModelAdmin):
-    model = Scale
-    ordering = ('scale',)
 
 
 class PhotoIndexInlineAdmin(admin.StackedInline):
@@ -115,7 +110,6 @@ class CollectionAdmin(admin.ModelAdmin):
     county_names.short_description = "Counties in Collection"
 
 
-# Register your models here.
 class CountyAdmin(admin.ModelAdmin):
     list_filter = (
         ('name', CountyDropdownFilter),
@@ -126,8 +120,8 @@ class CountyAdmin(admin.ModelAdmin):
     # search_fields = ['name', 'fips']
 
 
+# Register your models here.
 admin.site.register(Agency, AgencyAdmin)
 admin.site.register(Collection, CollectionAdmin)
 admin.site.register(County, CountyAdmin)
 admin.site.register(FrameSize, FrameSizeAdmin)
-admin.site.register(Scale, ScaleAdmin)

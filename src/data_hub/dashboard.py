@@ -71,7 +71,6 @@ class CustomIndexDashboard(Dashboard):
             css_classes=('grp-collapse grp-closed',),
             models=('lore.models.Agency',
                     'lore.models.FrameSize',
-                    'lore.models.Scale',
                     'lore.models.County',
                     'lore.models.Collection'),
         ))

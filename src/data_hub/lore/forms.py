@@ -8,7 +8,6 @@ from .models import Collection, County, CountyRelate, Product
 class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
-        # hide scale and scanned fields based on issue #53; still present in model.
         fields = ('frame_size', 'coverage', 'number_of_frames', 'medium',
                   'print_type', 'clean_status', 'physical_location', 'remarks')
 

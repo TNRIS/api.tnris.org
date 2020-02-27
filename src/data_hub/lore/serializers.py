@@ -24,7 +24,6 @@ class ProductSerializer(serializers.ModelSerializer):
     NumFrames = serializers.IntegerField(
         source="number_of_frames", read_only=True)
     PrintType = serializers.SlugField(source="print_type", read_only=True)
-    Scale = serializers.IntegerField(source="scale.scale", read_only=True)
 
     def county_fips(self, product):
         fips = self.context['request'].query_params.get('countyFips')
@@ -33,10 +32,10 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = ('AcquiringAgency', 'CountyFIPS', 'Date', 'NumFrames',
-                  'PrintType', 'Scale')
+                  'PrintType')
 
 
 class CollectionSerializer(serializers.ModelSerializer):
     class Meta:
         model = ChcView
-        fields = '__all__' 
+        fields = '__all__'

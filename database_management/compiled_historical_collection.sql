@@ -26,10 +26,8 @@ SELECT historical_collection.id as collection_id,
                                  'number_of_frames', product.number_of_frames,
                                  'medium', product.medium,
                                  'print_type', product.print_type,
-                                 'scale', scale.scale,
                                  'frame_size', frame_size.frame_size)
         FROM product
-        LEFT JOIN scale ON scale.id=product.scale_id
         LEFT JOIN frame_size ON frame_size.id=product.frame_size_id
         WHERE product.collection_id=historical_collection.id), ',') as products,
   CASE

@@ -43,22 +43,6 @@ class FrameSize(models.Model):
         return str(self.frame_size)
 
 
-class Scale(models.Model):
-    """Domain defining allowable scale values"""
-
-    class Meta:
-        db_table = 'scale'
-        verbose_name_plural = 'Scales'
-
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    scale = models.PositiveIntegerField('Scale', unique=True)
-    created = models.DateTimeField('Created', auto_now_add=True)
-    last_modified = models.DateTimeField('Last Modified', auto_now=True)
-
-    def __str__(self):
-        return str(self.scale)
-
-
 class PhotoIndex(models.Model):
     """Defines historical imagery collection photo indexes"""
 
@@ -66,12 +50,9 @@ class PhotoIndex(models.Model):
         db_table = 'photo_index'
         verbose_name = 'Photo Index'
         verbose_name_plural = 'Photo Indexes'
-        unique_together = ('collection', 'scale', 'number_of_frames',
-                           'scanned', 'physical_location')
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     collection = models.ForeignKey('Collection', on_delete=models.CASCADE)
-    scale = models.ForeignKey('Scale', on_delete=models.CASCADE, null=True, blank=True)
     number_of_frames = models.PositiveIntegerField('Number of Frames', default=1)
     scanned = models.PositiveIntegerField('Scanned', default=0)
     scanned_location = models.CharField('Scanned Location', max_length=254, null=True, blank=True)
@@ -190,14 +171,10 @@ class Product(models.Model):
         db_table = 'product'
         verbose_name = 'Product'
         verbose_name_plural = 'Products'
-        unique_together = ("collection", "scale", "frame_size",
-                           "number_of_frames", "scanned", "medium",
-                           "physical_location")
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     collection = models.ForeignKey('Collection', on_delete=models.CASCADE,
                                    related_name='Products')
-    scale = models.ForeignKey('Scale', on_delete=models.CASCADE)
     frame_size = models.ForeignKey('FrameSize', on_delete=models.CASCADE)
     COVERAGE_TYPE_CHOICE = (
         ('Full', 'Full'),
@@ -207,7 +184,6 @@ class Product(models.Model):
                                 choices=COVERAGE_TYPE_CHOICE, default='Partial')
     number_of_frames = models.PositiveIntegerField('Number of Frames',
                                                    default=0)
-    scanned = models.PositiveIntegerField('Scanned', default=0)
 
     MEDIUM_TYPE_CHOICE = (
         ('Film', 'Film'),

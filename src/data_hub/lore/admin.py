@@ -9,7 +9,7 @@ from .forms import CollectionForm, ProductForm
 from .models import (Agency, Collection, County, CountyRelate, FrameSize,
                      LineIndex, MicroficheIndex, PhotoIndex, Product,
                      ScannedPhotoIndexLink)
-from .actions import export_csv
+from .actions import export_collections, export_products
 
 
 class AgencyAdmin(admin.ModelAdmin):
@@ -99,7 +99,7 @@ class CollectionAdmin(admin.ModelAdmin):
         CollectionCountyFilter
     )
     readonly_fields=('qr_code_url',)
-    actions = [export_csv]
+    actions = [export_collections, export_products]
 
     def county_names(self, collection):
         county_relates = (
@@ -120,7 +120,6 @@ class CountyAdmin(admin.ModelAdmin):
     ordering = ('name',)
     list_display = ('name', 'fips')
     # search_fields = ['name', 'fips']
-    actions = [export_csv]
 
 
 # Register your models here.

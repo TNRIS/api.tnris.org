@@ -69,14 +69,18 @@ def lambda_handler(event, context):
     x = datetime.datetime.now()
     file = x.strftime('%Y%m%d') + '_compiled_historical_collection.csv'
 
-    print(file)
-
     # use postgres copy function to grab db_view and delimit with comma, include header info
     sql = "COPY (SELECT * FROM %s) TO STDOUT WITH CSV DELIMITER ',' HEADER;" % (db_view)
 
-    # write sql to .csv file
-    with tempfile.NamedTemporaryFile('w') as csv_file:
-        cur.copy_expert(sql, csv_file)
+    # create file like object in memory
+    f = io.StringIO()
+    
+    # write sql to temporary file then save to s3
+    with tempfile.NamedTemporaryFile(mode='w+b', delete=False) as temp_csv:
+        print('temp original name:', temp_csv.name)
+        temp_csv.name = file
+        print('new temp name:', temp_csv.name)
+        cur.copy_expert(sql, temp_csv)
         # key = s3.key.Key(bucket, sub)
         # key.set_contents_from_filename(csv_file.name)
         # s3.Object(bucket, csv_file).put(Body=the_file.getvalue())
@@ -86,11 +90,11 @@ def lambda_handler(event, context):
             ACL='public-read',
             ContentType='text/csv',
             Key=sub,
-            Body=csv_file
+            Body=temp_csv
         )
 
     # completed
-    print("goodbye :-}")
+    print("all done, goodbye :-}")
 
 if __name__ == '__main__':
     lambda_handler(event='event', context='context')

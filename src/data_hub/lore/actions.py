@@ -16,6 +16,7 @@ from .models import (
 
 # additional actions in admin console dropdown
 # export the historical collections table from the database to .csv format
+# action available in CollectionAdmin class
 def export_collection(self, request, queryset):
     date = datetime.datetime.today().strftime('%Y%m%d')
     response = HttpResponse(content_type='text/csv')
@@ -109,7 +110,7 @@ def export_product(self, request, queryset):
                     p.remarks,
                     p.created,
                     p.last_modified,
-                    size.frame_size,
+                    size.frame_size, # return actual frame size, not frame size id
                     p.clean_status
                 ])
 

@@ -11,8 +11,8 @@ from .models import (Agency, Collection, County, CountyRelate, FrameSize,
                      ScannedPhotoIndexLink)
 from .actions import (export_collection, export_product, export_photo_index,
                       export_scanned_photo_index_link, export_county, export_line_index,
-                      export_agency_domain, export_frame_size_domain,
-                      export_county_domain)
+                      export_microfiche_index, export_agency_domain,
+                      export_frame_size_domain, export_county_domain)
 
 
 class AgencyAdmin(admin.ModelAdmin):
@@ -110,7 +110,8 @@ class CollectionAdmin(admin.ModelAdmin):
                 export_photo_index,
                 export_scanned_photo_index_link,
                 export_county,
-                export_line_index
+                export_line_index,
+                export_microfiche_index
               ]
 
     def county_names(self, collection):

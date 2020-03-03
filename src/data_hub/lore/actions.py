@@ -240,6 +240,37 @@ def export_line_index(self, request, queryset):
 export_line_index.short_description = "Line Index table to CSV"
 
 
+# export the microfiche index table information
+# tied to collection records; action available in CollectionAdmin class
+def export_microfiche_index(self, request, queryset):
+    date = datetime.datetime.today().strftime('%Y%m%d')
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="%s_historical_microfiche_index.csv"' % date
+    writer = csv.writer(response)
+    # writer header row
+    writer.writerow([
+        'collection_id',
+        'microfiche_index_id',
+        'remarks',
+        'created',
+        'last_modified'
+    ])
+
+    collections = queryset.values_list()
+
+    for c in collections:
+        for i in LineIndex.objects.filter(collection=c):
+            writer.writerow([
+                i.collection_id,
+                i.id,
+                i.remarks,
+                i.created,
+                i.last_modified
+            ])
+    return response
+export_microfiche_index.short_description = "Microfiche Index table to CSV"
+
+
 # export the agency domain table from the database to .csv format
 # action used in AgencyAdmin
 def export_agency_domain(self, request, queryset):

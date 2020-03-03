@@ -42,13 +42,29 @@ def export_collection(self, request, queryset):
         'number_of_boxes'
     ])
 
-    collections = queryset.values_list()
+    collections = queryset.values_list(
+        'id',
+        'collection',
+        'from_date',
+        'to_date',
+        'agency',
+        'photo_index_only',
+        'public',
+        'fully_scanned',
+        'remarks',
+        'created',
+        'last_modified',
+        'index_service_url',
+        'frames_service_url',
+        'mosaic_service_url',
+        'ls4_link',
+        'qr_code_url',
+        'number_of_boxes'
+    )
 
     for c in collections:
-        for a in Agency.objects.filter(collection=c):
-            writer.writerow([
-                c[0],c[1],c[2],c[3],c[4],c[5],c[6],c[7],c[8],c[9],c[10],c[11],c[12],c[13],c[14],c[15],c[16]
-            ])
+        writer.writerow(c)
+
     return response
 export_collection.short_description = "Collections table to CSV"
 
@@ -96,6 +112,7 @@ def export_product(self, request, queryset):
                     size.frame_size,
                     p.clean_status
                 ])
+
     return response
 export_product.short_description = "Products table to CSV"
 
@@ -135,6 +152,7 @@ def export_photo_index(self, request, queryset):
                 photo.created,
                 photo.last_modified
             ])
+
     return response
 export_photo_index.short_description = "Photo Index table to CSV"
 
@@ -172,6 +190,7 @@ def export_scanned_photo_index_link(self, request, queryset):
                 link.created,
                 link.last_modified
             ])
+
     return response
 export_scanned_photo_index_link.short_description = "Scanned Photo Index Link table to CSV"
 
@@ -205,6 +224,7 @@ def export_county(self, request, queryset):
                 r.created,
                 r.last_modified
             ])
+
     return response
 export_county.short_description = "Counties table to CSV"
 
@@ -236,6 +256,7 @@ def export_line_index(self, request, queryset):
                 i.created,
                 i.last_modified
             ])
+
     return response
 export_line_index.short_description = "Line Index table to CSV"
 
@@ -259,7 +280,7 @@ def export_microfiche_index(self, request, queryset):
     collections = queryset.values_list()
 
     for c in collections:
-        for i in LineIndex.objects.filter(collection=c):
+        for i in MicroficheIndex.objects.filter(collection=c):
             writer.writerow([
                 i.collection_id,
                 i.id,
@@ -267,6 +288,7 @@ def export_microfiche_index(self, request, queryset):
                 i.created,
                 i.last_modified
             ])
+
     return response
 export_microfiche_index.short_description = "Microfiche Index table to CSV"
 

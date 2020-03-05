@@ -9,6 +9,10 @@ from .forms import CollectionForm, ProductForm
 from .models import (Agency, Collection, County, CountyRelate, FrameSize,
                      LineIndex, MicroficheIndex, PhotoIndex, Product,
                      ScannedPhotoIndexLink)
+from .actions import (export_collection, export_product, export_photo_index,
+                      export_scanned_photo_index_link, export_county, export_line_index,
+                      export_microfiche_index, export_agency_domain,
+                      export_frame_size_domain, export_county_domain)
 
 
 class AgencyAdmin(admin.ModelAdmin):
@@ -17,11 +21,13 @@ class AgencyAdmin(admin.ModelAdmin):
     list_display = (
         'name', 'abbreviation'
     )
+    actions = [export_agency_domain]
 
 
 class FrameSizeAdmin(admin.ModelAdmin):
     model = FrameSize
     ordering = ('frame_size',)
+    actions = [export_frame_size_domain]
 
 
 class PhotoIndexInlineAdmin(admin.StackedInline):
@@ -98,6 +104,15 @@ class CollectionAdmin(admin.ModelAdmin):
         CollectionCountyFilter
     )
     readonly_fields=('qr_code_url',)
+    actions = [
+                export_collection,
+                export_product,
+                export_photo_index,
+                export_scanned_photo_index_link,
+                export_county,
+                export_line_index,
+                export_microfiche_index
+              ]
 
     def county_names(self, collection):
         county_relates = (
@@ -118,6 +133,7 @@ class CountyAdmin(admin.ModelAdmin):
     ordering = ('name',)
     list_display = ('name', 'fips')
     # search_fields = ['name', 'fips']
+    actions = [export_county_domain]
 
 
 # Register your models here.

@@ -70,7 +70,7 @@ class CollectionViewSet(viewsets.ReadOnlyModelViewSet):
 
 class MapserverViewSet(viewsets.ViewSet):
     """
-    Retrieve TNRIS historical collection server information
+    Retrieve TNRIS mapserver instance mapfiles list from S3 content objects
     """
     permission_classes = (AllowAny,)
 
@@ -103,7 +103,7 @@ class MapserverViewSet(viewsets.ViewSet):
             name = key.replace('mapfiles/', '').replace('.map', '')
             key_obj['name'] = name
             key_obj['label'] = name.replace("_", " ").title()
-            key_obj['wms'] = 'http://mapserver.tnris.org/wms/?map=/' + key
+            key_obj['wms'] = 'http://mapserver.tnris.org/?map=/' + key
 
             if len(name.split("_")) == 4:
                 key_obj['org'] = 'county'

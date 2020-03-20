@@ -103,7 +103,7 @@ class MapserverViewSet(viewsets.ViewSet):
             name = key.replace('mapfiles/', '').replace('.map', '')
             key_obj['name'] = name
             key_obj['label'] = name.replace("_", " ").title()
-            key_obj['wms'] = 'http://mapserver.tnris.org/?map=/' + key
+            key_obj['wms'] = 'http://mapserver.tnris.org/wms/?map=/' + key
 
             if len(name.split("_")) == 4:
                 key_obj['org'] = 'county'

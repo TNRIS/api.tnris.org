@@ -107,6 +107,7 @@ class CustomIndexDashboard(Dashboard):
             models=('contact.models.DataHubContact',
                     'contact.models.DataHubOrder',
                     'contact.models.DataHubOutsideEntityContact',
+                    'contact.models.EducationContact',
                     'contact.models.EmailTemplate',
                     'contact.models.ForumJobBoardSubmission',
                     'contact.models.GeneralContact',

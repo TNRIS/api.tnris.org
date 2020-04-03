@@ -6,6 +6,7 @@ from .models import (
     DataHubContact,
     DataHubOrder,
     DataHubOutsideEntityContact,
+    EducationContact,
     EmailTemplate,
     ForumJobBoardSubmission,
     GeneralContact,
@@ -115,6 +116,28 @@ class DataHubOutsideEntityContactAdmin(admin.ModelAdmin, ExportSelectedToCsvMixi
         return self.readonly_fields
 
 
+@admin.register(EducationContact)
+class EducationContactAdmin(admin.ModelAdmin, ExportSelectedToCsvMixin):
+    model = EducationContact
+    actions = ["export_selected_to_csv"]
+    list_display = (
+        'name',
+        'email',
+        'phone',
+        'address',
+        'organization',
+        'industry',
+        'question_or_comments',
+        'created'
+    )
+    ordering = ('-created',)
+
+    def get_readonly_fields(self, request, obj=None):
+        if obj:
+            self.readonly_fields = [field.name for field in obj.__class__._meta.fields]
+        return self.readonly_fields
+
+
 @admin.register(EmailTemplate)
 class EmailTemplateAdmin(admin.ModelAdmin):
     model = EmailTemplate
@@ -165,7 +188,6 @@ class GeneralContactAdmin(admin.ModelAdmin, ExportSelectedToCsvMixin):
         'organization',
         'industry',
         'question_or_comments',
-        'created',
         'created'
     )
     ordering = ('-created',)

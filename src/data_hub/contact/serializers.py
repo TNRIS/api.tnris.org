@@ -4,6 +4,7 @@ from .models import (
     DataHubContact,
     DataHubOrder,
     DataHubOutsideEntityContact,
+    EducationContact,
     ForumJobBoardSubmission,
     GeneralContact,
     GeorodeoCallForPresentationsSubmission,
@@ -31,6 +32,12 @@ class DataHubOrderSerializer(serializers.ModelSerializer):
 class DataHubOutsideEntityContactSerializer(serializers.ModelSerializer):
     class Meta:
         model = DataHubOutsideEntityContact
+        fields = ('__all__')
+
+
+class EducationContactSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EducationContact
         fields = ('__all__')
 
         

@@ -70,7 +70,7 @@ class CollectionViewSet(viewsets.ReadOnlyModelViewSet):
 
 class MapserverViewSet(viewsets.ViewSet):
     """
-    Retrieve TNRIS historical collection server information
+    Retrieve TNRIS mapserver instance mapfiles list from S3 content objects
     """
     permission_classes = (AllowAny,)
 

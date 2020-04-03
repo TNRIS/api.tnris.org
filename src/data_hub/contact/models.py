@@ -341,6 +341,83 @@ class DataHubOutsideEntityContact(models.Model):
         return self.name + " " + self.created.strftime('%Y-%m-%d %H:%M')
 
 
+class EducationContact(models.Model):
+    """
+    Education page Contact form on tnris.org
+    https://tnris.org/education/
+    """
+
+    class Meta:
+        db_table = 'contact_education'
+        verbose_name = 'Education Question or Comment'
+        verbose_name_plural = 'Education Questions or Comments'
+
+    education_contact_id = models.UUIDField(
+        'Education Contact ID',
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False
+    )
+    question_or_comments = models.TextField(
+        'Question or Comment',
+        null=False,
+        blank=False
+    )
+    name = models.CharField(
+        'Name',
+        max_length=150,
+        null=False,
+        blank=False
+    )
+    email = models.CharField(
+        'Email',
+        max_length=150,
+        null=False,
+        blank=False
+    )
+    phone = models.CharField(
+        'Phone',
+        max_length=20,
+        null=True,
+        blank=True
+    )
+    address = models.CharField(
+        'Address',
+        max_length=150,
+        null=True,
+        blank=True
+    )
+    organization = models.CharField(
+        'Organization',
+        max_length=100,
+        null=True,
+        blank=True
+    )
+    industry = models.CharField(
+        'Industry',
+        max_length=50,
+        null=True,
+        blank=True
+    )
+    industry_other = models.CharField(
+        'Industry (Other)',
+        max_length=50,
+        null=True,
+        blank=True
+    )
+    created = models.DateTimeField(
+        'Created',
+        auto_now_add=True
+    )
+    last_modified = models.DateTimeField(
+        'Last Modified',
+        auto_now=True
+    )
+
+    def __str__(self):
+        return self.name + " " + self.created.strftime('%Y-%m-%d %H:%M')
+
+
 class ForumJobBoardSubmission(models.Model):
     """
     Forum job board submission form on tnris.org forum pages

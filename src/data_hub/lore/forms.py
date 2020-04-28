@@ -51,30 +51,54 @@ class CollectionForm(forms.ModelForm):
         mosaic = self.cleaned_data['mosaic_service_url']
 
         links = []
+        mapserver_url = 'https://mapserver.tnris.org/wms/?map=/mapfiles/'
         if index is not None:
+            # validate url belongs to proper product type
             if '_index' not in index:
                 raise forms.ValidationError('That is not an Index Service URL!')
+            # validate url is 443 protocol
+            if 'http://' in index:
+                raise forms.ValidationError('Index Service URL must be https protocol!')
+            # validate the url structure matches the tnris mapserver instance
+            if mapserver_url not in index:
+                raise forms.ValidationError('Index Service URL must belong to the TNRIS mapserver: "https://mapserver.tnris.org/wms/?map=/mapfiles/<mapfile>"')
             idx_link = index.split('/')[-1].replace('.map', '').replace('_index', '').replace('_', ' ').upper()
             if idx_link not in links:
                 links.append(idx_link)
         if frames is not None:
+            # validate url belongs to proper product type
             if '_frames' not in frames:
                 raise forms.ValidationError('That is not an Frames Service URL!')
+            # validate url is 443 protocol
+            if 'http://' in frames:
+                raise forms.ValidationError('Frames Service URL must be https protocol!')
+            # validate the url structure matches the tnris mapserver instance
+            if mapserver_url not in frames:
+                raise forms.ValidationError('Frames Service URL must belong to the TNRIS mapserver: "https://mapserver.tnris.org/wms/?map=/mapfiles/<mapfile>"')
             frm_link = frames.split('/')[-1].replace('.map', '').replace('_frames', '').replace('_', ' ').upper()
             if frm_link not in links:
                 links.append(frm_link)
         if mosaic is not None:
+            # validate url belongs to proper product type
             if '_mosaic' not in mosaic:
                 raise forms.ValidationError('That is not an Mosaic Service URL!')
+            # validate url is 443 protocol
+            if 'http://' in mosaic:
+                raise forms.ValidationError('Mosaic Service URL must be https protocol!')
+            # validate the url structure matches the tnris mapserver instance
+            if mapserver_url not in mosaic:
+                raise forms.ValidationError('Mosaic Service URL must belong to the TNRIS mapserver: "https://mapserver.tnris.org/wms/?map=/mapfiles/<mapfile>"')
             msc_link = mosaic.split('/')[-1].replace('.map', '').replace('_mosaic', '').replace('_', ' ').upper()
             if msc_link not in links:
                 links.append(msc_link)
+        # cross validate consistency across all 3 service urls
         if len(links) > 1:
             raise forms.ValidationError('Index, Frames, and Mosaic Service URLs have inconsistent collections!')
         elif len(links) == 1:
             self.instance.ls4_link = links[0]
         else:
             self.instance.ls4_link = None
+        return
 
     def save(self, commit=True):
         updated_counties = self.cleaned_data['counties']
@@ -97,6 +121,7 @@ class ScannedPhotoIndexLinkForm(forms.ModelForm):
         fields = ('__all__')
 
     def clean(self):
+        # force 443 protocol on urls and reformat url structure for consistency
         link = self.cleaned_data['link']
         link = link.replace('http://', 'https://')
         link = link.replace('https://tnris-ls4.s3.amazonaws.com/', 'https://s3.amazonaws.com/tnris-ls4/')

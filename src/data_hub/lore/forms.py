@@ -2,7 +2,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.db.utils import ProgrammingError
 
-from .models import Collection, County, CountyRelate, Product
+from .models import Collection, County, CountyRelate, Product, ScannedPhotoIndexLink
 
 
 class ProductForm(forms.ModelForm):
@@ -89,3 +89,17 @@ class CollectionForm(forms.ModelForm):
         for add in adds:
             CountyRelate(county_id=add, collection=self.instance).save()
         return super(CollectionForm, self).save(commit=commit)
+
+
+class ScannedPhotoIndexLinkForm(forms.ModelForm):
+    class Meta:
+        model = ScannedPhotoIndexLink
+        fields = ('__all__')
+
+    def clean(self):
+        link = self.cleaned_data['link']
+        link = link.replace('http://', 'https://')
+        link = link.replace('https://tnris-ls4.s3.amazonaws.com/', 'https://s3.amazonaws.com/tnris-ls4/')
+        self.cleaned_data['link'] = link
+        super(ScannedPhotoIndexLinkForm, self).save(commit=False)
+        return 

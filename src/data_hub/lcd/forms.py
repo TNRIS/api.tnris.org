@@ -60,7 +60,11 @@ class ImageForm(forms.ModelForm):
             'caption': 'Caption will not be saved until chosen image is uploaded and saved to database.',
         }
 
-    image_url = forms.FileField(required=True, widget=PictureWidget, help_text="Choose an image file and 'Save' this form to upload & save it to the database. After saving, you can populate a Caption and re-save to apply.")
+    image_url = forms.FileField(
+        required=True,
+        widget=PictureWidget, 
+        help_text="DataHub Images should be 16:9 ratio (1920 x 1080 pixels).<br/>Choose an image file and 'Save' this form to upload & save it to the database. After saving, you can populate a Caption and re-save to apply."
+        )
 
 
 class CollectionForm(forms.ModelForm):

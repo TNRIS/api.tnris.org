@@ -234,7 +234,7 @@ class Collection(models.Model):
     number_of_boxes = models.PositiveIntegerField('Number of Boxes', null=True, blank=True)
     thumbnail_image = models.TextField(
         'Thumb Image',
-        max_length=120,
+        max_length=200,
         null=True,
         blank=True,
         default='https://s3.amazonaws.com/data.tnris.org/historical_images/historical_thumbnail.jpg'

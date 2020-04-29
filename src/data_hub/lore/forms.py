@@ -55,11 +55,38 @@ class CollectionForm(forms.ModelForm):
                     "county_id").filter(collection=self.instance.id)
             ]
             self.fields['counties'].initial = self.initial_counties
+            self.fields['thumbnail_image'].choices = self.create_image_choices('image_url', 'image_id', Image, 'image_id')
+            self.fields['thumbnail_image'].help_text = self.selected_thumbnail()
 
     counties = forms.MultipleChoiceField(
         widget=forms.SelectMultiple(attrs={'title': 'Hold down ctrl to select multiple counties',}),
         choices=county_choices
     )
+    thumbnail_image = forms.ChoiceField(required=False, choices=[])
+
+    # general function to create a form dropdown for thumbnail image
+    def create_image_choices(self, id_field, label_field, type_table, order_field):
+        # start with the model field default which resides in s3 outside of any dbase record
+        choices = [('https://s3.amazonaws.com/data.tnris.org/historical_images/historical_thumbnail.jpg', 'Default')]
+        # get the relate type choices from the type table
+        try:
+            uploaded_images = [
+                (getattr(b, id_field), getattr(b, label_field)) for b in type_table.objects.filter(collection_id=self.instance.id).order_by(order_field)]
+            
+            choices.extend(uploaded_images)
+        except ProgrammingError as e:
+            print(e)
+        return choices
+
+    # retrieve selected thumbnail id for helper text to display
+    def selected_thumbnail(self):
+        text = "NO THUMBNAIL SELECTED! Please choose an image UUID from the dropdown and 'Save' the form."
+        if self.instance.thumbnail_image is not None and self.instance.thumbnail_image != "":
+            filename = self.instance.thumbnail_image.split("/")[-1]
+            if filename == 'historical_thumbnail.jpg':
+                filename = 'Default'
+            text = "Currently Selected: %s" % filename 
+        return text
 
     def inline_image_handler(self, file):
         new_uuid = uuid.uuid4()

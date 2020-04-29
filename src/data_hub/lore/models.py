@@ -226,14 +226,21 @@ class Collection(models.Model):
     public = models.BooleanField('Public', default=True)
     fully_scanned = models.BooleanField('Fully Scanned', default=False)
     remarks = models.TextField(null=True, blank=True)
-    created = models.DateTimeField('Created', auto_now_add=True)
-    last_modified = models.DateTimeField('Last Modified', auto_now=True)
     index_service_url = models.URLField('Index Service URL', max_length=256, null=True, blank=True)
     frames_service_url = models.URLField('Frames Service URL', max_length=256, null=True, blank=True)
     mosaic_service_url = models.URLField('Mosaic Service URL', max_length=256, null=True, blank=True)
     ls4_link = models.CharField(max_length=200, null=True, blank=True)
     qr_code_url = models.URLField('QR Code URL', max_length=256, null=True, blank=True)
     number_of_boxes = models.PositiveIntegerField('Number of Boxes', null=True, blank=True)
+    thumbnail_image = models.TextField(
+        'Thumb Image',
+        max_length=120,
+        null=True,
+        blank=True,
+        default='https://s3.amazonaws.com/data.tnris.org/historical_images/historical_thumbnail.jpg'
+    )
+    created = models.DateTimeField('Created', auto_now_add=True)
+    last_modified = models.DateTimeField('Last Modified', auto_now=True)
 
     def delete_s3_files(self):
         # do that boto dance

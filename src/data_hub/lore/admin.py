@@ -5,9 +5,9 @@ from django.contrib import admin
 
 from .filters import (CollectionAgencyNameFilter, CollectionCountyFilter,
                       CountyDropdownFilter)
-from .forms import CollectionForm, ProductForm
+from .forms import CollectionForm, ProductForm, ImageForm
 from .models import (Agency, Collection, County, CountyRelate, FrameSize,
-                     LineIndex, MicroficheIndex, PhotoIndex, Product,
+                     Image, LineIndex, MicroficheIndex, PhotoIndex, Product,
                      ScannedPhotoIndexLink)
 from .actions import (export_collection, export_product, export_photo_index,
                       export_scanned_photo_index_link, export_county, export_line_index,
@@ -75,6 +75,14 @@ class CountyRelateInlineAdmin(admin.StackedInline):
     ordering = ('county__name',)
 
 
+class ImageInlineAdmin(admin.StackedInline):
+    classes = ('grp-collapse grp-closed',)
+    inline_classes = ('grp-collapse grp-open',)
+    model = Image
+    form = ImageForm
+    extra = 0
+
+
 class CollectionAdmin(admin.ModelAdmin):
     model = Collection
     form = CollectionForm
@@ -90,7 +98,7 @@ class CollectionAdmin(admin.ModelAdmin):
     )
     inlines = [PhotoIndexInlineAdmin, LineIndexInlineAdmin,
                MicroficheIndexInlineAdmin, ProductInlineAdmin,
-               ScannedPhotoIndexLinkInlineAdmin]
+               ScannedPhotoIndexLinkInlineAdmin, ImageInlineAdmin]
     list_display = (
         'collection', 'id', 'agency', 'from_date', 'to_date', 'county_names', 'public'
     )

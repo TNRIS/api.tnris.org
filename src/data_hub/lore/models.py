@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 import uuid
+import boto3
 
 from django.db import models
 
@@ -234,8 +235,96 @@ class Collection(models.Model):
     qr_code_url = models.URLField('QR Code URL', max_length=256, null=True, blank=True)
     number_of_boxes = models.PositiveIntegerField('Number of Boxes', null=True, blank=True)
 
+    def delete_s3_files(self):
+        # do that boto dance
+        client = boto3.client('s3')
+        # set aside list for compiling keys
+        key_list = []
+        # list Objects
+        collection_prefix = str(self.id) + '/assets'
+        response = client.list_objects_v2(
+            Bucket='data.tnris.org',
+            Prefix=collection_prefix
+        )
+
+        if 'Contents' in response.keys():
+            # add image keys to list
+            for image in response['Contents']:
+                key_list.append({'Key':image['Key']})
+
+            response = client.delete_objects(
+                Bucket='data.tnris.org',
+                Delete={'Objects': key_list}
+            )
+            print('%s s3 files: delete success!' % self.collection)
+        return
+
+    # overwrite default model delete method so that all associated
+    # s3 files get deleted as well
+    def delete(self, *args, **kwargs):
+        self.delete_s3_files()
+        super().delete(*args, **kwargs)
+
     def __str__(self):
         return self.collection
+
+
+class Image(models.Model):
+    """
+    Defines available image resources.
+    Related to :model:`lore.collection`.
+    """
+
+    class Meta:
+        db_table = 'historical_image'
+        verbose_name = 'Image'
+        verbose_name_plural = 'Images'
+
+    image_id = models.UUIDField(
+        'Image ID',
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False
+    )
+    collection_id = models.ForeignKey(
+        'Collection',
+        db_column='collection_id',
+        on_delete=models.CASCADE,
+        related_name='image_collections'
+    )
+    image_url = models.URLField(
+        'Image URL',
+        max_length=255
+    )
+    caption = models.CharField(
+        'Image Caption',
+        max_length=255,
+        null=True,
+        blank=True
+    )
+    created = models.DateTimeField(
+        'Created',
+        auto_now_add=True
+    )
+    last_modified = models.DateTimeField(
+        'Last Modified',
+        auto_now=True
+    )
+    # delete s3 image files
+    def delete(self, *args, **kwargs):
+        client = boto3.client('s3')
+        key = str(self).replace('https://s3.amazonaws.com/data.tnris.org/', '')
+        print(key)
+        response = client.delete_object(
+            Bucket='data.tnris.org',
+            Key=key
+        )
+        print(self)
+        super().delete(*args, **kwargs)
+
+    def __str__(self):
+        return self.image_url
+
 
 """
 ********** Database Views **********

@@ -2,8 +2,10 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.db.utils import ProgrammingError
 
-from .models import Collection, County, CountyRelate, Product
+from .models import Collection, County, CountyRelate, Product, Image
+from lcd.forms import PictureWidget
 
+import boto3, uuid
 
 class ProductForm(forms.ModelForm):
     class Meta:
@@ -14,6 +16,17 @@ class ProductForm(forms.ModelForm):
     clean_status = forms.BooleanField(label='Clean Status', help_text='Clean Status refers to collections that have been reviewed and are ready to been scanned, no erasing of frames needed. Default is False/Unchecked.', required=False)
 
 
+class ImageForm(forms.ModelForm):
+    class Meta:
+        model = Image
+        fields = ('__all__')
+        help_texts = {
+            'caption': 'Caption will not be saved until chosen image is uploaded and saved to database.',
+        }
+
+    image_url = forms.FileField(required=True, widget=PictureWidget, help_text="Choose an image file and 'Save' this form to upload & save it to the database. After saving, you can populate a Caption and re-save to apply.")
+
+
 class CollectionForm(forms.ModelForm):
     class Meta:
         model = Collection
@@ -22,6 +35,9 @@ class CollectionForm(forms.ModelForm):
         }
         fields = ('collection', 'agency', 'from_date', 'to_date', 'counties',
                   'remarks')
+
+    # boto3 s3 object
+    client = boto3.client('s3')
 
     # added a try/except for initial migration without data
     try:
@@ -44,6 +60,28 @@ class CollectionForm(forms.ModelForm):
         widget=forms.SelectMultiple(attrs={'title': 'Hold down ctrl to select multiple counties',}),
         choices=county_choices
     )
+
+    def inline_image_handler(self, file):
+        new_uuid = uuid.uuid4()
+        file_ext = str(file).split('.')[-1]
+        # upload image
+        key = "%s/assets/%s.%s" % (self.instance.id, new_uuid, file_ext)
+        # print(key + file_ext)
+        response = self.client.put_object(
+            Bucket='data.tnris.org',
+            ACL='public-read',
+            Key=key,
+            Body=file
+        )
+        print('%s upload success!' % key)
+        # update link in database table
+        args = {
+            'image_id': new_uuid,
+            'image_url': "https://s3.amazonaws.com/data.tnris.org/" + key,
+            'collection_id': self.instance
+        }
+        Image(**args).save()
+        return
 
     def clean(self):
         index = self.cleaned_data['index_service_url']
@@ -88,4 +126,12 @@ class CollectionForm(forms.ModelForm):
                 county=remove).filter(collection=self.instance.id).delete()
         for add in adds:
             CountyRelate(county_id=add, collection=self.instance).save()
+        
+        # check for files
+        files = self.files
+        # if files and field not marked for deletion then upload to s3
+        for f in files:
+            if 'image_collections' in f:
+                self.inline_image_handler(files[f])
+
         return super(CollectionForm, self).save(commit=commit)

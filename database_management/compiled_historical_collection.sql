@@ -22,7 +22,18 @@ SELECT historical_collection.id as collection_id,
   agency.about as about,
   agency.general_scale as general_scale,
   agency.media_type as media_type,
-  agency.sample_image_url as images,
+  string_agg(distinct historical_image.image_url, ',') as bull,
+  agency.sample_image_url as crap,
+  -- use conditional logic to combine agency sample image and uploaded images for carousel if they exist
+  CASE
+    WHEN agency.sample_image_url IS NOT NULL AND string_agg(distinct historical_image.image_url, ',') IS NOT NULL
+    THEN CONCAT(agency.sample_image_url, ',', string_agg(distinct historical_image.image_url, ','))
+    WHEN agency.sample_image_url IS NOT NULL AND string_agg(distinct historical_image.image_url, ',') IS NULL
+    THEN agency.sample_image_url
+    WHEN agency.sample_image_url IS NULL AND string_agg(distinct historical_image.image_url, ',') IS NOT NULL
+    THEN string_agg(distinct historical_image.image_url, ',')
+    ELSE agency.sample_image_url
+  END AS images,
   array_to_string(ARRAY(SELECT json_build_object('coverage', product.coverage,
                                  'number_of_frames', product.number_of_frames,
                                  'medium', product.medium,
@@ -35,7 +46,8 @@ SELECT historical_collection.id as collection_id,
     WHEN (
       (string_agg(distinct county.name, ',' order by county.name)
       ~ '.*(,).*')
-      ) THEN CONCAT('Multi-County ', agency.abbreviation, ' Historic Imagery')
+      )
+    THEN CONCAT('Multi-County ', agency.abbreviation, ' Historic Imagery')
     ELSE CONCAT(string_agg(distinct county.name, ',' order by county.name), ' ', agency.abbreviation, ' Historic Imagery')
   END AS name,
   'historical-aerial' as template,
@@ -58,6 +70,8 @@ LEFT JOIN county_relate ON county_relate.collection_id=historical_collection.id
 LEFT JOIN county ON county.id=county_relate.county_id
 
 LEFT JOIN agency ON agency.id=historical_collection.agency_id
+
+LEFT JOIN historical_image ON historical_image.collection_id=historical_collection.id
 
 GROUP BY historical_collection.id,
          agency.name,

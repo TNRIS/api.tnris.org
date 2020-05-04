@@ -5,9 +5,11 @@ from django.contrib import admin
 
 from .filters import (CollectionAgencyNameFilter, CollectionCountyFilter,
                       CountyDropdownFilter)
-from .forms import CollectionForm, ProductForm, ScannedPhotoIndexLinkForm
+
+from .forms import CollectionForm, ProductForm, ImageForm, ScannedPhotoIndexLinkForm
+
 from .models import (Agency, Collection, County, CountyRelate, FrameSize,
-                     LineIndex, MicroficheIndex, PhotoIndex, Product,
+                     Image, LineIndex, MicroficheIndex, PhotoIndex, Product,
                      ScannedPhotoIndexLink)
 from .actions import (export_collection, export_product, export_photo_index,
                       export_scanned_photo_index_link, export_county, export_line_index,
@@ -76,6 +78,14 @@ class CountyRelateInlineAdmin(admin.StackedInline):
     ordering = ('county__name',)
 
 
+class ImageInlineAdmin(admin.StackedInline):
+    classes = ('grp-collapse grp-closed',)
+    inline_classes = ('grp-collapse grp-open',)
+    model = Image
+    form = ImageForm
+    extra = 0
+
+
 class CollectionAdmin(admin.ModelAdmin):
     model = Collection
     form = CollectionForm
@@ -83,7 +93,8 @@ class CollectionAdmin(admin.ModelAdmin):
         ('Collection Information', {
              'fields': ('collection', 'agency', 'from_date', 'to_date',
                        'index_service_url', 'frames_service_url', 'mosaic_service_url',
-                       'counties', 'number_of_boxes', 'photo_index_only', 'public', 'fully_scanned', 'qr_code_url'),
+                       'counties', 'number_of_boxes', 'photo_index_only', 'public',
+                       'fully_scanned', 'thumbnail_image', 'qr_code_url'),
         }),
         ('Remarks', {
             'fields': ('remarks',)
@@ -91,7 +102,7 @@ class CollectionAdmin(admin.ModelAdmin):
     )
     inlines = [PhotoIndexInlineAdmin, LineIndexInlineAdmin,
                MicroficheIndexInlineAdmin, ProductInlineAdmin,
-               ScannedPhotoIndexLinkInlineAdmin]
+               ScannedPhotoIndexLinkInlineAdmin, ImageInlineAdmin]
     list_display = (
         'collection', 'id', 'agency', 'from_date', 'to_date', 'county_names', 'public'
     )

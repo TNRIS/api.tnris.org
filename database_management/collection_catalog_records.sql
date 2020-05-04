@@ -166,12 +166,12 @@ LEFT JOIN license_type ON license_type.license_type_id=collection.license_type_i
 
 LEFT JOIN template_type ON template_type.template_type_id=collection.template_type_id
 
-LEFT JOIN image ON image.collection_id = collection.collection_id
+LEFT JOIN image ON image.collection_id=collection.collection_id
 
 LEFT JOIN collection_county_relate ON collection_county_relate.collection_id=collection.collection_id
 LEFT JOIN area_type ON area_type.area_type_id=collection_county_relate.area_type_id
 
-LEFT JOIN outside_entity_services ON outside_entity_services.collection_id = collection.collection_id
+LEFT JOIN outside_entity_services ON outside_entity_services.collection_id=collection.collection_id
 
 GROUP BY collection.collection_id,
         source_type.source_name,

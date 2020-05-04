@@ -3,6 +3,7 @@ from django.core.exceptions import ValidationError
 from django.db.utils import ProgrammingError
 
 from .models import Collection, County, CountyRelate, Product, Image, ScannedPhotoIndexLink
+from lcd.forms import PictureWidget
 
 import boto3, uuid
 

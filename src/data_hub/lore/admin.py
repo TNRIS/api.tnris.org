@@ -5,7 +5,9 @@ from django.contrib import admin
 
 from .filters import (CollectionAgencyNameFilter, CollectionCountyFilter,
                       CountyDropdownFilter)
-from .forms import CollectionForm, ProductForm, ImageForm
+
+from .forms import CollectionForm, ProductForm, ImageForm, ScannedPhotoIndexLinkForm
+
 from .models import (Agency, Collection, County, CountyRelate, FrameSize,
                      Image, LineIndex, MicroficheIndex, PhotoIndex, Product,
                      ScannedPhotoIndexLink)
@@ -41,6 +43,7 @@ class ScannedPhotoIndexLinkInlineAdmin(admin.StackedInline):
     classes = ('grp-collapse grp-closed',)
     inline_classes = ('grp-collapse grp-closed',)
     model = ScannedPhotoIndexLink
+    form = ScannedPhotoIndexLinkForm
     extra = 0
 
 

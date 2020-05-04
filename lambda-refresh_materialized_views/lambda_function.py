@@ -18,18 +18,24 @@ def lambda_handler(event, context):
     conn = psycopg2.connect(conn_string)
     cur = conn.cursor()
 
-    queries = [
-        "REFRESH MATERIALIZED VIEW collection_catalog_record with DATA;",
-        "REFRESH MATERIALIZED VIEW compiled_historical_collection with DATA;",
-        "REFRESH MATERIALIZED VIEW areas with DATA;",
-        "REFRESH MATERIALIZED VIEW resource_management with DATA;",
-        "REFRESH MATERIALIZED VIEW master_systems_display with DATA;"
-    ]
-
-    for q in queries:
-        print(q)
-        cur.execute(q)
+    if 'materialized_view' in event.keys():
+        query = "REFRESH MATERIALIZED VIEW %s with DATA;" % (event['materialized_view'])
+        print(query)
+        cur.execute(query)
         conn.commit()
+    else:
+        queries = [
+            "REFRESH MATERIALIZED VIEW collection_catalog_record with DATA;",
+            "REFRESH MATERIALIZED VIEW compiled_historical_collection with DATA;",
+            "REFRESH MATERIALIZED VIEW areas with DATA;",
+            "REFRESH MATERIALIZED VIEW resource_management with DATA;",
+            "REFRESH MATERIALIZED VIEW master_systems_display with DATA;"
+        ]
+
+        for q in queries:
+            print(q)
+            cur.execute(q)
+            conn.commit()
 
     cur.close()
     conn.close()

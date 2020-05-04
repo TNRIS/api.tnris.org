@@ -23,6 +23,7 @@ class TnrisTrainingSerializer(serializers.ModelSerializer):
                   'cost',
                   'registration_open',
                   'description',
+                  'training_link',
                   'created',
                   'last_modified',
                   'public',)

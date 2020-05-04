@@ -72,6 +72,14 @@ class MapserverViewSet(viewsets.ViewSet):
     """
     Retrieve TNRIS mapserver instance mapfiles list from S3 content objects
     """
+    # *******************************************************************
+    # *** this endpoint is not currently used by any of our apps/pages ***
+    # *******************************************************************
+    # This is an alternative, direct-from-s3 (what services truly exist) list of
+    # mapserver service URLs. Same information can be/currently is retrieved by using the
+    # '<index,frames,mosaic>_service_url' fields from the /api/v1/historical/collections
+    # endpoint but if the LORE database and those fields are not properly populated,
+    # then that result will be different from this endpoint
     permission_classes = (AllowAny,)
 
     def list(self, request):
@@ -103,7 +111,7 @@ class MapserverViewSet(viewsets.ViewSet):
             name = key.replace('mapfiles/', '').replace('.map', '')
             key_obj['name'] = name
             key_obj['label'] = name.replace("_", " ").title()
-            key_obj['wms'] = 'http://mapserver.tnris.org/wms/?map=/' + key
+            key_obj['wms'] = 'https://mapserver.tnris.org/wms/?map=/' + key
 
             if len(name.split("_")) == 4:
                 key_obj['org'] = 'county'

@@ -832,7 +832,7 @@ class Collection(models.Model):
     )
     thumbnail_image = models.TextField(
         'Thumb Image',
-        max_length=120,
+        max_length=200,
         null=True,
         blank=True
     )

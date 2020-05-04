@@ -161,6 +161,11 @@ class TnrisTraining(models.Model):
     description = models.TextField(
         'Training Description'
     )
+    training_link = models.URLField(
+        'Training Course Registration Link',
+        max_length=255,
+        null=False
+    )
     created = models.DateTimeField(
         'Created',
         auto_now_add=True

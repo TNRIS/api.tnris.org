@@ -386,6 +386,18 @@ class CollectionForm(forms.ModelForm):
         if self.og_name != self.instance.name and self.og_name is not None:
             self.update_s3_names(self.og_name)
 
+        # handle the thumbnail image attribute
+        total_images = Image.objects.filter(collection_id=self.instance.collection_id)
+        # if no images for collection exist, clear thumbnail image reference
+        if len(total_images) == 0:
+            self.instance.thumbnail_image = ""
+        # if only one image exists, use it for the thumbnail
+        elif len(total_images) == 1:
+            self.instance.thumbnail_image = total_images[0].image_url
+        # if multiple exist but no thumbnail selected, just select the first one
+        elif len(total_images) > 1 and self.instance.thumbnail_image == "":
+            self.instance.thumbnail_image = total_images[0].image_url
+
         return super(CollectionForm, self).save(commit=commit)
 
 global progress_tracker

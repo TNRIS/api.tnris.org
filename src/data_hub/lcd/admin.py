@@ -118,22 +118,6 @@ class CollectionAdmin(admin.ModelAdmin):
             del actions['delete_selected']
         return actions
 
-    # handle the thumbnail image attribute if inline images were changed
-    def save_formset(self, request, form, formset, change):
-        super(CollectionAdmin, self).save_formset(request, form, formset, change)
-        # only for the Image table inlines
-        if formset.model == Image:
-            obj = formset.instance
-            # query for number of images saved for this collection
-            total_images = Image.objects.filter(collection_id=obj.collection_id)
-            # if none exist, clear thumbnail image reference
-            if len(total_images) == 0:
-                obj.thumbnail_image = ""
-            # if only one image exists, use it for the thumbnail
-            elif len(total_images) == 1:
-                obj.thumbnail_image = total_images[0].image_url
-            obj.save()
-
     def get_form(self, request, obj=None, **kwargs):
         # if username is 'admin' or user is part of 'Master of Resources' group
         # then show the Public field. otherwise, hide it

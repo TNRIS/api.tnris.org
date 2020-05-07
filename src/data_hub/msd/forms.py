@@ -14,7 +14,7 @@ from .models import (
 )
 
 import os
-import boto3
+import boto3, json
 
 from lcd.models import Collection
 
@@ -115,6 +115,17 @@ class MapDownloadForm(forms.ModelForm):
                 self.handle_upload(files[f])
             else:
                 print("where did this file come from???? shouldn't be possible.")
+
+        # fire lambda to refresh the MsdView
+        client = boto3.client('lambda')
+        payload = {'materialized_view': 'master_systems_display'}
+        response = client.invoke(
+            FunctionName='api-tnris-org-refresh_materialized_views',
+            InvocationType='Event',
+            Payload=json.dumps(payload)
+        )
+        print(response)
+        
         return super(MapDownloadForm, self).save(commit=commit)
 
 
@@ -219,4 +230,15 @@ class MapCollectionForm(forms.ModelForm):
         for add in adds:
             data_collection_rec = Collection.objects.get(collection_id=add)
             MapDataRelate(data_collection_id=data_collection_rec, map_collection_id=self.instance).save()
+
+        # fire lambda to refresh the MsdView
+        client = boto3.client('lambda')
+        payload = {'materialized_view': 'master_systems_display'}
+        response = client.invoke(
+            FunctionName='api-tnris-org-refresh_materialized_views',
+            InvocationType='Event',
+            Payload=json.dumps(payload)
+        )
+        print(response)
+
         return super(MapCollectionForm, self).save(commit=commit)

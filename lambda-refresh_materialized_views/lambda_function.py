@@ -1,5 +1,5 @@
 # --------------- IMPORTS ---------------
-import os, psycopg2
+import os, psycopg2, time
 
 # Database Connection Info
 database = os.environ.get('DB_NAME')
@@ -19,6 +19,8 @@ def lambda_handler(event, context):
     cur = conn.cursor()
 
     if 'materialized_view' in event.keys():
+        print('waiting 15 seconds to ensure database saves are complete...')
+        time.sleep(15)
         query = "REFRESH MATERIALIZED VIEW %s with DATA;" % (event['materialized_view'])
         print(query)
         cur.execute(query)

@@ -166,6 +166,12 @@ class TnrisTraining(models.Model):
         max_length=255,
         null=False
     )
+    # category = models.ForeignKey(
+    #     'TrainingCategory',
+    #     db_column='training_category_id',
+    #     on_delete=models.CASCADE,
+    #     related_name='category'
+    # ) 
     created = models.DateTimeField(
         'Created',
         auto_now_add=True
@@ -447,6 +453,40 @@ class TnrisInstructorType(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class TrainingCategory(models.Model):
+    """Category domain table for TnrisTraining"""
+
+    class Meta:
+        db_table = 'tnris_training_category'
+        verbose_name = 'Tnris Training Category'
+        verbose_name_plural = 'Tnris Training Categories'
+        ordering = ('training_category',)
+
+    training_category_id = models.UUIDField(
+        'Category ID',
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False,
+        blank=False
+    )
+    training_category = models.CharField(
+        'Category',
+        max_length=100,
+        blank=False
+    )
+    created = models.DateTimeField(
+        'Created',
+        auto_now_add=True
+    )
+    last_modified = models.DateTimeField(
+        'Last Modified',
+        auto_now=True
+    )
+
+    def __str__(self):
+        return self.training_category
 
 
 """

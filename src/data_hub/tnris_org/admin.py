@@ -16,7 +16,8 @@ from .models import (
     TnrisTraining,
     TnrisForumTraining,
     TnrisInstructorType,
-    TnrisGioCalendarEvent
+    TnrisGioCalendarEvent,
+    TrainingCategory
 )
 from .filters import (
     TnrisTrainingFiscalYearFilter,
@@ -164,6 +165,14 @@ class TnrisInstructorTypeAdmin(admin.ModelAdmin):
     ordering = ('name',)
     list_display = ('name', 'company', 'headshot')
     search_fields = ('name', 'company')
+
+
+@admin.register(TrainingCategory)
+class TrainingCategoryAdmin(admin.ModelAdmin):
+    model = TrainingCategory
+    ordering = ('training_category',)
+    list_display = ('training_category',)
+    search_fields = ('training_category_id', 'training_category')
 
 
 @admin.register(TnrisGioCalendarEvent)

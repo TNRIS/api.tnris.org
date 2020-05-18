@@ -166,12 +166,12 @@ class TnrisTraining(models.Model):
         max_length=255,
         null=False
     )
-    # category = models.ForeignKey(
-    #     'TrainingCategory',
-    #     db_column='training_category_id',
-    #     on_delete=models.CASCADE,
-    #     related_name='category'
-    # ) 
+    category = models.ForeignKey(
+        'TrainingCategory',
+        db_column='training_category',
+        on_delete=models.CASCADE,
+        related_name='category'
+    ) 
     created = models.DateTimeField(
         'Created',
         auto_now_add=True

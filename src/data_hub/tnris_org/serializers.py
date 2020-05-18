@@ -24,10 +24,12 @@ class TnrisTrainingSerializer(serializers.ModelSerializer):
                   'registration_open',
                   'description',
                   'training_link',
+                  'category',
                   'created',
                   'last_modified',
                   'public',)
 
+    category = serializers.StringRelatedField()
     # format date/time for api rest endpoint to use on front end
     start_date_time = serializers.DateTimeField(format="%A, %B %d %I:%M %p")
     end_date_time = serializers.DateTimeField(format="%A, %B %d %I:%M %p")

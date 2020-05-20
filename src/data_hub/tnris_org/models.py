@@ -474,7 +474,8 @@ class TrainingCategory(models.Model):
     training_category = models.CharField(
         'Category',
         max_length=100,
-        blank=False
+        blank=False,
+        help_text='No "&" or "?" special characters allowed! These are reserved characters used by the API for querying.'
     )
     created = models.DateTimeField(
         'Created',

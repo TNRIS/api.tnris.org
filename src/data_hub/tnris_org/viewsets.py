@@ -8,7 +8,8 @@ from .models import (
     TnrisInstructorType,
     CompleteForumTrainingView,
     TnrisGioCalendarEvent,
-    TnrisDocument
+    TnrisDocument,
+    TrainingCategory
 )
 from .serializers import (
     TnrisTrainingSerializer,
@@ -38,6 +39,8 @@ class TnrisTrainingViewSet(viewsets.ReadOnlyModelViewSet):
                 # convert null queries
                 if value in null_list:
                     value = None
+                if field == 'category':
+                    value = TrainingCategory.objects.get(training_category=value).training_category_id
                 args[field] = value
         # get records using query
         queryset = TnrisTraining.objects.filter(**args).order_by('title', 'start_date_time', 'end_date_time')

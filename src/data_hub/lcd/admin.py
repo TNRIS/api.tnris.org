@@ -27,6 +27,7 @@ from .models import (
     UseType,
     XlargeSupplemental
 )
+import boto3, json
 
 # Relate tables managed through 'Collection' form as collection records are
 # required to create/manage relate records
@@ -118,11 +119,12 @@ class CollectionAdmin(admin.ModelAdmin):
             del actions['delete_selected']
         return actions
 
-    # handle the thumbnail image attribute if inline images were changed
     def save_formset(self, request, form, formset, change):
         super(CollectionAdmin, self).save_formset(request, form, formset, change)
-        # only for the Image table inlines
+        
         if formset.model == Image:
+            # Image table inline used for thumbnail image att.
+            # handle the thumbnail image attribute if inline images were changed
             obj = formset.instance
             # query for number of images saved for this collection
             total_images = Image.objects.filter(collection_id=obj.collection_id)
@@ -132,7 +134,23 @@ class CollectionAdmin(admin.ModelAdmin):
             # if only one image exists, use it for the thumbnail
             elif len(total_images) == 1:
                 obj.thumbnail_image = total_images[0].image_url
+            # if multiple exist but no thumbnail selected, just select the first one
+            elif len(total_images) > 1 and obj.thumbnail_image == "":
+                obj.thumbnail_image = total_images[0].image_url
             obj.save()
+
+            # fire lambda to refresh the CcrView
+            # nested under if statement to ensure it only fires
+            # once rather than for every inline admin
+            client = boto3.client('lambda')
+            payload = {'materialized_view': 'collection_catalog_record'}
+            response = client.invoke(
+                FunctionName='api-tnris-org-refresh_materialized_views',
+                InvocationType='Event',
+                Payload=json.dumps(payload)
+            )
+            print(response)
+        
 
     def get_form(self, request, obj=None, **kwargs):
         # if username is 'admin' or user is part of 'Master of Resources' group

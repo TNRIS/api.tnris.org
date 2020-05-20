@@ -15,6 +15,7 @@ from .actions import (export_collection, export_product, export_photo_index,
                       export_scanned_photo_index_link, export_county, export_line_index,
                       export_microfiche_index, export_agency_domain,
                       export_frame_size_domain, export_county_domain)
+import boto3, json
 
 
 class AgencyAdmin(admin.ModelAdmin):
@@ -135,6 +136,22 @@ class CollectionAdmin(admin.ModelAdmin):
         return "{}".format(", ".join(name for name in counties))
 
     county_names.short_description = "Counties in Collection"
+
+    def save_formset(self, request, form, formset, change):
+        super(CollectionAdmin, self).save_formset(request, form, formset, change)
+        
+        if formset.model == Image:
+            # fire lambda to refresh the ChcView
+            # nested under if statement to ensure it only fires
+            # once rather than for every inline admin
+            client = boto3.client('lambda')
+            payload = {'materialized_view': 'compiled_historical_collection'}
+            response = client.invoke(
+                FunctionName='api-tnris-org-refresh_materialized_views',
+                InvocationType='Event',
+                Payload=json.dumps(payload)
+            )
+            print(response)
 
 
 class CountyAdmin(admin.ModelAdmin):

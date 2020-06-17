@@ -4,7 +4,7 @@ certifi==2019.3.9
 chardet==3.0.4
 docutils==0.14
 gspread==3.1.0
-httplib2==0.12.3
+httplib2==0.18.0
 idna==2.8
 jmespath==0.9.4
 oauth2client==4.1.3

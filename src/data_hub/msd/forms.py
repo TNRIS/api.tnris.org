@@ -199,7 +199,7 @@ class MapCollectionForm(forms.ModelForm):
         return
 
     # custom handling of thumbnail image on save
-    def clean(self, commit=True):
+    def clean(self):
         # check for files
         files = self.files
         for f in files:
@@ -213,7 +213,7 @@ class MapCollectionForm(forms.ModelForm):
         # handle s3 deletions
         if self.cleaned_data['delete_thumbnail'] is True:
             self.delete_thumbnail_from_s3('thumbnail_link')
-        super(MapCollectionForm, self).save(commit=commit)
+        super(MapCollectionForm, self).save(commit=False)
         return
 
     def save(self, commit=True):

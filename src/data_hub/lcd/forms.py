@@ -24,7 +24,7 @@ from .models import (Collection,
                      UseRelate,
                      UseType,
                      XlargeSupplemental)
-import os
+import os, json
 import boto3, botocore, uuid
 
 class PictureWidget(forms.widgets.Widget):
@@ -544,6 +544,18 @@ class ResourceForm(forms.ModelForm):
         progress_tracker = [0, 0]
         super(ResourceForm, self).save(commit=False)
         return
+
+    def save(self, commit=True):
+        # fire lambda to refresh the RemView
+        client = boto3.client('lambda')
+        payload = {'materialized_view': 'resource_management'}
+        response = client.invoke(
+            FunctionName='api-tnris-org-refresh_materialized_views',
+            InvocationType='Event',
+            Payload=json.dumps(payload)
+        )
+        print(response)
+        return super(ResourceForm, self).save(commit=commit)
 
 
 class XlargeSupplementalForm(forms.ModelForm):

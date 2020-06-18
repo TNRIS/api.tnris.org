@@ -1,8 +1,6 @@
 from django.db import models
-
 import uuid
 
-from django.db import models
 
 """
 These tables might be used in future versions of this app.

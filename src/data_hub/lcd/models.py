@@ -1,5 +1,4 @@
 from django.db import models
-
 import uuid
 import boto3
 import os
@@ -483,7 +482,7 @@ class CountyRelate(models.Model):
     last_modified = models.DateTimeField('Last Modified', auto_now=True)
 
     def __str__(self):
-        return self.area_type.area_type_name
+        return self.area_type_id.area_type_name
 
 
 class EpsgRelate(models.Model):

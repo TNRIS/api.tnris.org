@@ -213,6 +213,10 @@ class MapCollectionForm(forms.ModelForm):
         # handle s3 deletions
         if self.cleaned_data['delete_thumbnail'] is True:
             self.delete_thumbnail_from_s3('thumbnail_link')
+        if 'name' not in self.cleaned_data.keys():
+            raise forms.ValidationError('"Name" field is required.')
+        if 'publish_date' not in self.cleaned_data.keys():
+            raise forms.ValidationError('"Publish Date" field is required.')
         super(MapCollectionForm, self).save(commit=False)
         return
 

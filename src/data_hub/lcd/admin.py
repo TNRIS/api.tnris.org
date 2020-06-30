@@ -1,4 +1,5 @@
-from django.contrib import admin
+from django.contrib import admin, messages
+from django.utils.safestring import mark_safe
 
 # from .filters import CollectionAgencyNameFilter, CollectionCountyFilter, \
 #     CountyDropdownFilter
@@ -277,6 +278,24 @@ class ResourceAdmin(admin.ModelAdmin):
         # on initialization, set aside declared_fields attribute
         # so it can be re-applied based on form view
         self.original_declared_fields = self.form.declared_fields
+
+    # override save method on model since update was passed out of the
+    # admin console to lambda within the form; nothing to save.
+    def message_user(self, *args):
+        pass
+
+    def save_model(self, request, obj, form, change):
+        text = """
+        <p>
+        Update process has been initiated for collection id: %s
+        <br>
+        An email will be sent if an error occcurs.
+        <br>
+        It is suggested you query the database in 5 minutes (or so) to ensure the s3 zipfile count == resource table record count.
+        </p>
+        """ % (form.data['collection'])
+        messages.success(request, mark_safe(text))
+        pass
 
 
 # Resource Type Relate table managed through 'Resource' form as s3 zipfiles are

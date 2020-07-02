@@ -24,16 +24,12 @@ class CorsPostPermission(AllowAny):
         'api.tnris.org',
         'beta.tnris.org',
         'data.tnris.org',
-        'ellwood.tnris.org',
-        'frye.tnris.org',
-        'glidden.tnris.org',
-        'haish.tnris.org',
+        'develop.tnris.org',
         'lake-gallery.tnris.org',
         'localhost:8000',
         'localhost',
-        'razor-wire.tnris.org',
+        'staging.tnris.org',
         'tnris.org',
-        'washburn.tnris.org',
         'www.tnris.org'
     ]
 

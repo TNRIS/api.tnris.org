@@ -289,9 +289,9 @@ class ResourceAdmin(admin.ModelAdmin):
         <p>
         Update process has been initiated for collection id: %s
         <br>
-        An email will be sent if an error occcurs.
+        An 'AWS Cloudwatch Alarm' email will be sent if an error occcurs.
         <br>
-        It is suggested you query the database in 5 minutes (or so) to ensure the s3 zipfile count == resource table record count.
+        In ~5 minutes, it is suggested you search the collection_id below to ensure the resource table record count equals the expected s3 zipfile count.
         </p>
         """ % (form.data['collection'])
         messages.success(request, mark_safe(text))

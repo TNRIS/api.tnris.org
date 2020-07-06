@@ -388,9 +388,6 @@ class CollectionForm(forms.ModelForm):
 
         return super(CollectionForm, self).save(commit=commit)
 
-global progress_tracker
-progress_tracker = [0, 0]
-
 
 class ResourceForm(forms.ModelForm):
     # base model is Collection
@@ -429,133 +426,25 @@ class ResourceForm(forms.ModelForm):
             # fire function to create the Collection field dropdown
             self.fields['collection'].choices = self.create_collection_field()
 
-    # generic function to retrieve the associated Collection object
-    def get_collection_obj(self, collection_id):
-        record = Collection.objects.get(collection_id=collection_id)
-        return record
-
-    # generic function to retrieve the associated AreaType object
-    def get_area_obj(self, area_code):
-        record = AreaType.objects.get(area_code=area_code)
-        return record
-
-    # generic function to retrieve the associated ResourceType object
-    def get_resource_type_obj(self, abbreviation):
-        record = ResourceType.objects.get(resource_type_abbreviation=abbreviation)
-        return record
-
-    # generic function to list s3 bucket zipfiles
-    list = []
-    def get_s3_zipfiles(self, prefix, token=''):
-        if token == '':
-            s3_zipfiles = self.client.list_objects_v2(
-                Bucket='data.tnris.org',
-                Prefix=prefix,
-                MaxKeys=1000
-            )
-        else:
-            s3_zipfiles = self.client.list_objects_v2(
-                Bucket='data.tnris.org',
-                Prefix=prefix,
-                MaxKeys=1000,
-                ContinuationToken=token
-            )
-        self.list = self.list + s3_zipfiles['Contents']
-        if s3_zipfiles['IsTruncated'] is True:
-            self.get_s3_zipfiles(prefix, s3_zipfiles['NextContinuationToken'])
-        else:
-            return
-
-    # custom handling in save method for adding multiple new records
+    # invoke lambda to perform database update. no actual records saved here in admin console
     def clean(self):
-        # get the collection
         try:
-            collection_obj = self.get_collection_obj(self.cleaned_data['collection'])
-        except:
-            raise forms.ValidationError('Could not retrieve "%s" from the collection table. This is extremely peculiar... What did you do???' % (self.cleaned_data['collection']))
-        # delete all current resource and resource_type_relate records for this collection
-        Resource.objects.filter(collection_id=self.cleaned_data['collection']).delete()
-        ResourceTypeRelate.objects.filter(collection_id=self.cleaned_data['collection']).delete()
-        # go get all associated s3 zipfiles and compile them into single list
-        prefix = "%s/resources/" % (self.cleaned_data['collection'])
-        try:
-            s3_zipfiles = self.get_s3_zipfiles(prefix)
-        except:
-            raise forms.ValidationError('Uh oh, Master! There was trouble retrieving the S3 zipfile list!')
-        # set aside list length so we know when we are on the last one
-        total = len(self.list)
-        last_idx = total - 1
-        global progress_tracker
-        progress_tracker = [0, total]
-        # set aside list for tracking relate entries
-        relates = []
-        # iterate all (except last) s3 keys adding each as new record in resource table
-        for idx, f in enumerate(self.list):
-            print(f['Key'])
-            if f['Key'] == prefix:
-                continue
-            link = "https://s3.amazonaws.com/data.tnris.org/" + f['Key']
-            # disassemble filename
-            try:
-                filename = f['Key'].split("/")[-1]
-                area_code = filename.split("_")[-2]
-                resource_type_abbr = filename.split("_")[-1].replace('.zip', '').upper()
-            except:
-                raise forms.ValidationError('Uh oh, Master! This resource has a bad filename! ' + f['Key'])
-            # get the area_type
-            try:
-                area_obj = self.get_area_obj(area_code)
-            except:
-                raise forms.ValidationError('Bad area code! Verify area code in key: %s' % (f['Key']))
-            # get the resource_type
-            try:
-                resource_type_obj = self.get_resource_type_obj(resource_type_abbr)
-            except:
-                raise forms.ValidationError('Bad resource type abbreviation! "%s" is invalid in key "%s" and must be added to the ResourceTypes table before continuing.' % (resource_type_abbr, f['Key']))
-            # self attribute the file in case it is the last one
-            self.instance.pk = None
-            self.instance.collection_id = collection_obj
-            self.instance.area_type_id = area_obj
-            self.instance.resource_type_id = resource_type_obj
-            self.instance.resource = link
-            self.instance.filesize = f['Size']
-            # if not the last file in the list, we'll just save it
-            if idx != last_idx:
-                args = {
-                    'collection_id': collection_obj,
-                    'area_type_id': area_obj,
-                    'resource_type_id': resource_type_obj,
-                    'resource': link,
-                    'filesize': f['Size']
-                }
-                Resource(**args).save()
-            # if this resource type abbr isn't in the list, add it to the relate
-            # table and then the list
-            if resource_type_abbr not in relates:
-                args = {
-                    'collection_id': collection_obj,
-                    'resource_type_id': resource_type_obj
-                }
-                ResourceTypeRelate(**args).save()
-
-            progress_tracker = [idx + 1, total]
-            relates.append(resource_type_abbr)
-        # return last record for form to validate and commit all new records
-        progress_tracker = [0, 0]
+            print('invoking app-resource-update')
+            client = boto3.client('lambda')
+            payload = {'collection_id': self.cleaned_data['collection']}
+            response = client.invoke(
+                FunctionName='api-resource-update',
+                InvocationType='Event',
+                Payload=json.dumps(payload)
+            )
+            print(response)
+            if response['StatusCode'] != 202:
+                raise forms.ValidationError('Response error when invoking "api-resource-update" lambda. Response code: %s' % (str(response['StatusCode'])))
+        except Exception as e:
+            print(e)
+            raise forms.ValidationError('Local error invoking "api-resource-update" lambda. Please contact the IS team for assistance.')
         super(ResourceForm, self).save(commit=False)
         return
-
-    def save(self, commit=True):
-        # fire lambda to refresh the RemView
-        client = boto3.client('lambda')
-        payload = {'materialized_view': 'resource_management'}
-        response = client.invoke(
-            FunctionName='api-tnris-org-refresh_materialized_views',
-            InvocationType='Event',
-            Payload=json.dumps(payload)
-        )
-        print(response)
-        return super(ResourceForm, self).save(commit=commit)
 
 
 class XlargeSupplementalForm(forms.ModelForm):

@@ -28,7 +28,7 @@ import os, json
 import boto3, botocore, uuid
 
 class PictureWidget(forms.widgets.Widget):
-    def render(self, name, value, attrs=None):
+    def render(self, name, value, attrs=None, renderer=None):
 
         if value is None:
             html = Template("""
@@ -46,7 +46,7 @@ class PictureWidget(forms.widgets.Widget):
         return mark_safe(html.substitute(link=value,name=name))
 
 class ZipfileWidget(forms.widgets.Widget):
-    def render(self, name, value, attrs=None):
+    def render(self, name, value, attrs=None, renderer=None):
         html = Template("""
             <input type="file" name="$name" id="id_$name"><label for="img_$name">Current: $link</label>
         """)

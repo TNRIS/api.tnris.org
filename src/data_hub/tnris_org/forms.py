@@ -18,7 +18,7 @@ import boto3, uuid
 
 
 class PictureWidget(forms.widgets.Widget):
-    def render(self, name, value, attrs=None):
+    def render(self, name, value, attrs=None, renderer=None):
 
         if value is None:
             html = Template("""
@@ -37,7 +37,7 @@ class PictureWidget(forms.widgets.Widget):
 
 
 class DocumentWidget(forms.widgets.Widget):
-    def render(self, name, value, attrs=None):
+    def render(self, name, value, attrs=None, renderer=None):
 
         if value is None:
             html = Template("""

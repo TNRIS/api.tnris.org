@@ -27,23 +27,18 @@ from .models import (Collection,
 import os, json
 import boto3, botocore, uuid
 
-class PictureWidget(forms.widgets.Widget):
-    def render(self, name, value, attrs=None, renderer=None):
+# widget template override for populated upload file fields
+def populated_image_render(name, value, attrs=None, renderer=None):
+    html = Template("""
+        <div style="margin-bottom:10px;">
+            <input style="width:90%;" type="text" id="currentUrl" value="$link" readonly></input>
+        </div>
+        <div style="margin-bottom:10px;">
+            <img id="img_$name" style="max-height:500px; max-width: 95%;" src="$link"/>
+        </div>
+    """)
+    return mark_safe(html.substitute(link=value,name=name))
 
-        if value is None:
-            html = Template("""
-                <input type="file" name="$name" id="id_$name"></input>
-            """)
-        else:
-            html = Template("""
-                <div style="margin-bottom:10px;">
-                    <input style="width:90%;" type="text" id="currentUrl" value="$link" readonly></input>
-                </div>
-                <div style="margin-bottom:10px;">
-                    <img id="img_$name" src="$link" style="max-height:500px; max-width:95%;"/>
-                </div>
-            """)
-        return mark_safe(html.substitute(link=value,name=name))
 
 class ZipfileWidget(forms.widgets.Widget):
     def render(self, name, value, attrs=None, renderer=None):
@@ -51,6 +46,7 @@ class ZipfileWidget(forms.widgets.Widget):
             <input type="file" name="$name" id="id_$name"><label for="img_$name">Current: $link</label>
         """)
         return mark_safe(html.substitute(link=value,name=name))
+
 
 class ImageForm(forms.ModelForm):
     class Meta:
@@ -60,11 +56,40 @@ class ImageForm(forms.ModelForm):
             'caption': 'Caption will not be saved until chosen image is uploaded and saved to database.',
         }
 
+    # boto3 s3 object
+    client = boto3.client('s3')
+
     image_url = forms.FileField(
         required=True,
-        widget=PictureWidget, 
         help_text="DataHub Images should be 16:9 ratio (1920 x 1080 pixels).<br/>Choose an image file and 'Save' this form to upload & save it to the database. After saving, you can populate a Caption and re-save to apply."
         )
+
+    def __init__(self, *args, **kwargs):
+        super(ImageForm, self).__init__(*args, **kwargs)
+        if self.instance.image_url != '':
+            self.fields['image_url'].widget.render = populated_image_render
+
+    def inline_image_handler(self, file):
+        new_uuid = uuid.uuid4()
+        file_ext = str(file).split('.')[-1]
+        key = "%s/assets/%s.%s" % (self.instance.collection_id_id, new_uuid, file_ext)
+        response = self.client.put_object(
+            Bucket='data.tnris.org',
+            ACL='public-read',
+            Key=key,
+            Body=file.file,
+            ContentType=file.content_type
+        )
+        self.cleaned_data['image_url'] = "https://s3.amazonaws.com/data.tnris.org/" + key
+        return
+
+    def clean(self, commit=True):
+        if self.instance.image_url == '':
+            file_key = self.prefix + "-image_url"
+            self.inline_image_handler(self.files[file_key], file_key.replace('image_url', ''))
+            
+        super(ImageForm, self).save(commit=commit)
+        return
 
 
 class CollectionForm(forms.ModelForm):
@@ -79,16 +104,6 @@ class CollectionForm(forms.ModelForm):
     publication_date = forms.DateField(required=False, widget=AdminDateWidget(), help_text="Date TNRIS published collection to the public. Format: YYYY-MM-DD")
     known_issues = forms.CharField(required=False, widget=forms.Textarea(), initial='None')
     carto_map_id = forms.CharField(required=False, widget=forms.TextInput(attrs={'style':'width:758px'}),max_length=50)
-
-    overview_image = forms.FileField(required=False, widget=PictureWidget)
-    # thumbnail_image = forms.FileField(required=False, widget=PictureWidget)
-    natural_image = forms.FileField(required=False, widget=PictureWidget)
-    urban_image = forms.FileField(required=False, widget=PictureWidget)
-
-    delete_overview_image = forms.BooleanField(required=False)
-    delete_thumbnail_image = forms.BooleanField(required=False)
-    delete_natural_image = forms.BooleanField(required=False)
-    delete_urban_image = forms.BooleanField(required=False)
 
     supplemental_report_url = forms.FileField(required=False, widget=ZipfileWidget, help_text="Maximum filesize 75MB")
     lidar_breaklines_url = forms.FileField(required=False, widget=ZipfileWidget, help_text="Maximum filesize 75MB")
@@ -219,43 +234,6 @@ class CollectionForm(forms.ModelForm):
             relate_table(**args).save()
         return
 
-    # generic function to upload image and update dbase link
-    def handle_image(self, field, file):
-        # upload image
-        key = "%s/assets/%s" % (self.instance.collection_id, field.replace('_image', '.jpg'))
-        response = self.client.put_object(
-            Bucket='data.tnris.org',
-            ACL='public-read',
-            Key=key,
-            Body=file
-        )
-        print('%s upload success!' % key)
-        # update link in database table
-        setattr(self.instance, field, "https://s3.amazonaws.com/data.tnris.org/" + key)
-        return
-
-    def inline_image_handler(self, file):
-        new_uuid = uuid.uuid4()
-        file_ext = str(file).split('.')[-1]
-        # upload image
-        key = "%s/assets/%s.%s" % (self.instance.collection_id, new_uuid, file_ext)
-        # print(key + file_ext)
-        response = self.client.put_object(
-            Bucket='data.tnris.org',
-            ACL='public-read',
-            Key=key,
-            Body=file
-        )
-        print('%s upload success!' % key)
-        # update link in database table
-        args = {
-            'image_id': new_uuid,
-            'image_url': "https://s3.amazonaws.com/data.tnris.org/" + key,
-            'collection_id': self.instance
-        }
-        Image(**args).save()
-        return
-
     # generic function to upload zipfile and update dbase link
     def handle_zipfile(self, field, file):
         # format filename
@@ -356,26 +334,19 @@ class CollectionForm(forms.ModelForm):
         self.update_relate_table('counties', CountyRelate, 'area_type_id', AreaType)
         # check for files
         files = self.files
-        image_fields = ['overview_image', 'thumbnail_image', 'natural_image', 'urban_image']
         zipfile_fields = ['supplemental_report_url', 'lidar_breaklines_url', 'lidar_buildings_url', 'tile_index_url']
         # if files and field not marked for deletion then upload to s3
         for f in files:
             delete_checkbox = 'delete_' + f
-            if f in image_fields and self.cleaned_data[delete_checkbox] is False:
-                self.handle_image(f, files[f])
-            elif f in zipfile_fields and self.cleaned_data[delete_checkbox] is False:
+            if f in zipfile_fields and self.cleaned_data[delete_checkbox] is False:
                 self.handle_zipfile(f, files[f])
             elif 'image_collections' in f:
-                self.inline_image_handler(files[f])
+                print('inline image', f)
             else:
                 print('New file uploaded but delete checkbox says "no!":', f)
         # iterate deletion checkboxes and if checked then delete associated
         # file from s3
-        deletion_flags = ['delete_overview_image',
-                          'delete_thumbnail_image',
-                          'delete_natural_image',
-                          'delete_urban_image',
-                          'delete_supplemental_report_url',
+        deletion_flags = ['delete_supplemental_report_url',
                           'delete_lidar_breaklines_url',
                           'delete_lidar_buildings_url',
                           'delete_tile_index_url']

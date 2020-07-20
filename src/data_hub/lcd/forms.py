@@ -52,9 +52,6 @@ class ImageForm(forms.ModelForm):
     class Meta:
         model = Image
         fields = ('__all__')
-        help_texts = {
-            'caption': 'Caption will not be saved until chosen image is uploaded and saved to database.',
-        }
 
     # boto3 s3 object
     client = boto3.client('s3')
@@ -86,8 +83,7 @@ class ImageForm(forms.ModelForm):
     def clean(self, commit=True):
         if self.instance.image_url == '':
             file_key = self.prefix + "-image_url"
-            self.inline_image_handler(self.files[file_key], file_key.replace('image_url', ''))
-            
+            self.inline_image_handler(self.files[file_key])
         super(ImageForm, self).save(commit=commit)
         return
 

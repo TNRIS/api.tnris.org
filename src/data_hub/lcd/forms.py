@@ -101,10 +101,10 @@ class CollectionForm(forms.ModelForm):
     known_issues = forms.CharField(required=False, widget=forms.Textarea(), initial='None')
     carto_map_id = forms.CharField(required=False, widget=forms.TextInput(attrs={'style':'width:758px'}),max_length=50)
 
-    supplemental_report_url = forms.FileField(required=False, widget=ZipfileWidget, help_text="Maximum filesize 75MB")
-    lidar_breaklines_url = forms.FileField(required=False, widget=ZipfileWidget, help_text="Maximum filesize 75MB")
-    lidar_buildings_url = forms.FileField(required=False, widget=ZipfileWidget, help_text="Maximum filesize 75MB")
-    tile_index_url = forms.FileField(required=False, widget=ZipfileWidget, help_text="Maximum filesize 75MB")
+    supplemental_report_url = forms.FileField(required=False, widget=ZipfileWidget, help_text="Maximum filesize 75MB. Must be a '.zip' extension zipfile.")
+    lidar_breaklines_url = forms.FileField(required=False, widget=ZipfileWidget, help_text="Maximum filesize 75MB. Must be a '.zip' extension zipfile.")
+    lidar_buildings_url = forms.FileField(required=False, widget=ZipfileWidget, help_text="Maximum filesize 75MB. Must be a '.zip' extension zipfile.")
+    tile_index_url = forms.FileField(required=False, widget=ZipfileWidget, help_text="Maximum filesize 75MB. Must be a '.zip' extension zipfile.")
 
     delete_supplemental_report_url = forms.BooleanField(required=False)
     delete_lidar_breaklines_url = forms.BooleanField(required=False)
@@ -318,6 +318,17 @@ class CollectionForm(forms.ModelForm):
             Delete={'Objects': old_key_list}
         )
         return
+    
+    def clean(self):
+        zipfile_fields = ['supplemental_report_url', 'lidar_breaklines_url', 'lidar_buildings_url', 'tile_index_url']
+        for f in self.files:
+            if f in zipfile_fields:
+                submitted_ext = str(self.files[f]).split(".")[-1]
+                if submitted_ext != "zip":
+                    raise ValidationError("Link field uploads must be a '.zip' extension zipfile!")
+        super(CollectionForm, self).save(commit=False)
+        return
+
 
     # custom handling of various relationships on save method
     def save(self, commit=True):

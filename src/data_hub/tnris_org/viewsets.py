@@ -17,7 +17,8 @@ from .serializers import (
     TnrisInstructorTypeSerializer,
     CompleteForumTrainingViewSerializer,
     TnrisGioCalendarEventSerializer,
-    TnrisSGMDocumentSerializer
+    TnrisSGMDocumentSerializer,
+    TnrisCommunityMeetingDocumentSerializer
 )
 
 
@@ -148,6 +149,21 @@ class TnrisSGMDocumentViewSet(viewsets.ReadOnlyModelViewSet):
     def get_queryset(self):
         # get records using query
         args = {'sgm_note': True}
+        # order by document file name
+        queryset = TnrisDocument.objects.filter(**args).order_by('document_name')
+        return queryset
+
+
+class TnrisCommunityMeetingDocumentViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    Retrieve all GIS Community Meeting Documents for tnris.org frontend
+    """
+    serializer_class = TnrisCommunityMeetingDocumentSerializer
+    http_method_names = ['get']
+
+    def get_queryset(self):
+        # get records using query
+        args = {'comm_note': True}
         # order by document file name
         queryset = TnrisDocument.objects.filter(**args).order_by('document_name')
         return queryset

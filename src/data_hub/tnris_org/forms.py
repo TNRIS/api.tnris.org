@@ -134,6 +134,7 @@ class DocumentForm(forms.ModelForm):
 
     document_url = forms.FileField(required=False, widget=DocumentWidget, help_text="Choose a document file and 'Save' this form to upload & save it to the database. Attempting to overwrite with a new file will only create a new record. The best method to overwrite would be to delete the existing file and re-upload a new file with the same name.")
     sgm_note = forms.BooleanField(required=False, label="GIS Solutions Group Notes", help_text="Check this box to identify as a GIS Solutions Group notes document.<br><br><strong>Note:</strong> This is required to view the document on tnris.org. Be sure to name the file correctly - 'YYYY-MM-DD-GIS-SG-Meeting-Notes.pdf'. The file name is important for the order these documents are presented on tnris.org.")
+    comm_note = forms.BooleanField(required=False, label="GIS Community Meeting Notes", help_text="Check this box to identify as a GIS Community Meeting notes document.<br><br><strong>Note:</strong> This is required to view the document on tnris.org. Be sure to name the file correctly - 'YYYY-MM-DD-GIS-Community-Meeting-Notes.pdf'. The file name is important for the order these documents are presented on tnris.org.")
 
     # boto3 s3 object
     client = boto3.client('s3')
@@ -165,9 +166,12 @@ class DocumentForm(forms.ModelForm):
         # update link in database table
         setattr(self.instance, field, "https://tnris-org-static.s3.amazonaws.com/" + key)
         setattr(self.instance, "document_name", str(file))
-        # special handling to capture boolean input value of sgm_note and save it on initial creation
+        # special handling to capture boolean input value of sgm_note & comm_note and save it on initial creation
         if self.cleaned_data['sgm_note'] == True:
             setattr(self.instance, "sgm_note", True)
+            self.cleaned_data = self.instance.__dict__
+        elif self.cleaned_data['comm_note'] == True:
+            setattr(self.instance, "comm_note", True)
             self.cleaned_data = self.instance.__dict__
         else:
             self.cleaned_data = self.instance.__dict__

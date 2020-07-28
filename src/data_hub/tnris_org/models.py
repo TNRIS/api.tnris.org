@@ -85,6 +85,11 @@ class TnrisDocument(models.Model):
         default=False,
         null=False
     )
+    comm_note = models.BooleanField(
+        'GIS Community Meeting Note',
+        default=False,
+        null=False
+    )
     created = models.DateTimeField(
         'Created',
         auto_now_add=True

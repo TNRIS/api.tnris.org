@@ -163,3 +163,14 @@ class TnrisSGMDocumentSerializer(serializers.ModelSerializer):
                   'sgm_note',
                   'created',
                   'last_modified',)
+
+
+class TnrisCommunityMeetingDocumentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TnrisDocument
+        fields = ('document_id',
+                  'document_name',
+                  'document_url',
+                  'comm_note',
+                  'created',
+                  'last_modified',)

@@ -16,6 +16,7 @@ class TnrisTrainingSerializer(serializers.ModelSerializer):
         model = TnrisTraining
         fields = ('training_id',
                   'year', # models.py property method (field does not exist in db)
+                  'fiscal_year', # models.py property method (field does not exist in db)
                   'start_date_time',
                   'end_date_time',
                   'title',

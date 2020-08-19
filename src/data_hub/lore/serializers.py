@@ -55,3 +55,11 @@ class CollectionSerializer(serializers.ModelSerializer):
         else:
             path = None
         return path
+
+    scanned_index_ls4_links = serializers.SerializerMethodField()
+    def get_scanned_index_ls4_links(self, obj):
+        if str(obj.scanned_index_ls4_links) != "" and obj.scanned_index_ls4_links is not None:
+            path = str(obj.scanned_index_ls4_links).replace("https://s3.amazonaws.com/tnris-ls4/", "https://cdn.tnris.org/")
+        else:
+            path = None
+        return path

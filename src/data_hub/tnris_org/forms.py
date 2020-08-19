@@ -99,7 +99,7 @@ class ImageForm(forms.ModelForm):
         )
         print('%s upload success!' % key)
         # update link in database table
-        setattr(self.instance, field, "https://cdn.tnris.org/" + key)
+        setattr(self.instance, field, "https://tnris-org-static.s3.amazonaws.com/" + key)
         setattr(self.instance, "image_name", str(file))
         self.cleaned_data = self.instance.__dict__
         return
@@ -164,7 +164,7 @@ class DocumentForm(forms.ModelForm):
         )
         print('%s upload success!' % key)
         # update link in database table
-        setattr(self.instance, field, "https://cdn.tnris.org/" + key)
+        setattr(self.instance, field, "https://tnris-org-static.s3.amazonaws.com/" + key)
         setattr(self.instance, "document_name", str(file))
         # special handling to capture boolean input value of sgm_note & comm_note and save it on initial creation
         if self.cleaned_data['sgm_note'] == True:

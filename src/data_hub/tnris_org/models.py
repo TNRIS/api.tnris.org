@@ -44,7 +44,7 @@ class TnrisImage(models.Model):
     # delete s3 image files
     def delete(self, *args, **kwargs):
         client = boto3.client('s3')
-        key = str(self).replace('https://cdn.tnris.org/', '')
+        key = str(self).replace('https://tnris-org-static.s3.amazonaws.com/', '')
         print(key, 'successfully deleted')
         response = client.delete_object(
             Bucket='tnris-org-static',
@@ -101,7 +101,7 @@ class TnrisDocument(models.Model):
     # delete s3 doc files
     def delete(self, *args, **kwargs):
         client = boto3.client('s3')
-        key = str(self).replace('https://cdn.tnris.org/', '')
+        key = str(self).replace('https://tnris-org-static.s3.amazonaws.com/', '')
         print(key, 'successfully deleted')
         response = client.delete_object(
             Bucket='tnris-org-static',

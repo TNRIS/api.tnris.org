@@ -202,6 +202,7 @@ class ScannedPhotoIndexLinkForm(forms.ModelForm):
         link = self.cleaned_data['link']
         link = link.replace('http://', 'https://')
         link = link.replace('https://tnris-ls4.s3.amazonaws.com/', 'https://s3.amazonaws.com/tnris-ls4/')
+        link = link.replace('https://s3.amazonaws.com/tnris-ls4/', 'https://cdn.tnris.org/')
         self.cleaned_data['link'] = link
         super(ScannedPhotoIndexLinkForm, self).save(commit=False)
         return 

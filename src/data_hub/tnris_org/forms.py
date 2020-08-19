@@ -99,7 +99,7 @@ class ImageForm(forms.ModelForm):
         )
         print('%s upload success!' % key)
         # update link in database table
-        setattr(self.instance, field, "https://tnris-org-static.s3.amazonaws.com/" + key)
+        setattr(self.instance, field, "https://cdn.tnris.org/" + key)
         setattr(self.instance, "image_name", str(file))
         self.cleaned_data = self.instance.__dict__
         return
@@ -111,10 +111,10 @@ class ImageForm(forms.ModelForm):
         for f in files:
             print(str(files[f]))
             ext = os.path.splitext(str(files[f]))[1]
-            valid_extensions = ['.jpg', '.png', '.gif', '.jpeg', '.svg']
+            valid_extensions = ['.ico', '.jpg', '.png', '.gif', '.jpeg', '.svg']
             # validation to prevent non-standard image formats or other files from being uploaded
             if not ext.lower() in valid_extensions:
-                raise ValidationError(u"Unsupported file extension. Only .jpg, .png, .gif, and .jpeg file extensions supported for Tnris Images")
+                raise ValidationError(u"Unsupported file extension. Only .ico, .jpg, .png, .gif, and .jpeg file extensions supported for Tnris Images")
             # validation to check if image file name already exists in database
             name_set = TnrisImage.objects.filter(image_name=str(files[f]))
             if len(name_set) > 0:
@@ -164,7 +164,7 @@ class DocumentForm(forms.ModelForm):
         )
         print('%s upload success!' % key)
         # update link in database table
-        setattr(self.instance, field, "https://tnris-org-static.s3.amazonaws.com/" + key)
+        setattr(self.instance, field, "https://cdn.tnris.org/" + key)
         setattr(self.instance, "document_name", str(file))
         # special handling to capture boolean input value of sgm_note & comm_note and save it on initial creation
         if self.cleaned_data['sgm_note'] == True:
@@ -306,4 +306,4 @@ class TnrisInstructorTypeForm(forms.ModelForm):
         fields = ('__all__')
 
     bio = forms.CharField(required=False, widget=forms.Textarea(attrs={"rows":25, "cols":20}), help_text="Enter plain text, no html or markdown.")
-    headshot = forms.URLField(required=False, widget=HeadshotWidget, help_text="Paste the S3 url for this instructor's headshot photo in the input above.<br><strong>Example headshot url:</strong> 'https://tnris-org-static.s3.amazonaws.com/images/name_headshot.jpg'<br><strong>*NOTE:</strong> Headshot preview in this form may not reflect actual size of the image.")
+    headshot = forms.URLField(required=False, widget=HeadshotWidget, help_text="Paste the S3 url for this instructor's headshot photo in the input above.<br><strong>Example headshot url:</strong> 'https://cdn.tnris.org/images/name_headshot.jpg'<br><strong>*NOTE:</strong> Headshot preview in this form may not reflect actual size of the image.")

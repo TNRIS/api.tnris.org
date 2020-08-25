@@ -39,3 +39,27 @@ class CollectionSerializer(serializers.ModelSerializer):
     class Meta:
         model = ChcView
         fields = '__all__'
+
+    thumbnail_image = serializers.SerializerMethodField()
+    def get_thumbnail_image(self, obj):
+        if str(obj.thumbnail_image) != "" and obj.thumbnail_image is not None:
+            path = str(obj.thumbnail_image).replace("https://s3.amazonaws.com/data.tnris.org/", "https://data.tnris.org/")
+        else:
+            path = None
+        return path
+
+    images = serializers.SerializerMethodField()
+    def get_images(self, obj):
+        if str(obj.images) != "" and obj.images is not None:
+            path = str(obj.images).replace("https://s3.amazonaws.com/data.tnris.org/", "https://data.tnris.org/")
+        else:
+            path = None
+        return path
+
+    scanned_index_ls4_links = serializers.SerializerMethodField()
+    def get_scanned_index_ls4_links(self, obj):
+        if str(obj.scanned_index_ls4_links) != "" and obj.scanned_index_ls4_links is not None:
+            path = str(obj.scanned_index_ls4_links).replace("https://s3.amazonaws.com/tnris-ls4/", "https://cdn.tnris.org/")
+        else:
+            path = None
+        return path

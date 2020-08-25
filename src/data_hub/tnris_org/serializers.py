@@ -16,6 +16,7 @@ class TnrisTrainingSerializer(serializers.ModelSerializer):
         model = TnrisTraining
         fields = ('training_id',
                   'year', # models.py property method (field does not exist in db)
+                  'fiscal_year', # models.py property method (field does not exist in db)
                   'start_date_time',
                   'end_date_time',
                   'title',
@@ -43,6 +44,14 @@ class TnrisInstructorTypeSerializer(serializers.ModelSerializer):
                   'company',
                   'bio',
                   'headshot',)
+
+    headshot = serializers.SerializerMethodField()
+    def get_headshot(self, obj):
+        if str(obj.headshot) != "" and obj.headshot is not None:
+            path = str(obj.headshot).replace("https://tnris-org-static.s3.amazonaws.com/", "https://cdn.tnris.org/")
+        else:
+            path = None
+        return path
 
 
 class TnrisForumTrainingSerializer(serializers.ModelSerializer):
@@ -93,6 +102,14 @@ class CompleteForumTrainingViewSerializer(serializers.ModelSerializer):
     start_date_time = serializers.DateTimeField(format="%A, %B %d %I:%M %p")
     end_date_time = serializers.DateTimeField(format="%A, %B %d %I:%M %p")
 
+    instructor_info = serializers.SerializerMethodField()
+    def get_instructor_info(self, obj):
+        if str(obj.instructor_info) != "" and obj.instructor_info is not None:
+            path = str(obj.instructor_info).replace("https://tnris-org-static.s3.amazonaws.com/", "https://cdn.tnris.org/")
+        else:
+            path = None
+        return path
+
 
 class TnrisGioCalendarEventSerializer(serializers.ModelSerializer):
     class Meta:
@@ -116,6 +133,14 @@ class TnrisGioCalendarEventSerializer(serializers.ModelSerializer):
                   'zipcode',
                   'pretty_date',
                   'pretty_time')
+
+    community_meeting_agenda_url = serializers.SerializerMethodField()
+    def get_community_meeting_agenda_url(self, obj):
+        if str(obj.community_meeting_agenda_url) != "" and obj.community_meeting_agenda_url is not None:
+            path = str(obj.community_meeting_agenda_url).replace("https://tnris-org-static.s3.amazonaws.com/", "https://cdn.tnris.org/")
+        else:
+            path = None
+        return path
 
     # pretty format date/time for api rest endpoint to use on front end
     pretty_date = serializers.SerializerMethodField()
@@ -163,3 +188,30 @@ class TnrisSGMDocumentSerializer(serializers.ModelSerializer):
                   'sgm_note',
                   'created',
                   'last_modified',)
+
+    document_url = serializers.SerializerMethodField()
+    def get_document_url(self, obj):
+        if str(obj.document_url) != "" and obj.document_url is not None:
+            path = str(obj.document_url).replace("https://tnris-org-static.s3.amazonaws.com/", "https://cdn.tnris.org/")
+        else:
+            path = None
+        return path
+
+
+class TnrisCommunityMeetingDocumentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TnrisDocument
+        fields = ('document_id',
+                  'document_name',
+                  'document_url',
+                  'comm_note',
+                  'created',
+                  'last_modified',)
+
+    document_url = serializers.SerializerMethodField()
+    def get_document_url(self, obj):
+        if str(obj.document_url) != "" and obj.document_url is not None:
+            path = str(obj.document_url).replace("https://tnris-org-static.s3.amazonaws.com/", "https://cdn.tnris.org/")
+        else:
+            path = None
+        return path

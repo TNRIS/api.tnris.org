@@ -2,10 +2,27 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.db.utils import ProgrammingError
 
+from string import Template
+from django.utils.safestring import mark_safe
+
 from .models import Collection, County, CountyRelate, Product, Image, ScannedPhotoIndexLink
-from lcd.forms import PictureWidget
 
 import boto3, uuid
+
+# widget template override for populated upload file fields
+def populated_image_render(name, value, attrs=None, renderer=None):
+    cdn_link = value.replace('https://s3.amazonaws.com/data.tnris.org/', 'https://data.tnris.org/')
+    html = Template("""
+        <div style="margin-bottom:10px;">
+            <input style="width:90%;" type="text" id="currentUrl" value="$link" readonly></input>
+        </div>
+        <div style="margin-bottom:10px;">
+            <img id="img_$name" style="max-height:500px; max-width: 95%;" src="$link"/>
+        </div>
+        <p>S3 Path: $value</p>
+    """)
+    return mark_safe(html.substitute(value=value, link=cdn_link, name=name))
+
 
 class ProductForm(forms.ModelForm):
     class Meta:
@@ -20,15 +37,40 @@ class ImageForm(forms.ModelForm):
     class Meta:
         model = Image
         fields = ('__all__')
-        help_texts = {
-            'caption': 'Caption will not be saved until chosen image is uploaded and saved to database.',
-        }
+
+    # boto3 s3 object
+    client = boto3.client('s3')
 
     image_url = forms.FileField(
         required=True,
-        widget=PictureWidget,
         help_text="DataHub Images should be 16:9 ratio (1920 x 1080 pixels).<br/>Choose an image file and 'Save' this form to upload & save it to the database. After saving, you can populate a Caption and re-save to apply."
         )
+
+    def __init__(self, *args, **kwargs):
+        super(ImageForm, self).__init__(*args, **kwargs)
+        if self.instance.image_url != '':
+            self.fields['image_url'].widget.render = populated_image_render
+    
+    def inline_image_handler(self, file):
+        new_uuid = uuid.uuid4()
+        file_ext = str(file).split('.')[-1]
+        key = "%s/assets/%s.%s" % (self.instance.collection_id_id, new_uuid, file_ext)
+        response = self.client.put_object(
+            Bucket='data.tnris.org',
+            ACL='public-read',
+            Key=key,
+            Body=file.file,
+            ContentType=file.content_type
+        )
+        self.cleaned_data['image_url'] = "https://s3.amazonaws.com/data.tnris.org/" + key
+        return
+
+    def clean(self, commit=True):
+        if self.instance.image_url == '':
+            file_key = self.prefix + "-image_url"
+            self.inline_image_handler(self.files[file_key])
+        super(ImageForm, self).save(commit=commit)
+        return
 
 
 class CollectionForm(forms.ModelForm):
@@ -91,28 +133,6 @@ class CollectionForm(forms.ModelForm):
                 filename = 'Default'
             text = "Currently Selected: %s" % filename 
         return text
-
-    def inline_image_handler(self, file):
-        new_uuid = uuid.uuid4()
-        file_ext = str(file).split('.')[-1]
-        # upload image
-        key = "%s/assets/%s.%s" % (self.instance.id, new_uuid, file_ext)
-        # print(key + file_ext)
-        response = self.client.put_object(
-            Bucket='data.tnris.org',
-            ACL='public-read',
-            Key=key,
-            Body=file
-        )
-        print('%s upload success!' % key)
-        # update link in database table
-        args = {
-            'image_id': new_uuid,
-            'image_url': "https://s3.amazonaws.com/data.tnris.org/" + key,
-            'collection_id': self.instance
-        }
-        Image(**args).save()
-        return
 
     def clean(self):
         index = self.cleaned_data['index_service_url']
@@ -181,13 +201,6 @@ class CollectionForm(forms.ModelForm):
                 county=remove).filter(collection=self.instance.id).delete()
         for add in adds:
             CountyRelate(county_id=add, collection=self.instance).save()
-        
-        # check for files
-        files = self.files
-        # if files and field not marked for deletion then upload to s3
-        for f in files:
-            if 'image_collections' in f:
-                self.inline_image_handler(files[f])
 
         return super(CollectionForm, self).save(commit=commit)
 

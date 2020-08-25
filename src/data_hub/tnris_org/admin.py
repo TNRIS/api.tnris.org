@@ -57,14 +57,14 @@ class TnrisImageAdmin(admin.ModelAdmin):
             js,
             htmlId,
             htmlId,
-            obj.image_url
+            obj.image_url.replace('https://tnris-org-static.s3.amazonaws.com/', 'https://cdn.tnris.org/')
         )
 
     def tiny_preview(self, obj):
         return format_html(
             u'<a href="{0}" title="Click to view in full"><img style="max-width:100px;cursor:pointer;" src="{1}" /></a>',
-            obj.image_url,
-            obj.image_url
+            obj.image_url.replace('https://tnris-org-static.s3.amazonaws.com/', 'https://cdn.tnris.org/'),
+            obj.image_url.replace('https://tnris-org-static.s3.amazonaws.com/', 'https://cdn.tnris.org/')
         )
 
 
@@ -94,7 +94,7 @@ class TnrisDocumentAdmin(admin.ModelAdmin):
             js,
             htmlId,
             htmlId,
-            obj.document_url
+            obj.document_url.replace('https://tnris-org-static.s3.amazonaws.com/', 'https://cdn.tnris.org/')
         )
 
 
@@ -163,8 +163,14 @@ class TnrisInstructorTypeAdmin(admin.ModelAdmin):
     model = TnrisInstructorType
     form = TnrisInstructorTypeForm
     ordering = ('name',)
-    list_display = ('name', 'company', 'headshot')
+    list_display = ('name', 'company', 'headshot_url')
     search_fields = ('name', 'company')
+
+    def headshot_url(self, obj):
+        url = obj.headshot
+        if obj.headshot is not None:
+            url = url.replace('https://tnris-org-static.s3.amazonaws.com/', 'https://cdn.tnris.org/')
+        return url
 
 
 @admin.register(TrainingCategory)

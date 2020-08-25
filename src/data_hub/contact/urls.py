@@ -26,10 +26,10 @@ from .viewsets import (
 )
 
 router = routers.DefaultRouter(trailing_slash=False)
-router.register(r'submit/?', SubmitFormViewSet, base_name="SubmitForm")
-router.register(r'policy/zip-upload', ZipPolicyViewSet, base_name="ZipPolicy")
-router.register(r'policy/image-upload', ImagePolicyViewSet, base_name="ImagePolicy")
-router.register(r'policy/file-upload', FilePolicyViewSet, base_name="FilePolicy")
+router.register(r'submit/?', SubmitFormViewSet, basename="SubmitForm")
+router.register(r'policy/zip-upload', ZipPolicyViewSet, basename="ZipPolicy")
+router.register(r'policy/image-upload', ImagePolicyViewSet, basename="ImagePolicy")
+router.register(r'policy/file-upload', FilePolicyViewSet, basename="FilePolicy")
 
 schema_view = get_swagger_view(title='Contact API')
 

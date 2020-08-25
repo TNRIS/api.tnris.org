@@ -21,6 +21,7 @@ from lcd.models import Collection
 
 # widget template overrides for populated upload file fields
 def populated_image_render(name, value, attrs=None, renderer=None):
+    cdn_link = value.replace('https://s3.amazonaws.com/data.tnris.org/', 'https://data.tnris.org/')
     html = Template("""
         <div style="margin-bottom:10px;">
             <input style="width:90%;" type="text" id="currentUrl" value="$link" readonly></input>
@@ -28,11 +29,13 @@ def populated_image_render(name, value, attrs=None, renderer=None):
         <div style="margin-bottom:10px;">
             <img id="img_$name" style="max-height:500px; max-width: 95%;" src="$link"/>
         </div>
+        <p>S3 Path: $value</p>
     """)
-    return mark_safe(html.substitute(link=value,name=name))
+    return mark_safe(html.substitute(value=value, link=cdn_link, name=name))
 
 
 def populated_pdf_render(name, value, attrs=None, renderer=None):
+    cdn_link = value.replace('https://s3.amazonaws.com/data.tnris.org/', 'https://data.tnris.org/')
     js = """
     <script type="text/javascript">
         function copyFunction() {
@@ -50,9 +53,11 @@ def populated_pdf_render(name, value, attrs=None, renderer=None):
             <div alt="$link" style="margin-bottom:10px;">
                 <input id="currentUrl" value="$link" readonly style="width: 80%;padding:3px;cursor:default;"></input>
             </div>
+            <br>
+            <p>S3 Path: $value</p>
 
         """.format(js))
-    return mark_safe(html.substitute(link=value))
+    return mark_safe(html.substitute(value=value, link=cdn_link))
 
 
 class MapDownloadForm(forms.ModelForm):

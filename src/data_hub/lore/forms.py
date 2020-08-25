@@ -11,6 +11,7 @@ import boto3, uuid
 
 # widget template override for populated upload file fields
 def populated_image_render(name, value, attrs=None, renderer=None):
+    cdn_link = value.replace('https://s3.amazonaws.com/data.tnris.org/', 'https://data.tnris.org/')
     html = Template("""
         <div style="margin-bottom:10px;">
             <input style="width:90%;" type="text" id="currentUrl" value="$link" readonly></input>
@@ -18,8 +19,9 @@ def populated_image_render(name, value, attrs=None, renderer=None):
         <div style="margin-bottom:10px;">
             <img id="img_$name" style="max-height:500px; max-width: 95%;" src="$link"/>
         </div>
+        <p>S3 Path: $value</p>
     """)
-    return mark_safe(html.substitute(link=value,name=name))
+    return mark_safe(html.substitute(value=value, link=cdn_link, name=name))
 
 
 class ProductForm(forms.ModelForm):

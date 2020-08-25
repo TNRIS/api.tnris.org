@@ -224,16 +224,17 @@ class ResourceAdmin(admin.ModelAdmin):
     model = Resource
     form = ResourceForm
 
-    readonly_fields = ('resource',
-                       'filesize',
-                       'last_modified',
-                       'collection_id',
-                       'area_type_id',
-                       'resource_type_id')
+    readonly_fields = ('download_url',
+                        'resource',
+                        'filesize',
+                        'last_modified',
+                        'collection_id',
+                        'area_type_id',
+                        'resource_type_id')
 
     ordering = ('collection_id',)
     list_display = (
-        'disp_name', 'area_type_id', 'resource', 'resource_type_id', 'last_modified'
+        'disp_name', 'area_type_id', 'download_url', 'resource_type_id', 'last_modified'
     )
     search_fields = ('collection_id__name', 'area_type_id__area_type_name', 'resource', 'resource_type_id__resource_type_name')
     list_filter = (
@@ -241,6 +242,9 @@ class ResourceAdmin(admin.ModelAdmin):
         'area_type_id',
         'resource_type_id'
     )
+
+    def download_url(self, obj):
+        return obj.resource.replace('https://s3.amazonaws.com/data.tnris.org/', 'https://data.tnris.org/')
 
     # set aside acqusition_date year for list display
     def disp_name(self, resource):

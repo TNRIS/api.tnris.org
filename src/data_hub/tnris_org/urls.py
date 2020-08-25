@@ -35,8 +35,8 @@ router.register(r'forum_training/?', TnrisForumTrainingViewSet, basename="TnrisF
 router.register(r'complete_forum_training/?', CompleteForumTrainingViewSet, basename="CompleteForumTrainingView")
 router.register(r'instructor_type/?', TnrisInstructorTypeViewSet, basename="TnrisInstructorType")
 router.register(r'gio_calendar/?', TnrisGioCalendarEventViewSet, basename="TnrisGioCalendarEvent")
-router.register(r'sgm_note/?', TnrisSGMDocumentViewSet, basename="TnrisDocument")
-router.register(r'comm_note/?', TnrisCommunityMeetingDocumentViewSet, base_name="TnrisDocument")
+router.register(r'sgm_note/?', TnrisSGMDocumentViewSet, basename="TnrisSgmDocument")
+router.register(r'comm_note/?', TnrisCommunityMeetingDocumentViewSet, basename="TnrisCommDocument")
 
 schema_view = get_swagger_view(title='TNRIS.org API')
 

@@ -19,6 +19,7 @@ import boto3, uuid
 
 # widget template overrides for populated upload file fields
 def populated_image_render(name, value, attrs=None, renderer=None):
+    cdn_link = value.replace('https://tnris-org-static.s3.amazonaws.com/', 'https://cdn.tnris.org/')
     html = Template("""
         <div style="margin-bottom:10px;">
             <input style="width:90%;" type="text" id="currentUrl" value="$link" readonly></input>
@@ -26,25 +27,33 @@ def populated_image_render(name, value, attrs=None, renderer=None):
         <div style="margin-bottom:10px;">
             <img id="img_$name" style="max-height:500px; max-width: 95%;" src="$link"/>
         </div>
+        <br>
+        <p>S3 Path: $value</p>
     """)
-    return mark_safe(html.substitute(link=value,name=name))
+    return mark_safe(html.substitute(value=value, link=cdn_link, name=name))
 
 def populated_document_render(name, value, attrs=None, renderer=None):
+    cdn_link = value.replace('https://tnris-org-static.s3.amazonaws.com/', 'https://cdn.tnris.org/')
     html = Template("""
             <div style="margin-bottom:10px;">
                 <input style="width:90%;" type="text" id="currentUrl" value="$link" readonly></input>
             </div>
+            <br>
+            <p>S3 Path: $value</p>
         """)
-    return mark_safe(html.substitute(link=value))
+    return mark_safe(html.substitute(value=value, link=cdn_link))
 
 def populated_headshot_render(name, value, attrs=None, renderer=None):
+    cdn_link = value.replace('https://tnris-org-static.s3.amazonaws.com/', 'https://cdn.tnris.org/')
     html = Template("""
         <input type="text" name="$name" id="id_$name" style="width:758px;"></input>
         <br>
         <label for="img_$name">Current: <a href="$link" target="_blank">$link</a></label>
         <img id="img_$name" src="$link" style="max-height:250px; max-width:250px; margin:20px 20px;"/>
+        <br>
+        <p>S3 Path: $value</p>
     """)
-    return mark_safe(html.substitute(link=value,name=name))
+    return mark_safe(html.substitute(value=value, link=cdn_link, name=name))
 
 
 class ImageForm(forms.ModelForm):
@@ -312,5 +321,13 @@ class TnrisInstructorTypeForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(TnrisInstructorTypeForm, self).__init__(*args, **kwargs)
-        if self.instance.headshot != '':
+        if self.instance.headshot != '' and self.instance.headshot is not None:
             self.fields['headshot'].widget.render = populated_headshot_render
+
+    # custom handling of documents on save
+    def clean(self, commit=True):
+        self.cleaned_data['headshot'] = self.cleaned_data['headshot'].replace('https://cdn.tnris.org/', 'https://tnris-org-static.s3.amazonaws.com/')
+        if self.cleaned_data['headshot'] == "":
+            self.cleaned_data['headshot'] = None
+        super(TnrisInstructorTypeForm, self).save(commit=commit)
+        return

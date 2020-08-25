@@ -17,55 +17,34 @@ import os
 import boto3, uuid
 
 
-class PictureWidget(forms.widgets.Widget):
-    def render(self, name, value, attrs=None):
+# widget template overrides for populated upload file fields
+def populated_image_render(name, value, attrs=None, renderer=None):
+    html = Template("""
+        <div style="margin-bottom:10px;">
+            <input style="width:90%;" type="text" id="currentUrl" value="$link" readonly></input>
+        </div>
+        <div style="margin-bottom:10px;">
+            <img id="img_$name" style="max-height:500px; max-width: 95%;" src="$link"/>
+        </div>
+    """)
+    return mark_safe(html.substitute(link=value,name=name))
 
-        if value is None:
-            html = Template("""
-                <input type="file" name="$name" id="id_$name"></input>
-            """)
-        else:
-            html = Template("""
-                <div style="margin-bottom:10px;">
-                    <input style="width:90%;" type="text" id="currentUrl" value="$link" readonly></input>
-                </div>
-                <div style="margin-bottom:10px;">
-                    <img id="img_$name" style="max-height:500px; max-width: 95%;" src="$link"/>
-                </div>
-            """)
-        return mark_safe(html.substitute(link=value,name=name))
+def populated_document_render(name, value, attrs=None, renderer=None):
+    html = Template("""
+            <div style="margin-bottom:10px;">
+                <input style="width:90%;" type="text" id="currentUrl" value="$link" readonly></input>
+            </div>
+        """)
+    return mark_safe(html.substitute(link=value))
 
-
-class DocumentWidget(forms.widgets.Widget):
-    def render(self, name, value, attrs=None):
-
-        if value is None:
-            html = Template("""
-                <input type="file" name="$name" id="id_$name"></input>
-            """)
-        else:
-            html = Template("""
-                <div style="margin-bottom:10px;">
-                    <input style="width:90%;" type="text" id="currentUrl" value="$link" readonly></input>
-                </div>
-            """)
-        return mark_safe(html.substitute(link=value,name=name))
-
-
-class HeadshotWidget(forms.widgets.Widget):
-    def render(self, name, value, attrs=None, renderer=None):
-        if value is None:
-            html = Template("""
-                <input type="text" name="$name" id="id_$name" style="width:758px;"></input>
-            """)
-        else:
-            html = Template("""
-                <input type="text" name="$name" id="id_$name" style="width:758px;"></input>
-                <br>
-                <label for="img_$name">Current: <a href="$link" target="_blank">$link</a></label>
-                <img id="img_$name" src="$link" style="max-height:250px; max-width:250px; margin:20px 20px;"/>
-            """)
-        return mark_safe(html.substitute(link=value,name=name))
+def populated_headshot_render(name, value, attrs=None, renderer=None):
+    html = Template("""
+        <input type="text" name="$name" id="id_$name" style="width:758px;"></input>
+        <br>
+        <label for="img_$name">Current: <a href="$link" target="_blank">$link</a></label>
+        <img id="img_$name" src="$link" style="max-height:250px; max-width:250px; margin:20px 20px;"/>
+    """)
+    return mark_safe(html.substitute(link=value,name=name))
 
 
 class ImageForm(forms.ModelForm):
@@ -73,10 +52,18 @@ class ImageForm(forms.ModelForm):
         model = TnrisImage
         fields = ('__all__')
 
-    image_url = forms.FileField(required=False, widget=PictureWidget, help_text="Choose an image file and 'Save' this form to upload & save it to the database. To replace this image with a new one, delete the image and create a new one.")
+    image_url = forms.FileField(
+        required=False,
+        help_text="Choose an image file and 'Save' this form to upload & save it to the database. To replace this image with a new one, delete the image and create a new one."
+    )
 
     # boto3 s3 object
     client = boto3.client('s3')
+
+    def __init__(self, *args, **kwargs):
+        super(ImageForm, self).__init__(*args, **kwargs)
+        if self.instance.image_url != '':
+            self.fields['image_url'].widget.render = populated_image_render
 
     # function to upload image to s3 and update dbase link
     def handle_image(self, field, file):
@@ -131,13 +118,21 @@ class DocumentForm(forms.ModelForm):
     class Meta:
         model = TnrisDocument
         fields = ('__all__')
-
-    document_url = forms.FileField(required=False, widget=DocumentWidget, help_text="Choose a document file and 'Save' this form to upload & save it to the database. Attempting to overwrite with a new file will only create a new record. The best method to overwrite would be to delete the existing file and re-upload a new file with the same name.")
+    
+    document_url = forms.FileField(
+        required=False,
+        help_text="Choose a document file and 'Save' this form to upload & save it to the database. Attempting to overwrite with a new file will only create a new record. The best method to overwrite would be to delete the existing file and re-upload a new file with the same name."
+    )
     sgm_note = forms.BooleanField(required=False, label="GIS Solutions Group Notes", help_text="Check this box to identify as a GIS Solutions Group notes document.<br><br><strong>Note:</strong> This is required to view the document on tnris.org. Be sure to name the file correctly - 'YYYY-MM-DD-GIS-SG-Meeting-Notes.pdf'. The file name is important for the order these documents are presented on tnris.org.")
     comm_note = forms.BooleanField(required=False, label="GIS Community Meeting Notes", help_text="Check this box to identify as a GIS Community Meeting notes document.<br><br><strong>Note:</strong> This is required to view the document on tnris.org. Be sure to name the file correctly - 'YYYY-MM-DD-GIS-Community-Meeting-Notes.pdf'. The file name is important for the order these documents are presented on tnris.org.")
 
     # boto3 s3 object
     client = boto3.client('s3')
+
+    def __init__(self, *args, **kwargs):
+        super(DocumentForm, self).__init__(*args, **kwargs)
+        if self.instance.document_url != '':
+            self.fields['document_url'].widget.render = populated_document_render
 
     # function to upload document to s3 and update dbase link
     def handle_doc(self, field, file):
@@ -305,5 +300,17 @@ class TnrisInstructorTypeForm(forms.ModelForm):
         model = TnrisInstructorType
         fields = ('__all__')
 
-    bio = forms.CharField(required=False, widget=forms.Textarea(attrs={"rows":25, "cols":20}), help_text="Enter plain text, no html or markdown.")
-    headshot = forms.URLField(required=False, widget=HeadshotWidget, help_text="Paste the S3 url for this instructor's headshot photo in the input above.<br><strong>Example headshot url:</strong> 'https://cdn.tnris.org/images/name_headshot.jpg'<br><strong>*NOTE:</strong> Headshot preview in this form may not reflect actual size of the image.")
+    bio = forms.CharField(
+        required=False,
+        widget=forms.Textarea(attrs={"rows":25, "cols":20}),
+        help_text="Enter plain text, no html or markdown."
+    )
+    headshot = forms.URLField(
+        required=False,
+        help_text="Paste the S3 url for this instructor's headshot photo in the input above.<br><strong>Example headshot url:</strong> 'https://cdn.tnris.org/images/name_headshot.jpg'<br><strong>*NOTE:</strong> Headshot preview in this form may not reflect actual size of the image."
+    )
+
+    def __init__(self, *args, **kwargs):
+        super(TnrisInstructorTypeForm, self).__init__(*args, **kwargs)
+        if self.instance.headshot != '':
+            self.fields['headshot'].widget.render = populated_headshot_render

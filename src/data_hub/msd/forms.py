@@ -19,29 +19,40 @@ import boto3, json
 from lcd.models import Collection
 
 
-class PictureWidget(forms.widgets.Widget):
-    def render(self, name, value, attrs=None, renderer=None):
-        html = Template("""<input type="file" name="$name" id="id_$name"><label for="img_$name" style='font-weight:bold;'>Current: $link</label><img id="img_$name" src="$link" style="max-width:500px;"/>""")
-        return mark_safe(html.substitute(link=value,name=name))
+# widget template overrides for populated upload file fields
+def populated_image_render(name, value, attrs=None, renderer=None):
+    html = Template("""
+        <div style="margin-bottom:10px;">
+            <input style="width:90%;" type="text" id="currentUrl" value="$link" readonly></input>
+        </div>
+        <div style="margin-bottom:10px;">
+            <img id="img_$name" style="max-height:500px; max-width: 95%;" src="$link"/>
+        </div>
+    """)
+    return mark_safe(html.substitute(link=value,name=name))
 
 
-class PdfWidget(forms.widgets.Widget):
-    def render(self, name, value, attrs=None, renderer=None):
-        js = """
-        <script type="text/javascript">
-            function copyFunction() {
-                var copyText = document.getElementById("currentUrl");
-                copyText.select();
-                document.execCommand("copy");
-            }
-        </script>
-        """
+def populated_pdf_render(name, value, attrs=None, renderer=None):
+    js = """
+    <script type="text/javascript">
+        function copyFunction() {
+            var copyText = document.getElementById("currentUrl");
+            copyText.select();
+            document.execCommand("copy");
+        }
+    </script>
+    """
+    html = Template("""
+            {0}
+            <div style="margin-bottom:10px;">
+                <a style="cursor:pointer;border:solid 1px;padding:3px;" onclick="copyFunction();">COPY URL</a>
+            </div>
+            <div alt="$link" style="margin-bottom:10px;">
+                <input id="currentUrl" value="$link" readonly style="width: 80%;padding:3px;cursor:default;"></input>
+            </div>
 
-        if value:
-            html = Template("""{0}<div style="margin-bottom:10px;"><a style="cursor:pointer;border:solid 1px;padding:3px;" onclick="copyFunction();">COPY URL</a></div><div alt="$link" style="margin-bottom:10px;"><input id="currentUrl" value="$link" readonly style="width: 80%;padding:3px;cursor:default;"></input></div>""".format(js))
-        else:
-            html = Template("""<input type="file" name="$name" id="id_$name"></input>""")
-        return mark_safe(html.substitute(link=value,name=name))
+        """.format(js))
+    return mark_safe(html.substitute(link=value))
 
 
 class MapDownloadForm(forms.ModelForm):
@@ -54,7 +65,15 @@ class MapDownloadForm(forms.ModelForm):
             'label'
             )
 
-    download_url = forms.FileField(required=False, widget=PdfWidget, help_text="Upload map download file. PDF is recommended. 75MB max size. Overwriting files is not allowed. Delete the record and create a new one with the new file if you are attempting to overwrite.")
+    download_url = forms.FileField(
+        required=False,
+        help_text="Upload map download file. PDF is recommended. 75MB max size. Overwriting files is not allowed. Delete the record and create a new one with the new file if you are attempting to overwrite."
+    )
+
+    def __init__(self, *args, **kwargs):
+        super(MapDownloadForm, self).__init__(*args, **kwargs)
+        if self.instance.download_url != '':
+            self.fields['download_url'].widget.render = populated_pdf_render
 
     # FILE UPLOAD FOR DOWNLOAD FILE (PDF SUGGESTED)
     # boto3 s3 object
@@ -88,14 +107,6 @@ class MapDownloadForm(forms.ModelForm):
             Body=file
         )
         print('%s upload success!' % key)
-        # if replacing a download file, delete the old one
-        if self.instance.download_url is not None and self.cleaned_data['download_url'] is not None:
-            old_key = self.cleaned_data['download_url'].replace('https://s3.amazonaws.com/data.tnris.org/', '')
-            response = self.client.delete_object(
-                Bucket='data.tnris.org',
-                Key=old_key
-            )
-            print('deleted: ' + old_key)
 
         # update link in database table
         setattr(self.instance, 'download_url', "https://s3.amazonaws.com/data.tnris.org/" + key)
@@ -105,9 +116,6 @@ class MapDownloadForm(forms.ModelForm):
     def clean(self):
         if len(self.files.keys()) == 0 and (self.instance.download_url == None or self.instance.download_url == ''):
             raise forms.ValidationError('You must select a file to upload for the Download Url!')
-        return self.cleaned_data
-
-    def save(self, commit=True):
         # handle map download upload
         files = self.files
         for f in files:
@@ -115,7 +123,9 @@ class MapDownloadForm(forms.ModelForm):
                 self.handle_upload(files[f])
             else:
                 print("where did this file come from???? shouldn't be possible.")
+        return self.cleaned_data
 
+    def save(self, commit=True):
         # fire lambda to refresh the MsdView
         client = boto3.client('lambda')
         payload = {'materialized_view': 'master_systems_display'}
@@ -138,7 +148,10 @@ class MapCollectionForm(forms.ModelForm):
         fields = ('name', 'publish_date', 'description', 'public',
                   'thumbnail_link', 'data_collections', 'more_info_link')
 
-    thumbnail_link = forms.FileField(required=False, widget=PictureWidget, help_text=".JPG Format Only!")
+    thumbnail_link = forms.FileField(
+        required=False,
+        help_text=".JPG Format Only!"
+    )
     delete_thumbnail = forms.BooleanField(required=False)
 
     # RELATED LCD DATA COLLECTIONS
@@ -159,6 +172,8 @@ class MapCollectionForm(forms.ModelForm):
                     "data_collection_id").filter(map_collection_id=self.instance.map_collection_id)
             ]
             self.fields['data_collections'].initial = self.initial_data_collections
+        if self.instance.thumbnail_link != None:
+            self.fields['thumbnail_link'].widget.render = populated_image_render
 
     data_collections = forms.MultipleChoiceField(
         widget=forms.SelectMultiple(attrs={'title': 'Hold down ctrl to select multiple data collections',}),
@@ -203,7 +218,6 @@ class MapCollectionForm(forms.ModelForm):
         # check for files
         files = self.files
         for f in files:
-            print(str(files[f]))
             ext = os.path.splitext(str(files[f]))[1]
             # validation to prevent non-jpg image format from being uploaded
             if ext.lower() != '.jpg':

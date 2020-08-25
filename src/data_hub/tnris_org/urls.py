@@ -29,12 +29,13 @@ from .viewsets import (
 )
 
 router = routers.DefaultRouter(trailing_slash=False)
-router.register(r'training/?', TnrisTrainingViewSet, base_name="TnrisTraining")
-router.register(r'forum_training/?', TnrisForumTrainingViewSet, base_name="TnrisForumTraining")
-router.register(r'complete_forum_training/?', CompleteForumTrainingViewSet, base_name="CompleteForumTrainingView")
-router.register(r'instructor_type/?', TnrisInstructorTypeViewSet, base_name="TnrisInstructorType")
-router.register(r'gio_calendar/?', TnrisGioCalendarEventViewSet, base_name="TnrisGioCalendarEvent")
-router.register(r'sgm_note/?', TnrisSGMDocumentViewSet, base_name="TnrisDocument")
+
+router.register(r'training/?', TnrisTrainingViewSet, basename="TnrisTraining")
+router.register(r'forum_training/?', TnrisForumTrainingViewSet, basename="TnrisForumTraining")
+router.register(r'complete_forum_training/?', CompleteForumTrainingViewSet, basename="CompleteForumTrainingView")
+router.register(r'instructor_type/?', TnrisInstructorTypeViewSet, basename="TnrisInstructorType")
+router.register(r'gio_calendar/?', TnrisGioCalendarEventViewSet, basename="TnrisGioCalendarEvent")
+router.register(r'sgm_note/?', TnrisSGMDocumentViewSet, basename="TnrisDocument")
 router.register(r'comm_note/?', TnrisCommunityMeetingDocumentViewSet, base_name="TnrisDocument")
 
 schema_view = get_swagger_view(title='TNRIS.org API')

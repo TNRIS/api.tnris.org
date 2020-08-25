@@ -21,7 +21,7 @@ from rest_framework.schemas import get_schema_view
 from .viewsets import (MapCollectionViewSet)
 
 router = routers.DefaultRouter(trailing_slash=False)
-router.register(r'collections/?', MapCollectionViewSet, base_name="Collection")
+router.register(r'collections/?', MapCollectionViewSet, basename="Collection")
 
 schema_view = get_swagger_view(title='Maps API')
 

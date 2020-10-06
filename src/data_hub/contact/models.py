@@ -1643,24 +1643,18 @@ class SurveyTemplate(models.Model):
     sheet_id = models.CharField(
         'Google Sheet Id to post responses to',
         max_length=50,
-        null=False,
-        blank=False,
-        default='minimize',
+        null=True,
+        blank=True,
         help_text="Sets the Google Sheet id for survey results to be posted to",
     )
     survey_id = models.CharField(
         'SurveyJS Id to pull survey from',
         max_length=50,
-        null=False,
-        blank=False,
-        default='minimize',
+        null=True,
+        blank=True,
         help_text="Sets the SurveyJS id for survey results to be posted to",
     )
-
-
-
     #===============================================================================#
-
     created = models.DateTimeField(
         'Created',
         auto_now_add=True
@@ -1671,4 +1665,4 @@ class SurveyTemplate(models.Model):
     )
 
     def __str__(self):
-        return self.email_template_type
+        return self.survey_template_id

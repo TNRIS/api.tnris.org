@@ -365,6 +365,8 @@ class PosterGallerySubmissionAdmin(admin.ModelAdmin, ExportSelectedToCsvMixin):
 class SurveyTemplateAdmin(admin.ModelAdmin):
     model = SurveyTemplate
     list_display = (
+        'public',
+        'survey_template_title',
         'created',
         'sheet_id',
         'survey_id'

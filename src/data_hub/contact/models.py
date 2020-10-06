@@ -1467,6 +1467,13 @@ class SurveyTemplate(models.Model):
         default=uuid.uuid4,
         editable=False
     )
+    survey_template_title = models.CharField(
+        'Survey Name',
+        null=False,
+        blank=False,
+        max_length=40,
+        help_text='An arbitrary title or descriptor for the survey modal'
+    )
     display_delay_template_type = models.PositiveSmallIntegerField(
         'Display Delay Template Type',
         null=False,
@@ -1663,6 +1670,10 @@ class SurveyTemplate(models.Model):
         'Last Modified',
         auto_now=True
     )
+    public = models.BooleanField(
+        'Public',
+        default=False
+    )
 
     def __str__(self):
-        return self.survey_template_id
+        return str(self.survey_template_id)

@@ -15,6 +15,7 @@ from .models import (
     LakesOfTexasContact,
     OrderMap,
     PosterGallerySubmission,
+    SurveyTemplate,
     TexasImageryServiceContact,
     TexasImageryServiceRequest
 )
@@ -360,6 +361,15 @@ class PosterGallerySubmissionAdmin(admin.ModelAdmin, ExportSelectedToCsvMixin):
             self.readonly_fields = [field.name for field in obj.__class__._meta.fields]
         return self.readonly_fields
 
+@admin.register(SurveyTemplate)
+class SurveyTemplateAdmin(admin.ModelAdmin):
+    model = SurveyTemplate
+    list_display = (
+        'created',
+        'sheet_id',
+        'survey_id'
+    )
+    ordering = ('-created',)
 
 @admin.register(TexasImageryServiceContact)
 class TexasImageryServiceContactAdmin(admin.ModelAdmin, ExportSelectedToCsvMixin):

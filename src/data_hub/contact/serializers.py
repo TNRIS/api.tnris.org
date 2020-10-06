@@ -12,6 +12,7 @@ from .models import (
     LakesOfTexasContact,
     OrderMap,
     PosterGallerySubmission,
+    SurveyTemplate,
     TexasImageryServiceContact,
     TexasImageryServiceRequest
 )
@@ -82,6 +83,10 @@ class PosterGallerySubmissionSerializer(serializers.ModelSerializer):
         model = PosterGallerySubmission
         fields = ('__all__')
 
+class SurveyTemplateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SurveyTemplate
+        fields = ('__all__')
 
 class TexasImageryServiceContactSerializer(serializers.ModelSerializer):
     class Meta:

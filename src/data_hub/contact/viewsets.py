@@ -13,7 +13,8 @@ from botocore.exceptions import ClientError
 from botocore.client import Config
 
 from .models import (
-    EmailTemplate
+    EmailTemplate,
+    SurveyTemplate
 )
 
 from .serializers import *
@@ -217,3 +218,19 @@ class FilePolicyViewSet(viewsets.ViewSet):
         except Exception as e:
             return Response(e, status=status.HTTP_400_BAD_REQUEST)
         return Response(presigned, status=status.HTTP_201_CREATED)
+
+
+class SurveyTemplateViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    Retrieve surveys to deliver survey modal content to front-end
+    """
+    serializer_class = SurveyTemplateSerializer
+    http_method_names = ['get']
+
+    def get_queryset(self):
+        # only return latest public survey record
+        args = {'public': True}
+        
+        # get records using query
+        queryset = SurveyTemplate.objects.filter(**args).order_by('-last_modified')
+        return queryset

@@ -23,6 +23,7 @@ from .viewsets import (
     ZipPolicyViewSet,
     ImagePolicyViewSet,
     FilePolicyViewSet,
+    SubmitSurveyViewSet,
     SurveyTemplateViewSet
 )
 
@@ -32,7 +33,7 @@ router.register(r'policy/zip-upload', ZipPolicyViewSet, basename="ZipPolicy")
 router.register(r'policy/image-upload', ImagePolicyViewSet, basename="ImagePolicy")
 router.register(r'policy/file-upload', FilePolicyViewSet, basename="FilePolicy")
 router.register(r'survey', SurveyTemplateViewSet, basename="Survey")
-
+router.register(r'survey/submit/?', SubmitSurveyViewSet, basename="SubmitSurvey")
 schema_view = get_swagger_view(title='Contact API')
 
 urlpatterns = [

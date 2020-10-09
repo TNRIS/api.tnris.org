@@ -115,8 +115,6 @@ class SubmitSurveyViewSet(viewsets.ViewSet):
             # Append value belonging to unique key to new row of table
             new_row.append(remaining[1])
 
-        print(submitted_values, new_headers, new_row)
-
         # Use batch_update to reduce HTTP calls
         SHEET.get_worksheet(0).batch_update([
             # UPDATE SHEET, adding new header row to sheet
@@ -134,17 +132,17 @@ class SubmitSurveyViewSet(viewsets.ViewSet):
         ])
 
     permission_classes = [CorsPostPermission]
-    # 1 Flatten survey response to prepare for Google Sheet
     def create(self, request, format=None):
         
         resp = request.data['survey_response']
         sheet = request.data['sheet_id']
+        # Flatten json request data
         flat = self.flatten_json_recursively(resp)
-
+        # Submit to Google Spreadsheet
         self.submit_to_google_sheet(sheet, flat)
 
         return Response(
-            {"status": "success", "message": request.data},
+            {"status": "success", "message": 'Survey submitted successfully'},
             status=status.HTTP_201_CREATED,
         )
 

@@ -367,11 +367,12 @@ class SurveyTemplateAdmin(admin.ModelAdmin):
     list_display = (
         'survey_template_title',
         'public',
+        'last_modified',
         'created',
         'sheet_id',
         'survey_id'
     )
-    ordering = ('-created',)
+    ordering = ('-last_modified',)
 
 @admin.register(TexasImageryServiceContact)
 class TexasImageryServiceContactAdmin(admin.ModelAdmin, ExportSelectedToCsvMixin):

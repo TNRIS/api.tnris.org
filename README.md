@@ -19,7 +19,7 @@ Built with:
 3. Install python dependencies:
    * `cd ~/api.tnris.org/src`
    * `pip install -r requirements.txt`
-4. Copy set-env-secrets-example.sh (found in ~/api.tnris.org/src/data_hub/) and rename it set-env-secrets.sh; paste the data.tnris.org RDS pw into the file. * This file is not tracked in version control. **--or--** place a copy of `vault-password.txt` into the root of this repo `~/api.tnris.org`. You might need to change spaces to newlines. cd into the root folder and run `make pull-secrets` to quickly download, decrypt, and properly place the secrets file.
+4. Copy set-env-secrets-example.sh (found in ~/api.tnris.org/src/data_hub/) and rename it set-env-secrets.sh; paste the data.tnris.org RDS pw into the file. * This file is not tracked in version control. **--or--** place a copy of `vault-password.txt` and `gspread_config.json` into the root of this repo `~/api.tnris.org`. You might need to change spaces to newlines. cd into the root folder and run `make pull-secrets` to quickly download, decrypt, and properly place the secrets file.
 5. Source the set-env-secrets.sh in your virtual environtment using command `source /path/to/your/file/set-env-secrets.sh`
 
 ## Local Development

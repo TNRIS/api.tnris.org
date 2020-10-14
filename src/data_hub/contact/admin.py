@@ -374,6 +374,45 @@ class SurveyTemplateAdmin(admin.ModelAdmin):
     )
     ordering = ('-last_modified',)
 
+    fieldsets = (
+        (None, {
+            'fields': ('survey_template_title',
+                       'sheet_id',
+                       'survey_id',
+                       'public',
+                       'display_delay_template_type',
+                       'initial_content_state',
+                       ),
+        }),
+        ('Preview Modal', {
+            'classes': ('grp-collapse', 'grp-closed'),
+            'fields': ('preview_header',
+                       'preview_body_text',
+                       'preview_accept_button_text',
+                       'preview_reject_button_text',
+                       'preview_later_button_text',
+                       'preview_position',
+                       'preview_size',
+                       'preview_background_color',
+                       ),
+        }),
+        ('Full / Survey Modal', {
+            'classes': ('grp-collapse', 'grp-closed'),
+            'fields': ('full_header',
+                       'full_body_text',
+                       'full_position',
+                       'full_size',
+                       'full_background_color',
+                       ),
+        }),
+        ('Minimized Modal', {
+            'classes': ('grp-collapse', 'grp-closed'),
+            'fields': ('minimized_text',
+                       'minimized_icon',
+                       ),
+        })
+    )
+
 @admin.register(TexasImageryServiceContact)
 class TexasImageryServiceContactAdmin(admin.ModelAdmin, ExportSelectedToCsvMixin):
     model = TexasImageryServiceContact

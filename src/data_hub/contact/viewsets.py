@@ -31,6 +31,7 @@ class CorsPostPermission(AllowAny):
         "localhost:8000",
         "localhost",
         "staging.tnris.org",
+        "staginghub.tnris.org",
         "tnris.org",
         "www.tnris.org",
     ]

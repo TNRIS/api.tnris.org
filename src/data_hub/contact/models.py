@@ -1446,3 +1446,237 @@ class TexasImageryServiceRequest(models.Model):
 
     def __str__(self):
         return self.name + " " + self.created.strftime('%Y-%m-%d %H:%M')
+
+
+"""
+*************************** SURVEY MODAL TEMPLATES ****************************
+********* SURVEY MODALS RENDERED IN DATAHUB TO GATHER USER FEEDBACK ***********
+"""
+
+class SurveyTemplate(models.Model):
+    """Display template parameters loaded into DataHub ApiModalFeed Component. Defines content and other factors of modal appearance and behavior."""
+
+    class Meta:
+        db_table = 'survey_template'
+        verbose_name = 'Survey Template'
+        verbose_name_plural = 'Survey Templates'
+
+    survey_template_id = models.UUIDField(
+        'Survey Template ID',
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False
+    )
+    survey_template_title = models.CharField(
+        'Survey Name',
+        null=False,
+        blank=False,
+        max_length=40,
+        help_text='An arbitrary title or descriptor for the survey modal'
+    )
+    display_delay_template_type = models.PositiveSmallIntegerField(
+        'Display Delay Template Type',
+        null=False,
+        blank=False,
+        default=5,
+        help_text="Integer value in seconds before modal appears."
+    )
+    initial_content_state = models.CharField(
+        'Initial Modal Content State',
+        max_length=16,
+        null=False,
+        blank=False,
+        default='preview',
+        choices=[
+            ('preview', 'preview'),
+            ('full', 'full'),
+            ('minimized', 'minimized'),
+            ('none', 'none')
+        ],
+        help_text="Sets the initial content of the modal upon loading. Preview content is the default initial content state."
+    )
+    preview_header = models.CharField(
+        'Preview Modal Header',
+        max_length=40,
+        null=True,
+        blank=True,
+        help_text="The header for the Preview Content of the modal"
+    )
+    preview_body_text = models.CharField(
+        'Preview Modal Body Text',
+        max_length=400,
+        null=True,
+        blank=True,
+        help_text="The text content for the Preview Content of the modal"
+    )
+    preview_accept_button_text = models.CharField(
+        'Preview Modal Accept Button Text',
+        max_length=20,
+        null=False,
+        blank=False,
+        default="Accept",
+        help_text="The text label for the preview accept button"
+    )
+    preview_reject_button_text = models.CharField(
+        'Preview Modal Reject Button Text',
+        max_length=20,
+        null=False,
+        blank=False,
+        default="No Thanks",
+        help_text="The text label for the preview reject button"
+    )
+    preview_later_button_text = models.CharField(
+        'Preview Modal Later Button Text',
+        max_length=20,
+        null=False,
+        blank=False,
+        default="Maybe Later",
+        help_text="The text label for the preview later button"
+    )
+    preview_position = models.CharField(
+        'Preview Modal Position',
+        max_length=16,
+        null=False,
+        blank=False,
+        default='bottom-right',
+        choices=[
+            ("top-right","top-right"),
+            ("top-left","top-left"),
+            ("top-center","top-center"),
+            ("bottom-right","bottom-right"),
+            ("bottom-left","bottom-left"),
+            ("bottom-center","bottom-center"),
+            ("left-center","left-center"),
+            ("right-center","right-center"),
+            ("center","center"),
+        ],
+        help_text="Sets the position of the preview modal on the screen when loaded."
+    )
+    preview_size = models.CharField(
+        'Preview Modal Size',
+        max_length=14,
+        null=False,
+        blank=False,
+        default='fit-content',
+        choices=[
+            ("full-screen","full-screen"), 
+            ("full-height","full-height"), 
+            ("full-width","full-width"),  
+            ("half-width","half-width"), 
+            ("half-height","half-height"),
+            ("fit-content", "fit-content")
+        ],
+        help_text="Sets the size of the preview modal on the screen when loaded."
+    )
+    preview_background_color = models.CharField(
+        'Preview Modal Background Overlay Color',
+        max_length=32,
+        null=True,
+        blank=True,
+        default='',
+        help_text='Sets the background overlay color of the preview modal on load.'
+    )
+    full_header = models.CharField(
+        'Full Modal Header',
+        max_length=40,
+        null=True,
+        blank=True,
+        help_text="The header for the Full Content of the modal"
+    )
+    full_body_text = models.CharField(
+        'Full Body Text',
+        max_length=400,
+        null=True,
+        blank=True,
+        help_text="The text content for the Full Content of the modal"
+    )
+    full_position = models.CharField(
+        'Full Modal Position',
+        max_length=16,
+        null=False,
+        blank=False,
+        default='bottom-right',
+        choices=[
+            ("top-right","top-right"),
+            ("top-left","top-left"),
+            ("top-center","top-center"),
+            ("bottom-right","bottom-right"),
+            ("bottom-left","bottom-left"),
+            ("bottom-center","bottom-center"),
+            ("left-center","left-center"),
+            ("right-center","right-center"),
+            ("center","center"),
+        ],
+        help_text="Sets the position of the preview modal on the screen when loaded."
+    )
+    full_size = models.CharField(
+        'Full Modal Size',
+        max_length=14,
+        null=False,
+        blank=False,
+        default='full-screen',
+        choices=[
+            ("full-screen","full-screen"), 
+            ("full-height","full-height"), 
+            ("full-width","full-width"),  
+            ("half-width","half-width"), 
+            ("half-height","half-height"),
+            ("half-screen", "half-screen"),
+            ("fit-content", "fit-content")
+        ],
+        help_text="Sets the size of the full modal on the screen when loaded."
+    )
+    full_background_color = models.CharField(
+        'Full Modal Background Overlay Color',
+        max_length=32,
+        null=True,
+        blank=True,
+        default='#333333c4',
+        help_text='Sets the background overlay color of the full modal on load.'
+    )
+    minimized_icon = models.CharField(
+        'MDC Icon Text String',
+        max_length=40,
+        null=False,
+        blank=False,
+        default='fact_check',
+        help_text="Sets the icon for the minimized state of the modal",
+    )
+    minimized_text = models.CharField(
+        'Minimized modal label text',
+        max_length=40,
+        null=False,
+        blank=False,
+        default='Take Survey',
+        help_text="Sets the label text for the minimized state of the modal",
+    )
+    sheet_id = models.CharField(
+        'Google Sheet Id to post responses to',
+        max_length=50,
+        null=True,
+        blank=True,
+        help_text="Sets the Google Sheet id for survey results to be posted to",
+    )
+    survey_id = models.CharField(
+        'SurveyJS Id to pull survey from',
+        max_length=50,
+        null=True,
+        blank=True,
+        help_text="Sets the SurveyJS id for survey results to be posted to",
+    )
+    #===============================================================================#
+    created = models.DateTimeField(
+        'Created',
+        auto_now_add=True
+    )
+    last_modified = models.DateTimeField(
+        'Last Modified',
+        auto_now=True
+    )
+    public = models.BooleanField(
+        'Public',
+        default=False
+    )
+
+    def __str__(self):
+        return str(self.survey_template_id)

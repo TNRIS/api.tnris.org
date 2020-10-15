@@ -44,137 +44,12 @@ class CorsPostPermission(AllowAny):
         return u in self.whitelisted_domains
 
 
-# survey submission endpoint
+# ######################################################
+# ############## CONTACT FORM ENDPOINTS ################
+# ######################################################
 
 
-class SubmitSurveyViewSet(viewsets.ViewSet):
-    """
-    Handle generic SurveyJS survey submissions
-    """
-
-    def flatten_json_recursively(self, y):
-        out = {}
-
-        def flatten(x, name=""):
-            # If the Nested key-value
-            # pair is of dict type
-            if type(x) is dict:
-                for a in x:
-                    flatten(x[a], name + a + "_")
-            # If the Nested key-value
-            # pair is of list type
-            elif type(x) is list:
-                i = 0
-
-                for a in x:
-                    flatten(a, name + str(i) + "_")
-                    i += 1
-
-            else:
-                out[name[:-1]] = x
-
-        flatten(y)
-        return out
-
-    def submit_to_google_sheet(self, sheet_id, flattened_survey_response):
-        # Reliably set current path location
-        __location__ = os.path.realpath(
-            os.path.join(os.getcwd(), os.path.dirname(os.path.dirname(__file__)))
-        )
-
-        # Get credentials and authenticate using gspread auth wrapper and __location__
-        try:
-            gc = gspread.service_account(
-                filename=os.path.join(__location__, "gspread_config.json")
-            )
-        except Exception as e:
-            return Response({"status": "error", "message": "GSpread auth unsuccessful" }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-        # Open spreadsheet by url using request.data['sheet_id']
-        try:
-            SHEET = gc.open_by_key(sheet_id)
-        except Exception as e:
-            return Response({"status": "success", "message": "GSpread sheet retreival unsuccessful" }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-        # Get current headers values
-        try:
-            current_headers = SHEET.get_worksheet(0).row_values(1)
-        except Exception as e:
-            return Response({"status": "success", "message": "GSpread headers retreival unsuccessful" }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-        # Get row index for the end of the spreadsheet
-        try: 
-            next_empty_row = len(SHEET.get_worksheet(0).col_values(1)) + 1
-        except Exception as e:
-            return Response({"status": "success", "message": "GSpread next_empty_row unsuccessful" }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-        submitted_values = flattened_survey_response
-
-        # Variable to store new row values
-        new_row = []
-        # Variable to store new header values
-        new_headers = current_headers
-
-        # Cycle through current header fields
-        # If the existing field was sent, add its designated column
-        ## Pop value from list so that only submitted values which do not have columns remain in submitted_values
-        # If current header exists in Sheet but was not sent in request, mark value as empty string
-        for v in current_headers:
-            if v in submitted_values:
-                new_row.append(submitted_values.pop(v))
-            else:
-                new_row.append("")
-
-        # Cycle through remaining submitted_values as 2D array
-        for remaining in submitted_values.items():
-            # Append unique header / field key to first row of table (column names)
-            new_headers.append(remaining[0])
-            # Append value belonging to unique key to new row of table
-            new_row.append(remaining[1])
-
-        # Use batch_update to reduce HTTP calls
-        try: 
-            SHEET.get_worksheet(0).batch_update(
-            [
-                # UPDATE SHEET, adding new header row to sheet
-                {"range": "A1", "values": [new_headers]},
-                # UPDATE SHEET, adding new row to sheet
-                {
-                    # Must use gspread.utils to convert row index # to 'A1' style notation
-                    # Must use ternary on next_empty_row so that it will not overwrite header on first submission
-                    "range": gspread.utils.rowcol_to_a1(
-                        2 if next_empty_row == 1 else next_empty_row, 1
-                    ),
-                    "values": [new_row],
-                },
-            ]
-        )
-        except Exception as e:
-            return Response({"status": "success", "message": "GSpread batch_update unsuccessful" }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-
-    permission_classes = [CorsPostPermission]
-
-    def create(self, request, format=None):
-
-        resp = request.data["survey_response"]
-        sheet = request.data["sheet_id"]
-        # Flatten json request data
-        try:
-            flat = self.flatten_json_recursively(resp)
-        except Exception as e:
-            return Response({"status": "success", "message": "Error while flattening response data"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-        # Submit to Google Spreadsheet
-        self.submit_to_google_sheet(sheet, flat)
-
-        return Response(
-            {"status": "success", "message": "Survey submitted successfully"},
-            status=status.HTTP_201_CREATED,
-        )
-
-
-# form submission endpoint
+# FORMS SUBMISSION ENDPOINT
 class SubmitFormViewSet(viewsets.ViewSet):
     """
     Handle TNRIS form submissions (Restricted Access)
@@ -292,7 +167,7 @@ class SubmitFormViewSet(viewsets.ViewSet):
             )
 
 
-# POLICY ENDPOINTS
+# POLICY ENDPOINTS FOR UPLOADS
 def create_presigned_post(key, content_type, length, expiration=900):
     """Generate a presigned URL S3 POST request to upload a file
 
@@ -394,6 +269,12 @@ class FilePolicyViewSet(viewsets.ViewSet):
         return Response(presigned, status=status.HTTP_201_CREATED)
 
 
+# ######################################################
+# ################## SURVEY ENDPOINTS ##################
+# ######################################################
+
+
+# SURVEY DELIVERY
 class SurveyTemplateViewSet(viewsets.ReadOnlyModelViewSet):
     """
     Retrieve surveys to deliver survey modal content to front-end
@@ -409,3 +290,130 @@ class SurveyTemplateViewSet(viewsets.ReadOnlyModelViewSet):
         # get records using query
         queryset = SurveyTemplate.objects.filter(**args).order_by("-last_modified")
         return queryset
+
+
+# SURVEY SUBMISSION
+class SubmitSurveyViewSet(viewsets.ViewSet):
+    """
+    Handle generic SurveyJS survey submissions (Restricted Access)
+    """
+
+    permission_classes = [CorsPostPermission]
+
+    def flatten_json_recursively(self, y):
+        out = {}
+
+        def flatten(x, name=""):
+            # If the Nested key-value
+            # pair is of dict type
+            if type(x) is dict:
+                for a in x:
+                    flatten(x[a], name + a + "_")
+            # If the Nested key-value
+            # pair is of list type
+            elif type(x) is list:
+                i = 0
+
+                for a in x:
+                    flatten(a, name + str(i) + "_")
+                    i += 1
+
+            else:
+                out[name[:-1]] = x
+
+        flatten(y)
+        return out
+
+    def submit_to_google_sheet(self, sheet_id, flattened_survey_response):
+        # Reliably set current path location
+        __location__ = os.path.realpath(
+            os.path.join(os.getcwd(), os.path.dirname(os.path.dirname(__file__)))
+        )
+
+        # Get credentials and authenticate using gspread auth wrapper and __location__
+        try:
+            gc = gspread.service_account(
+                filename=os.path.join(__location__, "gspread_config.json")
+            )
+        except Exception as e:
+            return Response({"status": "error", "message": "GSpread auth unsuccessful" }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        # Open spreadsheet by url using request.data['sheet_id']
+        try:
+            SHEET = gc.open_by_key(sheet_id)
+        except Exception as e:
+            return Response({"status": "error", "message": "GSpread sheet retreival unsuccessful" }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        # Get current headers values
+        try:
+            current_headers = SHEET.get_worksheet(0).row_values(1)
+        except Exception as e:
+            return Response({"status": "error", "message": "GSpread headers retreival unsuccessful" }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        # Get row index for the end of the spreadsheet
+        try: 
+            next_empty_row = len(SHEET.get_worksheet(0).col_values(1)) + 1
+        except Exception as e:
+            return Response({"status": "error", "message": "GSpread next_empty_row unsuccessful" }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        submitted_values = flattened_survey_response
+
+        # Variable to store new row values
+        new_row = []
+        # Variable to store new header values
+        new_headers = current_headers
+
+        # Cycle through current header fields
+        # If the existing field was sent, add its designated column
+        ## Pop value from list so that only submitted values which do not have columns remain in submitted_values
+        # If current header exists in Sheet but was not sent in request, mark value as empty string
+        for v in current_headers:
+            if v in submitted_values:
+                new_row.append(submitted_values.pop(v))
+            else:
+                new_row.append("")
+
+        # Cycle through remaining submitted_values as 2D array
+        for remaining in submitted_values.items():
+            # Append unique header / field key to first row of table (column names)
+            new_headers.append(remaining[0])
+            # Append value belonging to unique key to new row of table
+            new_row.append(remaining[1])
+
+        # Use batch_update to reduce HTTP calls
+        try: 
+            SHEET.get_worksheet(0).batch_update(
+            [
+                # UPDATE SHEET, adding new header row to sheet
+                {"range": "A1", "values": [new_headers]},
+                # UPDATE SHEET, adding new row to sheet
+                {
+                    # Must use gspread.utils to convert row index # to 'A1' style notation
+                    # Must use ternary on next_empty_row so that it will not overwrite header on first submission
+                    "range": gspread.utils.rowcol_to_a1(
+                        2 if next_empty_row == 1 else next_empty_row, 1
+                    ),
+                    "values": [new_row],
+                },
+            ]
+        )
+        except Exception as e:
+            return Response({"status": "error", "message": "GSpread batch_update unsuccessful" }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def create(self, request, format=None):
+
+        resp = request.data["survey_response"]
+        sheet = request.data["sheet_id"]
+        # Flatten json request data
+        try:
+            flat = self.flatten_json_recursively(resp)
+        except Exception as e:
+            return Response({"status": "error", "message": "Error while flattening response data"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        # Submit to Google Spreadsheet
+        self.submit_to_google_sheet(sheet, flat)
+
+        return Response(
+            {"status": "success", "message": "Survey submitted successfully"},
+            status=status.HTTP_201_CREATED,
+        )

@@ -8,9 +8,9 @@ Django RESTful API and PostgreSQL backend database management system for maintai
 
 Built with:
 * Python 3.6 ([virtual environment](https://howchoo.com/g/nwewzjmzmjc/a-guide-to-python-virtual-environments-with-virtualenvwrapper) suggested)
-* PostgreSQL 10.3
-  * Amazon RDS Instance
-* [Django](https://docs.djangoproject.com/en/2.0/topics/install/)
+* PostgreSQL 10.7
+  * Amazon RDS Aurora Instance (`tnris-general-store`)
+* [Django](https://docs.djangoproject.com/en/3.0/topics/install/)
 * For data scripts, you probably want to use some form of python virtual env manager to maintain an isolated environment. A good run-down of the options can be found in [The Hitchiker's Guide to Python](http://docs.python-guide.org/en/latest/dev/virtualenvs/). A recommended setup is virtualenv + virtualenvwrapper.
 
 #### Django App Setup
@@ -19,21 +19,26 @@ Built with:
 3. Install python dependencies:
    * `cd ~/api.tnris.org/src`
    * `pip install -r requirements.txt`
-4. Copy set-env-secrets-example.sh (found in ~/api.tnris.org/src/data_hub/) and rename it set-env-secrets.sh; paste the data.tnris.org RDS pw into the file. * This file is not tracked in version control. **--or--** place a copy of `vault-password.txt` and `gspread_config.json` into the root of this repo `~/api.tnris.org`. You might need to change spaces to newlines. cd into the root folder and run `make pull-secrets` to quickly download, decrypt, and properly place the secrets file.
-5. Source the set-env-secrets.sh in your virtual environtment using command `source /path/to/your/file/set-env-secrets.sh`
+4. Setup secrets files:
+   * `./src/data_hub/set-env-secrets.sh`
+   * `./src/data_hub/gspread_config.json`
+   * **PREFERRED** ::: Place a copy of `vault-password.txt` into the root of this repo `~/api.tnris.org`. Then run `make pull-secrets` to quickly download, decrypt, and properly place both secrets files. *(for TNRIS employees only)*
+   * **ALTERNATIVE** ::: A template copy of each secrets file exists in `./src/data_hub/` but with `-example` in the filename. Make a copy of each file in the same directory, remove "-example" from the copy's name, and fill in the values for each secret manually.
 
 ## Local Development
 1. Set up a local development db instance or use [local port forwarding](https://blog.trackets.com/2014/05/17/ssh-tunnel-local-and-remote-port-forwarding-explained-with-examples.html) to connect to a remote db instance
    * Default settings are already setup if you're using local port forwarding to your port 9000 (skip to next step if you are doing this). If you're using a local development db, configure your database environment variables (`DB_NAME`, `DB_USER`, `DB_PASSWORD`, `DB_HOST`, `DB_PORT`) to point to it.
 2. `cd ~/api.tnris.org/src/data_hub/`
-3. **To run the django app locally**: run `python manage.py runserver`, it will be available at `localhost:8000`. if you get a DB_PASSWORD env variable error then you need to re-run the `source` command in 'Setup' step 5 above. Alternatively, run the app locally with `. set-env-secrets.sh && python manage.py runserver` instead as it applies the env variable before startup of the server.
+3. `. set-env-secrets.sh` or `source set-env-secrets.sh` to set the environment variables within the terminal session
+4. `python manage.py runserver` to run the app; it will be available at `localhost:8000`. if you get a DB_PASSWORD env variable error then you need to re-run the env variable command in the previous step.
 
 ## Deployment Prep
 
 1. `cd ~/api.tnris.org/src`
-1. `pip freeze > requirements.txt` to save dependencies
-1. save and commit all changes. push to github appropriately.
-1. head over to the deployments repo to execute the actual application deployment and make it so
+2. `pip freeze > requirements.txt` to save dependencies
+3. `make pull-secrets` if secrets files are not local. they must be locally in `./src/data_hub/` before deploying.
+4. save and commit all changes. push to github appropriately.
+5. head over to the deployments repo to execute the actual application deployment and make it so
 
 # Lambda
 

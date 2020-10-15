@@ -1522,7 +1522,7 @@ class SurveyTemplate(models.Model):
         max_length=20,
         null=False,
         blank=False,
-        default="Reject",
+        default="No Thanks",
         help_text="The text label for the preview reject button"
     )
     preview_later_button_text = models.CharField(
@@ -1557,13 +1557,14 @@ class SurveyTemplate(models.Model):
         max_length=14,
         null=False,
         blank=False,
-        default='half-width',
+        default='fit-content',
         choices=[
             ("full-screen","full-screen"), 
             ("full-height","full-height"), 
             ("full-width","full-width"),  
             ("half-width","half-width"), 
-            ("half-height","half-height")
+            ("half-height","half-height"),
+            ("fit-content", "fit-content")
         ],
         help_text="Sets the size of the preview modal on the screen when loaded."
     )
@@ -1613,13 +1614,15 @@ class SurveyTemplate(models.Model):
         max_length=14,
         null=False,
         blank=False,
-        default='half-width',
+        default='full-screen',
         choices=[
             ("full-screen","full-screen"), 
             ("full-height","full-height"), 
             ("full-width","full-width"),  
             ("half-width","half-width"), 
-            ("half-height","half-height")
+            ("half-height","half-height"),
+            ("half-screen", "half-screen"),
+            ("fit-content", "fit-content")
         ],
         help_text="Sets the size of the full modal on the screen when loaded."
     )
@@ -1628,7 +1631,7 @@ class SurveyTemplate(models.Model):
         max_length=32,
         null=True,
         blank=True,
-        default='',
+        default='#333333c4',
         help_text='Sets the background overlay color of the full modal on load.'
     )
     minimized_icon = models.CharField(
@@ -1636,7 +1639,7 @@ class SurveyTemplate(models.Model):
         max_length=40,
         null=False,
         blank=False,
-        default='minimize',
+        default='fact_check',
         help_text="Sets the icon for the minimized state of the modal",
     )
     minimized_text = models.CharField(
@@ -1644,7 +1647,7 @@ class SurveyTemplate(models.Model):
         max_length=40,
         null=False,
         blank=False,
-        default='minimize',
+        default='Take Survey',
         help_text="Sets the label text for the minimized state of the modal",
     )
     sheet_id = models.CharField(

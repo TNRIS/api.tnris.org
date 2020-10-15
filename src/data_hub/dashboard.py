@@ -117,6 +117,7 @@ class CustomIndexDashboard(Dashboard):
                     'contact.models.LakesOfTexasContact',
                     'contact.models.OrderMap',
                     'contact.models.PosterGallerySubmission',
+                    'contact.models.SurveyTemplate',
                     'contact.models.TexasImageryServiceContact',
                     'contact.models.TexasImageryServiceRequest'),
         ))

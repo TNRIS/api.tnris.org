@@ -1,0 +1,12 @@
+{
+  "type": "<auth type>",
+  "project_id": "<project id>",
+  "private_key_id": "<key identifier string>",
+  "private_key": "<permissions key>",
+  "client_email": "<client email as assigned within dashboard>",
+  "client_id": "<google client id>",
+  "auth_uri": "<google auth url>",
+  "token_uri": "<google token url>",
+  "auth_provider_x509_cert_url": "<google auth ver url>",
+  "client_x509_cert_url": "<custom project cert url>"
+}

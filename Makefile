@@ -18,7 +18,8 @@ FORCE:
 	aws s3 cp $@ s3://$(SECRETS_BUCKET)/$(APP_NAME)/.vault/$(notdir $@)
 
 push-secrets: \
-	.vault/.push/set-env-secrets.sh
+	.vault/.push/set-env-secrets.sh \
+	.vault/.push/gspread_config.json
 
 .vault/.pull/%: FORCE
 	mkdir -p $(dir $@)
@@ -30,4 +31,5 @@ src/data_hub/%: .vault/.pull/%
 	mv $< $@
 
 pull-secrets: \
-	src/data_hub/set-env-secrets.sh
+	src/data_hub/set-env-secrets.sh \
+	src/data_hub/gspread_config.json

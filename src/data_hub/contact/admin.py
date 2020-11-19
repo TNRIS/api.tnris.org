@@ -380,6 +380,8 @@ class SurveyTemplateAdmin(admin.ModelAdmin):
                        'sheet_id',
                        'survey_id',
                        'public',
+                       'dev_mode',
+                       'content_type',
                        'display_delay_template_type',
                        'initial_content_state',
                        ),

@@ -1595,9 +1595,9 @@ class SurveyTemplate(models.Model):
         blank=True,
         help_text="The header for the Full Content of the modal"
     )
-    full_body_text = models.CharField(
+    full_body_text = models.TextField(
         'Full Body Text',
-        max_length=400,
+        max_length=3000,
         null=True,
         blank=True,
         help_text="The text content for the Full Content of the modal"

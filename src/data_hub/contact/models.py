@@ -1481,6 +1481,18 @@ class SurveyTemplate(models.Model):
         default=5,
         help_text="Integer value in seconds before modal appears."
     )
+    content_type = models.CharField(
+        'Display Type',
+        help_text='The display type of the modal; for example, should it display a series of dialogues, or should the modal be a single, static-text alert type.',
+        max_length=16,
+        null=False,
+        blank=False,
+        default="multi-modal",
+        choices=[
+            ('single-modal', 'single-modal'),
+            ('multi-modal', 'multi-modal')
+        ],
+    )
     initial_content_state = models.CharField(
         'Initial Modal Content State',
         max_length=16,
@@ -1583,9 +1595,9 @@ class SurveyTemplate(models.Model):
         blank=True,
         help_text="The header for the Full Content of the modal"
     )
-    full_body_text = models.CharField(
+    full_body_text = models.TextField(
         'Full Body Text',
-        max_length=400,
+        max_length=3000,
         null=True,
         blank=True,
         help_text="The text content for the Full Content of the modal"
@@ -1677,6 +1689,10 @@ class SurveyTemplate(models.Model):
         'Public',
         default=False
     )
-
+    dev_mode = models.BooleanField(
+        'Dev Mode',
+        help_text='If checked, the modal will only display in development on localhost:3000',
+        default=False
+    )
     def __str__(self):
         return str(self.survey_template_id)

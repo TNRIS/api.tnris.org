@@ -128,7 +128,7 @@ class DocumentForm(forms.ModelForm):
         model = TnrisDocument
         fields = ('__all__')
     
-    document_url = forms.FileField(
+    document_file = forms.FileField(
         required=False,
         help_text="Choose a document file and 'Save' this form to upload & save it to the database. Attempting to overwrite with a new file will only create a new record. The best method to overwrite would be to delete the existing file and re-upload a new file with the same name."
     )
@@ -140,8 +140,12 @@ class DocumentForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(DocumentForm, self).__init__(*args, **kwargs)
+        self.fields['document_url'].help_text = "Paste the URL path to a video or file. Entering a URL will take precedent and ignore the 'Document file' upload."
+        self.fields['document_url'].required = False
         if self.instance.document_url != '':
             self.fields['document_url'].widget.render = populated_document_render
+            self.fields['document_file'].widget.attrs['readonly'] = True
+            self.fields['document_file'].widget.attrs['disabled'] = True
 
     # function to upload document to s3 and update dbase link
     def handle_doc(self, field, file):
@@ -168,37 +172,41 @@ class DocumentForm(forms.ModelForm):
         )
         print('%s upload success!' % key)
         # update link in database table
-        setattr(self.instance, field, "https://tnris-org-static.s3.amazonaws.com/" + key)
-        setattr(self.instance, "document_name", str(file))
-        # special handling to capture boolean input value of sgm_note & comm_note and save it on initial creation
-        if self.cleaned_data['sgm_note'] == True:
-            setattr(self.instance, "sgm_note", True)
-            self.cleaned_data = self.instance.__dict__
-        elif self.cleaned_data['comm_note'] == True:
-            setattr(self.instance, "comm_note", True)
-            self.cleaned_data = self.instance.__dict__
-        else:
-            self.cleaned_data = self.instance.__dict__
+        setattr(self.instance, 'document_url', "https://tnris-org-static.s3.amazonaws.com/" + key)
         return
 
     # custom handling of documents on save
     def clean(self, commit=True):
-        # check for files
+        # if no document name, throw error early. this prevents an unwanted file upload
+        if 'document_name' not in self.cleaned_data.keys():
+            raise ValidationError(u"Document Name is required.")
+        # if no url present on the instance (it's a new record if so) and no file being uploaded
+        # or url entered, then throw the error as URL is required
+        if (self.instance.document_url == '' and
+            self.cleaned_data['document_url'] == '' and
+            self.cleaned_data['document_file'] is None):
+            raise ValidationError(u"A 'Document file' or 'Document URL' is required.")
+        # check for files. if files present and no URL entered, then do the upload.
+        # if no files, or a URL is entered, ignore the file and go with the URL. this prevents
+        # the unused and untracked file from being uploaded.
         files = self.files
-        for f in files:
-            print(str(files[f]))
-            ext = os.path.splitext(str(files[f]))[1]
-            invalid_extensions = ['.jpg', '.png', '.gif', '.jpeg', '.svg']
-            # validation to prevent image formats from being uploaded
-            if ext.lower() in invalid_extensions:
-                raise ValidationError(u"Unsupported file extension. All images should be uploaded to 'Tnris Images', only document type files should be uploaded here.")
-            # validation to check if document file name already exists in database
-            name_set = TnrisDocument.objects.filter(document_name=str(files[f]))
-            if len(name_set) > 0:
-                raise ValidationError(u"Document file name already exists. Rename your file.")
-
-            self.handle_doc(f, files[f])
-
+        if len(files) > 0 and self.cleaned_data['document_url'] == '':
+            for f in files:
+                ext = os.path.splitext(str(files[f]))[1]
+                invalid_extensions = ['.jpg', '.png', '.gif', '.jpeg', '.svg']
+                # validation to prevent image formats from being uploaded
+                if ext.lower() in invalid_extensions:
+                    raise ValidationError(u"Unsupported file extension. All images should be uploaded to 'Tnris Images', only document type files should be uploaded here.")
+                # validation to check if document file name already exists in database
+                name_set = TnrisDocument.objects.filter(document_name=str(files[f]))
+                if len(name_set) > 0:
+                    raise ValidationError(u"Document file name already exists, all filenames must be unique. Rename your file.")
+                self.handle_doc(f, files[f])
+        # if instance already had a url (updating rather than creating new), deliberately reset
+        # the current document_url into the form's cleaned_data as to prevent overwriting the field
+        # with an empty string from the uneditable field in the form
+        if self.instance.document_url != '' and self.cleaned_data['document_url'] == '':
+            self.cleaned_data['document_url'] = self.instance.document_url
         super(DocumentForm, self).save(commit=commit)
         return
 

@@ -73,8 +73,23 @@ class TnrisDocumentAdmin(admin.ModelAdmin):
     model = TnrisDocument
     form = DocumentForm
     ordering = ('document_name',)
-    list_display = ('document_name', 'document_url_link', 'created')
+    list_display = ('document_name', 'document_url_link', 'created', 'sgm_note', 'comm_note')
     search_fields = ('document_name', 'document_url')
+    fieldsets = (
+        ('Upload File -- or -- Enter URL', {
+            # 'classes': ('grp-collapse', 'grp-open'),
+            'fields': ('document_file',
+                       'document_url',
+                       )
+        }),
+        ('Name & Type', {
+            # 'classes': ('grp-collapse', 'grp-open',),
+            'fields': ('document_name',
+                       'sgm_note',
+                       'comm_note',
+                       )
+        }),
+    )
 
     def document_url_link(self, obj):
         htmlId = "i" + str(obj.document_id).replace("-","")
@@ -96,6 +111,12 @@ class TnrisDocumentAdmin(admin.ModelAdmin):
             htmlId,
             obj.document_url.replace('https://tnris-org-static.s3.amazonaws.com/', 'https://cdn.tnris.org/')
         )
+
+    # use the model's delete method as means to fire the s3 file
+    # deletion at time of records being deleted from the list_display actions
+    def delete_queryset(self, request, queryset):
+        for obj in queryset:
+            obj.delete()
 
 
 @admin.register(TnrisTraining)

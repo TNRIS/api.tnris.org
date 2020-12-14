@@ -74,7 +74,10 @@ class TnrisDocument(models.Model):
     document_name = models.CharField(
         'Document Name',
         max_length=200,
-        editable=False
+        null=False,
+        blank=False,
+        unique=True,
+        help_text="Plain text label, title, or name for the file. Must be unique."
     )
     document_url = models.URLField(
         'Document URL',

@@ -82,6 +82,9 @@ class TnrisDocument(models.Model):
     document_url = models.URLField(
         'Document URL',
         max_length=255,
+        null=False,
+        blank=False,
+        unique=True
     )
     sgm_note = models.BooleanField(
         'Solutions Group Note',

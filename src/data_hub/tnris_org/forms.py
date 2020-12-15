@@ -207,9 +207,9 @@ class DocumentForm(forms.ModelForm):
                 if ext.lower() in invalid_extensions:
                     raise ValidationError(u"Unsupported file extension. All images should be uploaded to 'Tnris Images', only document type files should be uploaded here.")
                 # validation to prevent bad URL characters in filename
-                regex = re.compile('[@!#$%^&*()<>?/\|}{~:]')
+                regex = re.compile('[@!#$%^&*()<>?/\|}{~:,]')
                 if regex.search(str(files[f])) is not None:
-                    raise ValidationError(u"Bad character(s) in filename. Filename characters must be URL friendly.")
+                    raise ValidationError(u"Bad character(s) in filename. Filename characters must be URL friendly. Exclude: [@!#$%^&*()<>?/\|}{~:,]")
                 # validation to check if document_file name already exists in database (also in s3 since one-in-the-same)
                 regex_str = str(files[f]) + "$"
                 filename_set = TnrisDocument.objects.filter(document_url__regex=regex_str)

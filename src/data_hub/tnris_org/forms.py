@@ -132,8 +132,8 @@ class DocumentForm(forms.ModelForm):
         required=False,
         help_text="Choose a document file and 'Save' this form to upload & save it to the database. Uploaded files cannot be overwritten; the best method to overwrite would be to delete this record (deletes the file as well) and re-upload in a new record."
     )
-    sgm_note = forms.BooleanField(required=False, label="GIS Solutions Group Notes", help_text="Check this box to identify as a GIS Solutions Group notes document.<br><br><strong>Note:</strong> This is required to view the document on tnris.org. Be sure to name the file correctly - 'YYYY-MM-DD-GIS-SG-Meeting-Notes.pdf'. The file name is important for the order these documents are presented on tnris.org.")
-    comm_note = forms.BooleanField(required=False, label="GIS Community Meeting Notes", help_text="Check this box to identify as a GIS Community Meeting notes document.<br><br><strong>Note:</strong> This is required to view the document on tnris.org. Be sure to name the file correctly - 'YYYY-MM-DD-GIS-Community-Meeting-Notes.pdf'. The file name is important for the order these documents are presented on tnris.org.")
+    sgm_note = forms.BooleanField(required=False, label="GIS Solutions Group Notes", help_text="Check this box to identify a GIS Solutions Group notes document.<br><br><strong>Note:</strong> This is required to view the document on the website at '/geographic-information-office/gis-solutions-group/'. Be sure to give a descriptive Document Name above.")
+    comm_note = forms.BooleanField(required=False, label="GIS Community Meeting Notes", help_text="Check this box to identify a GIS Community Meeting notes document.<br><br><strong>Note:</strong> This is required to view the document on the website at '/geographic-information-office/'. Be sure to give a descriptive Document Name above.")
 
     # boto3 s3 object
     client = boto3.client('s3')

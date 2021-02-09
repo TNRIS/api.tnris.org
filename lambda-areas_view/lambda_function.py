@@ -93,6 +93,12 @@ def lambda_handler(event, context):
     except Exception as e:
         print('ERROR:', e)
 
+    # refresh the materialized view to present the data updates
+    print('refreshing the materialized view: "download_areas"')
+    refresh_query = "REFRESH MATERIALIZED VIEW download_areas with DATA;"
+    cur.execute(refresh_query)
+    conn.commit()
+
     print('closing database connection.')
     conn.close()
     

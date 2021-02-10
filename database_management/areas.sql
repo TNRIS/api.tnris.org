@@ -1,7 +1,7 @@
 -- Create areas view for API to hit. Aggregates collection_id values from resources.
 -- This SQL only needs to be run after initial database creation
 -- Main collection api endpoint for all collections (historical and non) area associations: api/v1/areas
--- Used in areas_view CSV generator lambda function which ultimately syncs with Carto for geofilter
+-- Used in areas_view lambda function which ultimately dumps the records into a mapserver table for geofilter
 DROP MATERIALIZED VIEW IF EXISTS "areas";
 
 CREATE MATERIALIZED VIEW "areas" as

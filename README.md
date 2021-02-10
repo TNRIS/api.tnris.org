@@ -42,10 +42,10 @@ Built with:
 
 # Lambda
 
-The database API '/areas' endpoint is routinely accessed by a Lambda Function which
-creates a CSV and dumps it into S3 for Carto to sync with. This provides an efficient
-query capability for the Geography map filter to spatially identify collections directly
-in Carto.
+The database API '/areas' endpoint is routinely accessed by a Lambda Function which 
+pull the resource information and updates the mapserver database table 'areas_view' to join 
+and host as a map service. This provides an efficient query capability for the Geography map 
+filter to spatially identify collections.
 
 ### Lambda Development
 1. make a new python virtual environment (separate from the app's above) for lambda development. This is required as all associated python packages will need to be bundled

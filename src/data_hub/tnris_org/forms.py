@@ -183,7 +183,8 @@ class DocumentForm(forms.ModelForm):
         # validation to check if document_name already exists in database
         name_set = TnrisDocument.objects.filter(document_name=self.cleaned_data['document_name'])
         if len(name_set) > 0:
-            raise ValidationError(u"Document Name already exists, all names must be unique. Enter a different Document Name and try again.")
+            if name_set[0].document_id != self.instance.document_id:
+                raise ValidationError(u"Document Name already exists, all names must be unique. Enter a different Document Name and try again.")
         # if no url present on the instance (it's a new record if so) and no file being uploaded
         # or url entered, then throw the error as URL is required
         if (self.instance.document_url == '' and

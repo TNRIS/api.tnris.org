@@ -1,3 +1,6 @@
+import operator
+from functools import reduce
+from django.db.models import Q
 from rest_framework import viewsets
 from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
@@ -45,16 +48,38 @@ class CollectionViewSet(viewsets.ReadOnlyModelViewSet):
         # only return public collection records from the catalog
         args = {'public': True}
         null_list = ['null', 'Null', 'none', 'None']
+        #join_OR_conditions stores all OR clauses
         # create argument object of query clauses
+        join_OR_conditions = []
         for field in self.request.query_params.keys():
             if field not in ['limit', 'offset', 'ordering', 'search']:
                 value = self.request.query_params.get(field)
                 # convert null queries
                 if value in null_list:
                     value = None
+                
                 args[field] = value
+                
+                # if field is CSV and one of designated OR fields
+                or_fields = ["category__icontains", "availability__icontains", "file_type__icontains"]
+                if "," in value and field in or_fields:
+                    #split values
+                    values = value.split(",")
+                    #create objs array to fill from csv params
+                    objs = []
+                    #for each value in CSV Param, append
+                    for v in values:
+                        obj = {}
+                        obj[field]=v
+                        objs.append(obj)
+                    #split into Q objects joined by bitwise "OR"
+                    conditions = reduce(operator.or_, [Q(**o) for o in objs])
+                    del args[field]
+                    join_OR_conditions.append(conditions)
+                            
+        print(join_OR_conditions)
         # get records using query
-        queryset = CcrView.objects.filter(**args).order_by('collection_id')
+        queryset = CcrView.objects.filter(*join_OR_conditions,**args).order_by('collection_id')
         return queryset
 
 

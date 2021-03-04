@@ -1281,6 +1281,9 @@ class RemView(models.Model):
     area_type_id = models.UUIDField(
         'AreaType'
     )
+    area_type_name = models.TextField(
+        'Area Type Name'
+    )
     collection_id = models.UUIDField(
         'Collection'
     )

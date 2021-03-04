@@ -22,7 +22,7 @@ LEFT JOIN area_type ON area_type.area_type_id=resource.area_type_id
 GROUP BY area_type.area_type_name,
         resource.area_type_id, --group by area_type_id first? any objections?
 		    resource_type.resource_type_name, --group by area_type_name, idea is like-with-like by default
-        resource.resource_id, --
+        resource.resource_id,
         resource.resource,
         resource.filesize,
         resource.collection_id,

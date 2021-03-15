@@ -1,4 +1,4 @@
-from django.db import models
+from django.contrib.gis.db import models
 import uuid
 import boto3
 import os
@@ -1114,7 +1114,7 @@ class CcrView(models.Model):
 
     class Meta:
         managed = False
-        db_table = "collection_catalog_record"
+        db_table = "collection_catalog_geom_record"
         verbose_name = 'Collection Catalog Record'
         verbose_name_plural = 'Collection Catalog Records'
 
@@ -1247,6 +1247,9 @@ class CcrView(models.Model):
     )
     oe_service_urls = models.TextField(
         'Outside Entity Service URLs'
+    )
+    the_geom = models.MultiPolygonField(
+        'Coverage Geometry'
     )
 
     def __str__(self):

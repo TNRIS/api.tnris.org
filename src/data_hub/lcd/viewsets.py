@@ -3,6 +3,7 @@ from functools import reduce
 from django.db.models import Q
 from rest_framework import viewsets
 from rest_framework import filters
+from rest_framework_gis.filters import InBBoxFilter
 from django_filters.rest_framework import DjangoFilterBackend
 
 from .models import CcrView, RemView, AreasView
@@ -39,8 +40,9 @@ class CollectionViewSet(viewsets.ReadOnlyModelViewSet):
     ordering_fields = ['name', 'acquisition_date']
     # add search and ordering to the filter backends so we
     # can filter the api with the frontend sort and search
-    filter_backends = (filters.SearchFilter, filters.OrderingFilter,)
-
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter, InBBoxFilter)
+    bbox_filter_field = 'the_geom'
+    bbox_filter_include_overlapping = True
     serializer_class = CollectionSerializer
     http_method_names = ['get']
 
@@ -52,7 +54,7 @@ class CollectionViewSet(viewsets.ReadOnlyModelViewSet):
         # create argument object of query clauses
         join_OR_conditions = []
         for field in self.request.query_params.keys():
-            if field not in ['limit', 'offset', 'ordering', 'search']:
+            if field not in ['limit', 'offset', 'ordering', 'search', 'in_bbox']:
                 value = self.request.query_params.get(field)
                 # convert null queries
                 if value in null_list:
@@ -76,8 +78,6 @@ class CollectionViewSet(viewsets.ReadOnlyModelViewSet):
                     conditions = reduce(operator.or_, [Q(**o) for o in objs])
                     del args[field]
                     join_OR_conditions.append(conditions)
-                            
-        print(join_OR_conditions)
         # get records using query
         queryset = CcrView.objects.filter(*join_OR_conditions,**args).order_by('collection_id')
         return queryset

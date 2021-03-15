@@ -1,4 +1,6 @@
+from django.db.models import fields
 from rest_framework import serializers
+from rest_framework_gis.serializers import GeoFeatureModelSerializer
 from .models import CcrView, RemView, AreasView
 
 
@@ -6,6 +8,8 @@ class CollectionSerializer(serializers.ModelSerializer):
     class Meta:
         model = CcrView
         fields = '__all__'
+        #exclude = ('the_geom',)
+        geo_field = 'the_geom'
 
     thumbnail_image = serializers.SerializerMethodField()
     def get_thumbnail_image(self, obj):

@@ -1255,6 +1255,79 @@ class CcrView(models.Model):
     def __str__(self):
         return self.name
 
+class CatalogCollectionMetaView(models.Model):
+    """
+    Catalog Collection Meta view presents both historical and contemporary collections at one endpoint for consistent
+    querying of metadata under a unified schema. 
+    """
+
+    class Meta:
+        managed = False
+        db_table = "catalog_collection_meta"
+        verbose_name = 'Catalog Collection Metadatum'
+        verbose_name_plural = 'Catalog Collection Metadata'
+
+    collection_id = models.UUIDField(
+        'Collection ID',
+        primary_key=True
+    )
+    name = models.TextField(
+        'Name'
+    )
+    acquisition_date = models.TextField(
+        'Acquisition Date'
+    )
+    description = models.TextField(
+        'Description'
+    )
+    public = models.BooleanField(
+        'Public'
+    )
+    thumbnail_image = models.TextField(
+        'Thumb Image'
+    )
+    tile_index_url = models.URLField(
+        'Tile Index URL'
+    )
+    category = models.TextField(
+        'Category'
+    )
+    file_type = models.TextField(
+        'File Type'
+    )
+    source_name = models.TextField(
+        'Source Name'
+    )
+    source_abbreviation = models.TextField(
+        'Source Abbreviation'
+    )
+    license_name = models.TextField(
+        'License Name'
+    )
+    license_abbreviation = models.TextField(
+        'License Abbreviation'
+    )
+    license_url = models.CharField(
+        'License URL',
+        max_length=255
+    )
+    template = models.TextField(
+        'Template'
+    )
+    availability = models.TextField(
+        'Availability'
+    )
+    counties = models.TextField(
+        'Counties'
+    )
+    the_geom = models.MultiPolygonField(
+        'Coverage Geometry'
+    )
+
+    def __str__(self):
+        return self.name
+
+
 
 class RemView(models.Model):
     """

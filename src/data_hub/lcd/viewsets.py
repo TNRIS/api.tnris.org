@@ -6,12 +6,80 @@ from rest_framework import filters
 from rest_framework_gis.filters import InBBoxFilter
 from django_filters.rest_framework import DjangoFilterBackend
 
-from .models import CcrView, RemView, AreasView
+from .models import CatalogCollectionMetaView, CcrView, RemView, AreasView
 from .serializers import (
+    CatalogCollectionMetaSerializer,
     CollectionSerializer,
     ResourceSerializer,
     AreaSerializer,
 )
+
+class CatalogCollectionMetaViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    Retrieve TNRIS dataset collection metadata and information
+    """
+    
+    """
+    Below we are using DRF Filtering to handle
+    filtering, sorting, and keyword search,
+    documentation found here:
+    https://www.django-rest-framework.org/api-guide/filtering/
+    """
+    
+    # define the fields available to search
+    search_fields = [
+        'name',
+        'acquisition_date',
+        '@description',
+        '@counties',
+        'source_name',
+        'source_abbreviation',
+    ]
+    # define the fields available to sort
+    ordering_fields = ['name', 'acquisition_date']
+    # add search and ordering to the filter backends so we
+    # can filter the api with the frontend sort and search
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter, InBBoxFilter)
+    bbox_filter_field = 'the_geom'
+    bbox_filter_include_overlapping = True
+    serializer_class = CatalogCollectionMetaSerializer
+    http_method_names = ['get']
+
+    def get_queryset(self):
+        # only return public collection records from the catalog
+        args = {'public': True}
+        null_list = ['null', 'Null', 'none', 'None']
+        #join_OR_conditions stores all OR clauses
+        # create argument object of query clauses
+        join_OR_conditions = []
+        for field in self.request.query_params.keys():
+            if field not in ['limit', 'offset', 'ordering', 'search', 'in_bbox']:
+                value = self.request.query_params.get(field)
+                # convert null queries
+                if value in null_list:
+                    value = None
+                
+                args[field] = value
+                
+                # if field is CSV and one of designated OR fields
+                or_fields = ["category__icontains", "availability__icontains", "file_type__icontains"]
+                if "," in value and field in or_fields:
+                    #split values
+                    values = value.split(",")
+                    #create objs array to fill from csv params
+                    objs = []
+                    #for each value in CSV Param, append
+                    for v in values:
+                        obj = {}
+                        obj[field]=v
+                        objs.append(obj)
+                    #split into Q objects joined by bitwise "OR"
+                    conditions = reduce(operator.or_, [Q(**o) for o in objs])
+                    del args[field]
+                    join_OR_conditions.append(conditions)
+        # get records using query
+        queryset = CatalogCollectionMetaView.objects.filter(*join_OR_conditions,**args).order_by('collection_id')
+        return queryset
 
 class CollectionViewSet(viewsets.ReadOnlyModelViewSet):
     """

@@ -1,8 +1,30 @@
 from django.db.models import fields
 from rest_framework import serializers
 from rest_framework_gis.serializers import GeoFeatureModelSerializer
-from .models import CcrView, RemView, AreasView
+from .models import CatalogCollectionMetaView, CcrView, RemView, AreasView
 
+class CatalogCollectionMetaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CatalogCollectionMetaView
+        fields = '__all__'
+        #exclude = ('the_geom',)
+        geo_field = 'the_geom'
+
+    thumbnail_image = serializers.SerializerMethodField()
+    def get_thumbnail_image(self, obj):
+        if str(obj.thumbnail_image) != "" and obj.thumbnail_image is not None:
+            path = str(obj.thumbnail_image).replace("https://s3.amazonaws.com/data.tnris.org/", "https://data.tnris.org/")
+        else:
+            path = None
+        return path
+
+    tile_index_url = serializers.SerializerMethodField()
+    def get_tile_index_url(self, obj):
+        if str(obj.tile_index_url) != "" and obj.tile_index_url is not None:
+            path = str(obj.tile_index_url).replace("https://s3.amazonaws.com/data.tnris.org/", "https://data.tnris.org/")
+        else:
+            path = None
+        return path
 
 class CollectionSerializer(serializers.ModelSerializer):
     class Meta:

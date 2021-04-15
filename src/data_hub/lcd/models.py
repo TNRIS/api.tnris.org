@@ -1114,7 +1114,7 @@ class CcrView(models.Model):
 
     class Meta:
         managed = False
-        db_table = "collection_catalog_geom_record"
+        db_table = "collection_catalog_record"
         verbose_name = 'Collection Catalog Record'
         verbose_name_plural = 'Collection Catalog Records'
 
@@ -1248,12 +1248,10 @@ class CcrView(models.Model):
     oe_service_urls = models.TextField(
         'Outside Entity Service URLs'
     )
-    the_geom = models.MultiPolygonField(
-        'Coverage Geometry'
-    )
 
     def __str__(self):
         return self.name
+
 
 class CatalogCollectionMetaView(models.Model):
     """

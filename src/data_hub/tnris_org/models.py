@@ -33,6 +33,11 @@ class TnrisImage(models.Model):
         'Image URL',
         max_length=255
     )
+    carousel = models.BooleanField(
+        'Carousel Image',
+        default=False,
+        null=False
+    )
     created = models.DateTimeField(
         'Created',
         auto_now_add=True
@@ -182,7 +187,7 @@ class TnrisTraining(models.Model):
         db_column='training_category',
         on_delete=models.CASCADE,
         related_name='category'
-    ) 
+    )
     created = models.DateTimeField(
         'Created',
         auto_now_add=True

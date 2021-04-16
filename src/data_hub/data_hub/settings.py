@@ -89,7 +89,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_swagger',
     'storages',
-    'django_seo_js'
+    'django_seo_js',
+    'rest_framework_gis'
 ]
 
 MIDDLEWARE = [
@@ -131,7 +132,7 @@ WSGI_APPLICATION = 'data_hub.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': os.environ.get('DB_NAME', 'data_hub'),
         'USER': os.environ.get('DB_USER', 'tnris'),
         'PASSWORD': os.environ.get('DB_PASSWORD'),

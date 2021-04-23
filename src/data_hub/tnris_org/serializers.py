@@ -6,7 +6,8 @@ from .models import (
     TnrisInstructorType,
     CompleteForumTrainingView,
     TnrisGioCalendarEvent,
-    TnrisDocument
+    TnrisDocument,
+    TnrisImage
 )
 from datetime import datetime
 
@@ -212,6 +213,25 @@ class TnrisCommunityMeetingDocumentSerializer(serializers.ModelSerializer):
     def get_document_url(self, obj):
         if str(obj.document_url) != "" and obj.document_url is not None:
             path = str(obj.document_url).replace("https://tnris-org-static.s3.amazonaws.com/", "https://cdn.tnris.org/")
+        else:
+            path = None
+        return path
+
+
+class TnrisCarouselImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TnrisImage
+        fields = ('image_id',
+                  'image_name',
+                  'image_url',
+                  'carousel',
+                  'created',
+                  'last_modified',)
+
+    image_url = serializers.SerializerMethodField()
+    def get_image_url(self, obj):
+        if str(obj.image_url) != "" and obj.image_url is not None:
+            path = str(obj.image_url).replace("https://tnris-org-static.s3.amazonaws.com/", "https://cdn.tnris.org/")
         else:
             path = None
         return path

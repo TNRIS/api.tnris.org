@@ -38,6 +38,11 @@ class TnrisImage(models.Model):
         default=False,
         null=False
     )
+    carousel_caption = models.CharField(
+        'Carousel Caption',
+        max_length=200,
+        blank=True
+    )
     created = models.DateTimeField(
         'Created',
         auto_now_add=True

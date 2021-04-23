@@ -70,6 +70,13 @@ class ImageForm(forms.ModelForm):
         label="Carousel Image",
         help_text="Check this box if you'd like this image to show up on the tnris.org front page image carousel."
     )
+    carousel_caption = forms.CharField(
+        required=False,
+        label="Carousel Caption",
+        max_length=200,
+        widget=forms.Textarea(attrs={'rows':4, 'cols':20}),
+        help_text="Enter caption text for this carousel image."
+    )
 
     # boto3 s3 object
     client = boto3.client('s3')

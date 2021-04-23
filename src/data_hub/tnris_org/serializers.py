@@ -225,6 +225,7 @@ class TnrisCarouselImageSerializer(serializers.ModelSerializer):
                   'image_name',
                   'image_url',
                   'carousel',
+                  'carousel_caption',
                   'created',
                   'last_modified',)
 

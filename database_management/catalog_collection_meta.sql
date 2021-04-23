@@ -24,9 +24,9 @@ CREATE MATERIALIZED VIEW catalog_collection_meta AS
     c.category,
     c.recommended_use,
     c.file_type,
-    st_simplifypreservetopology(g.the_geom, 0.05::double precision) AS the_geom
+	g.the_geom
    FROM collection_catalog_record c
-     RIGHT JOIN collection_coverage_geom g ON c.collection_id = g.collection_id
+     RIGHT JOIN collection_footprint_geom g ON c.collection_id = g.collection_id
 UNION
  SELECT h.collection_id,
     h.thumbnail_image,

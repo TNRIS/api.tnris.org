@@ -36,7 +36,7 @@ class TnrisImageAdmin(admin.ModelAdmin):
     model = TnrisImage
     form = ImageForm
     ordering = ('image_name',)
-    list_display = ('image_name', 'image_url_link', 'tiny_preview', 'created')
+    list_display = ('image_name', 'image_url_link', 'tiny_preview', 'carousel', 'created')
     search_fields = ('image_name', 'image_url')
 
     def image_url_link(self, obj):

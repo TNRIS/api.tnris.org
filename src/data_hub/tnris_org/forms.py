@@ -65,6 +65,18 @@ class ImageForm(forms.ModelForm):
         required=False,
         help_text="Choose an image file and 'Save' this form to upload & save it to the database. To replace this image with a new one, delete the image and create a new one."
     )
+    carousel = forms.BooleanField(
+        required=False,
+        label="Carousel Image",
+        help_text="Check this box if you'd like this image to show up on the tnris.org front page image carousel."
+    )
+    carousel_caption = forms.CharField(
+        required=False,
+        label="Carousel Caption",
+        max_length=200,
+        widget=forms.Textarea(attrs={'rows':4, 'cols':20}),
+        help_text="Enter caption text for this carousel image."
+    )
 
     # boto3 s3 object
     client = boto3.client('s3')
@@ -127,13 +139,21 @@ class DocumentForm(forms.ModelForm):
     class Meta:
         model = TnrisDocument
         fields = ('__all__')
-    
+
     document_file = forms.FileField(
         required=False,
         help_text="Choose a document file and 'Save' this form to upload & save it to the database. Uploaded files cannot be overwritten; the best method to overwrite would be to delete this record (deletes the file as well) and re-upload in a new record."
     )
-    sgm_note = forms.BooleanField(required=False, label="GIS Solutions Group Notes", help_text="Check this box to identify a GIS Solutions Group notes document.<br><br><strong>Note:</strong> This is required to view the document on the website at '/geographic-information-office/gis-solutions-group/'. Be sure to give a descriptive Document Name above.")
-    comm_note = forms.BooleanField(required=False, label="GIS Community Meeting Notes", help_text="Check this box to identify a GIS Community Meeting notes document.<br><br><strong>Note:</strong> This is required to view the document on the website at '/geographic-information-office/'. Be sure to give a descriptive Document Name above.")
+    sgm_note = forms.BooleanField(
+        required=False,
+        label="GIS Solutions Group Notes",
+        help_text="Check this box to identify a GIS Solutions Group notes document.<br><br><strong>Note:</strong> This is required to view the document on the website at '/geographic-information-office/gis-solutions-group/'. Be sure to give a descriptive Document Name above."
+    )
+    comm_note = forms.BooleanField(
+        required=False,
+        label="GIS Community Meeting Notes",
+        help_text="Check this box to identify a GIS Community Meeting notes document.<br><br><strong>Note:</strong> This is required to view the document on the website at '/geographic-information-office/'. Be sure to give a descriptive Document Name above."
+    )
 
     # boto3 s3 object
     client = boto3.client('s3')

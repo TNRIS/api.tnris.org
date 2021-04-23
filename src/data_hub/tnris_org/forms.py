@@ -75,7 +75,7 @@ class ImageForm(forms.ModelForm):
         label="Carousel Caption",
         max_length=200,
         widget=forms.Textarea(attrs={'rows':4, 'cols':20}),
-        help_text="Enter caption text for this carousel image."
+        help_text="Enter caption text for this carousel image. 200 character limit."
     )
 
     # boto3 s3 object

@@ -9,7 +9,8 @@ from .models import (
     CompleteForumTrainingView,
     TnrisGioCalendarEvent,
     TnrisDocument,
-    TrainingCategory
+    TrainingCategory,
+    TnrisImage
 )
 from .serializers import (
     TnrisTrainingSerializer,
@@ -18,7 +19,8 @@ from .serializers import (
     CompleteForumTrainingViewSerializer,
     TnrisGioCalendarEventSerializer,
     TnrisSGMDocumentSerializer,
-    TnrisCommunityMeetingDocumentSerializer
+    TnrisCommunityMeetingDocumentSerializer,
+    TnrisCarouselImageSerializer
 )
 
 
@@ -166,4 +168,19 @@ class TnrisCommunityMeetingDocumentViewSet(viewsets.ReadOnlyModelViewSet):
         args = {'comm_note': True}
         # order by document file name
         queryset = TnrisDocument.objects.filter(**args).order_by('document_name')
+        return queryset
+
+
+class TnrisCarouselImageViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    Retrieve all Carousel Images for tnris.org frontend
+    """
+    serializer_class = TnrisCarouselImageSerializer
+    http_method_names = ['get']
+
+    def get_queryset(self):
+        # get records using query
+        args = {'carousel': True}
+        # order by image file name
+        queryset = TnrisImage.objects.filter(**args).order_by('image_name')
         return queryset

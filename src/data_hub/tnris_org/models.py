@@ -35,13 +35,21 @@ class TnrisImage(models.Model):
     )
     carousel = models.BooleanField(
         'Carousel Image',
-        default=False,
-        null=False
+        default=False
     )
     carousel_caption = models.CharField(
         'Carousel Caption',
         max_length=200,
         blank=True
+    )
+    carousel_link = models.URLField(
+        'Carousel Image Link',
+        max_length=255,
+        blank=True
+    )
+    carousel_order = models.PositiveSmallIntegerField(
+        'Carousel Image Order',
+        null=True
     )
     created = models.DateTimeField(
         'Created',

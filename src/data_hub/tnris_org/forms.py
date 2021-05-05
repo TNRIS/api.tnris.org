@@ -74,8 +74,19 @@ class ImageForm(forms.ModelForm):
         required=False,
         label="Carousel Caption",
         max_length=200,
-        widget=forms.Textarea(attrs={'rows':4, 'cols':20}),
+        widget=forms.Textarea(attrs={"rows":3, "cols":20}),
         help_text="Enter caption text for this carousel image. 200 character limit."
+    )
+    carousel_link = forms.URLField(
+        required=False,
+        label="Carousel Link",
+        widget=forms.Textarea(attrs={"rows":1, "cols":20}),
+        help_text="Enter a URL that you would like to send users to if they click this carousel image."
+    )
+    carousel_order = forms.IntegerField(
+        required=False,
+        label="Carousel Image Order",
+        help_text="Enter a number for the order you would like this image to appear in the carousel. A number 1 will show first."
     )
 
     # boto3 s3 object

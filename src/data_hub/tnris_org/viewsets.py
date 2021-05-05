@@ -173,14 +173,16 @@ class TnrisCommunityMeetingDocumentViewSet(viewsets.ReadOnlyModelViewSet):
 
 class TnrisCarouselImageViewSet(viewsets.ReadOnlyModelViewSet):
     """
-    Retrieve all Carousel Images for tnris.org frontend
+    Retrieve all Carousel Images in order for tnris.org frontend
     """
     serializer_class = TnrisCarouselImageSerializer
     http_method_names = ['get']
 
+    # def get_ordering(self)
+
     def get_queryset(self):
         # get records using query
         args = {'carousel': True}
-        # order by image file name
-        queryset = TnrisImage.objects.filter(**args).order_by('image_name')
+        # order by carousel_order then image_name
+        queryset = TnrisImage.objects.filter(**args).order_by('carousel_order', 'image_name')
         return queryset

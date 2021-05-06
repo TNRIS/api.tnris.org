@@ -50,7 +50,7 @@ idna==2.10
 importlib-metadata==1.7.0
 ipaddr==2.2.0
 itypes==1.2.0
-Jinja2==2.11.2
+Jinja2==2.11.3
 jmespath==0.10.0
 kombu==4.6.11
 lockfile==0.12.2

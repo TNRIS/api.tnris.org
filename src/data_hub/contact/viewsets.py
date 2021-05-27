@@ -26,6 +26,8 @@ class CorsPostPermission(AllowAny):
         "api.tnris.org",
         "beta.tnris.org",
         "data.tnris.org",
+        "alphabetadata.tnris.org",
+        "betadata.tnris.org",
         "develop.tnris.org",
         "lake-gallery.tnris.org",
         "localhost:8000",

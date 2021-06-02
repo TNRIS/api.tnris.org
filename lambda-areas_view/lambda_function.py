@@ -5,8 +5,8 @@ import urllib3, json, psycopg2, os
 database = os.environ.get('MAPSERVER_DB_NAME')
 username = os.environ.get('MAPSERVER_DB_USER')
 password = os.environ.get('MAPSERVER_DB_PASSWORD')
-host = os.environ.get('MAPSERVER_DB_HOST')
-port = os.environ.get('MAPSERVER_DB_PORT')
+host = os.environ.get('DB_HOST')
+port = os.environ.get('DB_PORT')
 
 # --------------- Main handler ------------------
 

@@ -20,8 +20,6 @@ export S3_UPLOAD_KEY="<s3 bucket key>"
 export MAPSERVER_DB_NAME='<mapserver database name>'
 export MAPSERVER_DB_USER='<mapserver database user>'
 export MAPSERVER_DB_PASSWORD='<mapserver database password>'
-export MAPSERVER_DB_HOST='<mapserver database host address>'
-export MAPSERVER_DB_PORT='<mapserver database port>'
 
 echo "environment variables set!!!"
 

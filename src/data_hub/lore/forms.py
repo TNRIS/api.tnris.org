@@ -140,7 +140,7 @@ class CollectionForm(forms.ModelForm):
         mosaic = self.cleaned_data['mosaic_service_url']
 
         links = []
-        mapserver_url = 'https://mapserver.tnris.org/wms/?map=/mapfiles/'
+        mapserver_url = 'https://mapserver.tnris.org/?map=/mapfiles/'
         if index is not None:
             # validate url belongs to proper product type
             if '_index' not in index:
@@ -150,7 +150,7 @@ class CollectionForm(forms.ModelForm):
                 raise forms.ValidationError('Index Service URL must be https protocol!')
             # validate the url structure matches the tnris mapserver instance
             if mapserver_url not in index:
-                raise forms.ValidationError('Index Service URL must belong to the TNRIS mapserver: "https://mapserver.tnris.org/wms/?map=/mapfiles/<mapfile>"')
+                raise forms.ValidationError('Index Service URL must belong to the TNRIS mapserver: "https://mapserver.tnris.org/?map=/mapfiles/<mapfile>"')
             idx_link = index.split('/')[-1].replace('.map', '').replace('_index', '').replace('_', ' ').upper()
             if idx_link not in links:
                 links.append(idx_link)
@@ -163,7 +163,7 @@ class CollectionForm(forms.ModelForm):
                 raise forms.ValidationError('Frames Service URL must be https protocol!')
             # validate the url structure matches the tnris mapserver instance
             if mapserver_url not in frames:
-                raise forms.ValidationError('Frames Service URL must belong to the TNRIS mapserver: "https://mapserver.tnris.org/wms/?map=/mapfiles/<mapfile>"')
+                raise forms.ValidationError('Frames Service URL must belong to the TNRIS mapserver: "https://mapserver.tnris.org/?map=/mapfiles/<mapfile>"')
             frm_link = frames.split('/')[-1].replace('.map', '').replace('_frames', '').replace('_', ' ').upper()
             if frm_link not in links:
                 links.append(frm_link)
@@ -176,7 +176,7 @@ class CollectionForm(forms.ModelForm):
                 raise forms.ValidationError('Mosaic Service URL must be https protocol!')
             # validate the url structure matches the tnris mapserver instance
             if mapserver_url not in mosaic:
-                raise forms.ValidationError('Mosaic Service URL must belong to the TNRIS mapserver: "https://mapserver.tnris.org/wms/?map=/mapfiles/<mapfile>"')
+                raise forms.ValidationError('Mosaic Service URL must belong to the TNRIS mapserver: "https://mapserver.tnris.org/?map=/mapfiles/<mapfile>"')
             msc_link = mosaic.split('/')[-1].replace('.map', '').replace('_mosaic', '').replace('_', ' ').upper()
             if msc_link not in links:
                 links.append(msc_link)

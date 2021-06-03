@@ -88,12 +88,12 @@ class MapserverViewSet(viewsets.ViewSet):
         def get_mapfiles(token):
             if token == '':
                 response = client.list_objects_v2(
-                    Bucket='tnris-ls4',
+                    Bucket='tnris-mapserver',
                     Prefix='mapfiles/'
                 )
             else:
                 response = client.list_objects_v2(
-                    Bucket='tnris-ls4',
+                    Bucket='tnris-mapserver',
                     Prefix='mapfiles/',
                     ContinuationToken=token
                 )
@@ -111,7 +111,7 @@ class MapserverViewSet(viewsets.ViewSet):
             name = key.replace('mapfiles/', '').replace('.map', '')
             key_obj['name'] = name
             key_obj['label'] = name.replace("_", " ").title()
-            key_obj['wms'] = 'https://mapserver.tnris.org/wms/?map=/' + key
+            key_obj['wms'] = 'https://mapserver.tnris.org/?map=/' + key
 
             if len(name.split("_")) == 4:
                 key_obj['org'] = 'county'

@@ -29,7 +29,7 @@ RUN chmod +x docker-entrypoint.d/*.sh
 
 # Setup app
 COPY src /src/
-RUN pip3 install -r /src/requirements.txt --upgrade
+RUN pip3 install -r /src/requirements.txt
 RUN pip3 install gunicorn
 
 # install awscli

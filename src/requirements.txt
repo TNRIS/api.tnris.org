@@ -1,6 +1,6 @@
 amqp==2.6.0
 aniso8601==7.0.0
-ansible==2.10.0
+ansible==2.10.7
 ansible-base==2.10.1
 ansible-vault==1.2.0
 appdirs==1.4.3

@@ -28,9 +28,10 @@ Built with:
 ## Local Development
 1. Set up a local development db instance or use [local port forwarding](https://blog.trackets.com/2014/05/17/ssh-tunnel-local-and-remote-port-forwarding-explained-with-examples.html) to connect to a remote db instance
    * Default settings are already setup if you're using local port forwarding to your port 9000 (skip to next step if you are doing this). If you're using a local development db, configure your database environment variables (`DB_NAME`, `DB_USER`, `DB_PASSWORD`, `DB_HOST`, `DB_PORT`) to point to it.
-2. `cd ~/api.tnris.org/src/data_hub/`
-3. `. set-env-secrets.sh` or `source set-env-secrets.sh` to set the environment variables within the terminal session
-4. `python manage.py runserver` to run the app; it will be available at `localhost:8000`. if you get a DB_PASSWORD env variable error then you need to re-run the env variable command in the previous step.
+2. Since the development of data.tnris.org v2, running the app local now requires installing [GDAL/OGR](https://gdal.org/) on the host. See installation instructions for Debian-based Linux distros here: http://www.sarasafavi.com/installing-gdalogr-on-ubuntu.html
+3. `cd ~/api.tnris.org/src/data_hub/`
+4. `. set-env-secrets.sh` or `source set-env-secrets.sh` to set the environment variables within the terminal session
+5. `python manage.py runserver` to run the app; it will be available at `localhost:8000`. if you get a DB_PASSWORD env variable error then you need to re-run the env variable command in the previous step.
 
 ## Deployment Prep
 
@@ -42,9 +43,9 @@ Built with:
 
 # Lambda
 
-The database API '/areas' endpoint is routinely accessed by a Lambda Function which 
-pull the resource information and updates the mapserver database table 'areas_view' to join 
-and host as a map service. This provides an efficient query capability for the Geography map 
+The database API '/areas' endpoint is routinely accessed by a Lambda Function which
+pull the resource information and updates the mapserver database table 'areas_view' to join
+and host as a map service. This provides an efficient query capability for the Geography map
 filter to spatially identify collections.
 
 ### Lambda Development

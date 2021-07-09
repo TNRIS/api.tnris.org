@@ -21,6 +21,8 @@ export MAPSERVER_DB_NAME='<mapserver database name>'
 export MAPSERVER_DB_USER='<mapserver database user>'
 export MAPSERVER_DB_PASSWORD='<mapserver database password>'
 
+export DATAHUB_MASTER_CLOUDFRONT=$(aws cloudformation describe-stack-resource --stack-name datahub-master --logical-resource-id MasterCloudfront --query StackResourceDetail.PhysicalResourceId --output text)
+
 echo "environment variables set!!!"
 
 # the following is only used within ETL scripts (specifically, migrate.py)

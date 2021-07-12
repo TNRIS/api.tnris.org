@@ -211,3 +211,5 @@ TIME_INPUT_FORMATS = [
 ]
 
 SITE_ID = 1
+
+CSRF_FAILURE_VIEW = 'data_hub.views.csrf_failure'

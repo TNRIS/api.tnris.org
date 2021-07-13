@@ -1,10 +1,10 @@
 from django import forms
 from django.core.exceptions import ValidationError
+from django.core.files import File
 from django.contrib.admin.widgets import AdminDateWidget
 
 from string import Template
 from django.utils.safestring import mark_safe
-
 from django.db.utils import ProgrammingError
 from .models import (Collection,
                      AreaType,
@@ -25,7 +25,10 @@ from .models import (Collection,
                      UseType,
                      XlargeSupplemental)
 import os, json
+from io import BytesIO
 import boto3, botocore, uuid
+#import PIL
+from PIL import Image as PilImage
 
 # widget template override for populated upload file fields
 def populated_image_render(name, value, attrs=None, renderer=None):
@@ -71,17 +74,34 @@ class ImageForm(forms.ModelForm):
         if self.instance.image_url != '':
             self.fields['image_url'].widget.render = populated_image_render
 
+    def reformat_image(self, image, base_width = 500):
+        base_width = 500
+        img = PilImage.open(image.file)
+        wpercent = (base_width / float(img.size[0]))
+        hsize = int((float(img.size[1]) * float(wpercent)))
+        img = img.resize((base_width, hsize), PilImage.ANTIALIAS)
+
+        img.convert('RGB')
+        img_io = BytesIO()
+        img.save(img_io, format='webp')
+        img_value = img_io.getvalue()
+        img_file = File(img_value, name=image.name)
+        return img_file
+
     def inline_image_handler(self, file):
+        formatted_image = self.reformat_image(file)
+
         new_uuid = uuid.uuid4()
-        file_ext = str(file).split('.')[-1]
+        file_ext = 'webp'
         key = "%s/assets/%s.%s" % (self.instance.collection_id_id, new_uuid, file_ext)
         response = self.client.put_object(
             Bucket='data.tnris.org',
             ACL='public-read',
             Key=key,
-            Body=file.file,
+            Body=formatted_image.file,
             ContentType=file.content_type
         )
+
         self.cleaned_data['image_url'] = "https://s3.amazonaws.com/data.tnris.org/" + key
         return
 

@@ -145,7 +145,7 @@ class CollectionAdmin(admin.ModelAdmin):
             # nested under if statement to ensure it only fires
             # once rather than for every inline admin
             client = boto3.client('lambda')
-            payload = {'materialized_view': 'compiled_historical_collection'}
+            payload = {'materialized_view': ['compiled_historical_collection', 'catalog_collection_meta']}
             response = client.invoke(
                 FunctionName='api-tnris-org-refresh_materialized_views',
                 InvocationType='Event',

@@ -19,12 +19,19 @@ def lambda_handler(event, context):
     cur = conn.cursor()
 
     if 'materialized_view' in event.keys():
-        print('waiting 15 seconds to ensure database saves are complete...')
-        time.sleep(15)
-        query = "REFRESH MATERIALIZED VIEW %s with DATA;" % (event['materialized_view'])
-        print(query)
-        cur.execute(query)
-        conn.commit()
+        if((type(event['materialized_view']) is list) or (type(event['materialized_view']) is tuple)):
+            for view in event['materialized_view']:
+                query = "REFRESH MATERIALIZED VIEW %s with DATA;" % (view)
+                print(query)
+                cur.execute(query)
+                conn.commit()
+        else:
+            print('waiting 15 seconds to ensure database saves are complete...')
+            time.sleep(15)
+            query = "REFRESH MATERIALIZED VIEW %s with DATA;" % (event['materialized_view'])
+            print(query)
+            cur.execute(query)
+            conn.commit()
     else:
         queries = [
             "REFRESH MATERIALIZED VIEW collection_catalog_record with DATA;",
@@ -32,6 +39,7 @@ def lambda_handler(event, context):
             "REFRESH MATERIALIZED VIEW areas with DATA;",
             "REFRESH MATERIALIZED VIEW resource_management with DATA;",
             "REFRESH MATERIALIZED VIEW master_systems_display with DATA;"
+            "REFRESH MATERIALIZED VIEW catalog_collection_meta with DATA;"
         ]
 
         for q in queries:

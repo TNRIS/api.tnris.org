@@ -39,7 +39,6 @@ def lambda_handler(event, context):
             "REFRESH MATERIALIZED VIEW areas with DATA;",
             "REFRESH MATERIALIZED VIEW resource_management with DATA;",
             "REFRESH MATERIALIZED VIEW master_systems_display with DATA;"
-            "REFRESH MATERIALIZED VIEW catalog_collection_meta with DATA;"
         ]
 
         for q in queries:

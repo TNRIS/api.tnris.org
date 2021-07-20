@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="robots" content="NONE,NOARCHIVE">
+  <title>403 Forbidden</title>
+  <style type="text/css">
+    html * { padding:0; margin:0; }
+    body * { padding:10px 20px; }
+    body * * { padding:0; }
+    body { font:small sans-serif; background:#eee; color:#000; }
+    body>div { border-bottom:1px solid #ddd; }
+    h1 { font-weight:normal; margin-bottom:.4em; }
+    h1 span { font-size:60%; color:#666; font-weight:normal; }
+    #info { background:#f6f6f6; }
+    #info ul { margin: 0.5em 4em; }
+    #info p, #summary p { padding-top:10px; }
+    #instruction { text-align: center; }
+    #instruction 
+    #data-star-trek { max-width: 50%; margin: 15px; }
+    #summary { background: #ffc; }
+  </style>
+</head>
+  <body>
+    <div id="summary">
+      <h1>Uh oh, there was an error: {{ title }} <span>(403)</span></h1>
+      <p>{{ main }}</p>
+      {% if no_referer %}
+        <p>{{ no_referer1 }}</p>
+        <p>{{ no_referer2 }}</p>
+        <p>{{ no_referer3 }}</p>
+      {% endif %}
+      {% if no_cookie %}
+        <p>{{ no_cookie1 }}</p>
+        <p>{{ no_cookie2 }}</p>
+      {% endif %}
+    </div>
+
+    <div id="instruction">
+        <h3>
+          <a href="/admin/logout/">
+            Please click here to logout and re-login to refresh your CSRF token (cookie).
+          </a>
+        </h3>
+        <br>
+        <p>You will automatically be logged out in <span id="timer"></span> seconds...</p>
+        <img id="data-star-trek" src="https://cdn.tnris.org/images/404.jpg" alt="Star Trek Data laughing" />
+    </div>
+
+    <div id="info">
+      <h3>Why did this happen?</h3>
+      {% if reason %}
+        <p>Reason given for failure:</p>
+        <pre>
+        {{ reason }}
+        </pre>
+      {% endif %}
+
+      <p>In general, this can occur when...</p>
+      <ul>
+        <li>You have logged in separately using multiple browser tabs and the CSRF tokens (cookies) are out of sync with the server.</li>
+        <li>You have hit the back button after a login and the CSRF tokens (cookies) are out of sync with the server.</li>
+        <li>Your login token has expired. Tokens expire after one year.</li>
+        <li>Your browser is not accepting 'cookies'. Please enable cookies in your browser software.</li>
+        <li>Your browser has disabled 'Referer' headers. Please enable Referer headers in your browser software.</li>
+        <li>There is a genuine Cross Site Request Forgery.</li>
+      </ul>
+    </div>
+
+    <script>
+      function startTimer(duration, display) {
+          console.log(display);
+          console.log(window.location);
+          var sec = parseInt(duration/1000);
+          display.innerHTML = sec;
+          if (sec === 0) {
+            window.location.href = "/admin/logout/";
+          }
+          else {
+            setInterval(function () {
+              var nextDuration = duration - 1000;
+              startTimer(nextDuration, display)
+            }, 1000);
+          }
+      }
+      //startTimer(30000, document.querySelector('#timer'));
+    </script>
+  </body>
+</html>

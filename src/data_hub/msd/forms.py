@@ -15,6 +15,7 @@ from .models import (
 
 import os
 import boto3, json
+from datetime import datetime
 
 from lcd.models import Collection
 
@@ -186,6 +187,25 @@ class MapCollectionForm(forms.ModelForm):
         required=False
     )
 
+    # cloudfront invalidation for thumbnails
+    cft_client = boto3.client('cloudfront')
+    def fire_invalidation(self, map_collection_id):
+        path_prefix = "/%s/*" % (map_collection_id)
+        response = self.cft_client.create_invalidation(
+            DistributionId=os.getenv('DATAHUB_MASTER_CLOUDFRONT'),
+            InvalidationBatch={
+                'Paths': {
+                    'Quantity': 1,
+                    'Items': [
+                        path_prefix,
+                    ]
+                },
+                'CallerReference': str(datetime.now())
+            }
+        )
+        print("%s invalidation fired!" % path_prefix)
+        return
+
     # FILE UPLOAD FOR THUMBNAIL IMAGE
     # boto3 s3 object
     client = boto3.client('s3')
@@ -201,6 +221,7 @@ class MapCollectionForm(forms.ModelForm):
             Body=file
         )
         print('%s upload success!' % key)
+        self.fire_invalidation(self.instance.map_collection_id)
         # update link in database table
         self.cleaned_data[field] = "https://s3.amazonaws.com/data.tnris.org/" + key
         return
@@ -214,6 +235,7 @@ class MapCollectionForm(forms.ModelForm):
             Key=key
         )
         print('%s delete success!' % key)
+        self.fire_invalidation(self.instance.map_collection_id)
         # clear link from database table
         self.cleaned_data[field] = None
         return

@@ -18,5 +18,7 @@ export S3_UPLOAD_BUCKET=`/envs/data_hub/bin/aws ssm get-parameters --name /apps/
 export S3_UPLOAD_SECRET=`/envs/data_hub/bin/aws ssm get-parameters --name /apps/api_tnris_org/s3_upload_secret --with-decryption --region us-east-1 --output text | awk '{print $7}'`
 export S3_UPLOAD_KEY=`/envs/data_hub/bin/aws ssm get-parameters --name /apps/api_tnris_org/s3_upload_key --with-decryption --region us-east-1 --output text | awk '{print $7}'`
 
+export DATAHUB_MASTER_CLOUDFRONT=`/envs/data_hub/bin/aws cloudformation describe-stack-resource --stack-name datahub-master --logical-resource-id MasterCloudfront --query StackResourceDetail.PhysicalResourceId --output text`
+
 eval /src/data_hub/manage.py collectstatic --noinput "$@"
 eval /usr/bin/supervisord "$@"

@@ -29,6 +29,8 @@ DEBUG = True
 ALLOWED_HOSTS = [
     'data.tnris.org',
     'api.tnris.org',
+    'api-test.tnris.org',
+    'stagingapi.tnris.org',
     'localhost',
     '127.0.0.1'
 ]

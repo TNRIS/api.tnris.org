@@ -1,8 +1,5 @@
 amqp==5.0.6
 aniso8601==9.0.1
-ansible==4.2.0
-ansible-core==2.11.3
-ansible-vault==2.1.0
 appdirs==1.4.4
 asgiref==3.4.1
 billiard==3.6.4.0

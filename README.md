@@ -14,12 +14,13 @@ Built with:
 * For data scripts, you probably want to use some form of python virtual env manager to maintain an isolated environment. A good run-down of the options can be found in [The Hitchiker's Guide to Python](http://docs.python-guide.org/en/latest/dev/virtualenvs/). A recommended setup is virtualenv + virtualenvwrapper.
 
 #### Django App Setup
-1. Enable your virtual environment. Example: `workon api.tnris.org` (for virtualenv wrapper)
-2. Upgrade pip using `pip install --upgrade pip`
-3. Install python dependencies:
+1. Requires `jq` package to be installed on local os to startup with env variables from SecretsManager: `apt-get update && apt-get install -y jq`
+2. Enable your virtual environment. Example: `workon api.tnris.org` (for virtualenv wrapper)
+3. Upgrade pip using `pip install --upgrade pip`
+4. Install python dependencies:
    * `cd ~/api.tnris.org/src`
    * `pip install -r requirements.txt`
-4. Setup secrets files:
+5. Setup secrets files:
    * `./src/data_hub/set-env-secrets.sh`
    * `./src/data_hub/gspread_config.json`
    * **PREFERRED** ::: Place a copy of `vault-password.txt` into the root of this repo `~/api.tnris.org`. Then run `make pull-secrets` to quickly download, decrypt, and properly place both secrets files. *(for TNRIS employees only)*

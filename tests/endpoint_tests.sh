@@ -1,6 +1,5 @@
 #!/bin/bash
 
-domain=stagingapi.tnris.org/
 paths_array=(
     "admin/login/?next=/admin/"
     "api/v1/schema/"
@@ -36,7 +35,7 @@ paths_array=(
 echo running api endpoint ping tests...
 
 for p in ${paths_array[*]}; do
-    url=://$domain$p
+    url=://$domain/$p
 
     echo https$url
     res=$(curl -s -o /dev/null -w "%{http_code}" https$url);

@@ -47,7 +47,7 @@ Built with:
 
 deployment tests located in the ./tests/ directory
 
-* `endpoint_tests.sh` runs within CodeBuild during deployment to validate api rest endpoints and landing pages are returning proper response codes before manual review & approval
+* `endpoint_tests.sh` runs within CodeBuild during deployment to validate api rest endpoints and landing pages are returning proper response codes before manual review & approval. must set variable `domain` when calling; example: `domain=stagingapi.tnris.org . ./tests/endpoint_tests.sh`
 
 # Lambda
 

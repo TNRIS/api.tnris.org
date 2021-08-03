@@ -27,6 +27,7 @@ Built with:
    * **ALTERNATIVE** ::: A template copy of each secrets file exists in `./src/data_hub/` but with `-example` in the filename. Make a copy of each file in the same directory, remove "-example" from the copy's name, and fill in the values for each secret manually.
 
 ## Local Development
+
 1. Set up a local development db instance or use [local port forwarding](https://blog.trackets.com/2014/05/17/ssh-tunnel-local-and-remote-port-forwarding-explained-with-examples.html) to connect to a remote db instance
    * Default settings are already setup if you're using local port forwarding to your port 9000 (skip to next step if you are doing this). If you're using a local development db, configure your database environment variables (`DB_NAME`, `DB_USER`, `DB_PASSWORD`, `DB_HOST`, `DB_PORT`) to point to it.
 2. Since the development of data.tnris.org v2, running the app local now requires installing [GDAL/OGR](https://gdal.org/) on the host. See installation instructions for Debian-based Linux distros here: http://www.sarasafavi.com/installing-gdalogr-on-ubuntu.html
@@ -41,6 +42,12 @@ Built with:
 3. `make pull-secrets` if secrets files are not local. they must be locally in `./src/data_hub/` before deploying.
 4. save and commit all changes. push to github appropriately.
 5. head over to the deployments repo to execute the actual application deployment and make it so
+
+## Tests
+
+deployment tests located in the ./tests/ directory
+
+* `endpoint_tests.sh` runs within CodeBuild during deployment to validate api rest endpoints and landing pages are returning proper response codes before manual review & approval
 
 # Lambda
 

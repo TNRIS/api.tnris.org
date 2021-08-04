@@ -39,9 +39,8 @@ Built with:
 
 1. `cd ~/api.tnris.org/src`
 2. `pip freeze > requirements.txt` to save dependencies
-3. `make pull-secrets` if secrets files are not local. they must be locally in `./src/data_hub/` before deploying.
-4. save and commit all changes. push to github appropriately.
-5. head over to the deployments repo to execute the actual application deployment and make it so
+3. save and commit all changes.
+4. push to github master branch to fire off the ci/cd pipeline which will automatically build and deploy to the staging env for review, and upon manual approval, then to the production env
 
 ## Tests
 
@@ -49,26 +48,9 @@ deployment tests located in the ./tests/ directory
 
 * `endpoint_tests.sh` runs within CodeBuild during deployment to validate api rest endpoints and landing pages are returning proper response codes before manual review & approval. must set variable `domain` when calling; example: `domain=stagingapi.tnris.org . ./tests/endpoint_tests.sh`
 
-# Lambda
+## Notes
 
-The database API '/areas' endpoint is routinely accessed by a Lambda Function which
+* The database API '/areas' endpoint is routinely accessed by a Lambda Function which
 pull the resource information and updates the mapserver database table 'areas_view' to join
 and host as a map service. This provides an efficient query capability for the Geography map
 filter to spatially identify collections.
-
-### Lambda Development
-1. make a new python virtual environment (separate from the app's above) for lambda development. This is required as all associated python packages will need to be bundled
-for deployment and we don't want un-needed packages included.
-2. enable the lambda function's virtual environment. Example: `workon lambda-areas_view` (for virtualenv wrapper)
-3. Upgrade pip using `pip install --upgrade pip`
-4. Install python dependencies (example):
-   * `cd ~/api.tnris.org/lambda-areas_view`
-   * `pip install -r requirements.txt`
-5. run the function with `python lambda_function.py` (will need the aws cli set up with proper permissions)
-
-### Lambda Deployment Prep
-1. go through the development steps and run the function locally to ensure it is running as expected
-2. enable the lambda function's virtual environment. Example: `workon lambda-areas_view` (for virtualenv wrapper)
-3. cd into the repo root with `cd ~/api.tnris.org`
-4. run `make pack-lambda-areas_view` (example) to copy the python dependencies from the virtual env into the lambda function folder
-5. hop over to the tnris deployments repo to run the rest

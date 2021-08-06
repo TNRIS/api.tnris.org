@@ -167,26 +167,6 @@ src/data_hub/webpack-stats\.prod\.json
 
 *.csv#
 
-lambda-areas_view/*
-!lambda-areas_view/lambda_function.py
-!lambda-areas_view/requirements.txt
-
-lambda-log_downloads/*
-!lambda-log_downloads/lambda_function.py
-!lambda-log_downloads/requirements.txt
-
-lambda-outside_entity_services/*
-!lambda-outside_entity_services/lambda_function.py
-!lambda-outside_entity_services/requirements.txt
-
-lambda-refresh_materialized_views/*
-!lambda-refresh_materialized_views/lambda_function.py
-!lambda-refresh_materialized_views/requirements.txt
-
-lambda-update_database_record_utility/*
-!lambda-update_database_record_utility/lambda_function.py
-!lambda-update_database_record_utility/requirements.txt
-
 vault-password\.txt
 .vault/
 

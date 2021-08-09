@@ -136,7 +136,7 @@ class MapDownloadForm(forms.ModelForm):
         client = boto3.client('lambda')
         payload = {'materialized_view': 'master_systems_display'}
         response = client.invoke(
-            FunctionName='api-tnris-org-refresh_materialized_views',
+            FunctionName='api-refresh-materialized-views',
             InvocationType='Event',
             Payload=json.dumps(payload)
         )
@@ -280,7 +280,7 @@ class MapCollectionForm(forms.ModelForm):
         client = boto3.client('lambda')
         payload = {'materialized_view': 'master_systems_display'}
         response = client.invoke(
-            FunctionName='api-tnris-org-refresh_materialized_views',
+            FunctionName='api-refresh-materialized-views',
             InvocationType='Event',
             Payload=json.dumps(payload)
         )

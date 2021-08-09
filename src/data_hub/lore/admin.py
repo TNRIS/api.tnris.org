@@ -147,7 +147,7 @@ class CollectionAdmin(admin.ModelAdmin):
             client = boto3.client('lambda')
             payload = {'materialized_view': 'compiled_historical_collection'}
             response = client.invoke(
-                FunctionName='api-tnris-org-refresh_materialized_views',
+                FunctionName='api-refresh-materialized-views',
                 InvocationType='Event',
                 Payload=json.dumps(payload)
             )

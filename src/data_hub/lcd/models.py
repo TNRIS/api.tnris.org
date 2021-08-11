@@ -1,5 +1,8 @@
 from django.contrib.gis.db import models
 import uuid
+
+from django.contrib.gis.geos.collections import MultiPolygon
+from django.contrib.gis.geos.polygon import Polygon
 import boto3
 import os
 
@@ -1100,6 +1103,41 @@ class OutsideEntityServices(models.Model):
         blank=False
     )
 
+class CollectionFootprint(models.Model):
+    """
+    Geographic MultiPolygon field representing the geographic extent
+    of the data offered by a collection
+    """
+    default_poly = MultiPolygon(
+        Polygon(
+          ((-107.05078125,25.60190226111573),(-93.07617187499999,25.60190226111573),(-93.07617187499999,36.66841891894786),(-107.05078125,36.66841891894786),(-107.05078125,25.60190226111573)))
+    )
+    class Meta:
+        db_table = 'collection_footprint'
+        verbose_name = 'Collection Footprint'
+        verbose_name_plural = 'Collection Footprints'
+    footprint_id = models.UUIDField(
+        'Footprint ID',
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False,
+        unique=True,
+        null=False
+    )
+    collection_id = models.OneToOneField(
+        verbose_name='Collection ID',
+        to=Collection,
+        on_delete=models.CASCADE,
+    )
+    the_geom = models.MultiPolygonField(
+        verbose_name='The Geometry',
+        srid=4326,
+        null=True,
+        default=None,
+    )
+
+    def __str__(self):
+        return self.collection_id.name + ' Footprint'
 
 """
 ********** Database Views **********

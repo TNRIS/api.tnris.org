@@ -82,6 +82,7 @@ INSTALLED_APPS = [
     'grappelli',
     'django.contrib.admin',
     'django.contrib.auth',
+    'django.contrib.gis',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',

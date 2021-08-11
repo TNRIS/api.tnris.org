@@ -1,15 +1,19 @@
 from django import forms
+from django.contrib.gis.forms import MultiPolygonField, OSMWidget
+from django.contrib.gis.db.models import fields
+from django.contrib.gis.geos import GEOSGeometry, MultiPolygon, Polygon
 from django.core.exceptions import ValidationError
 from django.core.files import File
 from django.contrib.admin.widgets import AdminDateWidget
 
 from string import Template
+from django.utils.datastructures import MultiValueDict
 from django.utils.safestring import mark_safe
 from django.db.utils import ProgrammingError
 from .models import (Collection,
                      AreaType,
                      CategoryRelate,
-                     CategoryType,
+                     CategoryType, CollectionFootprint,
                      CountyRelate,
                      EpsgRelate,
                      EpsgType,
@@ -44,7 +48,6 @@ def populated_image_render(name, value, attrs=None, renderer=None):
     """)
     return mark_safe(html.substitute(value=value, link=cdn_link, name=name))
 
-
 class ZipfileWidget(forms.widgets.Widget):
     def render(self, name, value, attrs=None, renderer=None):
         cdn_link = value
@@ -55,6 +58,51 @@ class ZipfileWidget(forms.widgets.Widget):
         """)
         return mark_safe(html.substitute(link=cdn_link, name=name))
 
+class CollectionFootprintForm(forms.ModelForm): 
+    class Meta:
+        model = CollectionFootprint
+        fields = ('the_geom', 'collection_id',)
+    
+    the_geom = forms.FileField(
+        required=False,
+        help_text='Upload the footprint of a collection as a .geojson file format. Must be of type Polygon or MultiPolygon.'
+    )
+
+    def __init__(self, *args, **kwargs):
+        super(CollectionFootprintForm, self).__init__(*args, **kwargs)
+        if self.instance.the_geom != None:
+            self.fields['the_geom'] = MultiPolygonField(required=False)
+            self.fields['the_geom'].widget = OSMWidget(attrs={
+                'map_width': 600, 
+                'map_height': 200, 
+            })
+
+    def clean(self, commit=True, *args, **kwargs):
+        cleaned_data = super(CollectionFootprintForm, self).clean()
+        if self.instance.the_geom == None:
+            if self.files['the_geom'].name.split('.')[-1] != 'geojson':
+                raise TypeError('The geometry file must be of file type .geojson.')
+            if self.files['the_geom']:
+                geojson_file = self.files['the_geom'].file
+                geojson = json.loads(geojson_file.read().decode())
+                geom = GEOSGeometry(str(geojson)).simplify(.005)
+                
+                cleaned_data['the_geom'] = geom
+                
+            else:
+                raise TypeError('The file does not exist?')
+
+        if isinstance(cleaned_data.get('the_geom', None), MultiPolygon):
+            cleaned_data['the_geom'] = cleaned_data['the_geom']
+        elif isinstance(cleaned_data.get('the_geom', None), Polygon):
+            cleansed = MultiPolygon([cleaned_data.get('the_geom', None)])
+            cleaned_data['the_geom'] = cleansed
+        elif cleaned_data.get('the_geom', None) == None or len(cleaned_data.get('the_geom', None)) == 0:
+            cleaned_data['the_geom'] = MultiPolygon(Polygon(
+          ((-107.05078125,25.60190226111573),(-93.07617187499999,25.60190226111573),(-93.07617187499999,36.66841891894786),(-107.05078125,36.66841891894786),(-107.05078125,25.60190226111573))))
+        else:
+            raise TypeError('Geojson must contain either a polygon or multipolygon')
+        return cleaned_data
 
 class ImageForm(forms.ModelForm):
     class Meta:

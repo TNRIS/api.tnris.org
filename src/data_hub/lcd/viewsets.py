@@ -4,6 +4,7 @@ from django.db.models import Q
 from rest_framework import viewsets
 from rest_framework import filters
 from rest_framework_gis.filters import InBBoxFilter
+from django.contrib.postgres.search import SearchQuery, SearchVector, SearchRank
 from django_filters.rest_framework import DjangoFilterBackend
 
 from .models import CatalogCollectionMetaView, CcrView, RemView, AreasView
@@ -27,14 +28,13 @@ class CatalogCollectionMetaViewSet(viewsets.ReadOnlyModelViewSet):
     """
     
     # define the fields available to search
-    search_fields = [
+    search_fields = (
         'name',
-        'acquisition_date',
-        '@description',
-        '@counties',
+        'description',
+        'counties',
         'source_name',
         'source_abbreviation',
-    ]
+    )
     # define the fields available to sort
     ordering_fields = ['name', 'acquisition_date']
     # add search and ordering to the filter backends so we
@@ -52,6 +52,10 @@ class CatalogCollectionMetaViewSet(viewsets.ReadOnlyModelViewSet):
         #join_OR_conditions stores all OR clauses
         # create argument object of query clauses
         join_OR_conditions = []
+        
+        search = self.request.GET.get('search')
+        search_vector = SearchVector(*self.search_fields)
+        search_query = SearchQuery(search)
         for field in self.request.query_params.keys():
             if field not in ['limit', 'offset', 'ordering', 'search', 'in_bbox']:
                 value = self.request.query_params.get(field)
@@ -78,7 +82,7 @@ class CatalogCollectionMetaViewSet(viewsets.ReadOnlyModelViewSet):
                     del args[field]
                     join_OR_conditions.append(conditions)
         # get records using query
-        queryset = CatalogCollectionMetaView.objects.filter(*join_OR_conditions,**args).order_by('collection_id')
+        queryset = CatalogCollectionMetaView.objects.annotate(search=search_vector, rank=SearchRank(search_vector, search_query)).filter(*join_OR_conditions,**args, search=search_query).order_by('-rank')
         return queryset
 
 class CollectionViewSet(viewsets.ReadOnlyModelViewSet):

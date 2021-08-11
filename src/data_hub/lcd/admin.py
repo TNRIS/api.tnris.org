@@ -1,15 +1,17 @@
-from django.contrib import admin, messages
+from django.contrib import messages
+from django.contrib.gis import admin
 from django.utils.safestring import mark_safe
 
 # from .filters import CollectionAgencyNameFilter, CollectionCountyFilter, \
 #     CountyDropdownFilter
-from .forms import CollectionForm, ResourceForm, ImageForm, XlargeSupplementalForm
+from .forms import CollectionFootprintForm, CollectionForm, ResourceForm, ImageForm, XlargeSupplementalForm
 from .models import (
     AreaType,
     CategoryRelate,
     CategoryType,
     Collection,
     CcrView,
+    CollectionFootprint,
     EpsgRelate,
     EpsgType,
     FileTypeRelate,
@@ -163,6 +165,13 @@ class CollectionAdmin(admin.ModelAdmin):
             self.fieldsets[0][1]['fields'] = tuple(x for x in self.fieldsets[0][1]['fields'] if x != 'public')
         return super(CollectionAdmin,self).get_form(request, obj, **kwargs)
 
+@admin.register(CollectionFootprint)
+class CollectionFootprintAdmin(admin.OSMGeoAdmin):
+    model = CollectionFootprint
+    form = CollectionFootprintForm
+    default_lon = -99.9018, 
+    default_lat = 31.9686, 
+    default_zoom = 8,
 
 # views not compiled from joined tables. not managed in admin console
 # @admin.register(CcrView)

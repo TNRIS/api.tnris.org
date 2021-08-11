@@ -50,7 +50,7 @@ class CustomIndexDashboard(Dashboard):
             collapsible=True,
             column=1,
             css_classes=('grp-collapse grp-closed',),
-            models=('lcd.models.Collection',),
+            models=('lcd.models.Collection','lcd.models.CollectionFootprint'),
         ))
 
         self.children.append(modules.AppList(

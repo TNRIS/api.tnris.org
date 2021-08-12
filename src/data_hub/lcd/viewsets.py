@@ -82,7 +82,10 @@ class CatalogCollectionMetaViewSet(viewsets.ReadOnlyModelViewSet):
                     del args[field]
                     join_OR_conditions.append(conditions)
         # get records using query
-        queryset = CatalogCollectionMetaView.objects.annotate(search=search_vector, rank=SearchRank(search_vector, search_query)).filter(*join_OR_conditions,**args, search=search_query).order_by('-rank')
+        if search:
+            queryset = CatalogCollectionMetaView.objects.annotate(search=search_vector, rank=SearchRank(search_vector, search_query)).filter(*join_OR_conditions,**args, search=search_query).order_by('-rank')
+        else:
+            queryset = CatalogCollectionMetaView.objects.filter(*join_OR_conditions,**args)
         return queryset
 
 class CollectionViewSet(viewsets.ReadOnlyModelViewSet):

@@ -86,7 +86,7 @@ class CollectionFootprintForm(forms.ModelForm):
         # checks performed if the_geom was null prior to save
         if self.instance.the_geom == None:
             #ensure file is either .geojson or .json
-            if self.files['the_geom'].name.split('.')[-1] != 'geojson' | self.files['the_geom'].name.split('.')[-1] != 'json':
+            if self.files['the_geom'].name.split('.')[-1] != 'geojson' and self.files['the_geom'].name.split('.')[-1] != 'json':
                 raise TypeError('The geometry file must be of file type .geojson.')
             if self.files['the_geom']:
                 geojson_file = self.files['the_geom'].file

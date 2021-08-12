@@ -64,42 +64,54 @@ class CollectionFootprintForm(forms.ModelForm):
         fields = ('the_geom', 'collection_id',)
     
     the_geom = forms.FileField(
+        label='The Geometry',
         required=False,
         help_text='Upload the footprint of a collection as a .geojson file format. Must be of type Polygon or MultiPolygon.'
     )
 
+    # if the value of the_geom is defined, show the map widget as opposed to upload widget
     def __init__(self, *args, **kwargs):
         super(CollectionFootprintForm, self).__init__(*args, **kwargs)
         if self.instance.the_geom != None:
-            self.fields['the_geom'] = MultiPolygonField(required=False)
+            self.fields['the_geom'] = MultiPolygonField(label='The Geometry', required=False)
             self.fields['the_geom'].widget = OSMWidget(attrs={
                 'map_width': 600, 
                 'map_height': 200, 
             })
 
+
     def clean(self, commit=True, *args, **kwargs):
+        # extend the clean function
         cleaned_data = super(CollectionFootprintForm, self).clean()
+        # checks performed if the_geom was null prior to save
         if self.instance.the_geom == None:
-            if self.files['the_geom'].name.split('.')[-1] != 'geojson':
+            #ensure file is either .geojson or .json
+            if self.files['the_geom'].name.split('.')[-1] != 'geojson' | self.files['the_geom'].name.split('.')[-1] != 'json':
                 raise TypeError('The geometry file must be of file type .geojson.')
             if self.files['the_geom']:
                 geojson_file = self.files['the_geom'].file
                 geojson = json.loads(geojson_file.read().decode())
+                # if the geojson file contains a FeatureCollection, grab first geometry from features
+                # must be of type Polygon or MultiPolygon
+                if geojson['type'] == 'FeatureCollection':
+                    geojson = geojson['features'][0]['geometry']
+                # cast to GEOSGeometry and simplify the geom
                 geom = GEOSGeometry(str(geojson)).simplify(.005)
-                
+                # assign the new geometry to the cleansed data
                 cleaned_data['the_geom'] = geom
                 
-            else:
-                raise TypeError('The file does not exist?')
-
+        # do nothing if MultiPolygon
         if isinstance(cleaned_data.get('the_geom', None), MultiPolygon):
             cleaned_data['the_geom'] = cleaned_data['the_geom']
+        # if polygon, cast to multipolygon
         elif isinstance(cleaned_data.get('the_geom', None), Polygon):
             cleansed = MultiPolygon([cleaned_data.get('the_geom', None)])
             cleaned_data['the_geom'] = cleansed
+        # if the geometry is null, provide a default geometry
         elif cleaned_data.get('the_geom', None) == None or len(cleaned_data.get('the_geom', None)) == 0:
             cleaned_data['the_geom'] = MultiPolygon(Polygon(
           ((-107.05078125,25.60190226111573),(-93.07617187499999,25.60190226111573),(-93.07617187499999,36.66841891894786),(-107.05078125,36.66841891894786),(-107.05078125,25.60190226111573))))
+        # throw an error if the geojson type if not polygon or multipolygon
         else:
             raise TypeError('Geojson must contain either a polygon or multipolygon')
         return cleaned_data

@@ -1137,7 +1137,7 @@ class CollectionFootprint(models.Model):
     )
 
     def __str__(self):
-        return self.collection_id.name + ' Footprint'
+        return self.collection_id.name + ' ' + str(self.collection_id.acquisition_date).split('-')[0] + ' Footprint'
 
 """
 ********** Database Views **********

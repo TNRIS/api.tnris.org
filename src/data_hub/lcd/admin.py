@@ -1,5 +1,6 @@
 from django.contrib import messages
-from django.contrib.gis import admin
+from django.contrib import admin
+from django.contrib.gis import admin as geo_admin
 from django.utils.safestring import mark_safe
 
 # from .filters import CollectionAgencyNameFilter, CollectionCountyFilter, \
@@ -166,9 +167,16 @@ class CollectionAdmin(admin.ModelAdmin):
         return super(CollectionAdmin,self).get_form(request, obj, **kwargs)
 
 @admin.register(CollectionFootprint)
-class CollectionFootprintAdmin(admin.OSMGeoAdmin):
+class CollectionFootprintAdmin(geo_admin.OSMGeoAdmin):
     model = CollectionFootprint
     form = CollectionFootprintForm
+    
+    search_fields = ('collection_id_id__name', 'collection_id_id__acquisition_date')
+    list_filter = (
+        'collection_id_id__public',
+        ('the_geom', admin.EmptyFieldListFilter,)
+    )
+    list_per_page = 25
     default_lon = -99.9018, 
     default_lat = 31.9686, 
     default_zoom = 8,

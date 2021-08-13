@@ -7,6 +7,7 @@ from django.core.files import File
 from django.contrib.admin.widgets import AdminDateWidget
 
 from string import Template
+from django.db.models import query
 from django.utils.datastructures import MultiValueDict
 from django.utils.safestring import mark_safe
 from django.db.utils import ProgrammingError
@@ -58,11 +59,19 @@ class ZipfileWidget(forms.widgets.Widget):
         """)
         return mark_safe(html.substitute(link=cdn_link, name=name))
 
+# customize the return value for label in collection footprint collection dropdown in api admin panel
+class CollectionFootprintCollectionChoiceField(forms.ModelChoiceField):
+    def label_from_instance(self, obj):
+        return '{} {}'.format(obj.name, obj.acquisition_date.split('-')[0])
+
 class CollectionFootprintForm(forms.ModelForm): 
     class Meta:
         model = CollectionFootprint
         fields = ('the_geom', 'collection_id',)
     
+    collection_id = CollectionFootprintCollectionChoiceField(
+        queryset=Collection.objects.all().order_by('name', '-acquisition_date')
+    )
     the_geom = forms.FileField(
         label='The Geometry',
         required=False,

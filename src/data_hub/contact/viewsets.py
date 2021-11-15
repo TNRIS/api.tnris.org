@@ -1,4 +1,4 @@
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.response import Response
@@ -422,3 +422,27 @@ class SubmitSurveyViewSet(viewsets.ViewSet):
             {"status": "success", "message": "Survey submitted successfully"},
             status=status.HTTP_201_CREATED,
         )
+
+# Orders GET endpoint READ_ONLY
+class DataHubOrdersViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    Retrieve TNRIS DataHub Order submissions
+    """
+    permission_classes = (IsAuthenticated,)
+    serializer_class = DataHubOrderSerializer
+    http_method_names = ['get']
+
+    def get_queryset(self):
+        args = {}
+        null_list = ['null', 'Null', 'none', 'None']
+        # create argument object of query clauses
+        for field in self.request.query_params.keys():
+            if field != 'limit' and field != 'offset':
+                value = self.request.query_params.get(field)
+                # convert null queries
+                if value in null_list:
+                    value = None
+                args[field] = value
+        # get records using query
+        queryset = DataHubOrder.objects.filter(**args)
+        return queryset

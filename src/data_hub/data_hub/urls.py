@@ -33,6 +33,8 @@ handler500 = 'data_hub.views.server_error'
 from data_hub.sitemap import StaticSitemap, CollectionSitemap
 from django.contrib.sitemaps.views import sitemap
 
+from rest_framework.authtoken.views import obtain_auth_token
+
 sitemaps = {
  'pages': StaticSitemap,
  'collections': CollectionSitemap,
@@ -48,5 +50,6 @@ urlpatterns = [
     path('admin', RedirectView.as_view(url='admin/', permanent=False)), # admin site
     path('api/v1/', include('lcd.urls')),
     path('health/', HealthCheckView.as_view()),
+    path('api/v1/token/', obtain_auth_token, name="auth_token"),
     path('', RedirectView.as_view(url='admin/', permanent=False)), # redirect home to admin
 ]

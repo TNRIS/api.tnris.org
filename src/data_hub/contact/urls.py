@@ -24,7 +24,8 @@ from .viewsets import (
     ImagePolicyViewSet,
     FilePolicyViewSet,
     SubmitSurveyViewSet,
-    SurveyTemplateViewSet
+    SurveyTemplateViewSet,
+    DataHubOrdersViewSet
 )
 
 router = routers.DefaultRouter(trailing_slash=False)
@@ -34,6 +35,7 @@ router.register(r'policy/image-upload', ImagePolicyViewSet, basename="ImagePolic
 router.register(r'policy/file-upload', FilePolicyViewSet, basename="FilePolicy")
 router.register(r'survey', SurveyTemplateViewSet, basename="Survey")
 router.register(r'survey/submit/?', SubmitSurveyViewSet, basename="SubmitSurvey")
+router.register(r'orders', DataHubOrdersViewSet, basename="Orders")
 schema_view = get_swagger_view(title='Contact API')
 
 urlpatterns = [

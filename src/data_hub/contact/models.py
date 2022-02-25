@@ -1695,3 +1695,72 @@ class SurveyTemplate(models.Model):
     )
     def __str__(self):
         return str(self.survey_template_id)
+
+"""
+*************************** SUBSCRIBER LISTS ****************************
+********* EMAIL SUBSCRIBER LIST ENDPOINT FOR VARIED CAMPAIGNS *****************
+"""
+class Campaign(models.Model):
+    """campaigns for email subscriptions"""
+    class Meta:
+        db_table = 'contact_campaign'
+        verbose_name = "Campaign"
+        verbose_name_plural = 'Campaigns'
+        ordering = ['campaign_name']
+    
+    campaign_id = models.UUIDField(
+        'subscription identification number',
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False
+    )
+    campaign_name = models.CharField(
+        'human friendly name for campaign',
+        max_length=40,
+        blank=False,
+        unique=True
+    )
+    campaign_description = models.CharField(
+        'description of campaign, including limitations for use of emails, etc',
+        max_length=140,
+        blank=False
+    )
+    def __str__(self):
+        return self.campaign_name
+
+class CampaignSubscriber(models.Model):
+    """Campaign subscriber model for varied email campaign subscriptions."""
+
+    class Meta:
+        db_table = 'contact_campaign_subscriber'
+        verbose_name = 'Campaign Subscriber'
+        verbose_name_plural = 'Campaign Subscribers'
+        ordering = ['campaign__campaign_name']
+
+    subscriber_id = models.UUIDField(
+        'subscriber identification number',
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False
+    )
+    campaign = models.ForeignKey(
+        Campaign,
+        on_delete=models.CASCADE
+    )
+    email = models.CharField(
+        'email',
+        max_length=140,
+        unique=True,
+        blank=False,
+    )
+    created = models.DateTimeField(
+        'Created',
+        auto_now_add=True
+    )
+    last_modified = models.DateTimeField(
+        'Last Modified',
+        auto_now=True
+    )
+    def __str__(self):
+        return "%s | %s" % (self.email, self.campaign)
+    

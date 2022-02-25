@@ -3,6 +3,8 @@ from django.http import HttpResponse
 import csv, datetime
 
 from .models import (
+    Campaign,
+    CampaignSubscriber,
     DataHubContact,
     DataHubOrder,
     DataHubOutsideEntityContact,
@@ -494,3 +496,32 @@ class TexasImageryServiceRequestAdmin(admin.ModelAdmin, ExportSelectedToCsvMixin
                     'active')
         })
     )
+
+@admin.register(CampaignSubscriber)
+class CampaignSubscriberAdmin(admin.ModelAdmin, ExportSelectedToCsvMixin):
+    model = CampaignSubscriber
+    actions = ["export_selected_to_csv"]
+    list_display = (
+        'subscriber_id',
+        'campaign',
+        'email',
+        'created',
+        'last_modified'
+    )
+    ordering = ('campaign', 'created', 'email', 'last_modified')
+    
+    def get_readonly_fields(self, request, obj=None):
+        if obj:
+            self.readonly_fields = [field.name for field in obj.__class__._meta.fields]
+        return self.readonly_fields
+
+@admin.register(Campaign)
+class CampaignAdmin(admin.ModelAdmin, ExportSelectedToCsvMixin):
+    model = CampaignSubscriber
+    actions = ["export_selected_to_csv"]
+    list_display = (
+        'campaign_id',
+        'campaign_name',
+        'campaign_description'
+    )
+    ordering = ('campaign_name',)

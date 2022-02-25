@@ -13,12 +13,14 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
+from email.mime import base
 from django.urls import path, include
 from rest_framework import routers
 from rest_framework_swagger.views import get_swagger_view
 from rest_framework.schemas import get_schema_view
 
 from .viewsets import (
+    SubmitCampaignSubscriptionViewSet,
     SubmitFormViewSet,
     ZipPolicyViewSet,
     ImagePolicyViewSet,
@@ -29,6 +31,7 @@ from .viewsets import (
 )
 
 router = routers.DefaultRouter(trailing_slash=False)
+router.register(r'campaignsubscription', SubmitCampaignSubscriptionViewSet, basename="SubmitCampaignSubscription")
 router.register(r'submit/?', SubmitFormViewSet, basename="SubmitForm")
 router.register(r'policy/zip-upload', ZipPolicyViewSet, basename="ZipPolicy")
 router.register(r'policy/image-upload', ImagePolicyViewSet, basename="ImagePolicy")

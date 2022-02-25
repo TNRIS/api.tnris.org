@@ -1,6 +1,5 @@
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from rest_framework import status
-from rest_framework import viewsets
+from rest_framework import mixins, schemas, status, viewsets
 from rest_framework.response import Response
 from urllib.parse import urlparse
 from django.conf import settings
@@ -16,7 +15,7 @@ from botocore.client import Config
 # Google Drive auth and GoogleSheets api wrapper libraries
 import gspread
 
-from .models import EmailTemplate, SurveyTemplate
+from .models import CampaignSubscriber, EmailTemplate, SurveyTemplate
 
 from .serializers import *
 
@@ -36,6 +35,7 @@ class CorsPostPermission(AllowAny):
         "staging.tnris.org",
         "stagingapi.tnris.org",
         "staginghub.tnris.org",
+        "store.tnris.org",
         "tnris.org",
         "www.tnris.org",
     ]
@@ -446,3 +446,23 @@ class DataHubOrdersViewSet(viewsets.ReadOnlyModelViewSet):
         # get records using query
         queryset = DataHubOrder.objects.filter(**args)
         return queryset
+
+# Campaigns rw endpoint
+class SubmitCampaignSubscriptionViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin):
+    """
+    post:
+    Create email campaign subscriptions
+    """
+    queryset = CampaignSubscriber.objects.all()
+    serializer_class = CampaignSubscriberSerializer
+    permission_classes = [CorsPostPermission]
+    schema = schemas.AutoSchema()
+    def create(self, request, format=None):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        
+        return Response(
+            serializer.data,
+            status=status.HTTP_201_CREATED
+        )

@@ -1,6 +1,8 @@
 from rest_framework import serializers
 
 from .models import (
+    Campaign,
+    CampaignSubscriber,
     DataHubContact,
     DataHubOrder,
     DataHubOutsideEntityContact,
@@ -83,6 +85,16 @@ class PosterGallerySubmissionSerializer(serializers.ModelSerializer):
         model = PosterGallerySubmission
         fields = ('__all__')
 
+class CampaignSubscriberSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CampaignSubscriber
+        fields = ('__all__')
+
+class CampaignSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Campaign
+        fields = ('__all__')
+
 class SurveyTemplateSerializer(serializers.ModelSerializer):
     class Meta:
         model = SurveyTemplate
@@ -92,7 +104,6 @@ class TexasImageryServiceContactSerializer(serializers.ModelSerializer):
     class Meta:
         model = TexasImageryServiceContact
         fields = ('__all__')
-
 
 class TexasImageryServiceRequestSerializer(serializers.ModelSerializer):
     class Meta:

@@ -105,7 +105,8 @@ class CustomIndexDashboard(Dashboard):
             collapsible=True,
             column=1,
             css_classes=('grp-collapse grp-closed',),
-            models=('contact.models.DataHubContact',
+            models=(
+                    'contact.models.DataHubContact',
                     'contact.models.DataHubOrder',
                     'contact.models.DataHubOutsideEntityContact',
                     'contact.models.EducationContact',
@@ -119,7 +120,10 @@ class CustomIndexDashboard(Dashboard):
                     'contact.models.PosterGallerySubmission',
                     'contact.models.SurveyTemplate',
                     'contact.models.TexasImageryServiceContact',
-                    'contact.models.TexasImageryServiceRequest'),
+                    'contact.models.TexasImageryServiceRequest',
+                    'contact.models.CampaignSubcriber',
+                    'contact.models.Campaign',
+                    ),
         ))
 
         # append a recent actions module

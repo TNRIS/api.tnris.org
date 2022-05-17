@@ -62,8 +62,10 @@ class ZipfileWidget(forms.widgets.Widget):
 # customize the return value for label in collection footprint collection dropdown in api admin panel
 class CollectionFootprintCollectionChoiceField(forms.ModelChoiceField):
     def label_from_instance(self, obj):
-        return '{} {}'.format(obj.name, obj.acquisition_date.split('-')[0])
-
+        if type(obj.acquisition_date) != type(None):
+            return '{} {}'.format(obj.name, obj.acquisition_date.split('-')[0])
+        else:
+            return '{} {}'.format(obj.name, '0000')
 class CollectionFootprintForm(forms.ModelForm): 
     class Meta:
         model = CollectionFootprint

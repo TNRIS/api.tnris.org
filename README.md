@@ -7,7 +7,7 @@ Django RESTful API and PostgreSQL backend database management system for maintai
 ## Setup
 
 Built with:
-* Python 3.6 ([virtual environment](https://howchoo.com/g/nwewzjmzmjc/a-guide-to-python-virtual-environments-with-virtualenvwrapper) suggested)
+* Python 3.6 ([virtual environment (venv)](https://docs.python.org/3/library/venv.html) suggested)
 * PostgreSQL 10.7
   * Amazon RDS Aurora Instance (`tnris-general-store`)
 * [Django](https://docs.djangoproject.com/en/3.0/topics/install/)
@@ -15,7 +15,7 @@ Built with:
 
 #### Django App Setup
 1. Requires `jq` package to be installed on local os to startup with env variables from SecretsManager: `apt-get update && apt-get install -y jq`
-2. Enable your virtual environment. Example: `workon api.tnris.org` (for virtualenv wrapper)
+2. Enable your virtual environment. Example: `. {path to venv}/bin/activate` (for venv)
 3. Upgrade pip using `pip install --upgrade pip`
 4. Install python dependencies:
    * `cd ~/api.tnris.org/src`

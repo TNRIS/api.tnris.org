@@ -1364,31 +1364,6 @@ class CatalogCollectionMetaView(models.Model):
         return self.name
 
 
-class ResourceTypeView(models.Model):
-    """Display list of category names and identifiers."""
-
-    class Meta:
-        managed = False
-        db_table = "resource_type"
-        verbose_name = 'Resource Type'
-        verbose_name_plural = 'Resource Types'
-
-    resource_type_id = models.UUIDField(
-        'Resource Type Id',
-        primary_key=True
-    )
-
-    resource_type_name  = models.TextField(
-        'Resource Type Name'
-    )
-
-    resource_type_abbreviation  = models.TextField(
-        'Resource Type Abbreviation'
-    )
-
-    def __str__(self):
-        return self.name
-
 class RemView(models.Model):
     """
     Resource Management view presents Resource table with joins

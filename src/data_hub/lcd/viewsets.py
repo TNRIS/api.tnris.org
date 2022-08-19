@@ -7,7 +7,7 @@ from rest_framework_gis.filters import InBBoxFilter
 from django.contrib.postgres.search import SearchQuery, SearchVector, SearchRank
 from django_filters.rest_framework import DjangoFilterBackend
 
-from .models import CatalogCollectionMetaView, CcrView, RemView, AreasView, ResourceTypeView
+from .models import CatalogCollectionMetaView, CcrView, RemView, AreasView, ResourceType
 from .serializers import (
     CatalogCollectionMetaSerializer,
     CollectionSerializer,
@@ -145,7 +145,7 @@ class ResourceTypeViewSet(viewsets.ReadOnlyModelViewSet):
     http_method_names = ['get']
     
     def get_queryset(self):
-        queryset = ResourceTypeView.objects.order_by('resource_type_id')
+        queryset = ResourceType.objects.order_by('resource_type_id')
         return queryset
 
 class ResourceViewSet(viewsets.ReadOnlyModelViewSet):

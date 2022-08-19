@@ -1439,8 +1439,6 @@ class RemView(models.Model):
         return self.resource_id
 
 
-
-
 class AreasView(models.Model):
   """
   Areas view presents resource table with aggregated collection_id

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import CatalogCollectionMetaView, CcrView, RemView, AreasView
+from .models import CatalogCollectionMetaView, CcrView, RemView, AreasView, CategoriesView
 
 class CatalogCollectionMetaSerializer(serializers.ModelSerializer):
     class Meta:
@@ -89,6 +89,11 @@ class ResourceSerializer(serializers.ModelSerializer):
         else:
             path = None
         return path
+
+class CategoriesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CategoriesView
+        fields = '__all__'
 
 class AreaSerializer(serializers.ModelSerializer):
     class Meta:

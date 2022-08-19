@@ -244,6 +244,30 @@ class ResolutionType(models.Model):
     def __str__(self):
         return self.resolution
 
+class ResourceTypeCategory(models.Model):
+    """Categories to sort resource types by"""
+    class Meta:
+        db_table = 'resource_type_category'
+        verbose_name = 'Resource Type Category'
+        verbose_name_plural = 'Resource Type Categories'
+    
+    category_name = models.TextField(
+        unique=True,
+        primary_key= True,
+        max_length=50
+    )
+
+    created = models.DateTimeField(
+        'Created',
+        auto_now_add=True
+    )
+    last_modified = models.DateTimeField(
+        'Last Modified',
+        auto_now=True
+    )
+
+    def __str__(self):
+        return self.category_name
 
 class ResourceType(models.Model):
     """Available resource download types domain table"""
@@ -275,6 +299,11 @@ class ResourceType(models.Model):
         'Resource Type Abbreviation',
         max_length=10,
         unique=True
+    )
+    resource_type_category = models.ForeignKey(
+        ResourceTypeCategory,
+        null=True,
+        on_delete=models.SET_NULL
     )
     created = models.DateTimeField(
         'Created',
@@ -1362,7 +1391,6 @@ class CatalogCollectionMetaView(models.Model):
 
     def __str__(self):
         return self.name
-
 
 
 class RemView(models.Model):

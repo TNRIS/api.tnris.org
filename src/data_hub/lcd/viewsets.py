@@ -7,12 +7,13 @@ from rest_framework_gis.filters import InBBoxFilter
 from django.contrib.postgres.search import SearchQuery, SearchVector, SearchRank
 from django_filters.rest_framework import DjangoFilterBackend
 
-from .models import CatalogCollectionMetaView, CcrView, RemView, AreasView
+from .models import CatalogCollectionMetaView, CcrView, RemView, AreasView, CategoriesView
 from .serializers import (
     CatalogCollectionMetaSerializer,
     CollectionSerializer,
     ResourceSerializer,
     AreaSerializer,
+    CategoriesSerializer
 )
 
 class CatalogCollectionMetaViewSet(viewsets.ReadOnlyModelViewSet):
@@ -134,6 +135,17 @@ class CollectionViewSet(viewsets.ReadOnlyModelViewSet):
                 args[field] = value
         # get records using query
         queryset = CcrView.objects.filter(**args).order_by('collection_id')
+        return queryset
+
+class CategoriesViewSet(viewsets.ReadOnlyModelViewSet): 
+    """
+    Retrieve TNRIS categories
+    """
+    serializer_class = CategoriesSerializer
+    http_method_names = ['get']
+    
+    def get_queryset(self):
+        queryset = CategoriesView.objects.order_by('resource_type_id')
         return queryset
 
 class ResourceViewSet(viewsets.ReadOnlyModelViewSet):

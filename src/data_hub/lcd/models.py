@@ -1364,7 +1364,7 @@ class CatalogCollectionMetaView(models.Model):
         return self.name
 
 
-class CategoriesView(models.Model):
+class ResourceTypeView(models.Model):
     """Display list of category names and identifiers."""
 
     class Meta:

@@ -24,6 +24,7 @@ from .models import (
     ResolutionType,
     Resource,
     ResourceType,
+    ResourceTypeCategory,
     ResourceTypeRelate,
     SourceType,
     TemplateType,
@@ -332,7 +333,15 @@ class ResourceTypeAdmin(admin.ModelAdmin):
     model = ResourceType
     ordering = ('resource_type_name',)
     list_display = (
-        'resource_type_name', 'resource_type_abbreviation'
+        'resource_type_name', 'resource_type_abbreviation', 'resource_type_category'
+    )
+
+@admin.register(ResourceTypeCategory)
+class ResourceTypeCategoryAdmin(admin.ModelAdmin):
+    model = ResourceTypeCategory
+    ordering = ('category_name',)
+    list_display = (
+        'category_name', 'last_modified', 'created'
     )
 
 

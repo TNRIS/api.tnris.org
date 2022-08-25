@@ -21,9 +21,9 @@ Built with:
    * `cd ~/api.tnris.org/src`
    * `pip install -r requirements.txt`
 5. Setup secrets files:
-   * `./src/data_hub/set-env-secrets.sh`
+   * `./src/data_hub/set-env-secrets.sh` *(for non TNRIS employees only)*
    * `./src/data_hub/gspread_config.json`
-   * **PREFERRED** ::: Run the command $(python configure.py) from the root directory. *(for TNRIS employees only)* 
+   * **PREFERRED** ::: Run the command $(python configure.py) from the root *(for TNRIS employees only)* 
    * **ALTERNATIVE** ::: A template copy of each secrets file exists in `./src/data_hub/` but with `-example` in the filename. Make a copy of each file in the same directory, remove "-example" from the copy's name, and fill in the values for each secret manually.
 
 ## Local Development

@@ -23,8 +23,8 @@ text_file.close()
 export_command = ("export DB_PASSWORD=" + secrets["DB_PASSWORD"] +
 " DB_NAME=" + secrets["DB_NAME"] +
 " DB_USER=" + secrets["DB_USER"] +
-" DB_HOST='localhost'" +
-" DB_PORT='9000'" +
+" DB_HOST=localhost" +
+" DB_PORT=9000" +
 " SEO_TOKEN=" + secrets["SEO_TOKEN"] +
 
 # CONTACT APP ENV VARIABLES
@@ -42,6 +42,6 @@ export_command = ("export DB_PASSWORD=" + secrets["DB_PASSWORD"] +
 " DATAHUB_MASTER_CLOUDFRONT=" + stack_resource.physical_resource_id +
 
 # the following is only used within ETL scripts (specifically, migrate.py)
-" TNRIS_REPO='local_path_to_cloned_tnris_website_repo' ")
+" TNRIS_REPO='local_path_to_cloned_tnris_website_repo'")
 
 print(export_command)

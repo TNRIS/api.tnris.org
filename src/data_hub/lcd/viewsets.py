@@ -16,6 +16,21 @@ from .serializers import (
     ResourceTypeSerializer
 )
 
+def getArgs(self):
+    # Helper function to get arguments based on query parameters.
+    # Note: Ignores fields limit and offset as they are special query parameters.
+    args = {}
+    null_list = ['null', 'Null', 'none', 'None']
+    # create argument object of query clauses
+    for field in self.request.query_params.keys():
+        if field != 'limit' and field != 'offset':
+            value = self.request.query_params.get(field)
+            # convert null queries
+            if value in null_list:
+                value = None
+            args[field] = value
+    return args
+
 class CatalogCollectionMetaViewSet(viewsets.ReadOnlyModelViewSet):
     """
     Retrieve TNRIS dataset collection metadata and information
@@ -145,8 +160,9 @@ class ResourceTypeViewSet(viewsets.ReadOnlyModelViewSet):
     http_method_names = ['get']
     
     def get_queryset(self):
-        queryset = ResourceType.objects.order_by('resource_type_id')
-        return queryset
+        args = getArgs(self)
+
+        return ResourceType.objects.filter(**args).order_by('resource_type_id')
 
 class ResourceViewSet(viewsets.ReadOnlyModelViewSet):
     """
@@ -156,19 +172,9 @@ class ResourceViewSet(viewsets.ReadOnlyModelViewSet):
     http_method_names = ['get']
 
     def get_queryset(self):
-        args = {}
-        null_list = ['null', 'Null', 'none', 'None']
-        # create argument object of query clauses
-        for field in self.request.query_params.keys():
-            if field != 'limit' and field != 'offset':
-                value = self.request.query_params.get(field)
-                # convert null queries
-                if value in null_list:
-                    value = None
-                args[field] = value
+        args = getArgs(self)
         # get records using query
-        queryset = RemView.objects.filter(**args).order_by('resource_id')
-        return queryset
+        return RemView.objects.filter(**args).order_by('resource_id')
 
 
 class AreaViewSet(viewsets.ReadOnlyModelViewSet):
@@ -179,16 +185,6 @@ class AreaViewSet(viewsets.ReadOnlyModelViewSet):
     http_method_names = ['get']
 
     def get_queryset(self):
-        args = {}
-        null_list = ['null', 'Null', 'none', 'None']
-        # create argument object of query clauses
-        for field in self.request.query_params.keys():
-            if field != 'limit' and field != 'offset':
-                value = self.request.query_params.get(field)
-                # convert null queries
-                if value in null_list:
-                    value = None
-                args[field] = value
+        args = getArgs(self)
         # get records using query
-        queryset = AreasView.objects.filter(**args).order_by('area_type_id')
-        return queryset
+        return AreasView.objects.filter(**args).order_by('area_type_id')

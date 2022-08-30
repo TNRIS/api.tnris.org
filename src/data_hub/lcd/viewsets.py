@@ -159,7 +159,7 @@ class ResourceTypeViewSet(viewsets.ReadOnlyModelViewSet):
 
     filter_backends = (filters.SearchFilter, filters.OrderingFilter,)
     search_fields = ['resource_type_id', 'resource_type_name', 'resource_type_abbreviation', 'resource_type_category__category_name']
-    ordering_fields = ['resource_type_name', 'created', 'last_modified', 'resource_type_category__category_name']
+    ordering_fields = ['resource_type_name', 'created', 'last_modified', 'resource_type_category__category_name', 'resource_type_abbreviation']
     serializer_class = ResourceTypeSerializer
     http_method_names = ['get']
     

@@ -18,12 +18,12 @@ from .serializers import (
 
 def getArgs(self):
     # Helper function to get arguments based on query parameters.
-    # Note: Ignores fields limit and offset as they are special query parameters.
+    # Note: Ignores fields limit, search, ordering and offset as they are special query parameters.
     args = {}
     null_list = ['null', 'Null', 'none', 'None']
     # create argument object of query clauses
     for field in self.request.query_params.keys():
-        if field != 'limit' and field != 'offset':
+        if field != 'limit' and field != 'offset' and field != 'search' and field != 'ordering':
             value = self.request.query_params.get(field)
             # convert null queries
             if value in null_list:
@@ -156,6 +156,10 @@ class ResourceTypeViewSet(viewsets.ReadOnlyModelViewSet):
     """
     Retrieve TNRIS resource types
     """
+
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter,)
+    search_fields = ['resource_type_id', 'resource_type_name', 'resource_type_abbreviation', 'resource_type_category__category_name']
+    ordering_fields = ['resource_type_name', 'created', 'last_modified']
     serializer_class = ResourceTypeSerializer
     http_method_names = ['get']
     

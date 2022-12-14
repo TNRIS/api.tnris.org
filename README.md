@@ -23,7 +23,7 @@ Built with:
 5. Setup secrets files:
    * `./src/data_hub/set-env-secrets.sh` *(for non TNRIS employees only)*
    * `./src/data_hub/gspread_config.json`
-   * **PREFERRED** ::: Run the command $(python configure.py) from the root *(for TNRIS employees only)* 
+   * **PREFERRED** ::: Run the command `$(python configure.py)` from the root *(for TNRIS employees only)* 
    * **ALTERNATIVE** ::: A template copy of each secrets file exists in `./src/data_hub/` but with `-example` in the filename. Make a copy of each file in the same directory, remove "-example" from the copy's name, and fill in the values for each secret manually.
 
 ## Local Development
@@ -32,8 +32,7 @@ Built with:
    * Default settings are already setup if you're using local port forwarding to your port 9000 (skip to next step if you are doing this). If you're using a local development db, configure your database environment variables (`DB_NAME`, `DB_USER`, `DB_PASSWORD`, `DB_HOST`, `DB_PORT`) to point to it.
 2. Since the development of data.tnris.org v2, running the app local now requires installing [GDAL/OGR](https://gdal.org/) on the host. See installation instructions for Debian-based Linux distros here: http://www.sarasafavi.com/installing-gdalogr-on-ubuntu.html
 3. `cd ~/api.tnris.org/src/data_hub/`
-4. `. set-env-secrets.sh` or `source set-env-secrets.sh` to set the environment variables within the terminal session
-5. `python manage.py runserver` to run the app; it will be available at `localhost:8000`. if you get a DB_PASSWORD env variable error then you need to re-run the env variable command in the previous step.
+4. `python manage.py runserver` to run the app; it will be available at `localhost:8000`. if you get a DB_PASSWORD env variable error then you need to re-run the env variable command in the previous step.
 
 ## Deployment Prep
 

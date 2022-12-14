@@ -87,7 +87,8 @@ class CollectionAdmin(admin.ModelAdmin):
                        'lidar_buildings_url',
                        'delete_lidar_buildings_url',
                        'tile_index_url',
-                       'delete_tile_index_url')
+                       'delete_tile_index_url',
+                       's_three_key')
         }),
         ('Lookup/Relate Associations', {
             'classes': ('grp-collapse grp-closed',),

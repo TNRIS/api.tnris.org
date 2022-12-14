@@ -782,7 +782,8 @@ class Collection(models.Model):
             'tags',
             'license_type_id',
             'source_type_id',
-            'template_type_id'
+            'template_type_id',
+            's_three_key'
         )
 
     collection_id = models.UUIDField(
@@ -845,6 +846,12 @@ class Collection(models.Model):
     )
     wms_link = models.URLField(
         'WMS Link',
+        max_length=255,
+        null=True,
+        blank=True
+    )
+    s_three_key = models.CharField(
+        'S3 Key',
         max_length=255,
         null=True,
         blank=True
@@ -1218,6 +1225,10 @@ class CcrView(models.Model):
     )
     wms_link = models.URLField(
         'WMS Link'
+    )
+    s_three_key = models.CharField(
+        'S3 Key',
+        max_length=255
     )
     popup_link = models.URLField(
         'Popup Link'

@@ -26,7 +26,7 @@ CREATE MATERIALIZED VIEW catalog_collection_meta AS
     c.file_type,
 	g.the_geom
    FROM collection_catalog_record c
-     RIGHT JOIN collection_footprint_geom g ON c.collection_id = g.collection_id
+     RIGHT JOIN collection_footprint g ON c.collection_id = g.collection_id_id
 UNION
  SELECT h.collection_id,
     h.thumbnail_image,

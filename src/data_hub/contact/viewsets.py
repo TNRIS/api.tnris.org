@@ -12,10 +12,14 @@ import boto3
 from botocore.exceptions import ClientError
 from botocore.client import Config
 
+# Fernet is pythons implementation of AES128 encryption at this time. 
+from cryptography.fernet import Fernet, MultiFernet
+import hashlib
+import secrets
 # Google Drive auth and GoogleSheets api wrapper libraries
 import gspread
 
-from .models import CampaignSubscriber, EmailTemplate, SurveyTemplate
+from .models import CampaignSubscriber, EmailTemplate, SurveyTemplate, OrderType
 
 from .serializers import *
 
@@ -171,6 +175,60 @@ class SubmitFormViewSet(viewsets.ViewSet):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
+# FORMS ORDER ENDPOINT
+class OrderFormViewSet(viewsets.ViewSet):
+    """
+    Handle TNRIS order form submissions
+    """
+    permission_classes = [CorsPostPermission]
+
+    def create(self, request, format=None):        
+        # Convert to JSON
+        order = json.dumps(request.data["order_details"])
+        
+        # Generate Access Code and one way encrypt it.
+        access_token = secrets.token_urlsafe(16)
+        salt = secrets.token_urlsafe(16)
+        pepper = json.loads(self.get_access_key())["access_pepper"]
+        hash = hashlib.sha256(bytes(access_token + salt + pepper, 'utf8')).hexdigest()
+        
+        # Store encrypted order details
+        OrderType.objects.create(order_details=self.encrypt_order(order), access_code=hash, access_salt=salt)
+        
+        return Response(
+            {"status": "success", "message": "Nice"},
+            status=status.HTTP_201_CREATED,
+        )
+
+    def encrypt_order(self, details):
+        access_key = bytes(json.loads(self.get_access_key())["fkey1"], 'utf-8')
+        f = Fernet(access_key)
+        
+        a = f.encrypt(bytes(details, 'utf8'))
+        return a
+
+
+    def get_access_key(self):
+        # Create a Secrets Manager client
+        session = boto3.session.Session()
+        client = session.client(
+            service_name='secretsmanager',
+            region_name='us-east-1'
+        )
+
+        try:
+            get_secret_value_response = client.get_secret_value(
+                SecretId='datahub_order_keys'
+            )
+        except ClientError as e:
+            # For a list of exceptions thrown, see
+            # https://docs.aws.amazon.com/secretsmanager/latest/apireference/API_GetSecretValue.html
+            raise e
+
+        # Decrypts secret using the associated KMS key.
+        secret = get_secret_value_response['SecretString']
+
+        return secret
 
 # POLICY ENDPOINTS FOR UPLOADS
 def create_presigned_post(key, content_type, length, expiration=900):

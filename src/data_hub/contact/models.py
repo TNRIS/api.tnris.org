@@ -1,6 +1,51 @@
 from django.db import models
 from datetime import datetime
 import uuid
+from django.contrib.postgres.fields import JSONField
+
+class OrderType(models.Model):
+    """Store order information"""
+
+    class Meta:
+        db_table = 'order_type'
+        verbose_name = 'Order Type'
+        verbose_name_plural = 'Order Types'  
+    
+    order_id = models.AutoField(
+        'Auto increment primary key.',
+        primary_key=True,
+        unique=True
+    )
+
+    # Don't want to use this for primary key for performance reasons
+    unique_trans_id = models.UUIDField(
+        'Unique Transaction Id',
+        default=uuid.uuid4,
+        editable=False,
+        unique=True
+    )
+    
+    order_details = models.BinaryField(
+        'A Json containing order details. Encrypted values'
+    )
+    
+    order_approved = models.BooleanField(
+        'Whether order has been approved',
+        default=False
+    )
+    
+    access_code = models.CharField(
+        'Order Private Access code',
+        max_length=1024
+    )
+    
+    access_salt = models.CharField(
+        'Salt for the access code',
+        max_length=32
+    )
+    
+    def __str__(self):
+        return self.resource_type_name
 
 """
 *************************** EMAIL TEMPLATES ****************************

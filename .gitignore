@@ -122,6 +122,7 @@ venv.bak/
 .idea/dictionaries
 .idea/vcs.xml
 .idea/jsLibraryMappings.xml
+conflocal.py
 
 # Sensitive or high-churn files:
 .idea/dataSources.ids

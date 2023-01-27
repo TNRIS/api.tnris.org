@@ -1,7 +1,22 @@
 from django.db import models
+from . import fields
 from datetime import datetime
 import uuid
 from django.contrib.postgres.fields import JSONField
+from django import forms
+
+
+    
+class OrderDetailsType(models.Model):
+    class Meta:
+        db_table = 'order_details_type'
+        verbose_name = 'Order Details Type'
+        verbose_name_plural = 'Order DetailsTypes'
+        
+    details = fields.CryptoTextField(
+        "Details",
+        max_length=50000
+    )
 
 class OrderType(models.Model):
     """Store order information"""
@@ -11,42 +26,79 @@ class OrderType(models.Model):
         verbose_name = 'Order Type'
         verbose_name_plural = 'Order Types'  
     
-    order_id = models.AutoField(
-        'Auto increment primary key.',
+    id = models.UUIDField(
+        'Order Id',
         primary_key=True,
-        unique=True
+        editable=False,
+        default=uuid.uuid4
+    )
+    
+    # Token for keeping track of a order form.
+    order_token = models.UUIDField(
+        'Order Token',
+        editable=False,
+        null=True,
+        default=None
+    )
+    
+    order_url = models.CharField(
+        'Order url',
+        editable=False,
+        null=True,
+        default=None,
+        max_length=255
     )
 
-    # Don't want to use this for primary key for performance reasons
-    unique_trans_id = models.UUIDField(
-        'Unique Transaction Id',
-        default=uuid.uuid4,
-        editable=False,
-        unique=True
-    )
-    
-    order_details = models.BinaryField(
-        'A Json containing order details. Encrypted values'
-    )
-    
     order_approved = models.BooleanField(
-        'Whether order has been approved',
-        default=False
+        'Order approved?',
+        default=False,
+        editable=True
     )
     
-    access_code = models.CharField(
-        'Order Private Access code',
-        max_length=1024
+    received_receipt = models.BooleanField(
+        'Receipt Received',
+        editable=False,
+        default=False,
+        null=True,
+        blank=True
     )
     
-    access_salt = models.CharField(
-        'Salt for the access code',
-        max_length=32
+    approved_charge = models.CharField(
+        "Approved Charge",
+        editable=True,
+        max_length=255,
+        default="",
+        null=True,
+        blank=True
+    )
+    
+    archived = models.BooleanField(
+        'Order Archived?',
+        default=False,
+        editable=True
+    )
+    
+    created = models.DateTimeField(
+        'Created',
+        auto_now_add=True,
+        editable=False
+    )
+    
+    last_modified = models.DateTimeField(
+        'Last Modified',
+        auto_now=True,
+        editable=False
+    )
+    
+    order_details = models.ForeignKey(
+        OrderDetailsType,
+        on_delete=models.CASCADE
     )
     
     def __str__(self):
-        return self.resource_type_name
+        return str(self.id)
 
+    
 """
 *************************** EMAIL TEMPLATES ****************************
 ********* USED TO FORMAT EMAILS SENT B/C OF FORM SUBMISSIONS ***********

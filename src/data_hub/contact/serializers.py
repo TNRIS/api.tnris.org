@@ -13,6 +13,7 @@ from .models import (
     GeorodeoRegistration,
     LakesOfTexasContact,
     OrderMap,
+    OrderType,
     PosterGallerySubmission,
     SurveyTemplate,
     TexasImageryServiceContact,
@@ -78,7 +79,13 @@ class OrderMapSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrderMap
         fields = ('__all__')
-
+        
+        
+class OrderStatusSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrderType
+        fields = ('__all__')
+        
 
 class PosterGallerySubmissionSerializer(serializers.ModelSerializer):
     class Meta:

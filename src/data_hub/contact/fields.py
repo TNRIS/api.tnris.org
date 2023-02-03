@@ -21,6 +21,9 @@ class CryptoTextField(models.Field):
 
         super().__init__(*args, **kwargs)
         
+    def db_type(self, connection):
+        return 'char(500000)'    
+    
     def formfield(self, **kwargs):
         return super().formfield(**{
             'form_class': forms.TimeField,
@@ -57,12 +60,12 @@ def encrypt_string(value):
         encrypted = f.encrypt(bytes(value, 'utf-8'))
     else:
         encrypted = f.encrypt(bytes("", 'utf-8'))    
-    return encrypted
+    return encrypted.decode('utf-8')
 
 def decrypt_string(value): 
     access_key = bytes(json.loads(get_access_key())["fkey1"], 'utf-8')
     f = Fernet(access_key)    
-    decrypted = f.decrypt(bytes(value))
+    decrypted = f.decrypt(bytes(value, 'utf-8'))
     
     return decrypted.decode('utf-8')
 

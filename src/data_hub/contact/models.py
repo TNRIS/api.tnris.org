@@ -2,8 +2,9 @@ from django.db import models
 from . import fields
 from datetime import datetime
 import uuid
-from django.contrib.postgres.fields import JSONField
+from django_json_widget.widgets import JSONEditorWidget
 from django import forms
+from django.utils import timezone
 
 
     
@@ -12,10 +13,10 @@ class OrderDetailsType(models.Model):
         db_table = 'order_details_type'
         verbose_name = 'Order Details Type'
         verbose_name_plural = 'Order DetailsTypes'
-        
+    
     details = fields.CryptoTextField(
         "Details",
-        max_length=50000
+        max_length=500000
     )
 
 class OrderType(models.Model):
@@ -80,8 +81,7 @@ class OrderType(models.Model):
     
     created = models.DateTimeField(
         'Created',
-        auto_now_add=True,
-        editable=False
+        default=timezone.now
     )
     
     last_modified = models.DateTimeField(

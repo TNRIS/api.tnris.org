@@ -20,6 +20,7 @@ import uuid
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from django.shortcuts import redirect
+from datetime import datetime, timezone
 
 # Google Drive auth and GoogleSheets api wrapper libraries
 import gspread
@@ -263,6 +264,37 @@ class OrderReceiptViewSet(viewsets.ViewSet):
                 status=status.HTTP_200_OK
             )
 
+class OrderCleanupViewSet(viewsets.ViewSet):
+    permission_classes = (AllowAny,)
+    
+    def list(self, request, pk=1, format=None):
+        try:
+            # Select all of the orders that are not archived.
+            unarchived_orders = OrderType.objects.filter(archived=False).values()
+            
+            now = datetime.now(timezone.utc)
+            
+            # If an order is older than 15 days archive it regardless.
+            for order in unarchived_orders:
+                difference = now - order["created"] 
+                if(difference.days > 15):
+                    obj = OrderType.objects.get(id=order["id"])
+                    obj.archived = True
+                    obj.save()
+                                
+            response =  Response(
+                {"status": "success", "message": "success"},
+                status=status.HTTP_200_OK,
+            )
+            # return response
+        except:
+            response =  Response(
+                {"status": "failure", "message": "failure"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+        finally:
+            return response
+
 class OrderSubmitViewSet(viewsets.ViewSet):
     permission_classes = (AllowAny,)
 
@@ -280,7 +312,7 @@ class OrderSubmitViewSet(viewsets.ViewSet):
             "MerchantKey": secret['MerchantKey'],
             "ServiceCode": secret['ServiceCode'],
             "UniqueTransId": order.order_details_id,
-            "LocalRef": request.query_params["uuid"],
+            "LocalRef": "580WD" + str(order.order_details_id),
             "PaymentType": order_details['Payment'],
             "LineItems": [
                 {
@@ -303,7 +335,7 @@ class OrderSubmitViewSet(viewsets.ViewSet):
         )
 
         url = json.loads(x.text)
-        if(hasattr(url, 'html5RedirectUrl')):
+        if('htmL5RedirectUrl' in url):
             orderObj.filter(id=request.query_params["uuid"]).update(order_token=url["token"], order_url=url["htmL5RedirectUrl"])
             order = orderObj.get(id=request.query_params["uuid"])
 

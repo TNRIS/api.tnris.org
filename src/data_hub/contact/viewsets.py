@@ -305,8 +305,8 @@ class OrderCleanupViewSet(viewsets.ViewSet):
                             send_from=os.environ.get("MAIL_DEFAULT_FROM"))    
                         print("pause") 
                     
-                #If no receipt was received after 15 days then archive order.
-                if(difference.days > 15 and a.status_code != 200):
+                #If no receipt was received or order was sent after 15 days then archive order automatically.
+                if(difference.days > 15 and (a.status_code != 200 or order["order_sent"] == True) ):
                     obj = OrderType.objects.get(id=order["id"])
                     obj.archived = True
                     obj.save()

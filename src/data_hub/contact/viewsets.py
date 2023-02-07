@@ -273,9 +273,16 @@ class OrderReceiptViewSet(viewsets.ViewSet):
 class OrderCleanupViewSet(viewsets.ViewSet):
     permission_classes = (AllowAny,)
     
-    def list(self, request, pk=1, format=None):
+    def create(self, request, pk=1, format=None):
+        secrets = get_secret("CCP_info")
+        if(secrets["AccessCode"] != request.data):
+            return Response(
+                {"status": "access_denied", "message": "access_denied"},
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
         try:
             # Select all of the orders that are not archived.
+
             unarchived_orders = OrderType.objects.filter(archived=False).values()
             
             now = datetime.now(timezone.utc)

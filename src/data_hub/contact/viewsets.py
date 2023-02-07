@@ -238,31 +238,37 @@ class OrderReceiptViewSet(viewsets.ViewSet):
     permission_classes = (AllowAny,)
 
     def list(self, request, pk=1, format=None):
-        orderObj = OrderType.objects
-        order = orderObj.get(id=request.query_params["uuid"])
-        secret = get_secret("CCP_info")
-        headers={
-            "apiKey": secret['ApiKey'],
-            "MerchantKey": secret['MerchantKey'],
-            "MerchantCode": secret['MerchantCode'],
-            "ServiceCode": secret['ServiceCode']
-        }
-        orderinfo = requests.get("https://securecheckout-uat.cdc.nicusa.com/ccprest/api/v1/TX/tokens/" + str(order.order_token), headers=headers)
-        
-        orderContent = json.loads(orderinfo.content)
-        if('orders' in orderContent):
-            orders = orderContent["orders"]
-            orderReceipt = requests.get("https://securecheckout-uat.cdc.nicusa.com/ccprest/api/v1/TX/receipts/" + orders[0]['orderId'], headers=headers)
+        try:
+            orderObj = OrderType.objects
+            order = orderObj.get(id=request.query_params["uuid"])
+            secret = get_secret("CCP_info")
+            headers={
+                "apiKey": secret['ApiKey'],
+                "MerchantKey": secret['MerchantKey'],
+                "MerchantCode": secret['MerchantCode'],
+                "ServiceCode": secret['ServiceCode']
+            }
+            orderinfo = requests.get("https://securecheckout-uat.cdc.nicusa.com/ccprest/api/v1/TX/tokens/" + str(order.order_token), headers=headers)
             
-            return Response(
-                {"status": "success", "receipt": "True"},
-                status=status.HTTP_200_OK
-            )
-        else:
-            return Response(
-                {"status": "fail", "receipt": "false"},
-                status=status.HTTP_200_OK
-            )
+            orderContent = json.loads(orderinfo.content)
+            if('orders' in orderContent):
+                orders = orderContent["orders"]
+                orderReceipt = requests.get("https://securecheckout-uat.cdc.nicusa.com/ccprest/api/v1/TX/receipts/" + str(orders[0]['orderId']), headers=headers)
+                response = Response(
+                    {"status_code": orderReceipt.status_code, "orderReceipt": orderReceipt}
+                )
+            else:
+                response = Response(
+                    {"status_code": 404},
+                    status=status.HTTP_404_NOT_FOUND
+                )
+        except:
+            response = Response(
+                {"status_code": 500},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            ) 
+        finally:
+            return response
 
 class OrderCleanupViewSet(viewsets.ViewSet):
     permission_classes = (AllowAny,)
@@ -277,11 +283,27 @@ class OrderCleanupViewSet(viewsets.ViewSet):
             # If an order is older than 15 days archive it regardless.
             for order in unarchived_orders:
                 difference = now - order["created"] 
-                if(difference.days > 15):
+                temp_req = request
+                temp_req.query_params._mutable = True
+                temp_req.query_params["uuid"] = str(order["id"])
+                temp_req.query_params._mutable = False
+                a = OrderReceiptViewSet.list(self, request, pk, format)
+                if(a.status_code == 200):
+                    if(not order["tnris_notified"]):
+                        obj = OrderType.objects.get(id=order["id"])
+                        obj.tnris_notified = True
+                        obj.save()
+                        OrderFormViewSet.send_email(subject="Payment has been received.",
+                            body="Order uuid: " + str(order["id"]) + " has been received. Please send package according to order details, then complete order.",
+                            send_from=os.environ.get("MAIL_DEFAULT_FROM"))    
+                        print("pause") 
+                    
+                #If no receipt was received after 15 days then archive order.
+                if(difference.days > 15 and a.status_code != 200):
                     obj = OrderType.objects.get(id=order["id"])
                     obj.archived = True
                     obj.save()
-                                
+                                          
             response =  Response(
                 {"status": "success", "message": "success"},
                 status=status.HTTP_200_OK,
@@ -294,6 +316,7 @@ class OrderCleanupViewSet(viewsets.ViewSet):
             )
         finally:
             return response
+        
 
 class OrderSubmitViewSet(viewsets.ViewSet):
     permission_classes = (AllowAny,)
@@ -360,13 +383,15 @@ class OrderFormViewSet(viewsets.ViewSet):
         instance.order_approved
         if(instance.order_approved and instance.approved_charge):
             order_info = json.loads(instance.order_details.details)
-                
-            OrderFormViewSet.send_email(
-                subject="Your order has been approved",
-                body="Please send payment. \n Url: http://localhost:8000/api/v1/contact/order/submit?uuid=" + str(instance.pk),
-                send_to=order_info["Email"],
-                send_from=os.environ.get("MAIL_DEFAULT_FROM")
-            )
+            if(not instance.customer_notified):
+                instance.customer_notified = True
+                instance.save()
+                OrderFormViewSet.send_email(
+                    subject="Your order has been approved",
+                    body="Please send payment. \n Url: http://localhost:8000/api/v1/contact/order/submit?uuid=" + str(instance.pk),
+                    send_to=order_info["Email"],
+                    send_from=os.environ.get("MAIL_DEFAULT_FROM")
+                )
         return Response(
             {"status": "success", "message": "Success"},
             status=status.HTTP_201_CREATED,

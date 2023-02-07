@@ -64,6 +64,30 @@ class OrderType(models.Model):
         blank=True
     )
     
+    tnris_notified = models.BooleanField(
+        'TNRIS Notified?',
+        editable=False,
+        default=False,
+        null=True,
+        blank=True
+    )
+    
+    customer_notified = models.BooleanField(
+        'Customer Notified?',
+        editable=False,
+        default=False,
+        null=True,
+        blank=True
+    )
+    
+    order_sent = models.BooleanField(
+        'Order Sent?',
+        editable=False,
+        default=False,
+        null=True,
+        blank=True
+    )
+    
     approved_charge = models.CharField(
         "Approved Charge",
         editable=True,

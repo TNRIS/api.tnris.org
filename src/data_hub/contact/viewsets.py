@@ -336,8 +336,13 @@ class OrderSubmitViewSet(viewsets.ViewSet):
         order_details = json.loads(order.order_details.details)
         
         item_attributes = json.load(open("itemattributes.json"))
-        a = {
-            "OrderTotal": None,
+        
+        total = int(order.approved_charge)
+        
+        #2.25% and $.25
+        transactionfee = round(((total/100) * 2.25) + .25, 2)
+        body = {
+            "OrderTotal": total + transactionfee,
             "MerchantCode": secret['MerchantCode'],
             "MerchantKey": secret['MerchantKey'],
             "ServiceCode": secret['ServiceCode'],
@@ -348,17 +353,21 @@ class OrderSubmitViewSet(viewsets.ViewSet):
                 {
                     "Sku": "DHUB",
                     "Description": "TNRIS DataHub order",
-                    "UnitPrice": int(order.approved_charge),
+                    "UnitPrice": total + transactionfee,
                     "Quantity": 1,
                     "ItemAttributes": item_attributes
                 }
             ]
         }
         
+        body["LineItems"][0]["ItemAttributes"].append({'FieldName':'USAS1', 'FieldValue': total})
+        body["LineItems"][0]["ItemAttributes"].append({'FieldName':'USAS2', 'FieldValue': transactionfee})
+        body["LineItems"][0]["ItemAttributes"].append({'FieldName':'USAS3', 'FieldValue': transactionfee})
+        body["LineItems"][0]["ItemAttributes"].append({'FieldName':'CONV_FEE', 'FieldValue': transactionfee})
         secret = get_secret("CCP_info")
         x = requests.post(
             "https://securecheckout-uat.cdc.nicusa.com/ccprest/api/v1/TX/tokens", 
-            json = a,
+            json = body,
             headers={
                 "apiKey": secret["ApiKey"]
             }

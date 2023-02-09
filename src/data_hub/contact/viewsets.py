@@ -10,7 +10,7 @@ from django.dispatch import receiver
 from django.shortcuts import redirect
 from django.shortcuts import render
 
-import requests, os, json, re, sys, hashlib, secrets, uuid
+import requests, os, json, re, sys, hashlib, secrets, uuid, time
 
 # policy imports
 import logging
@@ -165,34 +165,78 @@ class SubmitFormViewSet(viewsets.ViewSet):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
+class GenOtpViewSet(viewsets.ViewSet):
+    """
+    Regenerate One Time Passcode
+    """
+    permission_classes = [CorsPostPermission]
+    
+    def create(self, request, format=None):
+        try:
+            
+            order = OrderType.objects.get(id=request.query_params["uuid"])
+            details = json.loads(order.order_details.details)
+            
+            # Regenerate OTP
+            otp = secrets.token_urlsafe(6)
+            salt = details["access_salt"]
+            pepper = api_helper.get_secret('datahub_order_keys')['access_pepper']
+
+            details["otp"]=hashlib.sha256(bytes(otp + salt + pepper, 'utf8')).hexdigest()
+            details["otp_age"]=time.time()
+            
+            order.order_details.details = json.dumps(details)   
+            order.order_details.save()
+            
+            # Send One time passcode to users email.
+            api_helper.send_email(
+                subject="DataHub one time passcode",
+                body="Your new one time passcode is: " + otp,
+                send_to=details["Email"]
+            )
+            
+            return Response(
+                {"status": "success", "message": "Placeholder."},
+                status=status.HTTP_200_OK,
+            )
+        except Exception as e:
+            return Response(
+                {"status": "failure", "message": "Internl server error."},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )  
+    
 class OrderStatusViewSet(viewsets.ViewSet):
     """
     Handle Checking the order status
     """
-    permission_classes = (AllowAny,)
+    permission_classes = [CorsPostPermission]
 
-    def list(self, request, pk=1, format=None):
+    def create(self, request, format=None):
         try: 
             order = OrderType.objects.get(id=request.query_params["uuid"])
-            
-            if(order and order.archived):
+            authorized = api_helper.auth_order(request.data, json.loads(order.order_details.details))
+            if(not authorized):
+                return Response({"status": "denied", "message": "Access is denied. Either access code is wrong or One time passcode has expired."},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+            elif(order and order.archived):
                 return Response(
-                    {"status": "failure", "orderStatus": "Error"},
+                    {"status": "failure", "message": "Order not found. Or order has been processed."},
                     status=status.HTTP_404_NOT_FOUND,
                 )
             elif(order and order.order_approved):   
                 return Response(
-                    {"status": "success", "orderStatus": "Approved"},
+                    {"status": "success", "message": "Pending Payment."},
                     status=status.HTTP_200_OK,
                 )
             else: 
                 return Response(
-                    {"status": "success", "orderStatus": "Pending"},
+                    {"status": "success", "message": "Pending Review."},
                     status=status.HTTP_200_OK,
                 )
         except:
             return Response(
-                {"status": "failure", "orderStatus": "Error"},
+                {"status": "failure", "message": "Order not found. Or order has been processed."},
                 status=status.HTTP_404_NOT_FOUND,
             )
     
@@ -234,7 +278,7 @@ class OrderReceiptViewSet(viewsets.ViewSet):
             return response
 
 class OrderCleanupViewSet(viewsets.ViewSet):
-    permission_classes = (AllowAny,)
+    permission_classes = [CorsPostPermission]
     
     def create(self, request, pk=1, format=None):
         secrets = api_helper.get_secret("CCP_info")
@@ -286,12 +330,11 @@ class OrderCleanupViewSet(viewsets.ViewSet):
             )
         finally:
             return response
-        
 
 class OrderSubmitViewSet(viewsets.ViewSet):
-    permission_classes = (AllowAny,)
+    permission_classes = [CorsPostPermission]
 
-    def list(self, request, pk=1, format=None):
+    def create(self, request, format=None):
         orderObj = OrderType.objects
         order = orderObj.get(id=request.query_params["uuid"])
         secret = api_helper.get_secret("CCP_info")
@@ -379,21 +422,24 @@ class OrderFormViewSet(viewsets.ViewSet):
     def create(self, request, format=None):        
         # Convert to JSON
         order = request.data["order_details"]
-        
+
         # Generate Access Code and one way encrypt it.
-        access_token = secrets.token_urlsafe(16)
+        access_token = request.data["pw"]
         salt = secrets.token_urlsafe(16)
         pepper = api_helper.get_secret('datahub_order_keys')['access_pepper']
         hash = hashlib.sha256(bytes(access_token + salt + pepper, 'utf8')).hexdigest()
         
+        otp = secrets.token_urlsafe(6)
         # Store encrypted order details
         order["access_code"]=hash
         order["access_salt"]=salt
+        order["otp"]=hashlib.sha256(bytes(otp + salt + pepper, 'utf8')).hexdigest()
+        order["otp_age"]=time.time()
         
         abc = OrderDetailsType.objects.create(details=json.dumps(order))
         efg = OrderType.objects.create(order_details=abc)
 
-        api_helper.send_email("Your TNRIS Order Details", "Your access code is " + access_token 
+        api_helper.send_email("Your TNRIS Order Details", "Your OTP code is (valid for 30 minutes):" + otp 
                         + '\nYour order ID is: ' + str(efg.id)
                         + '\nYou can check your order status here ' + HOST_URL + '/api/v1/contact/order/status?uuid=' + str(efg.id)
                         + '\n\nYou wil receive a link via email to pay for the order once we process it.')        

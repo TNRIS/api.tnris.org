@@ -2,26 +2,22 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework import mixins, schemas, status, viewsets
 from rest_framework.response import Response
 from urllib.parse import urlparse
+from datetime import datetime, timezone
 from django.conf import settings
 from django.core.mail import EmailMessage
-import requests, os, json, re, sys
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
+from django.shortcuts import redirect
+from django.shortcuts import render
+
+import requests, os, json, re, sys, hashlib, secrets, uuid
 
 # policy imports
 import logging
 import boto3
 from botocore.exceptions import ClientError
 from botocore.client import Config
-
-# Fernet is pythons implementation of AES128 encryption at this time. 
-from cryptography.fernet import Fernet, MultiFernet
-import hashlib
-import secrets
-import uuid
-from django.db.models.signals import pre_save
-from django.dispatch import receiver
-from django.shortcuts import redirect
-from datetime import datetime, timezone
-
+from modules import api_helper
 # Google Drive auth and GoogleSheets api wrapper libraries
 import gspread
 
@@ -29,6 +25,8 @@ from .models import CampaignSubscriber, EmailTemplate, SurveyTemplate, OrderType
 
 from .serializers import *
 
+CCP_URL = 'https://securecheckout-uat.cdc.nicusa.com/ccprest/api/v1/TX/'
+HOST_URL = 'http://localhost:8000'
 # custom permissions for cors control
 class CorsPostPermission(AllowAny):
     whitelisted_domains = [
@@ -57,29 +55,6 @@ class CorsPostPermission(AllowAny):
             else request.META["HTTP_HOST"]
         )
         return u in self.whitelisted_domains
-
-
-def get_secret(secret_name):
-    region_name = "us-east-1"
-
-    # Create a Secrets Manager client
-    session = boto3.session.Session()
-    client = session.client(
-        service_name='secretsmanager',
-        region_name=region_name
-    )
-    
-    try:
-        get_secret_value_response = client.get_secret_value(
-            SecretId=secret_name
-        )
-    except ClientError as e:
-        # For a list of exceptions thrown, see
-        # https://docs.aws.amazon.com/secretsmanager/latest/apireference/API_GetSecretValue.html
-        raise e
-
-    # Decrypts secret using the associated KMS key.
-    return json.loads(get_secret_value_response['SecretString'])
     
 # ######################################################
 # ############## CONTACT FORM ENDPOINTS ################
@@ -104,21 +79,6 @@ class SubmitFormViewSet(viewsets.ViewSet):
         # replace all template values which weren't in the form (optional form fields)
         injected = re.sub(r"\{\{.*?\}\}", "", injected)
         return injected
-
-    # generic function for sending email associated with form submission
-    # emails send to supportsystem to create tickets in the ticketing system
-    # which are ultimately managed by IS, RDC, and StratMap
-    def send_email(
-        self,
-        subject,
-        body,
-        send_from=os.environ.get("MAIL_DEFAULT_FROM"),
-        send_to=os.environ.get("MAIL_DEFAULT_TO"),
-        reply_to="unknown@tnris.org",
-    ):
-        email = EmailMessage(subject, body, send_from, [send_to], reply_to=[reply_to])
-        email.send(fail_silently=False)
-        return
 
     def create(self, request, format=None):
         # if in DEBUG mode, assume local development and use localhost recaptcha secret
@@ -179,7 +139,9 @@ class SubmitFormViewSet(viewsets.ViewSet):
                         formatted["lastname"],
                         formatted["email"],
                     )
-                self.send_email(
+                # emails send to supportsystem to create tickets in the ticketing system
+                # which are ultimately managed by IS, RDC, and StratMap
+                api_helper.send_email(
                     email_template.email_template_subject,
                     body,
                     send_to=sender,
@@ -236,24 +198,24 @@ class OrderStatusViewSet(viewsets.ViewSet):
     
 class OrderReceiptViewSet(viewsets.ViewSet):
     permission_classes = (AllowAny,)
-
+    
     def list(self, request, pk=1, format=None):
         try:
             orderObj = OrderType.objects
             order = orderObj.get(id=request.query_params["uuid"])
-            secret = get_secret("CCP_info")
+            secret = api_helper.get_secret("CCP_info")
             headers={
                 "apiKey": secret['ApiKey'],
                 "MerchantKey": secret['MerchantKey'],
                 "MerchantCode": secret['MerchantCode'],
                 "ServiceCode": secret['ServiceCode']
             }
-            orderinfo = requests.get("https://securecheckout-uat.cdc.nicusa.com/ccprest/api/v1/TX/tokens/" + str(order.order_token), headers=headers)
+            orderinfo = requests.get(CCP_URL + "tokens/" + str(order.order_token), headers=headers) 
             
             orderContent = json.loads(orderinfo.content)
             if('orders' in orderContent):
                 orders = orderContent["orders"]
-                orderReceipt = requests.get("https://securecheckout-uat.cdc.nicusa.com/ccprest/api/v1/TX/receipts/" + str(orders[0]['orderId']), headers=headers)
+                orderReceipt = requests.get(CCP_URL + "receipts/" + str(orders[0]['orderId']), headers=headers)
                 response = Response(
                     {"status_code": orderReceipt.status_code, "orderReceipt": orderReceipt}
                 )
@@ -262,11 +224,12 @@ class OrderReceiptViewSet(viewsets.ViewSet):
                     {"status_code": 404},
                     status=status.HTTP_404_NOT_FOUND
                 )
-        except:
+        except Exception as e:
             response = Response(
                 {"status_code": 500},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
-            ) 
+            )
+            logging.error("Error getting receipt: " + str(e))
         finally:
             return response
 
@@ -274,7 +237,7 @@ class OrderCleanupViewSet(viewsets.ViewSet):
     permission_classes = (AllowAny,)
     
     def create(self, request, pk=1, format=None):
-        secrets = get_secret("CCP_info")
+        secrets = api_helper.get_secret("CCP_info")
         if(secrets["AccessCode"] != request.data):
             return Response(
                 {"status": "access_denied", "message": "access_denied"},
@@ -300,7 +263,7 @@ class OrderCleanupViewSet(viewsets.ViewSet):
                         obj = OrderType.objects.get(id=order["id"])
                         obj.tnris_notified = True
                         obj.save()
-                        OrderFormViewSet.send_email(subject="Payment has been received.",
+                        api_helper.send_email(subject="Payment has been received.",
                             body="Order uuid: " + str(order["id"]) + " has been received. Please send package according to order details, then complete order.",
                             send_from=os.environ.get("MAIL_DEFAULT_FROM"))    
                         print("pause") 
@@ -331,7 +294,7 @@ class OrderSubmitViewSet(viewsets.ViewSet):
     def list(self, request, pk=1, format=None):
         orderObj = OrderType.objects
         order = orderObj.get(id=request.query_params["uuid"])
-        secret = get_secret("CCP_info")
+        secret = api_helper.get_secret("CCP_info")
         
         order_details = json.loads(order.order_details.details)
         
@@ -364,9 +327,9 @@ class OrderSubmitViewSet(viewsets.ViewSet):
         body["LineItems"][0]["ItemAttributes"].append({'FieldName':'USAS2', 'FieldValue': transactionfee})
         body["LineItems"][0]["ItemAttributes"].append({'FieldName':'USAS3', 'FieldValue': transactionfee})
         body["LineItems"][0]["ItemAttributes"].append({'FieldName':'CONV_FEE', 'FieldValue': transactionfee})
-        secret = get_secret("CCP_info")
+        secret = api_helper.get_secret("CCP_info")
         x = requests.post(
-            "https://securecheckout-uat.cdc.nicusa.com/ccprest/api/v1/TX/tokens", 
+            CCP_URL + "tokens", 
             json = body,
             headers={
                 "apiKey": secret["ApiKey"]
@@ -402,9 +365,9 @@ class OrderFormViewSet(viewsets.ViewSet):
             if(not instance.customer_notified):
                 instance.customer_notified = True
                 instance.save()
-                OrderFormViewSet.send_email(
+                api_helper.send_email(
                     subject="Your order has been approved",
-                    body="Please send payment. \n Url: http://localhost:8000/api/v1/contact/order/submit?uuid=" + str(instance.pk),
+                    body="Please send payment. \n Url: " + HOST_URL + "/api/v1/contact/order/submit?uuid=" + str(instance.pk),
                     send_to=order_info["Email"],
                     send_from=os.environ.get("MAIL_DEFAULT_FROM")
                 )
@@ -417,13 +380,10 @@ class OrderFormViewSet(viewsets.ViewSet):
         # Convert to JSON
         order = request.data["order_details"]
         
-        # Generate UUID
-        uu_trans_id = uuid.uuid4()
-        
         # Generate Access Code and one way encrypt it.
         access_token = secrets.token_urlsafe(16)
         salt = secrets.token_urlsafe(16)
-        pepper = get_secret('datahub_order_keys')['access_pepper']
+        pepper = api_helper.get_secret('datahub_order_keys')['access_pepper']
         hash = hashlib.sha256(bytes(access_token + salt + pepper, 'utf8')).hexdigest()
         
         # Store encrypted order details
@@ -431,28 +391,17 @@ class OrderFormViewSet(viewsets.ViewSet):
         order["access_salt"]=salt
         
         abc = OrderDetailsType.objects.create(details=json.dumps(order))
-        
         efg = OrderType.objects.create(order_details=abc)
 
-        OrderFormViewSet.send_email("Your TNRIS Order Details", "Your access code is " + access_token 
+        api_helper.send_email("Your TNRIS Order Details", "Your access code is " + access_token 
                         + '\nYour order ID is: ' + str(efg.id)
-                        + '\nYou can check your order status here https://data.tnris.org/order/status/' + str(uu_trans_id)
+                        + '\nYou can check your order status here ' + HOST_URL + '/api/v1/contact/order/status?uuid=' + str(efg.id)
                         + '\n\nYou wil receive a link via email to pay for the order once we process it.')        
 
         return Response(
             {"status": "success", "message": "Success"},
             status=status.HTTP_201_CREATED,
         )
-    def send_email(
-            subject,
-            body,
-            send_from=os.environ.get("MAIL_DEFAULT_FROM"),
-            send_to=os.environ.get("MAIL_DEFAULT_TO"),
-            reply_to="unknown@tnris.org",
-        ):
-        email = EmailMessage(subject, body, send_from, [send_to], reply_to=[reply_to])
-        email.send(fail_silently=False)
-        return
 
 # POLICY ENDPOINTS FOR UPLOADS
 def create_presigned_post(key, content_type, length, expiration=900):

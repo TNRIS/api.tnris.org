@@ -239,14 +239,64 @@ class OrderStatusViewSet(viewsets.ViewSet):
                 {"status": "failure", "message": "Order not found. Or order has been processed."},
                 status=status.HTTP_404_NOT_FOUND,
             )
-    
-class OrderReceiptViewSet(viewsets.ViewSet):
+
+class OrderCleanupViewSet(viewsets.ViewSet):
     permission_classes = (AllowAny,)
     
-    def list(self, request, pk=1, format=None):
+    def create(self, request, format=None):
+        secrets = api_helper.get_secret("CCP_info")
+        if(secrets["AccessCode"] != request.data):
+            return Response(
+                {"status": "access_denied", "message": "access_denied"},
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
         try:
-            orderObj = OrderType.objects
-            order = orderObj.get(id=request.query_params["uuid"])
+            # Select all of the orders that are not archived.
+
+            unarchived_orders = OrderType.objects.filter(archived=False).values()
+            
+            now = datetime.now(timezone.utc)
+            
+            # If an order is older than 15 days archive it regardless.
+            for order in unarchived_orders:
+                difference = now - order["created"] 
+                temp_req = request
+                temp_req.query_params._mutable = True
+                temp_req.query_params["uuid"] = str(order["id"])
+                temp_req.query_params._mutable = False
+                a = self.get_receipt(request, format)
+                if(a.status_code == 200):
+                    if(not order["tnris_notified"]):
+                        obj = OrderType.objects.get(id=order["id"])
+                        obj.tnris_notified = True
+                        obj.save()
+                        api_helper.send_email(subject="Payment has been received.",
+                            body="Order uuid: " + str(order["id"]) + " has been received. Please send package according to order details, then complete order.",
+                            send_from=os.environ.get("MAIL_DEFAULT_FROM"))    
+                        print("pause") 
+                    
+                #If no receipt was received or order was sent after 15 days then archive order automatically.
+                if(difference.days > 15 and (a.status_code != 200 or order["order_sent"] == True) ):
+                    obj = OrderType.objects.get(id=order["id"])
+                    obj.archived = True
+                    obj.save()
+                                          
+            response =  Response(
+                {"status": "success", "message": "success"},
+                status=status.HTTP_200_OK,
+            )
+            # return response
+        except:
+            response =  Response(
+                {"status": "failure", "message": "failure"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+        finally:
+            return response
+    
+    def get_receipt(self, request, format):
+        try:
+            order = OrderType.objects.get(id=request.query_params["uuid"])
             secret = api_helper.get_secret("CCP_info")
             headers={
                 "apiKey": secret['ApiKey'],
@@ -274,60 +324,6 @@ class OrderReceiptViewSet(viewsets.ViewSet):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
             logging.error("Error getting receipt: " + str(e))
-        finally:
-            return response
-
-class OrderCleanupViewSet(viewsets.ViewSet):
-    permission_classes = [CorsPostPermission]
-    
-    def create(self, request, pk=1, format=None):
-        secrets = api_helper.get_secret("CCP_info")
-        if(secrets["AccessCode"] != request.data):
-            return Response(
-                {"status": "access_denied", "message": "access_denied"},
-                status=status.HTTP_401_UNAUTHORIZED,
-            )
-        try:
-            # Select all of the orders that are not archived.
-
-            unarchived_orders = OrderType.objects.filter(archived=False).values()
-            
-            now = datetime.now(timezone.utc)
-            
-            # If an order is older than 15 days archive it regardless.
-            for order in unarchived_orders:
-                difference = now - order["created"] 
-                temp_req = request
-                temp_req.query_params._mutable = True
-                temp_req.query_params["uuid"] = str(order["id"])
-                temp_req.query_params._mutable = False
-                a = OrderReceiptViewSet.list(self, request, pk, format)
-                if(a.status_code == 200):
-                    if(not order["tnris_notified"]):
-                        obj = OrderType.objects.get(id=order["id"])
-                        obj.tnris_notified = True
-                        obj.save()
-                        api_helper.send_email(subject="Payment has been received.",
-                            body="Order uuid: " + str(order["id"]) + " has been received. Please send package according to order details, then complete order.",
-                            send_from=os.environ.get("MAIL_DEFAULT_FROM"))    
-                        print("pause") 
-                    
-                #If no receipt was received or order was sent after 15 days then archive order automatically.
-                if(difference.days > 15 and (a.status_code != 200 or order["order_sent"] == True) ):
-                    obj = OrderType.objects.get(id=order["id"])
-                    obj.archived = True
-                    obj.save()
-                                          
-            response =  Response(
-                {"status": "success", "message": "success"},
-                status=status.HTTP_200_OK,
-            )
-            # return response
-        except:
-            response =  Response(
-                {"status": "failure", "message": "failure"},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            )
         finally:
             return response
 

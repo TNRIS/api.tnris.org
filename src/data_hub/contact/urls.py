@@ -25,7 +25,6 @@ from .viewsets import (
     OrderFormViewSet,
     OrderStatusViewSet,
     OrderSubmitViewSet,
-    OrderReceiptViewSet,
     OrderCleanupViewSet,
     GenOtpViewSet,
     ZipPolicyViewSet,
@@ -42,7 +41,6 @@ router.register(r'submit/?', SubmitFormViewSet, basename="SubmitForm")
 router.register(r'order/?', OrderFormViewSet, basename="OrderForm")
 router.register(r'order/submit/?', OrderSubmitViewSet, basename="PaymentForm")
 router.register(r'order/status/?', OrderStatusViewSet, basename="OrderStatus")
-router.register(r'order/receipt/?', OrderReceiptViewSet, basename="OrderReceipt")
 router.register(r'order/cleanup/?', OrderCleanupViewSet, basename="OrderCleanup")
 router.register(r'order/otp/?', GenOtpViewSet, basename="OrderOtp")
 router.register(r'policy/zip-upload', ZipPolicyViewSet, basename="ZipPolicy")

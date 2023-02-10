@@ -427,35 +427,44 @@ class OrderFormViewSet(viewsets.ViewSet):
             status=status.HTTP_201_CREATED,
         )
         
-    def create(self, request, format=None):        
-        # Convert to JSON
-        order = request.data["order_details"]
+    def create(self, request, format=None):
+        try:
+            # Convert to JSON
+            order = request.data["order_details"]
 
-        # Generate Access Code and one way encrypt it.
-        access_token = request.data["pw"]
-        salt = secrets.token_urlsafe(16)
-        pepper = api_helper.get_secret('datahub_order_keys')['access_pepper']
-        hash = hashlib.sha256(bytes(access_token + salt + pepper, 'utf8')).hexdigest()
-        
-        otp = secrets.token_urlsafe(6)
-        # Store encrypted order details
-        order["access_code"]=hash
-        order["access_salt"]=salt
-        order["otp"]=hashlib.sha256(bytes(otp + salt + pepper, 'utf8')).hexdigest()
-        order["otp_age"]=time.time()
-        
-        abc = OrderDetailsType.objects.create(details=json.dumps(order))
-        efg = OrderType.objects.create(order_details=abc)
+            # Generate Access Code and one way encrypt it.
+            access_token = request.data["pw"]
+            salt = secrets.token_urlsafe(16)
+            pepper = api_helper.get_secret('datahub_order_keys')['access_pepper']
+            hash = hashlib.sha256(bytes(access_token + salt + pepper, 'utf8')).hexdigest()
+            
+            otp = secrets.token_urlsafe(6)
+            # Store encrypted order details
+            order["access_code"]=hash
+            order["access_salt"]=salt
+            order["otp"]=hashlib.sha256(bytes(otp + salt + pepper, 'utf8')).hexdigest()
+            order["otp_age"]=time.time()
+            
+            abc = OrderDetailsType.objects.create(details=json.dumps(order))
+            efg = OrderType.objects.create(order_details=abc)
 
-        api_helper.send_email("Your TNRIS Order Details", '\nYour order ID is: ' + str(efg.id)
-                        + '\nYou can check your order status here ' + "placeholder"
-                        + '\n\nYou will receive a link via email to pay for the order once we process it.',
-                        send_to=order["Email"])
+            api_helper.send_email("Your TNRIS Order Details", '\nYour order ID is: ' + str(efg.id)
+                            + '\nYou can check your order status here ' + "placeholder"
+                            + '\n\nYou will receive a link via email to pay for the order once we process it.',
+                            send_to=order["Email"])
 
-        return Response(
-            {"status": "success", "message": "Success"},
-            status=status.HTTP_201_CREATED,
-        )
+            return Response(
+                {"status": "success", "message": "Success"},
+                status=status.HTTP_201_CREATED,
+            )
+        except Exception as e:
+            message = "internal error"
+            if settings.DEBUG:
+                message = str(e)
+            return Response(
+                {"status": "failure", "message": message},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
 # POLICY ENDPOINTS FOR UPLOADS
 def create_presigned_post(key, content_type, length, expiration=900):

@@ -2,23 +2,30 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework import mixins, schemas, status, viewsets
 from rest_framework.response import Response
 from urllib.parse import urlparse
+from datetime import datetime, timezone
 from django.conf import settings
 from django.core.mail import EmailMessage
-import requests, os, json, re, sys
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
+from django.shortcuts import redirect
+from django.shortcuts import render
+
+import requests, os, json, re, sys, hashlib, secrets, uuid, time
 
 # policy imports
 import logging
 import boto3
 from botocore.exceptions import ClientError
 from botocore.client import Config
-
+from modules import api_helper
 # Google Drive auth and GoogleSheets api wrapper libraries
 import gspread
 
-from .models import CampaignSubscriber, EmailTemplate, SurveyTemplate
+from .models import CampaignSubscriber, EmailTemplate, SurveyTemplate, OrderType, OrderDetailsType
 
 from .serializers import *
 
+CCP_URL = 'https://securecheckout-uat.cdc.nicusa.com/ccprest/api/v1/TX/'
 # custom permissions for cors control
 class CorsPostPermission(AllowAny):
     whitelisted_domains = [
@@ -47,8 +54,7 @@ class CorsPostPermission(AllowAny):
             else request.META["HTTP_HOST"]
         )
         return u in self.whitelisted_domains
-
-
+    
 # ######################################################
 # ############## CONTACT FORM ENDPOINTS ################
 # ######################################################
@@ -72,21 +78,6 @@ class SubmitFormViewSet(viewsets.ViewSet):
         # replace all template values which weren't in the form (optional form fields)
         injected = re.sub(r"\{\{.*?\}\}", "", injected)
         return injected
-
-    # generic function for sending email associated with form submission
-    # emails send to supportsystem to create tickets in the ticketing system
-    # which are ultimately managed by IS, RDC, and StratMap
-    def send_email(
-        self,
-        subject,
-        body,
-        send_from=os.environ.get("MAIL_DEFAULT_FROM"),
-        send_to=os.environ.get("MAIL_DEFAULT_TO"),
-        reply_to="unknown@tnris.org",
-    ):
-        email = EmailMessage(subject, body, send_from, [send_to], reply_to=[reply_to])
-        email.send(fail_silently=False)
-        return
 
     def create(self, request, format=None):
         # if in DEBUG mode, assume local development and use localhost recaptcha secret
@@ -147,7 +138,9 @@ class SubmitFormViewSet(viewsets.ViewSet):
                         formatted["lastname"],
                         formatted["email"],
                     )
-                self.send_email(
+                # emails send to supportsystem to create tickets in the ticketing system
+                # which are ultimately managed by IS, RDC, and StratMap
+                api_helper.send_email(
                     email_template.email_template_subject,
                     body,
                     send_to=sender,
@@ -171,6 +164,298 @@ class SubmitFormViewSet(viewsets.ViewSet):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
+class GenOtpViewSet(viewsets.ViewSet):
+    """
+    Regenerate One Time Passcode
+    """
+    permission_classes = [CorsPostPermission]
+    
+    def create(self, request, format=None):
+        try:
+            
+            order = OrderType.objects.get(id=request.query_params["uuid"])
+            details = json.loads(order.order_details.details)
+            
+            # Regenerate OTP
+            otp = secrets.token_urlsafe(6)
+            salt = details["access_salt"]
+            pepper = api_helper.get_secret('datahub_order_keys')['access_pepper']
+
+            details["otp"]=hashlib.sha256(bytes(otp + salt + pepper, 'utf8')).hexdigest()
+            details["otp_age"]=time.time()
+            
+            order.order_details.details = json.dumps(details)   
+            order.order_details.save()
+            
+            # Send One time passcode to users email.
+            api_helper.send_email(
+                subject="DataHub one time passcode",
+                body="Your new one time passcode is: " + otp,
+                send_to=details["Email"]
+            )
+            
+            return Response(
+                {"status": "success", "message": "Placeholder."},
+                status=status.HTTP_200_OK,
+            )
+        except Exception as e:
+            return Response(
+                {"status": "failure", "message": "Internl server error."},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )  
+    
+class OrderStatusViewSet(viewsets.ViewSet):
+    """
+    Handle Checking the order status
+    """
+    permission_classes = [CorsPostPermission]
+
+    def create(self, request, format=None):
+        try: 
+            order = OrderType.objects.get(id=request.query_params["uuid"])
+            authorized = api_helper.auth_order(request.data, json.loads(order.order_details.details))
+            if(not authorized):
+                return Response({"status": "denied", "message": "Access is denied. Either access code is wrong or One time passcode has expired."},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+            elif(order and order.archived):
+                return Response(
+                    {"status": "failure", "message": "Order not found. Or order has been processed."},
+                    status=status.HTTP_404_NOT_FOUND,
+                )
+            elif(order and order.order_approved):   
+                return Response(
+                    {"status": "success", "message": "Pending Payment."},
+                    status=status.HTTP_200_OK,
+                )
+            else: 
+                return Response(
+                    {"status": "success", "message": "Pending Review."},
+                    status=status.HTTP_200_OK,
+                )
+        except:
+            return Response(
+                {"status": "failure", "message": "Order not found. Or order has been processed."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+class OrderCleanupViewSet(viewsets.ViewSet):
+    permission_classes = (AllowAny,)
+    
+    def create(self, request, format=None):
+        secrets = api_helper.get_secret("CCP_info")
+        if(secrets["AccessCode"] != request.data):
+            return Response(
+                {"status": "access_denied", "message": "access_denied"},
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
+        try:
+            # Select all of the orders that are not archived.
+
+            unarchived_orders = OrderType.objects.filter(archived=False).values()
+            
+            now = datetime.now(timezone.utc)
+            
+            # If an order is older than 15 days archive it regardless.
+            for order in unarchived_orders:
+                difference = now - order["created"] 
+                temp_req = request
+                temp_req.query_params._mutable = True
+                temp_req.query_params["uuid"] = str(order["id"])
+                temp_req.query_params._mutable = False
+                a = self.get_receipt(request, format)
+                if(a.status_code == 200):
+                    if(not order["tnris_notified"]):
+                        obj = OrderType.objects.get(id=order["id"])
+                        obj.tnris_notified = True
+                        obj.save()
+                        api_helper.send_email(subject="Payment has been received.",
+                            body="Order uuid: " + str(order["id"]) + " has been received. Please send package according to order details, then complete order.",
+                            send_from=os.environ.get("MAIL_DEFAULT_FROM"))    
+                        print("pause") 
+                    
+                #If no receipt was received or order was sent after 15 days then archive order automatically.
+                if(difference.days > 15 and (a.status_code != 200 or order["order_sent"] == True) ):
+                    obj = OrderType.objects.get(id=order["id"])
+                    obj.archived = True
+                    obj.save()
+                                          
+            response =  Response(
+                {"status": "success", "message": "success"},
+                status=status.HTTP_200_OK,
+            )
+            # return response
+        except:
+            response =  Response(
+                {"status": "failure", "message": "failure"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+        finally:
+            return response
+    
+    def get_receipt(self, request, format):
+        try:
+            order = OrderType.objects.get(id=request.query_params["uuid"])
+            secret = api_helper.get_secret("CCP_info")
+            headers={
+                "apiKey": secret['ApiKey'],
+                "MerchantKey": secret['MerchantKey'],
+                "MerchantCode": secret['MerchantCode'],
+                "ServiceCode": secret['ServiceCode']
+            }
+            orderinfo = requests.get(CCP_URL + "tokens/" + str(order.order_token), headers=headers) 
+            
+            orderContent = json.loads(orderinfo.content)
+            if('orders' in orderContent):
+                orders = orderContent["orders"]
+                orderReceipt = requests.get(CCP_URL + "receipts/" + str(orders[0]['orderId']), headers=headers)
+                response = Response(
+                    {"status_code": orderReceipt.status_code, "orderReceipt": orderReceipt}
+                )
+            else:
+                response = Response(
+                    {"status_code": 404},
+                    status=status.HTTP_404_NOT_FOUND
+                )
+        except Exception as e:
+            response = Response(
+                {"status_code": 500},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+            logging.error("Error getting receipt: " + str(e))
+        finally:
+            return response
+
+class OrderSubmitViewSet(viewsets.ViewSet):
+    permission_classes = [CorsPostPermission]
+
+    def create(self, request, format=None):
+        try:
+            orderObj = OrderType.objects
+            order = orderObj.get(id=request.query_params["uuid"])
+            authorized = api_helper.auth_order(request.data, json.loads(order.order_details.details))
+            if(not authorized):
+                return Response({"status": "denied",
+                                 "order_url": "NONE",
+                                 "message": "Access is denied. Either access code is wrong or One time passcode has expired."},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+            secret = api_helper.get_secret("CCP_info")
+            
+            order_details = json.loads(order.order_details.details)
+            
+            item_attributes = json.load(open("itemattributes.json"))
+            
+            total = int(order.approved_charge)
+            
+            #2.25% and $.25
+            transactionfee = round(((total/100) * 2.25) + .25, 2)
+            body = {
+                "OrderTotal": total + transactionfee,
+                "MerchantCode": secret['MerchantCode'],
+                "MerchantKey": secret['MerchantKey'],
+                "ServiceCode": secret['ServiceCode'],
+                "UniqueTransId": order.order_details_id,
+                "LocalRef": "580WD" + str(order.order_details_id),
+                "PaymentType": order_details['Payment'],
+                "LineItems": [
+                    {
+                        "Sku": "DHUB",
+                        "Description": "TNRIS DataHub order",
+                        "UnitPrice": total + transactionfee,
+                        "Quantity": 1,
+                        "ItemAttributes": item_attributes
+                    }
+                ]
+            }
+            
+            body["LineItems"][0]["ItemAttributes"].append({'FieldName':'USAS1', 'FieldValue': total})
+            body["LineItems"][0]["ItemAttributes"].append({'FieldName':'USAS2', 'FieldValue': transactionfee})
+            body["LineItems"][0]["ItemAttributes"].append({'FieldName':'USAS3', 'FieldValue': transactionfee})
+            body["LineItems"][0]["ItemAttributes"].append({'FieldName':'CONV_FEE', 'FieldValue': transactionfee})
+            secret = api_helper.get_secret("CCP_info")
+            x = requests.post(
+                CCP_URL + "tokens", 
+                json = body,
+                headers={
+                    "apiKey": secret["ApiKey"]
+                }
+            )
+
+            url = json.loads(x.text)
+            if('htmL5RedirectUrl' in url):
+                orderObj.filter(id=request.query_params["uuid"]).update(order_token=url["token"], order_url=url["htmL5RedirectUrl"])
+                order = orderObj.get(id=request.query_params["uuid"])
+
+                #response = redirect(order.order_url)
+                response = Response(
+                    {"status": "success", "order_url": order.order_url, "message": "success"}
+                )
+            else:
+                response =  Response(
+                    {"status": "failure", "order_url": "NONE", "message": "The order has failed"},
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR,)
+        except Exception as e:
+            response =  Response(
+                {"status": "failure", "order_url": "NONE", "message": "The order has failed"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,)
+        return response
+
+# FORMS ORDER ENDPOINT
+class OrderFormViewSet(viewsets.ViewSet):
+    """
+    Handle TNRIS order form submissions
+    """
+    permission_classes = [CorsPostPermission]
+
+    @receiver(pre_save, sender=OrderType)
+    def my_callback(sender, instance, *args, **kwargs):
+        instance.order_approved
+        if(instance.order_approved and instance.approved_charge):
+            order_info = json.loads(instance.order_details.details)
+            if(not instance.customer_notified):
+                instance.customer_notified = True
+                instance.save()
+                api_helper.send_email(
+                    subject="Your order has been approved",
+                    body="Please send payment. \n Url: " + "placeholder",
+                    send_to=order_info["Email"],
+                    send_from=os.environ.get("MAIL_DEFAULT_FROM")
+                )
+        return Response(
+            {"status": "success", "message": "Success"},
+            status=status.HTTP_201_CREATED,
+        )
+        
+    def create(self, request, format=None):        
+        # Convert to JSON
+        order = request.data["order_details"]
+
+        # Generate Access Code and one way encrypt it.
+        access_token = request.data["pw"]
+        salt = secrets.token_urlsafe(16)
+        pepper = api_helper.get_secret('datahub_order_keys')['access_pepper']
+        hash = hashlib.sha256(bytes(access_token + salt + pepper, 'utf8')).hexdigest()
+        
+        otp = secrets.token_urlsafe(6)
+        # Store encrypted order details
+        order["access_code"]=hash
+        order["access_salt"]=salt
+        order["otp"]=hashlib.sha256(bytes(otp + salt + pepper, 'utf8')).hexdigest()
+        order["otp_age"]=time.time()
+        
+        abc = OrderDetailsType.objects.create(details=json.dumps(order))
+        efg = OrderType.objects.create(order_details=abc)
+
+        api_helper.send_email("Your TNRIS Order Details", '\nYour order ID is: ' + str(efg.id)
+                        + '\nYou can check your order status here ' + "placeholder"
+                        + '\n\nYou will receive a link via email to pay for the order once we process it.',
+                        send_to=order["Email"])
+
+        return Response(
+            {"status": "success", "message": "Success"},
+            status=status.HTTP_201_CREATED,
+        )
 
 # POLICY ENDPOINTS FOR UPLOADS
 def create_presigned_post(key, content_type, length, expiration=900):

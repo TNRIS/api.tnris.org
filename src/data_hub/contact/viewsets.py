@@ -505,7 +505,7 @@ def create_presigned_post(key, content_type, length, expiration=900):
         "s3",
         aws_access_key_id=os.environ.get("S3_UPLOAD_KEY"),
         aws_secret_access_key=os.environ.get("S3_UPLOAD_SECRET"),
-        config=Config(signature_vershttps://stagingapi.tnris.orgion="s3v4"),
+        config=Config(signature_version="s3v4"),
     )
     try:
         response = s3_client.generate_presigned_post(

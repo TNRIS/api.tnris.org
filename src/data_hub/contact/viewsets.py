@@ -458,11 +458,8 @@ class OrderFormViewSet(viewsets.ViewSet):
                 status=status.HTTP_201_CREATED,
             )
         except Exception as e:
-            message = "internal error"
-            if settings.DEBUG:
-                message = str(e)
             return Response(
-                {"status": "failure", "message": message},
+                {"status": "failure", "message": "internal error"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 

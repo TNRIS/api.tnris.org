@@ -331,62 +331,75 @@ class OrderSubmitViewSet(viewsets.ViewSet):
     permission_classes = [CorsPostPermission]
 
     def create(self, request, format=None):
-        orderObj = OrderType.objects
-        order = orderObj.get(id=request.query_params["uuid"])
-        secret = api_helper.get_secret("CCP_info")
-        
-        order_details = json.loads(order.order_details.details)
-        
-        item_attributes = json.load(open("itemattributes.json"))
-        
-        total = int(order.approved_charge)
-        
-        #2.25% and $.25
-        transactionfee = round(((total/100) * 2.25) + .25, 2)
-        body = {
-            "OrderTotal": total + transactionfee,
-            "MerchantCode": secret['MerchantCode'],
-            "MerchantKey": secret['MerchantKey'],
-            "ServiceCode": secret['ServiceCode'],
-            "UniqueTransId": order.order_details_id,
-            "LocalRef": "580WD" + str(order.order_details_id),
-            "PaymentType": order_details['Payment'],
-            "LineItems": [
-                {
-                    "Sku": "DHUB",
-                    "Description": "TNRIS DataHub order",
-                    "UnitPrice": total + transactionfee,
-                    "Quantity": 1,
-                    "ItemAttributes": item_attributes
-                }
-            ]
-        }
-        
-        body["LineItems"][0]["ItemAttributes"].append({'FieldName':'USAS1', 'FieldValue': total})
-        body["LineItems"][0]["ItemAttributes"].append({'FieldName':'USAS2', 'FieldValue': transactionfee})
-        body["LineItems"][0]["ItemAttributes"].append({'FieldName':'USAS3', 'FieldValue': transactionfee})
-        body["LineItems"][0]["ItemAttributes"].append({'FieldName':'CONV_FEE', 'FieldValue': transactionfee})
-        secret = api_helper.get_secret("CCP_info")
-        x = requests.post(
-            CCP_URL + "tokens", 
-            json = body,
-            headers={
-                "apiKey": secret["ApiKey"]
-            }
-        )
-
-        url = json.loads(x.text)
-        if('htmL5RedirectUrl' in url):
-            orderObj.filter(id=request.query_params["uuid"]).update(order_token=url["token"], order_url=url["htmL5RedirectUrl"])
+        try:
+            orderObj = OrderType.objects
             order = orderObj.get(id=request.query_params["uuid"])
-
-            response = redirect(order.order_url)
-        else:
-            response =  Response(
-                {"status": "failure", "message": "The order has failed with message: " + str(url)},
-                status=status.HTTP_201_CREATED,
+            authorized = api_helper.auth_order(request.data, json.loads(order.order_details.details))
+            if(not authorized):
+                return Response({"status": "denied",
+                                 "order_url": "NONE",
+                                 "message": "Access is denied. Either access code is wrong or One time passcode has expired."},
+                status=status.HTTP_403_FORBIDDEN,
             )
-        # return response
+            secret = api_helper.get_secret("CCP_info")
+            
+            order_details = json.loads(order.order_details.details)
+            
+            item_attributes = json.load(open("itemattributes.json"))
+            
+            total = int(order.approved_charge)
+            
+            #2.25% and $.25
+            transactionfee = round(((total/100) * 2.25) + .25, 2)
+            body = {
+                "OrderTotal": total + transactionfee,
+                "MerchantCode": secret['MerchantCode'],
+                "MerchantKey": secret['MerchantKey'],
+                "ServiceCode": secret['ServiceCode'],
+                "UniqueTransId": order.order_details_id,
+                "LocalRef": "580WD" + str(order.order_details_id),
+                "PaymentType": order_details['Payment'],
+                "LineItems": [
+                    {
+                        "Sku": "DHUB",
+                        "Description": "TNRIS DataHub order",
+                        "UnitPrice": total + transactionfee,
+                        "Quantity": 1,
+                        "ItemAttributes": item_attributes
+                    }
+                ]
+            }
+            
+            body["LineItems"][0]["ItemAttributes"].append({'FieldName':'USAS1', 'FieldValue': total})
+            body["LineItems"][0]["ItemAttributes"].append({'FieldName':'USAS2', 'FieldValue': transactionfee})
+            body["LineItems"][0]["ItemAttributes"].append({'FieldName':'USAS3', 'FieldValue': transactionfee})
+            body["LineItems"][0]["ItemAttributes"].append({'FieldName':'CONV_FEE', 'FieldValue': transactionfee})
+            secret = api_helper.get_secret("CCP_info")
+            x = requests.post(
+                CCP_URL + "tokens", 
+                json = body,
+                headers={
+                    "apiKey": secret["ApiKey"]
+                }
+            )
+
+            url = json.loads(x.text)
+            if('htmL5RedirectUrl' in url):
+                orderObj.filter(id=request.query_params["uuid"]).update(order_token=url["token"], order_url=url["htmL5RedirectUrl"])
+                order = orderObj.get(id=request.query_params["uuid"])
+
+                #response = redirect(order.order_url)
+                response = Response(
+                    {"status": "success", "order_url": order.order_url, "message": "success"}
+                )
+            else:
+                response =  Response(
+                    {"status": "failure", "order_url": "NONE", "message": "The order has failed"},
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR,)
+        except Exception as e:
+            response =  Response(
+                {"status": "failure", "order_url": "NONE", "message": "The order has failed"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,)
         return response
 
 # FORMS ORDER ENDPOINT
@@ -406,7 +419,7 @@ class OrderFormViewSet(viewsets.ViewSet):
                 instance.save()
                 api_helper.send_email(
                     subject="Your order has been approved",
-                    body="Please send payment. \n Url: " + HOST_URL + "/api/v1/contact/order/submit?uuid=" + str(instance.pk),
+                    body="Please send payment. \n Url: " + "placeholder",
                     send_to=order_info["Email"],
                     send_from=os.environ.get("MAIL_DEFAULT_FROM")
                 )
@@ -435,9 +448,8 @@ class OrderFormViewSet(viewsets.ViewSet):
         abc = OrderDetailsType.objects.create(details=json.dumps(order))
         efg = OrderType.objects.create(order_details=abc)
 
-        api_helper.send_email("Your TNRIS Order Details", "Your OTP code is (valid for 30 minutes):" + otp 
-                        + '\nYour order ID is: ' + str(efg.id)
-                        + '\nYou can check your order status here ' + HOST_URL + '/api/v1/contact/order/status?uuid=' + str(efg.id)
+        api_helper.send_email("Your TNRIS Order Details", '\nYour order ID is: ' + str(efg.id)
+                        + '\nYou can check your order status here ' + "placeholder"
                         + '\n\nYou wil receive a link via email to pay for the order once we process it.')        
 
         return Response(

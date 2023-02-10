@@ -26,7 +26,6 @@ from .models import CampaignSubscriber, EmailTemplate, SurveyTemplate, OrderType
 from .serializers import *
 
 CCP_URL = 'https://securecheckout-uat.cdc.nicusa.com/ccprest/api/v1/TX/'
-HOST_URL = 'http://localhost:8000'
 # custom permissions for cors control
 class CorsPostPermission(AllowAny):
     whitelisted_domains = [
@@ -450,7 +449,8 @@ class OrderFormViewSet(viewsets.ViewSet):
 
         api_helper.send_email("Your TNRIS Order Details", '\nYour order ID is: ' + str(efg.id)
                         + '\nYou can check your order status here ' + "placeholder"
-                        + '\n\nYou wil receive a link via email to pay for the order once we process it.')        
+                        + '\n\nYou will receive a link via email to pay for the order once we process it.',
+                        send_to=order["Email"])
 
         return Response(
             {"status": "success", "message": "Success"},

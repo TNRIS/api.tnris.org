@@ -22,6 +22,11 @@ from rest_framework.schemas import get_schema_view
 from .viewsets import (
     SubmitCampaignSubscriptionViewSet,
     SubmitFormViewSet,
+    OrderFormViewSet,
+    OrderStatusViewSet,
+    OrderSubmitViewSet,
+    OrderCleanupViewSet,
+    GenOtpViewSet,
     ZipPolicyViewSet,
     ImagePolicyViewSet,
     FilePolicyViewSet,
@@ -33,6 +38,11 @@ from .viewsets import (
 router = routers.DefaultRouter(trailing_slash=False)
 router.register(r'campaignsubscription', SubmitCampaignSubscriptionViewSet, basename="SubmitCampaignSubscription")
 router.register(r'submit/?', SubmitFormViewSet, basename="SubmitForm")
+router.register(r'order/?', OrderFormViewSet, basename="OrderForm")
+router.register(r'order/submit/?', OrderSubmitViewSet, basename="PaymentForm")
+router.register(r'order/status/?', OrderStatusViewSet, basename="OrderStatus")
+router.register(r'order/cleanup/?', OrderCleanupViewSet, basename="OrderCleanup")
+router.register(r'order/otp/?', GenOtpViewSet, basename="OrderOtp")
 router.register(r'policy/zip-upload', ZipPolicyViewSet, basename="ZipPolicy")
 router.register(r'policy/image-upload', ImagePolicyViewSet, basename="ImagePolicy")
 router.register(r'policy/file-upload', FilePolicyViewSet, basename="FilePolicy")

@@ -80,6 +80,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'grappelli.dashboard',
     'grappelli',
+    'django_json_widget',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.gis',

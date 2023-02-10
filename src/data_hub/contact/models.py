@@ -1,7 +1,128 @@
 from django.db import models
+from . import fields
 from datetime import datetime
 import uuid
+from django_json_widget.widgets import JSONEditorWidget
+from django import forms
+from django.utils import timezone
 
+
+    
+class OrderDetailsType(models.Model):
+    class Meta:
+        db_table = 'order_details_type'
+        verbose_name = 'Order Details Type'
+        verbose_name_plural = 'Order DetailsTypes'
+    
+    details = fields.CryptoTextField(
+        "Details",
+        max_length=500000
+    )
+
+class OrderType(models.Model):
+    """Store order information"""
+
+    class Meta:
+        db_table = 'order_type'
+        verbose_name = 'Order Type'
+        verbose_name_plural = 'Order Types'  
+    
+    id = models.UUIDField(
+        'Order Id',
+        primary_key=True,
+        editable=False,
+        default=uuid.uuid4
+    )
+    
+    # Token for keeping track of a order form.
+    order_token = models.UUIDField(
+        'Order Token',
+        editable=False,
+        null=True,
+        default=None
+    )
+    
+    order_url = models.CharField(
+        'Order url',
+        editable=False,
+        null=True,
+        default=None,
+        max_length=255
+    )
+
+    order_approved = models.BooleanField(
+        'Order approved?',
+        default=False,
+        editable=True
+    )
+    
+    received_receipt = models.BooleanField(
+        'Receipt Received',
+        editable=False,
+        default=False,
+        null=True,
+        blank=True
+    )
+    
+    tnris_notified = models.BooleanField(
+        'TNRIS Notified?',
+        editable=False,
+        default=False,
+        null=True,
+        blank=True
+    )
+    
+    customer_notified = models.BooleanField(
+        'Customer Notified?',
+        editable=False,
+        default=False,
+        null=True,
+        blank=True
+    )
+    
+    order_sent = models.BooleanField(
+        'Order Sent?',
+        editable=False,
+        default=False,
+        null=True,
+        blank=True
+    )
+    
+    approved_charge = models.CharField(
+        "Approved Charge",
+        editable=True,
+        max_length=255,
+        default="",
+        null=True,
+        blank=True
+    )
+    
+    archived = models.BooleanField(
+        'Order Archived?',
+        default=False,
+        editable=True
+    )
+    
+    created = models.DateTimeField(
+        'Created',
+        default=timezone.now
+    )
+    
+    last_modified = models.DateTimeField(
+        'Last Modified',
+        auto_now=True,
+        editable=False
+    )
+    
+    order_details = models.ForeignKey(
+        OrderDetailsType,
+        on_delete=models.CASCADE
+    )
+    
+    def __str__(self):
+        return str(self.id)
+
+    
 """
 *************************** EMAIL TEMPLATES ****************************
 ********* USED TO FORMAT EMAILS SENT B/C OF FORM SUBMISSIONS ***********

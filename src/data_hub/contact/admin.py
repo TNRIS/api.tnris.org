@@ -1,5 +1,10 @@
 from django.contrib import admin
 from django.http import HttpResponse
+from django.urls import reverse
+from django.utils.html import format_html
+from django_json_widget.widgets import JSONEditorWidget
+from django import forms
+
 import csv, datetime
 
 from .models import (
@@ -7,6 +12,8 @@ from .models import (
     CampaignSubscriber,
     DataHubContact,
     DataHubOrder,
+    OrderType,
+    OrderDetailsType,
     DataHubOutsideEntityContact,
     EducationContact,
     EmailTemplate,
@@ -71,6 +78,47 @@ class DataHubContactAdmin(admin.ModelAdmin, ExportSelectedToCsvMixin):
         if obj:
             self.readonly_fields = [field.name for field in obj.__class__._meta.fields]
         return self.readonly_fields
+
+@admin.register(OrderType)
+class OrderTypeAdmin(admin.ModelAdmin): 
+    model = OrderType
+    list_filter = (['order_approved', 'archived'])
+    list_display = (
+        'link_to_details',
+        'approved_charge',
+        'order_approved',
+        'archived',
+        'created',
+        'last_modified'
+    )
+    list_editable = (['approved_charge', 'order_approved'])
+    list_per_page = 5
+    ordering = ('-created',)
+
+    def link_to_details(self, obj):
+        link=reverse("admin:contact_orderdetailstype_change", args=[obj.order_details.id])
+        return format_html(u'<a href="%s">Details</a>' % (link))
+    link_to_details.allow_tags=True
+
+    def get_readonly_fields(self, request, obj=None):
+        if obj:
+            self.readonly_fields = [field.name for field in obj.__class__._meta.fields]
+        return self.readonly_fields
+
+class OrderDetailForm(forms.ModelForm):
+    class Meta:
+        model = OrderDetailsType
+        widgets = {
+            'details': JSONEditorWidget
+        }
+        list_display = (
+            ['details']
+        )
+        fields = '__all__' # required for Django 3.x
+
+@admin.register(OrderDetailsType)
+class OrderDetailsTypeAdmin(admin.ModelAdmin):
+    form = OrderDetailForm
 
 
 @admin.register(DataHubOrder)

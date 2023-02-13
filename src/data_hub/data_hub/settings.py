@@ -35,6 +35,22 @@ ALLOWED_HOSTS = [
     '127.0.0.1'
 ]
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler'
+        }
+    },
+    'loggers': {
+    '': {
+        'level': 'ERROR',
+        'handlers': ['console'],
+    },
+},
+}
+
 CORS_ORIGIN_ALLOW_ALL = True
 
 APPEND_SLASH = False

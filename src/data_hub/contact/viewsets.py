@@ -13,7 +13,7 @@ from django.shortcuts import render
 import requests, os, json, re, sys, hashlib, secrets, uuid, time
 
 # policy imports
-import logging
+import logging, watchtower
 import boto3
 from botocore.exceptions import ClientError
 from botocore.client import Config
@@ -27,6 +27,8 @@ from .serializers import *
 
 
 logger = logging.getLogger("errLog")
+logger.addHandler(watchtower.CloudWatchLogHandler())
+
 CCP_URL = 'https://securecheckout-uat.cdc.nicusa.com/ccprest/api/v1/TX/'
 # custom permissions for cors control
 class CorsPostPermission(AllowAny):

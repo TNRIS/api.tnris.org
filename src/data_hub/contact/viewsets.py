@@ -25,6 +25,8 @@ from .models import CampaignSubscriber, EmailTemplate, SurveyTemplate, OrderType
 
 from .serializers import *
 
+
+logger = logging.getLogger("errLog")
 CCP_URL = 'https://securecheckout-uat.cdc.nicusa.com/ccprest/api/v1/TX/'
 # custom permissions for cors control
 class CorsPostPermission(AllowAny):
@@ -429,6 +431,7 @@ class OrderFormViewSet(viewsets.ViewSet):
         
     def create(self, request, format=None):
         try:
+            logger.error("Test")
             # Convert to JSON
             order = request.data["order_details"]
 
@@ -458,7 +461,7 @@ class OrderFormViewSet(viewsets.ViewSet):
                 status=status.HTTP_201_CREATED,
             )
         except Exception as e:
-            logging.error("error creating order: " + str(e))
+            logger.error("error creating order: " + str(e))
             return Response(
                 {"status": "failure", "message": "internal error"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR

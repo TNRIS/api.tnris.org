@@ -44,11 +44,11 @@ LOGGING = {
         }
     },
     'loggers': {
-    '': {
-        'level': 'ERROR',
-        'handlers': ['console'],
+        'errLog': {
+            'level': 'ERROR',
+            'handlers': ['console'],
+        },
     },
-},
 }
 
 CORS_ORIGIN_ALLOW_ALL = True

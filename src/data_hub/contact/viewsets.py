@@ -431,7 +431,6 @@ class OrderFormViewSet(viewsets.ViewSet):
         
     def create(self, request, format=None):
         try:
-            logger.error("Test")
             # Convert to JSON
             order = request.data["order_details"]
 

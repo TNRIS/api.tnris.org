@@ -185,7 +185,7 @@ class GenOtpViewSet(viewsets.ViewSet):
                 # Regenerate OTP
                 otp = secrets.token_urlsafe(6)
                 salt = details["access_salt"]
-                pepper = api_helper.get_secret('datahub_order_keys')['access_pepper']
+                pepper = os.environ.get("ACCESS_PEPPER")
 
                 details["otp"]=hashlib.sha256(bytes(otp + salt + pepper, 'utf8')).hexdigest()
                 details["otp_age"]=time.time()
@@ -210,6 +210,7 @@ class GenOtpViewSet(viewsets.ViewSet):
                     status=status.HTTP_403_FORBIDDEN,
                 ) 
         except Exception as e:
+            logger.error("Error generating the One time passcode. Exception: " + str(e))
             return Response(
                 {"status": "failure", "message": "Internal server error."},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -251,7 +252,8 @@ class OrderStatusViewSet(viewsets.ViewSet):
                     {"status": "failure", "message": "Captcha is incorrect."},
                     status=status.HTTP_403_FORBIDDEN,
                 )         
-        except:
+        except Exception as e:
+            logger.error("Error checking order status. Exception: " + str(e))
             return Response(
                 {"status": "failure", "message": "Order not found. Or order has been processed."},
                 status=status.HTTP_404_NOT_FOUND,
@@ -261,8 +263,7 @@ class OrderCleanupViewSet(viewsets.ViewSet):
     permission_classes = (AllowAny,)
     
     def create(self, request, format=None):
-        secrets = api_helper.get_secret("CCP_info")
-        if(secrets["AccessCode"] != request.data):
+        if(os.environ.get("CCP_ACCESS_CODE")!= request.data):
             return Response(
                 {"status": "access_denied", "message": "access_denied"},
                 status=status.HTTP_401_UNAUTHORIZED,
@@ -304,6 +305,7 @@ class OrderCleanupViewSet(viewsets.ViewSet):
             )
             # return response
         except:
+            logger.error("Error cleaning up orders. Exception: " + str(e))
             response =  Response(
                 {"status": "failure", "message": "failure"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -314,12 +316,11 @@ class OrderCleanupViewSet(viewsets.ViewSet):
     def get_receipt(self, request, format):
         try:
             order = OrderType.objects.get(id=request.query_params["uuid"])
-            secret = api_helper.get_secret("CCP_info")
             headers={
-                "apiKey": secret['ApiKey'],
-                "MerchantKey": secret['MerchantKey'],
-                "MerchantCode": secret['MerchantCode'],
-                "ServiceCode": secret['ServiceCode']
+                "apiKey": os.environ.get("CCP_API_KEY"),
+                "MerchantKey": os.environ.get("CCP_MERCHANT_KEY"),
+                "MerchantCode": os.environ.get("CCP_MERCHANT_CODE"),
+                "ServiceCode": os.environ.get("CCP_SERVICE_CODE")
             }
             orderinfo = requests.get(CCP_URL + "tokens/" + str(order.order_token), headers=headers) 
             
@@ -340,7 +341,7 @@ class OrderCleanupViewSet(viewsets.ViewSet):
                 {"status_code": 500},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
-            logging.error("Error getting receipt: " + str(e))
+            logger.error("Error getting receipt: " + str(e))
         finally:
             return response
 
@@ -360,7 +361,6 @@ class OrderSubmitViewSet(viewsets.ViewSet):
                                     "message": "Access is denied. Either access code is wrong or One time passcode has expired."},
                     status=status.HTTP_403_FORBIDDEN,
                 )
-                secret = api_helper.get_secret("CCP_info")
                 
                 order_details = json.loads(order.order_details.details)
                 
@@ -372,9 +372,9 @@ class OrderSubmitViewSet(viewsets.ViewSet):
                 transactionfee = round(((total/100) * 2.25) + .25, 2)
                 body = {
                     "OrderTotal": total + transactionfee,
-                    "MerchantCode": secret['MerchantCode'],
-                    "MerchantKey": secret['MerchantKey'],
-                    "ServiceCode": secret['ServiceCode'],
+                    "MerchantCode": os.environ.get("CCP_MERCHANT_CODE"),
+                    "MerchantKey": os.environ.get("CCP_MERCHANT_KEY"),
+                    "ServiceCode": os.environ.get("CCP_SERVICE_CODE"),
                     "UniqueTransId": order.order_details_id,
                     "LocalRef": "580WD" + str(order.order_details_id),
                     "PaymentType": order_details['Payment'],
@@ -393,12 +393,11 @@ class OrderSubmitViewSet(viewsets.ViewSet):
                 body["LineItems"][0]["ItemAttributes"].append({'FieldName':'USAS2', 'FieldValue': transactionfee})
                 body["LineItems"][0]["ItemAttributes"].append({'FieldName':'USAS3', 'FieldValue': transactionfee})
                 body["LineItems"][0]["ItemAttributes"].append({'FieldName':'CONV_FEE', 'FieldValue': transactionfee})
-                secret = api_helper.get_secret("CCP_info")
                 x = requests.post(
                     CCP_URL + "tokens", 
                     json = body,
                     headers={
-                        "apiKey": secret["ApiKey"]
+                        "apiKey": os.environ.get("CCP_API_KEY")
                     }
                 )
 
@@ -421,6 +420,7 @@ class OrderSubmitViewSet(viewsets.ViewSet):
                     status=status.HTTP_403_FORBIDDEN,
                 )         
         except Exception as e:
+            logger.error("Error creating order. Exception: " + str(e))
             response =  Response(
                 {"status": "failure", "order_url": "NONE", "message": "The order has failed"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,)
@@ -463,7 +463,7 @@ class OrderFormViewSet(viewsets.ViewSet):
                 # Generate Access Code and one way encrypt it.
                 access_token = request.data["pw"]
                 salt = secrets.token_urlsafe(16)
-                pepper = api_helper.get_secret('datahub_order_keys')['access_pepper']
+                pepper = os.environ.get("ACCESS_PEPPER")
                 hash = hashlib.sha256(bytes(access_token + salt + pepper, 'utf8')).hexdigest()
                 
                 otp = secrets.token_urlsafe(6)
@@ -491,7 +491,7 @@ class OrderFormViewSet(viewsets.ViewSet):
                     status=status.HTTP_403_FORBIDDEN,
                 ) 
         except Exception as e:
-            logger.error("error creating order: " + str(e))
+            logger.error("Error creating order: " + str(e))
             return Response(
                 {"status": "failure", "message": "internal error"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR

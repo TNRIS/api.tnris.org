@@ -84,6 +84,7 @@ class OrderTypeAdmin(admin.ModelAdmin):
     model = OrderType
     list_filter = (['order_approved', 'archived'])
     list_display = (
+        'id',
         'link_to_details',
         'approved_charge',
         'order_approved',

@@ -75,7 +75,7 @@ def auth_order(auth_details, order_details):
         salt = order_details["access_salt"]
         
         # Secret pepper to stop rainbow tables even if salt is known.
-        pepper = get_secret('datahub_order_keys')['access_pepper']
+        pepper = os.environ.get("ACCESS_PEPPER")
         
         # Hash auth_details
         ac_hash = hashlib.sha256(bytes(access_token + salt + pepper, 'utf8')).hexdigest()

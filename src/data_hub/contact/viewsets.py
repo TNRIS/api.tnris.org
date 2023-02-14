@@ -210,6 +210,7 @@ class GenOtpViewSet(viewsets.ViewSet):
                     status=status.HTTP_403_FORBIDDEN,
                 ) 
         except Exception as e:
+            logger.error("Error generating the One time passcode. Exception: " + str(e))
             return Response(
                 {"status": "failure", "message": "Internal server error."},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -251,7 +252,8 @@ class OrderStatusViewSet(viewsets.ViewSet):
                     {"status": "failure", "message": "Captcha is incorrect."},
                     status=status.HTTP_403_FORBIDDEN,
                 )         
-        except:
+        except Exception as e:
+            logger.error("Error checking order status. Exception: " + str(e))
             return Response(
                 {"status": "failure", "message": "Order not found. Or order has been processed."},
                 status=status.HTTP_404_NOT_FOUND,
@@ -304,6 +306,7 @@ class OrderCleanupViewSet(viewsets.ViewSet):
             )
             # return response
         except:
+            logger.error("Error cleaning up orders. Exception: " + str(e))
             response =  Response(
                 {"status": "failure", "message": "failure"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -340,7 +343,7 @@ class OrderCleanupViewSet(viewsets.ViewSet):
                 {"status_code": 500},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
-            logging.error("Error getting receipt: " + str(e))
+            logger.error("Error getting receipt: " + str(e))
         finally:
             return response
 
@@ -421,6 +424,7 @@ class OrderSubmitViewSet(viewsets.ViewSet):
                     status=status.HTTP_403_FORBIDDEN,
                 )         
         except Exception as e:
+            logger.error("Error creating order. Exception: " + str(e))
             response =  Response(
                 {"status": "failure", "order_url": "NONE", "message": "The order has failed"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,)
@@ -491,7 +495,7 @@ class OrderFormViewSet(viewsets.ViewSet):
                     status=status.HTTP_403_FORBIDDEN,
                 ) 
         except Exception as e:
-            logger.error("error creating order: " + str(e))
+            logger.error("Error creating order: " + str(e))
             return Response(
                 {"status": "failure", "message": "internal error"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR

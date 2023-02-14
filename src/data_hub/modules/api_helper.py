@@ -1,4 +1,4 @@
-import boto3, json, os, hashlib, time
+import boto3, json, os, hashlib, time, requests
 from botocore.exceptions import ClientError
 from django.core.mail import EmailMessage
 
@@ -93,3 +93,28 @@ def auth_order(auth_details, order_details):
         return False
     
     return ACCESS_CODE_VALID and OTP_VALID
+
+def checkCaptcha(IS_DEBUG, captcha):
+    """Check a captcha string for success.
+
+    Args:
+        IS_DEBUG (boolean): Whether we are running in debug mode.
+        captcha (_type_): String sent in request body to check captcha success/failure
+
+    Returns:
+        _type_: python object with information about status of captcha.
+    """
+    # if in DEBUG mode, assume local development and use localhost recaptcha secret
+    # otherwise, use product account secret environment variable
+    recaptcha_secret = (
+        "6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe"
+        if IS_DEBUG
+        else os.environ.get("RECAPTCHA_SECRET")
+    )
+    recaptcha_verify_url = "https://www.google.com/recaptcha/api/siteverify"
+    recaptcha_data = {
+        "secret": recaptcha_secret,
+        "response": captcha,
+    }
+    
+    return requests.post(url=recaptcha_verify_url, data=recaptcha_data)

@@ -42,14 +42,6 @@ ALLOWED_HOSTS = [
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
-    'root': {
-        'level': 'ERROR',
-        # Adding the watchtower handler here causes all loggers in the project that
-        # have propagate=True (the default) to send messages to watchtower. If you
-        # wish to send only from specific loggers instead, remove "watchtower" here
-        # and configure individual loggers below.
-        'handlers': ['watchtower', 'console'],
-    },
     'handlers': {
         'console': {
             'class': 'logging.StreamHandler'

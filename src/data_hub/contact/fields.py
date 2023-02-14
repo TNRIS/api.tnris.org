@@ -1,9 +1,8 @@
 from django.db import models
 
 from cryptography.fernet import Fernet, MultiFernet
-from botocore.exceptions import ClientError
 
-import boto3, json
+import os
 
 from django import forms
 
@@ -54,7 +53,7 @@ class CryptoTextField(models.Field):
   
 
 def encrypt_string(value): 
-    access_key = bytes(json.loads(get_access_key())["fkey1"], 'utf-8')
+    access_key = bytes(os.environ.get("FKEY1"), 'utf-8')
     f = Fernet(access_key)
     if(value):
         encrypted = f.encrypt(bytes(value, 'utf-8'))
@@ -63,33 +62,11 @@ def encrypt_string(value):
     return encrypted.decode('utf-8')
 
 def decrypt_string(value): 
-    access_key = bytes(json.loads(get_access_key())["fkey1"], 'utf-8')
+    access_key = bytes(os.environ.get("FKEY1"), 'utf-8')
     f = Fernet(access_key)    
     decrypted = f.decrypt(bytes(value, 'utf-8'))
     
     return decrypted.decode('utf-8')
-
-def get_access_key():
-    # Create a Secrets Manager client
-    session = boto3.session.Session()
-    client = session.client(
-        service_name='secretsmanager',
-        region_name='us-east-1'
-    )
-
-    try:
-        get_secret_value_response = client.get_secret_value(
-            SecretId='datahub_order_keys'
-        )
-    except ClientError as e:
-        # For a list of exceptions thrown, see
-        # https://docs.aws.amazon.com/secretsmanager/latest/apireference/API_GetSecretValue.html
-        raise e
-
-    # Decrypts secret using the associated KMS key.
-    secret = get_secret_value_response['SecretString']
-
-    return secret
 
 class CryptoText(models.Model):
     cryptoText = CryptoTextField()

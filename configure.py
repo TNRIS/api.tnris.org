@@ -41,6 +41,17 @@ export_command = ("export DB_PASSWORD=" + secrets["DB_PASSWORD"] +
 " MAPSERVER_DB_PASSWORD=" + secrets["MAPSERVER_DB_PASSWORD"] +
 " DATAHUB_MASTER_CLOUDFRONT=" + stack_resource.physical_resource_id +
 
+# CCP Environment Variables
+" CCP_MERCHANT_CODE=" + secrets["CCP_MERCHANT_CODE"] +
+" CCP_MERCHANT_KEY=" + secrets["CCP_MERCHANT_KEY"] +
+" CCP_SERVICE_CODE=" + secrets["CCP_SERVICE_CODE"] +
+" CCP_API_KEY=" + secrets["CCP_API_KEY"] +
+" CCP_ACCESS_CODE=" + secrets["CCP_ACCESS_CODE"] +
+
+# Encryption Environmental Variables
+" FKEY1=" + secrets["FKEY1"] +
+" ACCESS_PEPPER" + secrets["ACCESS_PEPPER"] +
+
 # the following is only used within ETL scripts (specifically, migrate.py)
 " TNRIS_REPO='local_path_to_cloned_tnris_website_repo'")
 

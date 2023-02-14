@@ -84,5 +84,6 @@ Unidecode==1.2.0
 uritemplate==3.0.1
 urllib3==1.26.6
 vine==5.0.0
+watchtower==3.0.0
 webencodings==0.5.1
 zipp==3.5.0

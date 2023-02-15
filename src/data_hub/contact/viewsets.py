@@ -184,13 +184,12 @@ class GenOtpViewSet(viewsets.ViewSet):
                 
                 # Regenerate OTP
                 otp = secrets.token_urlsafe(6)
-                salt = details["access_salt"]
+                salt = order.order_details.access_salt
                 pepper = os.environ.get("ACCESS_PEPPER")
 
-                details["otp"]=hashlib.sha256(bytes(otp + salt + pepper, 'utf8')).hexdigest()
-                details["otp_age"]=time.time()
+                order.order_details.otp = hashlib.sha256(bytes(otp + salt + pepper, 'utf8')).hexdigest()
+                order.order_details.otp_age=time.time()
                 
-                order.order_details.details = json.dumps(details)   
                 order.order_details.save()
                 
                 # Send One time passcode to users email.
@@ -227,7 +226,7 @@ class OrderStatusViewSet(viewsets.ViewSet):
             verify_req = api_helper.checkCaptcha(settings.DEBUG, request.data["recaptcha"])
             if json.loads(verify_req.text)["success"]:
                 order = OrderType.objects.get(id=request.query_params["uuid"])
-                authorized = api_helper.auth_order(request.data, json.loads(order.order_details.details))
+                authorized = api_helper.auth_order(request.data, order.order_details)
                 if(not authorized):
                     return Response({"status": "denied", "message": "Access is denied. Either access code is wrong or One time passcode has expired."},
                     status=status.HTTP_403_FORBIDDEN,
@@ -354,7 +353,7 @@ class OrderSubmitViewSet(viewsets.ViewSet):
             if json.loads(verify_req.text)["success"]:
                 orderObj = OrderType.objects
                 order = orderObj.get(id=request.query_params["uuid"])
-                authorized = api_helper.auth_order(request.data, json.loads(order.order_details.details))
+                authorized = api_helper.auth_order(request.data, order.order_details)
                 if(not authorized):
                     return Response({"status": "denied",
                                     "order_url": "NONE",
@@ -366,7 +365,7 @@ class OrderSubmitViewSet(viewsets.ViewSet):
                 
                 item_attributes = json.load(open("itemattributes.json"))
                 
-                total = int(order.approved_charge)
+                total = order.approved_charge
                 
                 #2.25% and $.25
                 transactionfee = round(((total/100) * 2.25) + .25, 2)
@@ -467,16 +466,15 @@ class OrderFormViewSet(viewsets.ViewSet):
                 hash = hashlib.sha256(bytes(access_token + salt + pepper, 'utf8')).hexdigest()
                 
                 otp = secrets.token_urlsafe(6)
-                # Store encrypted order details
-                order["access_code"]=hash
-                order["access_salt"]=salt
-                order["otp"]=hashlib.sha256(bytes(otp + salt + pepper, 'utf8')).hexdigest()
-                order["otp_age"]=time.time()
                 
-                abc = OrderDetailsType.objects.create(details=json.dumps(order))
-                efg = OrderType.objects.create(order_details=abc)
+                order_details = OrderDetailsType.objects.create(details=json.dumps(order), 
+                                                      access_code=hash, 
+                                                      access_salt=salt, 
+                                                      otp=hashlib.sha256(bytes(otp + salt + pepper, 'utf8')).hexdigest(),
+                                                      otp_age=time.time())
+                order_object = OrderType.objects.create(order_details=order_details)
 
-                api_helper.send_email("Your TNRIS Order Details", '\nYour order ID is: ' + str(efg.id)
+                api_helper.send_email("Your TNRIS Order Details", '\nYour order ID is: ' + str(order_object.id)
                                 + '\nYou can check your order status here ' + "placeholder"
                                 + '\n\nYou will receive a link via email to pay for the order once we process it.',
                                 send_to=order["Email"])

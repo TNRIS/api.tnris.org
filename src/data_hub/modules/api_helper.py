@@ -72,7 +72,7 @@ def auth_order(auth_details, order_details):
         otp = auth_details["passCode"]
         
         # Secret salt to stop rainbow tables
-        salt = order_details["access_salt"]
+        salt = order_details.access_salt
         
         # Secret pepper to stop rainbow tables even if salt is known.
         pepper = os.environ.get("ACCESS_PEPPER")
@@ -82,13 +82,13 @@ def auth_order(auth_details, order_details):
         otp_hash = hashlib.sha256(bytes(otp + salt + pepper, 'utf8')).hexdigest()
         
         # How old in seconds is our otp?
-        otp_age_seconds = time.time() - order_details["otp_age"]
+        otp_age_seconds = time.time() - order_details.otp_age
         
         # Compare with our stored hash.
-        ACCESS_CODE_VALID = ac_hash == order_details["access_code"]
+        ACCESS_CODE_VALID = ac_hash == order_details.access_code
         
         # Compare with stored hash and ensure it's not more than 15 minutes old
-        OTP_VALID = otp_hash == order_details["otp"] and otp_age_seconds < 1800
+        OTP_VALID = otp_hash == order_details.otp and otp_age_seconds < 1800
     except Exception as e:
         return False
     

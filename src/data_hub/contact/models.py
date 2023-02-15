@@ -16,7 +16,38 @@ class OrderDetailsType(models.Model):
     
     details = fields.CryptoTextField(
         "Details",
-        max_length=500000
+        max_length=50000
+    )
+    
+    access_code = models.CharField(
+        'Hash of access code.',
+        editable=False,
+        null=True,
+        default=None,
+        max_length=255
+    )
+    
+    access_salt = models.CharField(
+        'Salt for access code.',
+        editable=False,
+        null=True,
+        default=None,
+        max_length=255
+    )
+
+    otp = models.CharField(
+        'One time passcode.',
+        editable=False,
+        null=True,
+        default=None,
+        max_length=255
+    )
+    
+    otp_age = models.FloatField(
+        'Age in seconds of the one time passcode.',
+        editable=False,
+        null=True,
+        default=None
     )
 
 class OrderType(models.Model):
@@ -24,8 +55,8 @@ class OrderType(models.Model):
 
     class Meta:
         db_table = 'order_type'
-        verbose_name = 'Order Type'
-        verbose_name_plural = 'Order Types'  
+        verbose_name = 'DataHub New Order'
+        verbose_name_plural = 'DataHub New Orders'  
     
     id = models.UUIDField(
         'Order Id',
@@ -88,11 +119,9 @@ class OrderType(models.Model):
         blank=True
     )
     
-    approved_charge = models.CharField(
+    approved_charge = models.FloatField(
         "Approved Charge",
         editable=True,
-        max_length=255,
-        default="",
         null=True,
         blank=True
     )

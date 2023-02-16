@@ -50,7 +50,7 @@ export_command = ("export DB_PASSWORD=" + secrets["DB_PASSWORD"] +
 
 # Encryption Environmental Variables
 " FKEY1=" + secrets["FKEY1"] +
-" ACCESS_PEPPER" + secrets["ACCESS_PEPPER"] +
+" ACCESS_PEPPER=" + secrets["ACCESS_PEPPER"] +
 
 # the following is only used within ETL scripts (specifically, migrate.py)
 " TNRIS_REPO='local_path_to_cloned_tnris_website_repo'")

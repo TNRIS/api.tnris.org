@@ -454,7 +454,6 @@ class OrderFormViewSet(viewsets.ViewSet):
         
     def create(self, request, format=None):
         try:
-            logger.error("TESTLOG")
             verify_req = api_helper.checkCaptcha(settings.DEBUG, request.data["recaptcha"])
             if json.loads(verify_req.text)["success"]:
 

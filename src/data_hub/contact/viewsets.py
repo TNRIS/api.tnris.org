@@ -27,7 +27,8 @@ from .serializers import *
 
 
 logger = logging.getLogger("errLog")
-logger.addHandler(watchtower.CloudWatchLogHandler())
+if os.environ.get("IS_LIVE") == 'true':
+    logger.addHandler(watchtower.CloudWatchLogHandler())
 
 CCP_URL = 'https://securecheckout-uat.cdc.nicusa.com/ccprest/api/v1/TX/'
 # custom permissions for cors control
@@ -461,7 +462,7 @@ class OrderFormViewSet(viewsets.ViewSet):
 
                 # Generate Access Code and one way encrypt it.
                 access_token = request.data["pw"]
-                salt = secrets.token_urlsafe(16)
+                salt = secrets.token_urlsafe(32)
                 pepper = os.environ.get("ACCESS_PEPPER")
                 hash = hashlib.sha256(bytes(access_token + salt + pepper, 'utf8')).hexdigest()
                 

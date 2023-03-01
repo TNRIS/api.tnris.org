@@ -5,7 +5,7 @@ from django.utils.html import format_html
 from django_json_widget.widgets import JSONEditorWidget
 from django import forms
 
-import csv, datetime
+import csv, datetime, json
 
 from .models import (
     Campaign,
@@ -93,7 +93,7 @@ class OrderTypeAdmin(admin.ModelAdmin):
         'last_modified'
     )
     list_editable = (['approved_charge', 'order_approved'])
-    list_per_page = 5
+    list_per_page = 10
     ordering = ('-created',)
 
     def link_to_details(self, obj):
@@ -106,21 +106,56 @@ class OrderTypeAdmin(admin.ModelAdmin):
             self.readonly_fields = [field.name for field in obj.__class__._meta.fields]
         return self.readonly_fields
 
-class OrderDetailForm(forms.ModelForm):
-    class Meta:
-        model = OrderDetailsType
-        widgets = {
-            'details': JSONEditorWidget
-        }
-        list_display = (
-            ['details']
-        )
-        fields = '__all__' # required for Django 3.x
-
 @admin.register(OrderDetailsType)
 class OrderDetailsTypeAdmin(admin.ModelAdmin):
-    form = OrderDetailForm
 
+    def name_field(self, obj):
+        return json.loads(obj.details)["Name"]
+
+    def email_field(self, obj):
+        return json.loads(obj.details)["Email"]
+
+    def phone_field(self, obj):
+        return json.loads(obj.details)["Phone"]
+    
+    def address_field(self, obj):
+        return json.loads(obj.details)["Address"]
+
+    def organization_field(self, obj):
+        return json.loads(obj.details)["Organization"]
+
+    def industry_field(self, obj):
+        return json.loads(obj.details)["Industry"]
+
+    def notes_field(self, obj):
+        return json.loads(obj.details)["Notes"]
+
+    def delivery_field(self, obj):
+        return json.loads(obj.details)["Delivery"]
+
+    def harddrive_field(self, obj):
+        return json.loads(obj.details)["HardDrive"]
+
+    def payment_field(self, obj):
+        return json.loads(obj.details)["Payment"]
+
+    def order_field(self, obj):
+        a = json.loads(obj.details)["Order"]
+        return a
+
+    order_field.widget=forms.CharField(widget=JSONEditorWidget)
+
+    def formid_field(self, obj):
+        return json.loads(obj.details)["form_id"]
+
+    def get_readonly_fields(self, request, obj=None):
+        return ['id', 'name_field', 'email_field', 'phone_field', 'address_field', 'organization_field', 'industry_field', 'notes_field', 'delivery_field', 'harddrive_field',
+        'payment_field', 'order_field', 'formid_field']
+
+    list_display = (
+        ['name_field', 'email_field', 'phone_field', 'address_field', 'organization_field', 'industry_field', 'notes_field', 'delivery_field', 'harddrive_field',
+        'payment_field', 'order_field', 'formid_field']
+    )
 
 @admin.register(DataHubOrder)
 class DataHubOrderAdmin(admin.ModelAdmin, ExportSelectedToCsvMixin):

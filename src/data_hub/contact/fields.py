@@ -12,20 +12,20 @@ from django.forms import widgets
 class CountableWidget(widgets.Textarea):
     pass
 
-class CryptoTextField(models.Field):
+class CryptoTextField(models.CharField):
     description = "A crypto field"
     def __init__(self, *args, **kwargs):
         kwargs['blank'] = True
         kwargs['null'] = True
-
+        kwargs['max_length'] = 50000
         super().__init__(*args, **kwargs)
         
     def db_type(self, connection):
-        return 'char(500000)'    
+        return 'char(50000)'    
     
     def formfield(self, **kwargs):
         return super().formfield(**{
-            'form_class': forms.TimeField,
+            'form_class': forms.CharField,
             **kwargs,
         })
         #return models.Field.formfield(self, models.BooleanField, **kwargs)

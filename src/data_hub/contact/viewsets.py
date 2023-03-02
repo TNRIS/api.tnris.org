@@ -201,7 +201,7 @@ class GenOtpViewSet(viewsets.ViewSet):
                 )
                 
                 return Response(
-                    {"status": "success", "message": "Passecode sent to email."},
+                    {"status": "success", "message": "Passcode sent to email."},
                     status=status.HTTP_200_OK,
                 )
             else:

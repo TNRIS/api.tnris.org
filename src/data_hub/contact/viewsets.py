@@ -201,7 +201,7 @@ class GenOtpViewSet(viewsets.ViewSet):
                 )
                 
                 return Response(
-                    {"status": "success", "message": "Placeholder."},
+                    {"status": "success", "message": "Passecode sent to email."},
                     status=status.HTTP_200_OK,
                 )
             else:
@@ -443,7 +443,7 @@ class OrderFormViewSet(viewsets.ViewSet):
                 instance.save()
                 api_helper.send_email(
                     subject="Your order has been approved",
-                    body="Please send payment. \n Url: " + "placeholder",
+                    body="Please send payment. \n Url: " + "https://data.tnris.org/submit?uuid=" + str(instance.pk),
                     send_to=order_info["Email"],
                     send_from=os.environ.get("MAIL_DEFAULT_FROM")
                 )
@@ -476,7 +476,7 @@ class OrderFormViewSet(viewsets.ViewSet):
                 order_object = OrderType.objects.create(order_details=order_details)
 
                 api_helper.send_email("Your TNRIS Order Details", '\nYour order ID is: ' + str(order_object.id)
-                                + '\nYou can check your order status here ' + "placeholder"
+                                + '\nYou can check your order status here https://www.data.tnris.org/status?uuid=' + str(order_object.id)
                                 + '\n\nYou will receive a link via email to pay for the order once we process it.',
                                 send_to=order["Email"])
 

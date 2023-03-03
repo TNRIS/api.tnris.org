@@ -179,7 +179,7 @@ class GenOtpViewSet(viewsets.ViewSet):
                 details = json.loads(order.order_details.details)
                 
                 # Regenerate OTP
-                otp = secrets.token_urlsafe(6)
+                otp = secrets.token_urlsafe(12)
                 salt = order.order_details.access_salt
                 pepper = os.environ.get("ACCESS_PEPPER")
 
@@ -380,6 +380,10 @@ class OrderSubmitViewSet(viewsets.ViewSet):
                     "UniqueTransId": order.order_details_id,
                     "LocalRef": "580WD" + str(order.order_details_id),
                     "PaymentType": order_details['Payment'],
+                    "SuccessUrl": "https://data.tnris.org/order?order_id=" + str(order.order_details_id) + "&status=success",
+                    "FailureUrl": "https://data.tnris.org/order?order_id=" + str(order.order_details_id) + "&status=failure",
+                    "DuplicateUrl": "https://data.tnris.org/order?order_id=" + str(order.order_details_id) + "&status=duplicate",
+                    "CancelUrl": "https://data.tnris.org/order?order_id=" + str(order.order_details_id) + "&status=cancel",                    
                     "LineItems": [
                         {
                             "Sku": "DHUB",

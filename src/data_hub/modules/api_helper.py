@@ -56,7 +56,7 @@ def send_email(
     email.send(fail_silently=False)
     return
 
-def auth_order(auth_details, order_details):
+def auth_order(auth_details, order):
     """Compare hashes of access code and one time passcode
 
     Args:
@@ -67,6 +67,7 @@ def auth_order(auth_details, order_details):
         boolean: Whether access is denied or allowed.
     """
     try:
+        order_details = order.order_details
         #Gather access token and One time passcode
         access_token = auth_details["accessCode"]
         otp = auth_details["passCode"]
@@ -91,7 +92,11 @@ def auth_order(auth_details, order_details):
         OTP_VALID = otp_hash == order_details.otp and otp_age_seconds < 1800
     except Exception as e:
         return False
-    
+    if(ACCESS_CODE_VALID and OTP_VALID):
+        #Invalidate access code after first success.
+        order.order_details.otp_age = 0
+        order.order_details.save()
+        order.save()
     return ACCESS_CODE_VALID and OTP_VALID
 
 def checkCaptcha(IS_DEBUG, captcha):

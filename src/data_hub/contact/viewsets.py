@@ -227,7 +227,7 @@ class OrderStatusViewSet(viewsets.ViewSet):
             verify_req = api_helper.checkCaptcha(settings.DEBUG, request.data["recaptcha"])
             if json.loads(verify_req.text)["success"]:
                 order = OrderType.objects.get(id=request.query_params["uuid"])
-                authorized = api_helper.auth_order(request.data, order.order_details)
+                authorized = api_helper.auth_order(request.data, order)
                 if(not authorized):
                     return Response({"status": "denied", "message": "Access is denied. Either access code is wrong or One time passcode has expired."},
                     status=status.HTTP_403_FORBIDDEN,
@@ -354,7 +354,7 @@ class OrderSubmitViewSet(viewsets.ViewSet):
             if json.loads(verify_req.text)["success"]:
                 orderObj = OrderType.objects
                 order = orderObj.get(id=request.query_params["uuid"])
-                authorized = api_helper.auth_order(request.data, order.order_details)
+                authorized = api_helper.auth_order(request.data, order)
                 if(not authorized):
                     return Response({"status": "denied",
                                     "order_url": "NONE",

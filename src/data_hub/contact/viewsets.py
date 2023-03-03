@@ -13,7 +13,7 @@ from django.shortcuts import render
 import requests, os, json, re, sys, hashlib, secrets, uuid, time
 
 # policy imports
-import logging, watchtower
+import logging
 import boto3
 from botocore.exceptions import ClientError
 from botocore.client import Config
@@ -24,11 +24,6 @@ import gspread
 from .models import CampaignSubscriber, EmailTemplate, SurveyTemplate, OrderType, OrderDetailsType
 
 from .serializers import *
-
-
-logger = logging.getLogger("errLog")
-if os.environ.get("IS_LIVE") == 'true':
-    logger.addHandler(watchtower.CloudWatchLogHandler())
 
 CCP_URL = 'https://securecheckout-uat.cdc.nicusa.com/ccprest/api/v1/TX/'
 # custom permissions for cors control
@@ -210,7 +205,7 @@ class GenOtpViewSet(viewsets.ViewSet):
                     status=status.HTTP_403_FORBIDDEN,
                 ) 
         except Exception as e:
-            logger.error("Error generating the One time passcode. Exception: " + str(e))
+            #logger.error("Error generating the One time passcode. Exception: " + str(e))
             return Response(
                 {"status": "failure", "message": "Internal server error."},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -253,7 +248,7 @@ class OrderStatusViewSet(viewsets.ViewSet):
                     status=status.HTTP_403_FORBIDDEN,
                 )         
         except Exception as e:
-            logger.error("Error checking order status. Exception: " + str(e))
+            #logger.error("Error checking order status. Exception: " + str(e))
             return Response(
                 {"status": "failure", "message": "Order not found. Or order has been processed."},
                 status=status.HTTP_404_NOT_FOUND,
@@ -311,8 +306,8 @@ class OrderCleanupViewSet(viewsets.ViewSet):
                 status=status.HTTP_200_OK,
             )
             # return response
-        except:
-            logger.error("Error cleaning up orders. Exception: " + str(e))
+        except Exception as e:
+            #logger.error("Error cleaning up orders. Exception: " + str(e))
             response =  Response(
                 {"status": "failure", "message": "failure"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -348,7 +343,7 @@ class OrderCleanupViewSet(viewsets.ViewSet):
                 {"status_code": 500},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
-            logger.error("Error getting receipt: " + str(e))
+            #logger.error("Error getting receipt: " + str(e))
         finally:
             return response
 
@@ -427,7 +422,7 @@ class OrderSubmitViewSet(viewsets.ViewSet):
                     status=status.HTTP_403_FORBIDDEN,
                 )         
         except Exception as e:
-            logger.error("Error creating order. Exception: " + str(e))
+            #logger.error("Error creating order. Exception: " + str(e))
             response =  Response(
                 {"status": "failure", "order_url": "NONE", "message": "The order has failed"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,)
@@ -497,7 +492,7 @@ class OrderFormViewSet(viewsets.ViewSet):
                     status=status.HTTP_403_FORBIDDEN,
                 ) 
         except Exception as e:
-            logger.error("Error creating order: " + str(e))
+            #logger.error("Error creating order: " + str(e))
             return Response(
                 {"status": "failure", "message": "internal error"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR

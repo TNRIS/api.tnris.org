@@ -288,8 +288,15 @@ class OrderCleanupViewSet(viewsets.ViewSet):
                         obj = OrderType.objects.get(id=order["id"])
                         obj.tnris_notified = True
                         obj.save()
+
+                        order_string = ""
+                        try:
+                            order_string = "Details \n " + json.loads(OrderDetailsType.objects.filter(id=order["order_details_id"]).values()[0]["details"])["Order"]
+                        except:
+                            order_string = ""
+
                         api_helper.send_email(subject="Payment has been received.",
-                            body="Order uuid: " + str(order["id"]) + " has been received. Please send package according to order details, then complete order.",
+                            body="Order uuid: " + str(order["id"]) + " has been received. Please send package according to order details, then complete order.\n" + order_string,
                             send_from=os.environ.get("MAIL_DEFAULT_FROM"))    
                         print("pause") 
                     

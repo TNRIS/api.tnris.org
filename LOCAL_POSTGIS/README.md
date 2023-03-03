@@ -11,6 +11,6 @@ These scripts are:
 2.) z_init.sql
 
 z_api_init.sh runs the z_init.sql file over psql inside the container so that the user, password, and database are all setup at startup.
-The script creates user "localapi" with password "localapi" and assigns this user as the owner of a new database, "localapi".
-Since `python manage.py migrate` requires superuser privileges, the user localapi is also made a superuser. This is not ideal in a production setting,
+The script creates user "apilocal" with password "apilocal" and assigns this user as the owner of a new database, "apilocal".
+Since `python manage.py migrate` requires superuser privileges, the user apilocal is also made a superuser. This is not ideal in a production setting,
 but it works just fine for local development.

@@ -5,8 +5,6 @@ import uuid
 from django_json_widget.widgets import JSONEditorWidget
 from django import forms
 from django.utils import timezone
-
-
     
 class OrderDetailsType(models.Model):
     class Meta:
@@ -16,7 +14,8 @@ class OrderDetailsType(models.Model):
     
     details = fields.CryptoTextField(
         "Details",
-        max_length=50000
+        max_length=50000,
+        editable=False
     )
     
     access_code = models.CharField(
@@ -26,7 +25,7 @@ class OrderDetailsType(models.Model):
         default=None,
         max_length=255
     )
-    
+
     access_salt = models.CharField(
         'Salt for access code.',
         editable=False,

@@ -201,7 +201,7 @@ class GenOtpViewSet(viewsets.ViewSet):
                 )
                 
                 return Response(
-                    {"status": "success", "message": "Placeholder."},
+                    {"status": "success", "message": "Passcode sent to email."},
                     status=status.HTTP_200_OK,
                 )
             else:
@@ -227,7 +227,7 @@ class OrderStatusViewSet(viewsets.ViewSet):
             verify_req = api_helper.checkCaptcha(settings.DEBUG, request.data["recaptcha"])
             if json.loads(verify_req.text)["success"]:
                 order = OrderType.objects.get(id=request.query_params["uuid"])
-                authorized = api_helper.auth_order(request.data, order.order_details)
+                authorized = api_helper.auth_order(request.data, order)
                 if(not authorized):
                     return Response({"status": "denied", "message": "Access is denied. Either access code is wrong or One time passcode has expired."},
                     status=status.HTTP_403_FORBIDDEN,
@@ -288,8 +288,15 @@ class OrderCleanupViewSet(viewsets.ViewSet):
                         obj = OrderType.objects.get(id=order["id"])
                         obj.tnris_notified = True
                         obj.save()
+
+                        order_string = ""
+                        try:
+                            order_string = "Details \n " + json.loads(OrderDetailsType.objects.filter(id=order["order_details_id"]).values()[0]["details"])["Order"]
+                        except:
+                            order_string = ""
+
                         api_helper.send_email(subject="Payment has been received.",
-                            body="Order uuid: " + str(order["id"]) + " has been received. Please send package according to order details, then complete order.",
+                            body="Order uuid: " + str(order["id"]) + " has been received. Please send package according to order details, then complete order.\n" + order_string,
                             send_from=os.environ.get("MAIL_DEFAULT_FROM"))    
                         print("pause") 
                     
@@ -354,7 +361,7 @@ class OrderSubmitViewSet(viewsets.ViewSet):
             if json.loads(verify_req.text)["success"]:
                 orderObj = OrderType.objects
                 order = orderObj.get(id=request.query_params["uuid"])
-                authorized = api_helper.auth_order(request.data, order.order_details)
+                authorized = api_helper.auth_order(request.data, order)
                 if(not authorized):
                     return Response({"status": "denied",
                                     "order_url": "NONE",
@@ -443,7 +450,7 @@ class OrderFormViewSet(viewsets.ViewSet):
                 instance.save()
                 api_helper.send_email(
                     subject="Your order has been approved",
-                    body="Please send payment. \n Url: " + "placeholder",
+                    body="Please send payment. \n Url: " + "https://data.tnris.org/submit?uuid=" + str(instance.pk),
                     send_to=order_info["Email"],
                     send_from=os.environ.get("MAIL_DEFAULT_FROM")
                 )
@@ -476,7 +483,7 @@ class OrderFormViewSet(viewsets.ViewSet):
                 order_object = OrderType.objects.create(order_details=order_details)
 
                 api_helper.send_email("Your TNRIS Order Details", '\nYour order ID is: ' + str(order_object.id)
-                                + '\nYou can check your order status here ' + "placeholder"
+                                + '\nYou can check your order status here https://www.data.tnris.org/status?uuid=' + str(order_object.id)
                                 + '\n\nYou will receive a link via email to pay for the order once we process it.',
                                 send_to=order["Email"])
 

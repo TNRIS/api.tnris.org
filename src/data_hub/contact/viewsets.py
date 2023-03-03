@@ -227,7 +227,7 @@ class OrderStatusViewSet(viewsets.ViewSet):
             verify_req = api_helper.checkCaptcha(settings.DEBUG, request.data["recaptcha"])
             if json.loads(verify_req.text)["success"]:
                 order = OrderType.objects.get(id=request.query_params["uuid"])
-                authorized = api_helper.auth_order(request.data, order.order_details)
+                authorized = api_helper.auth_order(request.data, order)
                 if(not authorized):
                     return Response({"status": "denied", "message": "Access is denied. Either access code is wrong or One time passcode has expired."},
                     status=status.HTTP_403_FORBIDDEN,
@@ -288,8 +288,15 @@ class OrderCleanupViewSet(viewsets.ViewSet):
                         obj = OrderType.objects.get(id=order["id"])
                         obj.tnris_notified = True
                         obj.save()
+
+                        order_string = ""
+                        try:
+                            order_string = "Details \n " + json.loads(OrderDetailsType.objects.filter(id=order["order_details_id"]).values()[0]["details"])["Order"]
+                        except:
+                            order_string = ""
+
                         api_helper.send_email(subject="Payment has been received.",
-                            body="Order uuid: " + str(order["id"]) + " has been received. Please send package according to order details, then complete order.",
+                            body="Order uuid: " + str(order["id"]) + " has been received. Please send package according to order details, then complete order.\n" + order_string,
                             send_from=os.environ.get("MAIL_DEFAULT_FROM"))    
                         print("pause") 
                     
@@ -354,7 +361,7 @@ class OrderSubmitViewSet(viewsets.ViewSet):
             if json.loads(verify_req.text)["success"]:
                 orderObj = OrderType.objects
                 order = orderObj.get(id=request.query_params["uuid"])
-                authorized = api_helper.auth_order(request.data, order.order_details)
+                authorized = api_helper.auth_order(request.data, order)
                 if(not authorized):
                     return Response({"status": "denied",
                                     "order_url": "NONE",

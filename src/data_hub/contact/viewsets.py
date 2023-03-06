@@ -26,12 +26,9 @@ from .models import CampaignSubscriber, EmailTemplate, SurveyTemplate, OrderType
 from .serializers import *
 
 
-logger = logging.getLogger("errLog")
-DEBUG = False
-if os.environ.get("IS_LIVE") == 'true':
+if settings.DEBUG:
+    logger = logging.getLogger("errLog")
     logger.addHandler(watchtower.CloudWatchLogHandler())
-    if os.environ.get("IS_DEBUG") == 'true':
-        DEBUG = True
 
 CCP_URL = 'https://securecheckout-uat.cdc.nicusa.com/ccprest/api/v1/TX/'
 # custom permissions for cors control
@@ -214,10 +211,9 @@ class GenOtpViewSet(viewsets.ViewSet):
                 ) 
         except Exception as e:
             message = "Error generating the One time passcode. Exception: "
-            api_helper.get_secret()
-            if(DEBUG): message = message + str(e)
-
-            logger.error(message)
+            if(settings.DEBUG): 
+                message = message + str(e)
+                logger.error(message)
             return Response(
                 {"status": "failure", "message": "Internal server error."},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -261,9 +257,9 @@ class OrderStatusViewSet(viewsets.ViewSet):
                 )         
         except Exception as e:
             message = "Error checking order status. Exception: "
-            if(DEBUG): message = message + str(e)
-
-            logger.error(message)
+            if(settings.DEBUG): 
+                message = message + str(e)
+                logger.error(message)
             return Response(
                 {"status": "failure", "message": "Order not found. Or order has been processed."},
                 status=status.HTTP_404_NOT_FOUND,
@@ -323,7 +319,7 @@ class OrderCleanupViewSet(viewsets.ViewSet):
             # return response
         except Exception as e:
             message = "Error cleaning up orders. Exception: "
-            if(DEBUG): message = message + str(e)
+            if(settings.DEBUG): message = message + str(e)
 
             response =  Response(
                 {"status": "failure", "message": "failure"},
@@ -362,9 +358,9 @@ class OrderCleanupViewSet(viewsets.ViewSet):
             )
 
             message = "Error getting receipt: " 
-            if(DEBUG): message = message + str(e)
-
-            logger.error(message)
+            if(settings.DEBUG):
+                message = message + str(e)
+                logger.error(message)
         finally:
             return response
 
@@ -444,9 +440,9 @@ class OrderSubmitViewSet(viewsets.ViewSet):
                 )         
         except Exception as e:
             message = "Error creating order. Exception: "
-            if(DEBUG): message = message + str(e)
-
-            logger.error(message)
+            if(settings.DEBUG):
+                message = message + str(e)
+                logger.error(message)
             response =  Response(
                 {"status": "failure", "order_url": "NONE", "message": "The order has failed"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,)
@@ -517,9 +513,9 @@ class OrderFormViewSet(viewsets.ViewSet):
                 ) 
         except Exception as e:
             message = "Error creating order: "
-            if(DEBUG): message = message + str(e)
-
-            logger.error(message)
+            if(settings.DEBUG):
+                message = message + str(e)
+                logger.error(message)
             return Response(
                 {"status": "failure", "message": "internal error"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR

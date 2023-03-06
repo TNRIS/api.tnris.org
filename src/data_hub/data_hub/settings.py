@@ -59,7 +59,7 @@ LOGGING = {
     'loggers': {
         'errLog': {
             'level': 'ERROR',
-            'handlers': ['console'],
+            'handlers': ['watchtower', 'console'],
             'propagate': False
         },
     },

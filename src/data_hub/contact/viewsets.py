@@ -27,6 +27,7 @@ from .serializers import *
 
 
 logger = logging.getLogger("errLog")
+DEBUG = False
 if os.environ.get("IS_LIVE") == 'true':
     logger.addHandler(watchtower.CloudWatchLogHandler())
     if os.environ.get("IS_DEBUG") == 'true':

@@ -29,6 +29,8 @@ from .serializers import *
 logger = logging.getLogger("errLog")
 if os.environ.get("IS_LIVE") == 'true':
     logger.addHandler(watchtower.CloudWatchLogHandler())
+    if os.environ.get("IS_DEBUG") == 'true':
+        DEBUG = True
 
 CCP_URL = 'https://securecheckout-uat.cdc.nicusa.com/ccprest/api/v1/TX/'
 # custom permissions for cors control
@@ -184,7 +186,7 @@ class GenOtpViewSet(viewsets.ViewSet):
                 details = json.loads(order.order_details.details)
                 
                 # Regenerate OTP
-                otp = secrets.token_urlsafe(6)
+                otp = secrets.token_urlsafe(12)
                 salt = order.order_details.access_salt
                 pepper = os.environ.get("ACCESS_PEPPER")
 
@@ -210,7 +212,11 @@ class GenOtpViewSet(viewsets.ViewSet):
                     status=status.HTTP_403_FORBIDDEN,
                 ) 
         except Exception as e:
-            logger.error("Error generating the One time passcode. Exception: " + str(e))
+            message = "Error generating the One time passcode. Exception: "
+            api_helper.get_secret()
+            if(DEBUG): message = message + str(e)
+
+            logger.error(message)
             return Response(
                 {"status": "failure", "message": "Internal server error."},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -253,7 +259,10 @@ class OrderStatusViewSet(viewsets.ViewSet):
                     status=status.HTTP_403_FORBIDDEN,
                 )         
         except Exception as e:
-            logger.error("Error checking order status. Exception: " + str(e))
+            message = "Error checking order status. Exception: "
+            if(DEBUG): message = message + str(e)
+
+            logger.error(message)
             return Response(
                 {"status": "failure", "message": "Order not found. Or order has been processed."},
                 status=status.HTTP_404_NOT_FOUND,
@@ -311,8 +320,10 @@ class OrderCleanupViewSet(viewsets.ViewSet):
                 status=status.HTTP_200_OK,
             )
             # return response
-        except:
-            logger.error("Error cleaning up orders. Exception: " + str(e))
+        except Exception as e:
+            message = "Error cleaning up orders. Exception: "
+            if(DEBUG): message = message + str(e)
+
             response =  Response(
                 {"status": "failure", "message": "failure"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -348,7 +359,11 @@ class OrderCleanupViewSet(viewsets.ViewSet):
                 {"status_code": 500},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
-            logger.error("Error getting receipt: " + str(e))
+
+            message = "Error getting receipt: " 
+            if(DEBUG): message = message + str(e)
+
+            logger.error(message)
         finally:
             return response
 
@@ -427,7 +442,10 @@ class OrderSubmitViewSet(viewsets.ViewSet):
                     status=status.HTTP_403_FORBIDDEN,
                 )         
         except Exception as e:
-            logger.error("Error creating order. Exception: " + str(e))
+            message = "Error creating order. Exception: "
+            if(DEBUG): message = message + str(e)
+
+            logger.error(message)
             response =  Response(
                 {"status": "failure", "order_url": "NONE", "message": "The order has failed"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,)
@@ -473,7 +491,7 @@ class OrderFormViewSet(viewsets.ViewSet):
                 pepper = os.environ.get("ACCESS_PEPPER")
                 hash = hashlib.sha256(bytes(access_token + salt + pepper, 'utf8')).hexdigest()
                 
-                otp = secrets.token_urlsafe(6)
+                otp = secrets.token_urlsafe(12)
                 
                 order_details = OrderDetailsType.objects.create(details=json.dumps(order), 
                                                       access_code=hash, 
@@ -497,7 +515,10 @@ class OrderFormViewSet(viewsets.ViewSet):
                     status=status.HTTP_403_FORBIDDEN,
                 ) 
         except Exception as e:
-            logger.error("Error creating order: " + str(e))
+            message = "Error creating order: "
+            if(DEBUG): message = message + str(e)
+
+            logger.error(message)
             return Response(
                 {"status": "failure", "message": "internal error"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR

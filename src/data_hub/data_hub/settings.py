@@ -12,9 +12,6 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 
 import os, boto3
 
-AWS_REGION_NAME = "us-east-1"
-
-boto3_logs_client = boto3.client("logs", region_name=AWS_REGION_NAME)
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -28,7 +25,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.environ.get('SECRET_KEY', 'emla71m=n&u^4_=@07&i8@oyw1thl%bc7x9dqjx7=l1r^d77+=')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     'data.tnris.org',
@@ -39,31 +36,35 @@ ALLOWED_HOSTS = [
     '127.0.0.1'
 ]
 
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler'
+if DEBUG: 
+    AWS_REGION_NAME = "us-east-1"
+    boto3_logs_client = boto3.client("logs", region_name=AWS_REGION_NAME)
+
+    LOGGING = {
+        'version': 1,
+        'disable_existing_loggers': False,
+        'handlers': {
+            'console': {
+                'class': 'logging.StreamHandler'
+            },
+            'watchtower': {
+                'class': 'watchtower.CloudWatchLogHandler',
+                'boto3_client': boto3_logs_client,
+                'log_group_name': '/ecs/api-tnris-org-staging',
+                # Decrease the verbosity level here to send only those logs to watchtower,
+                # but still see more verbose logs in the console. See the watchtower
+                # documentation for other parameters that can be set here.
+                'level': 'ERROR'
+            }
         },
-        'watchtower': {
-            'class': 'watchtower.CloudWatchLogHandler',
-            'boto3_client': boto3_logs_client,
-            'log_group_name': '/ecs/api-tnris-org-staging',
-            # Decrease the verbosity level here to send only those logs to watchtower,
-            # but still see more verbose logs in the console. See the watchtower
-            # documentation for other parameters that can be set here.
-            'level': 'ERROR'
-        }
-    },
-    'loggers': {
-        'errLog': {
-            'level': 'ERROR',
-            'handlers': ['watchtower', 'console'],
-            'propagate': False
+        'loggers': {
+            'errLog': {
+                'level': 'ERROR',
+                'handlers': ['watchtower', 'console'],
+                'propagate': False
+            },
         },
-    },
-}
+    }
 
 CORS_ORIGIN_ALLOW_ALL = True
 

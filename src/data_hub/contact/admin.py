@@ -110,43 +110,78 @@ class OrderTypeAdmin(admin.ModelAdmin):
 class OrderDetailsTypeAdmin(admin.ModelAdmin):
 
     def name_field(self, obj):
-        return json.loads(obj.details)["Name"]
-
+        if "Name" in json.loads(obj.details):
+            return json.loads(obj.details)["Name"]
+        else:
+            return ""
+            
     def email_field(self, obj):
-        return json.loads(obj.details)["Email"]
+        if "Email" in json.loads(obj.details):
+            return json.loads(obj.details)["Email"]
+        else:
+            return ""
 
     def phone_field(self, obj):
-        return json.loads(obj.details)["Phone"]
-    
+        if "Phone" in json.loads(obj.details):
+            return json.loads(obj.details)["Phone"]
+        else:
+            return ""
+
     def address_field(self, obj):
-        return json.loads(obj.details)["Address"]
+        if "Address" in json.loads(obj.details):    
+            return json.loads(obj.details)["Address"]
+        else:
+            return ""
 
     def organization_field(self, obj):
-        return json.loads(obj.details)["Organization"]
+        if "Organization" in json.loads(obj.details):
+            return json.loads(obj.details)["Organization"]
+        else:
+            return ""
 
     def industry_field(self, obj):
-        return json.loads(obj.details)["Industry"]
+        if "Industry" in json.loads(obj.details):
+            return json.loads(obj.details)["Industry"]
+        else:
+            return ""
 
     def notes_field(self, obj):
-        return json.loads(obj.details)["Notes"]
+        if "Notes" in json.loads(obj.details):
+            return json.loads(obj.details)["Notes"]
+        else:
+            return ""
 
     def delivery_field(self, obj):
-        return json.loads(obj.details)["Delivery"]
+        if "Delivery" in json.loads(obj.details):
+            return json.loads(obj.details)["Delivery"]
+        else:
+            return ""
 
     def harddrive_field(self, obj):
-        return json.loads(obj.details)["HardDrive"]
+        if "HardDrive" in json.loads(obj.details):
+            return json.loads(obj.details)["HardDrive"]
+        else:
+            return ""
 
     def payment_field(self, obj):
-        return json.loads(obj.details)["Payment"]
+        if "Payment" in json.loads(obj.details):
+            return json.loads(obj.details)["Payment"]
+        else:
+            return ""
 
     def order_field(self, obj):
-        a = json.loads(obj.details)["Order"]
-        return a
+        if "Order" in json.loads(obj.details):
+            return json.loads(obj.details)["Order"]
+        else:
+            return ""
 
     order_field.widget=forms.CharField(widget=JSONEditorWidget)
 
     def formid_field(self, obj):
-        return json.loads(obj.details)["form_id"]
+        if "form_id" in json.loads(obj.details):
+            return json.loads(obj.details)["form_id"]
+        else:
+            return ""
 
     def get_readonly_fields(self, request, obj=None):
         return ['id', 'name_field', 'email_field', 'phone_field', 'address_field', 'organization_field', 'industry_field', 'notes_field', 'delivery_field', 'harddrive_field',

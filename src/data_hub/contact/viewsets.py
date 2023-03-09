@@ -384,8 +384,50 @@ class OrderSubmitViewSet(viewsets.ViewSet):
                 )
                 cicdmessage += " 2"
                 order_details = json.loads(order.order_details.details)
-                
-                item_attributes = json.load(open("itemattributes.json"))
+                cicdmessage += " 3"
+
+                item_attributes = [
+                                    {
+                                    "FieldName": "USASLINES",
+                                    "FieldValue": 3
+                                    },
+                                    {
+                                    "FieldName": "USAS1CO",
+                                    "FieldValue": 3719
+                                    },
+                                    {
+                                    "FieldName": "USAS1PCA",
+                                    "FieldValue": 19001
+                                    },
+                                    {
+                                    "FieldName": "USAS1TCODE",
+                                    "FieldValue": 195
+                                    },
+                                    {
+                                    "FieldName": "USAS2CO",
+                                    "FieldValue": 3879
+                                    },
+                                    {
+                                    "FieldName": "USAS2PCA",
+                                    "FieldValue": "07768"
+                                    },
+                                    {
+                                    "FieldName": "USAS2TCODE",
+                                    "FieldValue": 179
+                                    },
+                                    {
+                                    "FieldName": "USAS3CO",
+                                    "FieldValue": 7219
+                                    },
+                                    {
+                                    "FieldName": "USAS3TCODE",
+                                    "FieldValue": 265
+                                    },
+                                    {
+                                    "FieldName": "USAS3PCA",
+                                    "FieldValue": "07768"
+                                    }
+                                ]
                 
                 total = order.approved_charge
                 cicdmessage += " 4"

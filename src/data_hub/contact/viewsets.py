@@ -366,7 +366,6 @@ class OrderCleanupViewSet(viewsets.ViewSet):
 
 class OrderSubmitViewSet(viewsets.ViewSet):
     permission_classes = [CorsPostPermission]
-
     def create(self, request, format=None):
         try:
             verify_req = api_helper.checkCaptcha(settings.DEBUG, request.data["recaptcha"])
@@ -380,13 +379,52 @@ class OrderSubmitViewSet(viewsets.ViewSet):
                                     "message": "Access is denied. Either access code is wrong or One time passcode has expired."},
                     status=status.HTTP_403_FORBIDDEN,
                 )
-                
                 order_details = json.loads(order.order_details.details)
-                
-                item_attributes = json.load(open("itemattributes.json"))
+
+                item_attributes = [
+                                    {
+                                    "FieldName": "USASLINES",
+                                    "FieldValue": 3
+                                    },
+                                    {
+                                    "FieldName": "USAS1CO",
+                                    "FieldValue": 3719
+                                    },
+                                    {
+                                    "FieldName": "USAS1PCA",
+                                    "FieldValue": 19001
+                                    },
+                                    {
+                                    "FieldName": "USAS1TCODE",
+                                    "FieldValue": 195
+                                    },
+                                    {
+                                    "FieldName": "USAS2CO",
+                                    "FieldValue": 3879
+                                    },
+                                    {
+                                    "FieldName": "USAS2PCA",
+                                    "FieldValue": "07768"
+                                    },
+                                    {
+                                    "FieldName": "USAS2TCODE",
+                                    "FieldValue": 179
+                                    },
+                                    {
+                                    "FieldName": "USAS3CO",
+                                    "FieldValue": 7219
+                                    },
+                                    {
+                                    "FieldName": "USAS3TCODE",
+                                    "FieldValue": 265
+                                    },
+                                    {
+                                    "FieldName": "USAS3PCA",
+                                    "FieldValue": "07768"
+                                    }
+                                ]
                 
                 total = order.approved_charge
-                
                 #2.25% and $.25
                 transactionfee = round(((total/100) * 2.25) + .25, 2)
                 body = {
@@ -397,6 +435,9 @@ class OrderSubmitViewSet(viewsets.ViewSet):
                     "UniqueTransId": order.order_details_id,
                     "LocalRef": "580WD" + str(order.order_details_id),
                     "PaymentType": order_details['Payment'],
+                    "HREFSUCCESS":"https://data.tnris.org/order/success",
+                    "HREFFAILURE":"https://data.tnris.org/order/failure",
+                    "HREFCANCEL":"https://data.tnris.org/order/cancel",
                     "LineItems": [
                         {
                             "Sku": "DHUB",

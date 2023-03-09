@@ -366,11 +366,13 @@ class OrderCleanupViewSet(viewsets.ViewSet):
 
 class OrderSubmitViewSet(viewsets.ViewSet):
     permission_classes = [CorsPostPermission]
-
     def create(self, request, format=None):
+        cicdmessage = ""
+
         try:
             verify_req = api_helper.checkCaptcha(settings.DEBUG, request.data["recaptcha"])
             if json.loads(verify_req.text)["success"]:
+                cicdmessage += "1"
                 orderObj = OrderType.objects
                 order = orderObj.get(id=request.query_params["uuid"])
                 authorized = api_helper.auth_order(request.data, order)
@@ -380,15 +382,16 @@ class OrderSubmitViewSet(viewsets.ViewSet):
                                     "message": "Access is denied. Either access code is wrong or One time passcode has expired."},
                     status=status.HTTP_403_FORBIDDEN,
                 )
-                
+                cicdmessage += " 2"
                 order_details = json.loads(order.order_details.details)
                 
                 item_attributes = json.load(open("itemattributes.json"))
                 
                 total = order.approved_charge
-                
+                cicdmessage += " 4"
                 #2.25% and $.25
                 transactionfee = round(((total/100) * 2.25) + .25, 2)
+                cicdmessage += " 5"
                 body = {
                     "OrderTotal": total + transactionfee,
                     "MerchantCode": os.environ.get("CCP_MERCHANT_CODE"),
@@ -412,6 +415,7 @@ class OrderSubmitViewSet(viewsets.ViewSet):
                 body["LineItems"][0]["ItemAttributes"].append({'FieldName':'USAS2', 'FieldValue': transactionfee})
                 body["LineItems"][0]["ItemAttributes"].append({'FieldName':'USAS3', 'FieldValue': transactionfee})
                 body["LineItems"][0]["ItemAttributes"].append({'FieldName':'CONV_FEE', 'FieldValue': transactionfee})
+                cicdmessage += " 6"
                 x = requests.post(
                     CCP_URL + "tokens", 
                     json = body,
@@ -421,6 +425,7 @@ class OrderSubmitViewSet(viewsets.ViewSet):
                 )
 
                 url = json.loads(x.text)
+                cicdmessage += " 7"
                 if('htmL5RedirectUrl' in url):
                     orderObj.filter(id=request.query_params["uuid"]).update(order_token=url["token"], order_url=url["htmL5RedirectUrl"])
                     order = orderObj.get(id=request.query_params["uuid"])
@@ -430,8 +435,9 @@ class OrderSubmitViewSet(viewsets.ViewSet):
                         {"status": "success", "order_url": order.order_url, "message": "success"}
                     )
                 else:
+                    cicdmessage += " 8"
                     response =  Response(
-                        {"status": "failure", "order_url": "NONE", "message": "The order has failed"},
+                        {"status": "failure", "order_url": "NONE", "message": "The order has failed: Log: " + cicdmessage},
                         status=status.HTTP_500_INTERNAL_SERVER_ERROR,)
             else:
                 return Response(
@@ -439,12 +445,14 @@ class OrderSubmitViewSet(viewsets.ViewSet):
                     status=status.HTTP_403_FORBIDDEN,
                 )         
         except Exception as e:
+            cicdmessage += " 9"
+
             message = "Error creating order. Exception: "
             if(settings.DEBUG):
                 message = message + str(e)
                 logger.error(message)
             response =  Response(
-                {"status": "failure", "order_url": "NONE", "message": "The order has failed"},
+                {"status": "failure", "order_url": "NONE", "message": "The order has failed: Log: " + cicdmessage},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,)
         return response
 

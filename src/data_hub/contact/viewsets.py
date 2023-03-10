@@ -435,9 +435,9 @@ class OrderSubmitViewSet(viewsets.ViewSet):
                     "UniqueTransId": order.order_details_id,
                     "LocalRef": "580WD" + str(order.order_details_id),
                     "PaymentType": order_details['Payment'],
-                    "HREFSUCCESS":"https://data.tnris.org/order/success",
-                    "HREFFAILURE":"https://data.tnris.org/order/failure",
-                    "HREFCANCEL":"https://data.tnris.org/order/cancel",
+                    "HREFSUCCESS":"https://data.tnris.org/order/redirect?status=success",
+                    "HREFFAILURE":"https://data.tnris.org/order/redirect?status=failure",
+                    "HREFCANCEL":"https://data.tnris.org/order/redirect?status=cancel",
                     "LineItems": [
                         {
                             "Sku": "DHUB",

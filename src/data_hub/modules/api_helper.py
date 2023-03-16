@@ -1,6 +1,6 @@
 import boto3, json, os, hashlib, time, requests
 from botocore.exceptions import ClientError
-from django.core.mail import EmailMessage
+from django.core.mail import send_mail
 
 
 def get_secret(secret_name):
@@ -52,8 +52,8 @@ def send_email(
         send_to (_type_, optional): Email Address to receive.. Defaults to os.environ.get("MAIL_DEFAULT_TO").
         reply_to (str, optional): Email address to reply to.. Defaults to "unknown@tnris.org".
     """
-    email = EmailMessage(subject, body, send_from, [send_to], reply_to=[reply_to])
-    email.send(fail_silently=False)
+
+    send_mail(subject, body, send_from, [send_to], html_message=body)
     return
 
 def auth_order(auth_details, order):

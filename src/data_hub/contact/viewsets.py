@@ -196,7 +196,21 @@ class GenOtpViewSet(viewsets.ViewSet):
                 # Send One time passcode to users email.
                 api_helper.send_email(
                     subject="DataHub one time passcode",
-                    body="Your new one time passcode is: " + otp,
+                    body=
+
+                        """
+                            <html><body style='overflow:hidden'>
+                        """
+                        + "<div style='width: 98%; background-color: #1e8dc1; padding:12px;'>" +
+                        """
+                            <img class="TnrisLogo" width="64" height="35" src="https://cdn.tnris.org/images/tnris_logo.svg" alt="TNRIS Logo" title="data.tnris.org">
+                            </div><br /><br />
+                            Greetings from TNRIS,<br /><br />
+                            Your one time passcode is: <strong>%s</strong><br /><br />
+                            Thanks,<br />
+                            The TNRIS Team
+                        </body></html>
+                        """ % otp,
                     send_to=details["Email"]
                 )
                 
@@ -506,8 +520,23 @@ class OrderFormViewSet(viewsets.ViewSet):
                 instance.customer_notified = True
                 instance.save()
                 api_helper.send_email(
-                    subject="Your order has been approved",
-                    body="Please send payment. \n Url: " + "https://data.tnris.org/submit?uuid=" + str(instance.pk),
+                    subject="Your TNRIS Datahub order has been approved",
+                    body=
+                        """
+                            <html><body style='overflow:hidden'>
+                        """
+                        + "<div style='width: 98%; background-color: #1e8dc1; padding:12px;'>" +
+                        """
+                            <img class="TnrisLogo" width="64" height="35" src="https://cdn.tnris.org/images/tnris_logo.svg" alt="TNRIS Logo" title="data.tnris.org">
+                          </div><br /><br />
+                            Greetings from TNRIS,<br /><br />
+                            Your TNRIS Datahub order has been approved.<br />
+                            To make a payment please follow this <a href='https://data.tnris.org/order/submit?uuid=%s'>link.</a><br />
+                            For questions or concerns, Please reply to this email or visit our <a href='https://tnris.org/contact/'>contact page</a> for more ways to contact TNRIS.<br /><br />
+                            Thanks,<br />
+                            The TNRIS Team
+                            </body></html>
+                        """ % str(instance.pk),
                     send_to=order_info["Email"],
                     send_from=os.environ.get("MAIL_DEFAULT_FROM")
                 )
@@ -539,10 +568,24 @@ class OrderFormViewSet(viewsets.ViewSet):
                                                       otp_age=time.time())
                 order_object = OrderType.objects.create(order_details=order_details)
 
-                api_helper.send_email("Your TNRIS Order Details", '\nYour order ID is: ' + str(order_object.id)
-                                + '\nYou can check your order status here https://www.data.tnris.org/status?uuid=' + str(order_object.id)
-                                + '\n\nYou will receive a link via email to pay for the order once we process it.',
-                                send_to=order["Email"])
+                api_helper.send_email(
+                    "Your datahub order has been received",
+                    """
+                        <html><body style='overflow:hidden'>
+                    """
+                    + "<div style='width: 100%; background-color: #1e8dc1; padding:12px; overflow:hidden;'>" +
+                    """
+                            <img class="TnrisLogo" width="64" height="35" src="https://cdn.tnris.org/images/tnris_logo.svg" alt="TNRIS Logo" title="data.tnris.org">
+                            </div><br /><br />
+                            Greetings from TNRIS,<br /><br />
+                            We have received your order and will process it after taking a look at the details.<br />
+                            In the meantime you can check your order status <a href='https://www.data.tnris.org/order/status?uuid=%s'>here</a>.<br />
+                            You will receive a link via email to pay for the order once we process it.<br /><br />
+                            Thanks,<br />
+                            The TNRIS Team
+                        </body></html>
+                    """ % str(order_object.id)
+                    ,send_to=order["Email"])
 
                 return Response(
                     {"status": "success", "message": "Success"},

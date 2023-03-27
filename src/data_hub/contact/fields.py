@@ -2,7 +2,10 @@ from django.db import models
 
 from cryptography.fernet import Fernet, MultiFernet
 
-import os
+import os, boto3
+from io import BytesIO
+
+client = boto3.client('s3')
 
 from django import forms
 
@@ -34,6 +37,7 @@ class CryptoTextField(models.CharField):
         name, path, args, kwargs = super().deconstruct()
         del kwargs["blank"]
         del kwargs["null"]
+        del kwargs["max_length"]
         return name, path, args, kwargs
     
     def get_prep_value(self, value):
@@ -50,8 +54,6 @@ class CryptoTextField(models.CharField):
         if value is None:
             return value
         return decrypt_string(value)
-  
-
 def encrypt_string(value): 
     access_key = bytes(os.environ.get("FKEY1"), 'utf-8')
     f = Fernet(access_key)
@@ -67,6 +69,35 @@ def decrypt_string(value):
     decrypted = f.decrypt(bytes(value, 'utf-8'))
     
     return decrypted.decode('utf-8')
+
+class ProtectedImageField(models.Field):
+
+    description = "A field that can read from a protected S3 bucket."
+
+    def __init__(self, *args, **kwargs):
+        kwargs['max_length'] = 104
+        super().__init__(*args, **kwargs)
+
+    def db_type(self, connection):
+        return 'varchar(254)'    
+
+    #Store image in protected S3
+    def get_prep_value(self, value):
+        return value
+
+    #Read image from protected S3
+    def from_db_value(self, value, expression, connection):
+        if(len(value) > 0):
+            session = boto3.Session()
+            s3_client = session.client("s3")
+
+            f = BytesIO()
+            s3_client.download_fileobj("contact-uploads-private", value, f)
+
+            return list(f.getvalue())
+        else:
+            return ""
+
 
 class CryptoText(models.Model):
     cryptoText = CryptoTextField()

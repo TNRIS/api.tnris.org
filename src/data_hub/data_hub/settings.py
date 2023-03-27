@@ -36,7 +36,7 @@ ALLOWED_HOSTS = [
     '127.0.0.1'
 ]
 
-if DEBUG: 
+if DEBUG and False: 
     AWS_REGION_NAME = "us-east-1"
     boto3_logs_client = boto3.client("logs", region_name=AWS_REGION_NAME)
 
@@ -147,7 +147,7 @@ ROOT_URLCONF = 'data_hub.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['src/data_hub/contact'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

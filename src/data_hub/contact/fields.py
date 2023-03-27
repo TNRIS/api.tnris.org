@@ -101,7 +101,7 @@ class ProtectedImageField(models.Field):
             else:
                 return ""
     except Exception as e:
-        logger.error(e)
+        logger.error(str(e))
 
 
 class CryptoText(models.Model):

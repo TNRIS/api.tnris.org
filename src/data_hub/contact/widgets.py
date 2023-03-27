@@ -16,7 +16,7 @@ class ProtectedFileWidget(Widget):
                 'value': value,
             }}
         except Exception as e:
-            logger.error(e)
+            logger.error(str(e))
 
     def render(self, name, value, attrs=None, renderer=None):
         try:
@@ -24,4 +24,4 @@ class ProtectedFileWidget(Widget):
             template = loader.get_template(self.template_name).render(context)
             return mark_safe(template)
         except Exception as e:
-            logger.error(e)
+            logger.error(str(e))

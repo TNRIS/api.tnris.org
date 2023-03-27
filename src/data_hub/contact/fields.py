@@ -4,7 +4,10 @@ from cryptography.fernet import Fernet, MultiFernet
 
 import os, boto3
 from io import BytesIO
+import logging, watchtower
 
+logger = logging.getLogger("errLog")
+logger.addHandler(watchtower.CloudWatchLogHandler())
 client = boto3.client('s3')
 
 from django import forms
@@ -71,32 +74,34 @@ def decrypt_string(value):
     return decrypted.decode('utf-8')
 
 class ProtectedImageField(models.Field):
+    try:
+        description = "A field that can read from a protected S3 bucket."
 
-    description = "A field that can read from a protected S3 bucket."
+        def __init__(self, *args, **kwargs):
+            kwargs['max_length'] = 104
+            super().__init__(*args, **kwargs)
 
-    def __init__(self, *args, **kwargs):
-        kwargs['max_length'] = 104
-        super().__init__(*args, **kwargs)
+        def db_type(self, connection):
+            return 'varchar(254)'    
 
-    def db_type(self, connection):
-        return 'varchar(254)'    
+        #Store image in protected S3
+        def get_prep_value(self, value):
+            return value
 
-    #Store image in protected S3
-    def get_prep_value(self, value):
-        return value
+        #Read image from protected S3
+        def from_db_value(self, value, expression, connection):
+            if(len(value) > 0):
+                session = boto3.Session()
+                s3_client = session.client("s3")
 
-    #Read image from protected S3
-    def from_db_value(self, value, expression, connection):
-        if(len(value) > 0):
-            session = boto3.Session()
-            s3_client = session.client("s3")
+                f = BytesIO()
+                s3_client.download_fileobj("contact-uploads-private", value, f)
 
-            f = BytesIO()
-            s3_client.download_fileobj("contact-uploads-private", value, f)
-
-            return list(f.getvalue())
-        else:
-            return ""
+                return list(f.getvalue())
+            else:
+                return ""
+    except Exception as e:
+        logger.error(e)
 
 
 class CryptoText(models.Model):

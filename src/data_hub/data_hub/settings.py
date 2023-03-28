@@ -146,7 +146,7 @@ ROOT_URLCONF = 'data_hub.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['src/data_hub/contact', os.path.join(BASE_DIR, 'src/data_hub/contact'), os.path.join(BASE_DIR, 'data_hub/contact')],
+        'DIRS': [os.path.join(BASE_DIR, 'contact')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

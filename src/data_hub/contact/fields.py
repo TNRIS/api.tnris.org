@@ -78,6 +78,7 @@ class ProtectedImageField(models.Field):
         description = "A field that can read from a protected S3 bucket."
 
         def __init__(self, *args, **kwargs):
+            self.imagename = ""
             kwargs['max_length'] = 104
             super().__init__(*args, **kwargs)
 
@@ -86,10 +87,16 @@ class ProtectedImageField(models.Field):
 
         #Store image in protected S3
         def get_prep_value(self, value):
-            return value
+            # This value should never change.
+            if(isinstance(value, str)):
+                return value
+            else:
+                return self.imagename
 
         #Read image from protected S3
         def from_db_value(self, value, expression, connection):
+            #Store the imagename
+            self.imagename = value
             if(len(value) > 0):
                 session = boto3.Session()
                 s3_client = session.client("s3")
@@ -100,6 +107,7 @@ class ProtectedImageField(models.Field):
                 return list(f.getvalue())
             else:
                 return ""
+
     except Exception as e:
         logger.error(str(e))
 

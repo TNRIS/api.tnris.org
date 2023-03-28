@@ -54,12 +54,12 @@ LOGGING = {
             # Decrease the verbosity level here to send only those logs to watchtower,
             # but still see more verbose logs in the console. See the watchtower
             # documentation for other parameters that can be set here.
-            'level': 'ERROR'
+            'level': 'INFO'
         }
     },
     'loggers': {
         'errLog': {
-            'level': 'ERROR',
+            'level': 'INFO',
             'handlers': ['watchtower', 'console'],
             'propagate': False
         },

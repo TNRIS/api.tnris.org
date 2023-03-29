@@ -15,9 +15,6 @@ from django import forms
 # widget stuff
 from django.forms import widgets
 
-class CountableWidget(widgets.Textarea):
-    pass
-
 class CryptoTextField(models.CharField):
     description = "A crypto field"
     def __init__(self, *args, **kwargs):

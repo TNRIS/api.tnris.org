@@ -28,7 +28,7 @@ export FKEY1=`/envs/data_hub/bin/aws secretsmanager get-secret-value --secret-id
 export ACCESS_PEPPER=`/envs/data_hub/bin/aws secretsmanager get-secret-value --secret-id api-tnris-org --query SecretString --output text | jq -cr '.ACCESS_PEPPER'`
 
 export IS_LIVE=true
-export IS_DEBUG=true
+export IS_DEBUG=false
 
 export DATAHUB_MASTER_CLOUDFRONT=`/envs/data_hub/bin/aws cloudformation describe-stack-resource --stack-name datahub-master --logical-resource-id MasterCloudfront --query StackResourceDetail.PhysicalResourceId --output text`
 

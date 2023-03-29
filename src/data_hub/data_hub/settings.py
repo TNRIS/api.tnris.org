@@ -36,7 +36,7 @@ ALLOWED_HOSTS = [
     '127.0.0.1'
 ]
 
-if DEBUG and False: 
+if False:
     AWS_REGION_NAME = "us-east-1"
     boto3_logs_client = boto3.client("logs", region_name=AWS_REGION_NAME)
 
@@ -54,12 +54,12 @@ if DEBUG and False:
                 # Decrease the verbosity level here to send only those logs to watchtower,
                 # but still see more verbose logs in the console. See the watchtower
                 # documentation for other parameters that can be set here.
-                'level': 'ERROR'
+                'level': 'INFO'
             }
         },
         'loggers': {
             'errLog': {
-                'level': 'ERROR',
+                'level': 'INFO',
                 'handlers': ['watchtower', 'console'],
                 'propagate': False
             },
@@ -147,7 +147,7 @@ ROOT_URLCONF = 'data_hub.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['src/data_hub/contact'],
+        'DIRS': [os.path.join(BASE_DIR, 'contact')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

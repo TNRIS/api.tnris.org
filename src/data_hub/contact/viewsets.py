@@ -61,7 +61,8 @@ class CorsPostPermission(AllowAny):
             else request.META["HTTP_HOST"]
         )
         return u in self.whitelisted_domains
-    
+
+
 # ######################################################
 # ############## CONTACT FORM ENDPOINTS ################
 # ######################################################
@@ -85,6 +86,21 @@ class SubmitFormViewSet(viewsets.ViewSet):
         # replace all template values which weren't in the form (optional form fields)
         injected = re.sub(r"\{\{.*?\}\}", "", injected)
         return injected
+
+    # generic function for sending email associated with form submission
+    # emails send to supportsystem to create tickets in the ticketing system
+    # which are ultimately managed by IS, RDC, and StratMap
+    def send_email(
+        self,
+        subject,
+        body,
+        send_from=os.environ.get("MAIL_DEFAULT_FROM"),
+        send_to=os.environ.get("MAIL_DEFAULT_TO"),
+        reply_to="unknown@tnris.org",
+    ):
+        email = EmailMessage(subject, body, send_from, [send_to], reply_to=[reply_to])
+        email.send(fail_silently=False)
+        return
 
     def create(self, request, format=None):
         # if in DEBUG mode, assume local development and use localhost recaptcha secret
@@ -145,9 +161,7 @@ class SubmitFormViewSet(viewsets.ViewSet):
                         formatted["lastname"],
                         formatted["email"],
                     )
-                # emails send to supportsystem to create tickets in the ticketing system
-                # which are ultimately managed by IS, RDC, and StratMap
-                api_helper.send_email(
+                self.send_email(
                     email_template.email_template_subject,
                     body,
                     send_to=sender,
@@ -442,7 +456,7 @@ class OrderSubmitViewSet(viewsets.ViewSet):
                 
                 total = order.approved_charge
                 #2.25% and $.25
-                transactionfee = round(((total/100) * 2.25) + .25, 2)
+                transactionfee = round(((100 + .25)/100) * 2.25, 2)
                 body = {
                     "OrderTotal": total + transactionfee,
                     "MerchantCode": os.environ.get("CCP_MERCHANT_CODE"),

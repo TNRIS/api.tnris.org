@@ -456,7 +456,8 @@ class OrderSubmitViewSet(viewsets.ViewSet):
                 
                 total = order.approved_charge
                 #2.25% and $.25
-                transactionfee = round(((100 + .25)/100) * 2.25, 2)
+                transactionfee = round(((total + .25)/100) * 2.25, 2)
+                transactionfee = transactionfee + .25
                 body = {
                     "OrderTotal": total + transactionfee,
                     "MerchantCode": os.environ.get("CCP_MERCHANT_CODE"),
@@ -593,7 +594,7 @@ class OrderFormViewSet(viewsets.ViewSet):
                     content = base64.b64decode(request.data['files'].replace("data:application/zip;base64,", ""))
                     s3_client = boto3.client('s3')
                     bio = BytesIO(content)
-                    s3_client.upload_fileobj(bio, "contact-uploads-private", zipName)
+                    s3_client.upload_fileobj(bio, "contact-uploads", zipName)
 
 
                 api_helper.send_email(

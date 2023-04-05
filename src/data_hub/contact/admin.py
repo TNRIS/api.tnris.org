@@ -3,9 +3,7 @@ from django.http import HttpResponse
 from django.urls import reverse
 from django.utils.html import format_html
 from django_json_widget.widgets import JSONEditorWidget
-from . import widgets
 from django import forms
-from . import fields
 
 import csv, datetime, json
 
@@ -111,9 +109,6 @@ class OrderTypeAdmin(admin.ModelAdmin):
 @admin.register(OrderDetailsType)
 class OrderDetailsTypeAdmin(admin.ModelAdmin):
 
-    formfield_overrides = {
-        fields.ProtectedImageField: {'widget': widgets.ProtectedFileWidget},
-    }
     def name_field(self, obj):
         if "Name" in json.loads(obj.details):
             return json.loads(obj.details)["Name"]
@@ -194,7 +189,7 @@ class OrderDetailsTypeAdmin(admin.ModelAdmin):
 
     list_display = (
         ['name_field', 'email_field', 'phone_field', 'address_field', 'organization_field', 'industry_field', 'notes_field', 'delivery_field', 'harddrive_field',
-        'payment_field', 'order_field', 'formid_field', 'attachments']
+        'payment_field', 'order_field', 'formid_field']
     )
     
 @admin.register(DataHubOrder)

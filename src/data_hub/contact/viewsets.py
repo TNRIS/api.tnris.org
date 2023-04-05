@@ -594,7 +594,7 @@ class OrderFormViewSet(viewsets.ViewSet):
                     content = base64.b64decode(request.data['files'].replace("data:application/zip;base64,", ""))
                     s3_client = boto3.client('s3')
                     bio = BytesIO(content)
-                    s3_client.upload_fileobj(bio, "contact-uploads", zipName)
+                    s3_client.upload_fileobj(bio, "contact-uploads-private", zipName)
 
 
                 api_helper.send_email(

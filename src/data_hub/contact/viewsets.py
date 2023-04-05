@@ -456,7 +456,8 @@ class OrderSubmitViewSet(viewsets.ViewSet):
                 
                 total = order.approved_charge
                 #2.25% and $.25
-                transactionfee = round(((100 + .25)/100) * 2.25, 2)
+                transactionfee = round(((total + .25)/100) * 2.25, 2)
+                transactionfee = transactionfee + .25
                 body = {
                     "OrderTotal": total + transactionfee,
                     "MerchantCode": os.environ.get("CCP_MERCHANT_CODE"),

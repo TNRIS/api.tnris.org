@@ -9,10 +9,9 @@ from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from django.shortcuts import redirect
 from django.shortcuts import render
-from io import BytesIO
 
 
-import requests, os, json, re, sys, hashlib, secrets, uuid, time, base64
+import requests, os, json, re, sys, hashlib, secrets, uuid, time
 
 # policy imports
 import logging, watchtower
@@ -584,18 +583,6 @@ class OrderFormViewSet(viewsets.ViewSet):
                                                       otp=hashlib.sha256(bytes(otp + salt + pepper, 'utf8')).hexdigest(),
                                                       otp_age=time.time())
                 order_object = OrderType.objects.create(order_details=order_details)
-
-                zipName = "order_number_" + str(order_object.id) + ".zip"
-
-                order_details.attachments = zipName
-                order_details.save()
-
-                if request.data and request.data['files']:
-                    content = base64.b64decode(request.data['files'].replace("data:application/zip;base64,", ""))
-                    s3_client = boto3.client('s3')
-                    bio = BytesIO(content)
-                    s3_client.upload_fileobj(bio, "contact-uploads-private", zipName)
-
 
                 api_helper.send_email(
                     "Your datahub order has been received",

@@ -17,13 +17,6 @@ class OrderDetailsType(models.Model):
         max_length=50000,
         editable=False
     )
-
-    attachments = fields.ProtectedImageField(
-        "Attached Files.",
-        editable=True,
-        default=""
-    )
-    
     access_code = models.CharField(
         'Hash of access code.',
         editable=False,

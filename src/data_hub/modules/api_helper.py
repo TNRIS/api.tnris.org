@@ -1,6 +1,7 @@
 import boto3, json, os, hashlib, time, requests
 from botocore.exceptions import ClientError
 from django.core.mail import send_mail
+from django.core.mail import EmailMessage
 
 
 def get_secret(secret_name):
@@ -54,6 +55,17 @@ def send_email(
     """
 
     send_mail(subject, body, send_from, [send_to], html_message=body)
+    return
+
+def send_raw_email(
+    subject,
+    body,
+    send_from=os.environ.get("MAIL_DEFAULT_FROM"),
+    send_to=os.environ.get("MAIL_DEFAULT_TO"),
+    reply_to="unknown@tnris.org",
+):
+    email = EmailMessage(subject, body, send_from, [send_to], reply_to=[reply_to])
+    email.send(fail_silently=False)
     return
 
 def auth_order(auth_details, order):
@@ -113,7 +125,7 @@ def checkCaptcha(IS_DEBUG, captcha):
     # otherwise, use product account secret environment variable
     recaptcha_secret = (
         "6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe"
-        if IS_DEBUG
+        if True
         else os.environ.get("RECAPTCHA_SECRET")
     )
     recaptcha_verify_url = "https://www.google.com/recaptcha/api/siteverify"
@@ -123,3 +135,27 @@ def checkCaptcha(IS_DEBUG, captcha):
     }
     
     return requests.post(url=recaptcha_verify_url, data=recaptcha_data)
+
+def buildOrderString(order_obj): 
+    order_string = ""
+    order_string += "Name: " + (order_obj["Name"] + "\n" if "Name" in order_obj else "\n")
+    order_string += "Email: " + (order_obj["Email"] + "\n" if "Email" in order_obj else "\n")
+    order_string += "Phone: " + (order_obj["Phone"] + "\n" if "Phone" in order_obj else "\n")
+    order_string += "Address: " + (order_obj["Address"] + "\n" if "Address" in order_obj else "\n")
+    order_string += "Organization: " + (order_obj["Organization"] + "\n" if "Organization" in order_obj else "\n")
+    order_string += "Industry: " + (order_obj["Industry"] + "\n" if "Industry" in order_obj else "\n")
+    order_string += "-------------------------------------------------------------------\n"
+    order_string += "Hard Drive: " + "\n"
+    order_string += "Delivery: " + (order_obj["Delivery"] + "\n" if "Delivery" in order_obj else "\n")
+    order_string += "Payment: " + (order_obj["Payment"] + "\n" if "Payment" in order_obj else "\n")
+    order_string += "-------------------------------------------------------------------\n"
+    order_string += "Notes: " + (order_obj["Notes"] + "\n" if "Notes" in order_obj else "\n")
+    order_string += "\n"
+    order_string += "-------------------------------------------------------------------\n"
+    
+    try:
+        order_string += "Order \n " + order_obj["Order"]
+    except:
+        order_string += ""
+
+    return order_string

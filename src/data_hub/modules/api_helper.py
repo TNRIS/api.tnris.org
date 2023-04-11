@@ -145,11 +145,12 @@ def buildOrderString(order_obj):
     order_string += "Organization: " + (order_obj["Organization"] + "\n" if "Organization" in order_obj else "\n")
     order_string += "Industry: " + (order_obj["Industry"] + "\n" if "Industry" in order_obj else "\n")
     order_string += "-------------------------------------------------------------------\n"
-    order_string += "Hard Drive: " + "\n"
+    order_string += "Hard Drive: " + (order_obj["HardDrive"] + "\n" if "HardDrive" in order_obj else "\n")
     order_string += "Delivery: " + (order_obj["Delivery"] + "\n" if "Delivery" in order_obj else "\n")
     order_string += "Payment: " + (order_obj["Payment"] + "\n" if "Payment" in order_obj else "\n")
     order_string += "-------------------------------------------------------------------\n"
     order_string += "Notes: " + (order_obj["Notes"] + "\n" if "Notes" in order_obj else "\n")
+    order_string += ("Fedex ID: " + order_obj["Fedex"] + "\n" if "Fedex" in order_obj and len(order_obj["Fedex"].strip()) > 0 else "\n")
     order_string += "\n"
     order_string += "-------------------------------------------------------------------\n"
     

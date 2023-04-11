@@ -151,6 +151,12 @@ class OrderDetailsTypeAdmin(admin.ModelAdmin):
         else:
             return ""
 
+    def fedex_field(self, obj):
+        if "Fedex" in json.loads(obj.details):
+            return json.loads(obj.details)["Fedex"]
+        else:
+            return ""
+
     def delivery_field(self, obj):
         if "Delivery" in json.loads(obj.details):
             return json.loads(obj.details)["Delivery"]
@@ -184,11 +190,11 @@ class OrderDetailsTypeAdmin(admin.ModelAdmin):
             return ""
 
     def get_readonly_fields(self, request, obj=None):
-        return ['id', 'name_field', 'email_field', 'phone_field', 'address_field', 'organization_field', 'industry_field', 'notes_field', 'delivery_field', 'harddrive_field',
+        return ['id', 'name_field', 'email_field', 'phone_field', 'address_field', 'organization_field', 'industry_field', 'fedex_field', 'notes_field', 'delivery_field', 'harddrive_field',
         'payment_field', 'order_field', 'formid_field']
 
     list_display = (
-        ['name_field', 'email_field', 'phone_field', 'address_field', 'organization_field', 'industry_field', 'notes_field', 'delivery_field', 'harddrive_field',
+        ['name_field', 'email_field', 'phone_field', 'address_field', 'organization_field', 'industry_field', 'fedex_field', 'notes_field', 'delivery_field', 'harddrive_field',
         'payment_field', 'order_field', 'formid_field']
     )
     

@@ -608,7 +608,7 @@ Form parameters \n
                 reply_email = "unknown@tnris.org"
                 if("Email" in order_obj):
                     reply_email = order_obj["Email"]
-                api_helper.send_raw_email(subject="Dataset Order.", body=email_body,
+                api_helper.send_raw_email(subject="Dataset Order", body=email_body,
                     send_from=os.environ.get("MAIL_DEFAULT_FROM"),
                     send_to=os.environ.get("MAIL_DEFAULT_TO"),
                     reply_to=reply_email)

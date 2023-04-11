@@ -298,7 +298,7 @@ class OrderCleanupViewSet(viewsets.ViewSet):
     permission_classes = (AllowAny,)
     
     def create(self, request, format=None):
-        if(os.environ.get("CCP_ACCESS_CODE")!= request.data):
+        if(os.environ.get("CCP_ACCESS_CODE")!= request.data["access_code"]):
             return Response(
                 {"status": "access_denied", "message": "access_denied"},
                 status=status.HTTP_401_UNAUTHORIZED,
@@ -313,27 +313,37 @@ class OrderCleanupViewSet(viewsets.ViewSet):
             # If an order is older than 15 days archive it regardless.
             for order in unarchived_orders:
                 difference = now - order["created"] 
-                temp_req = request
-                temp_req.query_params._mutable = True
-                temp_req.query_params["uuid"] = str(order["id"])
-                temp_req.query_params._mutable = False
+                request.query_params._mutable = True
+                request.query_params["uuid"] = str(order["id"])
+                request.query_params._mutable = False
+
                 a = self.get_receipt(request, format)
                 if(a.status_code == 200):
                     if(not order["tnris_notified"]):
                         obj = OrderType.objects.get(id=order["id"])
                         obj.tnris_notified = True
+                        order_obj = json.loads(OrderDetailsType.objects.filter(id=order["order_details_id"]).values()[0]["details"])
                         obj.save()
 
-                        order_string = ""
-                        try:
-                            order_string = "Details \n " + json.loads(OrderDetailsType.objects.filter(id=order["order_details_id"]).values()[0]["details"])["Order"]
-                        except:
-                            order_string = ""
 
-                        api_helper.send_email(subject="Payment has been received.",
-                            body="Order uuid: " + str(order["id"]) + " has been received. Please send package according to order details, then complete order.\n" + order_string,
-                            send_from=os.environ.get("MAIL_DEFAULT_FROM"))    
-                        print("pause") 
+                        order_string = api_helper.buildOrderString(order_obj)
+                        email_body = """
+A payment has been received from from: https://data.tnris.org/ \n
+Please see order details below. And ship the order. \n
+Form ID: data-tnris-org \n
+\n
+Form parameters \n
+================== \n
+\n"""
+                        
+                        email_body = email_body + order_string
+                        reply_email = "unknown@tnris.org"
+                        if("Email" in order_obj):
+                            reply_email = order_obj["Email"]
+                        api_helper.send_raw_email(subject="Dataset Order Update: Payment has been received.", body=email_body,
+                            send_from=os.environ.get("MAIL_DEFAULT_FROM"),
+                            send_to=os.environ.get("MAIL_DEFAULT_TO"),
+                            reply_to=reply_email)
                     
                 #If no receipt was received or order was sent after 15 days then archive order automatically.
                 if(difference.days > 15 and (a.status_code != 200 or order["order_sent"] == True) ):
@@ -584,6 +594,26 @@ class OrderFormViewSet(viewsets.ViewSet):
                                                       otp_age=time.time())
                 order_object = OrderType.objects.create(order_details=order_details)
 
+                #Notify TxGIO
+                order_obj = json.loads(order_object.order_details.details)
+                order_string = api_helper.buildOrderString(order_obj)
+                email_body = """
+A form has been submitted from: https://data.tnris.org/ \n
+Form ID: data-tnris-org \n
+\n
+Form parameters \n
+================== \n
+\n"""
+                email_body = email_body + order_string
+                reply_email = "unknown@tnris.org"
+                if("Email" in order_obj):
+                    reply_email = order_obj["Email"]
+                api_helper.send_raw_email(subject="Dataset Order", body=email_body,
+                    send_from=os.environ.get("MAIL_DEFAULT_FROM"),
+                    send_to=os.environ.get("MAIL_DEFAULT_TO"),
+                    reply_to=reply_email)
+
+                #Notify user
                 api_helper.send_email(
                     "Your datahub order has been received",
                     """

@@ -82,17 +82,18 @@ class DataHubContactAdmin(admin.ModelAdmin, ExportSelectedToCsvMixin):
 @admin.register(OrderType)
 class OrderTypeAdmin(admin.ModelAdmin): 
     model = OrderType
-    list_filter = (['order_approved', 'archived'])
+    list_filter = (['order_approved', 'order_sent', 'archived'])
     list_display = (
         'id',
         'link_to_details',
         'approved_charge',
         'order_approved',
+        'order_sent',
         'archived',
         'created',
         'last_modified'
     )
-    list_editable = (['approved_charge', 'order_approved'])
+    list_editable = (['approved_charge', 'order_approved', 'order_sent', 'archived'])
     list_per_page = 10
     ordering = ('-created',)
 

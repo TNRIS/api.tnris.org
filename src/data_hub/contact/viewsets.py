@@ -27,9 +27,8 @@ from .models import CampaignSubscriber, EmailTemplate, SurveyTemplate, OrderType
 from .serializers import *
 
 
-if settings.DEBUG:
-    logger = logging.getLogger("errLog")
-    logger.addHandler(watchtower.CloudWatchLogHandler())
+logger = logging.getLogger("errLog")
+logger.addHandler(watchtower.CloudWatchLogHandler())
 
 CCP_URL = 'https://securecheckout-uat.cdc.nicusa.com/ccprest/api/v1/TX/'
 # custom permissions for cors control
@@ -299,13 +298,14 @@ class OrderCleanupViewSet(viewsets.ViewSet):
     
     def create(self, request, format=None):
         if(os.environ.get("CCP_ACCESS_CODE")!= request.data["access_code"]):
+            logger.error("CCP access code incorrect")
             return Response(
                 {"status": "access_denied", "message": "access_denied"},
                 status=status.HTTP_401_UNAUTHORIZED,
             )
         try:
             # Select all of the orders that are not archived.
-
+            logger.info("Starting cleanup.")
             unarchived_orders = OrderType.objects.filter(archived=False).values()
             
             now = datetime.now(timezone.utc)
@@ -320,6 +320,7 @@ class OrderCleanupViewSet(viewsets.ViewSet):
                 a = self.get_receipt(request, format)
                 if(a.status_code == 200):
                     if(not order["tnris_notified"]):
+                        logger.info("Order receipt found where TNRIS has not been notified.")
                         obj = OrderType.objects.get(id=order["id"])
                         obj.tnris_notified = True
                         order_obj = json.loads(OrderDetailsType.objects.filter(id=order["order_details_id"]).values()[0]["details"])
@@ -350,7 +351,7 @@ Form parameters \n
                     obj = OrderType.objects.get(id=order["id"])
                     obj.archived = True
                     obj.save()
-                                          
+            logger.info("Successful cleanup")           
             response =  Response(
                 {"status": "success", "message": "success"},
                 status=status.HTTP_200_OK,
@@ -359,12 +360,13 @@ Form parameters \n
         except Exception as e:
             message = "Error cleaning up orders. Exception: "
             if(settings.DEBUG): message = message + str(e)
-
+            logger.error(message = message + str(e))
             response =  Response(
                 {"status": "failure", "message": "failure"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
         finally:
+            logger.info("Finished cleanup.")
             return response
     
     def get_receipt(self, request, format):

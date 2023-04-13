@@ -111,10 +111,8 @@ class OrderType(models.Model):
     
     order_sent = models.BooleanField(
         'Order Sent?',
-        editable=False,
         default=False,
-        null=True,
-        blank=True
+        editable=True
     )
     
     approved_charge = models.FloatField(

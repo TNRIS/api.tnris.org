@@ -511,7 +511,10 @@ class OrderSubmitViewSet(viewsets.ViewSet):
 
                     #response = redirect(order.order_url)
                     response = Response(
-                        {"status": "success", "order_url": order.order_url, "message": "success"}
+                        {"status": "success", 
+                        "order_url": order.order_url,
+                        "charge": order.approved_charge,
+                        "message": "success"}
                     )
                 else:
                     response =  Response(

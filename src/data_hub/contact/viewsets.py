@@ -327,7 +327,7 @@ class OrderCleanupViewSet(viewsets.ViewSet):
                         obj.save()
 
 
-                        order_string = api_helper.buildOrderString(order_obj)
+                        order_string = api_helper.buildOrderString(str(order["id"]), order_obj)
                         email_body = """
 A payment has been received from from: https://data.tnris.org/ \n
 Please see order details below. And ship the order. \n
@@ -601,7 +601,7 @@ class OrderFormViewSet(viewsets.ViewSet):
 
                 #Notify TxGIO
                 order_obj = json.loads(order_object.order_details.details)
-                order_string = api_helper.buildOrderString(order_obj)
+                order_string = api_helper.buildOrderString(str(order_object.id), order_obj)
                 email_body = """
 A form has been submitted from: https://data.tnris.org/ \n
 Form ID: data-tnris-org \n

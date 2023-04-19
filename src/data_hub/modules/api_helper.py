@@ -136,8 +136,9 @@ def checkCaptcha(IS_DEBUG, captcha):
     
     return requests.post(url=recaptcha_verify_url, data=recaptcha_data)
 
-def buildOrderString(order_obj): 
+def buildOrderString(id, order_obj): 
     order_string = ""
+    order_string += "Order ID: " + (id + "\n\n" )
     order_string += "Name: " + (order_obj["Name"] + "\n" if "Name" in order_obj else "\n")
     order_string += "Email: " + (order_obj["Email"] + "\n" if "Email" in order_obj else "\n")
     order_string += "Phone: " + (order_obj["Phone"] + "\n" if "Phone" in order_obj else "\n")

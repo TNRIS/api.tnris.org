@@ -312,23 +312,24 @@ class OrderCleanupViewSet(viewsets.ViewSet):
             
             # If an order is older than 15 days archive it regardless.
             for order in unarchived_orders:
-                difference = now - order["created"] 
-                request.query_params._mutable = True
-                request.query_params["uuid"] = str(order["id"])
-                request.query_params._mutable = False
+                try:
+                    difference = now - order["created"] 
+                    request.query_params._mutable = True
+                    request.query_params["uuid"] = str(order["id"])
+                    request.query_params._mutable = False
 
-                a = self.get_receipt(request, format)
-                if(a.status_code == 200):
-                    if(not order["tnris_notified"]):
-                        logger.info("Order receipt found where TNRIS has not been notified.")
-                        obj = OrderType.objects.get(id=order["id"])
-                        obj.tnris_notified = True
-                        order_obj = json.loads(OrderDetailsType.objects.filter(id=order["order_details_id"]).values()[0]["details"])
-                        obj.save()
+                    a = self.get_receipt(request, format)
+                    if(a.status_code == 200):
+                        if(not order["tnris_notified"]):
+                            logger.info("Order receipt found where TNRIS has not been notified.")
+                            obj = OrderType.objects.get(id=order["id"])
+                            obj.tnris_notified = True
+                            order_obj = json.loads(OrderDetailsType.objects.filter(id=order["order_details_id"]).values()[0]["details"])
+                            obj.save()
 
 
-                        order_string = api_helper.buildOrderString(str(order["id"]), order_obj)
-                        email_body = """
+                            order_string = api_helper.buildOrderString(str(order["id"]), order_obj)
+                            email_body = """
 A payment has been received from from: https://data.tnris.org/ \n
 Please see order details below. And ship the order. \n
 Form ID: data-tnris-org \n
@@ -336,21 +337,45 @@ Form ID: data-tnris-org \n
 Form parameters \n
 ================== \n
 \n"""
+                            
+                            email_body = email_body + order_string
+                            reply_email = "unknown@tnris.org"
+                            if("Email" in order_obj):
+                                reply_email = order_obj["Email"]
+                            api_helper.send_raw_email(subject="Dataset Order Update: Payment has been received.", body=email_body,
+                                send_from=os.environ.get("MAIL_DEFAULT_FROM"),
+                                send_to=os.environ.get("MAIL_DEFAULT_TO"),
+                                reply_to=reply_email)
                         
-                        email_body = email_body + order_string
-                        reply_email = "unknown@tnris.org"
-                        if("Email" in order_obj):
-                            reply_email = order_obj["Email"]
-                        api_helper.send_raw_email(subject="Dataset Order Update: Payment has been received.", body=email_body,
-                            send_from=os.environ.get("MAIL_DEFAULT_FROM"),
-                            send_to=os.environ.get("MAIL_DEFAULT_TO"),
-                            reply_to=reply_email)
-                    
-                #If no receipt was received or order was sent after 15 days then archive order automatically.
-                if(difference.days > 15 and (a.status_code != 200 or order["order_sent"] == True) ):
-                    obj = OrderType.objects.get(id=order["id"])
-                    obj.archived = True
-                    obj.save()
+                    #If no receipt was received or order was sent after 45 days then archive order automatically.
+                    if(difference.days > 45 and (a.status_code != 200 or order["order_sent"] == True) ):
+                        order_obj = json.loads(OrderDetailsType.objects.filter(id=order["order_details_id"]).values()[0]["details"])
+                        obj = OrderType.objects.get(id=order["id"])
+                        obj.archived = True
+                        obj.save()
+                        if(a.status_code != 200 and "Email" in order_obj):
+                            api_helper.send_email(
+                                subject="Your TNRIS Datahub order has been removed",
+                                body=
+                                    """
+                                        <html><body style='overflow:hidden'>
+                                    """
+                                    + "<div style='width: 98%; background-color: #1e8dc1; padding:12px;'>" +
+                                    """
+                                        <img class="TnrisLogo" width="64" height="35" src="https://cdn.tnris.org/images/tnris_logo.svg" alt="TNRIS Logo" title="data.tnris.org">
+                                    </div><br /><br />
+                                        Greetings from TNRIS,<br /><br />
+                                        Your TNRIS Datahub order has been closed due to being greater than 45 days old. <br />
+                                        For questions or concerns, Please reply to this email or visit our <a href='https://tnris.org/contact/'>contact page</a> for more ways to contact TNRIS.<br /><br />
+                                        Thanks,<br />
+                                        The TNRIS Team
+                                        </body></html>
+                                    """,
+                                send_to=order_obj["Email"],
+                                send_from=os.environ.get("MAIL_DEFAULT_FROM")
+                            )
+                except Exception as e:
+                    logger.error("There was a problem processing a single order. Proceeding.")
             logger.info("Successful cleanup")           
             response =  Response(
                 {"status": "success", "message": "success"},

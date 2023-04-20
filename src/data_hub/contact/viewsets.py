@@ -332,7 +332,7 @@ class OrderCleanupViewSet(viewsets.ViewSet):
                             email_body = """
 A payment has been received from from: https://data.tnris.org/ \n
 Please see order details below. And ship the order. \n
-Form ID: data-tnris-org \n
+Form ID: data-tnris-org-order \n
 \n
 Form parameters \n
 ================== \n
@@ -567,6 +567,17 @@ class OrderFormViewSet(viewsets.ViewSet):
     """
     permission_classes = [CorsPostPermission]
 
+    # inject form values into email template body
+    def compile_email_body(self, template_body, dict):
+        injected = template_body
+        # loop form value keys and replace in template
+        for k in dict.keys():
+            var = "{{%s}}" % k.lower()
+            injected = injected.replace(var, str(dict[k]))
+        # replace all template values which weren't in the form (optional form fields)
+        injected = re.sub(r"\{\{.*?\}\}", "", injected)
+        return injected
+
     @receiver(pre_save, sender=OrderType)
     def my_callback(sender, instance, *args, **kwargs):
         instance.order_approved
@@ -627,21 +638,38 @@ class OrderFormViewSet(viewsets.ViewSet):
                 #Notify TxGIO
                 order_obj = json.loads(order_object.order_details.details)
                 order_string = api_helper.buildOrderString(str(order_object.id), order_obj)
-                email_body = """
-A form has been submitted from: https://data.tnris.org/ \n
-Form ID: data-tnris-org \n
-\n
-Form parameters \n
-================== \n
-\n"""
-                email_body = email_body + order_string
-                reply_email = "unknown@tnris.org"
-                if("Email" in order_obj):
-                    reply_email = order_obj["Email"]
-                api_helper.send_raw_email(subject="Dataset Order", body=email_body,
-                    send_from=os.environ.get("MAIL_DEFAULT_FROM"),
-                    send_to=os.environ.get("MAIL_DEFAULT_TO"),
-                    reply_to=reply_email)
+
+                formatted = request.data.get('order_details')
+                formatted["url"] = (
+                    request.META["HTTP_REFERER"]
+                    if "HTTP_REFERER" in request.META.keys()
+                    else request.META["HTTP_HOST"]
+                )
+
+                formatted["url"] = "https://data.tnris.org/"
+                
+                email_template = EmailTemplate.objects.get(form_id='data-tnris-org-order')
+
+                body = self.compile_email_body(
+                    email_template.email_template_body, formatted
+                )
+                # send to ticketing system unless sendpoint has alternative key value in email template record
+                sender = (
+                    os.environ.get("MAIL_DEFAULT_TO")
+                    if email_template.sendpoint == "default"
+                    else formatted[email_template.sendpoint]
+                )
+                replyer = (
+                    formatted["Email"]
+                    if "Email" in formatted.keys()
+                    else "unknown@tnris.org"
+                )
+                if "Name" in formatted.keys():
+                    replyer = "%s <%s>" % (formatted["Name"], formatted["Email"])
+
+                api_helper.send_raw_email(subject="Dataset Order", body=body,
+                    send_to=sender,
+                    reply_to= replyer)
 
                 #Notify user
                 api_helper.send_email(

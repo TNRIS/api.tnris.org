@@ -63,7 +63,7 @@ class OrderType(models.Model):
                         order_approved=False
                     )
                     | models.Q(
-                        approved_charge__gte=1,
+                        approved_charge__gte=0.01,
                         order_approved=True
                     )
                 )

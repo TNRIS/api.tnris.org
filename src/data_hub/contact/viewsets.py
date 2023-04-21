@@ -328,15 +328,15 @@ class OrderCleanupViewSet(viewsets.ViewSet):
                             obj.save()
 
 
-                            order_string = api_helper.buildOrderString(str(order["id"]), order_obj)
+                            order_string = api_helper.buildOrderString(order_obj)
                             email_body = """
-A payment has been received from from: https://data.tnris.org/ \n
+A payment has been received from from: https://data.tnris.org/
 Please see order details below. And ship the order. \n
-Form ID: data-tnris-org-order \n
-\n
-Form parameters \n
+Form ID: data-tnris-org-order
+Order ID: %s
+Form parameters
 ================== \n
-\n"""
+""" % str(order["id"])
                             
                             email_body = email_body + order_string
                             reply_email = "unknown@tnris.org"
@@ -635,19 +635,13 @@ class OrderFormViewSet(viewsets.ViewSet):
                                                       otp_age=time.time())
                 order_object = OrderType.objects.create(order_details=order_details)
 
-                #Notify TxGIO
-                order_obj = json.loads(order_object.order_details.details)
-                order_string = api_helper.buildOrderString(str(order_object.id), order_obj)
-
                 formatted = request.data.get('order_details')
                 formatted["url"] = (
                     request.META["HTTP_REFERER"]
                     if "HTTP_REFERER" in request.META.keys()
                     else request.META["HTTP_HOST"]
                 )
-
-                formatted["url"] = "https://data.tnris.org/"
-                
+                formatted["order_uuid"] = order_object.id
                 email_template = EmailTemplate.objects.get(form_id='data-tnris-org-order')
 
                 body = self.compile_email_body(
@@ -667,7 +661,9 @@ class OrderFormViewSet(viewsets.ViewSet):
                 if "Name" in formatted.keys():
                     replyer = "%s <%s>" % (formatted["Name"], formatted["Email"])
 
-                api_helper.send_raw_email(subject="Dataset Order", body=body,
+                api_helper.send_raw_email(
+                    subject="Dataset Order",
+                    body=body,
                     send_to=sender,
                     reply_to= replyer)
 

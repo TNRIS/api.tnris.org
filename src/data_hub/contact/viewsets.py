@@ -312,45 +312,70 @@ class OrderCleanupViewSet(viewsets.ViewSet):
             
             # If an order is older than 15 days archive it regardless.
             for order in unarchived_orders:
-                difference = now - order["created"] 
-                request.query_params._mutable = True
-                request.query_params["uuid"] = str(order["id"])
-                request.query_params._mutable = False
+                try:
+                    difference = now - order["created"] 
+                    request.query_params._mutable = True
+                    request.query_params["uuid"] = str(order["id"])
+                    request.query_params._mutable = False
 
-                a = self.get_receipt(request, format)
-                if(a.status_code == 200):
-                    if(not order["tnris_notified"]):
-                        logger.info("Order receipt found where TNRIS has not been notified.")
-                        obj = OrderType.objects.get(id=order["id"])
-                        obj.tnris_notified = True
-                        order_obj = json.loads(OrderDetailsType.objects.filter(id=order["order_details_id"]).values()[0]["details"])
-                        obj.save()
+                    a = self.get_receipt(request, format)
+                    if(a.status_code == 200):
+                        if(not order["tnris_notified"]):
+                            logger.info("Order receipt found where TNRIS has not been notified.")
+                            obj = OrderType.objects.get(id=order["id"])
+                            obj.tnris_notified = True
+                            order_obj = json.loads(OrderDetailsType.objects.filter(id=order["order_details_id"]).values()[0]["details"])
+                            obj.save()
 
 
-                        order_string = api_helper.buildOrderString(str(order["id"]), order_obj)
-                        email_body = """
-A payment has been received from from: https://data.tnris.org/ \n
+                            order_string = api_helper.buildOrderString(order_obj)
+                            email_body = """
+A payment has been received from from: https://data.tnris.org/
 Please see order details below. And ship the order. \n
-Form ID: data-tnris-org \n
-\n
-Form parameters \n
+Form ID: data-tnris-org-order
+Order ID: %s
+Form parameters
 ================== \n
-\n"""
+""" % str(order["id"])
+                            
+                            email_body = email_body + order_string
+                            reply_email = "unknown@tnris.org"
+                            if("Email" in order_obj):
+                                reply_email = order_obj["Email"]
+                            api_helper.send_raw_email(subject="Dataset Order Update: Payment has been received.", body=email_body,
+                                send_from=os.environ.get("MAIL_DEFAULT_FROM"),
+                                send_to=os.environ.get("MAIL_DEFAULT_TO"),
+                                reply_to=reply_email)
                         
-                        email_body = email_body + order_string
-                        reply_email = "unknown@tnris.org"
-                        if("Email" in order_obj):
-                            reply_email = order_obj["Email"]
-                        api_helper.send_raw_email(subject="Dataset Order Update: Payment has been received.", body=email_body,
-                            send_from=os.environ.get("MAIL_DEFAULT_FROM"),
-                            send_to=os.environ.get("MAIL_DEFAULT_TO"),
-                            reply_to=reply_email)
-                    
-                #If no receipt was received or order was sent after 15 days then archive order automatically.
-                if(difference.days > 15 and (a.status_code != 200 or order["order_sent"] == True) ):
-                    obj = OrderType.objects.get(id=order["id"])
-                    obj.archived = True
-                    obj.save()
+                    #If no receipt was received or order was sent after 45 days then archive order automatically.
+                    if(difference.days > 45 and (a.status_code != 200 or order["order_sent"] == True) ):
+                        order_obj = json.loads(OrderDetailsType.objects.filter(id=order["order_details_id"]).values()[0]["details"])
+                        obj = OrderType.objects.get(id=order["id"])
+                        obj.archived = True
+                        obj.save()
+                        if(a.status_code != 200 and "Email" in order_obj):
+                            api_helper.send_email(
+                                subject="Your TNRIS Datahub order has been removed",
+                                body=
+                                    """
+                                        <html><body style='overflow:hidden'>
+                                    """
+                                    + "<div style='width: 98%; background-color: #1e8dc1; padding:12px;'>" +
+                                    """
+                                        <img class="TnrisLogo" width="64" height="35" src="https://cdn.tnris.org/images/tnris_logo.svg" alt="TNRIS Logo" title="data.tnris.org">
+                                    </div><br /><br />
+                                        Greetings from TNRIS,<br /><br />
+                                        Your TNRIS Datahub order has been closed due to being greater than 45 days old. <br />
+                                        For questions or concerns, Please reply to this email or visit our <a href='https://tnris.org/contact/'>contact page</a> for more ways to contact TNRIS.<br /><br />
+                                        Thanks,<br />
+                                        The TNRIS Team
+                                        </body></html>
+                                    """,
+                                send_to=order_obj["Email"],
+                                send_from=os.environ.get("MAIL_DEFAULT_FROM")
+                            )
+                except Exception as e:
+                    logger.error("There was a problem processing a single order. Proceeding.")
             logger.info("Successful cleanup")           
             response =  Response(
                 {"status": "success", "message": "success"},
@@ -542,6 +567,17 @@ class OrderFormViewSet(viewsets.ViewSet):
     """
     permission_classes = [CorsPostPermission]
 
+    # inject form values into email template body
+    def compile_email_body(self, template_body, dict):
+        injected = template_body
+        # loop form value keys and replace in template
+        for k in dict.keys():
+            var = "{{%s}}" % k.lower()
+            injected = injected.replace(var, str(dict[k]))
+        # replace all template values which weren't in the form (optional form fields)
+        injected = re.sub(r"\{\{.*?\}\}", "", injected)
+        return injected
+
     @receiver(pre_save, sender=OrderType)
     def my_callback(sender, instance, *args, **kwargs):
         instance.order_approved
@@ -599,24 +635,37 @@ class OrderFormViewSet(viewsets.ViewSet):
                                                       otp_age=time.time())
                 order_object = OrderType.objects.create(order_details=order_details)
 
-                #Notify TxGIO
-                order_obj = json.loads(order_object.order_details.details)
-                order_string = api_helper.buildOrderString(str(order_object.id), order_obj)
-                email_body = """
-A form has been submitted from: https://data.tnris.org/ \n
-Form ID: data-tnris-org \n
-\n
-Form parameters \n
-================== \n
-\n"""
-                email_body = email_body + order_string
-                reply_email = "unknown@tnris.org"
-                if("Email" in order_obj):
-                    reply_email = order_obj["Email"]
-                api_helper.send_raw_email(subject="Dataset Order", body=email_body,
-                    send_from=os.environ.get("MAIL_DEFAULT_FROM"),
-                    send_to=os.environ.get("MAIL_DEFAULT_TO"),
-                    reply_to=reply_email)
+                formatted = request.data.get('order_details')
+                formatted["url"] = (
+                    request.META["HTTP_REFERER"]
+                    if "HTTP_REFERER" in request.META.keys()
+                    else request.META["HTTP_HOST"]
+                )
+                formatted["order_uuid"] = order_object.id
+                email_template = EmailTemplate.objects.get(form_id='data-tnris-org-order')
+
+                body = self.compile_email_body(
+                    email_template.email_template_body, formatted
+                )
+                # send to ticketing system unless sendpoint has alternative key value in email template record
+                sender = (
+                    os.environ.get("MAIL_DEFAULT_TO")
+                    if email_template.sendpoint == "default"
+                    else formatted[email_template.sendpoint]
+                )
+                replyer = (
+                    formatted["Email"]
+                    if "Email" in formatted.keys()
+                    else "unknown@tnris.org"
+                )
+                if "Name" in formatted.keys():
+                    replyer = "%s <%s>" % (formatted["Name"], formatted["Email"])
+
+                api_helper.send_raw_email(
+                    subject="Dataset Order",
+                    body=body,
+                    send_to=sender,
+                    reply_to= replyer)
 
                 #Notify user
                 api_helper.send_email(

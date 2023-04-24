@@ -55,6 +55,20 @@ class OrderType(models.Model):
         db_table = 'order_type'
         verbose_name = 'DataHub New Order'
         verbose_name_plural = 'DataHub New Orders'  
+        constraints = [
+            models.CheckConstraint(
+                name="%(app_label)s_%(class)s_order_approved_constraint",
+                check=(
+                    models.Q(
+                        order_approved=False
+                    )
+                    | models.Q(
+                        approved_charge__gte=0.01,
+                        order_approved=True
+                    )
+                )
+            )
+        ]
 
     id = models.UUIDField(
         'Order Id',

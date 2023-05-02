@@ -496,12 +496,13 @@ class OrderSubmitViewSet(viewsets.ViewSet):
                                     }
                                 ]
                 
-                total = order.approved_charge
+                total = round(order.approved_charge, 2)
                 #2.25% and $.25
                 transactionfee = round(((total + .25)/100) * 2.25, 2)
-                transactionfee = transactionfee + .25
+                #Round to second digit because of binary Float
+                transactionfee = round(transactionfee + .25, 2)
                 body = {
-                    "OrderTotal": total + transactionfee,
+                    "OrderTotal": round(total + transactionfee, 2),
                     "MerchantCode": os.environ.get("CCP_MERCHANT_CODE"),
                     "MerchantKey": os.environ.get("CCP_MERCHANT_KEY"),
                     "ServiceCode": os.environ.get("CCP_SERVICE_CODE"),
@@ -516,7 +517,7 @@ class OrderSubmitViewSet(viewsets.ViewSet):
                         {
                             "Sku": "DHUB",
                             "Description": "TNRIS DataHub order",
-                            "UnitPrice": total + transactionfee,
+                            "UnitPrice": round(total + transactionfee, 2),
                             "Quantity": 1,
                             "ItemAttributes": item_attributes
                         }

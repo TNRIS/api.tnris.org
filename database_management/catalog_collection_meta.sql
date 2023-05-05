@@ -20,11 +20,14 @@ CREATE MATERIALIZED VIEW catalog_collection_meta AS
     c.license_url,
     c.name,
     c.template,
-    c.availability,
+    CASE
+        WHEN c.wms_link IS NOT NULL THEN concat(c.availability, ',', 'WMS_Service')
+        ELSE c.availability
+    END AS availability,
     c.category,
     c.recommended_use,
     c.file_type,
-	g.the_geom
+    g.the_geom
    FROM collection_catalog_record c
      LEFT JOIN collection_footprint g ON c.collection_id = g.collection_id_id
 UNION
@@ -46,8 +49,7 @@ UNION
     h.category,
     h.recommended_use,
     'TIFF'::text AS file_type,
-    ( SELECT 
-	 st_simplifypreservetopology(st_union(geom.the_geom), .05::double precision) AS the_geom
+    ( SELECT st_simplifypreservetopology(st_union(geom.the_geom), 0.05::double precision) AS the_geom
            FROM ( SELECT a_t_g.wkb_geometry AS the_geom
                    FROM county_relate c_r
                      RIGHT JOIN county c ON c_r.county_id = c.id

@@ -30,7 +30,7 @@ from .serializers import *
 logger = logging.getLogger("errLog")
 logger.addHandler(watchtower.CloudWatchLogHandler())
 
-CCP_URL = 'https://securecheckout-uat.cdc.nicusa.com/ccprest/api/v1/TX/'
+CCP_URL = 'https://securecheckout.cdc.nicusa.com/ccprest/api/v1/TX/'
 # custom permissions for cors control
 class CorsPostPermission(AllowAny):
     whitelisted_domains = [

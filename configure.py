@@ -45,7 +45,7 @@ export_command = ("export DB_PASSWORD=" + secrets["DB_PASSWORD"] +
 " CCP_MERCHANT_CODE=" + secrets["CCP_MERCHANT_CODE"] +
 " CCP_MERCHANT_KEY=" + secrets["CCP_MERCHANT_KEY"] +
 " CCP_SERVICE_CODE=" + secrets["CCP_SERVICE_CODE"] +
-" CCP_API_KEY=" + secrets["CCP_API_KEY"] +
+" CCP_API_KEY_UAT=" + secrets["CCP_API_KEY_UAT"] +
 " CCP_ACCESS_CODE=" + secrets["CCP_ACCESS_CODE"] +
 
 # Encryption Environmental Variables

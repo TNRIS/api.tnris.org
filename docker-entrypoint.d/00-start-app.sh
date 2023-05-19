@@ -21,7 +21,7 @@ export S3_UPLOAD_KEY=`/envs/data_hub/bin/aws secretsmanager get-secret-value --s
 export CCP_MERCHANT_CODE=`/envs/data_hub/bin/aws secretsmanager get-secret-value --secret-id api-tnris-org --query SecretString --output text | jq -cr '.CCP_MERCHANT_CODE'`
 export CCP_MERCHANT_KEY=`/envs/data_hub/bin/aws secretsmanager get-secret-value --secret-id api-tnris-org --query SecretString --output text | jq -cr '.CCP_MERCHANT_KEY'`
 export CCP_SERVICE_CODE=`/envs/data_hub/bin/aws secretsmanager get-secret-value --secret-id api-tnris-org --query SecretString --output text | jq -cr '.CCP_SERVICE_CODE'`
-export CCP_API_KEY=`/envs/data_hub/bin/aws secretsmanager get-secret-value --secret-id api-tnris-org --query SecretString --output text | jq -cr '.CCP_API_KEY'`
+export CCP_API_KEY_UAT=`/envs/data_hub/bin/aws secretsmanager get-secret-value --secret-id api-tnris-org --query SecretString --output text | jq -cr '.CCP_API_KEY_UAT'`
 export CCP_ACCESS_CODE=`/envs/data_hub/bin/aws secretsmanager get-secret-value --secret-id api-tnris-org --query SecretString --output text | jq -cr '.CCP_ACCESS_CODE'`
 
 export FKEY1=`/envs/data_hub/bin/aws secretsmanager get-secret-value --secret-id api-tnris-org --query SecretString --output text | jq -cr '.FKEY1'`

@@ -26,6 +26,7 @@ export CCP_ACCESS_CODE=`/envs/data_hub/bin/aws secretsmanager get-secret-value -
 
 export FKEY1=`/envs/data_hub/bin/aws secretsmanager get-secret-value --secret-id api-tnris-org --query SecretString --output text | jq -cr '.FKEY1'`
 export ACCESS_PEPPER=`/envs/data_hub/bin/aws secretsmanager get-secret-value --secret-id api-tnris-org --query SecretString --output text | jq -cr '.ACCESS_PEPPER'`
+export BCC_EMAIL_1=`/envs/data_hub/bin/aws secretsmanager get-secret-value --secret-id api-tnris-org --query SecretString --output text | jq -cr '.BCC_EMAIL_1'`
 
 export IS_LIVE=true
 export IS_DEBUG=false

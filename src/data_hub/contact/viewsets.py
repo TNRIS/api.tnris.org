@@ -513,6 +513,7 @@ class OrderSubmitViewSet(viewsets.ViewSet):
                     "FailureUrl":"https://data.tnris.org/order/redirect?status=failure",
                     "CancelUrl":"https://data.tnris.org/order/redirect?status=cancel",
                     "DuplicateUrl":"https://data.tnris.org/order/redirect?status=duplicate",
+                    "BCCEmail1":os.environ.get("BCC_EMAIL_1"),
                     "LineItems": [
                         {
                             "Sku": "DHUB",

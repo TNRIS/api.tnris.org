@@ -30,7 +30,7 @@ from .serializers import *
 logger = logging.getLogger("errLog")
 logger.addHandler(watchtower.CloudWatchLogHandler())
 
-CCP_URL = 'https://securecheckout-uat.cdc.nicusa.com/ccprest/api/v1/TX/'
+CCP_URL = 'https://securecheckout.cdc.nicusa.com/ccprest/api/v1/TX/'
 # custom permissions for cors control
 class CorsPostPermission(AllowAny):
     whitelisted_domains = [
@@ -399,7 +399,7 @@ Form parameters
             order = OrderType.objects.get(id=request.query_params["uuid"])
             if(order.order_approved):
                 headers={
-                    "apiKey": os.environ.get("CCP_API_KEY_UAT"),
+                    "apiKey": os.environ.get("CCP_API_KEY"),
                     "MerchantKey": os.environ.get("CCP_MERCHANT_KEY"),
                     "MerchantCode": os.environ.get("CCP_MERCHANT_CODE"),
                     "ServiceCode": os.environ.get("CCP_SERVICE_CODE")
@@ -533,7 +533,7 @@ class OrderSubmitViewSet(viewsets.ViewSet):
                     CCP_URL + "tokens", 
                     json = body,
                     headers={
-                        "apiKey": os.environ.get("CCP_API_KEY_UAT")
+                        "apiKey": os.environ.get("CCP_API_KEY")
                     }
                 )
 

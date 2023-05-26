@@ -40,6 +40,19 @@ class CollectionSerializer(serializers.ModelSerializer):
         model = ChcView
         fields = '__all__'
 
+    s_three_key = serializers.SerializerMethodField()
+    def get_s_three_key(self, obj):
+        try:
+            if(obj.source_abbreviation and obj.from_date and obj.collection):
+                sa = obj.source_abbreviation
+                year = obj.from_date.strftime("%Y")
+                cname = obj.collection
+                return sa + '-' + year + '-' + cname
+            else:
+                return ""
+        except:
+            return ""
+
     thumbnail_image = serializers.SerializerMethodField()
     def get_thumbnail_image(self, obj):
         if str(obj.thumbnail_image) != "" and obj.thumbnail_image is not None:

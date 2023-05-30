@@ -2,6 +2,9 @@ import boto3, json, os, hashlib, time, requests
 from botocore.exceptions import ClientError
 from django.core.mail import send_mail
 from django.core.mail import EmailMessage
+import logging, watchtower
+logger = logging.getLogger("errLog")
+logger.addHandler(watchtower.CloudWatchLogHandler())
 
 
 def get_secret(secret_name):
@@ -121,6 +124,8 @@ def checkCaptcha(IS_DEBUG, captcha):
     Returns:
         _type_: python object with information about status of captcha.
     """
+    logger.info("Checking Captcha.")
+
     # if in DEBUG mode, assume local development and use localhost recaptcha secret
     # otherwise, use product account secret environment variable
     recaptcha_secret = (

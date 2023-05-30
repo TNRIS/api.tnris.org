@@ -36,7 +36,7 @@ ALLOWED_HOSTS = [
     '127.0.0.1'
 ]
 
-if False:
+if True:
     AWS_REGION_NAME = "us-east-1"
     boto3_logs_client = boto3.client("logs", region_name=AWS_REGION_NAME)
 

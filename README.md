@@ -7,7 +7,7 @@ Django RESTful API and PostgreSQL backend database management system for maintai
 ## Setup
 
 Built with:
-* Python 3.6 ([virtual environment (venv)](https://docs.python.org/3/library/venv.html) suggested)
+* Python 3.8 ([virtual environment (venv)](https://docs.python.org/3/library/venv.html) suggested)
 * PostgreSQL 10.7
   * Amazon RDS Aurora Instance (`tnris-general-store`)
 * [Django](https://docs.djangoproject.com/en/3.0/topics/install/)

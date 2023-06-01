@@ -294,7 +294,7 @@ class LoggerType(models.Model):
     )
 
     def __str__(self):
-        return "logger type"
+        return self.setting_name
 
 class ResourceType(models.Model):
     """Available resource download types domain table"""

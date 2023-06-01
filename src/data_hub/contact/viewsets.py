@@ -29,6 +29,7 @@ from .serializers import *
 
 logger = logging.getLogger("errLog")
 logger.addHandler(watchtower.CloudWatchLogHandler())
+CLEANING_FLAG=False
 
 CCP_URL = 'https://securecheckout.cdc.nicusa.com/ccprest/api/v1/TX/'
 # custom permissions for cors control
@@ -297,6 +298,14 @@ class OrderCleanupViewSet(viewsets.ViewSet):
     permission_classes = (AllowAny,)
     
     def create(self, request, format=None):
+        if CLEANING_FLAG:
+            logger.error("Cleaning function is already in progress.")
+            return Response(
+                {"status": "failure", "message": "failure. Cleaning function already running"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+        
+        # Check CCP ACCESS CODE to prevent bots from making requests.
         if(os.environ.get("CCP_ACCESS_CODE")!= request.data["access_code"]):
             logger.error("CCP access code incorrect")
             return Response(
@@ -306,6 +315,7 @@ class OrderCleanupViewSet(viewsets.ViewSet):
         try:
             # Select all of the orders that are not archived.
             logger.info("Starting cleanup.")
+            CLEANING_FLAG=True
             unarchived_orders = OrderType.objects.filter(archived=False).values()
             
             now = datetime.now(timezone.utc)
@@ -318,8 +328,8 @@ class OrderCleanupViewSet(viewsets.ViewSet):
                     request.query_params["uuid"] = str(order["id"])
                     request.query_params._mutable = False
 
-                    a = self.get_receipt(request, format)
-                    if(a.status_code == 200):
+                    receipt = self.get_receipt(request, format)
+                    if(receipt.status_code == 200):
                         if(not order["tnris_notified"]):
                             logger.info("Order receipt found where TNRIS has not been notified.")
                             obj = OrderType.objects.get(id=order["id"])
@@ -348,12 +358,12 @@ Form parameters
                                 reply_to=reply_email)
                         
                     #If no receipt was received or order was sent after 45 days then archive order automatically.
-                    if(difference.days > 45 and (a.status_code != 200 or order["order_sent"] == True) ):
+                    if(difference.days > 45 and (receipt.status_code != 200 or order["order_sent"] == True) ):
                         order_obj = json.loads(OrderDetailsType.objects.filter(id=order["order_details_id"]).values()[0]["details"])
                         obj = OrderType.objects.get(id=order["id"])
                         obj.archived = True
                         obj.save()
-                        if(a.status_code != 200 and "Email" in order_obj):
+                        if(receipt.status_code != 200 and "Email" in order_obj):
                             api_helper.send_email(
                                 subject="Your TNRIS Datahub order has been removed",
                                 body=
@@ -392,6 +402,7 @@ Form parameters
             )
         finally:
             logger.info("Finished cleanup.")
+            CLEANING_FLAG=False
             return response
     
     def get_receipt(self, request, format):

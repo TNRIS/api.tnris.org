@@ -269,33 +269,6 @@ class ResourceTypeCategory(models.Model):
     def __str__(self):
         return self.category_name
 
-class LoggerType(models.Model):
-    """Settings for Logger"""
-
-    class Meta:
-        db_table = 'captains_log'
-        verbose_name = 'Captains Log'
-        verbose_name_plural = 'Captains Logs'
-
-    resource_type_id = models.UUIDField (
-        'Resource Type Id',
-        default=uuid.uuid4,
-        editable=False
-    )
-
-    setting_name = models.CharField (
-        'Setting Name',
-        max_length=32
-    )
-
-    setting_value= models.CharField (
-        'Setting Value',
-        max_length=32
-    )
-
-    def __str__(self):
-        return self.setting_name
-
 class ResourceType(models.Model):
     """Available resource download types domain table"""
 

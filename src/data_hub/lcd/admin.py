@@ -30,8 +30,7 @@ from .models import (
     TemplateType,
     UseRelate,
     UseType,
-    XlargeSupplemental,
-    LoggerType
+    XlargeSupplemental
 )
 import boto3, json
 
@@ -217,11 +216,6 @@ class EpsgTypeAdmin(admin.ModelAdmin):
 class FileTypeAdmin(admin.ModelAdmin):
     model = FileType
     ordering = ('file_type',)
-
-@admin.register(LoggerType)
-class LoggerTypeAdmin(admin.ModelAdmin):
-    model = LoggerType
-    ordering = ('setting_name',)
 
 
 @admin.register(LicenseType)

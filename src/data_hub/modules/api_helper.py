@@ -3,13 +3,9 @@ from botocore.exceptions import ClientError
 from django.core.mail import send_mail
 from django.core.mail import EmailMessage
 import logging, watchtower
-import time
-from lcd.models import LoggerType
 logger = logging.getLogger("errLog")
 logger.addHandler(watchtower.CloudWatchLogHandler())
 
-SHOULD_LOG = False
-LAST_CHECKED = 0
 
 def get_secret(secret_name):
     """ Access all of the AWS Secrets via it's Identifier.
@@ -169,14 +165,3 @@ def buildOrderString(order_obj):
         order_string += ""
 
     return order_string
-
-def checkLogger():
-    # Check every 30 minutes the SHOULD_LOG Setting otherwise return SHOULD_LOG (Done this way to minimize database use)
-    NOW = time.time()
-    if NOW - LAST_CHECKED >= 1800:
-        LAST_CHECKED = NOW
-        if LoggerType.objects.filter(setting_name='SHOULD_LOG').first().setting_value == 'True':
-            SHOULD_LOG = True
-        else:
-            SHOULD_LOG = False
-    return SHOULD_LOG

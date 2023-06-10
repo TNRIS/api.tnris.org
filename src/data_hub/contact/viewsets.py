@@ -431,8 +431,6 @@ Form parameters
     
     def get_receipt(self, request, format):
         try:
-            if(api_helper.checkLogger()):
-                logger.info("getting receipt.")
             order = OrderType.objects.get(id=request.query_params["uuid"])
             if(order.order_approved):
                 headers={

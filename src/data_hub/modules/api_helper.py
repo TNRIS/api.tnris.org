@@ -174,8 +174,7 @@ def checkLogger():
     try:
         # Check every 30 minutes the SHOULD_LOG Setting otherwise return SHOULD_LOG (Done this way to minimize database use)
         NOW = time.time()
-        global LAST_CHECKED
-        global SHOULD_LOG
+        global LAST_CHECKED, SHOULD_LOG
         if NOW - LAST_CHECKED >= 1800:
             LAST_CHECKED = NOW
             if LoggerType.objects.filter(setting_name='SHOULD_LOG').first().setting_value == 'True':
@@ -184,6 +183,5 @@ def checkLogger():
                 SHOULD_LOG = False
         return SHOULD_LOG
     except Exception as e:
-        print(e)
         logger.error("Error checking logger.")
         return False

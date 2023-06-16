@@ -313,6 +313,7 @@ class OrderCleanupViewSet(viewsets.ViewSet):
     permission_classes = (AllowAny,)
     
     def create(self, request, format=None):
+        global CLEANING_FLAG
         if CLEANING_FLAG:
             if api_helper.checkLogger():
                 logger.error("Cleaning function is already in progress.")

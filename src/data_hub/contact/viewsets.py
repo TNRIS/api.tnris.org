@@ -297,6 +297,16 @@ class OrderCleanupViewSet(viewsets.ViewSet):
     permission_classes = (AllowAny,)
     
     def create(self, request, format=None):
+        global CLEANING_FLAG
+        if CLEANING_FLAG:
+            if api_helper.checkLogger():
+                logger.error("Cleaning function is already in progress.")
+            return Response(
+                {"status": "failure", "message": "failure. Cleaning function already running"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+        
+        # Check CCP ACCESS CODE to prevent bots from making requests.
         if(os.environ.get("CCP_ACCESS_CODE")!= request.data["access_code"]):
             logger.error("CCP access code incorrect")
             return Response(

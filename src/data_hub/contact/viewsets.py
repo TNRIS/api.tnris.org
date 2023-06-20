@@ -29,6 +29,7 @@ from .serializers import *
 
 logger = logging.getLogger("errLog")
 logger.addHandler(watchtower.CloudWatchLogHandler())
+CLEANING_FLAG=False
 
 CCP_URL = 'https://securecheckout.cdc.nicusa.com/ccprest/api/v1/TX/'
 # custom permissions for cors control
@@ -103,6 +104,8 @@ class SubmitFormViewSet(viewsets.ViewSet):
     def create(self, request, format=None):
         # if in DEBUG mode, assume local development and use localhost recaptcha secret
         # otherwise, use product account secret environment variable
+        if(api_helper.checkLogger()): 
+            logger.info("Submitting form: in SubmitFormViewSet.")
         recaptcha_secret = (
             "6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe"
             if settings.DEBUG
@@ -118,6 +121,8 @@ class SubmitFormViewSet(viewsets.ViewSet):
         try:
             email_template = EmailTemplate.objects.get(form_id=request.data["form_id"])
         except:
+            if(api_helper.checkLogger()):
+                logger.error("form_id not registered.")
             return Response(
                 {"status": "error", "message": "form_id not registered."},
                 status=status.HTTP_400_BAD_REQUEST,
@@ -165,10 +170,14 @@ class SubmitFormViewSet(viewsets.ViewSet):
                     send_to=sender,
                     reply_to=replyer,
                 )
+                if(api_helper.checkLogger()):
+                    logger.info("Form Submitted Successfully!")
                 return Response(
                     {"status": "success", "message": "Form Submitted Successfully!"},
                     status=status.HTTP_201_CREATED,
                 )
+            if(api_helper.checkLogger()):
+                logger.info("Serializer Save Failed.")
             return Response(
                 {
                     "status": "error",
@@ -178,6 +187,8 @@ class SubmitFormViewSet(viewsets.ViewSet):
                 status=status.HTTP_400_BAD_REQUEST,
             )
         else:
+            if(api_helper.checkLogger()):
+                logger.error("Recaptcha Verification Failed.")
             return Response(
                 {"status": "error", "message": "Recaptcha Verification Failed."},
                 status=status.HTTP_400_BAD_REQUEST,
@@ -191,6 +202,8 @@ class GenOtpViewSet(viewsets.ViewSet):
     
     def create(self, request, format=None):
         try:
+            if(api_helper.checkLogger()):
+                logger.info("Regenerating one time passcode. GenOtpViewSet")
             verify_req = api_helper.checkCaptcha(settings.DEBUG, request.data["recaptcha"])
             if json.loads(verify_req.text)["success"]:
 
@@ -227,19 +240,22 @@ class GenOtpViewSet(viewsets.ViewSet):
                         """ % otp,
                     send_to=details["Email"]
                 )
-                
+                if(api_helper.checkLogger()):
+                    logger.info("Passcode sent to email.")
                 return Response(
                     {"status": "success", "message": "Passcode sent to email."},
                     status=status.HTTP_200_OK,
                 )
             else:
+                if(api_helper.checkLogger()):
+                    logger.error("Captcha is incorrect.")
                 return Response(
                     {"status": "failure", "message": "Captcha is incorrect."},
                     status=status.HTTP_403_FORBIDDEN,
                 ) 
         except Exception as e:
             message = "Error generating the One time passcode. Exception: "
-            if(settings.DEBUG): 
+            if(api_helper.checkLogger()): 
                 message = message + str(e)
                 logger.error(message)
             return Response(
@@ -285,7 +301,7 @@ class OrderStatusViewSet(viewsets.ViewSet):
                 )         
         except Exception as e:
             message = "Error checking order status. Exception: "
-            if(settings.DEBUG): 
+            if(api_helper.checkLogger()): 
                 message = message + str(e)
                 logger.error(message)
             return Response(
@@ -297,15 +313,28 @@ class OrderCleanupViewSet(viewsets.ViewSet):
     permission_classes = (AllowAny,)
     
     def create(self, request, format=None):
+        global CLEANING_FLAG
+        if CLEANING_FLAG:
+            if api_helper.checkLogger():
+                logger.error("Cleaning function is already in progress.")
+            return Response(
+                {"status": "failure", "message": "failure. Cleaning function already running"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+        
+        # Check CCP ACCESS CODE to prevent bots from making requests.
         if(os.environ.get("CCP_ACCESS_CODE")!= request.data["access_code"]):
-            logger.error("CCP access code incorrect")
+            if api_helper.checkLogger():
+                logger.error("CCP access code incorrect")
             return Response(
                 {"status": "access_denied", "message": "access_denied"},
                 status=status.HTTP_401_UNAUTHORIZED,
             )
         try:
             # Select all of the orders that are not archived.
-            logger.info("Starting cleanup.")
+            if api_helper.checkLogger():
+                logger.info("Starting cleanup.")
+            CLEANING_FLAG=True
             unarchived_orders = OrderType.objects.filter(archived=False).values()
             
             now = datetime.now(timezone.utc)
@@ -318,10 +347,11 @@ class OrderCleanupViewSet(viewsets.ViewSet):
                     request.query_params["uuid"] = str(order["id"])
                     request.query_params._mutable = False
 
-                    a = self.get_receipt(request, format)
-                    if(a.status_code == 200):
+                    receipt = self.get_receipt(request, format)
+                    if(receipt.status_code == 200):
                         if(not order["tnris_notified"]):
-                            logger.info("Order receipt found where TNRIS has not been notified.")
+                            if api_helper.checkLogger():
+                                logger.info("Order receipt found where TNRIS has not been notified.")
                             obj = OrderType.objects.get(id=order["id"])
                             obj.tnris_notified = True
                             order_obj = json.loads(OrderDetailsType.objects.filter(id=order["order_details_id"]).values()[0]["details"])
@@ -348,12 +378,12 @@ Form parameters
                                 reply_to=reply_email)
                         
                     #If no receipt was received or order was sent after 45 days then archive order automatically.
-                    if(difference.days > 45 and (a.status_code != 200 or order["order_sent"] == True) ):
+                    if(difference.days > 45 and (receipt.status_code != 200 or order["order_sent"] == True) ):
                         order_obj = json.loads(OrderDetailsType.objects.filter(id=order["order_details_id"]).values()[0]["details"])
                         obj = OrderType.objects.get(id=order["id"])
                         obj.archived = True
                         obj.save()
-                        if(a.status_code != 200 and "Email" in order_obj):
+                        if(receipt.status_code != 200 and "Email" in order_obj):
                             api_helper.send_email(
                                 subject="Your TNRIS Datahub order has been removed",
                                 body=
@@ -375,8 +405,10 @@ Form parameters
                                 send_from=os.environ.get("MAIL_DEFAULT_FROM")
                             )
                 except Exception as e:
-                    logger.error("There was a problem processing a single order. Proceeding.")
-            logger.info("Successful cleanup")           
+                    if api_helper.checkLogger():
+                        logger.error("There was a problem processing a single order. Proceeding.")
+            if api_helper.checkLogger():
+                logger.info("Successful cleanup")           
             response =  Response(
                 {"status": "success", "message": "success"},
                 status=status.HTTP_200_OK,
@@ -385,13 +417,16 @@ Form parameters
         except Exception as e:
             message = "Error cleaning up orders. Exception: "
             if(settings.DEBUG): message = message + str(e)
-            logger.error(message = message + str(e))
+            if api_helper.checkLogger():
+                logger.error(message = message + str(e))
             response =  Response(
                 {"status": "failure", "message": "failure"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
         finally:
-            logger.info("Finished cleanup.")
+            if api_helper.checkLogger():
+                logger.info("Finished cleanup.")
+            CLEANING_FLAG=False
             return response
     
     def get_receipt(self, request, format):
@@ -432,7 +467,8 @@ Form parameters
             message = "Error getting receipt: " 
             if(settings.DEBUG):
                 message = message + str(e)
-                logger.error(message)
+                if api_helper.checkLogger():
+                    logger.error(message)
         finally:
             return response
 
@@ -440,6 +476,8 @@ class OrderSubmitViewSet(viewsets.ViewSet):
     permission_classes = [CorsPostPermission]
     def create(self, request, format=None):
         try:
+            if api_helper.checkLogger():
+                logger.info("Starting OrderSubmitViewSet")
             verify_req = api_helper.checkCaptcha(settings.DEBUG, request.data["recaptcha"])
             if json.loads(verify_req.text)["success"]:
                 orderObj = OrderType.objects
@@ -550,10 +588,14 @@ class OrderSubmitViewSet(viewsets.ViewSet):
                         "message": "success"}
                     )
                 else:
+                    if api_helper.checkLogger():
+                        logger.error("An order has failed. because no html5Redirect found in the response.")
                     response =  Response(
                         {"status": "failure", "order_url": "NONE", "message": "The order has failed"},
                         status=status.HTTP_500_INTERNAL_SERVER_ERROR,)
             else:
+                if api_helper.checkLogger():
+                    logger.info("An order has failed because Captcha is incorrect.")
                 return Response(
                     {"status": "failure", "message": "Captcha is incorrect."},
                     status=status.HTTP_403_FORBIDDEN,
@@ -562,7 +604,8 @@ class OrderSubmitViewSet(viewsets.ViewSet):
             message = "Error creating order. Exception: "
             if(settings.DEBUG):
                 message = message + str(e)
-                logger.error(message)
+                if api_helper.checkLogger():
+                    logger.error(message)
             response =  Response(
                 {"status": "failure", "order_url": "NONE", "message": "The order has failed"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,)
@@ -622,6 +665,8 @@ class OrderFormViewSet(viewsets.ViewSet):
         
     def create(self, request, format=None):
         try:
+            if api_helper.checkLogger():
+                logger.info("running OrderFormViewSet")
             verify_req = api_helper.checkCaptcha(settings.DEBUG, request.data["recaptcha"])
             if json.loads(verify_req.text)["success"]:
 
@@ -708,7 +753,8 @@ class OrderFormViewSet(viewsets.ViewSet):
             message = "Error creating order: "
             if(settings.DEBUG):
                 message = message + str(e)
-                logger.error(message)
+                if api_helper.checkLogger():
+                    logger.error(message)
             return Response(
                 {"status": "failure", "message": "internal error"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
@@ -760,6 +806,8 @@ def create_presigned_post(key, content_type, length, expiration=900):
             bucket, key, Fields=fields, Conditions=conditions, ExpiresIn=expiration
         )
     except ClientError as e:
+        if api_helper.checkLogger():
+            logger.error(e)
         logging.error(e)
         return None
 

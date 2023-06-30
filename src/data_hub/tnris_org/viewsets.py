@@ -204,17 +204,14 @@ class TnrisMetricsViewSet(viewsets.ViewSet):
     
     def create(self, request, format=None):
         try:
-            s3_resource = boto3.resource('s3')
             s3_client = boto3.client('s3')
-            analytics = s3_resource.Bucket("tnris-analytics")
-            downloads = analytics.objects.filter(Prefix="analytics.html")
+            html = s3_client.get_object(Bucket=request.data["bucket"], Key=request.data["key"])
+            resp = html['Body'].read()
 
-            resp = list(downloads)[0].get()['Body'].read()
-            
             return Response(
                 {"status": "success", "message": resp},
                 status=status.HTTP_200_OK,
             )
         except Exception as e:
-            if(api_helper.checkLogger()): 
+            if(api_helper.checkLogger()):
                 logger.error("Cannot retrieve download stats. Error: " + str(e))

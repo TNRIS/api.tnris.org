@@ -217,4 +217,4 @@ class TnrisMetricsViewSet(viewsets.ViewSet):
             )
         except Exception as e:
             if(api_helper.checkLogger()): 
-                logger.error("Cannot retrieve download stats. Error: " + e)
+                logger.error("Cannot retrieve download stats. Error: " + str(e))

@@ -3,6 +3,11 @@ from rest_framework.permissions import AllowAny
 
 from rest_framework.response import Response
 from datetime import datetime
+from modules import api_helper
+import logging, watchtower
+
+logger = logging.getLogger("errLog")
+logger.addHandler(watchtower.CloudWatchLogHandler())
 
 import boto3
 from .models import (
@@ -211,4 +216,5 @@ class TnrisMetricsViewSet(viewsets.ViewSet):
                 status=status.HTTP_200_OK,
             )
         except Exception as e:
-            print(e)
+            if(api_helper.checkLogger()): 
+                logger.error("Cannot retrieve download stats. Error: " + e)

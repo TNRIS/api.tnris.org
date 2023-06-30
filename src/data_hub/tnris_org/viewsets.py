@@ -1,7 +1,10 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, status
+from rest_framework.permissions import AllowAny
+
 from rest_framework.response import Response
 from datetime import datetime
 
+import boto3
 from .models import (
     TnrisTraining,
     TnrisForumTraining,
@@ -186,3 +189,26 @@ class TnrisCarouselImageViewSet(viewsets.ReadOnlyModelViewSet):
         # order by carousel_order then image_name
         queryset = TnrisImage.objects.filter(**args).order_by('carousel_order', 'image_name')
         return queryset
+
+
+class TnrisMetricsViewSet(viewsets.ViewSet):
+    """
+    Retrieve download statistics for the current month
+    """
+    permission_classes = (AllowAny,)
+    
+    def create(self, request, format=None):
+        try:
+            s3_resource = boto3.resource('s3')
+            s3_client = boto3.client('s3')
+            analytics = s3_resource.Bucket("tnris-analytics")
+            downloads = analytics.objects.filter(Prefix="analytics.html")
+
+            resp = list(downloads)[0].get()['Body'].read()
+            
+            return Response(
+                {"status": "success", "message": resp},
+                status=status.HTTP_200_OK,
+            )
+        except Exception as e:
+            print(e)

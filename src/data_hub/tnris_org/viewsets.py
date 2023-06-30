@@ -192,6 +192,9 @@ class TnrisCarouselImageViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class TnrisMetricsViewSet(viewsets.ViewSet):
+    """
+    Retrieve download statistics for the current month
+    """
     permission_classes = (AllowAny,)
     
     def create(self, request, format=None):

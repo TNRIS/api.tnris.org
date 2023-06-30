@@ -408,7 +408,7 @@ Form parameters
                     if api_helper.checkLogger():
                         logger.error("There was a problem processing a single order. Proceeding.")
             if api_helper.checkLogger():
-                logger.info("Successful cleanup")           
+                logger.info("Successful cleanup")
             response =  Response(
                 {"status": "success", "message": "success"},
                 status=status.HTTP_200_OK,

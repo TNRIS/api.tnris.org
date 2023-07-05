@@ -20,7 +20,7 @@ coreschema==0.0.4
 cryptography==40.0.2
 distlib==0.3.2
 distro==1.5.0
-Django==3.2.19
+Django==3.2.20
 django-admin-list-filter-dropdown==1.0.3
 django-cors-headers==3.7.0
 django-filter==2.4.0

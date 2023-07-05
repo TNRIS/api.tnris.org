@@ -205,7 +205,7 @@ class TnrisMetricsViewSet(viewsets.ViewSet):
     def create(self, request, format=None):
         try:
             s3_client = boto3.client('s3')
-            html = s3_client.get_object(Bucket=request.data["bucket"], Key=request.data["key"])
+            html = s3_client.get_object(Bucket='tnris-analytics', Key='analytics.html')
             resp = html['Body'].read()
 
             return Response(

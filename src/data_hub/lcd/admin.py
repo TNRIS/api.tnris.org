@@ -15,6 +15,7 @@ from .models import (
     CollectionFootprint,
     EpsgRelate,
     EpsgType,
+    FavoriteFoods,
     FileTypeRelate,
     FileType,
     Image,
@@ -408,3 +409,10 @@ class QuoteAdmin(admin.ModelAdmin):
     model = Quote
     ordering = ('author',)
     list_display = ('author', 'quote', 'created')
+
+
+@admin.register(FavoriteFoods)
+class FavoriteFoodsAdmin(admin.ModelAdmin):
+    model = FavoriteFoods
+    ordering = ('food',)
+    list_display = ('food', 'description', 'created')

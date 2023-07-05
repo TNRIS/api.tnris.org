@@ -17,7 +17,7 @@ from django.urls import path, include
 from rest_framework import routers
 from rest_framework_swagger.views import get_swagger_view
 from rest_framework.schemas import get_schema_view
-from .viewsets import CatalogCollectionMetaViewSet, CollectionViewSet, ResourceViewSet, AreaViewSet, ResourceTypeViewSet
+from .viewsets import CatalogCollectionMetaViewSet, CollectionViewSet, ResourceViewSet, AreaViewSet, ResourceTypeViewSet, FavoriteFoodsViewSet
 import lore
 import msd
 import tnris_org
@@ -30,6 +30,7 @@ router.register(r'resources/?', ResourceViewSet, basename="Resources")
 router.register(r'areas/?', AreaViewSet, basename="Areas")
 router.register(r'collections_catalog/?', CatalogCollectionMetaViewSet, basename="Catalog")
 router.register(r'resource_types/?', ResourceTypeViewSet, basename='ResourceTypes')
+router.register(r'favorite_foods/?', FavoriteFoodsViewSet, basename='FavoriteFoods')
 
 schema_view = get_swagger_view(title='TNRIS Data API')
 

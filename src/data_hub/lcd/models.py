@@ -1584,3 +1584,44 @@ class Quote(models.Model):
 
     def __str__(self):
         return self.author + " " + self.created.strftime('%Y-%m-%d %H:%M')
+    
+class FavoriteFoods(models.Model):
+    """
+    Test class to see if I can create a model
+    will NOT be merged
+    """
+    class Meta:
+        db_table='favorite_foods'
+        verbose_name='Favorite Food'
+        verbose_name_plural='Favorite Foods'
+
+    favorite_food_id = models.UUIDField(
+        "Favorite Food Id",
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False
+    )
+
+    food = models.CharField(
+        'Food',
+        max_length=80,
+        null=False,
+        blank=False
+    )
+    description = models.TextField(
+        'Description',
+        null=True,
+        blank=True
+    )
+    created = models.DateTimeField(
+        'Created',
+        auto_now_add=True
+    )
+    last_modified = models.DateTimeField(
+        'Last Modified',
+        auto_now=True
+    )
+
+    def __str__(self):
+        return self.food + " " + self.created.strftime('%Y-%m-%d %H:%M')
+    

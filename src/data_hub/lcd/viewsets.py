@@ -7,13 +7,14 @@ from rest_framework_gis.filters import InBBoxFilter
 from django.contrib.postgres.search import SearchQuery, SearchVector, SearchRank
 from django_filters.rest_framework import DjangoFilterBackend
 
-from .models import CatalogCollectionMetaView, CcrView, RemView, AreasView, ResourceType
+from .models import CatalogCollectionMetaView, CcrView, RemView, AreasView, ResourceType, FavoriteFoods
 from .serializers import (
     CatalogCollectionMetaSerializer,
     CollectionSerializer,
     ResourceSerializer,
     AreaSerializer,
-    ResourceTypeSerializer
+    ResourceTypeSerializer,
+    FavoriteFoodsSerializer
 )
 
 def getArgs(self):
@@ -192,3 +193,35 @@ class AreaViewSet(viewsets.ReadOnlyModelViewSet):
         args = getArgs(self)
         # get records using query
         return AreasView.objects.filter(**args).order_by('area_type_id')
+
+class FavoriteFoodsViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    Retrieve dummy Favorite Foods as an exercise
+    DO NOT COMMIT
+    """
+
+    search_fields = (
+        'food',
+        'description',
+        'created',
+    )
+
+    ordering_fields = ['food', 'created']
+
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter)
+
+    serializer_class = FavoriteFoodsSerializer
+
+    http_method_names = ['get']
+
+    def get_queryset(self):
+        # search = self.request.GET.get('search')
+        # search_vector = SearchVector(*self.search_fields)
+        # search_query = SearchQuery(search)
+
+        args = getArgs(self)
+
+        # queryset = CatalogCollectionMetaView.objects.annotate(search=search_vector, rank=SearchRank(search_vector, search_query)).filter(*join_OR_conditions,**args, search=search_query).order_by('-rank')
+        return FavoriteFoods.objects.filter(**args).order_by('favorite_food_id')
+
+

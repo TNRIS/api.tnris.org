@@ -732,7 +732,7 @@ class OrderFormViewSet(viewsets.ViewSet):
                             </div><br /><br />
                             Greetings from TNRIS,<br /><br />
                             We have received your order and will process it after taking a look at the details.<br />
-                            In the meantime you can check your order status <a href='https://www.data.tnris.org/order/status?uuid=%s'>here</a>.<br />
+                            In the meantime you can check your order status <a href='https://data.tnris.org/order/status?uuid=%s'>here</a>.<br />
                             You will receive a link via email to pay for the order once we process it.<br /><br />
                             Thanks,<br />
                             The TNRIS Team

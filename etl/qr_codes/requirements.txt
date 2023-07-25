@@ -1,6 +1,6 @@
 boto3==1.18.2
 botocore==1.21.2
-certifi==2023.5.7
+certifi==2023.7.22
 chardet==3.0.4
 docutils==0.14
 gspread==3.1.0

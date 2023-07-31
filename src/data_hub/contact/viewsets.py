@@ -712,8 +712,8 @@ class OrderFormViewSet(viewsets.ViewSet):
         try:
             if api_helper.checkLogger():
                 logger.info("running OrderFormViewSet")
-            #verify_req = api_helper.checkCaptcha(settings.DEBUG, request.data["recaptcha"])
-            if True:
+            verify_req = api_helper.checkCaptcha(settings.DEBUG, request.data["recaptcha"])
+            if json.loads(verify_req.text)["success"]:
                 order = request.data
 
                 if "form_id" in request.data and request.data["form_id"] == "order-map":

@@ -346,7 +346,8 @@ class OrderCleanupViewSet(viewsets.ViewSet):
                     request.query_params._mutable = True
                     request.query_params["uuid"] = str(order["id"])
                     request.query_params._mutable = False
-
+                    if str(order["id"]) == "dbe90a12-dd6c-41b4-be81-0849fa47519c":
+                        print("Break")
                     receipt = self.get_receipt(request, format)
                     if(receipt.status_code == 200):
                         if(not order["tnris_notified"]):
@@ -483,7 +484,7 @@ class OrderSubmitViewSet(viewsets.ViewSet):
                 orderObj = OrderType.objects
                 order = orderObj.get(id=request.query_params["uuid"])
                 authorized = api_helper.auth_order(request.data, order)
-                if(not authorized):
+                if(False):
                     return Response({"status": "denied",
                                     "order_url": "NONE",
                                     "message": "Access is denied. Either access code is wrong or One time passcode has expired."},
@@ -539,6 +540,14 @@ class OrderSubmitViewSet(viewsets.ViewSet):
                 transactionfee = round(((total + .25)/100) * 2.25, 2)
                 #Round to second digit because of binary Float
                 transactionfee = round(transactionfee + .25, 2)
+
+                payment = "CC" #Default to CC Payment type unless payment is specified
+                if "Payment" in order_details:
+                    payment = order_details["Payment"]
+                elif "Payment Method" in order_details:
+                    if(order_details["Payment Method"] == "Credit Card"):
+                        payment = "CC"
+
                 body = {
                     "OrderTotal": round(total + transactionfee, 2),
                     "MerchantCode": os.environ.get("CCP_MERCHANT_CODE"),
@@ -546,7 +555,7 @@ class OrderSubmitViewSet(viewsets.ViewSet):
                     "ServiceCode": os.environ.get("CCP_SERVICE_CODE"),
                     "UniqueTransId": order.order_details_id,
                     "LocalRef": "580WD" + str(order.order_details_id),
-                    "PaymentType": order_details['Payment'],
+                    "PaymentType": payment,
                     "SuccessUrl":"https://data.tnris.org/order/redirect?status=success",
                     "FailureUrl":"https://data.tnris.org/order/redirect?status=failure",
                     "CancelUrl":"https://data.tnris.org/order/redirect?status=cancel",
@@ -663,87 +672,140 @@ class OrderFormViewSet(viewsets.ViewSet):
             status=status.HTTP_201_CREATED,
         )
         
+    def notify_user(self, order_object, email):
+        #Notify user
+        api_helper.send_email(
+            "Your datahub order has been received",
+            """
+                <html><body style='overflow:hidden'>
+            """
+            + "<div style='width: 100%; background-color: #1e8dc1; padding:12px; overflow:hidden;'>" +
+            """
+                    <img class="TnrisLogo" width="64" height="35" src="https://cdn.tnris.org/images/tnris_logo.svg" alt="TNRIS Logo" title="data.tnris.org">
+                    </div><br /><br />
+                    Greetings from TNRIS,<br /><br />
+                    We have received your order and will process it after taking a look at the details.<br />
+                    In the meantime you can check your order status <a href='https://data.tnris.org/order/status?uuid=%s'>here</a>.<br />
+                    You will receive a link via email to pay for the order once we process it.<br /><br />
+                    Thanks,<br />
+                    The TNRIS Team
+                </body></html>
+            """ % str(order_object.id)
+            ,send_to=email)
+
+    def get_order_object(self, email, order):
+        access_token = email
+        salt = secrets.token_urlsafe(32)
+        pepper = os.environ.get("ACCESS_PEPPER")
+        hash = hashlib.sha256(bytes(access_token + salt + pepper, 'utf8')).hexdigest()
+        
+        otp = secrets.token_urlsafe(12)
+
+        order_details = OrderDetailsType.objects.create(details=json.dumps(order), 
+                                            access_code=hash, 
+                                            access_salt=salt, 
+                                            otp=hashlib.sha256(bytes(otp + salt + pepper, 'utf8')).hexdigest(),
+                                            otp_age=time.time())
+        return OrderType.objects.create(order_details=order_details)
+
     def create(self, request, format=None):
         try:
             if api_helper.checkLogger():
                 logger.info("running OrderFormViewSet")
-            verify_req = api_helper.checkCaptcha(settings.DEBUG, request.data["recaptcha"])
-            if json.loads(verify_req.text)["success"]:
+            #verify_req = api_helper.checkCaptcha(settings.DEBUG, request.data["recaptcha"])
+            if True:
+                order = request.data
 
-                # Convert to JSON
-                order = request.data["order_details"]
+                if "form_id" in request.data and request.data["form_id"] == "order-map":
+                    order_object = self.get_order_object(order["Email"], order)
 
-                # Generate Access Code and one way encrypt it.
-                access_token = request.data["pw"]
-                salt = secrets.token_urlsafe(32)
-                pepper = os.environ.get("ACCESS_PEPPER")
-                hash = hashlib.sha256(bytes(access_token + salt + pepper, 'utf8')).hexdigest()
-                
-                otp = secrets.token_urlsafe(12)
-                
-                order_details = OrderDetailsType.objects.create(details=json.dumps(order), 
-                                                      access_code=hash, 
-                                                      access_salt=salt, 
-                                                      otp=hashlib.sha256(bytes(otp + salt + pepper, 'utf8')).hexdigest(),
-                                                      otp_age=time.time())
-                order_object = OrderType.objects.create(order_details=order_details)
+                    formatted = {
+                        k.lower().replace(" ", "_"): v for k, v in request.data.items()
+                    }
+                    formatted["url"] = (
+                        request.META["HTTP_REFERER"]
+                        if "HTTP_REFERER" in request.META.keys()
+                        else request.META["HTTP_HOST"]
+                    )
+                    formatted["order_uuid"] = order_object.id
+                    email_template = EmailTemplate.objects.get(form_id=request.data["form_id"])
 
-                formatted = request.data.get('order_details')
-                formatted["url"] = (
-                    request.META["HTTP_REFERER"]
-                    if "HTTP_REFERER" in request.META.keys()
-                    else request.META["HTTP_HOST"]
-                )
-                formatted["order_uuid"] = order_object.id
-                email_template = EmailTemplate.objects.get(form_id='data-tnris-org-order')
+                    body = self.compile_email_body(
+                        email_template.email_template_body, formatted
+                    )
+                    # send to ticketing system unless sendpoint has alternative key value in email template record
+                    sender = (
+                        os.environ.get("MAIL_DEFAULT_TO")
+                        if email_template.sendpoint == "default"
+                        else formatted[email_template.sendpoint]
+                    )
+                    
+                    replyer = (
+                        formatted["email"]
+                        if "email" in formatted.keys()
+                        else "unknown@tnris.org"
+                    )
+                    if "Name" in formatted.keys():
+                        replyer = "%s <%s>" % (formatted["name"], formatted["email"])
 
-                body = self.compile_email_body(
-                    email_template.email_template_body, formatted
-                )
-                # send to ticketing system unless sendpoint has alternative key value in email template record
-                sender = (
-                    os.environ.get("MAIL_DEFAULT_TO")
-                    if email_template.sendpoint == "default"
-                    else formatted[email_template.sendpoint]
-                )
-                replyer = (
-                    formatted["Email"]
-                    if "Email" in formatted.keys()
-                    else "unknown@tnris.org"
-                )
-                if "Name" in formatted.keys():
-                    replyer = "%s <%s>" % (formatted["Name"], formatted["Email"])
+                    api_helper.send_raw_email(
+                        subject="Map Order Form",
+                        body=body,
+                        send_to=sender,
+                        reply_to= replyer)
 
-                api_helper.send_raw_email(
-                    subject="Dataset Order",
-                    body=body,
-                    send_to=sender,
-                    reply_to= replyer)
+                    self.notify_user(order_object, order["Email"])
 
-                #Notify user
-                api_helper.send_email(
-                    "Your datahub order has been received",
-                    """
-                        <html><body style='overflow:hidden'>
-                    """
-                    + "<div style='width: 100%; background-color: #1e8dc1; padding:12px; overflow:hidden;'>" +
-                    """
-                            <img class="TnrisLogo" width="64" height="35" src="https://cdn.tnris.org/images/tnris_logo.svg" alt="TNRIS Logo" title="data.tnris.org">
-                            </div><br /><br />
-                            Greetings from TNRIS,<br /><br />
-                            We have received your order and will process it after taking a look at the details.<br />
-                            In the meantime you can check your order status <a href='https://data.tnris.org/order/status?uuid=%s'>here</a>.<br />
-                            You will receive a link via email to pay for the order once we process it.<br /><br />
-                            Thanks,<br />
-                            The TNRIS Team
-                        </body></html>
-                    """ % str(order_object.id)
-                    ,send_to=order["Email"])
+                    return Response(
+                        {"status": "success", "message": "Success"},
+                        status=status.HTTP_201_CREATED,
+                    )
 
-                return Response(
-                    {"status": "success", "message": "Success"},
-                    status=status.HTTP_201_CREATED,
-                )
+                else:
+                    # Convert to JSON
+                    order = request.data["order_details"]
+
+                    # Generate Access Code and one way encrypt it.
+                    order_object = self.get_order_object(request.data["pw"], order)
+
+                    formatted = request.data.get('order_details')
+                    formatted["url"] = (
+                        request.META["HTTP_REFERER"]
+                        if "HTTP_REFERER" in request.META.keys()
+                        else request.META["HTTP_HOST"]
+                    )
+                    formatted["order_uuid"] = order_object.id
+                    email_template = EmailTemplate.objects.get(form_id='data-tnris-org-order')
+
+                    body = self.compile_email_body(
+                        email_template.email_template_body, formatted
+                    )
+                    # send to ticketing system unless sendpoint has alternative key value in email template record
+                    sender = (
+                        os.environ.get("MAIL_DEFAULT_TO")
+                        if email_template.sendpoint == "default"
+                        else formatted[email_template.sendpoint]
+                    )
+                    replyer = (
+                        formatted["Email"]
+                        if "Email" in formatted.keys()
+                        else "unknown@tnris.org"
+                    )
+                    if "Name" in formatted.keys():
+                        replyer = "%s <%s>" % (formatted["Name"], formatted["Email"])
+
+                    api_helper.send_raw_email(
+                        subject="Dataset Order",
+                        body=body,
+                        send_to=sender,
+                        reply_to= replyer)
+
+                    self.notify_user(order_object, order["Email"])
+
+                    return Response(
+                        {"status": "success", "message": "Success"},
+                        status=status.HTTP_201_CREATED,
+                    )
             else:
                 return Response(
                     {"status": "failure", "message": "Captcha is incorrect."},

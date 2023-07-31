@@ -12,7 +12,7 @@
             "request": "launch",
             "program": "${workspaceFolder}/src/data_hub/manage.py",
             "args": [
-                "runserver"
+                "runserver", "8000"
             ],
             "django": true,
             "justMyCode": true

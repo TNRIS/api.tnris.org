@@ -134,7 +134,7 @@ def checkCaptcha(IS_DEBUG, captcha):
     # otherwise, use product account secret environment variable
     recaptcha_secret = (
         "6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe"
-        if True
+        if IS_DEBUG
         else os.environ.get("RECAPTCHA_SECRET")
     )
     recaptcha_verify_url = "https://www.google.com/recaptcha/api/siteverify"

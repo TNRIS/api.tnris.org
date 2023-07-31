@@ -346,8 +346,6 @@ class OrderCleanupViewSet(viewsets.ViewSet):
                     request.query_params._mutable = True
                     request.query_params["uuid"] = str(order["id"])
                     request.query_params._mutable = False
-                    if str(order["id"]) == "dbe90a12-dd6c-41b4-be81-0849fa47519c":
-                        print("Break")
                     receipt = self.get_receipt(request, format)
                     if(receipt.status_code == 200):
                         if(not order["tnris_notified"]):
@@ -484,7 +482,7 @@ class OrderSubmitViewSet(viewsets.ViewSet):
                 orderObj = OrderType.objects
                 order = orderObj.get(id=request.query_params["uuid"])
                 authorized = api_helper.auth_order(request.data, order)
-                if(False):
+                if(not authorized):
                     return Response({"status": "denied",
                                     "order_url": "NONE",
                                     "message": "Access is denied. Either access code is wrong or One time passcode has expired."},

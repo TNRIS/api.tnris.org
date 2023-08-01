@@ -238,7 +238,10 @@ class GenOtpViewSet(viewsets.ViewSet):
                             The TNRIS Team
                         </body></html>
                         """ % otp,
-                    send_to=details["Email"]
+                    send_to=details["Email"],
+                    send_from=os.environ.get("STRATMAP_EMAIL"),
+                    reply_to=os.environ.get("STRATMAP_EMAIL")
+
                 )
                 if(api_helper.checkLogger()):
                     logger.info("Passcode sent to email.")
@@ -401,7 +404,8 @@ Form parameters
                                         </body></html>
                                     """,
                                 send_to=order_obj["Email"],
-                                send_from=os.environ.get("MAIL_DEFAULT_FROM")
+                                send_from=os.environ.get("STRATMAP_EMAIL"),
+                                reply_to=os.environ.get("STRATMAP_EMAIL")
                             )
                 except Exception as e:
                     if api_helper.checkLogger():
@@ -663,7 +667,8 @@ class OrderFormViewSet(viewsets.ViewSet):
                             </body></html>
                         """ % str(instance.pk),
                     send_to=order_info["Email"],
-                    send_from=os.environ.get("MAIL_DEFAULT_FROM")
+                    send_from=os.environ.get("STRATMAP_EMAIL"),
+                    reply_to=os.environ.get("STRATMAP_EMAIL")
                 )
         return Response(
             {"status": "success", "message": "Success"},
@@ -688,8 +693,11 @@ class OrderFormViewSet(viewsets.ViewSet):
                     Thanks,<br />
                     The TNRIS Team
                 </body></html>
-            """ % str(order_object.id)
-            ,send_to=email)
+            """ % str(order_object.id),
+            send_to=email,
+            send_from=os.environ.get("STRATMAP_EMAIL"),
+            reply_to=os.environ.get("STRATMAP_EMAIL")
+        )
 
     def get_order_object(self, email, order):
         access_token = email

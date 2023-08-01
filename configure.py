@@ -30,6 +30,7 @@ export_command = ("export DB_PASSWORD=" + secrets["DB_PASSWORD"] +
 # CONTACT APP ENV VARIABLES
 " RECAPTCHA_SECRET=" + secrets["RECAPTCHA_SECRET"] +
 " MAIL_DEFAULT_FROM=" + secrets["MAIL_DEFAULT_FROM"] +
+" STRATMAP_EMAIL=" + secrets["STRATMAP_EMAIL"] +
 " MAIL_DEFAULT_TO=" + secrets["MAIL_DEFAULT_TO"] +
 " AWS_SES_ACCESS_KEY=" + secrets["AWS_SES_ACCESS_KEY"] +
 " AWS_SES_SECRET_KEY=" + secrets["AWS_SES_SECRET_KEY"] +

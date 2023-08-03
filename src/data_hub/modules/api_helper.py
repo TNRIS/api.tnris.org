@@ -1,7 +1,7 @@
 import boto3, json, os, hashlib, time, requests
 from botocore.exceptions import ClientError
 from django.core.mail import send_mail
-from django.core.mail import EmailMessage
+from django.core.mail import EmailMessage, EmailMultiAlternatives
 import logging, watchtower
 import time
 from lcd.models import LoggerType
@@ -61,8 +61,10 @@ def send_email(
         reply_to (str, optional): Email address to reply to.. Defaults to "unknown@tnris.org".
     """
 
-    send_mail(subject, body, send_from, [send_to], html_message=body)
-    return
+    mail = EmailMultiAlternatives(subject, body, send_from, [send_to], reply_to=[reply_to])
+    mail.attach_alternative(body, 'text/html')
+
+    return mail.send()
 
 def send_raw_email(
     subject,

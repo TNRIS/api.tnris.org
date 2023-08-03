@@ -1,6 +1,6 @@
 import boto3, json, os, hashlib, time, requests
 from botocore.exceptions import ClientError
-from django.core.mail import send_mail, get_connection
+from django.core.mail import send_mail
 from django.core.mail import EmailMessage, EmailMultiAlternatives
 import logging, watchtower
 import time

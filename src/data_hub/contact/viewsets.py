@@ -239,7 +239,6 @@ class GenOtpViewSet(viewsets.ViewSet):
                         </body></html>
                         """ % otp,
                     send_to=details["Email"],
-                    send_from=os.environ.get("STRATMAP_EMAIL"),
                     reply_to=os.environ.get("STRATMAP_EMAIL")
 
                 )
@@ -404,7 +403,6 @@ Form parameters
                                         </body></html>
                                     """,
                                 send_to=order_obj["Email"],
-                                send_from=os.environ.get("STRATMAP_EMAIL"),
                                 reply_to=os.environ.get("STRATMAP_EMAIL")
                             )
                 except Exception as e:
@@ -667,7 +665,6 @@ class OrderFormViewSet(viewsets.ViewSet):
                             </body></html>
                         """ % str(instance.pk),
                     send_to=order_info["Email"],
-                    send_from=os.environ.get("STRATMAP_EMAIL"),
                     reply_to=os.environ.get("STRATMAP_EMAIL")
                 )
         return Response(
@@ -695,7 +692,6 @@ class OrderFormViewSet(viewsets.ViewSet):
                 </body></html>
             """ % str(order_object.id),
             send_to=email,
-            send_from=os.environ.get("STRATMAP_EMAIL"),
             reply_to=os.environ.get("STRATMAP_EMAIL")
         )
 

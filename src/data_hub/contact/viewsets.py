@@ -747,7 +747,7 @@ class OrderFormViewSet(viewsets.ViewSet):
                         if "email" in formatted.keys()
                         else "unknown@tnris.org"
                     )
-                    if "Name" in formatted.keys():
+                    if "name" in formatted.keys():
                         replyer = "%s <%s>" % (formatted["name"], formatted["email"])
 
                     api_helper.send_raw_email(

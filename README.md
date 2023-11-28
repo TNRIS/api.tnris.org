@@ -1,7 +1,7 @@
 # api.tnris.org
-Django RESTful API and PostgreSQL backend database management system for maintaining and serving TNRIS's available data and content.
+Django RESTful API and PostgreSQL backend database management system for maintaining and serving Texas GIO's available data and content.
 
-## API and content management system for TNRIS data!
+## API and content management system for Texas GIO data!
 * Check out the wiki to learn about the data model and other curiosities
 
 ## Setup
@@ -21,9 +21,9 @@ Built with:
    * `cd ~/api.tnris.org/src`
    * `pip install -r requirements.txt`
 5. Setup secrets files:
-   * `./src/data_hub/set-env-secrets.sh` *(for non TNRIS employees only)*
+   * `./src/data_hub/set-env-secrets.sh` *(for non Texas GIO employees only)*
    * `./src/data_hub/gspread_config.json`
-   * **PREFERRED** ::: Run the command `$(python configure.py)` from the root *(for TNRIS employees only)* 
+   * **PREFERRED** ::: Run the command `$(python configure.py)` from the root *(for Texas GIO employees only)* 
    * **ALTERNATIVE** ::: A template copy of each secrets file exists in `./src/data_hub/` but with `-example` in the filename. Make a copy of each file in the same directory, remove "-example" from the copy's name, and fill in the values for each secret manually.
 
 ## Local Development

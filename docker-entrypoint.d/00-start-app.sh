@@ -11,6 +11,8 @@ export SEO_TOKEN=`/envs/data_hub/bin/aws secretsmanager get-secret-value --secre
 
 export RECAPTCHA_SECRET=`/envs/data_hub/bin/aws secretsmanager get-secret-value --secret-id api-tnris-org --query SecretString --output text | jq -cr '.RECAPTCHA_SECRET'`
 export MAIL_DEFAULT_FROM=`/envs/data_hub/bin/aws secretsmanager get-secret-value --secret-id api-tnris-org --query SecretString --output text | jq -cr '.MAIL_DEFAULT_FROM'`
+export STRATMAP_EMAIL=`/envs/data_hub/bin/aws secretsmanager get-secret-value --secret-id api-tnris-org --query SecretString --output text | jq -cr '.STRATMAP_EMAIL'`
+
 export MAIL_DEFAULT_TO=`/envs/data_hub/bin/aws secretsmanager get-secret-value --secret-id api-tnris-org --query SecretString --output text | jq -cr '.MAIL_DEFAULT_TO'`
 export AWS_SES_ACCESS_KEY=`/envs/data_hub/bin/aws secretsmanager get-secret-value --secret-id api-tnris-org --query SecretString --output text | jq -cr '.AWS_SES_ACCESS_KEY'`
 export AWS_SES_SECRET_KEY=`/envs/data_hub/bin/aws secretsmanager get-secret-value --secret-id api-tnris-org --query SecretString --output text | jq -cr '.AWS_SES_SECRET_KEY'`

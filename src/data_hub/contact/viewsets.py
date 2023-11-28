@@ -29,6 +29,7 @@ from .serializers import *
 
 logger = logging.getLogger("errLog")
 logger.addHandler(watchtower.CloudWatchLogHandler())
+CLEANING_FLAG=False
 
 CCP_URL = 'https://securecheckout.cdc.nicusa.com/ccprest/api/v1/TX/'
 # custom permissions for cors control
@@ -103,6 +104,8 @@ class SubmitFormViewSet(viewsets.ViewSet):
     def create(self, request, format=None):
         # if in DEBUG mode, assume local development and use localhost recaptcha secret
         # otherwise, use product account secret environment variable
+        if(api_helper.checkLogger()): 
+            logger.info("Submitting form: in SubmitFormViewSet.")
         recaptcha_secret = (
             "6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe"
             if settings.DEBUG
@@ -118,6 +121,8 @@ class SubmitFormViewSet(viewsets.ViewSet):
         try:
             email_template = EmailTemplate.objects.get(form_id=request.data["form_id"])
         except:
+            if(api_helper.checkLogger()):
+                logger.error("form_id not registered.")
             return Response(
                 {"status": "error", "message": "form_id not registered."},
                 status=status.HTTP_400_BAD_REQUEST,
@@ -165,10 +170,14 @@ class SubmitFormViewSet(viewsets.ViewSet):
                     send_to=sender,
                     reply_to=replyer,
                 )
+                if(api_helper.checkLogger()):
+                    logger.info("Form Submitted Successfully!")
                 return Response(
                     {"status": "success", "message": "Form Submitted Successfully!"},
                     status=status.HTTP_201_CREATED,
                 )
+            if(api_helper.checkLogger()):
+                logger.info("Serializer Save Failed.")
             return Response(
                 {
                     "status": "error",
@@ -178,6 +187,8 @@ class SubmitFormViewSet(viewsets.ViewSet):
                 status=status.HTTP_400_BAD_REQUEST,
             )
         else:
+            if(api_helper.checkLogger()):
+                logger.error("Recaptcha Verification Failed.")
             return Response(
                 {"status": "error", "message": "Recaptcha Verification Failed."},
                 status=status.HTTP_400_BAD_REQUEST,
@@ -191,6 +202,8 @@ class GenOtpViewSet(viewsets.ViewSet):
     
     def create(self, request, format=None):
         try:
+            if(api_helper.checkLogger()):
+                logger.info("Regenerating one time passcode. GenOtpViewSet")
             verify_req = api_helper.checkCaptcha(settings.DEBUG, request.data["recaptcha"])
             if json.loads(verify_req.text)["success"]:
 
@@ -225,21 +238,26 @@ class GenOtpViewSet(viewsets.ViewSet):
                             The TNRIS Team
                         </body></html>
                         """ % otp,
-                    send_to=details["Email"]
+                    send_to=details["Email"],
+                    reply_to=os.environ.get("STRATMAP_EMAIL")
+
                 )
-                
+                if(api_helper.checkLogger()):
+                    logger.info("Passcode sent to email.")
                 return Response(
                     {"status": "success", "message": "Passcode sent to email."},
                     status=status.HTTP_200_OK,
                 )
             else:
+                if(api_helper.checkLogger()):
+                    logger.error("Captcha is incorrect.")
                 return Response(
                     {"status": "failure", "message": "Captcha is incorrect."},
                     status=status.HTTP_403_FORBIDDEN,
                 ) 
         except Exception as e:
             message = "Error generating the One time passcode. Exception: "
-            if(settings.DEBUG): 
+            if(api_helper.checkLogger()): 
                 message = message + str(e)
                 logger.error(message)
             return Response(
@@ -285,7 +303,7 @@ class OrderStatusViewSet(viewsets.ViewSet):
                 )         
         except Exception as e:
             message = "Error checking order status. Exception: "
-            if(settings.DEBUG): 
+            if(api_helper.checkLogger()): 
                 message = message + str(e)
                 logger.error(message)
             return Response(
@@ -297,15 +315,28 @@ class OrderCleanupViewSet(viewsets.ViewSet):
     permission_classes = (AllowAny,)
     
     def create(self, request, format=None):
+        global CLEANING_FLAG
+        if CLEANING_FLAG:
+            if api_helper.checkLogger():
+                logger.error("Cleaning function is already in progress.")
+            return Response(
+                {"status": "failure", "message": "failure. Cleaning function already running"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+        
+        # Check CCP ACCESS CODE to prevent bots from making requests.
         if(os.environ.get("CCP_ACCESS_CODE")!= request.data["access_code"]):
-            logger.error("CCP access code incorrect")
+            if api_helper.checkLogger():
+                logger.error("CCP access code incorrect")
             return Response(
                 {"status": "access_denied", "message": "access_denied"},
                 status=status.HTTP_401_UNAUTHORIZED,
             )
         try:
             # Select all of the orders that are not archived.
-            logger.info("Starting cleanup.")
+            if api_helper.checkLogger():
+                logger.info("Starting cleanup.")
+            CLEANING_FLAG=True
             unarchived_orders = OrderType.objects.filter(archived=False).values()
             
             now = datetime.now(timezone.utc)
@@ -317,11 +348,11 @@ class OrderCleanupViewSet(viewsets.ViewSet):
                     request.query_params._mutable = True
                     request.query_params["uuid"] = str(order["id"])
                     request.query_params._mutable = False
-
-                    a = self.get_receipt(request, format)
-                    if(a.status_code == 200):
+                    receipt = self.get_receipt(request, format)
+                    if(receipt.status_code == 200):
                         if(not order["tnris_notified"]):
-                            logger.info("Order receipt found where TNRIS has not been notified.")
+                            if api_helper.checkLogger():
+                                logger.info("Order receipt found where TNRIS has not been notified.")
                             obj = OrderType.objects.get(id=order["id"])
                             obj.tnris_notified = True
                             order_obj = json.loads(OrderDetailsType.objects.filter(id=order["order_details_id"]).values()[0]["details"])
@@ -348,12 +379,12 @@ Form parameters
                                 reply_to=reply_email)
                         
                     #If no receipt was received or order was sent after 45 days then archive order automatically.
-                    if(difference.days > 45 and (a.status_code != 200 or order["order_sent"] == True) ):
+                    if(difference.days > 45 and (receipt.status_code != 200 or order["order_sent"] == True) ):
                         order_obj = json.loads(OrderDetailsType.objects.filter(id=order["order_details_id"]).values()[0]["details"])
                         obj = OrderType.objects.get(id=order["id"])
                         obj.archived = True
                         obj.save()
-                        if(a.status_code != 200 and "Email" in order_obj):
+                        if(receipt.status_code != 200 and "Email" in order_obj):
                             api_helper.send_email(
                                 subject="Your TNRIS Datahub order has been removed",
                                 body=
@@ -372,11 +403,13 @@ Form parameters
                                         </body></html>
                                     """,
                                 send_to=order_obj["Email"],
-                                send_from=os.environ.get("MAIL_DEFAULT_FROM")
+                                reply_to=os.environ.get("STRATMAP_EMAIL")
                             )
                 except Exception as e:
-                    logger.error("There was a problem processing a single order. Proceeding.")
-            logger.info("Successful cleanup")           
+                    if api_helper.checkLogger():
+                        logger.error("There was a problem processing a single order. Proceeding.")
+            if api_helper.checkLogger():
+                logger.info("Successful cleanup")
             response =  Response(
                 {"status": "success", "message": "success"},
                 status=status.HTTP_200_OK,
@@ -385,13 +418,16 @@ Form parameters
         except Exception as e:
             message = "Error cleaning up orders. Exception: "
             if(settings.DEBUG): message = message + str(e)
-            logger.error(message = message + str(e))
+            if api_helper.checkLogger():
+                logger.error(message = message + str(e))
             response =  Response(
                 {"status": "failure", "message": "failure"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
         finally:
-            logger.info("Finished cleanup.")
+            if api_helper.checkLogger():
+                logger.info("Finished cleanup.")
+            CLEANING_FLAG=False
             return response
     
     def get_receipt(self, request, format):
@@ -432,7 +468,8 @@ Form parameters
             message = "Error getting receipt: " 
             if(settings.DEBUG):
                 message = message + str(e)
-                logger.error(message)
+                if api_helper.checkLogger():
+                    logger.error(message)
         finally:
             return response
 
@@ -440,6 +477,8 @@ class OrderSubmitViewSet(viewsets.ViewSet):
     permission_classes = [CorsPostPermission]
     def create(self, request, format=None):
         try:
+            if api_helper.checkLogger():
+                logger.info("Starting OrderSubmitViewSet")
             verify_req = api_helper.checkCaptcha(settings.DEBUG, request.data["recaptcha"])
             if json.loads(verify_req.text)["success"]:
                 orderObj = OrderType.objects
@@ -501,6 +540,14 @@ class OrderSubmitViewSet(viewsets.ViewSet):
                 transactionfee = round(((total + .25)/100) * 2.25, 2)
                 #Round to second digit because of binary Float
                 transactionfee = round(transactionfee + .25, 2)
+
+                payment = "CC" #Default to CC Payment type unless payment is specified
+                if "Payment" in order_details:
+                    payment = order_details["Payment"]
+                elif "Payment Method" in order_details:
+                    if(order_details["Payment Method"] == "Credit Card"):
+                        payment = "CC"
+
                 body = {
                     "OrderTotal": round(total + transactionfee, 2),
                     "MerchantCode": os.environ.get("CCP_MERCHANT_CODE"),
@@ -508,7 +555,7 @@ class OrderSubmitViewSet(viewsets.ViewSet):
                     "ServiceCode": os.environ.get("CCP_SERVICE_CODE"),
                     "UniqueTransId": order.order_details_id,
                     "LocalRef": "580WD" + str(order.order_details_id),
-                    "PaymentType": order_details['Payment'],
+                    "PaymentType": payment,
                     "SuccessUrl":"https://data.tnris.org/order/redirect?status=success",
                     "FailureUrl":"https://data.tnris.org/order/redirect?status=failure",
                     "CancelUrl":"https://data.tnris.org/order/redirect?status=cancel",
@@ -550,10 +597,14 @@ class OrderSubmitViewSet(viewsets.ViewSet):
                         "message": "success"}
                     )
                 else:
+                    if api_helper.checkLogger():
+                        logger.error("An order has failed. because no html5Redirect found in the response.")
                     response =  Response(
                         {"status": "failure", "order_url": "NONE", "message": "The order has failed"},
                         status=status.HTTP_500_INTERNAL_SERVER_ERROR,)
             else:
+                if api_helper.checkLogger():
+                    logger.info("An order has failed because Captcha is incorrect.")
                 return Response(
                     {"status": "failure", "message": "Captcha is incorrect."},
                     status=status.HTTP_403_FORBIDDEN,
@@ -562,7 +613,8 @@ class OrderSubmitViewSet(viewsets.ViewSet):
             message = "Error creating order. Exception: "
             if(settings.DEBUG):
                 message = message + str(e)
-                logger.error(message)
+                if api_helper.checkLogger():
+                    logger.error(message)
             response =  Response(
                 {"status": "failure", "order_url": "NONE", "message": "The order has failed"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,)
@@ -613,92 +665,149 @@ class OrderFormViewSet(viewsets.ViewSet):
                             </body></html>
                         """ % str(instance.pk),
                     send_to=order_info["Email"],
-                    send_from=os.environ.get("MAIL_DEFAULT_FROM")
+                    reply_to=os.environ.get("STRATMAP_EMAIL")
                 )
         return Response(
             {"status": "success", "message": "Success"},
             status=status.HTTP_201_CREATED,
         )
         
+    def notify_user(self, order_object, email):
+        #Notify user
+        api_helper.send_email(
+            "Your datahub order has been received",
+            """
+                <html><body style='overflow:hidden'>
+            """
+            + "<div style='width: 100%; background-color: #1e8dc1; padding:12px; overflow:hidden;'>" +
+            """
+                    <img class="TnrisLogo" width="64" height="35" src="https://cdn.tnris.org/images/tnris_logo.svg" alt="TNRIS Logo" title="data.tnris.org">
+                    </div><br /><br />
+                    Greetings from TNRIS,<br /><br />
+                    We have received your order and will process it after taking a look at the details.<br />
+                    In the meantime you can check your order status <a href='https://data.tnris.org/order/status?uuid=%s'>here</a>.<br />
+                    You will receive a link via email to pay for the order once we process it.<br /><br />
+                    Thanks,<br />
+                    The TNRIS Team
+                </body></html>
+            """ % str(order_object.id),
+            send_to=email,
+            reply_to=os.environ.get("STRATMAP_EMAIL")
+        )
+
+    def get_order_object(self, email, order):
+        access_token = email
+        salt = secrets.token_urlsafe(32)
+        pepper = os.environ.get("ACCESS_PEPPER")
+        hash = hashlib.sha256(bytes(access_token + salt + pepper, 'utf8')).hexdigest()
+        
+        otp = secrets.token_urlsafe(12)
+
+        order_details = OrderDetailsType.objects.create(details=json.dumps(order), 
+                                            access_code=hash, 
+                                            access_salt=salt, 
+                                            otp=hashlib.sha256(bytes(otp + salt + pepper, 'utf8')).hexdigest(),
+                                            otp_age=time.time())
+        return OrderType.objects.create(order_details=order_details)
+
     def create(self, request, format=None):
         try:
+            if api_helper.checkLogger():
+                logger.info("running OrderFormViewSet")
             verify_req = api_helper.checkCaptcha(settings.DEBUG, request.data["recaptcha"])
             if json.loads(verify_req.text)["success"]:
+                order = request.data
 
-                # Convert to JSON
-                order = request.data["order_details"]
+                if "form_id" in request.data and request.data["form_id"] == "order-map":
+                    order_object = self.get_order_object(order["Email"], order)
 
-                # Generate Access Code and one way encrypt it.
-                access_token = request.data["pw"]
-                salt = secrets.token_urlsafe(32)
-                pepper = os.environ.get("ACCESS_PEPPER")
-                hash = hashlib.sha256(bytes(access_token + salt + pepper, 'utf8')).hexdigest()
-                
-                otp = secrets.token_urlsafe(12)
-                
-                order_details = OrderDetailsType.objects.create(details=json.dumps(order), 
-                                                      access_code=hash, 
-                                                      access_salt=salt, 
-                                                      otp=hashlib.sha256(bytes(otp + salt + pepper, 'utf8')).hexdigest(),
-                                                      otp_age=time.time())
-                order_object = OrderType.objects.create(order_details=order_details)
+                    formatted = {
+                        k.lower().replace(" ", "_"): v for k, v in request.data.items()
+                    }
+                    formatted["url"] = (
+                        request.META["HTTP_REFERER"]
+                        if "HTTP_REFERER" in request.META.keys()
+                        else request.META["HTTP_HOST"]
+                    )
+                    formatted["order_uuid"] = order_object.id
+                    email_template = EmailTemplate.objects.get(form_id=request.data["form_id"])
 
-                formatted = request.data.get('order_details')
-                formatted["url"] = (
-                    request.META["HTTP_REFERER"]
-                    if "HTTP_REFERER" in request.META.keys()
-                    else request.META["HTTP_HOST"]
-                )
-                formatted["order_uuid"] = order_object.id
-                email_template = EmailTemplate.objects.get(form_id='data-tnris-org-order')
+                    body = self.compile_email_body(
+                        email_template.email_template_body, formatted
+                    )
+                    # send to ticketing system unless sendpoint has alternative key value in email template record
+                    sender = (
+                        os.environ.get("MAIL_DEFAULT_TO")
+                        if email_template.sendpoint == "default"
+                        else formatted[email_template.sendpoint]
+                    )
+                    
+                    replyer = (
+                        formatted["email"]
+                        if "email" in formatted.keys()
+                        else "unknown@tnris.org"
+                    )
+                    if "name" in formatted.keys():
+                        replyer = "%s <%s>" % (formatted["name"], formatted["email"])
 
-                body = self.compile_email_body(
-                    email_template.email_template_body, formatted
-                )
-                # send to ticketing system unless sendpoint has alternative key value in email template record
-                sender = (
-                    os.environ.get("MAIL_DEFAULT_TO")
-                    if email_template.sendpoint == "default"
-                    else formatted[email_template.sendpoint]
-                )
-                replyer = (
-                    formatted["Email"]
-                    if "Email" in formatted.keys()
-                    else "unknown@tnris.org"
-                )
-                if "Name" in formatted.keys():
-                    replyer = "%s <%s>" % (formatted["Name"], formatted["Email"])
+                    api_helper.send_raw_email(
+                        subject="Map Order Form",
+                        body=body,
+                        send_to=sender,
+                        reply_to= replyer)
 
-                api_helper.send_raw_email(
-                    subject="Dataset Order",
-                    body=body,
-                    send_to=sender,
-                    reply_to= replyer)
+                    self.notify_user(order_object, order["Email"])
 
-                #Notify user
-                api_helper.send_email(
-                    "Your datahub order has been received",
-                    """
-                        <html><body style='overflow:hidden'>
-                    """
-                    + "<div style='width: 100%; background-color: #1e8dc1; padding:12px; overflow:hidden;'>" +
-                    """
-                            <img class="TnrisLogo" width="64" height="35" src="https://cdn.tnris.org/images/tnris_logo.svg" alt="TNRIS Logo" title="data.tnris.org">
-                            </div><br /><br />
-                            Greetings from TNRIS,<br /><br />
-                            We have received your order and will process it after taking a look at the details.<br />
-                            In the meantime you can check your order status <a href='https://www.data.tnris.org/order/status?uuid=%s'>here</a>.<br />
-                            You will receive a link via email to pay for the order once we process it.<br /><br />
-                            Thanks,<br />
-                            The TNRIS Team
-                        </body></html>
-                    """ % str(order_object.id)
-                    ,send_to=order["Email"])
+                    return Response(
+                        {"status": "success", "message": "Success"},
+                        status=status.HTTP_201_CREATED,
+                    )
 
-                return Response(
-                    {"status": "success", "message": "Success"},
-                    status=status.HTTP_201_CREATED,
-                )
+                else:
+                    # Convert to JSON
+                    order = request.data["order_details"]
+
+                    # Generate Access Code and one way encrypt it.
+                    order_object = self.get_order_object(request.data["pw"], order)
+
+                    formatted = request.data.get('order_details')
+                    formatted["url"] = (
+                        request.META["HTTP_REFERER"]
+                        if "HTTP_REFERER" in request.META.keys()
+                        else request.META["HTTP_HOST"]
+                    )
+                    formatted["order_uuid"] = order_object.id
+                    email_template = EmailTemplate.objects.get(form_id='data-tnris-org-order')
+
+                    body = self.compile_email_body(
+                        email_template.email_template_body, formatted
+                    )
+                    # send to ticketing system unless sendpoint has alternative key value in email template record
+                    sender = (
+                        os.environ.get("MAIL_DEFAULT_TO")
+                        if email_template.sendpoint == "default"
+                        else formatted[email_template.sendpoint]
+                    )
+                    replyer = (
+                        formatted["Email"]
+                        if "Email" in formatted.keys()
+                        else "unknown@tnris.org"
+                    )
+                    if "Name" in formatted.keys():
+                        replyer = "%s <%s>" % (formatted["Name"], formatted["Email"])
+
+                    api_helper.send_raw_email(
+                        subject="Dataset Order",
+                        body=body,
+                        send_to=sender,
+                        reply_to= replyer)
+
+                    self.notify_user(order_object, order["Email"])
+
+                    return Response(
+                        {"status": "success", "message": "Success"},
+                        status=status.HTTP_201_CREATED,
+                    )
             else:
                 return Response(
                     {"status": "failure", "message": "Captcha is incorrect."},
@@ -708,7 +817,8 @@ class OrderFormViewSet(viewsets.ViewSet):
             message = "Error creating order: "
             if(settings.DEBUG):
                 message = message + str(e)
-                logger.error(message)
+                if api_helper.checkLogger():
+                    logger.error(message)
             return Response(
                 {"status": "failure", "message": "internal error"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
@@ -760,6 +870,8 @@ def create_presigned_post(key, content_type, length, expiration=900):
             bucket, key, Fields=fields, Conditions=conditions, ExpiresIn=expiration
         )
     except ClientError as e:
+        if api_helper.checkLogger():
+            logger.error(e)
         logging.error(e)
         return None
 

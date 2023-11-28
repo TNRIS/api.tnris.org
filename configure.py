@@ -30,6 +30,7 @@ export_command = ("export DB_PASSWORD=" + secrets["DB_PASSWORD"] +
 # CONTACT APP ENV VARIABLES
 " RECAPTCHA_SECRET=" + secrets["RECAPTCHA_SECRET"] +
 " MAIL_DEFAULT_FROM=" + secrets["MAIL_DEFAULT_FROM"] +
+" STRATMAP_EMAIL=" + secrets["STRATMAP_EMAIL"] +
 " MAIL_DEFAULT_TO=" + secrets["MAIL_DEFAULT_TO"] +
 " AWS_SES_ACCESS_KEY=" + secrets["AWS_SES_ACCESS_KEY"] +
 " AWS_SES_SECRET_KEY=" + secrets["AWS_SES_SECRET_KEY"] +
@@ -46,6 +47,7 @@ export_command = ("export DB_PASSWORD=" + secrets["DB_PASSWORD"] +
 " CCP_MERCHANT_KEY=" + secrets["CCP_MERCHANT_KEY"] +
 " CCP_SERVICE_CODE=" + secrets["CCP_SERVICE_CODE"] +
 " CCP_API_KEY=" + secrets["CCP_API_KEY"] +
+" CCP_API_KEY_UAT=" + secrets["CCP_API_KEY_UAT"] +
 " CCP_ACCESS_CODE=" + secrets["CCP_ACCESS_CODE"] +
 
 # Encryption Environmental Variables

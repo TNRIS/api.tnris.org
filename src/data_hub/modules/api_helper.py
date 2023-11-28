@@ -1,11 +1,15 @@
 import boto3, json, os, hashlib, time, requests
 from botocore.exceptions import ClientError
 from django.core.mail import send_mail
-from django.core.mail import EmailMessage
+from django.core.mail import EmailMessage, EmailMultiAlternatives
 import logging, watchtower
+import time
+from lcd.models import LoggerType
 logger = logging.getLogger("errLog")
 logger.addHandler(watchtower.CloudWatchLogHandler())
 
+SHOULD_LOG = False
+LAST_CHECKED = 0
 
 def get_secret(secret_name):
     """ Access all of the AWS Secrets via it's Identifier.
@@ -57,8 +61,10 @@ def send_email(
         reply_to (str, optional): Email address to reply to.. Defaults to "unknown@tnris.org".
     """
 
-    send_mail(subject, body, send_from, [send_to], html_message=body)
-    return
+    mail = EmailMultiAlternatives(subject, body, send_from, [send_to], reply_to=[reply_to])
+    mail.attach_alternative(body, 'text/html')
+
+    return mail.send()
 
 def send_raw_email(
     subject,
@@ -130,7 +136,7 @@ def checkCaptcha(IS_DEBUG, captcha):
     # otherwise, use product account secret environment variable
     recaptcha_secret = (
         "6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe"
-        if True
+        if IS_DEBUG
         else os.environ.get("RECAPTCHA_SECRET")
     )
     recaptcha_verify_url = "https://www.google.com/recaptcha/api/siteverify"
@@ -165,3 +171,19 @@ def buildOrderString(order_obj):
         order_string += ""
 
     return order_string
+
+def checkLogger():
+    try:
+        # Check every 30 minutes the SHOULD_LOG Setting otherwise return SHOULD_LOG (Done this way to minimize database use)
+        NOW = time.time()
+        global LAST_CHECKED, SHOULD_LOG
+        if NOW - LAST_CHECKED >= 1800:
+            LAST_CHECKED = NOW
+            if LoggerType.objects.filter(setting_name='SHOULD_LOG').first().setting_value == 'True':
+                SHOULD_LOG = True
+            else:
+                SHOULD_LOG = False
+        return SHOULD_LOG
+    except Exception as e:
+        logger.error("Error checking logger.")
+        return False

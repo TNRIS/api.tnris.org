@@ -129,8 +129,11 @@ class OrderDetailsTypeAdmin(admin.ModelAdmin):
             return ""
 
     def address_field(self, obj):
-        if "Address" in json.loads(obj.details):    
-            return json.loads(obj.details)["Address"]
+        obj_details = json.loads(obj.details)
+        if "Address" in obj_details:    
+            return obj_details["Address"]
+        elif "Address_1" in obj_details and "Address_2" in obj_details:
+            return obj_details["Address_1"] + " " + obj_details["Address_2"]
         else:
             return ""
 
@@ -141,26 +144,39 @@ class OrderDetailsTypeAdmin(admin.ModelAdmin):
             return ""
 
     def industry_field(self, obj):
-        if "Industry" in json.loads(obj.details):
-            return json.loads(obj.details)["Industry"]
+        obj_details = json.loads(obj.details)
+        if "Industry" in obj_details:
+            if "Industry_other" in obj_details:
+                return obj_details["Industry"] + " " + obj_details["Industry_other"]
+            else:
+                return obj_details["Industry"]
         else:
             return ""
 
     def notes_field(self, obj):
-        if "Notes" in json.loads(obj.details):
-            return json.loads(obj.details)["Notes"]
+        obj_details = json.loads(obj.details)
+        if "Notes" in obj_details:
+            return obj_details["Notes"]
+        elif "Additional Info" in obj_details:
+            return obj_details["Additional Info"]
         else:
             return ""
 
     def fedex_field(self, obj):
-        if "Fedex" in json.loads(obj.details):
-            return json.loads(obj.details)["Fedex"]
+        obj_details = json.loads(obj.details)
+        if "Fedex" in obj_details:
+            return obj_details["Fedex"]
+        elif "FedEx Customer Number" in obj_details:
+            return obj_details["FedEx Customer Number"]
         else:
             return ""
 
     def delivery_field(self, obj):
-        if "Delivery" in json.loads(obj.details):
-            return json.loads(obj.details)["Delivery"]
+        obj_details = json.loads(obj.details)
+        if "Delivery" in obj_details:
+            return obj_details["Delivery"]
+        elif "Delivery Method" in obj_details:
+            return obj_details["Delivery Method"]
         else:
             return ""
 
@@ -171,14 +187,57 @@ class OrderDetailsTypeAdmin(admin.ModelAdmin):
             return ""
 
     def payment_field(self, obj):
-        if "Payment" in json.loads(obj.details):
-            return json.loads(obj.details)["Payment"]
+        obj_details = json.loads(obj.details)
+        if "Payment" in obj_details:
+            return obj_details["Payment"]
+        elif "Payment Method" in obj_details:
+            return obj_details["Payment Method"]
         else:
             return ""
 
     def order_field(self, obj):
-        if "Order" in json.loads(obj.details):
-            return json.loads(obj.details)["Order"]
+        obj_details = json.loads(obj.details)
+        if "Order" in obj_details:
+            return obj_details["Order"]
+        elif "form_id" in obj_details and obj_details["form_id"] == "order-map":
+            details = ""
+            if "Type of Data" in obj_details:
+                details += "Type of Data: " + obj_details["Type of Data"]
+            
+            if "Type of Map" in obj_details: 
+                details += "\n Type of Map: " + obj_details["Type of Map"]
+
+            if "Map Size" in obj_details: 
+                details += "\n Map Size: " + obj_details["Map Size"]
+            
+            if "Custom Map Size" in obj_details: 
+                details += "\n Custom Map Size: " + obj_details["Custom Map Size"]
+
+            if "Map Scale" in obj_details:
+                details += "\n Map Scale: " + obj_details["Map Scale"]
+
+            if "Map Title" in obj_details:
+                details += "\n Map Title: " + obj_details["Map Title"]
+
+            if "Map Date" in obj_details:
+                details += "\n Map Date: " + obj_details["Map Date"]
+
+            if "Map Collection Name" in obj_details:
+                details += "\n Map Collection Name: " + obj_details["Map Collection Name"]
+
+            if "Map Sheet" in obj_details:
+                details += "\n Map Sheet: " + obj_details["Map Sheet"]
+            
+            if "Legislative Request?" in obj_details:
+                details += "\n Legislative Request?: " + obj_details["Legislative Request?"]
+
+            if "Map Option" in obj_details:
+                details += "\n Map Option: " + obj_details["Map Option"]
+
+            if "Map Description" in obj_details:
+                details += "\n Map Description: " + obj_details["Map Description"]
+
+            return details
         else:
             return ""
 

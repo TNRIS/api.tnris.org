@@ -51,6 +51,18 @@ class CorsPostPermission(AllowAny):
         "store.tnris.org",
         "tnris.org",
         "www.tnris.org",
+        "dev.txgio.org",
+        "geographic.texas.gov",
+        "dev.geographic.texas.gov",
+        "staging.geographic.texas.gov",
+        "dev.gio.texas.gov",
+        "staging.gio.texas.gov",
+        "data.geographic.texas.gov",
+        "data.gio.texas.gov",
+        "devdata.geographic.texas.gov",
+        "stagingdata.geographic.texas.gov",
+        "cmsdev",
+        "cmsprod"
     ]
 
     def has_permission(self, request, view):

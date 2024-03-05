@@ -107,7 +107,7 @@ class CollectionFootprintForm(forms.ModelForm):
                 if geojson['type'] == 'FeatureCollection':
                     geojson = geojson['features'][0]['geometry']
                 # cast to GEOSGeometry and simplify the geom
-                geom = GEOSGeometry(str(geojson)).simplify(.0025, preserve_toplogy=True)
+                geom = GEOSGeometry(str(geojson)).simplify(.0025, preserve_topology=True)
                 # assign the new geometry to the cleansed data
                 cleaned_data['the_geom'] = geom
                 

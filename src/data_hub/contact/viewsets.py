@@ -82,7 +82,7 @@ class CorsPostPermission(AllowAny):
 # FORMS SUBMISSION ENDPOINT
 class SubmitFormViewSet(viewsets.ViewSet):
     """
-    Handle TNRIS form submissions (Restricted Access)
+    Handle TxGIO form submissions (Restricted Access)
     """
 
     permission_classes = [CorsPostPermission]
@@ -242,12 +242,12 @@ class GenOtpViewSet(viewsets.ViewSet):
                         """
                         + "<div style='width: 98%; background-color: #1e8dc1; padding:12px;'>" +
                         """
-                            <img class="TnrisLogo" width="64" height="35" src="https://cdn.tnris.org/images/tnris_logo.svg" alt="TNRIS Logo" title="data.tnris.org">
+                            <img class="TnrisLogo" width="64" height="35" src="https://cdn.tnris.org/images/txgio_light.png" alt="TxGIO Logo" title="data.geographic.texas.gov">
                             </div><br /><br />
-                            Greetings from TNRIS,<br /><br />
+                            Greetings from TxGIO,<br /><br />
                             Your one time passcode is: <strong>%s</strong><br /><br />
                             Thanks,<br />
-                            The TNRIS Team
+                            The TxGIO Team
                         </body></html>
                         """ % otp,
                     send_to=details["Email"],
@@ -364,7 +364,7 @@ class OrderCleanupViewSet(viewsets.ViewSet):
                     if(receipt.status_code == 200):
                         if(not order["tnris_notified"]):
                             if api_helper.checkLogger():
-                                logger.info("Order receipt found where TNRIS has not been notified.")
+                                logger.info("Order receipt found where TxGIO has not been notified.")
                             obj = OrderType.objects.get(id=order["id"])
                             obj.tnris_notified = True
                             order_obj = json.loads(OrderDetailsType.objects.filter(id=order["order_details_id"]).values()[0]["details"])
@@ -373,7 +373,7 @@ class OrderCleanupViewSet(viewsets.ViewSet):
 
                             order_string = api_helper.buildOrderString(order_obj)
                             email_body = """
-A payment has been received from from: https://data.tnris.org/
+A payment has been received from from: https://data.geographic.texas.gov/order/
 Please see order details below. And ship the order. \n
 Form ID: data-tnris-org-order
 Order ID: %s
@@ -398,20 +398,20 @@ Form parameters
                         obj.save()
                         if(receipt.status_code != 200 and "Email" in order_obj):
                             api_helper.send_email(
-                                subject="Your TNRIS Datahub order has been removed",
+                                subject="Your TxGIO Datahub order has been removed",
                                 body=
                                     """
                                         <html><body style='overflow:hidden'>
                                     """
                                     + "<div style='width: 98%; background-color: #1e8dc1; padding:12px;'>" +
                                     """
-                                        <img class="TnrisLogo" width="64" height="35" src="https://cdn.tnris.org/images/tnris_logo.svg" alt="TNRIS Logo" title="data.tnris.org">
+                                        <img class="TnrisLogo" width="64" height="35" src="https://cdn.tnris.org/images/txgio_light.png" alt="TxGIO Logo" title="data.tnris.org">
                                     </div><br /><br />
-                                        Greetings from TNRIS,<br /><br />
-                                        Your TNRIS Datahub order has been closed due to being greater than 45 days old. <br />
-                                        For questions or concerns, Please reply to this email or visit our <a href='https://tnris.org/contact/'>contact page</a> for more ways to contact TNRIS.<br /><br />
+                                        Greetings from TxGIO,<br /><br />
+                                        Your TxGIO Datahub order has been closed due to being greater than 45 days old. <br />
+                                        For questions or concerns, Please reply to this email or visit our <a href='https://tnris.org/contact/'>contact page</a> for more ways to contact TxGIO.<br /><br />
                                         Thanks,<br />
-                                        The TNRIS Team
+                                        The TxGIO Team
                                         </body></html>
                                     """,
                                 send_to=order_obj["Email"],
@@ -568,15 +568,15 @@ class OrderSubmitViewSet(viewsets.ViewSet):
                     "UniqueTransId": order.order_details_id,
                     "LocalRef": "580WD" + str(order.order_details_id),
                     "PaymentType": payment,
-                    "SuccessUrl":"https://data.tnris.org/order/redirect?status=success",
-                    "FailureUrl":"https://data.tnris.org/order/redirect?status=failure",
-                    "CancelUrl":"https://data.tnris.org/order/redirect?status=cancel",
-                    "DuplicateUrl":"https://data.tnris.org/order/redirect?status=duplicate",
+                    "SuccessUrl":"https://data.geographic.texas.gov/order/redirect?status=success",
+                    "FailureUrl":"https://data.geographic.texas.gov/order/redirect?status=failure",
+                    "CancelUrl":"https://data.geographic.texas.gov/order/redirect?status=cancel",
+                    "DuplicateUrl":"https://data.geographic.texas.gov/order/redirect?status=duplicate",
                     "BCCEmail1":os.environ.get("BCC_EMAIL_1"),
                     "LineItems": [
                         {
                             "Sku": "DHUB",
-                            "Description": "TNRIS DataHub order",
+                            "Description": "TxGIO DataHub order",
                             "UnitPrice": round(total + transactionfee, 2),
                             "Quantity": 1,
                             "ItemAttributes": item_attributes
@@ -635,7 +635,7 @@ class OrderSubmitViewSet(viewsets.ViewSet):
 # FORMS ORDER ENDPOINT
 class OrderFormViewSet(viewsets.ViewSet):
     """
-    Handle TNRIS order form submissions
+    Handle TxGIO order form submissions
     """
     permission_classes = [CorsPostPermission]
 
@@ -659,21 +659,21 @@ class OrderFormViewSet(viewsets.ViewSet):
                 instance.customer_notified = True
                 instance.save()
                 api_helper.send_email(
-                    subject="Your TNRIS Datahub order has been approved",
+                    subject="Your TxGIO Datahub order has been approved",
                     body=
                         """
                             <html><body style='overflow:hidden'>
                         """
                         + "<div style='width: 98%; background-color: #1e8dc1; padding:12px;'>" +
                         """
-                            <img class="TnrisLogo" width="64" height="35" src="https://cdn.tnris.org/images/tnris_logo.svg" alt="TNRIS Logo" title="data.tnris.org">
+                            <img class="TnrisLogo" width="64" height="35" src="https://cdn.tnris.org/images/txgio_light.png" alt="TxGIO Logo" title="data.geographic.texas.gov">
                           </div><br /><br />
-                            Greetings from TNRIS,<br /><br />
-                            Your TNRIS Datahub order has been approved.<br />
-                            To make a payment please follow this <a href='https://data.tnris.org/order/submit?uuid=%s'>link.</a><br />
+                            Greetings from TxGIO,<br /><br />
+                            Your TxGIO Datahub order has been approved.<br />
+                            To make a payment please follow this <a href='https://data.geographic.texas.gov/order/submit?uuid=%s'>link.</a><br />
                             For questions or concerns, Please reply to this email or visit our <a href='https://tnris.org/contact/'>contact page</a> for more ways to contact TNRIS.<br /><br />
                             Thanks,<br />
-                            The TNRIS Team
+                            The TxGIO Team
                             </body></html>
                         """ % str(instance.pk),
                     send_to=order_info["Email"],
@@ -693,14 +693,14 @@ class OrderFormViewSet(viewsets.ViewSet):
             """
             + "<div style='width: 100%; background-color: #1e8dc1; padding:12px; overflow:hidden;'>" +
             """
-                    <img class="TnrisLogo" width="64" height="35" src="https://cdn.tnris.org/images/tnris_logo.svg" alt="TNRIS Logo" title="data.tnris.org">
+                    <img class="TnrisLogo" width="64" height="35" src="https://cdn.tnris.org/images/txgio_light.png" alt="TxGIO Logo" title="data.tnris.org">
                     </div><br /><br />
-                    Greetings from TNRIS,<br /><br />
+                    Greetings from TxGIO,<br /><br />
                     We have received your order and will process it after taking a look at the details.<br />
-                    In the meantime you can check your order status <a href='https://data.tnris.org/order/status?uuid=%s'>here</a>.<br />
+                    In the meantime you can check your order status <a href='https://data.geographic.texas.gov/order/status?uuid=%s'>here</a>.<br />
                     You will receive a link via email to pay for the order once we process it.<br /><br />
                     Thanks,<br />
-                    The TNRIS Team
+                    The TxGIO Team
                 </body></html>
             """ % str(order_object.id),
             send_to=email,
@@ -1092,7 +1092,7 @@ class SubmitSurveyViewSet(viewsets.ViewSet):
 # Orders GET endpoint READ_ONLY
 class DataHubOrdersViewSet(viewsets.ReadOnlyModelViewSet):
     """
-    Retrieve TNRIS DataHub Order submissions
+    Retrieve TxGIO DataHub Order submissions
     """
     permission_classes = (IsAuthenticated,)
     serializer_class = DataHubOrderSerializer

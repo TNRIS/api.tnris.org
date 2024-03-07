@@ -1020,7 +1020,7 @@ class LakesOfTexasContact(models.Model):
 class OrderMap(models.Model):
     """
     Order Map form on tnris.org
-    https://tnris.org/order-map
+    https://geographic.texas.gov/order-map
     """
 
     class Meta:

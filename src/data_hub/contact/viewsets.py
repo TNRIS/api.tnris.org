@@ -240,9 +240,9 @@ class GenOtpViewSet(viewsets.ViewSet):
                         """
                             <html><body style='overflow:hidden'>
                         """
-                        + "<div style='width: 98%; background-color: #1e8dc1; padding:12px;'>" +
+                        + "<div style='width: 98%; background-color: #1e8dc1;'>" +
                         """
-                            <img class="TnrisLogo" width="64" height="35" src="https://cdn.tnris.org/images/txgio_light.png" alt="TxGIO Logo" title="data.geographic.texas.gov">
+                            <img class="TnrisLogo" width="100" height="59" src="https://cdn.tnris.org/images/txgio_light.png" alt="TxGIO Logo" title="data.geographic.texas.gov">
                             </div><br /><br />
                             Greetings from TxGIO,<br /><br />
                             Your one time passcode is: <strong>%s</strong><br /><br />
@@ -403,9 +403,9 @@ Form parameters
                                     """
                                         <html><body style='overflow:hidden'>
                                     """
-                                    + "<div style='width: 98%; background-color: #1e8dc1; padding:12px;'>" +
+                                    + "<div style='width: 98%; background-color: #1e8dc1;'>" +
                                     """
-                                        <img class="TnrisLogo" width="64" height="35" src="https://cdn.tnris.org/images/txgio_light.png" alt="TxGIO Logo" title="data.tnris.org">
+                                        <img class="TnrisLogo" width="100" height="59" src="https://cdn.tnris.org/images/txgio_light.png" alt="TxGIO Logo" title="data.tnris.org">
                                     </div><br /><br />
                                         Greetings from TxGIO,<br /><br />
                                         Your TxGIO Datahub order has been closed due to being greater than 45 days old. <br />
@@ -664,9 +664,9 @@ class OrderFormViewSet(viewsets.ViewSet):
                         """
                             <html><body style='overflow:hidden'>
                         """
-                        + "<div style='width: 98%; background-color: #1e8dc1; padding:12px;'>" +
+                        + "<div style='width: 98%; background-color: #1e8dc1;'>" +
                         """
-                            <img class="TnrisLogo" width="64" height="35" src="https://cdn.tnris.org/images/txgio_light.png" alt="TxGIO Logo" title="data.geographic.texas.gov">
+                            <img class="TnrisLogo" width="100" height="59" src="https://cdn.tnris.org/images/txgio_light.png" alt="TxGIO Logo" title="data.geographic.texas.gov">
                           </div><br /><br />
                             Greetings from TxGIO,<br /><br />
                             Your TxGIO Datahub order has been approved.<br />
@@ -691,9 +691,9 @@ class OrderFormViewSet(viewsets.ViewSet):
             """
                 <html><body style='overflow:hidden'>
             """
-            + "<div style='width: 100%; background-color: #1e8dc1; padding:12px; overflow:hidden;'>" +
+            + "<div style='width: 100%; background-color: #1e8dc1; overflow:hidden;'>" +
             """
-                    <img class="TnrisLogo" width="64" height="35" src="https://cdn.tnris.org/images/txgio_light.png" alt="TxGIO Logo" title="data.tnris.org">
+                    <img class="TnrisLogo" width="100" height="59" src="https://cdn.tnris.org/images/txgio_light.png" alt="TxGIO Logo" title="data.tnris.org">
                     </div><br /><br />
                     Greetings from TxGIO,<br /><br />
                     We have received your order and will process it after taking a look at the details.<br />

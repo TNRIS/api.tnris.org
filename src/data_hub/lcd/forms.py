@@ -87,7 +87,8 @@ class CollectionFootprintForm(forms.ModelForm):
             self.fields['the_geom'] = MultiPolygonField(label='The Geometry', required=False)
             self.fields['the_geom'].widget = OSMWidget(attrs={
                 'map_width': 600, 
-                'map_height': 200, 
+                'map_height': 200,
+                'display_raw': True, 
             })
 
 
@@ -107,7 +108,7 @@ class CollectionFootprintForm(forms.ModelForm):
                 if geojson['type'] == 'FeatureCollection':
                     geojson = geojson['features'][0]['geometry']
                 # cast to GEOSGeometry and simplify the geom
-                geom = GEOSGeometry(str(geojson)).simplify(.0025, preserve_topology=True)
+                geom = GEOSGeometry(str(geojson)).simplify(.0005, preserve_topology=True)
                 # assign the new geometry to the cleansed data
                 cleaned_data['the_geom'] = geom
                 

@@ -77,7 +77,7 @@ class CollectionFootprintForm(forms.ModelForm):
     the_geom = forms.FileField(
         label='The Geometry',
         required=False,
-        help_text='Upload the footprint of a collection as a .geojson file format. Must be of type Polygon or MultiPolygon.'
+        help_text='Upload the footprint of a collection as a .geojson file format. Must be of type Polygon or MultiPolygon. Please simplify geometries prior to uploading using either the Douglas-Peucker algorithm with .0001 tolerance, or Wang-Muller algorithm with .0005 tolerance.'
     )
 
     # if the value of the_geom is defined, show the map widget as opposed to upload widget

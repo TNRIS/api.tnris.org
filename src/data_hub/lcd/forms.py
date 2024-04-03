@@ -107,8 +107,18 @@ class CollectionFootprintForm(forms.ModelForm):
                 # must be of type Polygon or MultiPolygon
                 if geojson['type'] == 'FeatureCollection':
                     geojson = geojson['features'][0]['geometry']
-                # cast to GEOSGeometry and simplify the geom
-                geom = GEOSGeometry(str(geojson)).simplify(.0005, preserve_topology=True)
+                
+                ##############################################################################################################################
+                ##### DEPRECATE: as of 4/3/2024, all simplification of uploaded footprints will be completed by Stratmap prior to upload #####
+                ##############################################################################################################################
+                ### cast to GEOSGeometry and simplify the geom                                                                           #####
+                ### geom = GEOSGeometry(str(geojson)).simplify(.0005, preserve_topology=True)                                            #####
+                ##############################################################################################################################
+                ##############################################################################################################################
+                
+                # cast geojson to GEOSGeometry
+                geom = GEOSGeometry(str(geojson))
+
                 # assign the new geometry to the cleansed data
                 cleaned_data['the_geom'] = geom
                 

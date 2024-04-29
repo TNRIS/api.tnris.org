@@ -51,5 +51,6 @@ urlpatterns = [
     path('api/v1/', include('lcd.urls')),
     path('health/', HealthCheckView.as_view()),
     path('api/v1/token/', obtain_auth_token, name="auth_token"),
+    path('analytics/', include('analytics.urls')),
     path('', RedirectView.as_view(url='admin/', permanent=False)), # redirect home to admin
 ]

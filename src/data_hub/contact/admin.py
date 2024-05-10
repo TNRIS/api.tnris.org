@@ -143,6 +143,24 @@ class OrderDetailsTypeAdmin(admin.ModelAdmin):
         else:
             return ""
 
+    def city_field(self, obj):
+        if "City" in json.loads(obj.details):
+            return json.loads(obj.details)["City"]
+        else:
+            return ""
+
+    def state_field(self, obj):
+        if "State" in json.loads(obj.details):
+            return json.loads(obj.details)["State"]
+        else:
+            return ""
+
+    def zipcode_field(self, obj):
+        if "Zipcode" in json.loads(obj.details):
+            return json.loads(obj.details)["Zipcode"]
+        else:
+            return ""
+
     def industry_field(self, obj):
         obj_details = json.loads(obj.details)
         if "Industry" in obj_details:
@@ -250,11 +268,11 @@ class OrderDetailsTypeAdmin(admin.ModelAdmin):
             return ""
 
     def get_readonly_fields(self, request, obj=None):
-        return ['id', 'name_field', 'email_field', 'phone_field', 'address_field', 'organization_field', 'industry_field', 'fedex_field', 'notes_field', 'delivery_field', 'harddrive_field',
+        return ['id', 'name_field', 'email_field', 'phone_field', 'address_field', 'city_field', 'state_field', 'zipcode_field', 'organization_field', 'industry_field', 'fedex_field', 'notes_field', 'delivery_field', 'harddrive_field',
         'payment_field', 'order_field', 'formid_field']
 
     list_display = (
-        ['name_field', 'email_field', 'phone_field', 'address_field', 'organization_field', 'industry_field', 'fedex_field', 'notes_field', 'delivery_field', 'harddrive_field',
+        ['name_field', 'email_field', 'phone_field', 'address_field', 'city_field', 'state_field', 'zipcode_field', 'organization_field', 'industry_field', 'fedex_field', 'notes_field', 'delivery_field', 'harddrive_field',
         'payment_field', 'order_field', 'formid_field']
     )
     

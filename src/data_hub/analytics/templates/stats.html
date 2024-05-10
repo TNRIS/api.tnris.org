@@ -38,6 +38,53 @@
                 font-weight: bold;
             }
 
+            .value {
+                display: grid;
+                justify-content: center;
+                margin: 50px 0;
+            }
+
+            .inner-value {
+                display: flex;
+            }
+
+            .bubble {
+                background-color: lightcyan;
+                width: 150px;
+                height: 150px;
+                border-radius: 75px;
+                display: grid;
+                grid-template-columns: auto;
+                text-align: center;
+            }
+
+            .bubble .total {
+                font-weight: bold;
+                font-size: 24px;
+            }
+
+            .bubble img {
+                width: 24px;
+                margin: auto;
+            }
+
+            .times {
+                width: 100px;
+                display: grid;
+                grid-template-columns: auto;
+                text-align: center;
+                margin: 10px 0;
+            }
+
+            .times img {
+                width: 24px;
+                margin: auto;
+            }
+
+            .times div {
+                font-size: 10px;
+            }
+
             form {
                 border: 1px solid black;
                 width: 800px;
@@ -123,6 +170,35 @@
             <div class="totals">
                 <span> Successful Map Downloads : </span
                 >&nbsp;{{total_success_map}}
+            </div>
+        </div>
+
+        <!-- prettier-ignore -->
+        <div class="value">
+            <div class="inner-value">
+                <div class="bubble">
+                    <img src="{% static "analytics/interrogation.png" %}" /> 
+                    <div class="total">{{total_success}}</div>
+                    <div class="explanation">downloads responsive to PIR needs</div>
+                </div>
+                <div class="times">
+                    <img src="{% static "analytics/cross-small.png" %}" />
+                    <div>multiply by estimated time to complete (~3 hours)</div>
+                </div>
+                <div class="bubble">
+                    <img src="{% static "analytics/clock-two.png" %}" /> 
+                    <div class="total">{{hours_saved}}</div>
+                    <div class="explanation">hours saved</div>
+                </div>
+                <div class="times">
+                    <img src="{% static "analytics/cross-small.png" %}" />
+                    <div>multiply by employee average hourly salary (~ $26.66)</div>
+                </div>
+                <div class="bubble">
+                    <img src="{% static "analytics/piggy-bank.png" %}" /> 
+                    <div class="total">{{dollars_saved}}</div>
+                    <div class="explanation">dollars saved</div>
+                </div>
             </div>
         </div>
 

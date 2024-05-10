@@ -11,6 +11,25 @@ import time
 import json
 from django.db import connections
 
+AVG_TIME_TO_COMPLETE_HRS = 3
+AVG_HOURLY_SALARY = 26.66
+
+# convert dollar totals from e.g. 1,000,000 to 1M 
+def format_money(num):
+    if num > 1000000000:
+        if not num % 1000000000:
+            return f'${num // 1000000000}B'
+        return f'${round(num / 1000000000, 1)}B'
+    elif num > 1000000:
+        if not num % 1000000:
+            return f'${num // 1000000}M'
+        return f'${round(num / 1000000, 1)}M'
+    elif num > 1000:
+        if not num % 1000:
+            return f'${num // 1000}K'
+        return f'${num // 1000}K'
+    return f'${num}'
+
 @login_required(login_url='/admin/login/')
 def get_monthly_stats(request):
     # set up start and end time
@@ -169,6 +188,7 @@ def get_monthly_stats(request):
     results = {}
     start_date_clause = "date >= '" + start_date.strftime('%Y-%m-%d') + "'::DATE"
     end_date_clause = "date <= '" + end_date.strftime('%Y-%m-%d') + "'::DATE"
+    total_success = 0
     # for queries like total_downloads
     for q in total_queries:
         beginning_of_date_clause = 'where ' if q == 'total_downloads' else 'and '
@@ -192,7 +212,14 @@ def get_monthly_stats(request):
         with connections['analytics'].cursor() as cursor:
             cursor.execute(query) 
             results[q] = cursor.fetchall()  
+            if q == 'total_success_data' or q == 'total_success_map':
+                total_success += results[q][0][0]
             results[q] = f'{results[q][0][0]:,}'
+    hours_saved = total_success * AVG_TIME_TO_COMPLETE_HRS
+    dollars_saved = hours_saved * AVG_HOURLY_SALARY
+    results['total_success'] = f'{total_success:,}'
+    results['hours_saved'] = f'{hours_saved:,}'
+    results['dollars_saved'] = format_money(dollars_saved)
 
     # compose queries for top 10 lists
     for q in queries:

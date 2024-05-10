@@ -158,6 +158,8 @@ class OrderDetailsTypeAdmin(admin.ModelAdmin):
     def zipcode_field(self, obj):
         if "Zipcode" in json.loads(obj.details):
             return json.loads(obj.details)["Zipcode"]
+        elif "Zip" in json.loads(obj.details):
+            return json.loads(obj.details)["Zip"]
         else:
             return ""
 

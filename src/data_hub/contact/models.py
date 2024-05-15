@@ -125,7 +125,7 @@ class OrderType(models.Model):
     
     customer_notified = models.BooleanField(
         'Customer Notified?',
-        editable=False,
+        editable=True,
         default=False,
         null=True,
         blank=True

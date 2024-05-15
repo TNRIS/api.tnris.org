@@ -654,32 +654,35 @@ class OrderFormViewSet(viewsets.ViewSet):
     def my_callback(sender, instance, *args, **kwargs):
         instance.order_approved
         if(instance.order_approved and instance.approved_charge):
-            order_info = json.loads(instance.order_details.details)
-            api_helper.send_email(
-                subject="Your TxGIO Datahub order has been approved",
-                body=
-                    """
-                        <html><body style='overflow:hidden'>
-                    """
-                    + "<div style='width: 98%; background-color: #1e8dc1;'>" +
-                    """
-                        <img class="TnrisLogo" width="100" height="59" src="https://cdn.tnris.org/images/txgio_light.png" alt="TxGIO Logo" title="data.geographic.texas.gov">
-                        </div><br /><br />
-                        Greetings from TxGIO,<br /><br />
-                        Your TxGIO Datahub order has been approved.<br />
-                        To make a payment please follow this <a href='https://data.geographic.texas.gov/order/submit?uuid=%s'>link.</a><br />
-                        For questions or concerns, Please reply to this email or visit our <a href='https://tnris.org/contact/'>contact page</a> for more ways to contact TNRIS.<br /><br />
-                        Thanks,<br />
-                        The TxGIO Team
-                        </body></html>
-                    """ % str(instance.pk),
-                send_to=order_info["Email"],
-                reply_to=os.environ.get("STRATMAP_EMAIL")
+            if(not instance.customer_notified):
+                instance.customer_notified = True
+                instance.save()
+                order_info = json.loads(instance.order_details.details)
+                api_helper.send_email(
+                    subject="Your TxGIO Datahub order has been approved",
+                    body=
+                        """
+                            <html><body style='overflow:hidden'>
+                        """
+                        + "<div style='width: 98%; background-color: #1e8dc1;'>" +
+                        """
+                            <img class="TnrisLogo" width="100" height="59" src="https://cdn.tnris.org/images/txgio_light.png" alt="TxGIO Logo" title="data.geographic.texas.gov">
+                            </div><br /><br />
+                            Greetings from TxGIO,<br /><br />
+                            Your TxGIO Datahub order has been approved.<br />
+                            To make a payment please follow this <a href='https://data.geographic.texas.gov/order/submit?uuid=%s'>link.</a><br />
+                            For questions or concerns, Please reply to this email or visit our <a href='https://tnris.org/contact/'>contact page</a> for more ways to contact TNRIS.<br /><br />
+                            Thanks,<br />
+                            The TxGIO Team
+                            </body></html>
+                        """ % str(instance.pk),
+                    send_to=order_info["Email"],
+                    reply_to=os.environ.get("STRATMAP_EMAIL")
+                )
+            return Response(
+                {"status": "success", "message": "Success"},
+                status=status.HTTP_201_CREATED,
             )
-        return Response(
-            {"status": "success", "message": "Success"},
-            status=status.HTTP_201_CREATED,
-        )
         
     def notify_user(self, order_object, email):
         #Notify user

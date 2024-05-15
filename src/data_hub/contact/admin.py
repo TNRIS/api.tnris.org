@@ -89,12 +89,13 @@ class OrderTypeAdmin(admin.ModelAdmin):
         'link_to_details',
         'approved_charge',
         'order_approved',
+        'customer_notified',
         'order_sent',
         'archived',
         'created',
         'last_modified'
     )
-    list_editable = (['approved_charge', 'order_approved', 'order_sent', 'archived'])
+    list_editable = (['approved_charge', 'customer_notified', 'order_approved', 'order_sent', 'archived'])
     list_per_page = 10
     ordering = ('-created',)
 

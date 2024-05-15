@@ -6,7 +6,7 @@ from django_json_widget.widgets import JSONEditorWidget
 from django import forms
 from django.shortcuts import redirect
 
-import csv, datetime, json
+import csv, datetime, json, os, secrets, hashlib, time
 
 from .models import (
     Campaign,
@@ -287,6 +287,17 @@ class OrderDetailsTypeAdmin(admin.ModelAdmin):
             #setattr(form.cleaned_data, 'update_email', '')
             form.cleaned_data["update_email"] = ""
             obj.update_email = ""
+            access_token = obj_details["Email"] 
+            salt = secrets.token_urlsafe(32)
+            pepper = os.environ.get("ACCESS_PEPPER")
+            hash = hashlib.sha256(bytes(access_token + salt + pepper, 'utf8')).hexdigest()
+            otp = secrets.token_urlsafe(12)
+
+            obj.access_salt = salt
+            obj.access_code = hash
+            obj.otp = hashlib.sha256(bytes(otp + salt + pepper, 'utf8')).hexdigest()
+            obj.otp_age=time.time()
+
         super().save_model(request, obj, form, change)
     def response_change(self, request, obj):
         return redirect('/admin/contact/orderdetailstype/' + str(obj.id) + '/change/')

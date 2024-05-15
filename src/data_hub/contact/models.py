@@ -48,6 +48,14 @@ class OrderDetailsType(models.Model):
         default=None
     )
 
+    update_email = models.CharField(
+        'Update Email',
+        max_length=50,
+        editable=True,
+        null=True,
+        default=None
+    )
+
 class OrderType(models.Model):
     """Store order information"""
 

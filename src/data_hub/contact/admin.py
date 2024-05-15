@@ -4,6 +4,7 @@ from django.urls import reverse
 from django.utils.html import format_html
 from django_json_widget.widgets import JSONEditorWidget
 from django import forms
+from django.shortcuts import redirect
 
 import csv, datetime, json
 
@@ -115,7 +116,7 @@ class OrderDetailsTypeAdmin(admin.ModelAdmin):
             return json.loads(obj.details)["Name"]
         else:
             return ""
-            
+
     def email_field(self, obj):
         if "Email" in json.loads(obj.details):
             return json.loads(obj.details)["Email"]
@@ -272,12 +273,23 @@ class OrderDetailsTypeAdmin(admin.ModelAdmin):
     def get_readonly_fields(self, request, obj=None):
         return ['id', 'name_field', 'email_field', 'phone_field', 'address_field', 'city_field', 'state_field', 'zipcode_field', 'organization_field', 'industry_field', 'fedex_field', 'notes_field', 'delivery_field', 'harddrive_field',
         'payment_field', 'order_field', 'formid_field']
+    list_editable = (['update_email'])
 
     list_display = (
-        ['name_field', 'email_field', 'phone_field', 'address_field', 'city_field', 'state_field', 'zipcode_field', 'organization_field', 'industry_field', 'fedex_field', 'notes_field', 'delivery_field', 'harddrive_field',
+        ['name_field', 'update_email', 'email_field', 'phone_field', 'address_field', 'city_field', 'state_field', 'zipcode_field', 'organization_field', 'industry_field', 'fedex_field', 'notes_field', 'delivery_field', 'harddrive_field',
         'payment_field', 'order_field', 'formid_field']
     )
-    
+    def save_model(self, request, obj, form, change):
+        if(change and form.cleaned_data["update_email"] and len(form.cleaned_data["update_email"])):
+            obj_details = json.loads(obj.details)
+            obj_details["Email"] = form.cleaned_data["update_email"]
+            setattr(obj, "details", json.dumps(obj_details))
+            #setattr(form.cleaned_data, 'update_email', '')
+            form.cleaned_data["update_email"] = ""
+            obj.update_email = ""
+        super().save_model(request, obj, form, change)
+    def response_change(self, request, obj):
+        return redirect('/admin/contact/orderdetailstype/' + str(obj.id) + '/change/')
 @admin.register(DataHubOrder)
 class DataHubOrderAdmin(admin.ModelAdmin, ExportSelectedToCsvMixin):
     model = DataHubOrder

@@ -29,6 +29,16 @@ class CustomIndexDashboard(Dashboard):
             models=('django.contrib.*',),
         ))
 
+        # append an app list module for "Axes"
+        self.children.append(modules.AppList(
+            title='Users Login Attempts',
+            collapsible=True,
+            column=1,
+            css_classes=('grp-collapse grp-closed',),
+            models=('axes.models.AccessAttempt',
+                    'axes.models.AccessLog'),
+        ))
+
         # append an app list module for "Applications"
         self.children.append(modules.AppList(
             title='Collection Domains',

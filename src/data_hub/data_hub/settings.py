@@ -126,7 +126,8 @@ INSTALLED_APPS = [
     'rest_framework_swagger',
     'storages',
     'django_seo_js',
-    'rest_framework_gis'
+    'rest_framework_gis',
+    'axes',
 ]
 
 MIDDLEWARE = [
@@ -209,8 +210,9 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
-
+AXES_ENABLED = True
+AXES_FAILURE_LIMIT = 5
+AXES_COOLOFF_TIME = .05
 # Grappelli Settings
 GRAPPELLI_ADMIN_TITLE = "TNRIS Application Programming Interface (API) Console"
 GRAPPELLI_SWITCH_USER = True
@@ -249,6 +251,15 @@ TIME_INPUT_FORMATS = [
     '%H:%M',        # '14:30'
 ]
 
+AUTHENTICATION_BACKENDS = [
+    # AxesStandaloneBackend should be the first backend in the AUTHENTICATION_BACKENDS list.
+    'axes.backends.AxesStandaloneBackend',
+
+    # Django ModelBackend is the default authentication backend.
+    'django.contrib.auth.backends.ModelBackend',
+]
+
+AXES_ENABLE_ADMIN = True
 SITE_ID = 1
 
 CSRF_FAILURE_VIEW = 'data_hub.views.csrf_failure'

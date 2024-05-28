@@ -17,7 +17,6 @@ import os, boto3
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 
@@ -128,6 +127,7 @@ INSTALLED_APPS = [
     'django_seo_js',
     'rest_framework_gis',
     'axes',
+    'analytics'
 ]
 
 MIDDLEWARE = [
@@ -175,9 +175,21 @@ DATABASES = {
         'PASSWORD': os.environ.get('DB_PASSWORD'),
         'HOST': os.environ.get('DB_HOST', '127.0.0.1'),
         'PORT': os.environ.get('DB_PORT', '9000')
-    }
+    },
+    'analytics': {
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': 'analytics',
+        'USER': os.environ.get('DB_USER', 'tnris'),
+        'PASSWORD': os.environ.get('DB_PASSWORD'),
+        'HOST': os.environ.get('DB_HOST', '127.0.0.1'),
+        'PORT': os.environ.get('DB_PORT', '9000')
+    } 
 }
 
+# Database Routers
+# https://docs.djangoproject.com/en/5.0/topics/db/multi-db/#using-routers
+
+DATABASE_ROUTERS = ['analytics.analytics_router.AnalyticsRouter']
 
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators

@@ -1,0 +1,309 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Monthly Stats</title>
+        <link href="https://use.typekit.net/rcc6rge.css" rel="stylesheet" />
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                font-family: pf-grand-gothik-variable, sans-serif;
+            }
+
+            .logo img {
+                width: 200px;
+            }
+
+            h1 {
+                text-align: center;
+            }
+
+            .centered {
+                margin: 50px auto;
+            }
+
+            .totals {
+                text-align: center;
+                margin-bottom: 10px;
+            }
+
+            .totals span {
+                font-weight: bold;
+            }
+
+            .value {
+                display: grid;
+                justify-content: center;
+                margin: 50px 0;
+            }
+
+            .inner-value {
+                display: flex;
+            }
+
+            .bubble {
+                background-color: lightcyan;
+                width: 150px;
+                height: 150px;
+                border-radius: 75px;
+                display: grid;
+                grid-template-columns: auto;
+                text-align: center;
+            }
+
+            .bubble .total {
+                font-weight: bold;
+                font-size: 24px;
+            }
+
+            .bubble img {
+                width: 24px;
+                margin: auto;
+            }
+
+            .times {
+                width: 100px;
+                display: grid;
+                grid-template-columns: auto;
+                text-align: center;
+                margin: 10px 0;
+            }
+
+            .times img {
+                width: 24px;
+                margin: auto;
+            }
+
+            .times div {
+                font-size: 10px;
+            }
+
+            form {
+                border: 1px solid black;
+                width: 800px;
+                margin: 50px auto;
+            }
+
+            .timeframe {
+                padding: 20px;
+                text-align: center;
+            }
+
+            .timeframe span {
+                margin: 0 20px;
+            }
+
+            .submit-form input {
+                border: none;
+                background: lightblue;
+                padding: 10px;
+                font-size: 18px;
+            }
+
+            .chart {
+                display: flex;
+                width: 800px;
+                margin: 30px;
+            }
+        </style>
+    </head>
+    <body>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.2.1/dist/chart.umd.min.js"></script>
+
+        <!-- prettier-ignore -->
+        <div class="logo">
+            <img src="{% static "analytics/TxGIO_Primary_Horizontal_Digital_RGB_WebOptimized.png" %}" /> 
+        </div>
+
+        {% if request.GET.start_date %}
+        <!-- keep the Prettier extension from reformating the following tag on save -->
+        <!-- prettier-ignore -->
+        <h1>
+            DataHub Statistics
+        </h1>
+        {% else %}
+        <!-- prettier-ignore -->
+        <h1>
+            DataHub Statistics for Current Month
+        </h1>
+        {% endif %}
+
+        <form action="/analytics/get_monthly_stats/" method="GET">
+            <div class="timeframe">
+                <span>
+                    Start date
+                    <input
+                        type="date"
+                        name="start_date"
+                        value="{{ request.GET.start_date }}"
+                    />
+                </span>
+                <span>
+                    End date
+                    <input
+                        type="date"
+                        name="end_date"
+                        value="{{ request.GET.end_date }}"
+                    />
+                </span>
+                <span class="submit-form">
+                    <input type="submit" value="Refresh" />
+                </span>
+            </div>
+        </form>
+
+        <div class="summary">
+            <div class="totals">
+                <span>Total Downloads :</span>&nbsp;{{total_downloads}}
+            </div>
+            <div class="totals">
+                <span> Successful Data Downloads : </span
+                >&nbsp;{{total_success_data}}
+            </div>
+            <div class="totals">
+                <span> Successful Map Downloads : </span
+                >&nbsp;{{total_success_map}}
+            </div>
+        </div>
+
+        <!-- prettier-ignore -->
+        <div class="value">
+            <div class="inner-value">
+                <div class="bubble">
+                    <img src="{% static "analytics/interrogation.png" %}" /> 
+                    <div class="total">{{total_success}}</div>
+                    <div class="explanation">downloads responsive to PIR needs</div>
+                </div>
+                <div class="times">
+                    <img src="{% static "analytics/cross-small.png" %}" />
+                    <div>multiply by estimated time to complete (~3 hours)</div>
+                </div>
+                <div class="bubble">
+                    <img src="{% static "analytics/clock-two.png" %}" /> 
+                    <div class="total">{{hours_saved}}</div>
+                    <div class="explanation">hours saved</div>
+                </div>
+                <div class="times">
+                    <img src="{% static "analytics/cross-small.png" %}" />
+                    <div>multiply by employee average hourly salary (~ $26.66)</div>
+                </div>
+                <div class="bubble">
+                    <img src="{% static "analytics/piggy-bank.png" %}" /> 
+                    <div class="total">{{dollars_saved}}</div>
+                    <div class="explanation">dollars saved</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="chart">
+            <canvas id="count-by-key-chart"></canvas>
+            <canvas id="count-by-collection-chart"></canvas>
+        </div>
+        <div class="chart">
+            <canvas id="count-by-historic-chart"></canvas>
+            <canvas id="count-by-map-chart"></canvas>
+        </div>
+        <div class="chart">
+            <canvas id="count-by-resource-type-chart"></canvas>
+        </div>
+
+        <script>
+            const buildChart = (chartId, chartLabel, labels, data) => {
+                const ctx = document.getElementById(chartId);
+                new Chart(ctx, {
+                    type: "bar",
+                    data: {
+                        labels,
+                        datasets: [
+                            {
+                                // label: chartLabel,
+                                data,
+                                borderWidth: 1,
+                            },
+                        ],
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                            },
+                        },
+                        indexAxis: "y",
+                        plugins: {
+                            legend: {
+                                display: false,
+                            },
+                            title: {
+                                display: true,
+                                text: chartLabel,
+                            },
+                        },
+                    },
+                });
+            };
+        </script>
+
+        <script type="text/javascript">
+            buildChart("count-by-key-chart", "Top 10 Successfully Downloaded Files", [
+                {% for item in count_by_key %}
+                "{% autoescape off %}{{item.0}}{% endautoescape %}",
+            {% endfor %}
+            ], [
+            {% for item in count_by_key %}
+            {{item.1}},
+            {% endfor %}
+            ])
+        </script>
+        <script type="text/javascript">
+                buildChart("count-by-collection-chart", "Top 10 Successfully Downloaded Data Collections (Historic Imagery Included)", [
+                    {% for item in count_by_collection %}
+                "{% autoescape off %}{{item.0}}{% endautoescape %}",
+                {% endfor %}
+            ], [
+                {% for item in count_by_collection %}
+                {{item.1}},
+                {% endfor %}
+            ])
+        </script>
+        <script type="text/javascript">
+            buildChart("count-by-historic-chart", "Top 10 Successfully Downloaded Historic Imagery Data Collections", [
+            {% for item in count_by_historic %}
+            "{% autoescape off %}{{item.0}}{% endautoescape %}",
+            {% endfor %}
+            ], [
+            {% for item in count_by_historic %}
+            {{item.1}},
+            {% endfor %}
+            ])
+        </script>
+        <script type="text/javascript">
+            buildChart("count-by-map-chart", "Top 10 Successfully Downloaded Maps", [
+            {% for item in count_by_map %}
+            "{% autoescape off %}{{item.0}}{% endautoescape %}",
+            {% endfor %}
+            ], [
+                {% for item in count_by_map %}
+            {{item.1}},
+            {% endfor %}
+            ])
+        </script>
+        <script type="text/javascript">
+            buildChart("count-by-resource-type-chart", "Total Successfully Downloaded Count by resource_type", [
+            {% for item in count_by_resource_type %}
+            "{% autoescape off %}{{item.0}}{% endautoescape %}",
+            {% endfor %}
+            ], [
+                {% for item in count_by_resource_type %}
+                {{item.1}},
+            {% endfor %}
+            ])
+        </script>
+    </body>
+</html>

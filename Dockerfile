@@ -46,7 +46,6 @@ RUN chmod -R 777 /src/data_hub/static
 RUN rm /etc/nginx/sites-enabled/default
 COPY django.conf /etc/nginx/sites-available/
 RUN ln -s /etc/nginx/sites-available/django.conf /etc/nginx/sites-enabled/django.conf
-# RUN echo 'add_header Strict-Transport-Security "max-age=31536000; includeSubdomains";' >> /etc/nginx/nginx.conf
 RUN echo "daemon off;" >> /etc/nginx/nginx.conf
 
 # Setup supervisord

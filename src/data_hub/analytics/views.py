@@ -77,6 +77,11 @@ def get_monthly_stats(request):
                         where x_edge_result_type <> 'Error'
                         and collection_id <> '' 
                         and area_type_id = 'map'
+        """,
+        'total_errors':
+        """
+        select {0} from download_log_{1} 
+                        where x_edge_result_type = 'Error'
         """
     }
     queries = {

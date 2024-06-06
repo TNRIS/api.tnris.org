@@ -58,13 +58,14 @@
             }
 
             .bubble {
-                background-color: lightcyan;
+                background-color: #0379bc;
                 width: 150px;
                 height: 150px;
                 border-radius: 75px;
                 display: grid;
                 grid-template-columns: auto;
                 text-align: center;
+                color: white;
             }
 
             .bubble .total {
@@ -75,6 +76,7 @@
             .bubble img {
                 width: 24px;
                 margin: auto;
+                filter: invert(1);
             }
 
             .times {
@@ -111,9 +113,10 @@
 
             .submit-form input {
                 border: none;
-                background: lightblue;
+                background: #0379bc;
                 padding: 10px;
                 font-size: 18px;
+                color: white;
             }
 
             .chart-container {
@@ -200,6 +203,9 @@
             <div class="totals">
                 <span> Successful Map Downloads : </span
                 >&nbsp;{{total_success_map}}
+            </div>
+            <div class="totals">
+                <span> Total Errors : </span>&nbsp;{{total_errors}}
             </div>
         </div>
 

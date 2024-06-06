@@ -13,8 +13,17 @@
                 box-sizing: border-box;
             }
 
+            html,
             body {
                 font-family: pf-grand-gothik-variable, sans-serif;
+                width: 100vw;
+                overflow-x: hidden;
+            }
+
+            .logo {
+                width: 100%;
+                max-width: 1200px;
+                margin: auto;
             }
 
             .logo img {
@@ -107,10 +116,31 @@
                 font-size: 18px;
             }
 
+            .chart-container {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                max-width: 1400px;
+                column-gap: 30px;
+                row-gap: 30px;
+                margin: 30px auto;
+            }
+
             .chart {
-                display: flex;
-                width: 800px;
-                margin: 30px;
+                width: 100%;
+            }
+
+            @media screen and (max-width: 800px) {
+                .chart-container {
+                    display: grid;
+                    grid-template-columns: 1fr;
+                    max-width: 700px;
+                    row-gap: 30px;
+                    margin: 30px auto;
+                }
+
+                form {
+                    max-width: 700px;
+                }
             }
         </style>
     </head>
@@ -118,7 +148,7 @@
         <script src="https://cdn.jsdelivr.net/npm/chart.js@4.2.1/dist/chart.umd.min.js"></script>
 
         <!-- prettier-ignore -->
-        <div class="logo">
+        <div class="logo centered">
             <img src="{% static "analytics/TxGIO_Primary_Horizontal_Digital_RGB_WebOptimized.png" %}" /> 
         </div>
 
@@ -202,16 +232,22 @@
             </div>
         </div>
 
-        <div class="chart">
-            <canvas id="count-by-key-chart"></canvas>
-            <canvas id="count-by-collection-chart"></canvas>
-        </div>
-        <div class="chart">
-            <canvas id="count-by-historic-chart"></canvas>
-            <canvas id="count-by-map-chart"></canvas>
-        </div>
-        <div class="chart">
-            <canvas id="count-by-resource-type-chart"></canvas>
+        <div class="chart-container">
+            <div class="chart">
+                <canvas id="count-by-key-chart"></canvas>
+            </div>
+            <div class="chart">
+                <canvas id="count-by-collection-chart"></canvas>
+            </div>
+            <div class="chart">
+                <canvas id="count-by-historic-chart"></canvas>
+            </div>
+            <div class="chart">
+                <canvas id="count-by-map-chart"></canvas>
+            </div>
+            <div class="chart">
+                <canvas id="count-by-resource-type-chart"></canvas>
+            </div>
         </div>
 
         <script>

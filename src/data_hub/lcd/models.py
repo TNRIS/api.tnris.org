@@ -330,7 +330,8 @@ class ResourceType(models.Model):
     resource_type_category = models.ForeignKey(
         ResourceTypeCategory,
         null=True,
-        on_delete=models.SET_NULL
+        on_delete=models.SET_NULL,
+        blank=True
     )
     created = models.DateTimeField(
         'Created',

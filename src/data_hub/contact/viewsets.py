@@ -31,7 +31,14 @@ logger = logging.getLogger("errLog")
 logger.addHandler(watchtower.CloudWatchLogHandler())
 CLEANING_FLAG=False
 
+# Use testing URLS (Do not use in production)
+TESTING = False
+
 CCP_URL = 'https://securecheckout.cdc.nicusa.com/ccprest/api/v1/TX/'
+
+if(TESTING):
+    CCP_URL = 'https://securecheckout-uat.cdc.nicusa.com/ccprest/api/v1/TX/'
+
 # custom permissions for cors control
 class CorsPostPermission(AllowAny):
     whitelisted_domains = [
@@ -443,24 +450,34 @@ Form parameters
             return response
     
     def get_receipt(self, request, format):
+        #Look for a successful receipt. Otherwise return 404.
         try:
             order = OrderType.objects.get(id=request.query_params["uuid"])
             if(order.order_approved):
-                headers={
+                headers = {
                     "apiKey": os.environ.get("CCP_API_KEY"),
                     "MerchantKey": os.environ.get("CCP_MERCHANT_KEY"),
                     "MerchantCode": os.environ.get("CCP_MERCHANT_CODE"),
                     "ServiceCode": os.environ.get("CCP_SERVICE_CODE")
                 }
+                if(TESTING):
+                    headers["apiKey"] = os.environ.get("CCP_API_KEY_UAT")
+                
                 orderinfo = requests.get(CCP_URL + "tokens/" + str(order.order_token), headers=headers) 
                 
                 orderContent = json.loads(orderinfo.content)
                 if('orders' in orderContent):
                     orders = orderContent["orders"]
-                    orderReceipt = requests.get(CCP_URL + "receipts/" + str(orders[0]['orderId']), headers=headers)
-                    response = Response(
-                        {"status_code": orderReceipt.status_code, "orderReceipt": orderReceipt}
-                    )
+                    if(orders[0]["orderStatus"] == "COMPLETE"):
+                        orderReceipt = requests.get(CCP_URL + "receipts/" + str(orders[0]['orderId']), headers=headers)
+                        response = Response(
+                            {"status_code": orderReceipt.status_code, "orderReceipt": orderReceipt}
+                        )
+                    else:
+                        response = Response(
+                            {"status_code": 404},
+                            status=status.HTTP_404_NOT_FOUND
+                        )
                 else:
                     response = Response(
                         {"status_code": 404},
@@ -588,11 +605,16 @@ class OrderSubmitViewSet(viewsets.ViewSet):
                 body["LineItems"][0]["ItemAttributes"].append({'FieldName':'USAS2AMOUNT', 'FieldValue': transactionfee})
                 body["LineItems"][0]["ItemAttributes"].append({'FieldName':'USAS3AMOUNT', 'FieldValue': transactionfee})
                 body["LineItems"][0]["ItemAttributes"].append({'FieldName':'CONV_FEE', 'FieldValue': transactionfee})
+                api_key = os.environ.get("CCP_API_KEY")
+
+                if(TESTING):
+                    api_key = os.environ.get("CCP_API_KEY_UAT")
+
                 x = requests.post(
                     CCP_URL + "tokens", 
                     json = body,
                     headers={
-                        "apiKey": os.environ.get("CCP_API_KEY")
+                        "apiKey": api_key
                     }
                 )
 

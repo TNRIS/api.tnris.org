@@ -397,8 +397,8 @@ Form parameters
                                 send_to=os.environ.get("MAIL_DEFAULT_TO"),
                                 reply_to=reply_email)
                         
-                    #If no receipt was received or order was sent after 45 days then archive order automatically.
-                    if(difference.days > 45 and (receipt.status_code != 200 or order["order_sent"] == True) ):
+                    #If no receipt was received or order was sent after 90 days then archive order automatically.
+                    if(difference.days > 90 and (receipt.status_code != 200 or order["order_sent"] == True) ):
                         order_obj = json.loads(OrderDetailsType.objects.filter(id=order["order_details_id"]).values()[0]["details"])
                         obj = OrderType.objects.get(id=order["id"])
                         obj.archived = True
@@ -415,7 +415,7 @@ Form parameters
                                         <img class="TnrisLogo" width="100" height="59" src="https://cdn.tnris.org/images/txgio_light.png" alt="TxGIO Logo" title="data.tnris.org">
                                     </div><br /><br />
                                         Greetings from TxGIO,<br /><br />
-                                        Your TxGIO Datahub order has been closed due to being greater than 45 days old. <br />
+                                        Your TxGIO Datahub order has been closed due to being greater than 90 days old. <br />
                                         For questions or concerns, Please reply to this email or visit our <a href='https://tnris.org/contact/'>contact page</a> for more ways to contact TxGIO.<br /><br />
                                         Thanks,<br />
                                         The TxGIO Team

@@ -51,7 +51,7 @@ def get_monthly_stats(request):
 
     # initialize no_downloads with all possible collections (we remove any that were downloaded)
     no_downloads = {}
-    collections = Collection.objects.filter(template_type_id__template='tnris-download').using('default')
+    collections = Collection.objects.filter(template_type_id__template='tnris-download').filter(public__exact=True).using('default')
     for coll in collections:
         no_downloads[str(coll.collection_id)] = "%s %s" % (coll.acquisition_date[:4], coll.name)
 

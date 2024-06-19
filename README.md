@@ -53,3 +53,10 @@ deployment tests located in the ./tests/ directory
 pull the resource information and updates the mapserver database table 'areas_view' to join
 and host as a map service. This provides an efficient query capability for the Geography map
 filter to spatially identify collections.
+
+## Order Data retention Policies
+
+Procedures for handling order deletions for the API. Jun 18 2024
+
+* Un-acted upon orders will be archived after 90 days. After an additional 30 days then they will be deleted from the API database.
+* Orders manually marked as sent will be archived after 90 days. After an additional 30 days they will be deleted from the API database.

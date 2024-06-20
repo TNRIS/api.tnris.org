@@ -342,6 +342,7 @@ class ResourceTypeAdmin(admin.ModelAdmin):
     list_display = (
         'resource_type_name', 'resource_type_abbreviation', 'resource_type_category'
     )
+    list_editable = (['resource_type_category'])
 
 @admin.register(ResourceTypeCategory)
 class ResourceTypeCategoryAdmin(admin.ModelAdmin):

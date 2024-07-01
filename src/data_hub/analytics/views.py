@@ -35,6 +35,13 @@ def get_monthly_stats(request):
     # set up start and end time
     default_end_date = datetime.now()
     default_start_date = default_end_date.replace(day=1)
+    # if it's the first of the month, make the default start the first of last month
+    if (default_end_date.day == 1):
+        last_month = default_end_date.month - 1
+        print(last_month)
+        if last_month == 0:
+            last_month = 12
+        default_start_date = default_end_date.replace(month=last_month)
     start_date = request.GET.get('start_date', default_start_date.strftime('%Y-%m-%d'))
     end_date = request.GET.get('end_date', default_end_date.strftime('%Y-%m-%d'))
     try:

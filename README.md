@@ -55,8 +55,6 @@ and host as a map service. This provides an efficient query capability for the G
 filter to spatially identify collections.
 
 ## Order Data retention Policies
-
-Procedures for handling order deletions for the API. Jun 18 2024
-
+To be implemented future procedures for handling order deletions for the API. Jun 18 2024
 * Un-acted upon orders will be archived after 90 days. After an additional 30 days then they will be deleted from the API database.
 * Orders manually marked as sent will be archived after 90 days. After an additional 30 days they will be deleted from the API database.

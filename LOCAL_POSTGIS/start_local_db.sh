@@ -1,4 +1,4 @@
 #! /bin/bash
 
-docker build . -t tnris/api-local-postgis
-docker run -d -p 9000:5432 tnris/api-local-postgis
+docker build . -t txgio/api-local-postgis
+docker run -d -p 9000:5432 txgio/api-local-postgis

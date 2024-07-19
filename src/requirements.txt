@@ -32,7 +32,7 @@ django-seo-js==0.4.1
 django-ses==3.5.0
 django-storages==1.11.1
 django-webpack-loader==1.1.0
-djangorestframework==3.14.0
+djangorestframework==3.15.2
 djangorestframework-gis==0.18
 docutils==0.17.1
 enum-compat==0.0.3

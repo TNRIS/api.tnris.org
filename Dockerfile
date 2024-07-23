@@ -1,5 +1,5 @@
 
-FROM ubuntu:jammy
+FROM ubuntu:focal
 
 ENV DEBIAN_FRONTEND noninteractive
 

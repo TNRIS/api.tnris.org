@@ -31,7 +31,8 @@ from .models import (
     UseRelate,
     UseType,
     XlargeSupplemental,
-    LoggerType
+    LoggerType,
+    Product
 )
 import boto3, json
 
@@ -409,3 +410,11 @@ class QuoteAdmin(admin.ModelAdmin):
     model = Quote
     ordering = ('author',)
     list_display = ('author', 'quote', 'created')
+
+
+@admin.register(Product)
+class SourceTypeAdmin(admin.ModelAdmin):
+    model = Product
+    ordering = ('name',)
+    list_display = ('name', 'description','price','created_at','updated_at')
+    search_fields = ('name',)

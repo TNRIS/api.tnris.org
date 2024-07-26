@@ -3,17 +3,19 @@ from functools import reduce
 from django.db.models import Q
 from rest_framework import viewsets
 from rest_framework import filters
+from rest_framework.permissions import AllowAny
 from rest_framework_gis.filters import InBBoxFilter
 from django.contrib.postgres.search import SearchQuery, SearchVector, SearchRank
 from django_filters.rest_framework import DjangoFilterBackend
 
-from .models import CatalogCollectionMetaView, CcrView, RemView, AreasView, ResourceType
+from .models import CatalogCollectionMetaView, CcrView, RemView, AreasView, ResourceType, Product
 from .serializers import (
     CatalogCollectionMetaSerializer,
     CollectionSerializer,
     ResourceSerializer,
     AreaSerializer,
-    ResourceTypeSerializer
+    ResourceTypeSerializer,
+    ProdcutSerializer
 )
 
 def getArgs(self):
@@ -192,3 +194,16 @@ class AreaViewSet(viewsets.ReadOnlyModelViewSet):
         args = getArgs(self)
         # get records using query
         return AreasView.objects.filter(**args).order_by('area_type_id')
+
+class ProductViewSet(viewsets.ModelViewSet):
+    serializer_class = ProdcutSerializer
+    permission_classes = [AllowAny]
+    # http_method_names = ['get']
+
+    def get_queryset(self):
+        args = getArgs(self)
+        # get records using query
+        return Product.objects.filter(**args).order_by('product_id')
+
+    # queryset = Product.objects.all()
+    # serializer_class = NewModelSerializer

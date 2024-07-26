@@ -1585,3 +1585,26 @@ class Quote(models.Model):
 
     def __str__(self):
         return self.author + " " + self.created.strftime('%Y-%m-%d %H:%M')
+
+
+"""
+********** Local Tesing Table  **********
+"""
+
+class Product(models.Model):
+
+    class Meta:
+        db_table = 'product_table'
+        verbose_name = 'product'
+        verbose_name_plural = 'product'
+        ordering = ('name',)
+
+    product_id = models.UUIDField('product id',primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.CharField('name',max_length=100)
+    price = models.DecimalField('price',max_digits=10, decimal_places=2)
+    description = models.TextField('description')
+    created_at = models.DateTimeField('created_at',auto_now_add=True)
+    updated_at = models.DateTimeField('updated_at',auto_now=True)
+
+    def __str__(self):
+        return self.name

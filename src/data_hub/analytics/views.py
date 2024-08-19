@@ -10,6 +10,7 @@ from datetime import datetime
 import time
 import json
 from django.db import connections
+import requests
 
 AVG_TIME_TO_COMPLETE_HRS = 3
 AVG_HOURLY_SALARY = 26.66
@@ -29,6 +30,48 @@ def format_money(num):
             return f'${num // 1000}K'
         return f'${num // 1000}K'
     return f'${num}'
+
+@login_required(login_url='/admin/login/')
+def get_stats_from_arcgis(request):
+    # retrieve token used to make requests
+    data = {'username': 'ags_admin', 'password': '6b4731499c18b007264dbb714e7d24df', 'client': 'requestip', 'expiration': 90, 'f': 'json'}
+    response = requests.post("https://feature.geographic.texas.gov/arcgis/admin/generateToken", data=data)
+    token = response.json()['token']
+    print(token)
+    # create list of services to display in the line chart based on what's checked in the HTML page
+    services = json.loads(request.GET.get('services'))
+    resourceURIs = ["services/"]
+    for service in services:
+        for name in service:
+            if service[name]:
+                resourceURIs.append("services/" + name)
+    print(str(resourceURIs))         
+    response = requests.get('https://feature.geographic.texas.gov/arcgis/admin/usagereports/Total%20requests%20for%20the%20last%207%20days?f=json&token=' + token)
+    print(response.text)
+
+    default_end_date = datetime.now()
+    default_start_date = default_end_date.replace(day=1)
+    # default_end_date = round(default_end_date.timestamp() / 100) * 100000
+    if (default_end_date.day == 1):
+        last_month = default_end_date.month - 1
+        print(last_month)
+        if last_month == 0:
+            last_month = 12
+        default_start_date = default_end_date.replace(month=last_month)
+    start_date = request.GET.get('start_date', round(default_start_date.timestamp() / 100) * 100000)
+    end_date = request.GET.get('end_date', round(default_end_date.timestamp() / 100) * 100000)
+    print('from', start_date)
+    print('to', end_date)
+    # edit the report called analytics_dashboard to reflect the select dates and services the user is interested in
+    data = {'usagereport': '{"reportname":"analytics_dashboard","since":"CUSTOM","queries":[{"resourceURIs":' + str(resourceURIs) + ',"metrics":["RequestCount"]}],"metadata":{"temp":false,"title":"Total requests for the last 7 days","managerReport":true,"styles":{"services/":{"color":"#D900D9"}}},"from":' + str(start_date) + ',"to":' + str(end_date) + '}', 'f': 'json', 'token': token}
+    response = requests.post('https://feature.geographic.texas.gov/arcgis/admin/usagereports/analytics_dashboard/edit', data=data)
+    print(response.request.body)
+    print(response.text)
+    # get the report data
+    response = requests.get('https://feature.geographic.texas.gov/arcgis/admin/usagereports/analytics_dashboard/data?filter=%7B%22services%22%3A%22*%22%2C%22machines%22%3A%22*%22%7D&f=json&token=' + token)
+    print(response.text)
+    return HttpResponse(response.text)
+
 
 @login_required(login_url='/admin/login/')
 def get_monthly_stats(request):
@@ -87,6 +130,7 @@ def get_monthly_stats(request):
         """,
         'total_errors':
         """
+
         select {0} from download_log_{1} 
                         where x_edge_result_type = 'Error'
         """

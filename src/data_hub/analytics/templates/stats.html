@@ -132,6 +132,20 @@
                 width: 100%;
             }
 
+            .line-chart-container {
+                margin: 80px auto;
+                max-width: 1000px;
+                display: grid;
+                grid-template-columns: 2fr 7fr;
+            }
+
+            #service-types div {
+                margin: 20px;
+                display: grid;
+                grid-template-columns: 30px 150px;
+                grid-row-gap: 5px;
+            }
+
             @media screen and (max-width: 800px) {
                 .chart-container {
                     display: grid;
@@ -255,6 +269,16 @@
                 <canvas id="count-by-resource-type-chart"></canvas>
             </div>
         </div>
+        
+        <div class="line-chart-container">
+            <div id="service-types">
+                <!-- rows are created in the JS below -->
+            </div>
+            <div>
+                <canvas id="test-line-chart"></canvas>
+            <div>
+        </div>
+        
 
         <script>
             const buildChart = (chartId, chartLabel, labels, data) => {
@@ -290,6 +314,120 @@
                     },
                 });
             };
+
+            const buildLineChart = (chartId, chartLabel, labels, datasets) => {
+                const ctx = document.getElementById(chartId);
+                if (window.lineChart) {
+                    window.lineChart.destroy()
+                }
+                window.lineChart = new Chart(ctx, {
+                    type: "line",
+                    data: {
+                        labels,
+                        datasets,
+                    },
+                    options: {
+                        plugins: {
+                            legend: {
+                                position: 'right'
+                            }
+                        }
+                    }
+                });                
+            }
+
+            window.services = [
+                {'Address_Points': false}, 
+                {'Basemap': false}, 
+                {'Bathymetry': false}, 
+                {'FDST': false}, 
+                {'Geologic_Database': false}, 
+                {'Hydrography': false}, 
+                {'Hypsography': false}, 
+                {'Parcels': false}
+                ]
+            console.log(window.services)
+            const updateServiceType = async (serviceType) => {
+                console.log(window.services)
+
+                window.services.forEach(service => {
+                    Object.keys(service).forEach(key => {
+                        if (key == serviceType) {
+                            service[key] = !service[key]
+                        }
+                    })
+                })
+
+                const servicesParam = JSON.stringify(window.services)
+                const queryParams = window.location.search.split('?')[1]
+                const convertDateToTime = dateString => {
+                    // assumes date string in YYYY-MM-DD format
+                    const [year, month, day] = dateString.split('-')
+                    return new Date(year, month - 1, day).getTime()
+                }
+                let startDate = ""
+                let endDate = ""
+                if (queryParams) {
+                    const queryParamsArray = queryParams.split('&')
+                    queryParamsArray.forEach((param => {
+                        if (param.startsWith('start_date')) {
+                            startDate = convertDateToTime(param.split('=')[1])
+                        }
+                        if (param.startsWith('end_date')) {
+                            endDate = convertDateToTime(param.split('=')[1])
+                        }
+                    }))
+                }
+                const response = await fetch(
+                    `http://localhost:8000/analytics/get_stats_from_arcgis/?services=${servicesParam}&start_date=${startDate}&end_date=${endDate}`
+                )
+
+                const result = await response.json()
+                console.log(result)
+                let datasets = []
+                console.log("result.report['report-data'][0]", result.report['report-data'][0])
+                result.report['report-data'][0].forEach((dataset, index) => {
+                    console.log('dataset', dataset)
+                    console.log('index', index)
+                    let legendLabel = dataset.resourceURI.split('/')[1]
+                    if (!legendLabel) legendLabel = 'Site (root)'
+                    datasets.push({ data: dataset.data, label: legendLabel, borderWidth: 1 })
+                })
+                //let data = result.report['report-data'][0][0].data
+                let labels = result.report['time-slices'].map(time => new Date(time).toDateString())
+                buildLineChart("test-line-chart", "this is a test", labels, datasets)
+
+            }
+            updateServiceType()
+            const serviceTypesDiv = document.getElementById('service-types');
+            window.services.forEach(serviceObj => {
+                const service = Object.keys(serviceObj)[0]
+                const label = document.createElement('label')
+                label.setAttribute('for', service)
+                const labelValue = document.createTextNode(service)
+                label.appendChild(labelValue)
+                const checkbox = document.createElement('input')
+                checkbox.setAttribute('type', 'checkbox')
+                checkbox.setAttribute('id', service)
+                const serviceDiv = document.createElement('div')
+                checkbox.addEventListener("change", () => {updateServiceType(service)})
+                serviceDiv.appendChild(checkbox)
+                serviceDiv.appendChild(label)
+                serviceTypesDiv.appendChild(serviceDiv)
+            })
+            
+            console.log('ever here')
+
+            console.log(serviceTypesDiv.children)
+            for (const child of serviceTypesDiv.children) {
+                console.log(child)
+                console.log(child.tagName)
+                if (child.tagName == 'INPUT') {
+                    child.addEventListener("change", () => {console.log('ever here'); updateServiceType(child.id);})
+                }
+
+            }
+            
         </script>
 
         <script type="text/javascript">

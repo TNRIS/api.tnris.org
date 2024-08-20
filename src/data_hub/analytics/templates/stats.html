@@ -379,7 +379,7 @@
                     }))
                 }
                 const response = await fetch(
-                    `http://localhost:8000/analytics/get_stats_from_arcgis/?services=${servicesParam}&start_date=${startDate}&end_date=${endDate}`
+                    `/analytics/get_stats_from_arcgis/?services=${servicesParam}&start_date=${startDate}&end_date=${endDate}`
                 )
 
                 const result = await response.json()

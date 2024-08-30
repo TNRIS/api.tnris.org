@@ -30,6 +30,9 @@ export FKEY1=`/envs/data_hub/bin/aws secretsmanager get-secret-value --secret-id
 export ACCESS_PEPPER=`/envs/data_hub/bin/aws secretsmanager get-secret-value --secret-id api-tnris-org --query SecretString --output text | jq -cr '.ACCESS_PEPPER'`
 export BCC_EMAIL_1=`/envs/data_hub/bin/aws secretsmanager get-secret-value --secret-id api-tnris-org --query SecretString --output text | jq -cr '.BCC_EMAIL_1'`
 
+export ARCGIS_USERNAME=`/envs/data_hub/bin/aws secretsmanager get-secret-value --secret-id api-tnris-org --query SecretString --output text | jq -cr '.ARCGIS_USERNAME'`
+export ARCGIS_PASSWORD=`/envs/data_hub/bin/aws secretsmanager get-secret-value --secret-id api-tnris-org --query SecretString --output text | jq -cr '.ARCGIS_PASSWORD'`
+
 export IS_LIVE=true
 export IS_DEBUG=false
 

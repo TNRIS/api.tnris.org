@@ -57,6 +57,11 @@ export_command = ("export DB_PASSWORD=" + secrets["DB_PASSWORD"] +
 # Private emails
 " BCC_EMAIL_1=" + secrets["BCC_EMAIL_1"] +
 
+# ArcGIS credentials for analytics report
+" ARCGIS_USERNAME=" + secrets["ARCGIS_USERNAME"] +
+" ARCGIS_PASSWORD=" + secrets["ARCGIS_PASSWORD"] +
+
+
 # the following is only used within ETL scripts (specifically, migrate.py)
 " TNRIS_REPO='local_path_to_cloned_tnris_website_repo'")
 

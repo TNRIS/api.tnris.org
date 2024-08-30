@@ -1,11 +1,12 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse, QueryDict
 from django.contrib.auth.decorators import login_required
 from lcd.models import Collection, TemplateType
 from msd.models import MapCollection
 from analytics.models import DownloadLog2024
 import inspect
 import analytics.models
+import os
 from datetime import datetime
 import time
 import json
@@ -14,6 +15,8 @@ import requests
 
 AVG_TIME_TO_COMPLETE_HRS = 3
 AVG_HOURLY_SALARY = 26.66
+
+all_services = None
 
 # convert dollar totals from e.g. 1,000,000 to 1M 
 def format_money(num):
@@ -31,51 +34,8 @@ def format_money(num):
         return f'${num // 1000}K'
     return f'${num}'
 
-@login_required(login_url='/admin/login/')
-def get_stats_from_arcgis(request):
-    # retrieve token used to make requests
-    data = {'username': 'ags_admin', 'password': '6b4731499c18b007264dbb714e7d24df', 'client': 'requestip', 'expiration': 90, 'f': 'json'}
-    response = requests.post("https://feature.geographic.texas.gov/arcgis/admin/generateToken", data=data)
-    token = response.json()['token']
-    print(token)
-    # create list of services to display in the line chart based on what's checked in the HTML page
-    services = json.loads(request.GET.get('services'))
-    resourceURIs = ["services/"]
-    for service in services:
-        for name in service:
-            if service[name]:
-                resourceURIs.append("services/" + name)
-    print(str(resourceURIs))         
-    response = requests.get('https://feature.geographic.texas.gov/arcgis/admin/usagereports/Total%20requests%20for%20the%20last%207%20days?f=json&token=' + token)
-    print(response.text)
-
-    default_end_date = datetime.now()
-    default_start_date = default_end_date.replace(day=1)
-    # default_end_date = round(default_end_date.timestamp() / 100) * 100000
-    if (default_end_date.day == 1):
-        last_month = default_end_date.month - 1
-        print(last_month)
-        if last_month == 0:
-            last_month = 12
-        default_start_date = default_end_date.replace(month=last_month)
-    start_date = request.GET.get('start_date', round(default_start_date.timestamp() / 100) * 100000)
-    end_date = request.GET.get('end_date', round(default_end_date.timestamp() / 100) * 100000)
-    print('from', start_date)
-    print('to', end_date)
-    # edit the report called analytics_dashboard to reflect the select dates and services the user is interested in
-    data = {'usagereport': '{"reportname":"analytics_dashboard","since":"CUSTOM","queries":[{"resourceURIs":' + str(resourceURIs) + ',"metrics":["RequestCount"]}],"metadata":{"temp":false,"title":"Total requests for the last 7 days","managerReport":true,"styles":{"services/":{"color":"#D900D9"}}},"from":' + str(start_date) + ',"to":' + str(end_date) + '}', 'f': 'json', 'token': token}
-    response = requests.post('https://feature.geographic.texas.gov/arcgis/admin/usagereports/analytics_dashboard/edit', data=data)
-    print(response.request.body)
-    print(response.text)
-    # get the report data
-    response = requests.get('https://feature.geographic.texas.gov/arcgis/admin/usagereports/analytics_dashboard/data?filter=%7B%22services%22%3A%22*%22%2C%22machines%22%3A%22*%22%7D&f=json&token=' + token)
-    print(response.text)
-    return HttpResponse(response.text)
-
-
-@login_required(login_url='/admin/login/')
-def get_monthly_stats(request):
-    # set up start and end time
+def get_default_start_and_end_dates():
+    # get the date/time for the report (defaults to the start of the month until today or last month if today is the 1st)
     default_end_date = datetime.now()
     default_start_date = default_end_date.replace(day=1)
     # if it's the first of the month, make the default start the first of last month
@@ -84,9 +44,117 @@ def get_monthly_stats(request):
         print(last_month)
         if last_month == 0:
             last_month = 12
-        default_start_date = default_end_date.replace(month=last_month)
-    start_date = request.GET.get('start_date', default_start_date.strftime('%Y-%m-%d'))
-    end_date = request.GET.get('end_date', default_end_date.strftime('%Y-%m-%d'))
+        default_start_date = default_end_date.replace(month=last_month)   
+    return [default_start_date, default_end_date] 
+
+def get_arcgis_token():
+    # retrieve token used to make requests
+    username = os.environ.get('ARCGIS_USERNAME')
+    password = os.environ.get('ARCGIS_PASSWORD')
+    data = {'username': username, 'password': password, 'client': 'requestip', 'expiration': 90, 'f': 'json'}
+    response = requests.post("https://feature.geographic.texas.gov/arcgis/admin/generateToken", data=data)
+    token = response.json()['token']
+    print(token)
+    return token
+
+@login_required(login_url='/admin/login/')
+def get_all_service_and_subservices(request):
+    # initialize the list of services and subservices and their shown status
+    global all_services
+    if all_services is not None:
+        return JsonResponse(all_services, safe=False)
+    
+    token = get_arcgis_token()    
+    response = requests.get('https://feature.geographic.texas.gov/arcgis/admin/usagereports/analytics_dashboard?f=json&token=' + token)
+    currentServices = response.json()["queries"][0]["resourceURIs"]
+    print("currentServices " + str(currentServices))
+
+    all_services = [
+        {  "serviceName": "services/", "isShown": False },
+        {  "serviceName": "services/Address_Points", "isShown": False },
+        {  "serviceName": "services/Basemap", "isShown": False },
+        {  "serviceName": "services/Bathymetry", "isShown": False },
+        {  "serviceName": "services/FDST", "isShown": False },
+        {  "serviceName": "services/Geologic_Database", "isShown": False },
+        {  "serviceName": "services/Hydrography", "isShown": False },
+        {  "serviceName": "services/Hypsography", "isShown": False },
+        {  "serviceName": "services/Parcels", "isShown": False }
+    ]
+    for s in all_services:
+        print(s["serviceName"])
+        if s["serviceName"] in currentServices:
+            s["isShown"] = True
+        actualServiceName = s["serviceName"].split("/")[1]
+        if not actualServiceName: # i.e. just "services/"
+            continue
+        # otherwise, get all the subservices there are
+        response = requests.get('https://feature.geographic.texas.gov/arcgis/admin/services/' + actualServiceName + '?f=json&token=' + token)
+        # print(response.text)
+        s["subservices"] = []
+        for subservice in response.json()["services"]:
+            print(subservice["serviceName"])
+            subserviceFullName = s["serviceName"] + "/" + subservice["serviceName"] + ".MapServer"
+            isShown = subserviceFullName in currentServices
+            s["subservices"].append({"serviceName": subserviceFullName, "isShown": isShown})
+            
+    return JsonResponse(all_services, safe=False)
+
+@login_required(login_url='/admin/login/')
+def get_stats_from_arcgis(request):
+    global all_services
+
+    token = get_arcgis_token()
+
+    print(str(all_services))
+
+    # toggle the service listed in the request and 
+    # add any shown service to the list of resourceURIs
+    serviceToToggle = request.GET.get("serviceToToggle")
+    print(serviceToToggle)
+    resourceURIs = []
+    for service in all_services:
+        if service["serviceName"] == serviceToToggle:
+            service["isShown"] = not service["isShown"]
+        if service["isShown"]:
+            resourceURIs.append(service["serviceName"])
+        if "subservices" in service:
+            for subservice in service['subservices']:
+                if subservice["serviceName"] == serviceToToggle:
+                    subservice["isShown"] = not subservice["isShown"]
+                if subservice["isShown"]:
+                    resourceURIs.append(subservice["serviceName"])
+
+    print("resourceURIs " + str(resourceURIs))         
+    response = requests.get('https://feature.geographic.texas.gov/arcgis/admin/usagereports/analytics_dashboard?f=json&token=' + token)
+    print("first request " + response.text)
+
+    default_dates = get_default_start_and_end_dates()
+    start_date = request.GET.get('start_date', round(default_dates[0].timestamp() / 100) * 100000)
+    end_date = request.GET.get('end_date', round(default_dates[1].timestamp() / 100) * 100000)
+    print('from', start_date)
+    print('to', end_date)
+    # edit the report called analytics_dashboard to reflect the select dates and services the user is interested in
+    queries ='"queries":[]'
+    if len(resourceURIs) > 0:
+        queries = '"queries":[{"resourceURIs":' + str(resourceURIs) + ',"metrics":["RequestCount"]}]'
+    print("queries " + queries)
+    data = {'usagereport': '{"reportname":"analytics_dashboard","since":"CUSTOM",' + str(queries) + ',"metadata":{"temp":false,"title":"Total requests for the last 7 days","managerReport":true,"styles":{"services/":{"color":"#D900D9"}}},"from":' + str(start_date) + ',"to":' + str(end_date) + '}', 'f': 'json', 'token': token}
+    print("edit data " + str(data))
+    response = requests.post('https://feature.geographic.texas.gov/arcgis/admin/usagereports/analytics_dashboard/edit', data=data)
+    # print(response.request.body)
+    print(response.text)
+    # get the report data
+    response = requests.get('https://feature.geographic.texas.gov/arcgis/admin/usagereports/analytics_dashboard/data?filter=%7B%22services%22%3A%22*%22%2C%22machines%22%3A%22*%22%7D&f=json&token=' + token)
+    print("final response " + response.text)
+    return HttpResponse(response.text)
+
+
+@login_required(login_url='/admin/login/')
+def get_monthly_stats(request):
+    # set up start and end time
+    default_dates = get_default_start_and_end_dates()
+    start_date = request.GET.get('start_date', default_dates[0].strftime('%Y-%m-%d'))
+    end_date = request.GET.get('end_date', default_dates[1].strftime('%Y-%m-%d'))
     try:
         start_date = datetime.strptime(start_date, '%Y-%m-%d')
         end_date = datetime.strptime(end_date, '%Y-%m-%d')

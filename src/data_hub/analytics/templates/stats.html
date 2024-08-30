@@ -6,6 +6,11 @@
         <meta charset="utf-8" />
         <title>Monthly Stats</title>
         <link href="https://use.typekit.net/rcc6rge.css" rel="stylesheet" />
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+        />
+
         <style>
             * {
                 margin: 0;
@@ -134,16 +139,63 @@
 
             .line-chart-container {
                 margin: 80px auto;
-                max-width: 1000px;
+                max-width: 1500px;
                 display: grid;
                 grid-template-columns: 2fr 7fr;
             }
 
-            #service-types div {
+            .line-chart-stand-in {
+                height: 600px;
+                border: 1px solid black;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            #service-types > div {
                 margin: 20px;
                 display: grid;
-                grid-template-columns: 30px 150px;
+                grid-template-columns: 30px 30px 150px;
                 grid-row-gap: 5px;
+            }
+
+            .plus-test {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .subservice-checkbox {
+                display: none;
+            }
+
+            .subservice-label {
+                cursor: pointer;
+            }
+
+            .subservice-label .fa-minus-square-o {
+                display: none;
+            }
+
+            .subservice-checkbox:checked
+                + .subservice-label
+                .fa-minus-square-o {
+                display: inline;
+            }
+
+            .subservice-checkbox:checked + .subservice-label .fa-plus-square-o {
+                display: none;
+            }
+
+            #service-types .subservice {
+                display: none;
+            }
+
+            #service-types .subservice.show-subservice {
+                display: grid;
+                grid-template-columns: 30px 250px;
+                grid-row-gap: 5px;
+                margin-left: 35px;
             }
 
             @media screen and (max-width: 800px) {
@@ -192,7 +244,12 @@
                         value="{{ request.GET.start_date }}"
                     />
                 </span>
-                <span>
+                <span
+                    ><link
+                        rel="stylesheet"
+                        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+                    />
+
                     End date
                     <input
                         type="date"
@@ -252,6 +309,15 @@
             </div>
         </div>
 
+        <div class="line-chart-container">
+            <div id="service-types">
+                <!-- the HTML is created in the JS below -->
+            </div>
+            <div id="line-chart-container">
+                <canvas id="line-chart"></canvas>
+            </div>
+        </div>
+
         <div class="chart-container">
             <div class="chart">
                 <canvas id="count-by-key-chart"></canvas>
@@ -269,16 +335,6 @@
                 <canvas id="count-by-resource-type-chart"></canvas>
             </div>
         </div>
-        
-        <div class="line-chart-container">
-            <div id="service-types">
-                <!-- rows are created in the JS below -->
-            </div>
-            <div>
-                <canvas id="test-line-chart"></canvas>
-            <div>
-        </div>
-        
 
         <script>
             const buildChart = (chartId, chartLabel, labels, data) => {
@@ -318,7 +374,7 @@
             const buildLineChart = (chartId, chartLabel, labels, datasets) => {
                 const ctx = document.getElementById(chartId);
                 if (window.lineChart) {
-                    window.lineChart.destroy()
+                    window.lineChart.destroy();
                 }
                 window.lineChart = new Chart(ctx, {
                     type: "line",
@@ -329,105 +385,228 @@
                     options: {
                         plugins: {
                             legend: {
-                                position: 'right'
-                            }
-                        }
-                    }
-                });                
-            }
+                                position: "right",
+                            },
+                        },
+                    },
+                });
+            };
 
-            window.services = [
-                {'Address_Points': false}, 
-                {'Basemap': false}, 
-                {'Bathymetry': false}, 
-                {'FDST': false}, 
-                {'Geologic_Database': false}, 
-                {'Hydrography': false}, 
-                {'Hypsography': false}, 
-                {'Parcels': false}
-                ]
-            console.log(window.services)
-            const updateServiceType = async (serviceType) => {
-                console.log(window.services)
+            // toggle the service and update the line chart
+            // if service is null, just return the chart with
+            // whatever services are currently turned on
+            const toggleService = async (service) => {
+                const lineChartContainer = document.getElementById(
+                    "line-chart-container"
+                );
+                lineChartContainer.innerHTML =
+                    "<div class='line-chart-stand-in'>Loading ...</div>";
 
-                window.services.forEach(service => {
-                    Object.keys(service).forEach(key => {
-                        if (key == serviceType) {
-                            service[key] = !service[key]
-                        }
-                    })
-                })
-
-                const servicesParam = JSON.stringify(window.services)
-                const queryParams = window.location.search.split('?')[1]
-                const convertDateToTime = dateString => {
+                // build the date params, if any
+                const queryParams = window.location.search.split("?")[1];
+                const convertDateToTime = (dateString) => {
                     // assumes date string in YYYY-MM-DD format
-                    const [year, month, day] = dateString.split('-')
-                    return new Date(year, month - 1, day).getTime()
-                }
-                let startDate = ""
-                let endDate = ""
+                    const [year, month, day] = dateString.split("-");
+                    return new Date(year, month - 1, day).getTime();
+                };
+                let startDate = "";
+                let endDate = "";
                 if (queryParams) {
-                    const queryParamsArray = queryParams.split('&')
-                    queryParamsArray.forEach((param => {
-                        if (param.startsWith('start_date')) {
-                            startDate = convertDateToTime(param.split('=')[1])
+                    const queryParamsArray = queryParams.split("&");
+                    queryParamsArray.forEach((param) => {
+                        if (param.startsWith("start_date")) {
+                            startDate = convertDateToTime(param.split("=")[1]);
                         }
-                        if (param.startsWith('end_date')) {
-                            endDate = convertDateToTime(param.split('=')[1])
+                        if (param.startsWith("end_date")) {
+                            endDate = convertDateToTime(param.split("=")[1]);
                         }
-                    }))
+                    });
                 }
                 const response = await fetch(
-                    `/analytics/get_stats_from_arcgis/?services=${servicesParam}&start_date=${startDate}&end_date=${endDate}`
-                )
+                    `/analytics/get_stats_from_arcgis/?serviceToToggle=${service}&start_date=${startDate}&end_date=${endDate}`
+                );
 
-                const result = await response.json()
-                console.log(result)
-                let datasets = []
-                console.log("result.report['report-data'][0]", result.report['report-data'][0])
-                result.report['report-data'][0].forEach((dataset, index) => {
-                    console.log('dataset', dataset)
-                    console.log('index', index)
-                    let legendLabel = dataset.resourceURI.split('/')[1]
-                    if (!legendLabel) legendLabel = 'Site (root)'
-                    datasets.push({ data: dataset.data, label: legendLabel, borderWidth: 1 })
-                })
+                const result = await response.json();
+                console.log(result);
+
+                // retrieve the data and build the chart
+                let datasets = [];
+                if (result.report["report-data"]) {
+                    console.log(
+                        "result.report['report-data'][0]",
+                        result.report["report-data"][0]
+                    );
+                    result.report["report-data"][0].forEach(
+                        (dataset, index) => {
+                            console.log("dataset", dataset);
+                            console.log("index", index);
+                            let legendLabel = dataset.resourceURI.split("/")[2];
+                            if (legendLabel) {
+                                legendLabel = legendLabel
+                                    .split(".")[0]
+                                    .replaceAll("_", " ");
+                            } else {
+                                legendLabel = dataset.resourceURI
+                                    .split("/")[1]
+                                    .replaceAll("_", " ");
+                                if (!legendLabel) legendLabel = "All Services";
+                            }
+                            datasets.push({
+                                data: dataset.data,
+                                label: legendLabel,
+                                borderWidth: 1,
+                            });
+                        }
+                    );
+                }
                 //let data = result.report['report-data'][0][0].data
-                let labels = result.report['time-slices'].map(time => new Date(time).toDateString())
-                buildLineChart("test-line-chart", "this is a test", labels, datasets)
-
-            }
-            updateServiceType()
-            const serviceTypesDiv = document.getElementById('service-types');
-            window.services.forEach(serviceObj => {
-                const service = Object.keys(serviceObj)[0]
-                const label = document.createElement('label')
-                label.setAttribute('for', service)
-                const labelValue = document.createTextNode(service)
-                label.appendChild(labelValue)
-                const checkbox = document.createElement('input')
-                checkbox.setAttribute('type', 'checkbox')
-                checkbox.setAttribute('id', service)
-                const serviceDiv = document.createElement('div')
-                checkbox.addEventListener("change", () => {updateServiceType(service)})
-                serviceDiv.appendChild(checkbox)
-                serviceDiv.appendChild(label)
-                serviceTypesDiv.appendChild(serviceDiv)
-            })
-            
-            console.log('ever here')
-
-            console.log(serviceTypesDiv.children)
-            for (const child of serviceTypesDiv.children) {
-                console.log(child)
-                console.log(child.tagName)
-                if (child.tagName == 'INPUT') {
-                    child.addEventListener("change", () => {console.log('ever here'); updateServiceType(child.id);})
+                let labels = [];
+                if (result.report["time-slices"]) {
+                    labels = result.report["time-slices"].map((time) =>
+                        new Date(time).toDateString()
+                    );
                 }
 
-            }
-            
+                if (datasets.length > 0) {
+                    lineChartContainer.innerHTML =
+                        "<canvas id='line-chart'></canvas>";
+                    buildLineChart("line-chart", "Usage", labels, datasets);
+                } else {
+                    lineChartContainer.innerHTML =
+                        "<div class='line-chart-stand-in'>No Services Selected.</div>";
+                }
+            };
+
+            // creates the plus/minus checkbox that shows/hides the subservices div
+            const createTurndown = (
+                service,
+                subservicesDiv,
+                hasCheckedSubservices
+            ) => {
+                const turndownDiv = document.createElement("div");
+                turndownDiv.setAttribute("class", "turndown");
+                const checkbox = document.createElement("input");
+                checkbox.setAttribute("type", "checkbox");
+                checkbox.setAttribute("id", service + "Turndown");
+                checkbox.setAttribute("name", service + "Turndown");
+                checkbox.setAttribute("class", "subservice-checkbox");
+                checkbox.addEventListener("change", (e) => {
+                    if (e.target.checked) {
+                        subservicesDiv.classList.add("show-subservice");
+                    } else {
+                        subservicesDiv.classList.remove("show-subservice");
+                    }
+                });
+                const label = document.createElement("label");
+                label.setAttribute("for", service + "Turndown");
+                label.setAttribute("class", "subservice-label");
+                const plusButton = document.createElement("i");
+                plusButton.setAttribute("class", "fa fa-plus-square-o");
+                const minusButton = document.createElement("i");
+                minusButton.setAttribute("class", "fa fa-minus-square-o");
+                label.appendChild(plusButton);
+                label.appendChild(minusButton);
+                turndownDiv.appendChild(checkbox);
+                turndownDiv.appendChild(label);
+                if (hasCheckedSubservices) {
+                    checkbox.checked = true;
+                    subservicesDiv.classList.add("show-subservice");
+                }
+                return turndownDiv;
+            };
+
+            // creates the checkbox for a service or subservice and the label that goes with it
+            const createServiceCheckbox = (serviceName, isShown) => {
+                serviceNameArray = serviceName.split("/");
+                // the label for attribute is either "services",
+                // the service name with underscores or
+                // the subservice name with underscores
+                const labelFor = serviceNameArray[2]
+                    ? serviceNameArray[2].split(".")[0]
+                    : serviceNameArray[1]
+                    ? serviceNameArray[1]
+                    : serviceNameArray[0];
+                const label = document.createElement("label");
+
+                label.setAttribute("for", labelFor);
+                const labelText = document.createTextNode(
+                    (labelFor == "services"
+                        ? "All Services"
+                        : labelFor
+                    ).replaceAll("_", " ")
+                );
+                label.appendChild(labelText);
+                const checkbox = document.createElement("input");
+                checkbox.setAttribute("type", "checkbox");
+                checkbox.setAttribute("id", name);
+                checkbox.addEventListener("change", () => {
+                    toggleService(serviceName);
+                });
+                checkbox.checked = isShown;
+                return [checkbox, label];
+            };
+
+            // creates the hidden div containing the list of subservices
+            // exposed by the turndown
+            const createSubservicesDiv = (service, subservices) => {
+                if (!subservices) return null;
+                const subServicesDiv = document.createElement("div");
+                subServicesDiv.setAttribute("class", "subservice");
+                subservices.forEach((subservice) => {
+                    const [checkbox, label] = createServiceCheckbox(
+                        subservice.serviceName,
+                        subservice.isShown
+                    );
+                    subServicesDiv.appendChild(checkbox);
+                    subServicesDiv.appendChild(label);
+                });
+                return subServicesDiv;
+            };
+
+            // retrieves the list of services and subservices and
+            // creates the html for it
+            const getAllServices = async () => {
+                const serviceTypesDiv =
+                    document.getElementById("service-types");
+                const response = await fetch(
+                    "/analytics/get_all_services_and_subservices/"
+                );
+                allServices = await response.json();
+                console.log(allServices);
+                allServices.forEach(async (service) => {
+                    const subservicesDiv = createSubservicesDiv(
+                        service.serviceName,
+                        service.subservices
+                    );
+
+                    const serviceDiv = document.createElement("div");
+                    if (subservicesDiv) {
+                        serviceDiv.appendChild(
+                            createTurndown(
+                                service.serviceName,
+                                subservicesDiv,
+                                service.subservices.findIndex(
+                                    (subservice) => subservice.isShown
+                                ) >= 0
+                            )
+                        );
+                    } else {
+                        // append dummy div to take up space in the grid
+                        serviceDiv.appendChild(document.createElement("div"));
+                    }
+                    const [checkbox, label] = createServiceCheckbox(
+                        service.serviceName,
+                        service.isShown
+                    );
+                    serviceDiv.appendChild(checkbox);
+                    serviceDiv.appendChild(label);
+                    subservicesDiv && serviceDiv.appendChild(subservicesDiv);
+                    serviceTypesDiv.appendChild(serviceDiv);
+                });
+                // this has the effect of getting the initial graph
+                toggleService();
+            };
+            getAllServices();
         </script>
 
         <script type="text/javascript">

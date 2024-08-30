@@ -129,8 +129,13 @@ def get_stats_from_arcgis(request):
     print("first request " + response.text)
 
     default_dates = get_default_start_and_end_dates()
-    start_date = request.GET.get('start_date', round(default_dates[0].timestamp() / 100) * 100000)
-    end_date = request.GET.get('end_date', round(default_dates[1].timestamp() / 100) * 100000)
+    start_date = request.GET.get('start_date', default=round(default_dates[0].timestamp() / 100) * 100000)
+    end_date = request.GET.get('end_date', default=round(default_dates[1].timestamp() / 100) * 100000)
+    # for some reason, the default argument isn't working, so using the code below
+    if (not start_date): 
+        start_date = str(round(default_dates[0].timestamp() / 100) * 100000)
+    if (not end_date): 
+        end_date = str(round(default_dates[1].timestamp() / 100) * 100000)
     print('from', start_date)
     print('to', end_date)
     # edit the report called analytics_dashboard to reflect the select dates and services the user is interested in

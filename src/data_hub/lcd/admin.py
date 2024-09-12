@@ -269,7 +269,8 @@ class ResourceAdmin(admin.ModelAdmin):
     )
 
     def download_url(self, obj):
-        return obj.resource.replace('https://s3.amazonaws.com/data.tnris.org/', 'https://data.tnris.org/')
+        return obj.resource
+        #return obj.resource.replace('https://s3.amazonaws.com/data.tnris.org/', 'https://data.tnris.org/')
 
     # set aside acqusition_date year for list display
     def disp_name(self, resource):

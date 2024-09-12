@@ -56,7 +56,7 @@ class CollectionSerializer(serializers.ModelSerializer):
     thumbnail_image = serializers.SerializerMethodField()
     def get_thumbnail_image(self, obj):
         if str(obj.thumbnail_image) != "" and obj.thumbnail_image is not None:
-            path = str(obj.thumbnail_image).replace("https://s3.amazonaws.com/data.tnris.org/", "https://data.tnris.org/")
+            path = str(obj.thumbnail_image)
         else:
             path = None
         return path
@@ -64,7 +64,7 @@ class CollectionSerializer(serializers.ModelSerializer):
     images = serializers.SerializerMethodField()
     def get_images(self, obj):
         if str(obj.images) != "" and obj.images is not None:
-            path = str(obj.images).replace("https://s3.amazonaws.com/data.tnris.org/", "https://data.tnris.org/")
+            path = str(obj.images)
         else:
             path = None
         return path

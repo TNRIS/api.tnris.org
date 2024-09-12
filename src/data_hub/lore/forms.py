@@ -11,7 +11,7 @@ import boto3, uuid
 
 # widget template override for populated upload file fields
 def populated_image_render(name, value, attrs=None, renderer=None):
-    cdn_link = value.replace('https://s3.amazonaws.com/data.tnris.org/', 'https://data.tnris.org/')
+    cdn_link = value
     html = Template("""
         <div style="margin-bottom:10px;">
             <input style="width:90%;" type="text" id="currentUrl" value="$link" readonly></input>

@@ -330,6 +330,98 @@ class OrderStatusViewSet(viewsets.ViewSet):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
+class InitiateRetentionCleanupViewSet(viewsets.ViewSet):
+    """
+    Delete old orders according to retention policy.
+    """
+    permission_classes = (AllowAny,)
+
+    def create(self, request, format=None):
+        """Delete old orders according to retention policy."""
+
+        # Check CCP ACCESS CODE to prevent bots from making requests.
+        if os.environ.get("CCP_ACCESS_CODE")!= request.data["access_code"]:
+            if api_helper.checkLogger():
+                logger.error("CCP access code incorrect in InitiateRetentionCleanup ")
+            return Response(
+                {"status": "access_denied", "message": "access_denied"},
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
+
+        # Boolean flag to determine if we are running a test or not.
+        approve_run = False
+        if 'approve_run' in request.data:
+            approve_run = request.data["approve_run"] == "true"
+
+        try:
+            orders = OrderType.objects.get_queryset()
+            # Loop over each order and check if the retention policy has expired them.
+            for order in orders:
+                # Determine how long since the order was created.
+                created_td = datetime.utcnow() - order.created.replace(tzinfo=None)
+                days_since_created = created_td.days
+
+                # Determine how long since the order was modified.
+                modified_td = datetime.utcnow() - order.last_modified.replace(tzinfo=None)
+                days_since_modified = modified_td.days
+
+                # Get associated order details.
+                order_details = OrderDetailsType.objects.filter(id=order.order_details_id)
+
+                # Test variables
+                orders_to_be_deleted = 0
+                orders_to_be_archived = 0
+
+                # If archived we must check if deletion time has come.
+                # This is where the writing to the database should occur. Be
+                # sure to check for "approve_run" is "true" before doing
+                # anything dangerous.
+                if order.archived is True:
+                    # Retention policy - Un-acted upon orders will be archived
+                    # after 90 days. After an additional 30 days then they will
+                    # be deleted from the API database. We can check that at
+                    # least 120 days have passed since that's the minimum
+                    # amount of time we want to keep an order. We also want to
+                    # make sure it was changed to archived and it hasn't been
+                    # modified in any way for 30 days.
+                    if (days_since_created > 120) and (days_since_modified > 30):
+                        if approve_run:
+                            order.delete()
+                            order_details.delete()
+
+                        orders_to_be_deleted += 1
+                else:
+                    # If not archived we check the retention policy.
+                    # Retention policy Orders marked as archived will be
+                    # deleted if left in that state for 30 days completely
+                    # unmodified.
+                    if (days_since_created > 90) and (days_since_modified > 90):
+                        if approve_run:
+                            order.archived = True
+                            order.save()
+                        orders_to_be_archived += 1
+
+            # General Response
+            if approve_run:
+                return Response({"status": "success", "message": "success"})
+            
+            # Testing information response.
+            return Response({
+                "status": "success",
+                "message": "success",
+                "orders_to_be_deleted": orders_to_be_deleted,
+                "orders_to_be_archived": orders_to_be_archived
+            }, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            if api_helper.checkLogger():
+                logger.info("Error cleaning up old orders: %s", str(e))
+            return Response({
+                "status": "failure",
+                "message": "The order has failed"
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
 class OrderCleanupViewSet(viewsets.ViewSet):
     permission_classes = (AllowAny,)
     

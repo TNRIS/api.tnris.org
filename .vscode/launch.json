@@ -8,7 +8,7 @@
     "configurations": [    
         {
             "name": "Python: Django",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "program": "${workspaceFolder}/src/data_hub/manage.py",
             "args": [
@@ -19,7 +19,7 @@
         },
         {
             "name": "Configure",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "program": "${workspaceFolder}/configure.py"
         },

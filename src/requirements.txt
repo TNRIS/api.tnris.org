@@ -42,7 +42,7 @@ google-auth-oauthlib==0.4.4
 gspread==3.7.0
 html5lib==1.1
 httplib2==0.19.1
-idna==3.2
+idna==3.7
 importlib-metadata==4.6.1
 ipaddr==2.2.0
 itypes==1.2.0

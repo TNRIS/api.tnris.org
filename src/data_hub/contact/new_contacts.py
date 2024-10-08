@@ -18,8 +18,19 @@ from django.conf import settings
 from django.core.mail import EmailMessage
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
+from modules.api_helper import CorsPostPermission
+from modules.api_helper import logger
 from modules import api_helper
+from .models import (EmailTemplate, OrderType, OrderDetailsType)
 
+CLEANING_FLAG=False
+
+# Use testing URLS (Do not use in production)
+TESTING = False
+CCP_URL = 'https://securecheckout.cdc.nicusa.com/ccprest/api/v1/TX/'
+
+if TESTING:
+    CCP_URL = 'https://securecheckout-uat.cdc.nicusa.com/ccprest/api/v1/TX/'
 # FORMS SUBMISSION ENDPOINT
 class SubmitFormViewSetSuper(viewsets.ViewSet):
     """

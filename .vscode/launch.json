@@ -23,6 +23,17 @@
             "request": "launch",
             "program": "${workspaceFolder}/configure.py"
         },
+        {
+            "name": "TestContact",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/data_hub/manage.py",
+            "args": [
+                "test", "contact"
+            ],
+            "django": true,
+            "justMyCode": true
+        }
     ],
     "settings": {
         "python.pythonPath": "${workspaceFolder}/venv_38/bin/python"

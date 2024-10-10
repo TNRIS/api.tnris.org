@@ -1,6 +1,7 @@
 """
     Handle the datahub and map orders using our payment provider.
 """
+
 import hashlib
 import json
 import os
@@ -21,16 +22,18 @@ from django.dispatch import receiver
 from modules.api_helper import CorsPostPermission
 from modules.api_helper import logger
 from modules import api_helper
-from .models import (EmailTemplate, OrderType, OrderDetailsType)
+from .models import EmailTemplate, OrderType, OrderDetailsType
 
-CLEANING_FLAG=False
+CLEANING_FLAG = False
 
 # Use testing URLS (Do not use in production)
 TESTING = False
-CCP_URL = 'https://securecheckout.cdc.nicusa.com/ccprest/api/v1/TX/'
+CCP_URL = "https://securecheckout.cdc.nicusa.com/ccprest/api/v1/TX/"
 
 if TESTING:
-    CCP_URL = 'https://securecheckout-uat.cdc.nicusa.com/ccprest/api/v1/TX/'
+    CCP_URL = "https://securecheckout-uat.cdc.nicusa.com/ccprest/api/v1/TX/"
+
+
 # FORMS SUBMISSION ENDPOINT
 class SubmitFormViewSetSuper(viewsets.ViewSet):
     """
@@ -54,117 +57,90 @@ class SubmitFormViewSetSuper(viewsets.ViewSet):
         injected = re.sub(r"\{\{.*?\}\}", "", injected)
         return injected
 
-    # generic function for sending email associated with form submission
-    # emails send to supportsystem to create tickets in the ticketing system
-    # which are ultimately managed by IS, RDC, and StratMap
-    def send_email(
-        self,
-        subject,
-        body,
-        send_from=os.environ.get("MAIL_DEFAULT_FROM"),
-        send_to=os.environ.get("MAIL_DEFAULT_TO"),
-        reply_to="unknown@tnris.org",
-    ):
+    def build_error_response(self, message, e=False):
         """
-        Send Email
+        Build error message and response.
         """
-        email = EmailMessage(subject, body, send_from, [send_to], reply_to=[reply_to])
-        email.send(fail_silently=False)
-        return
+        if api_helper.checkLogger() and e:
+            logger.error("%s: %s", message, e)
+        elif api_helper.checkLogger():
+            logger.error("%s", message)
+        return Response(
+            {"status": "error", "message": message},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+    def send_template_email(self, email_template, formatted):
+        """Send an email to the template email (Configured through API)"""
+        body = self.compile_email_body(email_template.email_template_body, formatted)
+
+        sender = (
+            os.environ.get("MAIL_DEFAULT_TO")
+            if email_template.sendpoint == "default"
+            else formatted[email_template.sendpoint]
+        )
+        replyer = (
+            formatted["email"] if "email" in formatted.keys() else "unknown@tnris.org"
+        )
+
+        # Request can support firstname or name. Check which has been passed in.
+        if "name" in formatted.keys():
+            replyer = f"{formatted['name']} <{formatted['email']}>"
+        elif "firstname" in formatted.keys() and "lastname" in formatted.keys():
+            replyer = f"{formatted['firstname']} {formatted['lastname']} <{formatted['email']}>"
+
+        # send to ticketing system unless sendpoint has alternative key value
+        # in email template record
+        api_helper.send_raw_email(
+            email_template.email_template_subject,
+            body,
+            send_to=sender,
+            reply_to=replyer,
+        )
 
     def create(self, request, format=None):
-        # if in DEBUG mode, assume local development and use localhost recaptcha secret
-        # otherwise, use product account secret environment variable
-        # Note: The localhost recaptcha secret is a known test key for use in recaptcha it isn't secret at all. Do not change this to a real recaptcha key. Secrets manaaer must be used.
+        """
+        create a new order.
+        """
         if api_helper.checkLogger():
             logger.info("Submitting form: in SubmitFormViewSet.")
-        recaptcha_secret = (
-            "6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe"
-            if settings.DEBUG
-            else os.environ.get("RECAPTCHA_SECRET")
-        )
-        recaptcha_verify_url = "https://www.google.com/recaptcha/api/siteverify"
-        recaptcha_data = {
-            "secret": recaptcha_secret,
-            "response": request.data["recaptcha"],
-        }
-        verify_req = requests.post(url=recaptcha_verify_url, data=recaptcha_data)
-        # get email template for form. if bad form, return error
+
+        # Check Recaptcha return if it fails.
+        verify_req = api_helper.checkCaptcha(settings.DEBUG, request.data["recaptcha"])
+        if not json.loads(verify_req.text)["success"]:
+            return self.build_error_response("Recaptcha Verification Failed.")
+
+        # Get email template for form and return if it fails.
         try:
             email_template = EmailTemplate.objects.get(form_id=request.data["form_id"])
-        except:
+        except Exception as e:
+            return self.build_error_response("form_id not registered. Error: %s", e)
+
+        formatted = {k.lower().replace(" ", "_"): v for k, v in request.data.items()}
+        formatted["url"] = (
+            request.META["HTTP_REFERER"]
+            if "HTTP_REFERER" in request.META.keys()
+            else request.META["HTTP_HOST"]
+        )
+        serializer = getattr(
+            sys.modules[__name__], email_template.serializer_classname
+        )(data=formatted)
+
+        # This is the final step in the creation process. If this succeeds send a 201 status.
+        if serializer.is_valid():
+            serializer.save()
+            self.send_template_email(email_template, formatted)
             if api_helper.checkLogger():
-                logger.error("form_id not registered.")
+                logger.info("Form Submitted Successfully!")
             return Response(
-                {"status": "error", "message": "form_id not registered."},
-                status=status.HTTP_400_BAD_REQUEST,
+                {"status": "success", "message": "Form Submitted Successfully!"},
+                status=status.HTTP_201_CREATED,
             )
-        # if recaptcha verification a success, add to database
-        if json.loads(verify_req.text)["success"]:
-            formatted = {
-                k.lower().replace(" ", "_"): v for k, v in request.data.items()
-            }
-            formatted["url"] = (
-                request.META["HTTP_REFERER"]
-                if "HTTP_REFERER" in request.META.keys()
-                else request.META["HTTP_HOST"]
-            )
-            serializer = getattr(
-                sys.modules[__name__], email_template.serializer_classname
-            )(data=formatted)
-            if serializer.is_valid():
-                serializer.save()
-                body = self.compile_email_body(
-                    email_template.email_template_body, formatted
-                )
-                # send to ticketing system unless sendpoint has alternative key value in email template record
-                sender = (
-                    os.environ.get("MAIL_DEFAULT_TO")
-                    if email_template.sendpoint == "default"
-                    else formatted[email_template.sendpoint]
-                )
-                replyer = (
-                    formatted["email"]
-                    if "email" in formatted.keys()
-                    else "unknown@tnris.org"
-                )
-                if "name" in formatted.keys():
-                    replyer = "%s <%s>" % (formatted["name"], formatted["email"])
-                elif "firstname" in formatted.keys() and "lastname" in formatted.keys():
-                    replyer = "%s %s <%s>" % (
-                        formatted["firstname"],
-                        formatted["lastname"],
-                        formatted["email"],
-                    )
-                self.send_email(
-                    email_template.email_template_subject,
-                    body,
-                    send_to=sender,
-                    reply_to=replyer,
-                )
-                if api_helper.checkLogger():
-                    logger.info("Form Submitted Successfully!")
-                return Response(
-                    {"status": "success", "message": "Form Submitted Successfully!"},
-                    status=status.HTTP_201_CREATED,
-                )
-            if api_helper.checkLogger():
-                logger.info("Serializer Save Failed.")
-            return Response(
-                {
-                    "status": "error",
-                    "message": "Serializer Save Failed.",
-                    "error": serializer.errors,
-                },
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-        else:
-            if api_helper.checkLogger():
-                logger.error("Recaptcha Verification Failed.")
-            return Response(
-                {"status": "error", "message": "Recaptcha Verification Failed."},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+
+        # If we get this far then return a error response.
+        if api_helper.checkLogger():
+            logger.info("Serializer Save Failed.")
+        return self.build_error_response("Serializer Save Failed.")
 
 
 class GenOtpViewSetSuper(viewsets.ViewSet):
@@ -403,6 +379,10 @@ class InitiateRetentionCleanupViewSetSuper(viewsets.ViewSet):
 
 
 class OrderCleanupViewSetSuper(viewsets.ViewSet):
+    """
+    Begin Cleanup routines
+    """
+
     permission_classes = (AllowAny,)
 
     def create(self, request, format=None):

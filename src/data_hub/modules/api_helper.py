@@ -120,7 +120,6 @@ def send_email(
 
     return mail.send()
 
-
 def send_raw_email(
     subject,
     body,
@@ -128,6 +127,11 @@ def send_raw_email(
     send_to=os.environ.get("MAIL_DEFAULT_TO"),
     reply_to="unknown@tnris.org",
 ):
+    """
+    generic function for sending email associated with form submission
+    emails send to supportsystem to create tickets in the ticketing system
+    which are ultimately managed by IS, RDC, and StratMap
+    """
     email = EmailMessage(subject, body, send_from, [send_to], reply_to=[reply_to])
     email.send(fail_silently=False)
     return

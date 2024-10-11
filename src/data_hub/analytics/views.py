@@ -61,8 +61,8 @@ def get_arcgis_token():
 def get_all_service_and_subservices(request):
     # initialize the list of services and subservices and their shown status
     global all_services
-    if all_services is not None:
-        return JsonResponse(all_services, safe=False)
+    # if all_services is not None:
+    #     return JsonResponse(all_services, safe=False)
     
     token = get_arcgis_token()    
     response = requests.get('https://feature.geographic.texas.gov/arcgis/admin/usagereports/analytics_dashboard?f=json&token=' + token)
@@ -70,7 +70,7 @@ def get_all_service_and_subservices(request):
     print("currentServices " + str(currentServices))
 
     all_services = [
-        {  "serviceName": "services/", "isShown": False },
+        {  "serviceName": "services/", "isShown": True },
         {  "serviceName": "services/Address_Points", "isShown": False },
         {  "serviceName": "services/Basemap", "isShown": False },
         {  "serviceName": "services/Bathymetry", "isShown": False },
@@ -82,8 +82,8 @@ def get_all_service_and_subservices(request):
     ]
     for s in all_services:
         print(s["serviceName"])
-        if s["serviceName"] in currentServices:
-            s["isShown"] = True
+        # if s["serviceName"] in currentServices:
+        #     s["isShown"] = True
         actualServiceName = s["serviceName"].split("/")[1]
         if not actualServiceName: # i.e. just "services/"
             continue
@@ -94,8 +94,8 @@ def get_all_service_and_subservices(request):
         for subservice in response.json()["services"]:
             print(subservice["serviceName"])
             subserviceFullName = s["serviceName"] + "/" + subservice["serviceName"] + ".MapServer"
-            isShown = subserviceFullName in currentServices
-            s["subservices"].append({"serviceName": subserviceFullName, "isShown": isShown})
+            # isShown = subserviceFullName in currentServices
+            s["subservices"].append({"serviceName": subserviceFullName, "isShown": False})
             
     return JsonResponse(all_services, safe=False)
 
@@ -164,13 +164,16 @@ def get_monthly_stats(request):
         start_date = datetime.strptime(start_date, '%Y-%m-%d')
         end_date = datetime.strptime(end_date, '%Y-%m-%d')
         if start_date >= end_date:
-            raise Exception('start date must be before end date')
+            # raise Exception('start date must be before end date')
+            return render(request, 'stats.html', {'error', 'Start date must be before end date'})
     except ValueError:
         print('dates must be in the form YYYY-M-D') 
-        raise   
+        return render(request, 'stats.html', {'error', 'Dates must be in the form YYYY-M-D'})
+        # raise   
     except Exception:
-        print('start date must be after end date')
-        raise
+        print('You must provide both a start and end date')
+        return render(request, 'stats.html', {'error', 'You must provide both a start and end date'})
+        # raise
 
     # initialize no_downloads with all possible collections (we remove any that were downloaded)
     no_downloads = {}

@@ -23,6 +23,12 @@
                 font-family: pf-grand-gothik-variable, sans-serif;
                 width: 100vw;
                 overflow-x: hidden;
+                background-color: #f9f9fb;
+            }
+
+            #header {
+                background-color: #222632;
+                padding-bottom: 30px;
             }
 
             .logo {
@@ -37,19 +43,48 @@
 
             h1 {
                 text-align: center;
+                color: white;
             }
 
             .centered {
                 margin: 50px auto;
-            }
-
-            .totals {
                 text-align: center;
-                margin-bottom: 10px;
             }
 
-            .totals span {
+            .date-error {
+                text-align: center;
+                background-color: red;
+                padding: 10px 0;
+            }
+
+            .section-title {
+                text-align: center;
+                margin-top: 30px;
+                margin-bottom: 30px;
+            }
+
+            .summary {
+                border: 2px solid #aaaaaa;
+                border-radius: 5px;
+                background-color: white;
+                padding-top: 10px;
+                width: 500px;
+                margin: 0 auto;
+            }
+
+            .summary table {
+                margin: 10px auto;
+                width: 90%;
+            }
+
+            .summary td:nth-child(odd) {
                 font-weight: bold;
+                width: 70%;
+            }
+
+            .summary td:nth-child(even) {
+                text-align: right;
+                width: 30%;
             }
 
             .value {
@@ -62,26 +97,31 @@
                 display: flex;
             }
 
-            .bubble {
-                background-color: #0379bc;
+            .section-title {
+                text-align: center;
+                margin: 50px;
+            }
+
+            .square {
+                background-color: white;
                 width: 150px;
                 height: 150px;
-                border-radius: 75px;
                 display: grid;
                 grid-template-columns: auto;
                 text-align: center;
-                color: white;
+                color: black;
+                border: 2px solid #aaaaaa;
+                border-radius: 5px;
             }
 
-            .bubble .total {
+            .square .total {
                 font-weight: bold;
                 font-size: 24px;
             }
 
-            .bubble img {
+            .square img {
                 width: 24px;
                 margin: auto;
-                filter: invert(1);
             }
 
             .times {
@@ -104,12 +144,13 @@
             form {
                 border: 1px solid black;
                 width: 800px;
-                margin: 50px auto;
+                margin: 0 auto;
             }
 
             .timeframe {
                 padding: 20px;
                 text-align: center;
+                background-color: white;
             }
 
             .timeframe span {
@@ -118,7 +159,7 @@
 
             .submit-form input {
                 border: none;
-                background: #0379bc;
+                background: #007db8;
                 padding: 10px;
                 font-size: 18px;
                 color: white;
@@ -134,29 +175,58 @@
             }
 
             .chart {
+                border: 2px solid #aaaaaa;
+                border-radius: 5px;
+                background-color: white;
                 width: 100%;
             }
 
             .line-chart-container {
+                border: 2px solid #aaaaaa;
+                border-radius: 5px;
+                background-color: white;
+                padding: 30px;
                 margin: 80px auto;
-                max-width: 1500px;
+                max-width: 700px;
                 display: grid;
-                grid-template-columns: 2fr 7fr;
+                grid-template-columns: 1fr 7fr;
+            }
+
+            #line-chart-div > canvas {
+                width: 600px;
             }
 
             .line-chart-stand-in {
-                height: 600px;
+                width: 600px;
+                height: 300px;
                 border: 1px solid black;
                 display: flex;
                 align-items: center;
                 justify-content: center;
             }
 
+            #service-types {
+                position: absolute;
+                background-color: white;
+                border: 1px solid #aaaaaa;
+            }
+
             #service-types > div {
                 margin: 20px;
                 display: grid;
-                grid-template-columns: 30px 30px 150px;
+                grid-template-columns: 30px 30px 225px;
                 grid-row-gap: 5px;
+            }
+
+            #service-types > #close-service-types {
+                display: flex;
+                justify-content: flex-end;
+            }
+
+            #close-service-types > button {
+                border: none;
+                background-color: white;
+                font-size: 24px;
             }
 
             .plus-test {
@@ -198,7 +268,15 @@
                 margin-left: 35px;
             }
 
-            @media screen and (max-width: 800px) {
+            .shown {
+                display: block;
+            }
+
+            .hidden {
+                display: none;
+            }
+
+            @media screen and (max-width: 1400px) {
                 .chart-container {
                     display: grid;
                     grid-template-columns: 1fr;
@@ -216,74 +294,86 @@
     <body>
         <script src="https://cdn.jsdelivr.net/npm/chart.js@4.2.1/dist/chart.umd.min.js"></script>
 
-        <!-- prettier-ignore -->
-        <div class="logo centered">
-            <img src="{% static "analytics/TxGIO_Primary_Horizontal_Digital_RGB_WebOptimized.png" %}" /> 
-        </div>
-
-        {% if request.GET.start_date %}
-        <!-- keep the Prettier extension from reformating the following tag on save -->
-        <!-- prettier-ignore -->
-        <h1>
-            DataHub Statistics
-        </h1>
-        {% else %}
-        <!-- prettier-ignore -->
-        <h1>
-            DataHub Statistics for Current Month
-        </h1>
-        {% endif %}
-
-        <form action="/analytics/get_monthly_stats/" method="GET">
-            <div class="timeframe">
-                <span>
-                    Start date
-                    <input
-                        type="date"
-                        name="start_date"
-                        value="{{ request.GET.start_date }}"
-                    />
-                </span>
-                <span
-                    ><link
-                        rel="stylesheet"
-                        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-                    />
-
-                    End date
-                    <input
-                        type="date"
-                        name="end_date"
-                        value="{{ request.GET.end_date }}"
-                    />
-                </span>
-                <span class="submit-form">
-                    <input type="submit" value="Refresh" />
-                </span>
+        <div id="header">
+            <!-- prettier-ignore -->
+            <div class="logo centered">
+                <img src="{% static "analytics/TxGIO_Primary_Horizontal_Digital_RGB_WebOptimized.png" %}" /> 
             </div>
-        </form>
 
+            {% if request.GET.start_date %}
+            <!-- keep the Prettier extension from reformating the following tag on save -->
+            <!-- prettier-ignore -->
+            <h1>
+                DataHub Statistics
+            </h1>
+            {% else %}
+            <!-- prettier-ignore -->
+            <h1>
+                DataHub Statistics for Current Month
+            </h1>
+            {% endif %}
+
+            <form action="/analytics/get_monthly_stats/" method="GET">
+                <div class="timeframe">
+                    <h2>Filter by Date Range</h2>
+                    <span>
+                        Start date
+                        <input
+                            type="date"
+                            name="start_date"
+                            value="{{ request.GET.start_date }}"
+                        />
+                    </span>
+                    <span
+                        ><link
+                            rel="stylesheet"
+                            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+                        />
+
+                        End date
+                        <input
+                            type="date"
+                            name="end_date"
+                            value="{{ request.GET.end_date }}"
+                        />
+                    </span>
+                    <span class="submit-form">
+                        <input type="submit" value="Refresh" />
+                    </span>
+                </div>
+            </form>
+        </div>
+        {% if error %}
+        <h2 class="date-error">{{error}}</h2>
+        {% endif %} {% if not error %}
+        <h2 class="section-title">Datahub Download Summary Statistics</h2>
         <div class="summary">
-            <div class="totals">
-                <span>Total Downloads :</span>&nbsp;{{total_downloads}}
-            </div>
-            <div class="totals">
-                <span> Successful Data Downloads : </span
-                >&nbsp;{{total_success_data}}
-            </div>
-            <div class="totals">
-                <span> Successful Map Downloads : </span
-                >&nbsp;{{total_success_map}}
-            </div>
-            <div class="totals">
-                <span> Failed Downloads : </span>&nbsp;{{total_errors}}
-            </div>
+            <table>
+                <tr>
+                    <td>Total Downloads</td>
+                    <td>{{total_downloads}}</td>
+                </tr>
+                <tr>
+                    <td>Successful Data Downloads</td>
+                    <td>{{total_success_map}}</td>
+                </tr>
+                <tr>
+                    <td>Successful Map Downloads</td>
+                    <td>{{total_downloads}}</td>
+                </tr>
+                <tr>
+                    <td>Failed Downloads</td>
+                    <td>{{total_errors}}</td>
+                </tr>
+            </table>
         </div>
+
+        <h3 class="section-title">Time and Cost Savings</h3>
 
         <!-- prettier-ignore -->
         <div class="value">
             <div class="inner-value">
-                <div class="bubble">
+                <div class="square">
                     <img src="{% static "analytics/interrogation.png" %}" /> 
                     <div class="total">{{total_success}}</div>
                     <div class="explanation">downloads responsive to PIR needs</div>
@@ -292,7 +382,7 @@
                     <img src="{% static "analytics/cross-small.png" %}" />
                     <div>multiply by estimated time to complete (~3 hours)</div>
                 </div>
-                <div class="bubble">
+                <div class="square">
                     <img src="{% static "analytics/clock-two.png" %}" /> 
                     <div class="total">{{hours_saved}}</div>
                     <div class="explanation">hours saved</div>
@@ -301,7 +391,7 @@
                     <img src="{% static "analytics/cross-small.png" %}" />
                     <div>multiply by employee average hourly salary (~ $26.66)</div>
                 </div>
-                <div class="bubble">
+                <div class="square">
                     <img src="{% static "analytics/piggy-bank.png" %}" /> 
                     <div class="total">{{dollars_saved}}</div>
                     <div class="explanation">dollars saved</div>
@@ -309,14 +399,7 @@
             </div>
         </div>
 
-        <div class="line-chart-container">
-            <div id="service-types">
-                <!-- the HTML is created in the JS below -->
-            </div>
-            <div id="line-chart-container">
-                <canvas id="line-chart"></canvas>
-            </div>
-        </div>
+        <h3 class="section-title">File Download Statistics</h3>
 
         <div class="chart-container">
             <div class="chart">
@@ -333,6 +416,22 @@
             </div>
             <div class="chart">
                 <canvas id="count-by-resource-type-chart"></canvas>
+            </div>
+        </div>
+
+        <h2 class="section-title">ArcGIS Service Statistics</h2>
+
+        <div class="line-chart-container">
+            <div id="service-types-toggle">
+                <button type="button" id="show-service-types-button">
+                    Select Service Types
+                </button>
+            </div>
+            <div id="service-types">
+                <!-- the HTML is created in the JS below -->
+            </div>
+            <div id="line-chart-div">
+                <canvas id="line-chart"></canvas>
             </div>
         </div>
 
@@ -383,11 +482,26 @@
                         datasets,
                     },
                     options: {
+                        scales: {
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: "Date",
+                                },
+                            },
+                            y: {
+                                title: {
+                                    display: true,
+                                    text: "Number of Service Requests",
+                                },
+                            },
+                        },
                         plugins: {
                             legend: {
                                 position: "right",
                             },
                         },
+                        responsive: false,
                     },
                 });
             };
@@ -396,9 +510,13 @@
             // if service is null, just return the chart with
             // whatever services are currently turned on
             const toggleService = async (service) => {
-                const lineChartContainer = document.getElementById(
-                    "line-chart-container"
-                );
+                const serviceTypesDiv =
+                    document.getElementById("service-types");
+                serviceTypesDiv.classList.remove("shown");
+                serviceTypesDiv.classList.add("hidden");
+
+                const lineChartContainer =
+                    document.getElementById("line-chart-div");
                 lineChartContainer.innerHTML =
                     "<div class='line-chart-stand-in'>Loading ...</div>";
 
@@ -476,6 +594,17 @@
                         "<div class='line-chart-stand-in'>No Services Selected.</div>";
                 }
             };
+
+            const showServiceTypesButton = document.getElementById(
+                "show-service-types-button"
+            );
+            showServiceTypesButton.addEventListener("click", (e) => {
+                e.preventDefault();
+                const serviceTypesDiv =
+                    document.getElementById("service-types");
+                serviceTypesDiv.classList.remove("hidden");
+                serviceTypesDiv.classList.add("shown");
+            });
 
             // creates the plus/minus checkbox that shows/hides the subservices div
             const createTurndown = (
@@ -573,6 +702,19 @@
                 );
                 allServices = await response.json();
                 console.log(allServices);
+                const closeImg = document.createElement("i");
+                closeImg.setAttribute("class", "fa fa-close");
+                const closeButton = document.createElement("button");
+                closeButton.setAttribute("type", "button");
+                closeButton.addEventListener("click", () => {
+                    serviceTypesDiv.classList.remove("shown");
+                    serviceTypesDiv.classList.add("hidden");
+                });
+                closeButton.appendChild(closeImg);
+                const closeButtonDiv = document.createElement("div");
+                closeButtonDiv.setAttribute("id", "close-service-types");
+                closeButtonDiv.appendChild(closeButton);
+                serviceTypesDiv.appendChild(closeButtonDiv);
                 allServices.forEach(async (service) => {
                     const subservicesDiv = createSubservicesDiv(
                         service.serviceName,
@@ -664,5 +806,6 @@
             {% endfor %}
             ])
         </script>
+        {% endif %}
     </body>
 </html>

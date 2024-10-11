@@ -33,6 +33,11 @@ CCP_URL = "https://securecheckout.cdc.nicusa.com/ccprest/api/v1/TX/"
 if TESTING:
     CCP_URL = "https://securecheckout-uat.cdc.nicusa.com/ccprest/api/v1/TX/"
 
+# #################################################################
+# Do not call these functions from django router directly.
+# Call them from viewsets.py and do the authentication in viewsets.py
+# This is so that we can test these functions directly. 
+# #################################################################
 
 # FORMS SUBMISSION ENDPOINT
 class SubmitFormViewSetSuper(viewsets.ViewSet):
@@ -104,11 +109,6 @@ class SubmitFormViewSetSuper(viewsets.ViewSet):
         """
         if api_helper.checkLogger():
             logger.info("Submitting form: in SubmitFormViewSet.")
-
-        # Check Recaptcha return if it fails.
-        verify_req = api_helper.checkCaptcha(settings.DEBUG, request.data["recaptcha"])
-        if not json.loads(verify_req.text)["success"]:
-            return self.build_error_response("Recaptcha Verification Failed.")
 
         # Get email template for form and return if it fails.
         try:

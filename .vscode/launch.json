@@ -7,7 +7,7 @@
     "version": "0.2.0",
     "configurations": [    
         {
-            "name": "Python: Django",
+            "name": "Python: Run Django Server",
             "type": "debugpy",
             "request": "launch",
             "program": "${workspaceFolder}/src/data_hub/manage.py",
@@ -33,7 +33,18 @@
             ],
             "django": true,
             "justMyCode": true
-        }
+        },
+        {
+            "name": "TestContact_Keep_testdb",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/data_hub/manage.py",
+            "args": [
+                "test", "contact", "--keepdb"
+            ],
+            "django": true,
+            "justMyCode": true
+        },
     ],
     "settings": {
         "python.pythonPath": "${workspaceFolder}/venv_38/bin/python"

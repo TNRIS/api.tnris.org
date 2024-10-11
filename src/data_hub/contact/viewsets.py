@@ -2,6 +2,7 @@
 Contact viewset
 """
 from urllib.parse import urlparse
+import json
 import os
 import logging
 import watchtower
@@ -88,7 +89,6 @@ class CorsPostPermission(AllowAny):
         )
         return u in self.whitelisted_domains
 
-
 # ######################################################
 # ################## ORDER ENDPOINTS ###################
 # ######################################################
@@ -96,6 +96,13 @@ class SubmitFormViewSet(SubmitFormViewSetSuper):
     """
     Handle TxGIO form submissions (Restricted Access).
     """
+    def create(self, request):
+        # Check Recaptcha return if it fails.
+        verify_req = api_helper.checkCaptcha(request.data["recaptcha"])
+        if not json.loads(verify_req.text)["success"]:
+            return self.build_error_response("Recaptcha Verification Failed.")
+        
+        super().create(self, request)
 
 class GenOtpViewSet(GenOtpViewSetSuper):
     """

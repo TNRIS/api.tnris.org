@@ -120,7 +120,6 @@ def send_email(
 
     return mail.send()
 
-
 def send_raw_email(
     subject,
     body,
@@ -128,6 +127,11 @@ def send_raw_email(
     send_to=os.environ.get("MAIL_DEFAULT_TO"),
     reply_to="unknown@tnris.org",
 ):
+    """
+    generic function for sending email associated with form submission
+    emails send to supportsystem to create tickets in the ticketing system
+    which are ultimately managed by IS, RDC, and StratMap
+    """
     email = EmailMessage(subject, body, send_from, [send_to], reply_to=[reply_to])
     email.send(fail_silently=False)
     return
@@ -179,26 +183,17 @@ def auth_order(auth_details, order):
     return ACCESS_CODE_VALID and OTP_VALID
 
 
-def checkCaptcha(IS_DEBUG, captcha):
+def checkCaptcha(captcha):
     """Check a captcha string for success.
 
     Args:
-        IS_DEBUG (boolean): Whether we are running in debug mode.
         captcha (_type_): String sent in request body to check captcha success/failure
 
     Returns:
         _type_: python object with information about status of captcha.
     """
-    logger.info("Checking Captcha.")
-
-    # if in DEBUG mode, assume local development and use localhost recaptcha secret
-    # otherwise, use product account secret environment variable
-    # Note: The localhost recaptcha secret is a known test key for use in recaptcha it isn't secret at all. Do not change this to a real recaptcha key. Secrets manaaer must be used.
-    recaptcha_secret = (
-        "6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe"
-        if IS_DEBUG
-        else os.environ.get("RECAPTCHA_SECRET")
-    )
+   
+    recaptcha_secret = os.environ.get("RECAPTCHA_SECRET")
     recaptcha_verify_url = "https://www.google.com/recaptcha/api/siteverify"
     recaptcha_data = {
         "secret": recaptcha_secret,

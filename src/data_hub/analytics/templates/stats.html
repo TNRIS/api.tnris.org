@@ -752,7 +752,7 @@
         </script>
 
         <script type="text/javascript">
-            buildChart("count-by-key-chart", "Top 10 Successfully Downloaded Files", [
+            buildChart("count-by-key-chart", "Top 10 Successfully Downloaded Data Collections", [
                 {% for item in count_by_key %}
                 "{% autoescape off %}{{item.0}}{% endautoescape %}",
             {% endfor %}

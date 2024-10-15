@@ -225,7 +225,7 @@ def get_monthly_stats(request):
             {'select_statement': 
               """
               select collection_id, count(collection_id) from download_log_{0}
-              where x_edge_result_type <> 'Error!'
+              where collection_id <> '' and x_edge_result_type <> 'Error!'
               """,
             'grouping_clause': 
             """

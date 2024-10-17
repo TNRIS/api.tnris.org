@@ -23,7 +23,6 @@ from modules.api_helper import CorsPostPermission
 from modules.api_helper import logger
 from modules import api_helper
 from .models import EmailTemplate, OrderType, OrderDetailsType
-
 CLEANING_FLAG = False
 
 # Use testing URLS (Do not use in production)
@@ -116,32 +115,26 @@ class SubmitFormViewSetSuper(viewsets.ViewSet):
         except Exception as e:
             return self.build_error_response("form_id not registered. Error: %s", e)
 
+        # Pass in key value pairs into formatted data. Then add in the HTTP_REFERER
         formatted = {k.lower().replace(" ", "_"): v for k, v in request.data.items()}
-        formatted["url"] = (
-            request.META["HTTP_REFERER"]
-            if "HTTP_REFERER" in request.META.keys()
-            else request.META["HTTP_HOST"]
-        )
-        serializer = getattr(
-            sys.modules[__name__], email_template.serializer_classname
-        )(data=formatted)
+        if request.META["HTTP_REFERER"]:
+            formatted["url"] = request.META["HTTP_REFERER"]
+        else:
+            formatted["url"] = "unknown"
 
         # This is the final step in the creation process. If this succeeds send a 201 status.
-        if serializer.is_valid():
-            serializer.save()
-            self.send_template_email(email_template, formatted)
-            if api_helper.checkLogger():
-                logger.info("Form Submitted Successfully!")
-            return Response(
-                {"status": "success", "message": "Form Submitted Successfully!"},
-                status=status.HTTP_201_CREATED,
-            )
+        self.send_template_email(email_template, formatted)
+        if api_helper.checkLogger():
+            logger.info("Form Submitted Successfully!")
+
+            
+        return Response(
+            {"status": "success", "message": "Form Submitted Successfully!"},
+            status=status.HTTP_201_CREATED,
+        )
 
         # If we get this far then return a error response.
-        if api_helper.checkLogger():
-            logger.info("Serializer Save Failed.")
-        return self.build_error_response("Serializer Save Failed.")
-
+        return self.build_error_response("Serializer Save Failed. %s")
 
 class GenOtpViewSetSuper(viewsets.ViewSet):
     """

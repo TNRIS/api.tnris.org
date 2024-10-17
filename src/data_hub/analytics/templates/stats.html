@@ -187,18 +187,18 @@
                 background-color: white;
                 padding: 30px;
                 margin: 80px auto;
-                max-width: 700px;
+                max-width: 1200px;
                 display: grid;
                 grid-template-columns: 1fr 7fr;
             }
 
             #line-chart-div > canvas {
-                width: 600px;
+                width: 800px;
             }
 
             .line-chart-stand-in {
-                width: 600px;
-                height: 300px;
+                width: 800px;
+                height: 400px;
                 border: 1px solid black;
                 display: flex;
                 align-items: center;
@@ -206,9 +206,10 @@
             }
 
             #service-types {
-                position: absolute;
                 background-color: white;
-                border: 1px solid #aaaaaa;
+                width: 360px;
+                max-height: 365px;
+                overflow-y: auto;
             }
 
             #service-types > div {
@@ -216,17 +217,6 @@
                 display: grid;
                 grid-template-columns: 30px 30px 225px;
                 grid-row-gap: 5px;
-            }
-
-            #service-types > #close-service-types {
-                display: flex;
-                justify-content: flex-end;
-            }
-
-            #close-service-types > button {
-                border: none;
-                background-color: white;
-                font-size: 24px;
             }
 
             .plus-test {
@@ -268,14 +258,6 @@
                 margin-left: 35px;
             }
 
-            .shown {
-                display: block;
-            }
-
-            .hidden {
-                display: none;
-            }
-
             @media screen and (max-width: 1400px) {
                 .chart-container {
                     display: grid;
@@ -287,6 +269,40 @@
 
                 form {
                     max-width: 700px;
+                }
+
+                .line-chart-container {
+                    border: 2px solid #aaaaaa;
+                    border-radius: 5px;
+                    background-color: white;
+                    padding: 30px;
+                    margin: 80px auto;
+                    max-width: 700px;
+                    display: grid;
+                    grid-template-columns: 1fr;
+                }
+
+                #line-chart-div > canvas {
+                    width: 600px;
+                    order: 1;
+                }
+
+                .line-chart-stand-in {
+                    width: 600px;
+                    height: 300px;
+                    border: 1px solid black;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    order: 1;
+                }
+
+                #service-types {
+                    background-color: white;
+                    width: 600px;
+                    max-height: 365px;
+                    overflow-y: auto;
+                    order: 2;
                 }
             }
         </style>
@@ -422,11 +438,6 @@
         <h2 class="section-title">ArcGIS Service Statistics</h2>
 
         <div class="line-chart-container">
-            <div id="service-types-toggle">
-                <button type="button" id="show-service-types-button">
-                    Select Service Types
-                </button>
-            </div>
             <div id="service-types">
                 <!-- the HTML is created in the JS below -->
             </div>
@@ -510,11 +521,6 @@
             // if service is null, just return the chart with
             // whatever services are currently turned on
             const toggleService = async (service) => {
-                const serviceTypesDiv =
-                    document.getElementById("service-types");
-                serviceTypesDiv.classList.remove("shown");
-                serviceTypesDiv.classList.add("hidden");
-
                 const lineChartContainer =
                     document.getElementById("line-chart-div");
                 lineChartContainer.innerHTML =
@@ -594,17 +600,6 @@
                         "<div class='line-chart-stand-in'>No Services Selected.</div>";
                 }
             };
-
-            const showServiceTypesButton = document.getElementById(
-                "show-service-types-button"
-            );
-            showServiceTypesButton.addEventListener("click", (e) => {
-                e.preventDefault();
-                const serviceTypesDiv =
-                    document.getElementById("service-types");
-                serviceTypesDiv.classList.remove("hidden");
-                serviceTypesDiv.classList.add("shown");
-            });
 
             // creates the plus/minus checkbox that shows/hides the subservices div
             const createTurndown = (
@@ -702,19 +697,6 @@
                 );
                 allServices = await response.json();
                 console.log(allServices);
-                const closeImg = document.createElement("i");
-                closeImg.setAttribute("class", "fa fa-close");
-                const closeButton = document.createElement("button");
-                closeButton.setAttribute("type", "button");
-                closeButton.addEventListener("click", () => {
-                    serviceTypesDiv.classList.remove("shown");
-                    serviceTypesDiv.classList.add("hidden");
-                });
-                closeButton.appendChild(closeImg);
-                const closeButtonDiv = document.createElement("div");
-                closeButtonDiv.setAttribute("id", "close-service-types");
-                closeButtonDiv.appendChild(closeButton);
-                serviceTypesDiv.appendChild(closeButtonDiv);
                 allServices.forEach(async (service) => {
                     const subservicesDiv = createSubservicesDiv(
                         service.serviceName,

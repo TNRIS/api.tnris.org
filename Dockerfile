@@ -6,6 +6,7 @@ ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && apt-get install -y python3 python3-pip python3-venv nginx supervisor curl libpq-dev jq
 RUN apt-get install -y binutils libproj-dev gdal-bin
 RUN apt-get upgrade -y
+RUN snap refresh
 # Setup python 3 virtualenv
 RUN mkdir /envs/
 RUN python3 -m venv /envs/data_hub

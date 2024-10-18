@@ -188,6 +188,7 @@
                 padding: 30px;
                 margin: 80px auto;
                 max-width: 1200px;
+
                 display: grid;
                 grid-template-columns: 1fr 7fr;
             }
@@ -217,6 +218,17 @@
                 display: grid;
                 grid-template-columns: 30px 30px 225px;
                 grid-row-gap: 5px;
+            }
+
+            #service-types > #close-service-types {
+                display: flex;
+                justify-content: flex-end;
+            }
+
+            #close-service-types > button {
+                border: none;
+                background-color: white;
+                font-size: 24px;
             }
 
             .plus-test {
@@ -601,6 +613,17 @@
                 }
             };
 
+            const showServiceTypesButton = document.getElementById(
+                "show-service-types-button"
+            );
+            showServiceTypesButton.addEventListener("click", (e) => {
+                e.preventDefault();
+                const serviceTypesDiv =
+                    document.getElementById("service-types");
+                serviceTypesDiv.classList.remove("hidden");
+                serviceTypesDiv.classList.add("shown");
+            });
+
             // creates the plus/minus checkbox that shows/hides the subservices div
             const createTurndown = (
                 service,
@@ -697,6 +720,19 @@
                 );
                 allServices = await response.json();
                 console.log(allServices);
+                const closeImg = document.createElement("i");
+                closeImg.setAttribute("class", "fa fa-close");
+                const closeButton = document.createElement("button");
+                closeButton.setAttribute("type", "button");
+                closeButton.addEventListener("click", () => {
+                    serviceTypesDiv.classList.remove("shown");
+                    serviceTypesDiv.classList.add("hidden");
+                });
+                closeButton.appendChild(closeImg);
+                const closeButtonDiv = document.createElement("div");
+                closeButtonDiv.setAttribute("id", "close-service-types");
+                closeButtonDiv.appendChild(closeButton);
+                serviceTypesDiv.appendChild(closeButtonDiv);
                 allServices.forEach(async (service) => {
                     const subservicesDiv = createSubservicesDiv(
                         service.serviceName,

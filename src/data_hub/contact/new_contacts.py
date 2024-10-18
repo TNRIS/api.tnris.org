@@ -307,6 +307,7 @@ class GenOtpViewSetSuper(ContactViewset):
                 {"status": "success", "message": "Passcode sent to email."},
                 status=status.HTTP_200_OK,
             )
+
         except Exception as e:
             message = "Error generating the One time passcode. Exception: "
             if api_helper.checkLogger():

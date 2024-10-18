@@ -165,3 +165,4 @@ class OrderSubmitTestCase(TestCase):
 
         # # Make sure email is sent.
         # self.assertEqual(len(mail.outbox), 1, "No email has been sent.")
+

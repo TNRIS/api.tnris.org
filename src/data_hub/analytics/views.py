@@ -225,7 +225,7 @@ def get_monthly_stats(request):
             {'select_statement': 
               """
               select collection_id, count(collection_id) from download_log_{0}
-              where x_edge_result_type <> 'Error!'
+              where collection_id <> '' and x_edge_result_type <> 'Error!'
               """,
             'grouping_clause': 
             """
@@ -279,14 +279,18 @@ def get_monthly_stats(request):
             {'select_statement': 
             """
             select 
-              (case 
-                when hist_product = 'cog' and hist_file like '%_idx.zip' then 
-                       'historic imagery '||hist_type||'boundry shapefile'
-                else 'historic imagery '||hist_type||hist_product
-              end) as category, 
+              (case
+			  	when collection_id <> '' then
+				  file_type
+			    else 
+				  (case 
+	                when hist_product = 'cog' and hist_file like '%_idx.zip' then 
+	                       'historic imagery '||hist_type||'boundry shapefile'
+	                else 'historic imagery '||hist_type||' '||hist_product
+	              end)
+			  end) as category, 
               count(*) from download_log_{0} 
             where x_edge_result_type <> 'Error'
-									  and collection_id = ''
             """,
             'grouping_clause': 
             """

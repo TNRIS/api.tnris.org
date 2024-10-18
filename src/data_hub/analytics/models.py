@@ -3,7 +3,7 @@ from django.db import models
 # Create your models here.
 class DownloadLog2021(models.Model):
     class Meta:
-        managed: False
+        managed = False
         db_table = "download_log_2021"
         verbose_name = 'Download log 2021 entry'
         verbose_name_plural = 'Download logs 2021'   
@@ -85,7 +85,7 @@ class DownloadLog2021(models.Model):
     
 class DownloadLog2022(models.Model):
     class Meta:
-        managed: False
+        managed = False
         db_table = "download_log_2022"
         verbose_name = 'Download log 2022 entry'
         verbose_name_plural = 'Download logs 2022'   
@@ -167,7 +167,7 @@ class DownloadLog2022(models.Model):
     
 class DownloadLog2023(models.Model):
     class Meta:
-        managed: False
+        managed = False
         db_table = "download_log_2023"
         verbose_name = 'Download log 2023 entry'
         verbose_name_plural = 'Download logs 2023'   
@@ -249,7 +249,7 @@ class DownloadLog2023(models.Model):
     
 class DownloadLog2024(models.Model):
     class Meta:
-        managed: False
+        managed = False
         db_table = "download_log_2024"
         verbose_name = 'Download log 2024 entry'
         verbose_name_plural = 'Download logs 2024'   

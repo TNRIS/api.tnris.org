@@ -95,6 +95,7 @@ venv/
 venv_three_eleven/
 venv_38/
 venv_388/
+venv_310/
 ENV/
 env.bak/
 venv.bak/
@@ -179,5 +180,5 @@ src/data_hub/webpack-stats\.prod\.json
 vault-password\.txt
 .vault/
 contact24_quicktest.py
-
+testapi.json
 etl/source_data/texasimageryservicerequest.csv

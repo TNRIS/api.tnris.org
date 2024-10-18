@@ -38,7 +38,7 @@ from .viewsets import (
 
 router = routers.DefaultRouter(trailing_slash=False)
 router.register(r'campaignsubscription', SubmitCampaignSubscriptionViewSet, basename="SubmitCampaignSubscription")
-router.register(r'submit/?', SubmitFormViewSet, basename="SubmitForm")
+router.register(r'submit/?', SubmitFormViewSet, basename="SubmitForm") # Deprecated. TODO Remove after a year or two..
 router.register(r'order/?', OrderFormViewSet, basename="OrderForm")
 router.register(r'order/submit/?', OrderSubmitViewSet, basename="PaymentForm")
 router.register(r'order/status/?', OrderStatusViewSet, basename="OrderStatus")

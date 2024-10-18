@@ -11,7 +11,6 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework import mixins, schemas, status, viewsets
 from rest_framework.response import Response
 from contact.new_contacts import (
-    SubmitFormViewSetSuper,
     GenOtpViewSetSuper,
     OrderStatusViewSetSuper,
     InitiateRetentionCleanupViewSetSuper,
@@ -92,22 +91,23 @@ class CorsPostPermission(AllowAny):
 # ######################################################
 # ################## ORDER ENDPOINTS ###################
 # ######################################################
-class SubmitFormViewSet(SubmitFormViewSetSuper):
+class SubmitFormViewSet(viewsets.ViewSet):
     """
     Handle TxGIO form submissions (Restricted Access).
     """
+    permission_classes = [CorsPostPermission]
     def create(self, request):
         # Check Recaptcha return if it fails.
-        verify_req = api_helper.checkCaptcha(request.data["recaptcha"])
-        if not json.loads(verify_req.text)["success"]:
-            return self.build_error_response("Recaptcha Verification Failed.")
-        
-        super().create(self, request)
+        return Response("Endpoint deprecated", status=status.HTTP_410_GONE)
 
 class GenOtpViewSet(GenOtpViewSetSuper):
     """
     Generate One time password viewset.
     """
+    permission_classes = [CorsPostPermission]
+
+    def create(self, request):
+        return self.intro(request, "Regenerating one time passcode. GenOtpViewSet.")
 
 class OrderStatusViewSet(OrderStatusViewSetSuper):
     """
@@ -128,11 +128,28 @@ class OrderSubmitViewSet(OrderSubmitViewSetSuper):
     """
     Order submit viewset.
     """
+    permission_classes = [CorsPostPermission]
+    def create(self, request):
+        if api_helper.checkLogger():
+            logger.info("Starting OrderSubmitViewSet")
+        verify_req = api_helper.checkCaptcha(request.data["recaptcha"])
+        if json.loads(verify_req.text)["success"]:
+            return super().create(self, request)
+        else:
+            if api_helper.checkLogger():
+                logger.info("An order has failed because Captcha is incorrect.")
+            return Response(
+                {"status": "failure", "message": "Captcha is incorrect."},
+                status=status.HTTP_403_FORBIDDEN,
+            )
 
 class OrderFormViewSet(OrderFormViewSetSuper):
     """
     Order form viewset.
     """
+    permission_classes = [CorsPostPermission]
+    def create(self, request):
+        return self.intro(request, "running OrderFormViewSet")
 
 # ######################################################
 # ############## CONTACT FORM ENDPOINTS ################
@@ -191,7 +208,6 @@ def create_presigned_post(key, content_type, length, expiration=900):
     # The response contains the presigned URL and required fields
     return response
 
-
 class ZipPolicyViewSet(viewsets.ViewSet):
     """
     Get client form zipfile presigned url for s3 (Restricted Access)
@@ -207,7 +223,6 @@ class ZipPolicyViewSet(viewsets.ViewSet):
         except Exception as e:
             return Response(e, status=status.HTTP_400_BAD_REQUEST)
         return Response(presigned, status=status.HTTP_201_CREATED)
-
 
 class ImagePolicyViewSet(viewsets.ViewSet):
     """
@@ -225,7 +240,6 @@ class ImagePolicyViewSet(viewsets.ViewSet):
             return Response(e, status=status.HTTP_400_BAD_REQUEST)
         return Response(presigned, status=status.HTTP_201_CREATED)
 
-
 class FilePolicyViewSet(viewsets.ViewSet):
     """
     Get client form generic file presigned url for s3 (Restricted Access)
@@ -240,11 +254,9 @@ class FilePolicyViewSet(viewsets.ViewSet):
             return Response(e, status=status.HTTP_400_BAD_REQUEST)
         return Response(presigned, status=status.HTTP_201_CREATED)
 
-
 # ######################################################
 # ################## SURVEY ENDPOINTS ##################
 # ######################################################
-
 
 # SURVEY DELIVERY
 class SurveyTemplateViewSet(viewsets.ReadOnlyModelViewSet):
@@ -262,7 +274,6 @@ class SurveyTemplateViewSet(viewsets.ReadOnlyModelViewSet):
         # get records using query
         queryset = SurveyTemplate.objects.filter(**args).order_by("-last_modified")
         return queryset
-
 
 # SURVEY SUBMISSION
 class SubmitSurveyViewSet(viewsets.ViewSet):

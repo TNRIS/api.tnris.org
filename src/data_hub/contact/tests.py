@@ -47,9 +47,23 @@ class OrderFormTestCase(TestCase):
 
         })
         response = order_form_super.create(request)
-        
-        # Make sure we get a 201 created response.
-        self.assertEquals(response.status_code, 201, "Form submission was not successful.")
+
+        # Make sure order was submitted and created successfully.
+        orders = OrderType.objects.get_queryset()
+        if(len(orders)): # Check there is an item
+            order = orders[0]
+
+            #TODO Check each item instead of all at once
+            self.assertIsNotNone(order, "Items does not exist")
+
+            # Make sure order details was created successfully.
+            order_details = order.order_details
+            self.assertIsNotNone(order_details, "Item Details does not exist")
+
+            # Make sure we get a 201 created response.
+            self.assertEquals(response.status_code, 201, "Form submission was not successful.")
+        else:
+            self.fail("No order was created.")
 
         # Expected two emails to be sent. 
         self.assertEqual(len(mail.outbox), 2, "No email has been sent.")
@@ -72,7 +86,6 @@ class OrderFormTestCase(TestCase):
 
         # Expected two emails to be sent. 
         self.assertEqual(len(mail.outbox), 2, "No email has been sent.")
-
 
 class GoneTestCase(TestCase):
     """Test that old order urls are gone."""

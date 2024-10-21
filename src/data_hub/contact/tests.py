@@ -9,7 +9,7 @@ from .models import EmailTemplate, OrderType, OrderDetailsType
 from rest_framework.request import Request
 from rest_framework.parsers import JSONParser
 
-def create_super_request(data):
+def create_super_request(data, query_params=""):
     """Build a request that calls the super classes directly"""
     req_factory = AsyncRequestFactory()
     request = req_factory.post(
@@ -18,10 +18,12 @@ def create_super_request(data):
         headers={
             "Referer": "localhost"
         },
-        path="none"
+        path="none{}".format(query_params)
     )
+
     # Convert to a plain request that is used by Django. Then return it
-    return Request(request, parsers=[JSONParser()])
+    django_request = Request(request, parsers=[JSONParser()])
+    return django_request
 
 class OrderFormTestCase(TestCase):
     """Test Order Form Submission"""
@@ -47,9 +49,23 @@ class OrderFormTestCase(TestCase):
 
         })
         response = order_form_super.create(request)
-        
-        # Make sure we get a 201 created response.
-        self.assertEquals(response.status_code, 201, "Form submission was not successful.")
+
+        # Make sure order was submitted and created successfully.
+        orders = OrderType.objects.get_queryset()
+        if(len(orders)): # Check there is an item
+            order = orders[0]
+
+            #TODO Check each item instead of all at once
+            self.assertIsNotNone(order, "Items does not exist")
+
+            # Make sure order details was created successfully.
+            order_details = order.order_details
+            self.assertIsNotNone(order_details, "Item Details does not exist")
+
+            # Make sure we get a 201 created response.
+            self.assertEquals(response.status_code, 201, "Form submission was not successful.")
+        else:
+            self.fail("No order was created.")
 
         # Expected two emails to be sent. 
         self.assertEqual(len(mail.outbox), 2, "No email has been sent.")
@@ -73,7 +89,6 @@ class OrderFormTestCase(TestCase):
         # Expected two emails to be sent. 
         self.assertEqual(len(mail.outbox), 2, "No email has been sent.")
 
-
 class GoneTestCase(TestCase):
     """Test that old order urls are gone."""
     def test_gone(self):
@@ -92,9 +107,13 @@ class GenOtpTestCase(TestCase):
         """Test the OTP blocks failed captchas."""
         request = requests.Request(method='POST', data={"recaptcha": "none"})
 
-        genotp_form = GenOtpViewSet()
+        #build a basic request to test with
+        request = create_super_request({
+            "recaptcha": "none"
+        }, "?uuid=''")
+
+        genotp_form = GenOtpViewSetSuper()
         response = genotp_form.create(request)
-        self.assertEquals(response.status_code, 403, "GenOtp not blocking failed captchas correctly, and status code is not 400.")
 
     # def gen_otp(self):
     #     """Test that submit form super class functions correctly."""

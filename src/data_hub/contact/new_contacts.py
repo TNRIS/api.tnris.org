@@ -69,18 +69,21 @@ class ContactViewset(viewsets.ViewSet):
             status=status.HTTP_400_BAD_REQUEST,
         )
 
-    def send_template_email(self, email_template, formatted):
-        """Send an email to the template email (Configured through API)"""
+    def send_template_email(self, email_template, formatted, sender, replyer):
+        """Send an email to the template email (Configured through API)
+        sender and replyer default to mail_default to unless sendpoint 
+        """
         body = self.compile_email_body(email_template.email_template_body, formatted)
-
-        sender = (
-            os.environ.get("MAIL_DEFAULT_TO")
-            if email_template.sendpoint == "default"
-            else formatted[email_template.sendpoint]
-        )
-        replyer = (
-            formatted["email"] if "email" in formatted.keys() else "unknown@tnris.org"
-        )
+        if not sender:
+            sender = (
+                os.environ.get("MAIL_DEFAULT_TO")
+                if email_template.sendpoint == "default"
+                else formatted[email_template.sendpoint]
+            )
+        if not replyer:
+            replyer = (
+                formatted["email"] if "email" in formatted.keys() else "unknown@tnris.org"
+            )
 
         # Request can support firstname or name. Check which has been passed in.
         if "name" in formatted.keys():
@@ -282,25 +285,10 @@ class GenOtpViewSetSuper(ContactViewset):
             order.order_details.save()
 
             # Send One time passcode to users email.
-            api_helper.send_email(
-                subject="DataHub one time passcode",
-                body="""
-                        <html><body style='overflow:hidden'>
-                    """
-                + "<div style='width: 98%; background-color: #1e8dc1;'>"
-                + """
-                        <img class="TnrisLogo" width="100" height="59" src="https://cdn.tnris.org/images/txgio_light.png" alt="TxGIO Logo" title="data.geographic.texas.gov">
-                        </div><br /><br />
-                        Greetings from TxGIO,<br /><br />
-                        Your one time passcode is: <strong>%s</strong><br /><br />
-                        Thanks,<br />
-                        The TxGIO Team
-                    </body></html>
-                    """
-                % otp,
-                send_to=details["Email"],
-                reply_to=os.environ.get("STRATMAP_EMAIL"),
-            )
+            # get email template for generating otp
+            email_template = EmailTemplate.objects.get("gen-otp")
+            self.send_template_email(email_template, { otp }, details["Email"], os.environ.get("STRATMAP_EMAIL"))
+
             if api_helper.checkLogger():
                 logger.info("Passcode sent to email.")
             return Response(

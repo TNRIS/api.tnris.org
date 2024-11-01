@@ -1,5 +1,5 @@
 from django.db import models
-
+from modules.api_helper import encrypt_string, decrypt_string
 from cryptography.fernet import Fernet, MultiFernet
 
 import os, boto3
@@ -46,21 +46,6 @@ class CryptoTextField(models.CharField):
         if value is None:
             return value
         return decrypt_string(value)
-def encrypt_string(value): 
-    access_key = bytes(os.environ.get("FKEY1"), 'utf-8')
-    f = Fernet(access_key)
-    if(value):
-        encrypted = f.encrypt(bytes(value, 'utf-8'))
-    else:
-        encrypted = f.encrypt(bytes("", 'utf-8'))    
-    return encrypted.decode('utf-8')
-
-def decrypt_string(value): 
-    access_key = bytes(os.environ.get("FKEY1"), 'utf-8')
-    f = Fernet(access_key)    
-    decrypted = f.decrypt(bytes(value, 'utf-8'))
-    
-    return decrypted.decode('utf-8')
 
 class CryptoText(models.Model):
     cryptoText = CryptoTextField()

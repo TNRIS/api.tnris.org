@@ -14,6 +14,8 @@ from botocore.exceptions import ClientError
 from django.core.mail import EmailMessage, EmailMultiAlternatives
 from lcd.models import LoggerType
 from rest_framework.permissions import AllowAny
+from cryptography.fernet import Fernet, MultiFernet
+import datetime, uuid, base64, hmac
 
 logger = logging.getLogger("errLog")
 logger.addHandler(watchtower.CloudWatchLogHandler())
@@ -279,3 +281,37 @@ def checkLogger():
     except Exception as e:
         logger.error("Error checking logger.")
         return False
+
+
+def encrypt_string(value):
+    """
+    Standard function to encrypt a string using 
+    """
+    access_key = bytes(os.environ.get("FKEY1"), 'utf-8')
+    f = Fernet(access_key)
+    if(value):
+        encrypted = f.encrypt(bytes(value, 'utf-8'))
+    else:
+        encrypted = f.encrypt(bytes("", 'utf-8'))    
+    return encrypted.decode('utf-8')
+
+def decrypt_string(value):
+    """
+    Standard function to decrypt a string using 
+    """
+    access_key = bytes(os.environ.get("FKEY1"), 'utf-8')
+    f = Fernet(access_key)    
+    decrypted = f.decrypt(bytes(value, 'utf-8'))
+    
+    return decrypted.decode('utf-8')
+
+def generate_fiserv_hmac():
+    """Generate a hmac for fiserv"""
+    requestUri: str = f"{FISERV_URL}"
+    requestTimeStamp: str = str(datetime.datetime.now().timestamp())
+    nonce: str = str(uuid.uuid4())
+    signature: str = f"{os.environ.get('FISERV_DEV_ACCOUNT_ID')}POST{requestUri}{requestTimeStamp}{nonce}"
+    secretKeyByteArray: bytes = base64.b64encode(bytes(f"{os.environ.get('FISERV_DEV_AUTH_CODE')}", "utf8"))
+    requestSignatureBase64String:str = hmac.HMAC(bytes(signature, "utf8"), secretKeyByteArray, hashlib.sha256).hexdigest()
+    hmacValue:str = f"{os.environ.get('FISERV_DEV_ACCOUNT_ID')}:{requestSignatureBase64String}:{nonce}:{requestTimeStamp}"
+    return hmacValue

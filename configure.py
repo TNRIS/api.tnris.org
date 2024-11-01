@@ -50,6 +50,15 @@ export_command = ("export DB_PASSWORD=" + secrets["DB_PASSWORD"] +
 " CCP_API_KEY_UAT=" + secrets["CCP_API_KEY_UAT"] +
 " CCP_ACCESS_CODE=" + secrets["CCP_ACCESS_CODE"] +
 
+# FISERV Environment Variables
+" FISERV_DEV_ACCOUNT_ID=" + secrets["FISERV_DEV_ACCOUNT_ID"] +
+" FISERV_ACCOUNT_NAME=" + secrets["FISERV_ACCOUNT_NAME"] +
+" FISERV_GATEWAY=" + secrets["FISERV_GATEWAY"] +
+" FISERV_MERCHANT_ID=" + secrets["FISERV_MERCHANT_ID"] +
+" FISERV_MERCHANT_NAME=" + secrets["FISERV_MERCHANT_NAME"] +
+" FISERV_DEV_AUTH_USER=" + secrets["FISERV_DEV_AUTH_USER"] +
+" FISERV_DEV_AUTH_CODE=" + secrets["FISERV_DEV_AUTH_CODE"] +
+
 # Encryption Environmental Variables
 " FKEY1=" + secrets["FKEY1"] +
 " ACCESS_PEPPER=" + secrets["ACCESS_PEPPER"] +

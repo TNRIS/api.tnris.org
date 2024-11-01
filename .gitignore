@@ -183,6 +183,4 @@ contact24_quicktest.py
 etl/source_data/texasimageryservicerequest.csv
 
 #fixtures
-testapi.json
-ordertype.json
-order_details_type.json
+email_templates.json

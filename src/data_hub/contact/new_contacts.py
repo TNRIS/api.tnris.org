@@ -24,15 +24,17 @@ from modules.api_helper import logger
 from modules import api_helper
 from .models import EmailTemplate, OrderType, OrderDetailsType
 from .serializers import DataHubOrderSerializer
+from modules.api_helper import encrypt_string, decrypt_string
+from contact.constants import item_attributes
 
 CLEANING_FLAG = False
 
 # Use testing URLS (Do not use in production)
-TESTING = False
-CCP_URL = "https://securecheckout.cdc.nicusa.com/ccprest/api/v1/TX/"
+TESTING = True
+FISERV_URL = "https://snappaydirectapi-cert.fiserv.com/"
 
 if TESTING:
-    CCP_URL = "https://securecheckout-uat.cdc.nicusa.com/ccprest/api/v1/TX/"
+    FISERV_URL = "https://snappaydirectapi-cert.fiserv.com/"
 
 # #################################################################
 # Do not call these functions from django router directly.
@@ -100,7 +102,7 @@ class ContactViewset(viewsets.ViewSet):
             reply_to=replyer,
         )
 
-    def format_req(self, items):
+    def format_req(items):
         return {k.lower().replace(" ", "_"): v for k, v in items}
 
     def intro(self, request, msg=""):
@@ -131,6 +133,7 @@ class OrderFormViewSetSuper(ContactViewset):
                 instance.customer_notified = True
                 instance.save()
                 order_info = json.loads(instance.order_details.details)
+                formatted = ContactViewset.format_req(order_info.items())
                 api_helper.send_email(
                     subject="Your TxGIO Datahub order has been approved",
                     body="""
@@ -149,7 +152,7 @@ class OrderFormViewSetSuper(ContactViewset):
                             </body></html>
                         """
                     % str(instance.pk),
-                    send_to=order_info["Email"],
+                    send_to=formatted["email"],
                     reply_to=os.environ.get("STRATMAP_EMAIL"),
                 )
             return Response(
@@ -181,15 +184,15 @@ class OrderFormViewSetSuper(ContactViewset):
             reply_to=os.environ.get("STRATMAP_EMAIL"),
         )
 
-    def create_order_object(self, email, order):
+    def create_order_object(self, email, order, test_otp):
         """Create the order and add it to the database."""
         access_token = email
         salt = secrets.token_urlsafe(32)
         pepper = os.environ.get("ACCESS_PEPPER")
         hash = hashlib.sha256(bytes(access_token + salt + pepper, "utf8")).hexdigest()
-
         otp = secrets.token_urlsafe(12)
-
+        if(test_otp):
+            otp = test_otp
         order_details = OrderDetailsType.objects.create(
             details=json.dumps(order),
             access_code=hash,
@@ -668,8 +671,7 @@ Form parameters
         finally:
             return response
 
-
-class OrderSubmitViewSetSuper(ContactViewset):
+class OrderSubmitViewSetSuper(ContactViewset): #todo
     def create(self, request, format=None):
         try:
             orderObj = OrderType.objects
@@ -686,18 +688,7 @@ class OrderSubmitViewSetSuper(ContactViewset):
                 )
             order_details = json.loads(order.order_details.details)
 
-            item_attributes = [
-                {"FieldName": "USASLINES", "FieldValue": 3},
-                {"FieldName": "USAS1CO", "FieldValue": 3719},
-                {"FieldName": "USAS1PCA", "FieldValue": 19001},
-                {"FieldName": "USAS1TCODE", "FieldValue": 195},
-                {"FieldName": "USAS2CO", "FieldValue": 3879},
-                {"FieldName": "USAS2PCA", "FieldValue": "07768"},
-                {"FieldName": "USAS2TCODE", "FieldValue": 179},
-                {"FieldName": "USAS3CO", "FieldValue": 7219},
-                {"FieldName": "USAS3TCODE", "FieldValue": 265},
-                {"FieldName": "USAS3PCA", "FieldValue": "07768"},
-            ]
+
 
             total = round(order.approved_charge, 2)
             # 2.25% and $.25
@@ -754,7 +745,7 @@ class OrderSubmitViewSetSuper(ContactViewset):
                 api_key = os.environ.get("CCP_API_KEY_UAT")
 
             x = requests.post(
-                CCP_URL + "tokens", json=body, headers={"apiKey": api_key}
+                FISERV_URL + "tokens", json=body, headers={"apiKey": api_key}
             )
 
             url = json.loads(x.text)

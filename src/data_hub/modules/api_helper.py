@@ -15,6 +15,7 @@ from django.core.mail import EmailMessage, EmailMultiAlternatives
 from lcd.models import LoggerType
 from rest_framework.permissions import AllowAny
 from cryptography.fernet import Fernet, MultiFernet
+import datetime, uuid, base64, hmac
 
 logger = logging.getLogger("errLog")
 logger.addHandler(watchtower.CloudWatchLogHandler())
@@ -304,7 +305,7 @@ def decrypt_string(value):
     
     return decrypted.decode('utf-8')
 
-def generate_fiserv_hmac(value):
+def generate_fiserv_hmac():
     """Generate a hmac for fiserv"""
     requestUri: str = f"{FISERV_URL}"
     requestTimeStamp: str = str(datetime.datetime.now().timestamp())
@@ -313,3 +314,4 @@ def generate_fiserv_hmac(value):
     secretKeyByteArray: bytes = base64.b64encode(bytes(f"{os.environ.get('FISERV_DEV_AUTH_CODE')}", "utf8"))
     requestSignatureBase64String:str = hmac.HMAC(bytes(signature, "utf8"), secretKeyByteArray, hashlib.sha256).hexdigest()
     hmacValue:str = f"{os.environ.get('FISERV_DEV_ACCOUNT_ID')}:{requestSignatureBase64String}:{nonce}:{requestTimeStamp}"
+    return hmacValue

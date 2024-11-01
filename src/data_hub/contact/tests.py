@@ -1,11 +1,9 @@
 import requests
-import os, datetime, hashlib, json, uuid, base64, hmac
-from django import http
+import os
 from django.core import mail
-from django.test import TestCase, Client, AsyncRequestFactory
+from django.test import TestCase, AsyncRequestFactory
 from contact.viewsets import (
     SubmitFormViewSet,
-    GenOtpViewSet,
     OrderSubmitViewSet,
     OrderFormViewSet,
 )
@@ -17,6 +15,7 @@ from contact.new_contacts import (
 from .models import EmailTemplate, OrderType, OrderDetailsType
 from rest_framework.request import Request
 from rest_framework.parsers import JSONParser
+from modules import api_helper
 
 FISERV_URL = "https://snappaydirectapi-cert.fiserv.com/api/interop/"
 
@@ -199,13 +198,6 @@ class FiservTestCase(TestCase):
     """Test Fiserv endpoints"""
 
     def test_make_hmac(self):
-        requestUri: str = f"{FISERV_URL}"
-        requestTimeStamp: str = str(datetime.datetime.now().timestamp())
-        nonce: str = str(uuid.uuid4())
+        hmac: str = api_helper.generate_fiserv_hmac()
 
-        signature: str = f"{os.environ.get('FISERV_DEV_ACCOUNT_ID')}POST{requestUri}{requestTimeStamp}{nonce}"
-        secretKeyByteArray: bytes = base64.b64encode(bytes(f"{os.environ.get('FISERV_DEV_AUTH_CODE')}", "utf8"))
-        requestSignatureBase64String:str = hmac.HMAC(bytes(signature, "utf8"), secretKeyByteArray, hashlib.sha256).hexdigest()
-        hmacValue:str = f"{os.environ.get('FISERV_DEV_ACCOUNT_ID')}:{requestSignatureBase64String}:{nonce}:{requestTimeStamp}"
-        
-        print(hmacValue)
+        self.assertIsNotNone(hmac)

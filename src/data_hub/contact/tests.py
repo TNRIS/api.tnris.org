@@ -1,5 +1,7 @@
+from urllib import request
 import requests
 import os
+import json
 from django.core import mail
 from django.test import TestCase, AsyncRequestFactory
 from contact.viewsets import (
@@ -12,10 +14,12 @@ from contact.new_contacts import (
     OrderSubmitViewSetSuper,
     OrderFormViewSetSuper,
 )
-from .models import EmailTemplate, OrderType, OrderDetailsType
+from .models import OrderType
 from rest_framework.request import Request
 from rest_framework.parsers import JSONParser
 from modules import api_helper
+
+from contact.constants import payload_valid_test
 
 FISERV_URL = "https://snappaydirectapi-cert.fiserv.com/api/interop/"
 
@@ -198,6 +202,25 @@ class FiservTestCase(TestCase):
     """Test Fiserv endpoints"""
 
     def test_make_hmac(self):
-        hmac: str = api_helper.generate_fiserv_hmac()
-
+        requestUri: str = f"{FISERV_URL}GetRequestID"
+        hmac = api_helper.generate_fiserv_hmac(
+            requestUri,
+            "POST",
+            json.dumps(payload_valid_test),
+            os.environ.get("FISERV_DEV_ACCOUNT_ID"),
+            os.environ.get('FISERV_DEV_AUTH_CODE')
+        )
         self.assertIsNotNone(hmac)
+        basic = api_helper.generate_basic_auth()
+        response = requests.post(
+            FISERV_URL + "GetRequestID",
+            json=payload_valid_test,
+            headers={
+                "accountid": os.environ.get("FISERV_DEV_ACCOUNT_ID"), # good
+                "merchantid": os.environ.get("FISERV_MERCHANT_ID"), # good
+                "signature": f"Hmac {hmac.decode()}",
+                "Authorization": f"Basic {basic.decode()}"
+            })
+
+        self.assertIs(response.status_code, 200, "response status_code is not 200")
+        print("Error: " + str(response.status_code) + " " + json.loads(response.text)["message"])

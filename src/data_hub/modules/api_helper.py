@@ -14,7 +14,7 @@ from botocore.exceptions import ClientError
 from django.core.mail import EmailMessage, EmailMultiAlternatives
 from lcd.models import LoggerType
 from rest_framework.permissions import AllowAny
-from cryptography.fernet import Fernet, MultiFernet
+from cryptography.fernet import Fernet
 import datetime, uuid, base64, hmac
 
 logger = logging.getLogger("errLog")
@@ -22,6 +22,7 @@ logger.addHandler(watchtower.CloudWatchLogHandler())
 
 SHOULD_LOG = False
 LAST_CHECKED = 0
+FISERV_URL = "https://snappaydirectapi-cert.fiserv.com/api/interop/"
 
 
 class CorsPostPermission(AllowAny):
@@ -282,36 +283,57 @@ def checkLogger():
         logger.error("Error checking logger.")
         return False
 
-
 def encrypt_string(value):
     """
-    Standard function to encrypt a string using 
+    Standard function to encrypt a string using
     """
-    access_key = bytes(os.environ.get("FKEY1"), 'utf-8')
+    access_key = bytes(os.environ.get("FKEY1"), "utf-8")
     f = Fernet(access_key)
-    if(value):
-        encrypted = f.encrypt(bytes(value, 'utf-8'))
+    if value:
+        encrypted = f.encrypt(bytes(value, "utf-8"))
     else:
-        encrypted = f.encrypt(bytes("", 'utf-8'))    
-    return encrypted.decode('utf-8')
+        encrypted = f.encrypt(bytes("", "utf-8"))
+    return encrypted.decode("utf-8")
 
 def decrypt_string(value):
     """
-    Standard function to decrypt a string using 
+    Standard function to decrypt a string using
     """
-    access_key = bytes(os.environ.get("FKEY1"), 'utf-8')
-    f = Fernet(access_key)    
-    decrypted = f.decrypt(bytes(value, 'utf-8'))
-    
-    return decrypted.decode('utf-8')
+    access_key = bytes(os.environ.get("FKEY1"), "utf-8")
+    f = Fernet(access_key)
+    decrypted = f.decrypt(bytes(value, "utf-8"))
 
-def generate_fiserv_hmac():
-    """Generate a hmac for fiserv"""
-    requestUri: str = f"{FISERV_URL}"
-    requestTimeStamp: str = str(datetime.datetime.now().timestamp())
+    return decrypted.decode("utf-8")
+
+def computeSignature(requestURI: str, requestMethod: str, payLoad: str, accountId: str, key: str):
+    """
+    Compute a HMAC signature for fiserv
+    """
+    requestTimeStamp: str = str(int(datetime.datetime.now().timestamp()))
     nonce: str = str(uuid.uuid4())
-    signature: str = f"{os.environ.get('FISERV_DEV_ACCOUNT_ID')}POST{requestUri}{requestTimeStamp}{nonce}"
-    secretKeyByteArray: bytes = base64.b64encode(bytes(f"{os.environ.get('FISERV_DEV_AUTH_CODE')}", "utf8"))
-    requestSignatureBase64String:str = hmac.HMAC(bytes(signature, "utf8"), secretKeyByteArray, hashlib.sha256).hexdigest()
-    hmacValue:str = f"{os.environ.get('FISERV_DEV_ACCOUNT_ID')}:{requestSignatureBase64String}:{nonce}:{requestTimeStamp}"
-    return hmacValue
+    requestContentBase64String: str = payLoad
+    signatureRawData: str = accountId + requestMethod + requestURI + requestTimeStamp +  nonce + requestContentBase64String
+    secretKeyByteArray = base64.b64decode(key)
+    signature = signatureRawData.encode("utf8")
+    signatureBytes = hmac.new(secretKeyByteArray, signature, hashlib.sha256)
+    requestSignatureBase64String = base64.b64encode(signatureBytes.digest())
+    HmacRaw = f"{accountId}:{requestSignatureBase64String.decode()}:{nonce}:{requestTimeStamp}"
+    HmacValue = base64.b64encode(HmacRaw.encode("utf8"))
+    return HmacValue
+
+def generate_fiserv_hmac(
+    url: str,
+    method: str,
+    payLoad: str,
+    accountId: str,
+    key: str
+):
+    return computeSignature(url, method, payLoad, accountId, key)
+
+def generate_basic_auth():
+    """
+    Generate basic authentication token for fiserv
+    """
+    basic = f"{os.environ.get('FISERV_API_BASIC_AUTH_USERNAME')}:{os.environ.get('FISERV_API_BASIC_AUTH_PWD')}"
+    basic = base64.b64encode(basic.encode("utf8"))
+    return basic

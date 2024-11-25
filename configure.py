@@ -58,6 +58,8 @@ export_command = ("export DB_PASSWORD=" + secrets["DB_PASSWORD"] +
 " FISERV_MERCHANT_NAME=" + secrets["FISERV_MERCHANT_NAME"] +
 " FISERV_DEV_AUTH_USER=" + secrets["FISERV_DEV_AUTH_USER"] +
 " FISERV_DEV_AUTH_CODE=" + secrets["FISERV_DEV_AUTH_CODE"] +
+" FISERV_API_BASIC_AUTH_PWD=" + secrets["FISERV_API_BASIC_AUTH_PWD"] +
+" FISERV_API_BASIC_AUTH_USERNAME=" + secrets["FISERV_API_BASIC_AUTH_USERNAME"] +
 
 # Encryption Environmental Variables
 " FKEY1=" + secrets["FKEY1"] +

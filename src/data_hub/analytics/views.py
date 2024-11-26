@@ -3,9 +3,7 @@ from django.http import HttpResponse, JsonResponse, QueryDict
 from django.contrib.auth.decorators import login_required
 from lcd.models import Collection, TemplateType
 from msd.models import MapCollection
-from analytics.models import DownloadLog2024
 import inspect
-import analytics.models
 import os
 from datetime import datetime
 import time

@@ -19,6 +19,7 @@ payload_valid_test = {
     "currencycode": "USD",
     "customerid": os.environ.get("FISERV_CUSTOMER_ID"),
     "userid": os.environ.get("FISERV_USER_ID"),
+    "templateid": 1092,
     "savepaymentmethod": "N",
     "saveatcustomer": "N",
     "displaycardssavedatcustomer": "N",

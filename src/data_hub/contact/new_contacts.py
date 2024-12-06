@@ -727,7 +727,7 @@ class OrderSubmitViewSetSuper(ContactViewset): #todo
                 "cofscheduled": "N", #Optional, N means no don't schedule card to be filed.
                 "ecomind": "E", #Optional, E means ECommerce, this is a note on the origin of transaction
                 "orderid": "580WD" + str(order.order_details_id), # Optional Local order ID; we can use it.
-                #"purchaseorder": "", Optional, not sure if I need this. 
+                #"purchaseorder": "", Optional,
                 "type": "C", # Optional, but C means customer.
                 "savepaymentmethod": "N", #Optional
                 "saveatcustomer": "N", #Optional
@@ -768,19 +768,19 @@ class OrderSubmitViewSetSuper(ContactViewset): #todo
                         "transaction": {
                             "merchantid": os.environ.get("FISERV_MERCHANT_ID"),
                             "localreferenceid": str(order.id),
-                            "type": "",
-                            "description": "",
-                            "unitprice": PLACEHOLDER_INT,
-                            "quantity": PLACEHOLDER_INT,
+                            "type": "", #TODO
+                            "description": "TxGIO DataHub order",
+                            "unitprice": round(total + transactionfee, 2),
+                            "quantity": "1",
                             "sku": "DHUB", # Should be correct.
-                            "company": "",
+                            "company": "Texas Water Development Board",
                             "fee": "",
-                            "department": "",
-                            "vendorid": "",
-                            "customerid": "",
-                            "agency": "",
-                            "batchid": "",
-                            "reportlines": "",
+                            "department": "Texas Geographic Information Office",
+                            "vendorid": "", #TODO
+                            "customerid": "", #TODO
+                            "agency": "", #TODO
+                            "batchid": "", #TODO
+                            "reportlines": "1", # This should be how many items in the details.
                             "reportlinedetails": [
                                 {
                                     "id": "",
@@ -883,10 +883,10 @@ class OrderSubmitViewSetSuper(ContactViewset): #todo
                 }
             )
 
-            url = json.loads(response.text)
-            if "htmL5RedirectUrl" in url:
+            rbody = json.loads(response.text)
+            if "requestid" in rbody:
                 orderObj.filter(id=request.query_params["uuid"]).update(
-                    order_token=url["token"], order_url=url["htmL5RedirectUrl"]
+                    order_token=rbody["requestid"], order_url=f"https://snappaydirect-cert.fiserv.com/Interop/HostedPaymentPage/ProcessUPI?reqNo={rbody['requestid']}"
                 )
                 order = orderObj.get(id=request.query_params["uuid"])
 

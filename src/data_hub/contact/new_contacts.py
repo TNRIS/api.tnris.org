@@ -27,14 +27,15 @@ from .serializers import DataHubOrderSerializer
 from modules.api_helper import encrypt_string, decrypt_string
 from contact.constants import item_attributes
 
+PLACEHOLDER_INT = 0
 CLEANING_FLAG = False
 
 # Use testing URLS (Do not use in production)
 TESTING = True
-FISERV_URL = "https://snappaydirectapi-cert.fiserv.com/"
+FISERV_URL = "https://snappaydirectapi-cert.fiserv.com/api/interop/v2/"
 
 if TESTING:
-    FISERV_URL = "https://snappaydirectapi-cert.fiserv.com/"
+    FISERV_URL = "https://snappaydirectapi-cert.fiserv.com/api/interop/v2/"
 
 # #################################################################
 # Do not call these functions from django router directly.
@@ -184,29 +185,33 @@ class OrderFormViewSetSuper(ContactViewset):
             reply_to=os.environ.get("STRATMAP_EMAIL"),
         )
 
-    def create_order_object(self, email, order, test_otp):
+    def create_order_object(self, email, order_details, test_otp=None):
         """Create the order and add it to the database."""
-        access_token = email
-        salt = secrets.token_urlsafe(32)
-        pepper = os.environ.get("ACCESS_PEPPER")
-        hash = hashlib.sha256(bytes(access_token + salt + pepper, "utf8")).hexdigest()
-        otp = secrets.token_urlsafe(12)
-        if(test_otp):
-            otp = test_otp
-        order_details = OrderDetailsType.objects.create(
-            details=json.dumps(order),
-            access_code=hash,
-            access_salt=salt,
-            otp=hashlib.sha256(bytes(otp + salt + pepper, "utf8")).hexdigest(),
-            otp_age=time.time(),
-        )
-        return OrderType.objects.create(order_details=order_details)
+
+        try:
+            access_token = email
+            salt = secrets.token_urlsafe(32)
+            pepper = os.environ.get("ACCESS_PEPPER")
+            hash = hashlib.sha256(bytes(access_token + salt + pepper, "utf8")).hexdigest()
+            otp = secrets.token_urlsafe(12)
+            if(test_otp):
+                otp = test_otp
+            order_details = OrderDetailsType.objects.create(
+                details=json.dumps(order_details),
+                access_code=hash,
+                access_salt=salt,
+                otp=hashlib.sha256(bytes(otp + salt + pepper, "utf8")).hexdigest(),
+                otp_age=time.time(),
+            )
+            return OrderType.objects.create(order_details=order_details)
+        except Exception as e:
+            logger.error("Error creating order object at create_order_object.")
 
     def create(self, request):
         """Create a order object and notify"""
         try:
             # Generate Access Code and one way encrypt it.
-            formatted = self.format_req(request.data.items())
+            formatted = ContactViewset.format_req(request.data.items())
             order_object = self.create_order_object(
                 formatted["email"], formatted["order_details"]
             )
@@ -687,8 +692,7 @@ class OrderSubmitViewSetSuper(ContactViewset): #todo
                     status=status.HTTP_403_FORBIDDEN,
                 )
             order_details = json.loads(order.order_details.details)
-
-
+            order_details = ContactViewset.format_req(order_details.items())
 
             total = round(order.approved_charge, 2)
             # 2.25% and $.25
@@ -696,62 +700,193 @@ class OrderSubmitViewSetSuper(ContactViewset): #todo
             # Round to second digit because of binary Float
             transactionfee = round(transactionfee + 0.25, 2)
 
-            payment = "CC"  # Default to CC Payment type unless payment is specified
-            if "Payment" in order_details:
-                payment = order_details["Payment"]
-            elif "Payment Method" in order_details:
-                if order_details["Payment Method"] == "Credit Card":
-                    payment = "CC"
+            payment_method = "CC"  # Default to CC Payment type unless payment is specified
+            if "payment" in order_details:
+                payment_method = order_details["payment"]
+            elif "payment_method" in order_details:
+                if order_details["payment_method"] == "Credit Card":
+                    payment_method = "CC"
+                else:
+                    payment_method = order_details["payment_method"]
 
             body = {
-                "OrderTotal": round(total + transactionfee, 2),
-                "MerchantCode": os.environ.get("CCP_MERCHANT_CODE"),
-                "MerchantKey": os.environ.get("CCP_MERCHANT_KEY"),
-                "ServiceCode": os.environ.get("CCP_SERVICE_CODE"),
-                "UniqueTransId": order.order_details_id,
-                "LocalRef": "580WD" + str(order.order_details_id),
-                "PaymentType": payment,
-                "SuccessUrl": "https://data.geographic.texas.gov/order/redirect?status=success",
-                "FailureUrl": "https://data.geographic.texas.gov/order/redirect?status=failure",
-                "CancelUrl": "https://data.geographic.texas.gov/order/redirect?status=cancel",
-                "DuplicateUrl": "https://data.geographic.texas.gov/order/redirect?status=duplicate",
-                "BCCEmail1": os.environ.get("BCC_EMAIL_1"),
-                "LineItems": [
+                "accountid": os.environ.get("FISERV_DEV_ACCOUNT_ID"), #required
+                "companycode": os.environ.get("FISERV_COMPANY_CODE"), #required
+                "currencycode": "USD", #required
+                "customerid": os.environ.get("FISERV_CUSTOMER_ID"), #required
+                "userid": os.environ.get("FISERV_USER_ID"), #required
+                "redirecturl": "https://data.geographic.texas.gov/order/redirect?status=success", #required
+                "cancelredirecturl": "https://data.geographic.texas.gov/order/redirect?status=cancel", #Optional but we can use it.
+                "reference": "UPI", #Required 
+                "templateid": 1092, #required
+                "transactionType": "S", # required: S means for a sale.
+                "transactionamount": round(total + transactionfee, 2), #required
+                "paymentmethod": payment_method, # Not documented on site whether it is required or not as of writing. but should be CC for credit card
+                "sendemailreceipts": "Y",
+                "cof": "C", #Optional, means Card on file, and C means customer.
+                "cofscheduled": "N", #Optional, N means no don't schedule card to be filed.
+                "ecomind": "E", #Optional, E means ECommerce, this is a note on the origin of transaction
+                "orderid": "580WD" + str(order.order_details_id), # Optional Local order ID; we can use it.
+                #"purchaseorder": "", Optional,
+                "type": "C", # Optional, but C means customer.
+                "savepaymentmethod": "N", #Optional
+                "saveatcustomer": "N", #Optional
+                "displaycardssavedatcustomer": "N", #Optional
+                "customer": { #Optional customer data
+                    "customername": order_details["name"],
+                    "addressline1": order_details["address"],
+                    "addressline2": "",
+                    "city": order_details["city"],
+                    "state": order_details["state"],
+                    "zipcode": order_details["zipcode"],
+                    "country": "",  # Add state to order_details
+                    "phone": order_details["phone"],
+                    "email": order_details["email"]
+                },
+                "payments": [ #required
                     {
-                        "Sku": "DHUB",
-                        "Description": "TxGIO DataHub order",
-                        "UnitPrice": round(total + transactionfee, 2),
-                        "Quantity": 1,
-                        "ItemAttributes": item_attributes,
+                        "mode": payment_method, #Check these. CC has been checked TODO: Check ACH
+                        "merchantid": os.environ.get("FISERV_MERCHANT_ID")
                     }
                 ],
+                "level3": [
+                    {
+                        "linenumber": "1.000",
+                        "productcode": "TXGIO_DATA",
+                        "taxrate": "0",
+                        "quantity": "1",
+                        "itemdescriptor": "TxGIO DataHub order",
+                        "unitcost": round(total + transactionfee, 2),
+                        "lineitemtotal": round(total + transactionfee, 2),
+                        "taxamount": "0",
+                        "commoditycode": "",
+                        "unitofmeasure": "EA"
+                    }
+                ],
+                "clxstream": [
+                    {
+                        "transaction": {
+                            "merchantid": os.environ.get("FISERV_MERCHANT_ID"),
+                            "localreferenceid": str(order.id),
+                            "type": "", #TODO
+                            "description": "TxGIO DataHub order",
+                            "unitprice": round(total + transactionfee, 2),
+                            "quantity": "1",
+                            "sku": "DHUB", # Should be correct.
+                            "company": "Texas Water Development Board",
+                            "fee": "",
+                            "department": "Texas Geographic Information Office",
+                            "vendorid": "", #TODO
+                            "customerid": "", #TODO
+                            "agency": "", #TODO
+                            "batchid": "", #TODO
+                            "reportlines": "1", # This should be how many items in the details.
+                            "reportlinedetails": [
+                                {
+                                    "id": "",
+                                    "attributes": [
+                                        {
+                                            "name": "USASLINES",
+                                            "value": "3",
+                                            "type": "String"
+                                        },
+                                        {
+                                            "name": "USAS1CO",
+                                            "value": "3719",
+                                            "type": "String"
+                                        },
+                                        {
+                                            "name": "USAS1PCA",
+                                            "value": "19001",
+                                            "type": "String"
+                                        },
+                                        {
+                                            "name": "USAS1TCODE",
+                                            "value": "195",
+                                            "type": "String"
+                                        },
+                                        {
+                                            "name": "USAS2CO",
+                                            "value": "3879",
+                                            "type": "String"
+                                        },
+                                        {
+                                            "name": "USAS2PCA",
+                                            "value": "07768",
+                                            "type": "String"
+                                        },
+                                        {
+                                            "name": "USAS2TCODE",
+                                            "value": "179",
+                                            "type": "String"
+                                        },
+                                        {
+                                            "name": "USAS3CO",
+                                            "value": "7219",
+                                            "type": "String"
+                                        },
+                                        {
+                                            "name": "USAS3TCODE",
+                                            "value": "265",
+                                            "type": "String"
+                                        },
+                                        {
+                                            "name": "USAS3PCA",
+                                            "value": "07768",
+                                            "type": "String"
+                                        },
+                                        {
+                                            "name": "USAS1AMOUNT",
+                                            "FieldValue": str(total),
+                                            "type": "String"
+                                        },
+                                        {
+                                            "FieldName": "USAS2AMOUNT",
+                                            "FieldValue": str(transactionfee),
+                                            "type": "String"
+                                        },
+                                        {
+                                            "FieldName": "USAS3AMOUNT",
+                                            "FieldValue": str(transactionfee),
+                                            "type": "String"
+                                        },
+                                        {
+                                            "FieldName": "CONV_FEE",
+                                            "FieldValue": str(transactionfee),
+                                            "type": "String"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    }
+                ]
             }
 
-            body["LineItems"][0]["ItemAttributes"].append(
-                {"FieldName": "USAS1AMOUNT", "FieldValue": total}
-            )
-            body["LineItems"][0]["ItemAttributes"].append(
-                {"FieldName": "USAS2AMOUNT", "FieldValue": transactionfee}
-            )
-            body["LineItems"][0]["ItemAttributes"].append(
-                {"FieldName": "USAS3AMOUNT", "FieldValue": transactionfee}
-            )
-            body["LineItems"][0]["ItemAttributes"].append(
-                {"FieldName": "CONV_FEE", "FieldValue": transactionfee}
-            )
-            api_key = os.environ.get("CCP_API_KEY")
+            requestUri = f"{FISERV_URL}GetRequestID"
 
-            if TESTING:
-                api_key = os.environ.get("CCP_API_KEY_UAT")
+            hmac = api_helper.generate_fiserv_hmac(
+                requestUri,
+                "POST",
+                json.dumps(body),
+                os.environ.get("FISERV_DEV_ACCOUNT_ID"),
+                os.environ.get('FISERV_DEV_AUTH_CODE')
+            )
+            basic = api_helper.generate_basic_auth()
 
-            x = requests.post(
-                FISERV_URL + "tokens", json=body, headers={"apiKey": api_key}
+            response = requests.post(
+                requestUri, json=body, headers={
+                    "accountid": os.environ.get("FISERV_DEV_ACCOUNT_ID"), # good
+                    "merchantid": os.environ.get("FISERV_MERCHANT_ID"), # good
+                    "signature": f"Hmac {hmac.decode()}",
+                    "Authorization": f"Basic {basic.decode()}"
+                }
             )
 
-            url = json.loads(x.text)
-            if "htmL5RedirectUrl" in url:
+            rbody = json.loads(response.text)
+            if "requestid" in rbody:
                 orderObj.filter(id=request.query_params["uuid"]).update(
-                    order_token=url["token"], order_url=url["htmL5RedirectUrl"]
+                    order_token=rbody["requestid"], order_url=f"https://snappaydirect-cert.fiserv.com/Interop/HostedPaymentPage/ProcessUPI?reqNo={rbody['requestid']}"
                 )
                 order = orderObj.get(id=request.query_params["uuid"])
 

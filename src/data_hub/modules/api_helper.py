@@ -140,7 +140,7 @@ def send_raw_email(
     return
 
 
-def auth_order(auth_details, order):
+def auth_order(auth_details, order): # TODO: Stopping point
     """Compare hashes of access code and one time passcode
 
     Args:

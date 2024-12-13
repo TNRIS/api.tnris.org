@@ -47,7 +47,9 @@ class ForumJobBoardSubmissionSerializer(serializers.ModelSerializer):
         fields = ('__all__')
         
 class OtpSerializer(serializers.Serializer):
-    otp=serializers.StringRelatedField()
+    class Meta:
+        model = GeneralContact
+        fields = ('__all__')
 
 class GeneralContactSerializer(serializers.ModelSerializer):
     class Meta:

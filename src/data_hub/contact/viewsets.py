@@ -113,6 +113,9 @@ class OrderStatusViewSet(OrderStatusViewSetSuper):
     """
     Order Status viewset.
     """
+    permission_classes = [CorsPostPermission]
+    def create(self, request):
+        return self.intro(request, "running OrderStatusViewSet")
 
 class InitiateRetentionCleanupViewSet(InitiateRetentionCleanupViewSetSuper):
     """

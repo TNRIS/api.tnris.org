@@ -1,7 +1,11 @@
 from urllib import request
+import hashlib
+from django.db.models import Q
 import requests
 import os
+import time
 import json
+import secrets
 from django.core import mail
 from django.test import TestCase, AsyncRequestFactory
 from contact.viewsets import (
@@ -12,6 +16,7 @@ from contact.viewsets import (
     InitiateRetentionCleanupViewSet,
     OrderCleanupViewSet
 )
+from unittest.mock import MagicMock
 from contact.new_contacts import (
     GenOtpViewSetSuper,
     OrderFormViewSetSuper,
@@ -20,15 +25,14 @@ from contact.new_contacts import (
     InitiateRetentionCleanupViewSetSuper,
     OrderCleanupViewSetSuper
 )
-from .models import OrderType
+from .models import OrderType, OrderDetailsType
 from rest_framework.request import Request
 from rest_framework.parsers import JSONParser
 from modules import api_helper
 
 from contact.constants import payload_valid_test
 
-FISERV_URL = "https://snappaydirectapi-cert.fiserv.com/api/interop/v2/"
-
+FISERV_URL = "https://snappaydirectapi-cert.fiserv.com/api/interop/"
 
 def create_super_request(data, query_params=""):
     """Build a request that calls the super classes directly"""
@@ -69,48 +73,184 @@ class GeneralTest(TestCase):
         "form_id": "data-tnris-org-order",
     }
 
+    order_details_complete= {
+        "Name": "complete complete",
+        "Email": "TxGIO-DevOps@twdb.texas.gov",
+        "Phone": "1112223333",
+        "Address": "State Parking Garage E",
+        "City": "Austin",
+        "State": "Texas",
+        "Zipcode": "78660",
+        "Organization": "TEST",
+        "Industry": "TESTING",
+        "Fedex": "",
+        "Notes": "Test Note",
+        "Delivery": "Test Delivery",
+        "HardDrive": "Test Hard Drive",
+        "Payment": "CC",
+        "Order": "Test item 1\nTest Item 2",
+        "form_id": "data-tnris-org-order",
+    }
+
+    fake_charge = {
+        "accountid": os.environ.get("FISERV_DEV_ACCOUNT_ID"),
+        "customerid": os.environ.get("FISERV_CUSTOMER_ID"),
+        "currency": "USD",
+        "companycode": os.environ.get("FISERV_COMPANY_CODE"),
+        "userid": os.environ.get("FISERV_USER_ID"),
+        "sendemailreceipts": "Y",
+        "paymentmethod": {
+            "tokenid": "",
+            "transactionamount": 10,
+            "email": "TxGIO-DevOps@twdb.texas.gov"
+        }
+    }
+
+    fake_tokenize = {
+        "accountid": os.environ.get("FISERV_DEV_ACCOUNT_ID"),
+        "currency": "USD",
+        "companycode": os.environ.get("FISERV_COMPANY_CODE"),
+        "mode": "CC",
+        "type": "VISA",
+        "accountnumber": "4111111111111111",
+        "expirationdate": "122029"
+    }
+
     def setUp(self):
+        if(self.uuid):
+            # Reset otp age.
+            order = OrderType.objects.get(id=self.uuid)
+            order.order_details.otp_age = time.time()
+            order.order_details.save()
+            order.save()
+
+    @classmethod
+    def setUpTestData(cls):
+        basic = api_helper.generate_basic_auth()
         order = OrderFormViewSetSuper.create_order_object(
-            self,
+            MagicMock(),
             email="TxGIO-DevOps@twdb.texas.gov",
-            order_details=self.order_details_new,
+            order_details=cls.order_details_new,
             test_otp="12345",
         )
         order.order_approved = True
         order.approved_charge = 7.0
+        order.order_token = str(order.id)
         order.save()
-        self.uuid = str(order.id)
-        # # Make sure email is sent.
-        self.assertEqual(
-            len(mail.outbox), 1, "No email has been sent. in GeneralTest.setup()"
+        cls.uuid = str(order.id)
+
+        submit_form_super = OrderSubmitViewSetSuper()
+        request = create_super_request(
+            {
+                "recaptcha": "none",
+                "form_id": "data-tnris-org-order",
+                "accessCode": "TxGIO-DevOps@twdb.texas.gov",
+                "passCode": "12345",  # Note: this is not a real passcode.
+            },
+            f"?uuid={cls.uuid}",
+        )
+        submit_form_super.create(request)
+
+        fake_token_hmac = api_helper.generate_fiserv_hmac(
+            f"{FISERV_URL}tokenize",
+            "POST",
+            json.dumps(cls.fake_tokenize),
+            os.environ.get("FISERV_DEV_ACCOUNT_ID"),
+            os.environ.get("FISERV_DEV_AUTH_CODE"),
         )
 
-class OrderCleanupTestCase(GeneralTest): # Tested done pt1.
-    """Order cleanup test case."""
+        fake_token = requests.post(
+            FISERV_URL + "tokenize",
+            json=cls.fake_tokenize,
+            headers={
+                "accountid": os.environ.get("FISERV_DEV_ACCOUNT_ID"),  # good
+                "merchantid": os.environ.get("FISERV_MERCHANT_ID"),  # good
+                "signature": f"Hmac {fake_token_hmac.decode()}",
+                "Authorization": f"Basic {basic.decode()}",
+            },
+        )
+        cls.fake_charge["paymentmethod"]["tokenid"] = json.loads(fake_token.text)["tokenid"]
+
+        fake_hmac = api_helper.generate_fiserv_hmac(
+            f"{FISERV_URL}Charge",
+            "POST",
+            json.dumps(cls.fake_charge),
+            os.environ.get("FISERV_DEV_ACCOUNT_ID"),
+            os.environ.get("FISERV_DEV_AUTH_CODE"),
+        )
+
+        fake_response = requests.post( #TODO: Update to v2 address.
+            FISERV_URL + "Charge",
+            json=cls.fake_charge,
+            headers={
+                "accountid": os.environ.get("FISERV_DEV_ACCOUNT_ID"),  # good
+                "merchantid": os.environ.get("FISERV_MERCHANT_ID"),  # good
+                "signature": f"Hmac {fake_hmac.decode()}",
+                "Authorization": f"Basic {basic.decode()}",
+            },
+        )
+
+        # Create fake order in the database.abs
+        access_token = "TxGIO-DevOps@twdb.texas.gov"
+        salt = secrets.token_urlsafe(32)
+        pepper = os.environ.get("ACCESS_PEPPER")
+        hash = hashlib.sha256(
+            bytes(access_token + salt + pepper, "utf8")
+        ).hexdigest()
+        
+        otp = secrets.token_urlsafe(12)
+        order_details = OrderDetailsType.objects.create(
+            details=json.dumps(cls.order_details_complete),
+            access_code=hash,
+            access_salt=salt,
+            otp=hashlib.sha256(bytes(otp + salt + pepper, "utf8")).hexdigest(),
+            otp_age=time.time(),
+        )
+        created = OrderType.objects.create(order_details=order_details)
+
+        created.order_approved = True
+        created.approved_charge = 23
+        created.order_token = json.loads(fake_response.text)["transaction"]["pgtransactionid"]
+        created.save()
+
+        # Put completed order in database.
+        order = OrderFormViewSetSuper.create_order_object(
+            MagicMock(),
+            email="TxGIO-DevOps@twdb.texas.gov",
+            order_details=cls.order_details_new,
+            test_otp="12345",
+        )
+        order.order_approved = True
+        order.approved_charge = 9.9
+        order.order_token = "8fa45e97-439f-4883-a3fd-b42d3d7fabb1"
+        order.save()
+
+class SnappayTestCase(GeneralTest):
+    """General Snappay tests"""
+
+    fixtures = ["email_templates.json"]
 
     def test_order_cleanup(self):
+        """Order cleanup test case."""
         order_cleanup = OrderCleanupViewSetSuper()
         request = create_super_request(
-            {"access_code": os.environ.get("CCP_ACCESS_CODE")}
+            {"access_code": os.environ.get("CCP_ACCESS_CODE")},
+            f"?uuid={self.uuid}"
         )
         response = order_cleanup.create(request)
+        self.assertEquals(response.status_code, 200, "Order Cleanup unsuccessful.")
+        self.assertEquals(mail.outbox[0].subject, 'Dataset Order Update: Payment has been received.', "Dataset order update wasn't first email. ")
+        self.assertEquals(len(mail.outbox), 1, 'Dataset Order Update: Payment has been received.')
 
-        print("Break")
-
-class InitiateRetentionCleanupTestCase(GeneralTest):  # Tested done pt1.
-    """Initiate retention cleanup test case."""
 
     def test_initiate_retentions_cleanup(self):
+        """Initiate retention cleanup test case."""
         initiate_cleanup = InitiateRetentionCleanupViewSetSuper()
         request = create_super_request(
             {"approve_run": "none", "access_code": os.environ.get("CCP_ACCESS_CODE")}
         )
         response = initiate_cleanup.create(request)
-        self.assertEquals(response.status_code, 200, "Order status successful.")
-
-
-class OrderStatusTestCase(GeneralTest):  # Tested done pt1.
-    """Query Fiserv for order status"""
+        self.assertEquals(response.status_code, 200, "Order status unsuccessful.")
 
     def test_order_status(self):
         """Test getting order status"""
@@ -132,12 +272,6 @@ class OrderStatusTestCase(GeneralTest):  # Tested done pt1.
         # Make sure we get a 200 created response.
         self.assertEquals(response.status_code, 200, "Order status unsuccessful.")
 
-
-class OrderFormTestCase(TestCase):  # Tested done pt1.
-    """Test Order Form Submission"""
-
-    fixtures = ["email_templates.json"]
-
     def test_order_form_blocking(self):
         """Test the order form submit blocks failed captchas."""
         request = requests.Request(method="POST", data={"recaptcha": "none"})
@@ -149,7 +283,7 @@ class OrderFormTestCase(TestCase):  # Tested done pt1.
             "Order submit route not sending 403 Forbidden signal.",
         )
 
-    def test_order_submit(self):
+    def test_order_submit_create(self):
         """Test Order Submit create function"""
         order_form_super = OrderFormViewSetSuper()
         request = create_super_request(
@@ -207,11 +341,7 @@ class OrderFormTestCase(TestCase):  # Tested done pt1.
         )
 
         # Expected two emails to be sent.
-        self.assertEqual(len(mail.outbox), 2, "No email has been sent.")
-
-
-class GoneTestCase(TestCase):  # Tested done pt1.
-    """Test that old order urls are gone."""
+        self.assertEqual(len(mail.outbox), 1, "Wrong number of emails have been sent.")
 
     def test_gone(self):
         """Test that old order urls are gone."""
@@ -222,10 +352,6 @@ class GoneTestCase(TestCase):  # Tested done pt1.
         self.assertEquals(
             response.status_code, 410, "Submit route not sending 410 GONE signal."
         )
-
-
-class GenOtpTestCase(GeneralTest):  # Tested done pt1.
-    """Test OTP."""
 
     def test_gen_otp_form_blocking(self):
         """Test the OTP blocks failed captchas."""
@@ -263,11 +389,6 @@ class GenOtpTestCase(GeneralTest):  # Tested done pt1.
             "success",
             "Test the OTP generation failed.",
         )
-        print("Breakpoint test")
-
-
-class OrderSubmitTestCase(GeneralTest):  # Tested done pt1.
-    """Test Order Submit"""
 
     def test_gen_order_submit_blocking(self):
         """Test the order submit blocks failed captchas."""
@@ -298,10 +419,6 @@ class OrderSubmitTestCase(GeneralTest):  # Tested done pt1.
         self.assertEquals(
             response.status_code, 200, "Form submission and HPP was not created."
         )
-
-
-class FiservTestCase(TestCase):  # Tested done pt1.
-    """Test Fiserv endpoints"""
 
     def test_make_hmac(self):
         requestUri: str = f"{FISERV_URL}GetRequestID"

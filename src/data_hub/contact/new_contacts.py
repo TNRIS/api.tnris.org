@@ -1,41 +1,35 @@
 """
     Handle the datahub and map orders using our payment provider.
 """
-
 import hashlib
 import json
 import os
 import re
-import sys
 import secrets
 import time
 from datetime import datetime, timezone
-
 import requests
 from rest_framework.permissions import AllowAny
 from rest_framework import status, viewsets
 from rest_framework.response import Response
 from django.conf import settings
-from django.core.mail import EmailMessage
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from modules.api_helper import CorsPostPermission
 from modules.api_helper import logger
 from modules import api_helper
 from .models import EmailTemplate, OrderType, OrderDetailsType
-from .serializers import DataHubOrderSerializer
-from modules.api_helper import encrypt_string, decrypt_string
-from contact.constants import item_attributes
 
 PLACEHOLDER_INT = 0
 CLEANING_FLAG = False
 
 # Use testing URLS (Do not use in production)
 TESTING = True
-FISERV_URL = "https://snappaydirectapi-cert.fiserv.com/api/interop/v2/"
+FISERV_URL_V2 = "https://snappaydirectapi-cert.fiserv.com/api/interop/v2/"
+FISERV_URL = "https://snappaydirectapi-cert.fiserv.com/api/interop/"
 
 if TESTING:
-    FISERV_URL = "https://snappaydirectapi-cert.fiserv.com/api/interop/v2/"
+    FISERV_URL_V2 = "https://snappaydirectapi-cert.fiserv.com/api/interop/v2/"
 
 # #################################################################
 # Do not call these functions from django router directly.
@@ -219,7 +213,8 @@ class OrderFormViewSetSuper(
             # Generate Access Code and one way encrypt it.
             formatted = ContactViewset.format_req(request.data.items())
             order_object = self.create_order_object(
-                formatted["email"], formatted["order_details"]
+                email=formatted["email"],
+                order_details=formatted["order_details"]
             )
 
             formatted["url"] = (
@@ -472,7 +467,7 @@ class InitiateRetentionCleanupViewSetSuper(
             )
 
 
-class OrderCleanupViewSetSuper(ContactViewset):  # TODO: Not started testing
+class OrderCleanupViewSetSuper(ContactViewset):  # TODO: test pt2
     """
     Begin Cleanup routines
     """
@@ -517,7 +512,7 @@ class OrderCleanupViewSetSuper(ContactViewset):  # TODO: Not started testing
                     request.query_params["uuid"] = str(order["id"])
                     request.query_params._mutable = False
                     receipt = self.get_receipt(request, format) #TODO: Get receipt then continue.
-                    if receipt.status_code == 200:
+                    if receipt.status_code == 200: #TODO Monday: Fix this and find out why receipt isn't found.
                         if not order["tnris_notified"]:
                             if api_helper.checkLogger():
                                 logger.info(
@@ -616,42 +611,49 @@ class OrderCleanupViewSetSuper(ContactViewset):  # TODO: Not started testing
             CLEANING_FLAG = False
             return response
 
-    def get_receipt(self, request, format):
+    def get_receipt(self, request, format): # TODO: Testing done, check pt 2
         # Look for a successful receipt. Otherwise return 404.
         try:
             order = OrderType.objects.get(id=request.query_params["uuid"])
             if order.order_approved:
-                headers = {
-                    "apiKey": os.environ.get("CCP_API_KEY"),
-                    "MerchantKey": os.environ.get("CCP_MERCHANT_KEY"),
-                    "MerchantCode": os.environ.get("CCP_MERCHANT_CODE"),
-                    "ServiceCode": os.environ.get("CCP_SERVICE_CODE"),
-                }
-                if TESTING:
-                    headers["apiKey"] = os.environ.get("CCP_API_KEY_UAT")
+                endpoint = f"{FISERV_URL}GetPaymentDetails"
+                basic = api_helper.generate_basic_auth()
 
-                orderinfo = requests.get(
-                    FISERV_URL + "tokens/" + str(order.order_token), headers=headers
+                body = {
+                    "accountid": os.environ.get("FISERV_DEV_ACCOUNT_ID"),
+                    "token": str(order.order_token)
+                }
+
+                hmac = api_helper.generate_fiserv_hmac(
+                    endpoint,
+                    "POST",
+                    json.dumps(body),
+                    os.environ.get("FISERV_DEV_ACCOUNT_ID"),
+                    os.environ.get("FISERV_DEV_AUTH_CODE"),
+                )
+
+                headers = {
+                    "Accountid": os.environ.get("FISERV_DEV_ACCOUNT_ID"),  # good
+                    "Signature": f"Hmac {hmac.decode()}",
+                    "Authorization": f"Basic {basic.decode()}",
+                    "Content-Type": "application/json"
+                }
+
+                orderinfo = requests.post(
+                    endpoint,
+                    json=body,
+                    headers=headers,
                 )
 
                 orderContent = json.loads(orderinfo.content)
-                if "orders" in orderContent:
-                    orders = orderContent["orders"]
-                    if orders[0]["orderStatus"] == "COMPLETE":
-                        orderReceipt = requests.get(
-                            FISERV_URL + "receipts/" + str(orders[0]["orderId"]),
-                            headers=headers,
-                        )
-                        response = Response(
-                            {
-                                "status_code": orderReceipt.status_code,
-                                "orderReceipt": orderReceipt,
-                            }
-                        )
-                    else:
-                        response = Response(
-                            {"status_code": 404}, status=status.HTTP_404_NOT_FOUND
-                        )
+                if orderContent['status'] == "Y":
+                    orders = orderContent["transaction"] # TODO: Check 
+                    response = Response(
+                        {
+                            "status_code": orderinfo.status_code,
+                            "orderReceipt": orders,
+                        }
+                    )
                 else:
                     response = Response(
                         {"status_code": 404}, status=status.HTTP_404_NOT_FOUND
@@ -672,7 +674,6 @@ class OrderCleanupViewSetSuper(ContactViewset):  # TODO: Not started testing
                     logger.error(message)
         finally:
             return response
-
 
 class OrderSubmitViewSetSuper(
     ContactViewset
@@ -705,7 +706,7 @@ class OrderSubmitViewSetSuper(
             transactionfee = round(transactionfee + 0.25, 2)
 
             payment_method = (
-                "CC"  # Default to CC Payment type unless payment is specified
+                "CC"
             )
             if "payment" in order_details:
                 payment_method = order_details["payment"]
@@ -727,7 +728,7 @@ class OrderSubmitViewSetSuper(
                 "templateid": 1092,  # required
                 "transactionType": "S",  # required: S means for a sale.
                 "transactionamount": round(total + transactionfee, 2),  # required
-                "paymentmethod": payment_method,  # Not documented on site whether it is required or not as of writing. but should be CC for credit card
+                "paymentmethod": payment_method, # As needed.
                 "sendemailreceipts": "Y",
                 "cof": "C",  # Optional, means Card on file, and C means customer.
                 "cofscheduled": "N",  # Optional, N means no don't schedule card to be filed.
@@ -735,7 +736,7 @@ class OrderSubmitViewSetSuper(
                 "orderid": "580WD"
                 + str(
                     order.order_details_id
-                ),  # Optional Local order ID; we can use it.
+                ),  # Optional Local order ID; we use it as a reference to get transaction info.
                 # "purchaseorder": "", Optional,
                 "type": "C",  # Optional, but C means customer.
                 "savepaymentmethod": "N",  # Optional
@@ -777,18 +778,18 @@ class OrderSubmitViewSetSuper(
                         "transaction": {
                             "merchantid": os.environ.get("FISERV_MERCHANT_ID"),
                             "localreferenceid": str(order.id),
-                            "type": "",  # TODO
+                            "type": "ecommerce",
                             "description": "TxGIO DataHub order",
                             "unitprice": round(total + transactionfee, 2),
                             "quantity": "1",
                             "sku": "DHUB",  # Should be correct.
                             "company": "Texas Water Development Board",
-                            "fee": "",
+                            "fee": str(round(transactionfee)),
                             "department": "Texas Geographic Information Office",
                             "vendorid": "",  # TODO
                             "customerid": os.environ.get("FISERV_CUSTOMER_ID"),
-                            "agency": "",  # TODO
-                            "batchid": "",  # TODO
+                            "agency": "TWDB",
+                            "batchid": "",
                             "reportlines": "1",  # This should be how many items in the details.
                             "reportlinedetails": [
                                 {
@@ -872,7 +873,7 @@ class OrderSubmitViewSetSuper(
                 ],
             }
 
-            requestUri = f"{FISERV_URL}GetRequestID"
+            requestUri = f"{FISERV_URL_V2}GetRequestID"
 
             hmac = api_helper.generate_fiserv_hmac(
                 requestUri,
@@ -895,6 +896,7 @@ class OrderSubmitViewSetSuper(
             )
 
             rbody = json.loads(response.text)
+
             if "requestid" in rbody:
                 orderObj.filter(id=request.query_params["uuid"]).update(
                     order_token=rbody["requestid"],
@@ -902,7 +904,6 @@ class OrderSubmitViewSetSuper(
                 )
                 order = orderObj.get(id=request.query_params["uuid"])
 
-                # response = redirect(order.order_url)
                 response = Response(
                     {
                         "status": "success",

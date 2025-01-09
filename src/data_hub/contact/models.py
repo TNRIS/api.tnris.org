@@ -86,11 +86,12 @@ class OrderType(models.Model):
     )
     
     # Token for keeping track of a order form.
-    order_token = models.UUIDField(
+    order_token = models.CharField(
         'Order Token',
         editable=False,
         null=True,
-        default=None
+        default=None,
+        max_length=255
     )
     
     order_url = models.CharField(

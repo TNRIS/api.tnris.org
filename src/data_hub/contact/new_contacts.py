@@ -119,7 +119,7 @@ class ContactViewset(viewsets.ViewSet):
 # FORMS ORDER ENDPOINT
 class OrderFormViewSetSuper(
     ContactViewset
-):  # DONE: Automated test written. TODO: test pt2
+):
     """
     Handle TxGIO order form submissions
     """
@@ -269,9 +269,10 @@ class OrderFormViewSetSuper(
             )
 
 
+# Email type changed.
 class GenOtpViewSetSuper(
     ContactViewset
-):  # DONE: Automated test written. TODO: test pt2
+):
     """
     Regenerate One Time Passcode
     """
@@ -324,10 +325,10 @@ class GenOtpViewSetSuper(
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
 
-
+# Email type changed.
 class OrderStatusViewSetSuper(
     ContactViewset
-):  # DONE: Automated test written. TODO: test pt2
+):
     """
     Handle Checking the order status
     """
@@ -364,10 +365,10 @@ class OrderStatusViewSetSuper(
                 status=status.HTTP_200_OK,
             )
 
-
+# Email type changed.
 class InitiateRetentionCleanupViewSetSuper(
     ContactViewset
-):  # DONE: Automated test written. TODO: test pt2
+):
     """
     Delete old orders according to retention policy.
     """
@@ -466,8 +467,7 @@ class InitiateRetentionCleanupViewSetSuper(
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
 
-
-class OrderCleanupViewSetSuper(ContactViewset):  # TODO: test pt2
+class OrderCleanupViewSetSuper(ContactViewset):
     """
     Begin Cleanup routines
     """
@@ -528,28 +528,41 @@ class OrderCleanupViewSetSuper(ContactViewset):  # TODO: test pt2
                             obj.save()
 
                             order_string = api_helper.buildOrderString(order_obj)
-                            email_body = """
-                                A payment has been received from from: https://data.geographic.texas.gov/order/
-                                Please see order details below. And ship the order. \n
-                                Form ID: data-tnris-org-order
-                                Order ID: %s
-                                Form parameters
-                                ================== \n
-                                """ % str(
-                                order["id"]
-                            )
 
-                            email_body = email_body + order_string
                             reply_email = "unknown@tnris.org"
                             if "Email" in order_obj:
                                 reply_email = order_obj["Email"]
-                            api_helper.send_raw_email(
-                                subject="Dataset Order Update: Payment has been received.",
-                                body=email_body,
-                                send_from=os.environ.get("MAIL_DEFAULT_FROM"),
-                                send_to=os.environ.get("MAIL_DEFAULT_TO"),
-                                reply_to=reply_email,
+
+                            email_template = EmailTemplate.objects.get(form_id="order-received")
+                            self.send_template_email(
+                                email_template,
+                                {"order_id": order["id"], "order_string": order_string},
+                                os.environ.get("MAIL_DEFAULT_TO"),
+                                reply_email,
                             )
+
+                            # email_body = """
+                            #     A payment has been received from from: https://data.geographic.texas.gov/order/
+                            #     Please see order details below. And ship the order. \n
+                            #     Form ID: data-tnris-org-order
+                            #     Order ID: %s
+                            #     Form parameters
+                            #     ================== \n
+                            #     """ % str(
+                            #     order["id"]
+                            # )
+
+                            # email_body = email_body + order_string
+                            # reply_email = "unknown@tnris.org"
+                            # if "Email" in order_obj:
+                            #     reply_email = order_obj["Email"]
+                            # api_helper.send_raw_email(
+                            #     subject="Dataset Order Update: Payment has been received.",
+                            #     body=email_body,
+                            #     send_from=os.environ.get("MAIL_DEFAULT_FROM"),
+                            #     send_to=os.environ.get("MAIL_DEFAULT_TO"),
+                            #     reply_to=reply_email,
+                            # )
 
                     # If no receipt was received or order was sent after 90 days then archive order automatically.
                     if difference.days > 90 and (
@@ -677,7 +690,7 @@ class OrderCleanupViewSetSuper(ContactViewset):  # TODO: test pt2
 
 class OrderSubmitViewSetSuper(
     ContactViewset
-):  # DONE: Automated test written. TODO: test pt2
+):
     """
     Create and return a fiserv order url to HPP.
     """

@@ -732,6 +732,69 @@ class GeneralContact(models.Model):
     def __str__(self):
         return self.name + " " + self.created.strftime('%Y-%m-%d %H:%M')
 
+class OrderApproved(models.Model):
+    """
+    Orders approved datahub
+    """
+
+    class Meta:
+        verbose_name = 'Order Approved'
+        verbose_name_plural = 'Orders Approved'
+
+    order_id = models.UUIDField(
+        'DataHub Order ID',
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False
+    )
+
+    def __str__(self):
+        return str(self.order_id)
+
+class OrderReceived(models.Model):
+    """
+    Orders Received on datahub
+    """
+
+    class Meta:
+        verbose_name = 'Order Received'
+        verbose_name_plural = 'Orders Received'
+
+    order_id = models.UUIDField(
+        'DataHub Order ID',
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False
+    )
+
+    order_id = models.UUIDField(
+        '',
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False
+    )
+
+    def __str__(self):
+        return str(self.order_id)
+
+class OrderRemoved(models.Model):
+    """
+    Orders Removed from datahub
+    """
+
+    class Meta:
+        verbose_name = 'Order Removed'
+        verbose_name_plural = 'Orders Removed'
+
+    order_id = models.UUIDField(
+        'DataHub Order ID',
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False
+    )
+
+    def __str__(self):
+        return str(self.order_id)
 
 class GeorodeoCallForPresentationsSubmission(models.Model):
     """

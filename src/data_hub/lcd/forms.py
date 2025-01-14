@@ -161,7 +161,7 @@ class ImageForm(forms.ModelForm):
         img = PilImage.open(image.file)
         wpercent = (base_width / float(img.size[0]))
         hsize = int((float(img.size[1]) * float(wpercent)))
-        img = img.resize((base_width, hsize), PilImage.ANTIALIAS)
+        img = img.resize((base_width, hsize), PilImage.Resampling.LANCZOS)
 
         img.convert('RGB')
         img_io = BytesIO()

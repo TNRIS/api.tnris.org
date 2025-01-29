@@ -99,7 +99,7 @@ class ContactViewset(viewsets.ViewSet):
             reply_to=replyer,
         )
 
-    def format_req(items):
+    def format_req(self, items):
         return {k.lower().replace(" ", "_"): v for k, v in items}
 
     def intro(self, request, msg=""):
@@ -123,37 +123,25 @@ class OrderFormViewSetSuper(
     """
     Handle TxGIO order form submissions
     """
-
     @receiver(pre_save, sender=OrderType)
     def my_callback(sender, instance, *args, **kwargs):
+        contact_viewset = ContactViewset()
         instance.order_approved
         if instance.order_approved and instance.approved_charge:
             if not instance.customer_notified:
                 instance.customer_notified = True
                 instance.save()
                 order_info = json.loads(instance.order_details.details)
-                formatted = ContactViewset.format_req(order_info.items())
-                api_helper.send_email(
-                    subject="Your TxGIO Datahub order has been approved",
-                    body="""
-                            <html><body style='overflow:hidden'>
-                        """
-                    + "<div style='width: 98%; background-color: #1e8dc1;'>"
-                    + """
-                            <img class="TnrisLogo" width="100" height="59" src="https://cdn.tnris.org/images/txgio_light.png" alt="TxGIO Logo" title="data.geographic.texas.gov">
-                            </div><br /><br />
-                            Greetings from TxGIO,<br /><br />
-                            Your TxGIO Datahub order has been approved.<br />
-                            To make a payment please follow this <a href='https://data.geographic.texas.gov/order/submit?uuid=%s'>link.</a><br />
-                            For questions or concerns, Please reply to this email or visit our <a href='https://tnris.org/contact/'>contact page</a> for more ways to contact TNRIS.<br /><br />
-                            Thanks,<br />
-                            The TxGIO Team
-                            </body></html>
-                        """
-                    % str(instance.pk),
-                    send_to=formatted["email"],
-                    reply_to=os.environ.get("STRATMAP_EMAIL"),
+                formatted = contact_viewset.format_req(order_info.items())
+
+                email_template = EmailTemplate.objects.get(form_id="order-approved")
+                contact_viewset.send_template_email(
+                    email_template,
+                    {"uuid": str(instance.pk)},
+                    formatted["email"],
+                    os.environ.get("STRATMAP_EMAIL"),
                 )
+
             return Response(
                 {"status": "success", "message": "Success"},
                 status=status.HTTP_201_CREATED,
@@ -161,26 +149,12 @@ class OrderFormViewSetSuper(
 
     def notify_user(self, order_object, email):
         # Notify user
-        api_helper.send_email(
-            "Your datahub order has been received",
-            """
-                <html><body style='overflow:hidden'>
-            """
-            + "<div style='width: 100%; background-color: #1e8dc1; overflow:hidden;'>"
-            + """
-                    <img class="TnrisLogo" width="100" height="59" src="https://cdn.tnris.org/images/txgio_light.png" alt="TxGIO Logo" title="data.tnris.org">
-                    </div><br /><br />
-                    Greetings from TxGIO,<br /><br />
-                    We have received your order and will process it after taking a look at the details.<br />
-                    In the meantime you can check your order status <a href='https://data.geographic.texas.gov/order/status?uuid=%s'>here</a>.<br />
-                    You will receive a link via email to pay for the order once we process it.<br /><br />
-                    Thanks,<br />
-                    The TxGIO Team
-                </body></html>
-            """
-            % str(order_object.id),
-            send_to=email,
-            reply_to=os.environ.get("STRATMAP_EMAIL"),
+        email_template = EmailTemplate.objects.get(form_id="notify-user")
+        self.send_template_email(
+            email_template,
+            {"uuid": str(order_object.id)},
+            email,
+            os.environ.get("STRATMAP_EMAIL"),
         )
 
     def create_order_object(self, email, order_details, test_otp=None):
@@ -211,7 +185,7 @@ class OrderFormViewSetSuper(
         """Create a order object and notify"""
         try:
             # Generate Access Code and one way encrypt it.
-            formatted = ContactViewset.format_req(request.data.items())
+            formatted = self.format_req(request.data.items())
             order_object = self.create_order_object(
                 email=formatted["email"],
                 order_details=formatted["order_details"]
@@ -300,7 +274,7 @@ class GenOtpViewSetSuper(
             # get email template for generating otp
             email_template = EmailTemplate.objects.get(form_id="gen-otp")
             # ContactViewset.format_req(request.data.items())
-            formatted = ContactViewset.format_req(request.data.items())
+            formatted = self.format_req(request.data.items())
             self.send_template_email(
                 email_template,
                 formatted,
@@ -576,25 +550,14 @@ class OrderCleanupViewSetSuper(ContactViewset):
                         obj = OrderType.objects.get(id=order["id"])
                         obj.archived = True
                         obj.save()
+
                         if receipt.status_code != 200 and "Email" in order_obj:
-                            api_helper.send_email(
-                                subject="Your TxGIO Datahub order has been removed",
-                                body="""
-                                        <html><body style='overflow:hidden'>
-                                    """
-                                + "<div style='width: 98%; background-color: #1e8dc1;'>"
-                                + """
-                                        <img class="TnrisLogo" width="100" height="59" src="https://cdn.tnris.org/images/txgio_light.png" alt="TxGIO Logo" title="data.tnris.org">
-                                    </div><br /><br />
-                                        Greetings from TxGIO,<br /><br />
-                                        Your TxGIO Datahub order has been closed due to being greater than 90 days old. <br />
-                                        For questions or concerns, Please reply to this email or visit our <a href='https://tnris.org/contact/'>contact page</a> for more ways to contact TxGIO.<br /><br />
-                                        Thanks,<br />
-                                        The TxGIO Team
-                                        </body></html>
-                                    """,
-                                send_to=order_obj["Email"],
-                                reply_to=os.environ.get("STRATMAP_EMAIL"),
+                            email_template = EmailTemplate.objects.get(form_id="order-removed")
+                            self.send_template_email(
+                                email_template,
+                                {},
+                                order_obj["Email"],
+                                os.environ.get("STRATMAP_EMAIL"),
                             )
                 except Exception as e:
                     if api_helper.checkLogger():
@@ -710,7 +673,7 @@ class OrderSubmitViewSetSuper(
                     status=status.HTTP_403_FORBIDDEN,
                 )
             order_details = json.loads(order.order_details.details)
-            order_details = ContactViewset.format_req(order_details.items())
+            order_details = self.format_req(order_details.items())
 
             total = round(order.approved_charge, 2)
             # 2.25% and $.25
@@ -803,7 +766,7 @@ class OrderSubmitViewSetSuper(
                             "customerid": os.environ.get("FISERV_CUSTOMER_ID"),
                             "agency": "TWDB",
                             "batchid": "",
-                            "reportlines": "1",  # This should be how many items in the details.
+                            "reportlines": "1",  # This should be how many report line details attributes.
                             "reportlinedetails": [
                                 {
                                     "id": "",

@@ -33,6 +33,8 @@ from modules import api_helper
 from contact.constants import payload_valid_test
 
 FISERV_URL = "https://snappaydirectapi-cert.fiserv.com/api/interop/"
+FISERV_URL_V2 = "https://snappaydirectapi-cert.fiserv.com/api/interop/v2/"
+SEND_EMAIL = "N"
 
 def create_super_request(data, query_params=""):
     """Build a request that calls the super classes directly"""
@@ -98,14 +100,157 @@ class GeneralTest(TestCase):
         "currency": "USD",
         "companycode": os.environ.get("FISERV_COMPANY_CODE"),
         "userid": os.environ.get("FISERV_USER_ID"),
-        "sendemailreceipts": "Y",
+        "sendemailreceipts": SEND_EMAIL,
         "paymentmethod": {
-            "tokenid": "",
+            "tokenid": "", # Dynamic so this is set in setuptestdata function.
             "transactionamount": 10,
             "email": "TxGIO-DevOps@twdb.texas.gov"
         }
     }
 
+    fake_charge_new = {
+        "accountid": os.environ.get("FISERV_DEV_ACCOUNT_ID"),  # required
+        "userid": os.environ.get("FISERV_USER_ID"),  # required
+        "cof": "C",  # Optional, means Card on file, and C means customer.
+        "cofscheduled": "N",  # Optional, N means no don't schedule card to be filed.
+        "ecomind": "E",  # Optional, E means ECommerce, this is a note on the origin of transaction
+        "transactions": { # required
+            "merchantid": os.environ.get("FISERV_MERCHANT_ID"),
+            "currency": "USD",
+            "companycode": os.environ.get("FISERV_COMPANY_CODE"),
+            "customerid": os.environ.get("FISERV_CUSTOMER_ID"),
+            "orderid": "", # Configured elsewhere.
+            "paymentmethod": {
+                "tokenid": "", # Dynamic so this is set in setuptestdata function.
+                "transactionamount": "11.01",  # required
+                "customername": "test man",
+                "addressline1": "State Parking Garage E",
+                "addressline2": "",
+                "city": "Austin",
+                "state": "Texas",
+                "zip": "78701",
+                "country": "US",
+                "phone": "1111111111",
+                "email": os.environ.get("MAIL_DEFAULT_TO")
+            },
+            "level3": [
+                {
+                    "linenumber": "1.000",
+                    "productcode": "TXGIO_DATA",
+                    "taxrate": "0",
+                    "quantity": "1",
+                    "itemdescriptor": "TxGIO DataHub order",
+                    "unitcost": "11.01",
+                    "lineitemtotal": "11.01",
+                    "taxamount": "0",
+                    "commoditycode": "",
+                    "unitofmeasure": "EA",
+                }
+            ],
+            "clxstream": {
+                "transaction": {
+                    "merchantid": os.environ.get("FISERV_MERCHANT_ID"),
+                    "localreferenceid": "", # Dynamic so this is set in setuptestdata function.
+                    "type": "ecommerce",
+                    "description": "TxGIO DataHub order",
+                    "unitprice": "11.01",
+                    "quantity": "1",
+                    "sku": "DHUB",  # Should be correct.
+                    "company": "Texas Water Development Board",
+                    "fee": ".50",
+                    "department": "Texas Geographic Information Office",
+                    "vendorid": "",  # TODO
+                    "customerid": os.environ.get("FISERV_CUSTOMER_ID"),
+                    "agency": "TWDB",
+                    "reportlines": "3",  # This should be how many items in the details.
+                    "reportlinedetails": [
+                        {
+                            "id": "USAS1",
+                            "attributes": [
+                                {
+                                    "name": "USAS1LINES",
+                                    "value": "3",
+                                    "type": "String",
+                                },
+                                {
+                                    "name": "USAS1CO",
+                                    "value": "3719",
+                                    "type": "String",
+                                },
+                                {
+                                    "name": "USAS1PCA",
+                                    "value": "19001",
+                                    "type": "String",
+                                },
+                                {
+                                    "name": "USAS1TCODE",
+                                    "value": "195",
+                                    "type": "String",
+                                },
+                                {
+                                    "name": "USAS1AMOUNT",
+                                    "FieldValue": "11.01",
+                                    "type": "String",
+                                },
+                            ],
+                        },
+                        {
+                            "id": "USAS2",
+                            "attributes": [
+                                {
+                                    "name": "USAS2CO",
+                                    "value": "3879",
+                                    "type": "String",
+                                },
+                                {
+                                    "name": "USAS2PCA",
+                                    "value": "07768",
+                                    "type": "String",
+                                },
+                                {
+                                    "name": "USAS2TCODE",
+                                    "value": "179",
+                                    "type": "String",
+                                },
+                                {
+                                    "FieldName": "USAS2AMOUNT",
+                                    "FieldValue": ".50",
+                                    "type": "String",
+                                },
+                            ]
+                        },
+                        {
+                            "id": "USAS3",
+                            "attributes": [
+                               {
+                                    "name": "USAS3CO",
+                                    "value": "7219",
+                                    "type": "String",
+                                },
+                                {
+                                    "name": "USAS3TCODE",
+                                    "value": "265",
+                                    "type": "String",
+                                },
+                                {
+                                    "name": "USAS3PCA",
+                                    "value": "07768",
+                                    "type": "String",
+                                },
+                                {
+                                    "FieldName": "USAS3AMOUNT",
+                                    "FieldValue": ".50",
+                                    "type": "String",
+                                },
+                            ]
+                        }
+                    ],
+                }
+            },
+            "sendemailreceipts": SEND_EMAIL,
+        },
+    }
+ 
     fake_tokenize = {
         "accountid": os.environ.get("FISERV_DEV_ACCOUNT_ID"),
         "currency": "USD",
@@ -169,23 +314,53 @@ class GeneralTest(TestCase):
                 "Authorization": f"Basic {basic.decode()}",
             },
         )
-        cls.fake_charge["paymentmethod"]["tokenid"] = json.loads(fake_token.text)["tokenid"]
+        order_id = f"580WD{os.urandom(4).hex()}"
 
+        # Just for example this should use v2
+        cls.fake_charge_new["transactions"]["paymentmethod"]["tokenid"] = json.loads(fake_token.text)["tokenid"]
+        cls.fake_charge_new["transactions"]["orderid"] = order_id
+        cls.fake_charge_new["transactions"]["clxstream"]["transaction"]["localreferenceid"] = order_id
+
+        #TODO: Change back when bug with v2 is resolved
+        cls.fake_charge["paymentmethod"]["tokenid"] = json.loads(fake_token.text)["tokenid"] #TODO: Remove when changing to v2 
+        cls.fake_charge["orderid"] = order_id
+        
         fake_hmac = api_helper.generate_fiserv_hmac(
-            f"{FISERV_URL}Charge",
+            f"{FISERV_URL}Charge", # TODO: Change to v2 when bug with charge route is resolved.
             "POST",
             json.dumps(cls.fake_charge),
             os.environ.get("FISERV_DEV_ACCOUNT_ID"),
             os.environ.get("FISERV_DEV_AUTH_CODE"),
         )
 
-        fake_response = requests.post( #TODO: Update to v2 address.
+        fake_response = requests.post( # TODO: Change to v2 when bug with charge route is resolved.
             FISERV_URL + "Charge",
             json=cls.fake_charge,
             headers={
                 "accountid": os.environ.get("FISERV_DEV_ACCOUNT_ID"),  # good
                 "merchantid": os.environ.get("FISERV_MERCHANT_ID"),  # good
                 "signature": f"Hmac {fake_hmac.decode()}",
+                "Authorization": f"Basic {basic.decode()}",
+            },
+        )
+
+        #NOTE: Doesn't work but just testing v2
+        fake_hmac_v2 = api_helper.generate_fiserv_hmac(
+            f"{FISERV_URL_V2}Charge",  #NOTE: Doesn't work but just testing v2
+            "POST",
+            json.dumps(cls.fake_charge),
+            os.environ.get("FISERV_DEV_ACCOUNT_ID"),
+            os.environ.get("FISERV_DEV_AUTH_CODE"),
+        )
+
+        #NOTE: Doesn't work but just testing v2
+        fake_response_v2 = requests.post(  #NOTE: Doesn't work but just testing v2
+            FISERV_URL_V2 + "Charge",
+            json=cls.fake_charge,
+            headers={
+                "accountid": os.environ.get("FISERV_DEV_ACCOUNT_ID"),  # good
+                "merchantid": os.environ.get("FISERV_MERCHANT_ID"),  # good
+                "signature": f"Hmac {fake_hmac_v2.decode()}",
                 "Authorization": f"Basic {basic.decode()}",
             },
         )

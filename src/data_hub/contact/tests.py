@@ -95,34 +95,21 @@ class GeneralTest(TestCase):
     }
 
     fake_charge = {
-        "accountid": os.environ.get("FISERV_DEV_ACCOUNT_ID"),
-        "customerid": os.environ.get("FISERV_CUSTOMER_ID"),
-        "currency": "USD",
-        "companycode": os.environ.get("FISERV_COMPANY_CODE"),
-        "userid": os.environ.get("FISERV_USER_ID"),
-        "sendemailreceipts": SEND_EMAIL,
-        "paymentmethod": {
-            "tokenid": "", # Dynamic so this is set in setuptestdata function.
-            "transactionamount": 10,
-            "email": "TxGIO-DevOps@twdb.texas.gov"
-        }
-    }
-
-    fake_charge_new = {
         "accountid": os.environ.get("FISERV_DEV_ACCOUNT_ID"),  # required
         "userid": os.environ.get("FISERV_USER_ID"),  # required
         "cof": "C",  # Optional, means Card on file, and C means customer.
         "cofscheduled": "N",  # Optional, N means no don't schedule card to be filed.
         "ecomind": "E",  # Optional, E means ECommerce, this is a note on the origin of transaction
-        "transactions": { # required
+        "transactions": [{ # required
             "merchantid": os.environ.get("FISERV_MERCHANT_ID"),
-            "currency": "USD",
+            "currencycode": "USD",
             "companycode": os.environ.get("FISERV_COMPANY_CODE"),
             "customerid": os.environ.get("FISERV_CUSTOMER_ID"),
             "orderid": "", # Configured elsewhere.
             "paymentmethod": {
                 "tokenid": "", # Dynamic so this is set in setuptestdata function.
                 "transactionamount": "11.01",  # required
+                "cvv": "123",
                 "customername": "test man",
                 "addressline1": "State Parking Garage E",
                 "addressline2": "",
@@ -130,8 +117,13 @@ class GeneralTest(TestCase):
                 "state": "Texas",
                 "zip": "78701",
                 "country": "US",
-                "phone": "1111111111",
-                "email": os.environ.get("MAIL_DEFAULT_TO")
+                "phonenumber": "1111111111",
+                "email": os.environ.get("MAIL_DEFAULT_TO"),
+                "type": "VISA",
+                "last4": "1111",
+                "routingnumber": "",
+                "secureflag": "05",
+                "securevalue": ""
             },
             "level3": [
                 {
@@ -159,19 +151,13 @@ class GeneralTest(TestCase):
                     "company": "Texas Water Development Board",
                     "fee": ".50",
                     "department": "Texas Geographic Information Office",
-                    "vendorid": "",  # TODO
                     "customerid": os.environ.get("FISERV_CUSTOMER_ID"),
-                    "agency": "TWDB",
+                    "agency": "580",
                     "reportlines": "3",  # This should be how many items in the details.
                     "reportlinedetails": [
                         {
                             "id": "USAS1",
                             "attributes": [
-                                {
-                                    "name": "USAS1LINES",
-                                    "value": "3",
-                                    "type": "String",
-                                },
                                 {
                                     "name": "USAS1CO",
                                     "value": "3719",
@@ -189,7 +175,7 @@ class GeneralTest(TestCase):
                                 },
                                 {
                                     "name": "USAS1AMOUNT",
-                                    "FieldValue": "11.01",
+                                    "value": "11.01",
                                     "type": "String",
                                 },
                             ],
@@ -213,8 +199,8 @@ class GeneralTest(TestCase):
                                     "type": "String",
                                 },
                                 {
-                                    "FieldName": "USAS2AMOUNT",
-                                    "FieldValue": ".50",
+                                    "name": "USAS2AMOUNT",
+                                    "value": ".50",
                                     "type": "String",
                                 },
                             ]
@@ -238,8 +224,8 @@ class GeneralTest(TestCase):
                                     "type": "String",
                                 },
                                 {
-                                    "FieldName": "USAS3AMOUNT",
-                                    "FieldValue": ".50",
+                                    "name": "USAS3AMOUNT",
+                                    "value": ".50",
                                     "type": "String",
                                 },
                             ]
@@ -248,7 +234,7 @@ class GeneralTest(TestCase):
                 }
             },
             "sendemailreceipts": SEND_EMAIL,
-        },
+        }],
     }
  
     fake_tokenize = {
@@ -314,37 +300,13 @@ class GeneralTest(TestCase):
                 "Authorization": f"Basic {basic.decode()}",
             },
         )
-        order_id = f"580WD{os.urandom(4).hex()}"
+        order_id = f"580WD{os.urandom(4).hex()}" # Just for testing. 
+        # configure the variables in fake_charge structure. 
+        cls.fake_charge["transactions"][0]["paymentmethod"]["tokenid"] = json.loads(fake_token.text)["tokenid"]
+        cls.fake_charge["transactions"][0]["orderid"] = order_id
+        cls.fake_charge["transactions"][0]["clxstream"]["transaction"]["localreferenceid"] = order_id
 
-        # Just for example this should use v2
-        cls.fake_charge_new["transactions"]["paymentmethod"]["tokenid"] = json.loads(fake_token.text)["tokenid"]
-        cls.fake_charge_new["transactions"]["orderid"] = order_id
-        cls.fake_charge_new["transactions"]["clxstream"]["transaction"]["localreferenceid"] = order_id
-
-        #TODO: Change back when bug with v2 is resolved
-        cls.fake_charge["paymentmethod"]["tokenid"] = json.loads(fake_token.text)["tokenid"] #TODO: Remove when changing to v2 
-        cls.fake_charge["orderid"] = order_id
         
-        fake_hmac = api_helper.generate_fiserv_hmac(
-            f"{FISERV_URL}Charge", # TODO: Change to v2 when bug with charge route is resolved.
-            "POST",
-            json.dumps(cls.fake_charge),
-            os.environ.get("FISERV_DEV_ACCOUNT_ID"),
-            os.environ.get("FISERV_DEV_AUTH_CODE"),
-        )
-
-        fake_response = requests.post( # TODO: Change to v2 when bug with charge route is resolved.
-            FISERV_URL + "Charge",
-            json=cls.fake_charge,
-            headers={
-                "accountid": os.environ.get("FISERV_DEV_ACCOUNT_ID"),  # good
-                "merchantid": os.environ.get("FISERV_MERCHANT_ID"),  # good
-                "signature": f"Hmac {fake_hmac.decode()}",
-                "Authorization": f"Basic {basic.decode()}",
-            },
-        )
-
-        #NOTE: Doesn't work but just testing v2
         fake_hmac_v2 = api_helper.generate_fiserv_hmac(
             f"{FISERV_URL_V2}Charge",  #NOTE: Doesn't work but just testing v2
             "POST",

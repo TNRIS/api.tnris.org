@@ -762,20 +762,14 @@ class OrderSubmitViewSetSuper(
                             "company": "Texas Water Development Board",
                             "fee": str(round(transactionfee)),
                             "department": "Texas Geographic Information Office",
-                            "vendorid": "",  # TODO
                             "customerid": os.environ.get("FISERV_CUSTOMER_ID"),
-                            "agency": "TWDB",
+                            "agency": "580",
                             "batchid": "",
-                            "reportlines": "1",  # This should be how many report line details attributes.
+                            "reportlines": "3",  # This should be how many report line details attributes.
                             "reportlinedetails": [
                                 {
-                                    "id": "",
+                                    "id": "USAS1",
                                     "attributes": [
-                                        {
-                                            "name": "USASLINES",
-                                            "value": "3",
-                                            "type": "String",
-                                        },
                                         {
                                             "name": "USAS1CO",
                                             "value": "3719",
@@ -792,6 +786,16 @@ class OrderSubmitViewSetSuper(
                                             "type": "String",
                                         },
                                         {
+                                            "name": "USAS1AMOUNT",
+                                            "value": total,
+                                            "type": "String",
+                                        },
+                                    ],
+                                },
+                                {
+                                    "id": "USAS2",
+                                    "attributes": [
+                                        {
                                             "name": "USAS2CO",
                                             "value": "3879",
                                             "type": "String",
@@ -807,6 +811,16 @@ class OrderSubmitViewSetSuper(
                                             "type": "String",
                                         },
                                         {
+                                            "name": "USAS2AMOUNT",
+                                            "value": transactionfee,
+                                            "type": "String",
+                                        },
+                                    ]
+                                },
+                                {
+                                    "id": "USAS3",
+                                    "attributes": [
+                                    {
                                             "name": "USAS3CO",
                                             "value": "7219",
                                             "type": "String",
@@ -822,26 +836,11 @@ class OrderSubmitViewSetSuper(
                                             "type": "String",
                                         },
                                         {
-                                            "name": "USAS1AMOUNT",
-                                            "FieldValue": str(total),
+                                            "name": "USAS3AMOUNT",
+                                            "value": transactionfee,
                                             "type": "String",
                                         },
-                                        {
-                                            "FieldName": "USAS2AMOUNT",
-                                            "FieldValue": str(transactionfee),
-                                            "type": "String",
-                                        },
-                                        {
-                                            "FieldName": "USAS3AMOUNT",
-                                            "FieldValue": str(transactionfee),
-                                            "type": "String",
-                                        },
-                                        {
-                                            "FieldName": "CONV_FEE",
-                                            "FieldValue": str(transactionfee),
-                                            "type": "String",
-                                        },
-                                    ],
+                                    ]
                                 }
                             ],
                         }

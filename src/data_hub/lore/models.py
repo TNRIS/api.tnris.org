@@ -385,7 +385,7 @@ class ChcView(models.Model):
         'Mosaic Service URL',
         max_length=256
     )
-    counties = models.TextField(.replace('https://s3.amazonaws.com/data.tnris.org/', 'https://data.geographic.texas.gov/')
+    counties = models.TextField(
         'Counties'
     )
     source_name = models.CharField(

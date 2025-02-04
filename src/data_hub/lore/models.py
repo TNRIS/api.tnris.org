@@ -330,7 +330,7 @@ class Image(models.Model):
         super().delete(*args, **kwargs)
 
     def __str__(self):
-        return self.image_url
+        return self.image_url.replace('https://s3.amazonaws.com/data.tnris.org/', 'https://data.geographic.texas.gov/')
 
 
 """
@@ -385,7 +385,7 @@ class ChcView(models.Model):
         'Mosaic Service URL',
         max_length=256
     )
-    counties = models.TextField(
+    counties = models.TextField(.replace('https://s3.amazonaws.com/data.tnris.org/', 'https://data.geographic.texas.gov/')
         'Counties'
     )
     source_name = models.CharField(

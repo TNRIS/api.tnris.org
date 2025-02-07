@@ -32,18 +32,8 @@ from .serializers import (
     DataHubOrderSerializer,
     CampaignSubscriberSerializer)
 
-
 logger = logging.getLogger("errLog")
 logger.addHandler(watchtower.CloudWatchLogHandler())
-CLEANING_FLAG=False
-
-# Use testing URLS (Do not use in production)
-TESTING = False
-
-CCP_URL = 'https://securecheckout.cdc.nicusa.com/ccprest/api/v1/TX/'
-
-if TESTING:
-    CCP_URL = 'https://securecheckout-uat.cdc.nicusa.com/ccprest/api/v1/TX/'
 
 class CorsPostPermission(AllowAny):
     """

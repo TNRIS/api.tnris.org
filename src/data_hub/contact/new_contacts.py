@@ -108,18 +108,19 @@ class ContactViewset(viewsets.ViewSet):
             logger.info(msg)
         verify_req = api_helper.checkCaptcha(request.data["recaptcha"])
         if json.loads(verify_req.text)["success"]:
-            super().create(self, request)
+            self.create_super(request)
         else:
             return Response(
                 {"status": "failure", "message": "Captcha is incorrect."},
                 status=status.HTTP_403_FORBIDDEN,
             )
 
+# ContactViewset -> OrderFormViewSetSuper -> OrderFormViewSet
 
 # FORMS ORDER ENDPOINT
 class OrderFormViewSetSuper(
-    ContactViewset
-):
+        ContactViewset
+    ):
     """
     Handle TxGIO order form submissions
     """
@@ -181,44 +182,45 @@ class OrderFormViewSetSuper(
         except Exception as e:
             logger.error("Error creating order object at create_order_object.")
 
-    def create(self, request):
+    def create_super(self, request):
         """Create a order object and notify"""
         try:
             # Generate Access Code and one way encrypt it.
-            formatted = self.format_req(request.data.items())
+            formatted_items = self.format_req(request.data.items())
+            order_details = self.format_req(request.data.get("order_details").items())
             order_object = self.create_order_object(
-                email=formatted["email"],
-                order_details=formatted["order_details"]
+                email=order_details["email"],
+                order_details=order_details
             )
 
-            formatted["url"] = (
+            order_details["url"] = (
                 request.META["HTTP_REFERER"]
                 if "HTTP_REFERER" in request.META.keys()
                 else request.META["HTTP_HOST"]
             )
-            formatted["order_uuid"] = order_object.id
+            order_details["order_uuid"] = order_object.id
 
             ################################################
             # Begin configuration of emails to be sent.
             ################################################
-            email_template = EmailTemplate.objects.get(form_id=request.data["form_id"])
+            email_template = EmailTemplate.objects.get(form_id=order_details["form_id"])
             body = self.compile_email_body(
-                email_template.email_template_body, formatted
+                email_template.email_template_body, order_details
             )
             sender = (
                 os.environ.get("MAIL_DEFAULT_TO")
                 if email_template.sendpoint == "default"
-                else formatted[email_template.sendpoint]
+                else order_details[email_template.sendpoint]
             )
             replyer = (
-                formatted["email"]
-                if "email" in formatted.keys()
+                order_details["email"]
+                if "email" in order_details.keys()
                 else "unknown@tnris.org"
             )
 
             # If name was sent in request add it to the address information.
-            if "name" in formatted.keys():
-                replyer = "%s <%s>" % (formatted["name"], formatted["email"])
+            if "name" in order_details.keys():
+                replyer = "%s <%s>" % (order_details["name"], order_details["email"])
 
             # Send to ticketing system unless sendpoint has alternative key value in email template record.
             api_helper.send_raw_email(
@@ -229,7 +231,7 @@ class OrderFormViewSetSuper(
             )
 
             # If we get this far then send a notification to the requester via email, and a 201 created response.
-            self.notify_user(order_object, formatted["email"])
+            self.notify_user(order_object, order_details["email"])
             return Response(
                 {"status": "success", "message": "Success"},
                 status=status.HTTP_201_CREATED,
@@ -242,11 +244,10 @@ class OrderFormViewSetSuper(
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
 
-
 # Email type changed.
 class GenOtpViewSetSuper(
-    ContactViewset
-):
+        ContactViewset
+    ):
     """
     Regenerate One Time Passcode
     """
@@ -301,8 +302,8 @@ class GenOtpViewSetSuper(
 
 # Email type changed.
 class OrderStatusViewSetSuper(
-    ContactViewset
-):
+        ContactViewset
+    ):
     """
     Handle Checking the order status
     """
@@ -341,8 +342,8 @@ class OrderStatusViewSetSuper(
 
 # Email type changed.
 class InitiateRetentionCleanupViewSetSuper(
-    ContactViewset
-):
+        ContactViewset
+    ):
     """
     Delete old orders according to retention policy.
     """
@@ -652,8 +653,8 @@ class OrderCleanupViewSetSuper(ContactViewset):
             return response
 
 class OrderSubmitViewSetSuper(
-    ContactViewset
-):
+        ContactViewset
+    ):
     """
     Create and return a fiserv order url to HPP.
     """

@@ -98,7 +98,7 @@ class ContactViewset(viewsets.ViewSet):
             send_to=sender,
             reply_to=replyer,
         )
-
+    
     def format_req(self, items):
         return {k.lower().replace(" ", "_"): v for k, v in items}
 
@@ -108,7 +108,7 @@ class ContactViewset(viewsets.ViewSet):
             logger.info(msg)
         verify_req = api_helper.checkCaptcha(request.data["recaptcha"])
         if json.loads(verify_req.text)["success"]:
-            self.create_super(request)
+            return self.create_super(request)
         else:
             return Response(
                 {"status": "failure", "message": "Captcha is incorrect."},
@@ -117,7 +117,7 @@ class ContactViewset(viewsets.ViewSet):
 
 # ContactViewset -> OrderFormViewSetSuper -> OrderFormViewSet
 
-# FORMS ORDER ENDPOINT
+# FORMS ORDER ENDPOINT #Beta testing done 02/18/2024
 class OrderFormViewSetSuper(
         ContactViewset
     ):
@@ -125,7 +125,7 @@ class OrderFormViewSetSuper(
     Handle TxGIO order form submissions
     """
     @receiver(pre_save, sender=OrderType)
-    def my_callback(sender, instance, *args, **kwargs):
+    def my_callback(sender, instance, *args, **kwargs): #Beta testing done 02/18/2024
         contact_viewset = ContactViewset()
         instance.order_approved
         if instance.order_approved and instance.approved_charge:
@@ -148,7 +148,7 @@ class OrderFormViewSetSuper(
                 status=status.HTTP_201_CREATED,
             )
 
-    def notify_user(self, order_object, email):
+    def notify_user(self, order_object, email): #Beta testing done 02/18/2024
         # Notify user
         email_template = EmailTemplate.objects.get(form_id="notify-user")
         self.send_template_email(
@@ -158,7 +158,7 @@ class OrderFormViewSetSuper(
             os.environ.get("STRATMAP_EMAIL"),
         )
 
-    def create_order_object(self, email, order_details, test_otp=None):
+    def create_order_object(self, email, order_details, test_otp=None): #Beta testing done 02/18/2024
         """Create the order and add it to the database."""
 
         try:
@@ -178,11 +178,15 @@ class OrderFormViewSetSuper(
                 otp=hashlib.sha256(bytes(otp + salt + pepper, "utf8")).hexdigest(),
                 otp_age=time.time(),
             )
-            return OrderType.objects.create(order_details=order_details)
+            order_details.save()
+            order = OrderType.objects.create(order_details=order_details)
+            order.save()
+
+            return order
         except Exception as e:
             logger.error("Error creating order object at create_order_object.")
 
-    def create_super(self, request):
+    def create_super(self, request): #Beta testing done 02/18/2024
         """Create a order object and notify"""
         try:
             # Generate Access Code and one way encrypt it.
@@ -198,8 +202,11 @@ class OrderFormViewSetSuper(
                 if "HTTP_REFERER" in request.META.keys()
                 else request.META["HTTP_HOST"]
             )
-            order_details["order_uuid"] = order_object.id
-
+            order_details["order_uuid"] = str(order_object.id)
+            order_object.order_details.details = json.dumps(order_details)
+            order_object.order_details.save()
+            order_object.save()
+            # gettransaction orderid must = orderid from getrequestid (getTransaction is recommended over getpaymentdetails)
             ################################################
             # Begin configuration of emails to be sent.
             ################################################
@@ -223,7 +230,7 @@ class OrderFormViewSetSuper(
                 replyer = "%s <%s>" % (order_details["name"], order_details["email"])
 
             # Send to ticketing system unless sendpoint has alternative key value in email template record.
-            api_helper.send_raw_email(
+            api_helper.send_email(
                 subject=email_template.email_template_subject,
                 body=body,
                 send_to=sender,
@@ -244,17 +251,14 @@ class OrderFormViewSetSuper(
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
 
-# Email type changed.
+# Beta testing done 02/18/2024
 class GenOtpViewSetSuper(
         ContactViewset
     ):
     """
     Regenerate One Time Passcode
     """
-
-    permission_classes = [CorsPostPermission]
-
-    def create(self, request, format=None):
+    def create_super(self, request, format=None):
         try:
             order = OrderType.objects.get(id=request.query_params["uuid"])
             details = json.loads(order.order_details.details)
@@ -276,10 +280,11 @@ class GenOtpViewSetSuper(
             email_template = EmailTemplate.objects.get(form_id="gen-otp")
             # ContactViewset.format_req(request.data.items())
             formatted = self.format_req(request.data.items())
+            formatted["otp"] = otp
             self.send_template_email(
                 email_template,
                 formatted,
-                details["Email"],
+                details["email"],
                 os.environ.get("STRATMAP_EMAIL"),
             )
 
@@ -300,17 +305,14 @@ class GenOtpViewSetSuper(
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
 
-# Email type changed.
+# Beta testing done 02/18/2024
 class OrderStatusViewSetSuper(
         ContactViewset
     ):
     """
     Handle Checking the order status
     """
-
-    permission_classes = [CorsPostPermission]
-
-    def create(self, request, format=None):  # TODO: Continue here 12
+    def create_super(self, request, format=None):
         order = OrderType.objects.get(id=request.query_params["uuid"])
         authorized = api_helper.auth_order(request.data, order)
         if not authorized:
@@ -340,7 +342,7 @@ class OrderStatusViewSetSuper(
                 status=status.HTTP_200_OK,
             )
 
-# Email type changed.
+# Beta testing done 02/18/2024
 class InitiateRetentionCleanupViewSetSuper(
         ContactViewset
     ):
@@ -348,9 +350,7 @@ class InitiateRetentionCleanupViewSetSuper(
     Delete old orders according to retention policy.
     """
 
-    permission_classes = (AllowAny,)
-
-    def create(self, request, format=None):
+    def create_super(self, request, format=None):
         """Delete old orders according to retention policy."""
 
         # Check CCP ACCESS CODE to prevent bots from making requests.
@@ -446,10 +446,7 @@ class OrderCleanupViewSetSuper(ContactViewset):
     """
     Begin Cleanup routines
     """
-
-    permission_classes = (AllowAny,)
-
-    def create(self, request, format=None):
+    def create_super(self, request, format=None):
         global CLEANING_FLAG
         if CLEANING_FLAG:
             if api_helper.checkLogger():
@@ -516,29 +513,6 @@ class OrderCleanupViewSetSuper(ContactViewset):
                                 reply_email,
                             )
 
-                            # email_body = """
-                            #     A payment has been received from from: https://data.geographic.texas.gov/order/
-                            #     Please see order details below. And ship the order. \n
-                            #     Form ID: data-tnris-org-order
-                            #     Order ID: %s
-                            #     Form parameters
-                            #     ================== \n
-                            #     """ % str(
-                            #     order["id"]
-                            # )
-
-                            # email_body = email_body + order_string
-                            # reply_email = "unknown@tnris.org"
-                            # if "Email" in order_obj:
-                            #     reply_email = order_obj["Email"]
-                            # api_helper.send_raw_email(
-                            #     subject="Dataset Order Update: Payment has been received.",
-                            #     body=email_body,
-                            #     send_from=os.environ.get("MAIL_DEFAULT_FROM"),
-                            #     send_to=os.environ.get("MAIL_DEFAULT_TO"),
-                            #     reply_to=reply_email,
-                            # )
-
                     # If no receipt was received or order was sent after 90 days then archive order automatically.
                     if difference.days > 90 and (
                         receipt.status_code != 200 or order["order_sent"] == True
@@ -588,15 +562,15 @@ class OrderCleanupViewSetSuper(ContactViewset):
             CLEANING_FLAG = False
             return response
 
-    def get_receipt(self, request, format): # TODO: Testing done, check pt 2
+    def get_receipt(self, request, format): # TODO: Testing done, check pt 2 
         # Look for a successful receipt. Otherwise return 404.
         try:
             order = OrderType.objects.get(id=request.query_params["uuid"])
             if order.order_approved:
-                endpoint = f"{FISERV_URL}GetPaymentDetails"
+                endpoint = f"{FISERV_URL}GetPaymentDetails" # Change over to gettransaction
                 basic = api_helper.generate_basic_auth()
 
-                body = {
+                body = { # check orderid here.
                     "accountid": os.environ.get("FISERV_DEV_ACCOUNT_ID"),
                     "token": str(order.order_token)
                 }
@@ -652,6 +626,7 @@ class OrderCleanupViewSetSuper(ContactViewset):
         finally:
             return response
 
+# Beta testing done 02/18/2024
 class OrderSubmitViewSetSuper(
         ContactViewset
     ):
@@ -659,9 +634,9 @@ class OrderSubmitViewSetSuper(
     Create and return a fiserv order url to HPP.
     """
 
-    def create(self, request, format=None):
+    def create_super(self, request, format=None):
         try:
-            orderObj = OrderType.objects
+            orderObj = OrderType.objects 
             order = orderObj.get(id=request.query_params["uuid"])
             authorized = api_helper.auth_order(request.data, order)
             if not authorized:

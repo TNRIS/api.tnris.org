@@ -111,11 +111,15 @@ class InitiateRetentionCleanupViewSet(InitiateRetentionCleanupViewSetSuper):
     """
     Initiate retention cleanup viewset.
     """
+    permission_classes = (AllowAny,)
 
 class OrderCleanupViewSet(OrderCleanupViewSetSuper):
     """
     Order cleanup viewset.
     """
+    permission_classes = (AllowAny,)
+    def create(self, request):
+        return self.intro(request, "running OrderCleanupViewSet")
 
 class OrderSubmitViewSet(OrderSubmitViewSetSuper):
     """
@@ -123,18 +127,7 @@ class OrderSubmitViewSet(OrderSubmitViewSetSuper):
     """
     permission_classes = [CorsPostPermission]
     def create(self, request):
-        if api_helper.checkLogger():
-            logger.info("Starting OrderSubmitViewSet")
-        verify_req = api_helper.checkCaptcha(request.data["recaptcha"])
-        if json.loads(verify_req.text)["success"]:
-            return super().create(self, request)
-        else:
-            if api_helper.checkLogger():
-                logger.info("An order has failed because Captcha is incorrect.")
-            return Response(
-                {"status": "failure", "message": "Captcha is incorrect."},
-                status=status.HTTP_403_FORBIDDEN,
-            )
+        return self.intro(request, "Starting OrderSubmitViewSet")
 
 class OrderFormViewSet(OrderFormViewSetSuper):
     """

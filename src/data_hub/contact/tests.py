@@ -57,21 +57,21 @@ class GeneralTest(TestCase):
     fixtures = ["email_templates.json"]
     uuid = ""
     order_details_new = {
-        "Name": "FIRSTNAME LASTNAME",
-        "Email": "TxGIO-DevOps@twdb.texas.gov",
-        "Phone": "1112223333",
-        "Address": "State Parking Garage E",
-        "City": "Austin",
-        "State": "Texas",
-        "Zipcode": "78660",
-        "Organization": "TEST",
-        "Industry": "TESTING",
-        "Fedex": "",
-        "Notes": "Test Note",
-        "Delivery": "Test Delivery",
-        "HardDrive": "Test Hard Drive",
-        "Payment": "CC",
-        "Order": "Test item 1\nTest Item 2",
+        "name": "FIRSTNAME LASTNAME",
+        "email": "TxGIO-DevOps@twdb.texas.gov",
+        "phone": "1112223333",
+        "address": "State Parking Garage E",
+        "city": "Austin",
+        "state": "Texas",
+        "zipcode": "78660",
+        "organization": "TEST",
+        "industry": "TESTING",
+        "fedex": "",
+        "notes": "Test Note",
+        "delivery": "Test Delivery",
+        "harddrive": "Test Hard Drive",
+        "payment": "CC",
+        "order": "Test item 1\nTest Item 2",
         "form_id": "data-tnris-org-order",
     }
 
@@ -258,10 +258,12 @@ class GeneralTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         basic = api_helper.generate_basic_auth()
+
+        ofs = OrderFormViewSetSuper() # I need to call a method before creation.
         order = OrderFormViewSetSuper.create_order_object(
             MagicMock(),
             email="TxGIO-DevOps@twdb.texas.gov",
-            order_details=cls.order_details_new,
+            order_details=ofs.format_req(cls.order_details_new.items()),
             test_otp="12345",
         )
         order.order_approved = True
@@ -280,7 +282,7 @@ class GeneralTest(TestCase):
             },
             f"?uuid={cls.uuid}",
         )
-        submit_form_super.create(request)
+        submit_form_super.create_super(request)
 
         fake_token_hmac = api_helper.generate_fiserv_hmac(
             f"{FISERV_URL}tokenize",
@@ -347,7 +349,7 @@ class GeneralTest(TestCase):
 
         created.order_approved = True
         created.approved_charge = 23
-        created.order_token = json.loads(fake_response.text)["transaction"]["pgtransactionid"]
+        created.order_token = json.loads(fake_response_v2.text)["transactions"][0]["pgtransactionid"]
         created.save()
 
         # Put completed order in database.
@@ -374,7 +376,7 @@ class SnappayTestCase(GeneralTest):
             {"access_code": os.environ.get("CCP_ACCESS_CODE")},
             f"?uuid={self.uuid}"
         )
-        response = order_cleanup.create(request)
+        response = order_cleanup.create_super(request)
         self.assertEquals(response.status_code, 200, "Order Cleanup unsuccessful.")
         self.assertEquals(mail.outbox[0].subject, 'Dataset Order Update: Payment has been received.', "Dataset order update wasn't first email. ")
         self.assertEquals(len(mail.outbox), 1, 'Dataset Order Update: Payment has been received.')
@@ -386,7 +388,7 @@ class SnappayTestCase(GeneralTest):
         request = create_super_request(
             {"approve_run": "none", "access_code": os.environ.get("CCP_ACCESS_CODE")}
         )
-        response = initiate_cleanup.create(request)
+        response = initiate_cleanup.create_super(request)
         self.assertEquals(response.status_code, 200, "Order status unsuccessful.")
 
     def test_order_status(self):
@@ -404,7 +406,7 @@ class SnappayTestCase(GeneralTest):
             },
             f"?uuid={self.uuid}",
         )
-        response = order_status_super.create(request)
+        response = order_status_super.create_super(request)
 
         # Make sure we get a 200 created response.
         self.assertEquals(response.status_code, 200, "Order status unsuccessful.")
@@ -427,13 +429,15 @@ class SnappayTestCase(GeneralTest):
             {
                 "recaptcha": "none",
                 "form_id": "data-tnris-org-order",
-                "order_details": {"item": 50, "PAYMENT": 5.42},
+                "order_details": {"item": 50, "PAYMENT": 5.42, "EMAIL": os.environ.get(
+                    "MAIL_DEFAULT_TO"
+                )},
                 "EMAIL": os.environ.get(
                     "MAIL_DEFAULT_TO"
                 ),  # Caps to test that route makes keys lowercase
             }
         )
-        response = order_form_super.create(request)
+        response = order_form_super.create_super(request)
 
         # Make sure order was submitted and created successfully.
         orders = OrderType.objects.get_queryset()
@@ -464,13 +468,15 @@ class SnappayTestCase(GeneralTest):
             {
                 "recaptcha": "none",
                 "form_id": "order-map",
-                "order_details": {"item": 50, "PAYMENT": 5.43},
+                "order_details": {"item": 50, "PAYMENT": 5.43, "EMAIL": os.environ.get(
+                    "MAIL_DEFAULT_TO"
+                )},
                 "EMAIL": os.environ.get(
                     "MAIL_DEFAULT_TO"
                 ),  # Caps to test that route makes keys lowercase
             }
         )
-        response = order_form_super.create(request)
+        response = order_form_super.create_super(request)
 
         # Make sure we get a 201 created response.
         self.assertEquals(
@@ -514,7 +520,7 @@ class SnappayTestCase(GeneralTest):
         request = create_super_request({"recaptcha": "none"}, f"?uuid={self.uuid}")
 
         genotp_form = GenOtpViewSetSuper()
-        response = genotp_form.create(request)
+        response = genotp_form.create_super(request)
         self.assertEquals(
             response.status_code,
             200,
@@ -550,7 +556,7 @@ class SnappayTestCase(GeneralTest):
             },
             f"?uuid={self.uuid}",
         )
-        response = submit_form_super.create(request)
+        response = submit_form_super.create_super(request)
 
         # # Make sure we get a 201 created response.
         self.assertEquals(

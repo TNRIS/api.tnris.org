@@ -422,6 +422,15 @@ class SnappayTestCase(GeneralTest):
             "Order submit route not sending 403 Forbidden signal.",
         )
 
+    def test_redirect(self):
+        response = requests.post(
+            "https://localhost:8000/order/redirect?status=success",
+            json=payload_valid_test
+        )
+
+        print("Here")
+        
+
     def test_order_submit_create(self):
         """Test Order Submit create function"""
         order_form_super = OrderFormViewSetSuper()

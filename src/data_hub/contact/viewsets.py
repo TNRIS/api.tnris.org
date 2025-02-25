@@ -7,6 +7,8 @@ import os
 import logging
 import watchtower
 
+from django.shortcuts import redirect
+
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework import mixins, schemas, status, viewsets
 from rest_framework.response import Response
@@ -90,6 +92,15 @@ class SubmitFormViewSet(viewsets.ViewSet):
         # Check Recaptcha return if it fails.
         return Response("Endpoint deprecated", status=status.HTTP_410_GONE)
 
+class RedirectUrlViewSet(viewsets.ViewSet):
+    """
+    Redirect to a url.
+    """
+    permission_classes = [CorsPostPermission]
+    def create(self, request):
+        # Check Recaptcha return if it fails.
+        return redirect("https://data.geographic.texas.gov/order/redirect?status=success")
+
 class GenOtpViewSet(GenOtpViewSetSuper):
     """
     Generate One time password viewset.
@@ -112,6 +123,8 @@ class InitiateRetentionCleanupViewSet(InitiateRetentionCleanupViewSetSuper):
     Initiate retention cleanup viewset.
     """
     permission_classes = (AllowAny,)
+    def create(self, request):
+       return self.intro(request, "running InitiateRetentionCleanupViewSet")
 
 class OrderCleanupViewSet(OrderCleanupViewSetSuper):
     """
@@ -129,7 +142,7 @@ class OrderSubmitViewSet(OrderSubmitViewSetSuper):
     def create(self, request):
         return self.intro(request, "Starting OrderSubmitViewSet")
 
-class OrderFormViewSet(OrderFormViewSetSuper):
+class OrderFormViewSet(OrderFormViewSetSuper): #test
     """
     Order form viewset.
     """

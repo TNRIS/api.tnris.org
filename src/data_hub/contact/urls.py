@@ -28,6 +28,7 @@ from .viewsets import (
     OrderCleanupViewSet,
     InitiateRetentionCleanupViewSet,
     GenOtpViewSet,
+    RedirectUrlViewSet,
     ZipPolicyViewSet,
     ImagePolicyViewSet,
     FilePolicyViewSet,
@@ -42,6 +43,7 @@ router.register(r'submit/?', SubmitFormViewSet, basename="SubmitForm") # Depreca
 router.register(r'order/?', OrderFormViewSet, basename="OrderForm")
 router.register(r'order/submit/?', OrderSubmitViewSet, basename="PaymentForm")
 router.register(r'order/status/?', OrderStatusViewSet, basename="OrderStatus")
+router.register(r'order/redirect/?', RedirectUrlViewSet, basename="RedirectUrl")
 router.register(r'order/cleanup/?', OrderCleanupViewSet, basename="OrderCleanup")
 router.register(r'order/retentionCleanup/?', InitiateRetentionCleanupViewSet, basename="InitiateRetentionCleanup")
 router.register(r'order/otp/?', GenOtpViewSet, basename="OrderOtp")

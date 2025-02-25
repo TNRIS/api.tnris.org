@@ -196,7 +196,7 @@ class TnrisCarouselImageViewSet(viewsets.ReadOnlyModelViewSet):
         return queryset
 
 
-class TnrisMetricsViewSet(viewsets.ViewSet):
+class TnrisMetricsViewSet(viewsets.ViewSet): #Deprecated not needed.
     """
     Retrieve download statistics for the current month
     """

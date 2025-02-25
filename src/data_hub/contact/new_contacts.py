@@ -15,6 +15,7 @@ from rest_framework.response import Response
 from django.conf import settings
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
+
 from modules.api_helper import CorsPostPermission
 from modules.api_helper import logger
 from modules import api_helper
@@ -27,6 +28,7 @@ CLEANING_FLAG = False
 TESTING = True
 FISERV_URL_V2 = "https://snappaydirectapi-cert.fiserv.com/api/interop/v2/"
 FISERV_URL = "https://snappaydirectapi-cert.fiserv.com/api/interop/"
+SEND_HTML_FLAG = True # More meaningful than a simple True
 
 if TESTING:
     FISERV_URL_V2 = "https://snappaydirectapi-cert.fiserv.com/api/interop/v2/"
@@ -66,7 +68,7 @@ class ContactViewset(viewsets.ViewSet):
             status=status.HTTP_400_BAD_REQUEST,
         )
 
-    def send_template_email(self, email_template, formatted, sender, replyer):
+    def send_template_email(self, email_template, formatted, sender, replyer, html=False):
         """Send an email to the template email (Configured through API)
         sender and replyer default to mail_default to unless sendpoint
         """
@@ -90,14 +92,23 @@ class ContactViewset(viewsets.ViewSet):
         elif "firstname" in formatted.keys() and "lastname" in formatted.keys():
             replyer = f"{formatted['firstname']} {formatted['lastname']} <{formatted['email']}>"
 
-        # send to ticketing system unless sendpoint has alternative key value
-        # in email template record
-        api_helper.send_raw_email(
-            email_template.email_template_subject,
-            body,
-            send_to=sender,
-            reply_to=replyer,
-        )
+
+        if(html == SEND_HTML_FLAG):
+            api_helper.send_html_email(
+                email_template.email_template_subject,
+                body,
+                send_to=sender,
+                reply_to=replyer,
+            )
+        else:
+            # send to ticketing system unless sendpoint has alternative key value
+            # in email template record
+            api_helper.send_raw_email(
+                email_template.email_template_subject,
+                body,
+                send_to=sender,
+                reply_to=replyer,
+            )
     
     def format_req(self, items):
         return {k.lower().replace(" ", "_"): v for k, v in items}
@@ -141,6 +152,7 @@ class OrderFormViewSetSuper(
                     {"uuid": str(instance.pk)},
                     formatted["email"],
                     os.environ.get("STRATMAP_EMAIL"),
+                    SEND_HTML_FLAG
                 )
 
             return Response(
@@ -156,6 +168,7 @@ class OrderFormViewSetSuper(
             {"uuid": str(order_object.id)},
             email,
             os.environ.get("STRATMAP_EMAIL"),
+            SEND_HTML_FLAG
         )
 
     def create_order_object(self, email, order_details, test_otp=None): #Beta testing done 02/18/2024
@@ -228,9 +241,9 @@ class OrderFormViewSetSuper(
             # If name was sent in request add it to the address information.
             if "name" in order_details.keys():
                 replyer = "%s <%s>" % (order_details["name"], order_details["email"])
-
+            #TODO: Fix tests
             # Send to ticketing system unless sendpoint has alternative key value in email template record.
-            api_helper.send_email(
+            api_helper.send_raw_email(
                 subject=email_template.email_template_subject,
                 body=body,
                 send_to=sender,
@@ -286,6 +299,7 @@ class GenOtpViewSetSuper(
                 formatted,
                 details["email"],
                 os.environ.get("STRATMAP_EMAIL"),
+                SEND_HTML_FLAG
             )
 
             if api_helper.checkLogger():
@@ -674,7 +688,7 @@ class OrderSubmitViewSetSuper(
                 "currencycode": "USD",  # required
                 "customerid": os.environ.get("FISERV_CUSTOMER_ID"),  # required
                 "userid": os.environ.get("FISERV_USER_ID"),  # required
-                "redirecturl": "https://data.geographic.texas.gov/order/redirect?status=success",  # required
+                "redirecturl": "https://localhost:8000/api/v1/contact/order/redirect?status=success",
                 "cancelredirecturl": "https://data.geographic.texas.gov/order/redirect?status=cancel",  # Optional but we can use it.
                 "reference": "UPI",  # Required
                 "templateid": 1092,  # required

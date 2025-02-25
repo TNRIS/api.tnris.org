@@ -99,7 +99,7 @@ def get_secret(secret_name):
     return json.loads(get_secret_value_response["SecretString"])
 
 
-def send_email(
+def send_html_email(
     subject,
     body,
     send_from=os.environ.get("MAIL_DEFAULT_FROM"),

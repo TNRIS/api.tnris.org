@@ -194,24 +194,3 @@ class TnrisCarouselImageViewSet(viewsets.ReadOnlyModelViewSet):
         # order by carousel_order then image_name
         queryset = TnrisImage.objects.filter(**args).order_by('carousel_order', 'image_name')
         return queryset
-
-
-class TnrisMetricsViewSet(viewsets.ViewSet): #Deprecated not needed.
-    """
-    Retrieve download statistics for the current month
-    """
-    permission_classes = (AllowAny,)
-    
-    def create(self, request, format=None):
-        try:
-            s3_client = boto3.client('s3')
-            html = s3_client.get_object(Bucket='tnris-analytics', Key='analytics.json')
-            resp = html['Body'].read()
-
-            return Response(
-                {"status": "success", "message": resp},
-                status=status.HTTP_200_OK,
-            )
-        except Exception as e:
-            if(api_helper.checkLogger()):
-                logger.error("Cannot retrieve download stats. Error: " + str(e))

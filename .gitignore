@@ -184,3 +184,7 @@ etl/source_data/texasimageryservicerequest.csv
 
 #fixtures
 email_templates.json
+
+#For testing https
+cert.pem
+key.pem

@@ -447,6 +447,41 @@
         </div>
 
         <script>
+            const getCSRFToken = () => {
+                const cookies = document.cookie.split(";");
+                let csrfToken = cookies.find((ck) =>
+                    ck.trim().startsWith("csrftoken=")
+                );
+                return decodeURIComponent(csrfToken.trim().substring(10));
+            };
+            let testBody = {
+                reportName: "rob" + Date.now(),
+                resourceURIs: ["services/", "services/Address_Points"],
+            };
+            let myPromise = fetch(
+                "http://localhost:8000/analytics/update_services_in_arcgis_report/",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": getCSRFToken(),
+                    },
+                    body: JSON.stringify(testBody),
+                }
+            );
+            myPromise
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error("error response" + response);
+                    }
+                    return response.json();
+                })
+                .then((data) => {
+                    console.log(data);
+                })
+                .catch((error) => {
+                    console.log("update did not work", error);
+                });
             const buildChart = (chartId, chartLabel, labels, data) => {
                 const ctx = document.getElementById(chartId);
                 new Chart(ctx, {

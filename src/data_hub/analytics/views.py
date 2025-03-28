@@ -59,13 +59,13 @@ def get_arcgis_token():
 def get_all_service_and_subservices(request):
     # initialize the list of services and subservices and their shown status
     global all_services
-    # if all_services is not None:
-    #     return JsonResponse(all_services, safe=False)
+    if all_services is not None:
+        return JsonResponse(all_services, safe=False)
     
     token = get_arcgis_token()    
-    response = requests.get('https://feature.geographic.texas.gov/arcgis/admin/usagereports/analytics_dashboard?f=json&token=' + token)
-    currentServices = response.json()["queries"][0]["resourceURIs"]
-    print("currentServices " + str(currentServices))
+    # response = requests.get('https://feature.geographic.texas.gov/arcgis/admin/usagereports/analytics_dashboard?f=json&token=' + token)
+    # currentServices = response.json()["queries"][0]["resourceURIs"]
+    # print("currentServices " + str(currentServices))
 
     all_services = [
         {  "serviceName": "services/", "isShown": True },
@@ -79,6 +79,7 @@ def get_all_service_and_subservices(request):
         {  "serviceName": "services/Parcels", "isShown": False }
     ]
     for s in all_services:
+        print("serviceName")
         print(s["serviceName"])
         # if s["serviceName"] in currentServices:
         #     s["isShown"] = True
@@ -90,12 +91,58 @@ def get_all_service_and_subservices(request):
         # print(response.text)
         s["subservices"] = []
         for subservice in response.json()["services"]:
+            print("subserviceName")
             print(subservice["serviceName"])
             subserviceFullName = s["serviceName"] + "/" + subservice["serviceName"] + ".MapServer"
             # isShown = subserviceFullName in currentServices
             s["subservices"].append({"serviceName": subserviceFullName, "isShown": False})
             
     return JsonResponse(all_services, safe=False)
+
+@login_required(login_url='/admin/login/')
+def update_services_in_arcgis_report(request):
+    print("in update services")
+    token = get_arcgis_token()
+    print("reportName from request" + str(request.POST.get("reportName")))
+    reportName = request.POST.get("reportName")
+    resourceURIs = request.POST.get("resourceURIs")
+    print("request method is ")
+    print(request.method)
+    print(reportName)
+    print(resourceURIs)
+
+    # default_dates = get_default_start_and_end_dates()
+    # start_date = request.POST.get('start_date', default=round(default_dates[0].timestamp() / 100) * 100000)
+    # end_date = request.POST.get('end_date', default=round(default_dates[1].timestamp() / 100) * 100000)
+    # # for some reason, the default argument isn't working, so using the code below
+    # if (not start_date): 
+    #     start_date = str(round(default_dates[0].timestamp() / 100) * 100000)
+    # if (not end_date): 
+    #     end_date = str(round(default_dates[1].timestamp() / 100) * 100000)
+    # print('from', start_date)
+    # print('to', end_date)
+
+
+    # queries ='"queries":[]'
+    # if len(resourceURIs) > 0:
+    #     queries = '"queries":[{"resourceURIs":' + str(resourceURIs) + ',"metrics":["RequestCount"]}]'
+    # print("queries " + queries)
+    # data = {'usagereport': '{"reportname":"' + reportName + '","since":"CUSTOM",' + str(queries) + ',"metadata":{"temp":false,"title":"Total requests for the last 7 days","managerReport":true,"styles":{"services/":{"color":"#D900D9"}}},"from":' + str(start_date) + ',"to":' + str(end_date) + '}', 'f': 'json', 'token': token}
+    # print("edit data " + str(data))
+
+    # response = requests.get('https://feature.geographic.texas.gov/arcgis/admin/usagereports/' + reportName + '?f=json&token=' + token)
+    # print("first request " + response.status_code)
+    # # check if 404 error    
+    # if (response.status_code == 404):
+    #     response = requests.post('https://feature.geographic.texas.gov/arcgis/admin/usagereports/add', data=data)
+    # else:
+    #     response = requests.post('https://feature.geographic.texas.gov/arcgis/admin/usagereports/analytics_dashboard/edit', data=data)
+
+    # print(response.txt)
+    return HttpResponse("OK")
+
+    # When update successfully returns, call get stats from arcgis.  
+    # tear out all the code to edit the report
 
 @login_required(login_url='/admin/login/')
 def get_stats_from_arcgis(request):
@@ -108,6 +155,7 @@ def get_stats_from_arcgis(request):
     # toggle the service listed in the request and 
     # add any shown service to the list of resourceURIs
     serviceToToggle = request.GET.get("serviceToToggle")
+    print("service to toggle")
     print(serviceToToggle)
     resourceURIs = []
     for service in all_services:

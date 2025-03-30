@@ -447,41 +447,6 @@
         </div>
 
         <script>
-            const getCSRFToken = () => {
-                const cookies = document.cookie.split(";");
-                let csrfToken = cookies.find((ck) =>
-                    ck.trim().startsWith("csrftoken=")
-                );
-                return decodeURIComponent(csrfToken.trim().substring(10));
-            };
-            let testBody = {
-                reportName: "rob" + Date.now(),
-                resourceURIs: ["services/", "services/Address_Points"],
-            };
-            let myPromise = fetch(
-                "http://localhost:8000/analytics/update_services_in_arcgis_report/",
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "X-CSRFToken": getCSRFToken(),
-                    },
-                    body: JSON.stringify(testBody),
-                }
-            );
-            myPromise
-                .then((response) => {
-                    if (!response.ok) {
-                        throw new Error("error response" + response);
-                    }
-                    return response.json();
-                })
-                .then((data) => {
-                    console.log(data);
-                })
-                .catch((error) => {
-                    console.log("update did not work", error);
-                });
             const buildChart = (chartId, chartLabel, labels, data) => {
                 const ctx = document.getElementById(chartId);
                 new Chart(ctx, {
@@ -552,42 +517,34 @@
                 });
             };
 
-            // toggle the service and update the line chart
-            // if service is null, just return the chart with
-            // whatever services are currently turned on
-            const toggleService = async (service) => {
-                const lineChartContainer =
-                    document.getElementById("line-chart-div");
-                lineChartContainer.innerHTML =
-                    "<div class='line-chart-stand-in'>Loading ...</div>";
+            const convertDateToTime = (dateString) => {
+                // assumes date string in YYYY-MM-DD format
+                if (!dateString) return;
+                const [year, month, day] = dateString.split("-");
+                return new Date(year, month - 1, day).getTime();
+            };
 
-                // build the date params, if any
+            const getQueryParam = (paramName) => {
                 const queryParams = window.location.search.split("?")[1];
-                const convertDateToTime = (dateString) => {
-                    // assumes date string in YYYY-MM-DD format
-                    const [year, month, day] = dateString.split("-");
-                    return new Date(year, month - 1, day).getTime();
-                };
-                let startDate = "";
-                let endDate = "";
                 if (queryParams) {
                     const queryParamsArray = queryParams.split("&");
-                    queryParamsArray.forEach((param) => {
-                        if (param.startsWith("start_date")) {
-                            startDate = convertDateToTime(param.split("=")[1]);
-                        }
-                        if (param.startsWith("end_date")) {
-                            endDate = convertDateToTime(param.split("=")[1]);
-                        }
-                    });
+                    const param = queryParamsArray.find((param) =>
+                        param.startsWith(paramName)
+                    );
+                    console.log(param);
+                    return param ? param.split("=")[1] : "";
                 }
-                const response = await fetch(
-                    `/analytics/get_stats_from_arcgis/?serviceToToggle=${service}&start_date=${startDate}&end_date=${endDate}`
+            };
+
+            const getCSRFToken = () => {
+                const cookies = document.cookie.split(";");
+                let csrfToken = cookies.find((ck) =>
+                    ck.trim().startsWith("csrftoken=")
                 );
+                return decodeURIComponent(csrfToken.trim().substring(10));
+            };
 
-                const result = await response.json();
-                console.log(result);
-
+            const parseArcGISReport = (result) => {
                 // retrieve the data and build the chart
                 let datasets = [];
                 if (result.report["report-data"]) {
@@ -626,6 +583,8 @@
                     );
                 }
 
+                const lineChartContainer =
+                    document.getElementById("line-chart-div");
                 if (datasets.length > 0) {
                     lineChartContainer.innerHTML =
                         "<canvas id='line-chart'></canvas>";
@@ -634,6 +593,90 @@
                     lineChartContainer.innerHTML =
                         "<div class='line-chart-stand-in'>No Services Selected.</div>";
                 }
+            };
+
+            // toggle the service and update the line chart
+            // if service is null, just return the chart with
+            // whatever services are currently turned on
+            const toggleService = async (serviceName) => {
+                console.log(serviceName);
+                const lineChartContainer =
+                    document.getElementById("line-chart-div");
+                lineChartContainer.innerHTML =
+                    "<div class='line-chart-stand-in'>Loading ...</div>";
+
+                const reportName =
+                    sessionStorage.getItem("reportName") || Date.now();
+                sessionStorage.setItem("reportName", reportName);
+
+                // build resourceURIs; these take the form "services/", "services/Address_Points", etc.
+                // also update the allServices array which shows the current status about whether a given
+                // statistics line chart is shown yet
+                const allServices = JSON.parse(
+                    sessionStorage.getItem("allServices")
+                );
+                console.log(allServices);
+                let resourceURIs = [];
+                allServices.forEach((service) => {
+                    if (service.serviceName === serviceName) {
+                        service.isShown = !service.isShown;
+                    }
+                    if (service.isShown) {
+                        resourceURIs.push(service.serviceName);
+                    }
+                    if (service.subservices) {
+                        service.subservices.forEach((subservice) => {
+                            if (subservice.serviceName === serviceName) {
+                                subservice.isShown = !subservice.isShown;
+                            }
+                            if (subservice.isShown) {
+                                resourceURIs.push(subservice.serviceName);
+                            }
+                        });
+                    }
+                });
+                console.log(allServices);
+                console.log(resourceURIs);
+                // store the updated allServices object back in session storage
+                sessionStorage.setItem(
+                    "allServices",
+                    JSON.stringify(allServices)
+                );
+
+                let updateServicesBody = {
+                    reportName,
+                    resourceURIs,
+                    startDate: convertDateToTime(getQueryParam("start_date")),
+                    endDate: convertDateToTime(getQueryParam("end_date")),
+                };
+                await fetch(
+                    "http://localhost:8000/analytics/update_services_in_arcgis_report/",
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-CSRFToken": getCSRFToken(),
+                        },
+                        body: JSON.stringify(updateServicesBody),
+                    }
+                )
+                    .then((response) => {
+                        if (!response.ok) {
+                            throw new Error("error response" + response);
+                        }
+                    })
+                    .then(async () => {
+                        const response = await fetch(
+                            `/analytics/get_stats_from_arcgis/?reportName=${reportName}`
+                        );
+
+                        const result = await response.json();
+                        console.log(result);
+                        parseArcGISReport(result);
+                    })
+                    .catch((error) => {
+                        console.log("update did not work", error);
+                    });
             };
 
             // creates the plus/minus checkbox that shows/hides the subservices div
@@ -727,11 +770,22 @@
             const getAllServices = async () => {
                 const serviceTypesDiv =
                     document.getElementById("service-types");
-                const response = await fetch(
-                    "/analytics/get_all_services_and_subservices/"
+                let allServices = JSON.parse(
+                    sessionStorage.getItem("allServices")
                 );
-                allServices = await response.json();
+                if (!allServices) {
+                    const response = await fetch(
+                        "/analytics/get_all_services_and_subservices/"
+                    );
+                    allServices = await response.json();
+
+                    sessionStorage.setItem(
+                        "allServices",
+                        JSON.stringify(allServices)
+                    );
+                }
                 console.log(allServices);
+
                 allServices.forEach(async (service) => {
                     const subservicesDiv = createSubservicesDiv(
                         service.serviceName,

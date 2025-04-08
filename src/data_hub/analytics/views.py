@@ -39,7 +39,7 @@ def get_default_start_and_end_dates():
     # if it's the first of the month, make the default start the first of last month
     if (default_end_date.day == 1):
         last_month = default_end_date.month - 1
-        print(last_month)
+        # print(last_month)
         if last_month == 0:
             last_month = 12
         default_start_date = default_end_date.replace(month=last_month)   
@@ -52,7 +52,7 @@ def get_arcgis_token():
     data = {'username': username, 'password': password, 'client': 'requestip', 'expiration': 90, 'f': 'json'}
     response = requests.post("https://feature.geographic.texas.gov/arcgis/admin/generateToken", data=data)
     token = response.json()['token']
-    print(token)
+    # print(token)
     return token
 
 @login_required(login_url='/admin/login/')
@@ -77,8 +77,8 @@ def get_all_service_and_subservices(request):
     ]
     # add the subservice arrays to the all_services array
     for s in all_services:
-        print("serviceName")
-        print(s["serviceName"])
+        # print("serviceName")
+        # print(s["serviceName"])
         actualServiceName = s["serviceName"].split("/")[1]
         if not actualServiceName: # i.e. just "services/"
             continue
@@ -87,8 +87,8 @@ def get_all_service_and_subservices(request):
         # print(response.text)
         s["subservices"] = []
         for subservice in response.json()["services"]:
-            print("subserviceName")
-            print(subservice["serviceName"])
+            # print("subserviceName")
+            # print(subservice["serviceName"])
             subserviceFullName = s["serviceName"] + "/" + subservice["serviceName"] + ".MapServer"
             # isShown = subserviceFullName in currentServices
             s["subservices"].append({"serviceName": subserviceFullName, "isShown": False})
@@ -103,28 +103,28 @@ def update_services_in_arcgis_report(request):
     requestBody = json.loads(request.body.decode('utf-8'))
     reportName = requestBody["reportName"]
     resourceURIs = requestBody["resourceURIs"]
-    print(reportName)
-    print(resourceURIs)
+    # print(reportName)
+    # print(resourceURIs)
 
     default_dates = get_default_start_and_end_dates()
 
     start_date = requestBody.get('startDate', round(default_dates[0].timestamp() / 100) * 100000)
     end_date = requestBody.get('endDate', round(default_dates[1].timestamp() / 100) * 100000)
     
-    print('from', start_date)
-    print('to', end_date)
+    # print('from', start_date)
+    # print('to', end_date)
 
 
     # set up the request body for creating/updating the report
     queries ='"queries":[]'
     if len(resourceURIs) > 0:
         queries = '"queries":[{"resourceURIs":' + str(resourceURIs) + ',"metrics":["RequestCount"]}]'
-    print("queries " + queries)
+    # print("queries " + queries)
     data = {'usagereport': '{"reportname":"' + str(reportName) + '","since":"CUSTOM",' + str(queries) + ',"metadata":{"temp":false,"title":"Total requests for the last 7 days","managerReport":true,"styles":{"services/":{"color":"#D900D9"}}},"from":' + str(start_date) + ',"to":' + str(end_date) + '}', 'f': 'json', 'token': token}
-    print("edit data " + str(data))
+    # print("edit data " + str(data))
 
     response = requests.get('https://feature.geographic.texas.gov/arcgis/admin/usagereports/' + str(reportName) + '?f=json&token=' + token)
-    print("the URL is " + 'https://feature.geographic.texas.gov/arcgis/admin/usagereports/' + str(reportName) + '?f=json&token=' + token)
+    # print("the URL is " + 'https://feature.geographic.texas.gov/arcgis/admin/usagereports/' + str(reportName) + '?f=json&token=' + token)
     status_check = response.json()
     # check if 404 error; a 404 error is actually returned with HTTP status 200, but there will be a {"code": 404} in the returned JSON
     # if the report hasn't been created yet
@@ -136,7 +136,7 @@ def update_services_in_arcgis_report(request):
         # edit the existing report
         response = requests.post('https://feature.geographic.texas.gov/arcgis/admin/usagereports/' + str(reportName) + '/edit', data=data)
 
-    print(response.text)
+    # print(response.text)
     return HttpResponse("OK")  # this is actually unused
 
 
@@ -147,7 +147,7 @@ def get_stats_from_arcgis(request):
     reportName = request.GET.get("reportName")
 
     response = requests.get('https://feature.geographic.texas.gov/arcgis/admin/usagereports/' + str(reportName) + '/data?filter=%7B%22services%22%3A%22*%22%2C%22machines%22%3A%22*%22%7D&f=json&token=' + token)
-    print("final response " + response.text)
+    # print("final response " + response.text)
     return HttpResponse(response.text)
 
 
@@ -163,6 +163,8 @@ def get_monthly_stats(request):
         if start_date >= end_date:
             # raise Exception('start date must be before end date')
             return render(request, 'stats.html', {'error': 'Start date must be before end date'})
+        elif datetime.today() < start_date:
+            return render(request, 'stats.html', {'error': 'Start date must not be in the future'})
     except ValueError:
         print('dates must be in the form YYYY-M-D') 
         return render(request, 'stats.html', {'error': 'Dates must be in the form YYYY-M-D'})
@@ -341,7 +343,7 @@ def get_monthly_stats(request):
                 year += 1
             query += ' ' + beginning_of_date_clause + end_date_clause + ')'
             query = 'select count(*) from (' + query + ') as all_years'
-        print(query)
+        # print(query)
         with connections['analytics'].cursor() as cursor:
             cursor.execute(query) 
             results[q] = cursor.fetchall()  
@@ -375,15 +377,15 @@ def get_monthly_stats(request):
             query += ' and ' + end_date_clause + grouping_clause + ')'
             query = 'select * from (' + query + ') as all_years' + final_clause
 
-        print(query)
+        # print(query)
         with connections['analytics'].cursor() as cursor:
             cursor.execute(query) 
             results[q] = cursor.fetchall()  
 
 
-    print(results['count_by_key'])
+    # print(results['count_by_key'])
     for i, result in enumerate(results['count_by_key']):
-        print(result[0])
+        # print(result[0])
         coll = None
         isMap = False
         try:
@@ -392,14 +394,14 @@ def get_monthly_stats(request):
             coll = MapCollection.objects.get(pk=result[0])
             isMap = True
         if isMap:
-            print(coll.name + ' ' + str(coll.publish_date))
+            # print(coll.name + ' ' + str(coll.publish_date))
             results['count_by_key'][i] = (coll.name + ' ' + str(coll.publish_date), result[1])
         else:
-            print(coll.name + ' ' + coll.acquisition_date)
+            # print(coll.name + ' ' + coll.acquisition_date)
             results['count_by_key'][i] = (coll.name + ' ' + coll.acquisition_date, result[1])
-    print(results['count_by_key'])
+    # print(results['count_by_key'])
 
-    print(results['all_collections'][0])
+    # print(results['all_collections'][0])
 
-    print("iterating through queries takes ", time.time() - start_time)
+    # print("iterating through queries takes ", time.time() - start_time)
     return render(request, 'stats.html', results) 

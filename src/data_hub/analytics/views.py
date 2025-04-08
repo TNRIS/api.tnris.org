@@ -162,14 +162,14 @@ def get_monthly_stats(request):
         end_date = datetime.strptime(end_date, '%Y-%m-%d')
         if start_date >= end_date:
             # raise Exception('start date must be before end date')
-            return render(request, 'stats.html', {'error', 'Start date must be before end date'})
+            return render(request, 'stats.html', {'error': 'Start date must be before end date'})
     except ValueError:
         print('dates must be in the form YYYY-M-D') 
-        return render(request, 'stats.html', {'error', 'Dates must be in the form YYYY-M-D'})
+        return render(request, 'stats.html', {'error': 'Dates must be in the form YYYY-M-D'})
         # raise   
     except Exception:
         print('You must provide both a start and end date')
-        return render(request, 'stats.html', {'error', 'You must provide both a start and end date'})
+        return render(request, 'stats.html', {'error': 'You must provide both a start and end date'})
         # raise
 
     # initialize no_downloads with all possible collections (we remove any that were downloaded)

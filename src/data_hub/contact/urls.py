@@ -13,11 +13,9 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from email.mime import base
 from django.urls import path, include
 from rest_framework import routers
 from rest_framework_swagger.views import get_swagger_view
-from rest_framework.schemas import get_schema_view
 
 from .viewsets import (
     SubmitCampaignSubscriptionViewSet,
@@ -32,8 +30,7 @@ from .viewsets import (
     ImagePolicyViewSet,
     FilePolicyViewSet,
     SubmitSurveyViewSet,
-    SurveyTemplateViewSet,
-    DataHubOrdersViewSet
+    SurveyTemplateViewSet
 )
 
 router = routers.DefaultRouter(trailing_slash=False)
@@ -50,7 +47,6 @@ router.register(r'policy/image-upload', ImagePolicyViewSet, basename="ImagePolic
 router.register(r'policy/file-upload', FilePolicyViewSet, basename="FilePolicy")
 router.register(r'survey', SurveyTemplateViewSet, basename="Survey")
 router.register(r'survey/submit/?', SubmitSurveyViewSet, basename="SubmitSurvey")
-router.register(r'orders', DataHubOrdersViewSet, basename="Orders")
 schema_view = get_swagger_view(title='Contact API')
 
 urlpatterns = [

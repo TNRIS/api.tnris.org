@@ -26,13 +26,6 @@ class DataHubContactSerializer(serializers.ModelSerializer):
         model = DataHubContact
         fields = ('__all__')
 
-
-class DataHubOrderSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = DataHubOrder
-        fields = ('__all__')
-
-
 class DataHubOutsideEntityContactSerializer(serializers.ModelSerializer):
     class Meta:
         model = DataHubOutsideEntityContact

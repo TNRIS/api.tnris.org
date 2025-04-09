@@ -186,3 +186,8 @@ vault-password\.txt
 contact24_quicktest.py
 
 etl/source_data/texasimageryservicerequest.csv
+
+cert.crt
+cert.key
+cert.pem
+key.pem

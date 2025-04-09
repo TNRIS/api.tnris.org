@@ -651,34 +651,28 @@
                     startDate: convertDateToTime(getQueryParam("start_date")),
                     endDate: convertDateToTime(getQueryParam("end_date")),
                 };
-                await fetch(
-                    "http://localhost:8000/analytics/update_services_in_arcgis_report/",
-                    {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                            "X-CSRFToken": getCSRFToken(),
-                        },
-                        body: JSON.stringify(updateServicesBody),
-                    }
-                )
-                    .then((response) => {
-                        if (!response.ok) {
-                            throw new Error("error response" + response);
+                try {
+                    await fetch(
+                        "http://localhost:8000/analytics/update_services_in_arcgis_report/",
+                        {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "X-CSRFToken": getCSRFToken(),
+                            },
+                            body: JSON.stringify(updateServicesBody),
                         }
-                    })
-                    .then(async () => {
-                        const response = await fetch(
-                            `/analytics/get_stats_from_arcgis/?reportName=${reportName}`
-                        );
+                    );
+                    const response = await fetch(
+                        `/analytics/get_stats_from_arcgis/?reportName=${reportName}`
+                    );
 
-                        const result = await response.json();
-                        //console.log(result);
-                        parseArcGISReport(result);
-                    })
-                    .catch((error) => {
-                        console.log("update did not work", error);
-                    });
+                    const result = await response.json();
+                    //console.log(result);
+                    parseArcGISReport(result);
+                } catch (error) {
+                    console.log("update did not work", error);
+                }
             };
 
             // creates the plus/minus checkbox that shows/hides the subservices div

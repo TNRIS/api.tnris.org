@@ -33,6 +33,24 @@ SEND_HTML_FLAG = True # More meaningful than a simple True
 if TESTING:
     FISERV_URL_V2 = "https://snappaydirectapi-cert.fiserv.com/api/interop/v2/"
 
+def resend_email(self, request, queryset, CC_STRATMAP):
+    cont_static = ContactViewset()
+
+    for order in queryset:
+        if order.order_approved and order.approved_charge and order.customer_notified:
+            order_info = json.loads(order.order_details.details)
+            formatted = cont_static.format_req(order_info.items())
+            email_template = EmailTemplate.objects.get(form_id="order-approved")
+
+            cont_static.send_template_email(
+                email_template,
+                {"uuid": str(order.pk)},
+                formatted["email"],
+                os.environ.get("STRATMAP_EMAIL"),
+                SEND_HTML_FLAG,
+                CC_STRATMAP
+            )
+
 # #################################################################
 # Do not call these functions from django router directly.
 # Call them from viewsets.py and do the authentication in viewsets.py
@@ -68,7 +86,7 @@ class ContactViewset(viewsets.ViewSet):
             status=status.HTTP_400_BAD_REQUEST,
         )
 
-    def send_template_email(self, email_template, formatted, sender, replyer, html=False):
+    def send_template_email(self, email_template, formatted, sender, replyer, html=False, CC_STRATMAP=False):
         """Send an email to the template email (Configured through API)
         sender and replyer default to mail_default to unless sendpoint
         """
@@ -99,6 +117,7 @@ class ContactViewset(viewsets.ViewSet):
                 body,
                 send_to=sender,
                 reply_to=replyer,
+                cc_email=os.environ.get("MAIL_DEFAULT_TO")
             )
         else:
             # send to ticketing system unless sendpoint has alternative key value
@@ -108,6 +127,7 @@ class ContactViewset(viewsets.ViewSet):
                 body,
                 send_to=sender,
                 reply_to=replyer,
+                cc_email=os.environ.get("MAIL_DEFAULT_TO")
             )
     
     def format_req(self, items):
@@ -118,7 +138,7 @@ class ContactViewset(viewsets.ViewSet):
         if api_helper.checkLogger():
             logger.info(msg)
         verify_req = api_helper.checkCaptcha(request.data["recaptcha"])
-        if json.loads(verify_req.text)["success"]:
+        if json.loads(verify_req.text)["success"] or TESTING:
             return self.create_super(request)
         else:
             return Response(
@@ -699,7 +719,7 @@ class OrderSubmitViewSetSuper(
                 "cof": "C",  # Optional, means Card on file, and C means customer.
                 "cofscheduled": "N",  # Optional, N means no don't schedule card to be filed.
                 "ecomind": "E",  # Optional, E means ECommerce, this is a note on the origin of transaction
-                "orderid": "580WD"
+                "orderid": "580"
                 + str(
                     order.order_details_id
                 ),  # Optional Local order ID; we use it as a reference to get transaction info.
@@ -761,7 +781,7 @@ class OrderSubmitViewSetSuper(
                                     "id": "USAS1",
                                     "attributes": [
                                         {
-                                            "name": "USAS1CO",
+                                            "name": "USAS1COBJ",
                                             "value": "3719",
                                             "type": "String",
                                         },
@@ -786,7 +806,7 @@ class OrderSubmitViewSetSuper(
                                     "id": "USAS2",
                                     "attributes": [
                                         {
-                                            "name": "USAS2CO",
+                                            "name": "USAS2COBJ",
                                             "value": "3879",
                                             "type": "String",
                                         },
@@ -811,7 +831,7 @@ class OrderSubmitViewSetSuper(
                                     "id": "USAS3",
                                     "attributes": [
                                     {
-                                            "name": "USAS3CO",
+                                            "name": "USAS3COBJ",
                                             "value": "7219",
                                             "type": "String",
                                         },
@@ -862,7 +882,7 @@ class OrderSubmitViewSetSuper(
 
             rbody = json.loads(response.text)
 
-            if "requestid" in rbody:
+            if "requestid" in rbody and len(rbody['requestid']) > 0:
                 orderObj.filter(id=request.query_params["uuid"]).update(
                     order_token=rbody["requestid"],
                     order_url=f"https://snappaydirect-cert.fiserv.com/interop/HostedPaymentPage/ProcessRequest?reqNo={rbody['requestid']}",
@@ -880,7 +900,7 @@ class OrderSubmitViewSetSuper(
             else:
                 if api_helper.checkLogger():
                     logger.error(
-                        "An order has failed. because no html5Redirect found in the response."
+                        f"An order has failed to be created, because there was no requestid or order has already been completed."
                     )
                 response = Response(
                     {

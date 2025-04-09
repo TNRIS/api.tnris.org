@@ -7,6 +7,7 @@ from django import forms
 from django.shortcuts import redirect
 
 import csv, datetime, json, os, secrets, hashlib, time
+from .new_contacts import resend_email
 
 from .models import (
     Campaign,
@@ -83,6 +84,7 @@ class DataHubContactAdmin(admin.ModelAdmin, ExportSelectedToCsvMixin):
 @admin.register(OrderType)
 class OrderTypeAdmin(admin.ModelAdmin): 
     model = OrderType
+    actions = ["resend_order_link_email"]
     list_filter = (['order_approved', 'order_sent', 'archived'])
     list_display = (
         'id',
@@ -103,6 +105,18 @@ class OrderTypeAdmin(admin.ModelAdmin):
         link=reverse("admin:contact_orderdetailstype_change", args=[obj.order_details.id])
         return format_html(u'<a href="%s">Details</a>' % (link))
     link_to_details.allow_tags=True
+
+    @admin.action(
+        description="Resend a link to the payment portal."
+    )
+    def resend_order_link_email(self, request, queryset):
+        resend_email(self, request, queryset, False)
+
+    @admin.action(
+        description="Resend a link to the payment portal. And CC stratmap. For troubleshooting."
+    )
+    def resend_order_link_email_with_cc(self, request, queryset):
+        resend_email(self, request, queryset, True)
 
     def get_readonly_fields(self, request, obj=None):
         if obj:

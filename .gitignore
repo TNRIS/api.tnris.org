@@ -188,3 +188,5 @@ email_templates.json
 #For testing https
 cert.pem
 key.pem
+cert.crt
+cert.key

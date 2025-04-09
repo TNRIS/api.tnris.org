@@ -12,7 +12,7 @@
             "request": "launch",
             "program": "${workspaceFolder}/src/data_hub/manage.py",
             "args": [
-                "runserver", "8000"
+                "runserver_plus", "8000", "--cert-file", "cert.pem", "--key-file", "key.pem"
             ],
             "django": true,
             "justMyCode": true

@@ -105,6 +105,7 @@ def send_html_email(
     send_from=os.environ.get("MAIL_DEFAULT_FROM"),
     send_to=os.environ.get("MAIL_DEFAULT_TO"),
     reply_to="unknown@tnris.org",
+    cc_email=""
 ):
     """Generic function for sending emails from the API
 
@@ -114,10 +115,11 @@ def send_html_email(
         send_from (String, optional): Email to send from.. Defaults to os.environ.get("MAIL_DEFAULT_FROM").
         send_to (_type_, optional): Email Address to receive.. Defaults to os.environ.get("MAIL_DEFAULT_TO").
         reply_to (str, optional): Email address to reply to.. Defaults to "unknown@tnris.org".
+        cc_email (str, optional): cc email
     """
 
     mail = EmailMultiAlternatives(
-        subject, body, send_from, [send_to], reply_to=[reply_to]
+        subject, body, send_from, [send_to], [cc_email], reply_to=[reply_to]
     )
     mail.attach_alternative(body, "text/html")
 
@@ -129,13 +131,14 @@ def send_raw_email(
     send_from=os.environ.get("MAIL_DEFAULT_FROM"),
     send_to=os.environ.get("MAIL_DEFAULT_TO"),
     reply_to="unknown@tnris.org",
+    cc_email=""
 ):
     """
     generic function for sending email associated with form submission
     emails send to supportsystem to create tickets in the ticketing system
     which are ultimately managed by IS, RDC, and StratMap
     """
-    email = EmailMessage(subject, body, send_from, [send_to], reply_to=[reply_to])
+    email = EmailMessage(subject, body, send_from, [send_to], [cc_email], reply_to=[reply_to])
     email.send(fail_silently=False)
     return
 

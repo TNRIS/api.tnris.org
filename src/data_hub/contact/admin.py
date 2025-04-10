@@ -12,7 +12,6 @@ from .models import (
     Campaign,
     CampaignSubscriber,
     DataHubContact,
-    DataHubOrder,
     OrderType,
     OrderDetailsType,
     DataHubOutsideEntityContact,
@@ -23,7 +22,6 @@ from .models import (
     GeorodeoCallForPresentationsSubmission,
     GeorodeoRegistration,
     LakesOfTexasContact,
-    OrderMap,
     PosterGallerySubmission,
     SurveyTemplate,
     TexasImageryServiceContact,
@@ -302,28 +300,6 @@ class OrderDetailsTypeAdmin(admin.ModelAdmin):
         super().save_model(request, obj, form, change)
     def response_change(self, request, obj):
         return redirect('/admin/contact/orderdetailstype/' + str(obj.id) + '/change/')
-@admin.register(DataHubOrder)
-class DataHubOrderAdmin(admin.ModelAdmin, ExportSelectedToCsvMixin):
-    model = DataHubOrder
-    actions = ["export_selected_to_csv"]
-    list_display = (
-        'name',
-        'email',
-        'phone',
-        'address',
-        'organization',
-        'industry',
-        'harddrive',
-        'delivery',
-        'payment',
-        'created'
-    )
-    ordering = ('-created',)
-
-    def get_readonly_fields(self, request, obj=None):
-        if obj:
-            self.readonly_fields = [field.name for field in obj.__class__._meta.fields]
-        return self.readonly_fields
 
 
 @admin.register(DataHubOutsideEntityContact)
@@ -500,75 +476,6 @@ class LakesOfTexasContactAdmin(admin.ModelAdmin, ExportSelectedToCsvMixin):
         if obj:
             self.readonly_fields = [field.name for field in obj.__class__._meta.fields]
         return self.readonly_fields
-
-
-@admin.register(OrderMap)
-class OrderMapAdmin(admin.ModelAdmin, ExportSelectedToCsvMixin):
-    model = OrderMap
-    actions = ["export_selected_to_csv"]
-    list_display = (
-        'type_of_data',
-        'type_of_map',
-        'name',
-        'organization',
-        'industry',
-        'email',
-        'phone',
-        'delivery_method',
-        'payment_method',
-        'created'
-    )
-    ordering = ('-created',)
-    fieldsets = (
-        ('General Info', {
-            'classes': ('grp-collapse',),
-            'fields': ('name',
-                       'address_1',
-                       'address_2',
-                       'city',
-                       'state',
-                       'zip',
-                       'email',
-                       'phone',
-                       'fax',
-                       'organization',
-                       'industry',
-                       'industry_other',
-                       'delivery_method',
-                       'fedex_customer_number',
-                       'payment_method',
-                       'check_number',
-                       'purchase_order_number',
-                       'type_of_data',
-                       'type_of_map',
-                       'additional_info')
-        }),
-        ('Federal Prints', {
-            'classes': ('grp-collapse grp-closed',),
-            'fields': ('map_option',
-                       'map_description')
-        }),
-        ('Pre-Made Maps', {
-            'classes': ('grp-collapse grp-closed',),
-            'fields': ('map_collection_name',
-                       'map_sheet',
-                       'legislative_request')
-        }),
-        ('Custom Maps', {
-            'classes': ('grp-collapse grp-closed',),
-            'fields': ('map_size',
-                       'custom_map_size',
-                       'map_scale',
-                       'map_title',
-                       'map_date')
-        })
-    )
-
-    def get_readonly_fields(self, request, obj=None):
-        if obj:
-            self.readonly_fields = [field.name for field in obj.__class__._meta.fields]
-        return self.readonly_fields
-
 
 @admin.register(PosterGallerySubmission)
 class PosterGallerySubmissionAdmin(admin.ModelAdmin, ExportSelectedToCsvMixin):

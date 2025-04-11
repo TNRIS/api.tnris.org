@@ -45,110 +45,152 @@ def get_default_start_and_end_dates():
         default_start_date = default_end_date.replace(month=last_month)   
     return [default_start_date, default_end_date] 
 
+def check_for_arcgis_error(result):
+    status_code = result.get("code", 200)
+    if (status_code != 200):
+        print('Error: ' + result)
+        raise Exception('Error retrieving ArcGIS statistics ' + str(datetime.now()))
+
 def get_arcgis_token():
     # retrieve token used to make requests
     username = os.environ.get('ARCGIS_USERNAME')
     password = os.environ.get('ARCGIS_PASSWORD')
     data = {'username': username, 'password': password, 'client': 'requestip', 'expiration': 90, 'f': 'json'}
     response = requests.post("https://feature.geographic.texas.gov/arcgis/admin/generateToken", data=data)
-    token = response.json()['token']
+    result = response.json()
+    check_for_arcgis_error(result)
+    token = result['token']
     # print(token)
     return token
 
+
 @login_required(login_url='/admin/login/')
 def get_all_service_and_subservices(request):
-    # initialize the list of services and subservices and their shown status
-    # this code should only be run once if a report doesn't already exist in sessionStorage on the user's browser
-   
-    token = get_arcgis_token()    
+    try:
+        # initialize the list of services and subservices and their shown status
+        # this code should only be run once if a report doesn't already exist in sessionStorage on the user's browser
+    
+        token = get_arcgis_token()    
 
-    # initialize the allServices array
-    # this reflects the initial state of a new report in ArcGIS Server Admin
-    all_services = [
-        {  "serviceName": "services/", "isShown": True },
-        {  "serviceName": "services/Address_Points", "isShown": False },
-        {  "serviceName": "services/Basemap", "isShown": False },
-        {  "serviceName": "services/Bathymetry", "isShown": False },
-        {  "serviceName": "services/FDST", "isShown": False },
-        {  "serviceName": "services/Geologic_Database", "isShown": False },
-        {  "serviceName": "services/Hydrography", "isShown": False },
-        {  "serviceName": "services/Hypsography", "isShown": False },
-        {  "serviceName": "services/Parcels", "isShown": False }
-    ]
-    # add the subservice arrays to the all_services array
-    for s in all_services:
-        # print("serviceName")
-        # print(s["serviceName"])
-        actualServiceName = s["serviceName"].split("/")[1]
-        if not actualServiceName: # i.e. just "services/"
-            continue
-        # otherwise, get all the subservices there are
-        response = requests.get('https://feature.geographic.texas.gov/arcgis/admin/services/' + actualServiceName + '?f=json&token=' + token)
-        # print(response.text)
-        s["subservices"] = []
-        for subservice in response.json()["services"]:
-            # print("subserviceName")
-            # print(subservice["serviceName"])
-            subserviceFullName = s["serviceName"] + "/" + subservice["serviceName"] + ".MapServer"
-            # isShown = subserviceFullName in currentServices
-            s["subservices"].append({"serviceName": subserviceFullName, "isShown": False})
-            
-    return JsonResponse(all_services, safe=False)
+        # initialize the allServices array
+        # this reflects the initial state of a new report in ArcGIS Server Admin
+        all_services = [
+            {  "serviceName": "services/", "isShown": True },
+            {  "serviceName": "services/Address_Points", "isShown": False },
+            {  "serviceName": "services/Basemap", "isShown": False },
+            {  "serviceName": "services/Bathymetry", "isShown": False },
+            {  "serviceName": "services/FDST", "isShown": False },
+            {  "serviceName": "services/Geologic_Database", "isShown": False },
+            {  "serviceName": "services/Hydrography", "isShown": False },
+            {  "serviceName": "services/Hypsography", "isShown": False },
+            {  "serviceName": "services/Parcels", "isShown": False }
+        ]
+        # add the subservice arrays to the all_services array
+        for s in all_services:
+            # print("serviceName")
+            # print(s["serviceName"])
+            actualServiceName = s["serviceName"].split("/")[1]
+            if not actualServiceName: # i.e. just "services/"
+                continue
+            # otherwise, get all the subservices there are
+            response = requests.get('https://feature.geographic.texas.gov/arcgis/admin/services/' + actualServiceName + '?f=json&token=' + token)
+            result = response.json()
+            check_for_arcgis_error(result)
+            # print(result)
+            s["subservices"] = []
+            for subservice in result["services"]:
+                # print("subserviceName")
+                # print(subservice["serviceName"])
+                subserviceFullName = s["serviceName"] + "/" + subservice["serviceName"] + ".MapServer"
+                # isShown = subserviceFullName in currentServices
+                s["subservices"].append({"serviceName": subserviceFullName, "isShown": False})
+                
+        return JsonResponse(all_services, safe=False)
+    except Exception as e:
+        print(str(e))
+        return render(request, 'stats.html', {'error': str(e)})
+
+@login_required(login_url='/admin/login/')
+def delete_expired_report(request):
+    try:
+        token = get_arcgis_token()
+        requestBody = json.loads(request.body.decode('utf-8'))
+        reportName = requestBody["reportName"]
+        response = requests.get('https://feature.geographic.texas.gov/arcgis/admin/usagereports/' + str(reportName) + '/delete?f=json&token=' + token)
+        result = response.json()
+        check_for_arcgis_error(result)
+    except Exception as e: 
+        print(str(e))
+        return render(request, 'stats.html', {'error': str(e)})
+
 
 @login_required(login_url='/admin/login/')
 def update_services_in_arcgis_report(request):
-    # creates/updates a report with a given name in ArcGIS Server Administrator
-    # reports are JSON instructions to describe which data are returned
-    token = get_arcgis_token()
-    requestBody = json.loads(request.body.decode('utf-8'))
-    reportName = requestBody["reportName"]
-    resourceURIs = requestBody["resourceURIs"]
-    # print(reportName)
-    # print(resourceURIs)
+    try:
+        # creates/updates a report with a given name in ArcGIS Server Administrator
+        # reports are JSON instructions to describe which data are returned
+        token = get_arcgis_token()
+        requestBody = json.loads(request.body.decode('utf-8'))
+        reportName = requestBody["reportName"]
+        resourceURIs = requestBody["resourceURIs"]
+        # print(reportName)
+        # print(resourceURIs)
 
-    default_dates = get_default_start_and_end_dates()
+        default_dates = get_default_start_and_end_dates()
 
-    start_date = requestBody.get('startDate', round(default_dates[0].timestamp() / 100) * 100000)
-    end_date = requestBody.get('endDate', round(default_dates[1].timestamp() / 100) * 100000)
-    
-    # print('from', start_date)
-    # print('to', end_date)
+        start_date = requestBody.get('startDate', round(default_dates[0].timestamp() / 100) * 100000)
+        end_date = requestBody.get('endDate', round(default_dates[1].timestamp() / 100) * 100000)
+        
+        # print('from', start_date)
+        # print('to', end_date)
 
 
-    # set up the request body for creating/updating the report
-    queries ='"queries":[]'
-    if len(resourceURIs) > 0:
-        queries = '"queries":[{"resourceURIs":' + str(resourceURIs) + ',"metrics":["RequestCount"]}]'
-    # print("queries " + queries)
-    data = {'usagereport': '{"reportname":"' + str(reportName) + '","since":"CUSTOM",' + str(queries) + ',"metadata":{"temp":false,"title":"Total requests for the last 7 days","managerReport":true,"styles":{"services/":{"color":"#D900D9"}}},"from":' + str(start_date) + ',"to":' + str(end_date) + '}', 'f': 'json', 'token': token}
-    # print("edit data " + str(data))
+        # set up the request body for creating/updating the report
+        queries ='"queries":[]'
+        if len(resourceURIs) > 0:
+            queries = '"queries":[{"resourceURIs":' + str(resourceURIs) + ',"metrics":["RequestCount"]}]'
+        # print("queries " + queries)
+        data = {'usagereport': '{"reportname":"' + str(reportName) + '","since":"CUSTOM",' + str(queries) + ',"metadata":{"temp":false,"title":"Total requests for the last 7 days","managerReport":true,"styles":{"services/":{"color":"#D900D9"}}},"from":' + str(start_date) + ',"to":' + str(end_date) + '}', 'f': 'json', 'token': token}
+        # print("edit data " + str(data))
 
-    response = requests.get('https://feature.geographic.texas.gov/arcgis/admin/usagereports/' + str(reportName) + '?f=json&token=' + token)
-    # print("the URL is " + 'https://feature.geographic.texas.gov/arcgis/admin/usagereports/' + str(reportName) + '?f=json&token=' + token)
-    status_check = response.json()
-    # check if 404 error; a 404 error is actually returned with HTTP status 200, but there will be a {"code": 404} in the returned JSON
-    # if the report hasn't been created yet
-    status_code = status_check.get("code", 200)
-    if (status_code == 404):
-        # create the report
-        response = requests.post('https://feature.geographic.texas.gov/arcgis/admin/usagereports/add', data=data)
-    else:
-        # edit the existing report
-        response = requests.post('https://feature.geographic.texas.gov/arcgis/admin/usagereports/' + str(reportName) + '/edit', data=data)
+        response = requests.get('https://feature.geographic.texas.gov/arcgis/admin/usagereports/' + str(reportName) + '?f=json&token=' + token)
+        # print("the URL is " + 'https://feature.geographic.texas.gov/arcgis/admin/usagereports/' + str(reportName) + '?f=json&token=' + token)
+        result = response.json()
+        # check if 404 error; a 404 error is actually returned with HTTP status 200, but there will be a {"code": 404} in the returned JSON
+        # if the report hasn't been created yet
+        status_code = result.get("code", 200)
+        if (status_code == 404):
+            # create the report
+            response = requests.post('https://feature.geographic.texas.gov/arcgis/admin/usagereports/add', data=data)
+        else:
+            # edit the existing report
+            response = requests.post('https://feature.geographic.texas.gov/arcgis/admin/usagereports/' + str(reportName) + '/edit', data=data)
 
-    # print(response.text)
-    return HttpResponse("OK")  # this is actually unused
+        result = response.json()
+        check_for_arcgis_error(result)
+        # print(response.text)
+        return render(request, 'stats.html', {'success': 'success'}) 
+    except Exception as e: 
+        print(str(e))
+        return render(request, 'stats.html', {'error': str(e)})
+
 
 
 @login_required(login_url='/admin/login/')
 def get_stats_from_arcgis(request):
-    # run the report in ArcGIS Server Admin and return the results
-    token = get_arcgis_token()
-    reportName = request.GET.get("reportName")
+    try:
+        # run the report in ArcGIS Server Admin and return the results
+        token = get_arcgis_token()
+        reportName = request.GET.get("reportName")
 
-    response = requests.get('https://feature.geographic.texas.gov/arcgis/admin/usagereports/' + str(reportName) + '/data?filter=%7B%22services%22%3A%22*%22%2C%22machines%22%3A%22*%22%7D&f=json&token=' + token)
-    # print("final response " + response.text)
-    return HttpResponse(response.text)
+        response = requests.get('https://feature.geographic.texas.gov/arcgis/admin/usagereports/' + str(reportName) + '/data?filter=%7B%22services%22%3A%22*%22%2C%22machines%22%3A%22*%22%7D&f=json&token=' + token)
+        result = response.json()
+        check_for_arcgis_error(result)
+        # print("final response " + response.text)
+        return HttpResponse(response.text)
+    except Exception as e: 
+        print(str(e))
+        return render(request, 'stats.html', {'error': str(e)})    
 
 
 @login_required(login_url='/admin/login/')

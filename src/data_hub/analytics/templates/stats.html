@@ -597,6 +597,13 @@
                 }
             };
 
+            const handleError = () => {
+                const lineChartContainer =
+                    document.getElementById("line-chart-div");
+                lineChartContainer.innerHTML =
+                    "<div class='line-chart-stand-in'>Error retrieving statistics from ArcGIS</div>";
+            };
+
             // toggle the service and update the line chart
             // if service is null, just return the chart with
             // whatever services are currently turned on
@@ -606,7 +613,6 @@
                     document.getElementById("line-chart-div");
                 lineChartContainer.innerHTML =
                     "<div class='line-chart-stand-in'>Loading ...</div>";
-
                 const reportName =
                     localStorage.getItem("reportName") || Date.now();
                 localStorage.setItem("reportName", reportName);
@@ -614,10 +620,10 @@
                 // build resourceURIs; these take the form "services/", "services/Address_Points", etc.
                 // also update the allServices array which shows the current status about whether a given
                 // statistics line chart is shown yet
-                const allServices = JSON.parse(
-                    localStorage.getItem("allServices")
-                );
+                const allServices = await getAllServices();
+
                 //console.log(allServices);
+
                 let resourceURIs = [];
                 allServices.forEach((service) => {
                     if (service.serviceName === serviceName) {
@@ -671,7 +677,9 @@
                     //console.log(result);
                     parseArcGISReport(result);
                 } catch (error) {
-                    console.log("update did not work", error);
+                    console.log("error toggling service", error);
+                    // show error message
+                    handleError();
                 }
             };
 
@@ -761,26 +769,67 @@
                 return subServicesDiv;
             };
 
-            // retrieves the list of services and subservices and
-            // creates the html for it
+            const deleteReportIfExpired = async (retentionDays) => {
+                const reportName = localStorage.getItem("reportName");
+
+                if (!reportName) return;
+
+                let expirationTime = Date.now();
+                expirationTime.setHours(
+                    expirationTime.getHours() - retentionDays * 24
+                );
+                if (parseInt(reportName) < expirationTime.getTime()) {
+                    // delete existing
+                    try {
+                        const response = await fetch(
+                            "/analytics/delete_expired_report/?reportName=" +
+                                reportName
+                        );
+                        localStorage.removeItem("reportName");
+                        localStorage.removeItem("allServices");
+                    } catch (error) {
+                        console.log("delete did not work", error);
+                        // show error message
+                        handleError();
+                    }
+                }
+            };
+
+            // retrieves the list of services and subservices
+            // either from localServices or from the server
             const getAllServices = async () => {
-                const serviceTypesDiv =
-                    document.getElementById("service-types");
                 let allServices = JSON.parse(
                     localStorage.getItem("allServices")
                 );
                 if (!allServices) {
-                    const response = await fetch(
-                        "/analytics/get_all_services_and_subservices/"
-                    );
-                    allServices = await response.json();
+                    // this needs a try catch block  -- what to do if a failure?
+                    try {
+                        const response = await fetch(
+                            "/analytics/get_all_services_and_subservices/"
+                        );
+                        allServices = await response.json();
 
-                    localStorage.setItem(
-                        "allServices",
-                        JSON.stringify(allServices)
-                    );
+                        localStorage.setItem(
+                            "allServices",
+                            JSON.stringify(allServices)
+                        );
+                    } catch (error) {
+                        console.log("unable to get all services", error);
+                        // show error message
+                        handleError();
+                        return;
+                    }
                 }
-                //console.log(allServices);
+                console.log(allServices);
+                return allServices;
+            };
+
+            // creates the html for the list of services and subservices
+            const buildServicesHTML = async () => {
+                const allServices = await getAllServices();
+
+                const serviceTypesDiv =
+                    document.getElementById("service-types");
 
                 allServices.forEach(async (service) => {
                     const subservicesDiv = createSubservicesDiv(
@@ -812,10 +861,12 @@
                     subservicesDiv && serviceDiv.appendChild(subservicesDiv);
                     serviceTypesDiv.appendChild(serviceDiv);
                 });
-                // this has the effect of getting the initial graph
-                toggleService();
             };
-            getAllServices();
+
+            // deleteReportIfExpired(60);
+            buildServicesHTML();
+            // this has the effect of getting the initial graph
+            toggleService();
         </script>
 
         <script type="text/javascript">

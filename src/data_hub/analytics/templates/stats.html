@@ -670,13 +670,15 @@
                             body: JSON.stringify(updateServicesBody),
                         }
                     );
-                    if (!response.ok)
+                    if (!response.ok) {
                         throw new Error("unable to update statistics");
+                    }
                     response = await fetch(
                         `/analytics/get_stats_from_arcgis/?reportName=${reportName}`
                     );
-                    if (!response.ok)
+                    if (!response.ok) {
                         throw new Error("unable to retrieve statistics");
+                    }
 
                     const result = await response.json();
                     //console.log(result);
@@ -774,6 +776,8 @@
                 return subServicesDiv;
             };
 
+            /*
+            // commenting this code out for now
             const deleteReportIfExpired = async (retentionDays) => {
                 const reportName = localStorage.getItem("reportName");
 
@@ -790,8 +794,9 @@
                             "/analytics/delete_expired_report/?reportName=" +
                                 reportName
                         );
-                        if (!response.ok)
+                        if (!response.ok) {
                             throw new Error("unable to delete report");
+                        }
 
                         localStorage.removeItem("reportName");
                         localStorage.removeItem("allServices");
@@ -802,6 +807,7 @@
                     }
                 }
             };
+            */
 
             // retrieves the list of services and subservices
             // either from localServices or from the server
@@ -815,8 +821,9 @@
                         const response = await fetch(
                             "/analytics/get_all_services_and_subservices/"
                         );
-                        if (!response.ok)
+                        if (!response.ok) {
                             throw new Error("unable to get all services");
+                        }
 
                         allServices = await response.json();
 

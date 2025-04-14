@@ -621,6 +621,7 @@
                 // also update the allServices array which shows the current status about whether a given
                 // statistics line chart is shown yet
                 const allServices = await getAllServices();
+                if (!allServices) return;
 
                 //console.log(allServices);
 
@@ -658,7 +659,7 @@
                     endDate: convertDateToTime(getQueryParam("end_date")),
                 };
                 try {
-                    await fetch(
+                    let response = await fetch(
                         "http://localhost:8000/analytics/update_services_in_arcgis_report/",
                         {
                             method: "POST",
@@ -669,9 +670,13 @@
                             body: JSON.stringify(updateServicesBody),
                         }
                     );
-                    const response = await fetch(
+                    if (!response.ok)
+                        throw new Error("unable to update statistics");
+                    response = await fetch(
                         `/analytics/get_stats_from_arcgis/?reportName=${reportName}`
                     );
+                    if (!response.ok)
+                        throw new Error("unable to retrieve statistics");
 
                     const result = await response.json();
                     //console.log(result);
@@ -785,6 +790,9 @@
                             "/analytics/delete_expired_report/?reportName=" +
                                 reportName
                         );
+                        if (!response.ok)
+                            throw new Error("unable to delete report");
+
                         localStorage.removeItem("reportName");
                         localStorage.removeItem("allServices");
                     } catch (error) {
@@ -807,6 +815,9 @@
                         const response = await fetch(
                             "/analytics/get_all_services_and_subservices/"
                         );
+                        if (!response.ok)
+                            throw new Error("unable to get all services");
+
                         allServices = await response.json();
 
                         localStorage.setItem(
@@ -817,10 +828,10 @@
                         console.log("unable to get all services", error);
                         // show error message
                         handleError();
-                        return;
+                        return [];
                     }
                 }
-                console.log(allServices);
+                // console.log(allServices);
                 return allServices;
             };
 

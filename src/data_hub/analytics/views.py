@@ -108,7 +108,7 @@ def get_all_service_and_subservices(request):
         return JsonResponse(all_services, safe=False)
     except Exception as e:
         print(str(e))
-        return render(request, 'stats.html', {'error': str(e)})
+        return render(request, 'stats.html', {'error': str(e)}, status=500)
 
 @login_required(login_url='/admin/login/')
 def delete_expired_report(request):
@@ -121,7 +121,7 @@ def delete_expired_report(request):
         check_for_arcgis_error(result)
     except Exception as e: 
         print(str(e))
-        return render(request, 'stats.html', {'error': str(e)})
+        return render(request, 'stats.html', {'error': str(e)}, status=500)
 
 
 @login_required(login_url='/admin/login/')
@@ -172,7 +172,7 @@ def update_services_in_arcgis_report(request):
         return render(request, 'stats.html', {'success': 'success'}) 
     except Exception as e: 
         print(str(e))
-        return render(request, 'stats.html', {'error': str(e)})
+        return render(request, 'stats.html', {'error': str(e)}, status=500)
 
 
 
@@ -190,7 +190,7 @@ def get_stats_from_arcgis(request):
         return HttpResponse(response.text)
     except Exception as e: 
         print(str(e))
-        return render(request, 'stats.html', {'error': str(e)})    
+        return render(request, 'stats.html', {'error': str(e)}, status=500)    
 
 
 @login_required(login_url='/admin/login/')

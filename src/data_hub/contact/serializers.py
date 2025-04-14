@@ -4,7 +4,6 @@ from .models import (
     Campaign,
     CampaignSubscriber,
     DataHubContact,
-    DataHubOrder,
     DataHubOutsideEntityContact,
     EducationContact,
     ForumJobBoardSubmission,
@@ -12,7 +11,6 @@ from .models import (
     GeorodeoCallForPresentationsSubmission,
     GeorodeoRegistration,
     LakesOfTexasContact,
-    OrderMap,
     OrderType,
     PosterGallerySubmission,
     SurveyTemplate,
@@ -25,13 +23,6 @@ class DataHubContactSerializer(serializers.ModelSerializer):
     class Meta:
         model = DataHubContact
         fields = ('__all__')
-
-
-class DataHubOrderSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = DataHubOrder
-        fields = ('__all__')
-
 
 class DataHubOutsideEntityContactSerializer(serializers.ModelSerializer):
     class Meta:
@@ -74,12 +65,6 @@ class LakesOfTexasContactSerializer(serializers.ModelSerializer):
         model = LakesOfTexasContact
         fields = ('__all__')
 
-
-class OrderMapSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = OrderMap
-        fields = ('__all__')
-        
         
 class OrderStatusSerializer(serializers.ModelSerializer):
     class Meta:

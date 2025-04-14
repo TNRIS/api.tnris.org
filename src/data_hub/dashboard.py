@@ -117,7 +117,6 @@ class CustomIndexDashboard(Dashboard):
             css_classes=('grp-collapse grp-closed',),
             models=(
                     'contact.models.DataHubContact',
-                    'contact.models.DataHubOrder',
                     'contact.models.OrderType',
                     'contact.models.DataHubOutsideEntityContact',
                     'contact.models.EducationContact',
@@ -127,7 +126,6 @@ class CustomIndexDashboard(Dashboard):
                     'contact.models.GeorodeoCallForPresentationsSubmission',
                     'contact.models.GeorodeoRegistration',
                     'contact.models.LakesOfTexasContact',
-                    'contact.models.OrderMap',
                     'contact.models.PosterGallerySubmission',
                     'contact.models.SurveyTemplate',
                     'contact.models.TexasImageryServiceContact',

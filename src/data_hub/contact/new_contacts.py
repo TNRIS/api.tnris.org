@@ -26,12 +26,14 @@ CLEANING_FLAG = False
 
 # Use testing URLS (Do not use in production)
 TESTING = True
+FISERV_URL_V3 = "https://snappaydirectapi-cert.fiserv.com/api/interop/v3/"
 FISERV_URL_V2 = "https://snappaydirectapi-cert.fiserv.com/api/interop/v2/"
 FISERV_URL = "https://snappaydirectapi-cert.fiserv.com/api/interop/"
 SEND_HTML_FLAG = True # More meaningful than a simple True
 
 if TESTING:
     FISERV_URL_V2 = "https://snappaydirectapi-cert.fiserv.com/api/interop/v2/"
+    FISERV_URL_V3 = "https://snappaydirectapi-cert.fiserv.com/api/interop/v3/"
 
 def resend_email(self, request, queryset, CC_STRATMAP):
     cont_static = ContactViewset()
@@ -770,7 +772,7 @@ class OrderSubmitViewSetSuper(
                             "quantity": "1",
                             "sku": "DHUB",  # Should be correct.
                             "company": "Texas Water Development Board",
-                            "fee": str(round(transactionfee)),
+                            "fee": str(transactionfee),
                             "department": "Texas Geographic Information Office",
                             "customerid": os.environ.get("FISERV_CUSTOMER_ID"),
                             "agency": "580",
@@ -858,7 +860,7 @@ class OrderSubmitViewSetSuper(
                 ],
             }
 
-            requestUri = f"{FISERV_URL_V2}GetRequestID"
+            requestUri = f"{FISERV_URL_V3}GetRequestID"
 
             hmac = api_helper.generate_fiserv_hmac(
                 requestUri,

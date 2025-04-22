@@ -34,6 +34,7 @@ from contact.constants import payload_valid_test
 
 FISERV_URL = "https://snappaydirectapi-cert.fiserv.com/api/interop/"
 FISERV_URL_V2 = "https://snappaydirectapi-cert.fiserv.com/api/interop/v2/"
+FISERV_URL_V3 = "https://snappaydirectapi-cert.fiserv.com/api/interop/v3/"
 SEND_EMAIL = "N"
 
 def create_super_request(data, query_params=""):
@@ -149,7 +150,7 @@ class GeneralTest(TestCase):
                     "quantity": "1",
                     "sku": "DHUB",  # Should be correct.
                     "company": "Texas Water Development Board",
-                    "fee": ".50",
+                    "fee": "0.50",
                     "department": "Texas Geographic Information Office",
                     "customerid": os.environ.get("FISERV_CUSTOMER_ID"),
                     "agency": "580",

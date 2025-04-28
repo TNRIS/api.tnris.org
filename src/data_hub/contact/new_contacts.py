@@ -716,7 +716,7 @@ class OrderSubmitViewSetSuper(
                 "templateid": 1092,  # required
                 "transactionType": "S",  # required: S means for a sale.
                 "transactionamount": round(total + transactionfee, 2),  # required
-                "paymentmethod": payment_method, # As needed.
+                "paymentmode": payment_method, # As needed.
                 "sendemailreceipts": "Y",
                 "cof": "C",  # Optional, means Card on file, and C means customer.
                 "cofscheduled": "N",  # Optional, N means no don't schedule card to be filed.
@@ -764,20 +764,23 @@ class OrderSubmitViewSetSuper(
                 "clxstream": [
                     {
                         "transaction": {
-                            "merchantid": os.environ.get("FISERV_MERCHANT_ID"),
-                            "localreferenceid": str(order.id),
-                            "type": "ecommerce",
-                            "description": "TxGIO DataHub order",
-                            "unitprice": round(total + transactionfee, 2),
-                            "quantity": "1",
-                            "sku": "DHUB",  # Should be correct.
-                            "company": "Texas Water Development Board",
-                            "fee": str(transactionfee),
-                            "department": "Texas Geographic Information Office",
-                            "customerid": os.environ.get("FISERV_CUSTOMER_ID"),
                             "agency": "580",
                             "batchid": "",
+                            "company": "Texas Water Development Board",
+                            "customerid": os.environ.get("FISERV_CUSTOMER_ID"),
+                            "department": "Texas Geographic Information Office",
+                            "description": "TxGIO DataHub order",
+                            "fee": str(transactionfee),
+                            "localreferenceid": "580" + str(
+                                order.order_details_id
+                            ),
+                            "merchantid": os.environ.get("FISERV_MERCHANT_ID"),
+                            "paymenttype": payment_method,
+                            "quantity": "1",
                             "reportlines": "3",  # This should be how many report line details attributes.
+                            "sku": "DHUB",  # Should be correct.
+                            "type": "ecommerce",
+                            "unitprice": round(total + transactionfee, 2),
                             "reportlinedetails": [
                                 {
                                     "id": "USAS1",

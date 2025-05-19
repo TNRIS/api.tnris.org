@@ -21,6 +21,8 @@ from modules.api_helper import logger
 from modules import api_helper
 from .models import EmailTemplate, OrderType, OrderDetailsType
 
+from contact.fiserv_routines import fiserv_helper
+
 PLACEHOLDER_INT = 0
 CLEANING_FLAG = False
 
@@ -604,14 +606,14 @@ class OrderCleanupViewSetSuper(ContactViewset):
             order = OrderType.objects.get(id=request.query_params["uuid"])
             if order.order_approved:
                 endpoint = f"{FISERV_URL}GetPaymentDetails" # Change over to gettransaction
-                basic = api_helper.generate_basic_auth()
+                basic = fiserv_helper.generate_basic_auth()
 
                 body = { # check orderid here.
                     "accountid": os.environ.get("FISERV_DEV_ACCOUNT_ID"),
                     "token": str(order.order_token)
                 }
 
-                hmac = api_helper.generate_fiserv_hmac(
+                hmac = fiserv_helper.generate_fiserv_hmac(
                     endpoint,
                     "POST",
                     json.dumps(body),
@@ -711,195 +713,16 @@ class OrderSubmitViewSetSuper(
                     payment_method = order_details["payment_method"]
                     template_id = 1093
 
-            body = {
-                "accountid": os.environ.get("FISERV_DEV_ACCOUNT_ID"),  # required
-                "companycode": os.environ.get("FISERV_COMPANY_CODE"),  # required
-                "currencycode": "USD",  # required
-                "customerid": os.environ.get("FISERV_CUSTOMER_ID"),  # required
-                "userid": os.environ.get("FISERV_USER_ID"),  # required
-                "redirecturl": "https://localhost:8000/api/v1/contact/order/redirect?status=success",
-                "cancelredirecturl": "https://data.geographic.texas.gov/order/redirect?status=cancel",  # Optional but we can use it.
-                "reference": "UPI",  # Required
-                "templateid": template_id,  # required
-                "transactionType": "S",  # required: S means for a sale.
-                "transactionamount": round(total + transactionfee, 2),  # required
-                "paymentmode": payment_method, # As needed.
-                "sendemailreceipts": "Y",
-                "cof": "C",  # Optional, means Card on file, and C means customer.
-                "cofscheduled": "N",  # Optional, N means no don't schedule card to be filed.
-                "ecomind": "E",  # Optional, E means ECommerce, this is a note on the origin of transaction
-                "orderid": "580"
-                + str(
-                    order.order_details_id
-                ),  # Optional Local order ID; we use it as a reference to get transaction info.
-                # "purchaseorder": "", Optional,
-                "type": "C",  # Optional, but C means customer.
-                "savepaymentmethod": "N",  # Optional
-                "saveatcustomer": "N",  # Optional
-                "displaycardssavedatcustomer": "N",  # Optional
-                "customer": {  # Optional customer data
-                    "customername": order_details["name"],
-                    "addressline1": order_details["address"],
-                    "addressline2": "",
-                    "city": order_details["city"],
-                    "state": order_details["state"],
-                    "zipcode": order_details["zipcode"],
-                    "country": "",  # Add state to order_details
-                    "phone": order_details["phone"],
-                    "email": order_details["email"],
-                },
-                "payments": [  # required
-                    {
-                        "mode": payment_method,  # Check these. CC has been checked TODO: Check ACH
-                        "merchantid": os.environ.get("FISERV_MERCHANT_ID"),
-                    }
-                ],
-                "level3": [
-                    {
-                        "linenumber": "1.000",
-                        "productcode": "TXGIO_DATA",
-                        "taxrate": "0",
-                        "quantity": "1",
-                        "itemdescriptor": "TxGIO DataHub order",
-                        "unitcost": total,
-                        "lineitemtotal": total,
-                        "taxamount": "0",
-                        "commoditycode": "",
-                        "unitofmeasure": "EA",
-                    },
-                    {
-                        "linenumber": "2.000",
-                        "productcode": "TXDIR_FEE",
-                        "taxrate": "0",
-                        "quantity": "1",
-                        "itemdescriptor": "Texas.gov fee**",
-                        "unitcost": transactionfee,
-                        "lineitemtotal": transactionfee,
-                        "taxamount": "0",
-                        "commoditycode": "",
-                        "unitofmeasure": "EA"
-                    }
-                ],
-                "clxstream": [
-                    {
-                        "transaction": {
-                            "agency": "580",
-                            "batchid": "",
-                            "company": "Texas Water Development Board",
-                            "customerid": os.environ.get("FISERV_CUSTOMER_ID"),
-                            "department": "Texas Geographic Information Office",
-                            "description": "TxGIO DataHub order",
-                            "fee": str(transactionfee),
-                            "localreferenceid": "580" + str(
-                                order.order_details_id
-                            ),
-                            "merchantid": os.environ.get("FISERV_MERCHANT_ID"),
-                            "paymenttype": payment_method,
-                            "quantity": "1",
-                            "reportlines": "3",  # This should be how many report line details attributes.
-                            "sku": "DHUB",  # Should be correct.
-                            "type": "ecommerce",
-                            "unitprice": total,
-                            "vendorid": os.environ.get("FISERV_SERVICE_CODE"),
-                            "reportlinedetails": [
-                                {
-                                    "id": "USAS1",
-                                    "attributes": [
-                                        {
-                                            "name": "USAS1COBJ",
-                                            "value": "3719",
-                                            "type": "String",
-                                        },
-                                        {
-                                            "name": "USAS1PCA",
-                                            "value": "19001",
-                                            "type": "String",
-                                        },
-                                        {
-                                            "name": "USAS1TCODE",
-                                            "value": "195",
-                                            "type": "String",
-                                        },
-                                        {
-                                            "name": "USAS1AMOUNT",
-                                            "value": total,
-                                            "type": "String",
-                                        },
-                                    ],
-                                },
-                                {
-                                    "id": "USAS2",
-                                    "attributes": [
-                                        {
-                                            "name": "USAS2COBJ",
-                                            "value": "3879",
-                                            "type": "String",
-                                        },
-                                        {
-                                            "name": "USAS2PCA",
-                                            "value": "07768",
-                                            "type": "String",
-                                        },
-                                        {
-                                            "name": "USAS2TCODE",
-                                            "value": "179",
-                                            "type": "String",
-                                        },
-                                        {
-                                            "name": "USAS2AMOUNT",
-                                            "value": transactionfee,
-                                            "type": "String",
-                                        },
-                                    ]
-                                },
-                                {
-                                    "id": "USAS3",
-                                    "attributes": [
-                                    {
-                                            "name": "USAS3COBJ",
-                                            "value": "7219",
-                                            "type": "String",
-                                        },
-                                        {
-                                            "name": "USAS3TCODE",
-                                            "value": "265",
-                                            "type": "String",
-                                        },
-                                        {
-                                            "name": "USAS3PCA",
-                                            "value": "07768",
-                                            "type": "String",
-                                        },
-                                        {
-                                            "name": "USAS3AMOUNT",
-                                            "value": transactionfee,
-                                            "type": "String",
-                                        },
-                                    ]
-                                }
-                            ],
-                            "additionalinfo": [
-                                {
-                                    "key": "servicecode",
-                                    "value": os.environ.get("FISERV_SERVICE_CODE")
-                                }
-                            ]
-                        }
-                    }
-                ],
-            }
-
+            body = fiserv_helper.generate_fiserv_post_body(payment_method, order, template_id, total, transactionfee, order_details)
             requestUri = f"{FISERV_URL_V3}GetRequestID"
-
-            hmac = api_helper.generate_fiserv_hmac(
+            hmac = fiserv_helper.generate_fiserv_hmac(
                 requestUri,
                 "POST",
                 json.dumps(body),
                 os.environ.get("FISERV_DEV_ACCOUNT_ID"),
                 os.environ.get("FISERV_DEV_AUTH_CODE"),
             )
-            basic = api_helper.generate_basic_auth()
-
+            basic = fiserv_helper.generate_basic_auth()
             response = requests.post(
                 requestUri,
                 json=body,

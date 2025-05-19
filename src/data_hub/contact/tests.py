@@ -29,6 +29,7 @@ from .models import OrderType, OrderDetailsType
 from rest_framework.request import Request
 from rest_framework.parsers import JSONParser
 from modules import api_helper
+from fiserv_routines import fiserv_helper
 
 from contact.constants import payload_valid_test
 
@@ -258,7 +259,7 @@ class GeneralTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        basic = api_helper.generate_basic_auth()
+        basic = fiserv_helper.generate_basic_auth()
 
         ofs = OrderFormViewSetSuper() # I need to call a method before creation.
         order = OrderFormViewSetSuper.create_order_object(
@@ -285,7 +286,7 @@ class GeneralTest(TestCase):
         )
         submit_form_super.create_super(request)
 
-        fake_token_hmac = api_helper.generate_fiserv_hmac(
+        fake_token_hmac = fiserv_helper.generate_fiserv_hmac(
             f"{FISERV_URL}tokenize",
             "POST",
             json.dumps(cls.fake_tokenize),
@@ -310,7 +311,7 @@ class GeneralTest(TestCase):
         cls.fake_charge["transactions"][0]["clxstream"]["transaction"]["localreferenceid"] = order_id
 
         
-        fake_hmac_v2 = api_helper.generate_fiserv_hmac(
+        fake_hmac_v2 = fiserv_helper.generate_fiserv_hmac(
             f"{FISERV_URL_V2}Charge",  #NOTE: Doesn't work but just testing v2
             "POST",
             json.dumps(cls.fake_charge),
@@ -575,7 +576,7 @@ class SnappayTestCase(GeneralTest):
 
     def test_make_hmac(self):
         requestUri: str = f"{FISERV_URL}GetRequestID"
-        hmac = api_helper.generate_fiserv_hmac(
+        hmac = fiserv_helper.generate_fiserv_hmac(
             requestUri,
             "POST",
             json.dumps(payload_valid_test),
@@ -583,7 +584,7 @@ class SnappayTestCase(GeneralTest):
             os.environ.get("FISERV_DEV_AUTH_CODE"),
         )
         self.assertIsNotNone(hmac)
-        basic = api_helper.generate_basic_auth()
+        basic = fiserv_helper.generate_basic_auth()
         response = requests.post(
             FISERV_URL + "GetRequestID",
             json=payload_valid_test,

@@ -15,7 +15,6 @@ from django.core.mail import EmailMessage, EmailMultiAlternatives
 from lcd.models import LoggerType
 from rest_framework.permissions import AllowAny
 from cryptography.fernet import Fernet
-import datetime, uuid, base64, hmac
 
 logger = logging.getLogger("errLog")
 logger.addHandler(watchtower.CloudWatchLogHandler())
@@ -302,35 +301,3 @@ def decrypt_string(value):
 
     return decrypted.decode("utf-8")
 
-def computeSignature(requestURI: str, requestMethod: str, payLoad: str, accountId: str, key: str):
-    """
-    Compute a HMAC signature for fiserv
-    """
-    requestTimeStamp: str = str(int(datetime.datetime.now().timestamp()))
-    nonce: str = str(uuid.uuid4())
-    requestContentBase64String: str = payLoad
-    signatureRawData: str = accountId + requestMethod + requestURI + requestTimeStamp +  nonce + requestContentBase64String
-    secretKeyByteArray = base64.b64decode(key)
-    signature = signatureRawData.encode("utf8")
-    signatureBytes = hmac.new(secretKeyByteArray, signature, hashlib.sha256)
-    requestSignatureBase64String = base64.b64encode(signatureBytes.digest())
-    HmacRaw = f"{accountId}:{requestSignatureBase64String.decode()}:{nonce}:{requestTimeStamp}"
-    HmacValue = base64.b64encode(HmacRaw.encode("utf8"))
-    return HmacValue
-
-def generate_fiserv_hmac(
-    url: str,
-    method: str,
-    payLoad: str,
-    accountId: str,
-    key: str
-):
-    return computeSignature(url, method, payLoad, accountId, key)
-
-def generate_basic_auth():
-    """
-    Generate basic authentication token for fiserv
-    """
-    basic = f"{os.environ.get('FISERV_API_BASIC_AUTH_USERNAME')}:{os.environ.get('FISERV_API_BASIC_AUTH_PWD')}"
-    basic = base64.b64encode(basic.encode("utf8"))
-    return basic

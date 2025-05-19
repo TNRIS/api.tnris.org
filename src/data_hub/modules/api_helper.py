@@ -69,7 +69,6 @@ class CorsPostPermission(AllowAny):
         )
         return u in self.whitelisted_domains
 
-
 def get_secret(secret_name):
     """Access all of the AWS Secrets via it's Identifier.
 
@@ -97,7 +96,6 @@ def get_secret(secret_name):
 
     # Decrypts secret using the associated KMS key.
     return json.loads(get_secret_value_response["SecretString"])
-
 
 def send_html_email(
     subject,
@@ -187,7 +185,6 @@ def auth_order(auth_details, order): # TODO: Stopping point
         order.save()
     return ACCESS_CODE_VALID and OTP_VALID
 
-
 def checkCaptcha(captcha):
     """Check a captcha string for success.
 
@@ -206,7 +203,6 @@ def checkCaptcha(captcha):
     }
 
     return requests.post(url=recaptcha_verify_url, data=recaptcha_data)
-
 
 def buildOrderString(order_obj):
     order_string = ""
@@ -262,7 +258,6 @@ def buildOrderString(order_obj):
         order_string += ""
 
     return order_string
-
 
 def checkLogger():
     try:

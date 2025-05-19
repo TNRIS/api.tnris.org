@@ -692,17 +692,24 @@ class OrderSubmitViewSetSuper(
             transactionfee = round(((total + 0.25) / 100) * 2.25, 2)
             # Round to second digit because of binary Float
             transactionfee = round(transactionfee + 0.25, 2)
-
+            template_id = 1092 #Configure the default
             payment_method = (
                 "CC"
             )
             if "payment" in order_details:
+                # In this case read in the payment method from the body.
                 payment_method = order_details["payment"]
+                if payment_method == "ACH":
+                    template_id = 1093
+                elif payment_method == "CC":
+                    template_id = 1092
             elif "payment_method" in order_details:
                 if order_details["payment_method"] == "Credit Card":
                     payment_method = "CC"
+                    template_id = 1092
                 else:
                     payment_method = order_details["payment_method"]
+                    template_id = 1093
 
             body = {
                 "accountid": os.environ.get("FISERV_DEV_ACCOUNT_ID"),  # required
@@ -713,7 +720,7 @@ class OrderSubmitViewSetSuper(
                 "redirecturl": "https://localhost:8000/api/v1/contact/order/redirect?status=success",
                 "cancelredirecturl": "https://data.geographic.texas.gov/order/redirect?status=cancel",  # Optional but we can use it.
                 "reference": "UPI",  # Required
-                "templateid": 1092,  # required
+                "templateid": template_id,  # required
                 "transactionType": "S",  # required: S means for a sale.
                 "transactionamount": round(total + transactionfee, 2),  # required
                 "paymentmode": payment_method, # As needed.
@@ -754,11 +761,23 @@ class OrderSubmitViewSetSuper(
                         "taxrate": "0",
                         "quantity": "1",
                         "itemdescriptor": "TxGIO DataHub order",
-                        "unitcost": round(total + transactionfee, 2),
-                        "lineitemtotal": round(total + transactionfee, 2),
+                        "unitcost": total,
+                        "lineitemtotal": total,
                         "taxamount": "0",
                         "commoditycode": "",
                         "unitofmeasure": "EA",
+                    },
+                    {
+                        "linenumber": "2.000",
+                        "productcode": "TXDIR_FEE",
+                        "taxrate": "0",
+                        "quantity": "1",
+                        "itemdescriptor": "Texas.gov fee**",
+                        "unitcost": transactionfee,
+                        "lineitemtotal": transactionfee,
+                        "taxamount": "0",
+                        "commoditycode": "",
+                        "unitofmeasure": "EA"
                     }
                 ],
                 "clxstream": [
@@ -780,7 +799,8 @@ class OrderSubmitViewSetSuper(
                             "reportlines": "3",  # This should be how many report line details attributes.
                             "sku": "DHUB",  # Should be correct.
                             "type": "ecommerce",
-                            "unitprice": round(total + transactionfee, 2),
+                            "unitprice": total,
+                            "vendorid": os.environ.get("FISERV_SERVICE_CODE"),
                             "reportlinedetails": [
                                 {
                                     "id": "USAS1",
@@ -858,6 +878,12 @@ class OrderSubmitViewSetSuper(
                                     ]
                                 }
                             ],
+                            "additionalinfo": [
+                                {
+                                    "key": "servicecode",
+                                    "value": os.environ.get("FISERV_SERVICE_CODE")
+                                }
+                            ]
                         }
                     }
                 ],

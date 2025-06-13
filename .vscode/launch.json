@@ -12,6 +12,17 @@
             "request": "launch",
             "program": "${workspaceFolder}/src/data_hub/manage.py",
             "args": [
+                "runserver", "8000"
+            ],
+            "django": true,
+            "justMyCode": true
+        },
+        {
+            "name": "Python: Run Django Server https",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/data_hub/manage.py",
+            "args": [
                 "runserver_plus", "8000", "--cert-file", "cert.pem", "--key-file", "key.pem"
             ],
             "django": true,

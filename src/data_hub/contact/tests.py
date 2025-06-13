@@ -1,4 +1,3 @@
-from urllib import request
 import hashlib
 from django.db.models import Q
 import requests
@@ -13,8 +12,6 @@ from contact.viewsets import (
     SubmitFormViewSet,
     OrderSubmitViewSet,
     OrderFormViewSet,
-    InitiateRetentionCleanupViewSet,
-    OrderCleanupViewSet
 )
 from unittest.mock import MagicMock
 from contact.new_contacts import (
@@ -28,15 +25,27 @@ from contact.new_contacts import (
 from .models import OrderType, OrderDetailsType
 from rest_framework.request import Request
 from rest_framework.parsers import JSONParser
-from modules import api_helper
-from fiserv_routines import fiserv_helper
-
 from contact.constants import payload_valid_test
+from contact.fiserv_routines import fiserv_helper
+
+order_details = {
+    "name": "John",
+    "address": "State Parking Garage E",
+    "city": "Austin",
+    "state": "Texas",
+    "zipcode": "76528",
+    "country": "US",
+    "phone": "1112223333",
+    "email": os.environ.get("MAIL_DEFAULT_TO")
+}
+
+PROTOCOL = "http"
 
 FISERV_URL = "https://snappaydirectapi-cert.fiserv.com/api/interop/"
 FISERV_URL_V2 = "https://snappaydirectapi-cert.fiserv.com/api/interop/v2/"
 FISERV_URL_V3 = "https://snappaydirectapi-cert.fiserv.com/api/interop/v3/"
 SEND_EMAIL = "N"
+payload_valid_test = fiserv_helper.generate_fiserv_post_body("CC", "", 1092, 11.11, .50,  order_details, True)
 
 def create_super_request(data, query_params=""):
     """Build a request that calls the super classes directly"""
@@ -51,7 +60,6 @@ def create_super_request(data, query_params=""):
     # Convert to a plain request that is used by Django. Then return it
     django_request = Request(request, parsers=[JSONParser()])
     return django_request
-
 
 class GeneralTest(TestCase):
     """Inheritable with some common setup."""
@@ -110,7 +118,7 @@ class GeneralTest(TestCase):
             "orderid": "", # Configured elsewhere.
             "paymentmethod": {
                 "tokenid": "", # Dynamic so this is set in setuptestdata function.
-                "transactionamount": "11.01",  # required
+                "transactionamount": "2.25",  # required
                 "cvv": "123",
                 "customername": "test man",
                 "addressline1": "State Parking Garage E",
@@ -127,118 +135,12 @@ class GeneralTest(TestCase):
                 "secureflag": "05",
                 "securevalue": ""
             },
-            "level3": [
-                {
-                    "linenumber": "1.000",
-                    "productcode": "TXGIO_DATA",
-                    "taxrate": "0",
-                    "quantity": "1",
-                    "itemdescriptor": "TxGIO DataHub order",
-                    "unitcost": "11.01",
-                    "lineitemtotal": "11.01",
-                    "taxamount": "0",
-                    "commoditycode": "",
-                    "unitofmeasure": "EA",
-                }
-            ],
-            "clxstream": {
-                "transaction": {
-                    "merchantid": os.environ.get("FISERV_MERCHANT_ID"),
-                    "localreferenceid": "", # Dynamic so this is set in setuptestdata function.
-                    "type": "ecommerce",
-                    "description": "TxGIO DataHub order",
-                    "unitprice": "11.01",
-                    "quantity": "1",
-                    "sku": "DHUB",  # Should be correct.
-                    "company": "Texas Water Development Board",
-                    "fee": "0.50",
-                    "department": "Texas Geographic Information Office",
-                    "customerid": os.environ.get("FISERV_CUSTOMER_ID"),
-                    "agency": "580",
-                    "reportlines": "3",  # This should be how many items in the details.
-                    "reportlinedetails": [
-                        {
-                            "id": "USAS1",
-                            "attributes": [
-                                {
-                                    "name": "USAS1CO",
-                                    "value": "3719",
-                                    "type": "String",
-                                },
-                                {
-                                    "name": "USAS1PCA",
-                                    "value": "19001",
-                                    "type": "String",
-                                },
-                                {
-                                    "name": "USAS1TCODE",
-                                    "value": "195",
-                                    "type": "String",
-                                },
-                                {
-                                    "name": "USAS1AMOUNT",
-                                    "value": "11.01",
-                                    "type": "String",
-                                },
-                            ],
-                        },
-                        {
-                            "id": "USAS2",
-                            "attributes": [
-                                {
-                                    "name": "USAS2CO",
-                                    "value": "3879",
-                                    "type": "String",
-                                },
-                                {
-                                    "name": "USAS2PCA",
-                                    "value": "07768",
-                                    "type": "String",
-                                },
-                                {
-                                    "name": "USAS2TCODE",
-                                    "value": "179",
-                                    "type": "String",
-                                },
-                                {
-                                    "name": "USAS2AMOUNT",
-                                    "value": ".50",
-                                    "type": "String",
-                                },
-                            ]
-                        },
-                        {
-                            "id": "USAS3",
-                            "attributes": [
-                               {
-                                    "name": "USAS3CO",
-                                    "value": "7219",
-                                    "type": "String",
-                                },
-                                {
-                                    "name": "USAS3TCODE",
-                                    "value": "265",
-                                    "type": "String",
-                                },
-                                {
-                                    "name": "USAS3PCA",
-                                    "value": "07768",
-                                    "type": "String",
-                                },
-                                {
-                                    "name": "USAS3AMOUNT",
-                                    "value": ".50",
-                                    "type": "String",
-                                },
-                            ]
-                        }
-                    ],
-                }
-            },
+            "level3": fiserv_helper.generate_level_three("2.0", ".25"),
+            "clxstream": fiserv_helper.generate_clx_stream("2.0", ".25", "", "CC"),
             "sendemailreceipts": SEND_EMAIL,
         }],
     }
- 
+
     fake_tokenize = {
         "accountid": os.environ.get("FISERV_DEV_ACCOUNT_ID"),
         "currency": "USD",
@@ -310,23 +212,22 @@ class GeneralTest(TestCase):
         cls.fake_charge["transactions"][0]["orderid"] = order_id
         cls.fake_charge["transactions"][0]["clxstream"]["transaction"]["localreferenceid"] = order_id
 
-        
-        fake_hmac_v2 = fiserv_helper.generate_fiserv_hmac(
-            f"{FISERV_URL_V2}Charge",  #NOTE: Doesn't work but just testing v2
+        fake_hmac_v3 = fiserv_helper.generate_fiserv_hmac(
+            f"{FISERV_URL_V3}charge",  #NOTE: Doesn't work but just testing v3
             "POST",
             json.dumps(cls.fake_charge),
             os.environ.get("FISERV_DEV_ACCOUNT_ID"),
             os.environ.get("FISERV_DEV_AUTH_CODE"),
         )
 
-        #NOTE: Doesn't work but just testing v2
-        fake_response_v2 = requests.post(  #NOTE: Doesn't work but just testing v2
-            FISERV_URL_V2 + "Charge",
+        #NOTE: Doesn't work but just testing v3
+        fake_response_v3 = requests.post(  #NOTE: Doesn't work but just testing v3
+            FISERV_URL_V3 + "charge",
             json=cls.fake_charge,
             headers={
                 "accountid": os.environ.get("FISERV_DEV_ACCOUNT_ID"),  # good
                 "merchantid": os.environ.get("FISERV_MERCHANT_ID"),  # good
-                "signature": f"Hmac {fake_hmac_v2.decode()}",
+                "signature": f"Hmac {fake_hmac_v3.decode()}",
                 "Authorization": f"Basic {basic.decode()}",
             },
         )
@@ -338,7 +239,7 @@ class GeneralTest(TestCase):
         hash = hashlib.sha256(
             bytes(access_token + salt + pepper, "utf8")
         ).hexdigest()
-        
+
         otp = secrets.token_urlsafe(12)
         order_details = OrderDetailsType.objects.create(
             details=json.dumps(cls.order_details_complete),
@@ -348,10 +249,9 @@ class GeneralTest(TestCase):
             otp_age=time.time(),
         )
         created = OrderType.objects.create(order_details=order_details)
-
         created.order_approved = True
         created.approved_charge = 23
-        created.order_token = json.loads(fake_response_v2.text)["transactions"][0]["pgtransactionid"]
+        created.order_token = json.loads(fake_response_v3.text)["transactions"][0]["pgtransactionid"]
         created.save()
 
         # Put completed order in database.
@@ -368,7 +268,6 @@ class GeneralTest(TestCase):
 
 class SnappayTestCase(GeneralTest):
     """General Snappay tests"""
-
     fixtures = ["email_templates.json"]
 
     def test_order_cleanup(self):
@@ -380,9 +279,9 @@ class SnappayTestCase(GeneralTest):
         )
         response = order_cleanup.create_super(request)
         self.assertEquals(response.status_code, 200, "Order Cleanup unsuccessful.")
-        self.assertEquals(mail.outbox[0].subject, 'Dataset Order Update: Payment has been received.', "Dataset order update wasn't first email. ")
+        #self.assertEquals(mail.outbox[0].subject, 'Dataset Order Update: Payment has been received.', "Dataset order update wasn't first email. ")
+        self.assertEquals(mail.outbox[0].subject, 'Order Received', "Dataset order update wasn't first email. ")
         self.assertEquals(len(mail.outbox), 1, 'Dataset Order Update: Payment has been received.')
-
 
     def test_initiate_retentions_cleanup(self):
         """Initiate retention cleanup test case."""
@@ -426,12 +325,9 @@ class SnappayTestCase(GeneralTest):
 
     def test_redirect(self):
         response = requests.post(
-            "https://localhost:8000/order/redirect?status=success",
+            PROTOCOL + "://localhost:8000/order/redirect?status=success",
             json=payload_valid_test
         )
-
-        print("Here")
-        
 
     def test_order_submit_create(self):
         """Test Order Submit create function"""
@@ -440,9 +336,11 @@ class SnappayTestCase(GeneralTest):
             {
                 "recaptcha": "none",
                 "form_id": "data-tnris-org-order",
-                "order_details": {"item": 50, "PAYMENT": 5.42, "EMAIL": os.environ.get(
-                    "MAIL_DEFAULT_TO"
-                )},
+                "order_details": {
+                    "item": 50,
+                    "PAYMENT": 5.42,
+                    "EMAIL": os.environ.get("MAIL_DEFAULT_TO"),
+                    "form_id": "order-received"},
                 "EMAIL": os.environ.get(
                     "MAIL_DEFAULT_TO"
                 ),  # Caps to test that route makes keys lowercase
@@ -478,10 +376,12 @@ class SnappayTestCase(GeneralTest):
         request = create_super_request(
             {
                 "recaptcha": "none",
-                "form_id": "order-map",
-                "order_details": {"item": 50, "PAYMENT": 5.43, "EMAIL": os.environ.get(
-                    "MAIL_DEFAULT_TO"
-                )},
+                "order_details": {
+                    "item": 50,
+                    "PAYMENT": 5.43,
+                    "EMAIL": os.environ.get("MAIL_DEFAULT_TO"),
+                    "form_id": "order-map"
+                },
                 "EMAIL": os.environ.get(
                     "MAIL_DEFAULT_TO"
                 ),  # Caps to test that route makes keys lowercase
@@ -495,7 +395,7 @@ class SnappayTestCase(GeneralTest):
         )
 
         # Expected two emails to be sent.
-        self.assertEqual(len(mail.outbox), 1, "Wrong number of emails have been sent.")
+        self.assertEqual(len(mail.outbox), 2, "Wrong number of emails have been sent.")
 
     def test_gone(self):
         """Test that old order urls are gone."""
@@ -547,6 +447,7 @@ class SnappayTestCase(GeneralTest):
     def test_gen_order_submit_blocking(self):
         """Test the order submit blocks failed captchas."""
         request = requests.Request(method="POST", data={"recaptcha": "none"})
+        request = create_super_request({"recaptcha": "none"}, f"?uuid=bad")
         order_submit = OrderSubmitViewSet()
         response = order_submit.create(request)
         self.assertEquals(

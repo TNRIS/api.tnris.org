@@ -37,6 +37,8 @@ if TESTING:
     FISERV_URL_V2 = "https://snappaydirectapi-cert.fiserv.com/api/interop/v2/"
     FISERV_URL_V3 = "https://snappaydirectapi-cert.fiserv.com/api/interop/v3/"
 
+TESTING_SKIP_CAPTCHA = TESTING and False # Change to True if you want to skip captcha.
+
 def resend_email(self, request, queryset, CC_STRATMAP):
     cont_static = ContactViewset()
 
@@ -142,7 +144,7 @@ class ContactViewset(viewsets.ViewSet):
         if api_helper.checkLogger():
             logger.info(msg)
         verify_req = api_helper.checkCaptcha(request.data["recaptcha"])
-        if json.loads(verify_req.text)["success"] or TESTING:
+        if json.loads(verify_req.text)["success"] or TESTING_SKIP_CAPTCHA:
             return self.create_super(request)
         else:
             return Response(
@@ -713,7 +715,7 @@ class OrderSubmitViewSetSuper(
                     payment_method = order_details["payment_method"]
                     template_id = 1093
 
-            body = fiserv_helper.generate_fiserv_post_body(payment_method, order, template_id, total, transactionfee, order_details)
+            body = fiserv_helper.generate_fiserv_post_body(payment_method, str(order.order_details_id), template_id, total, transactionfee, order_details)
             requestUri = f"{FISERV_URL_V3}GetRequestID"
             hmac = fiserv_helper.generate_fiserv_hmac(
                 requestUri,

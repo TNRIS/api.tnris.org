@@ -160,7 +160,7 @@ def generate_clx_stream(f_total_amount, f_tran_fee, order_details_id, payment_me
                         {
                             "name": "USAS1AMOUNT",
                             "value": f_total_amount,
-                            "type": "String",
+                            "type": "DOLLAR",
                         },
                     ],
                 },
@@ -185,7 +185,7 @@ def generate_clx_stream(f_total_amount, f_tran_fee, order_details_id, payment_me
                         {
                             "name": "USAS2AMOUNT",
                             "value": f_tran_fee,
-                            "type": "String",
+                            "type": "DOLLAR",
                         },
                     ],
                 },
@@ -210,7 +210,7 @@ def generate_clx_stream(f_total_amount, f_tran_fee, order_details_id, payment_me
                         {
                             "name": "USAS3AMOUNT",
                             "value": f_tran_fee,
-                            "type": "String",
+                            "type": "DOLLAR",
                         },
                     ],
                 }],

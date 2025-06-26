@@ -58,6 +58,6 @@
         },
     ],
     "settings": {
-        "python.pythonPath": "${workspaceFolder}/venv_38/bin/python"
+        "python.pythonPath": "${workspaceFolder}/venv_312/bin/python"
     }
 }

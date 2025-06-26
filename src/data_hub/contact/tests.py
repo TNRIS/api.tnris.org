@@ -5,6 +5,8 @@ import os
 import time
 import json
 import secrets
+import datetime
+
 from django.core import mail
 from django.test import TestCase, AsyncRequestFactory
 from contact.viewsets import (
@@ -45,7 +47,7 @@ FISERV_URL = "https://snappaydirectapi-cert.fiserv.com/api/interop/"
 FISERV_URL_V2 = "https://snappaydirectapi-cert.fiserv.com/api/interop/v2/"
 FISERV_URL_V3 = "https://snappaydirectapi-cert.fiserv.com/api/interop/v3/"
 SEND_EMAIL = "N"
-payload_valid_test = fiserv_helper.generate_fiserv_post_body("CC", "", 1092, 11.11, .50,  order_details, True)
+payload_valid_test = fiserv_helper.generate_fiserv_post_body("CC", "", 1092, 11.11, .50,  order_details)
 
 def create_super_request(data, query_params=""):
     """Build a request that calls the super classes directly"""
@@ -264,7 +266,11 @@ class GeneralTest(TestCase):
         order.order_approved = True
         order.approved_charge = 9.9
         order.order_token = "8fa45e97-439f-4883-a3fd-b42d3d7fabb1"
+        order.created = datetime.datetime(2009, 1, 1, 0)
+        order.last_modified = datetime.datetime(2010, 1, 1, 0)
         order.save()
+
+        OrderType.objects.filter(order_token="8fa45e97-439f-4883-a3fd-b42d3d7fabb1").update(last_modified = datetime.datetime(2010, 1, 1, 0))
 
 class SnappayTestCase(GeneralTest):
     """General Snappay tests"""
@@ -274,23 +280,25 @@ class SnappayTestCase(GeneralTest):
         """Order cleanup test case."""
         order_cleanup = OrderCleanupViewSetSuper()
         request = create_super_request(
-            {"access_code": os.environ.get("CCP_ACCESS_CODE")},
+            {
+                "access_code": os.environ.get("CCP_ACCESS_CODE"),
+                "approve_run": "true"
+            },
             f"?uuid={self.uuid}"
         )
         response = order_cleanup.create_super(request)
-        self.assertEquals(response.status_code, 200, "Order Cleanup unsuccessful.")
-        #self.assertEquals(mail.outbox[0].subject, 'Dataset Order Update: Payment has been received.', "Dataset order update wasn't first email. ")
-        self.assertEquals(mail.outbox[0].subject, 'Order Received', "Dataset order update wasn't first email. ")
-        self.assertEquals(len(mail.outbox), 1, 'Dataset Order Update: Payment has been received.')
+        self.assertEqual(response.status_code, 200, "Order Cleanup unsuccessful.")
+        self.assertEqual(mail.outbox[0].subject, 'Order Received', "Dataset order update wasn't first email. ")
+        self.assertEqual(len(mail.outbox), 1, 'Dataset Order Update: Payment has been received.')
 
     def test_initiate_retentions_cleanup(self):
         """Initiate retention cleanup test case."""
         initiate_cleanup = InitiateRetentionCleanupViewSetSuper()
         request = create_super_request(
-            {"approve_run": "none", "access_code": os.environ.get("CCP_ACCESS_CODE")}
+            {"approve_run": "true", "access_code": os.environ.get("CCP_ACCESS_CODE")}
         )
         response = initiate_cleanup.create_super(request)
-        self.assertEquals(response.status_code, 200, "Order status unsuccessful.")
+        self.assertEqual(response.status_code, 200, "Order status unsuccessful.")
 
     def test_order_status(self):
         """Test getting order status"""
@@ -310,14 +318,14 @@ class SnappayTestCase(GeneralTest):
         response = order_status_super.create_super(request)
 
         # Make sure we get a 200 created response.
-        self.assertEquals(response.status_code, 200, "Order status unsuccessful.")
+        self.assertEqual(response.status_code, 200, "Order status unsuccessful.")
 
     def test_order_form_blocking(self):
         """Test the order form submit blocks failed captchas."""
         request = requests.Request(method="POST", data={"recaptcha": "none"})
         order_form = OrderFormViewSet()
         response = order_form.create(request)
-        self.assertEquals(
+        self.assertEqual(
             response.status_code,
             403,
             "Order submit route not sending 403 Forbidden signal.",
@@ -361,7 +369,7 @@ class SnappayTestCase(GeneralTest):
             self.assertIsNotNone(order_details, "Item Details does not exist")
 
             # Make sure we get a 201 created response.
-            self.assertEquals(
+            self.assertEqual(
                 response.status_code, 201, "Form submission was not successful."
             )
         else:
@@ -390,7 +398,7 @@ class SnappayTestCase(GeneralTest):
         response = order_form_super.create_super(request)
 
         # Make sure we get a 201 created response.
-        self.assertEquals(
+        self.assertEqual(
             response.status_code, 201, "Form submission was not successful."
         )
 
@@ -403,7 +411,7 @@ class SnappayTestCase(GeneralTest):
 
         submit_form = SubmitFormViewSet()
         response = submit_form.create(request)
-        self.assertEquals(
+        self.assertEqual(
             response.status_code, 410, "Submit route not sending 410 GONE signal."
         )
 
@@ -417,7 +425,7 @@ class SnappayTestCase(GeneralTest):
         genotp_form = GenOtpViewSet()
         response = genotp_form.create(request)
 
-        self.assertEquals(
+        self.assertEqual(
             response.status_code,
             403,
             "Generate OTP route not sending 403 Forbidden signal.",
@@ -432,13 +440,13 @@ class SnappayTestCase(GeneralTest):
 
         genotp_form = GenOtpViewSetSuper()
         response = genotp_form.create_super(request)
-        self.assertEquals(
+        self.assertEqual(
             response.status_code,
             200,
             "Test the OTP generation failed.",
         )
 
-        self.assertEquals(
+        self.assertEqual(
             response.data["status"],
             "success",
             "Test the OTP generation failed.",
@@ -450,7 +458,7 @@ class SnappayTestCase(GeneralTest):
         request = create_super_request({"recaptcha": "none"}, f"?uuid=bad")
         order_submit = OrderSubmitViewSet()
         response = order_submit.create(request)
-        self.assertEquals(
+        self.assertEqual(
             response.status_code,
             403,
             "Order submit route not sending 403 Forbidden signal.",
@@ -471,12 +479,12 @@ class SnappayTestCase(GeneralTest):
         response = submit_form_super.create_super(request)
 
         # # Make sure we get a 201 created response.
-        self.assertEquals(
+        self.assertEqual(
             response.status_code, 200, "Form submission and HPP was not created."
         )
 
     def test_make_hmac(self):
-        requestUri: str = f"{FISERV_URL}GetRequestID"
+        requestUri: str = f"{FISERV_URL_V3}GetRequestID"
         hmac = fiserv_helper.generate_fiserv_hmac(
             requestUri,
             "POST",
@@ -487,7 +495,7 @@ class SnappayTestCase(GeneralTest):
         self.assertIsNotNone(hmac)
         basic = fiserv_helper.generate_basic_auth()
         response = requests.post(
-            FISERV_URL + "GetRequestID",
+            FISERV_URL_V3 + "GetRequestID",
             json=payload_valid_test,
             headers={
                 "accountid": os.environ.get("FISERV_DEV_ACCOUNT_ID"),  # good
@@ -496,11 +504,5 @@ class SnappayTestCase(GeneralTest):
                 "Authorization": f"Basic {basic.decode()}",
             },
         )
-
-        self.assertIs(response.status_code, 200, "response status_code is not 200")
-        print(
-            "Error: "
-            + str(response.status_code)
-            + " "
-            + json.loads(response.text)["message"]
-        )
+        response_text = json.loads(response.text)
+        self.assertIs(response_text["status"], "Y", "response status is not Y " + response_text["message"])

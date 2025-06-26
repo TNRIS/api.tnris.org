@@ -267,7 +267,6 @@ class OrderFormViewSetSuper(
             # If name was sent in request add it to the address information.
             if "name" in order_details.keys():
                 replyer = "%s <%s>" % (order_details["name"], order_details["email"])
-            #TODO: Fix tests
             # Send to ticketing system unless sendpoint has alternative key value in email template record.
             api_helper.send_raw_email(
                 subject=email_template.email_template_subject,
@@ -382,7 +381,6 @@ class OrderStatusViewSetSuper(
                 status=status.HTTP_200_OK,
             )
 
-# Beta testing done 02/18/2024
 class InitiateRetentionCleanupViewSetSuper(
         ContactViewset
     ):
@@ -426,10 +424,6 @@ class InitiateRetentionCleanupViewSetSuper(
                     id=order.order_details_id
                 )
 
-                # Test variables
-                orders_to_be_deleted = 0
-                orders_to_be_archived = 0
-
                 # If archived we must check if deletion time has come.
                 # This is where the writing to the database should occur. Be
                 # sure to check for "approve_run" is "true" before doing
@@ -446,8 +440,6 @@ class InitiateRetentionCleanupViewSetSuper(
                         if approve_run:
                             order.delete()
                             order_details.delete()
-
-                        orders_to_be_deleted += 1
                 else:
                     # If not archived we check the retention policy.
                     # Retention policy Orders marked as archived will be
@@ -457,22 +449,10 @@ class InitiateRetentionCleanupViewSetSuper(
                         if approve_run:
                             order.archived = True
                             order.save()
-                        orders_to_be_archived += 1
 
             # General Response
             if approve_run:
                 return Response({"status": "success", "message": "success"})
-
-            # Testing information response.
-            return Response(
-                {
-                    "status": "success",
-                    "message": "success",
-                    "orders_to_be_deleted": orders_to_be_deleted,
-                    "orders_to_be_archived": orders_to_be_archived,
-                },
-                status=status.HTTP_200_OK,
-            )
 
         except Exception as e:
             if api_helper.checkLogger():
@@ -524,7 +504,7 @@ class OrderCleanupViewSetSuper(ContactViewset):
                     request.query_params["uuid"] = str(order["id"])
                     request.query_params._mutable = False
                     receipt = self.get_receipt(request, format) #TODO: Get receipt then continue.
-                    if receipt.status_code == 200: #TODO Monday: Fix this and find out why receipt isn't found.
+                    if receipt.status_code == 200: 
                         if not order["tnris_notified"]:
                             if api_helper.checkLogger():
                                 logger.info(
@@ -762,9 +742,9 @@ class OrderSubmitViewSetSuper(
                     {
                         "status": "failure",
                         "order_url": "NONE",
-                        "message": "The order has failed",
+                        "message": "We could not process this order, because we couldn't find the request id or the order has already been completed.",
                     },
-                    status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                    status=status.HTTP_409_CONFLICT,
                 )
         except Exception as e:
             message = "Error creating order. Exception: "

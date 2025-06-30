@@ -10,13 +10,13 @@ import datetime
 from django.core import mail
 from django.test import TestCase, AsyncRequestFactory
 from contact.viewsets import (
-    GenOtpViewSet,
-    SubmitFormViewSet,
-    OrderSubmitViewSet,
-    OrderFormViewSet,
+    FiservGenOtpViewSet,
+    FiservSubmitFormViewSet,
+    FiservOrderSubmitViewSet,
+    FiservOrderFormViewSet,
 )
 from unittest.mock import MagicMock
-from contact.new_contacts import (
+from contact.fiserv_payments import (
     GenOtpViewSetSuper,
     OrderFormViewSetSuper,
     OrderSubmitViewSetSuper,
@@ -323,7 +323,7 @@ class SnappayTestCase(GeneralTest):
     def test_order_form_blocking(self):
         """Test the order form submit blocks failed captchas."""
         request = requests.Request(method="POST", data={"recaptcha": "none"})
-        order_form = OrderFormViewSet()
+        order_form = FiservOrderFormViewSet()
         response = order_form.create(request)
         self.assertEqual(
             response.status_code,
@@ -333,7 +333,7 @@ class SnappayTestCase(GeneralTest):
 
     def test_redirect(self):
         response = requests.post(
-            PROTOCOL + "://localhost:8000/order/redirect?status=success",
+            PROTOCOL + "://localhost:8000/v2/order/redirect?status=success",
             json=payload_valid_test
         )
 
@@ -409,7 +409,7 @@ class SnappayTestCase(GeneralTest):
         """Test that old order urls are gone."""
         request = requests.Request(method="POST", data={"recaptcha": "none"})
 
-        submit_form = SubmitFormViewSet()
+        submit_form = FiservSubmitFormViewSet()
         response = submit_form.create(request)
         self.assertEqual(
             response.status_code, 410, "Submit route not sending 410 GONE signal."
@@ -422,7 +422,7 @@ class SnappayTestCase(GeneralTest):
         # build a basic request to test with
         request = create_super_request({"recaptcha": "none"}, f"?uuid={self.uuid}")
 
-        genotp_form = GenOtpViewSet()
+        genotp_form = FiservGenOtpViewSet()
         response = genotp_form.create(request)
 
         self.assertEqual(
@@ -456,7 +456,7 @@ class SnappayTestCase(GeneralTest):
         """Test the order submit blocks failed captchas."""
         request = requests.Request(method="POST", data={"recaptcha": "none"})
         request = create_super_request({"recaptcha": "none"}, f"?uuid=bad")
-        order_submit = OrderSubmitViewSet()
+        order_submit = FiservOrderSubmitViewSet()
         response = order_submit.create(request)
         self.assertEqual(
             response.status_code,

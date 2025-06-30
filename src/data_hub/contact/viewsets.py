@@ -12,13 +12,8 @@ from django.shortcuts import redirect
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework import mixins, schemas, status, viewsets
 from rest_framework.response import Response
-from contact.new_contacts import (
-    GenOtpViewSetSuper,
-    OrderStatusViewSetSuper,
-    InitiateRetentionCleanupViewSetSuper,
-    OrderCleanupViewSetSuper,
-    OrderSubmitViewSetSuper,
-    OrderFormViewSetSuper)
+from contact import fiserv_payments
+from contact import ccp_payments
 
 import boto3
 from botocore.exceptions import ClientError
@@ -83,7 +78,73 @@ class CorsPostPermission(AllowAny):
 # ######################################################
 # ################## ORDER ENDPOINTS ###################
 # ######################################################
-class SubmitFormViewSet(viewsets.ViewSet):
+
+# ######################################################
+# ################### CCP ENDPOINTS ####################
+# ######################################################
+
+class CcpSubmitFormViewSet(ccp_payments.SubmitFormViewSetSuper):
+    """
+    Old submit form, will be deprecated soon.
+    """
+    permission_classes = [CorsPostPermission]
+    def create(self, request):
+        return self.intro(request, "Running CcpSubmitFormViewSet")
+
+class CcpGenOtpViewSet(ccp_payments.GenOtpViewSetSuper):
+    """
+    Generate One time password viewset for CCP.
+    """
+    permission_classes = [CorsPostPermission]
+
+    def create(self, request):
+        return self.intro(request, "Regenerating one time passcode. CcpGenOtpViewSet.")
+
+class CcpOrderStatusViewSet(ccp_payments.OrderStatusViewSetSuper):
+    """
+    Order Status viewset.
+    """
+    permission_classes = [CorsPostPermission]
+    def create(self, request):
+        return self.intro(request, "running CcpOrderStatusViewSet")
+
+class CcpInitiateRetentionCleanupViewSet(ccp_payments.InitiateRetentionCleanupViewSetSuper):
+    """
+    Initiate retention cleanup viewset for ccp.
+    """
+    permission_classes = (AllowAny,)
+    def create(self, request):
+       return self.intro(request, "running CcpInitiateRetentionCleanupViewSet")
+
+class CcpOrderCleanupViewSet(ccp_payments.OrderCleanupViewSetSuper):
+    """
+    Order cleanup viewset.
+    """
+    permission_classes = (AllowAny,)
+    def create(self, request):
+        return self.intro(request, "running CcpOrderCleanupViewSet")
+
+class CcpOrderSubmitViewSet(ccp_payments.OrderSubmitViewSetSuper):
+    """
+    CCP Order submit viewset.
+    """
+    permission_classes = [CorsPostPermission]
+    def create(self, request):
+        return self.intro(request, "Starting CcpOrderSubmitViewSet")
+
+class CcpOrderFormViewSet(ccp_payments.OrderFormViewSetSuper): 
+    """
+    Ccp Order form viewset.
+    """
+    permission_classes = [CorsPostPermission]
+    def create(self, request):
+        return self.intro(request, "running CcpOrderFormViewSet")
+    
+# ######################################################
+# ################# FiServ ENDPOINTS ###################
+# ######################################################
+
+class FiservSubmitFormViewSet(viewsets.ViewSet):
     """
     Handle TxGIO form submissions (Restricted Access).
     """
@@ -92,16 +153,7 @@ class SubmitFormViewSet(viewsets.ViewSet):
         # Check Recaptcha return if it fails.
         return Response("Endpoint deprecated", status=status.HTTP_410_GONE)
 
-class RedirectUrlViewSet(viewsets.ViewSet):
-    """
-    Redirect to a url.
-    """
-    permission_classes = [CorsPostPermission]
-    def create(self, request):
-        # Check Recaptcha return if it fails.
-        return redirect("https://data.geographic.texas.gov/order/redirect?status=success")
-
-class GenOtpViewSet(GenOtpViewSetSuper):
+class FiservGenOtpViewSet(fiserv_payments.GenOtpViewSetSuper):
     """
     Generate One time password viewset.
     """
@@ -110,7 +162,7 @@ class GenOtpViewSet(GenOtpViewSetSuper):
     def create(self, request):
         return self.intro(request, "Regenerating one time passcode. GenOtpViewSet.")
 
-class OrderStatusViewSet(OrderStatusViewSetSuper):
+class FiservOrderStatusViewSet(fiserv_payments.OrderStatusViewSetSuper):
     """
     Order Status viewset.
     """
@@ -118,7 +170,7 @@ class OrderStatusViewSet(OrderStatusViewSetSuper):
     def create(self, request):
         return self.intro(request, "running OrderStatusViewSet")
 
-class InitiateRetentionCleanupViewSet(InitiateRetentionCleanupViewSetSuper):
+class FiservInitiateRetentionCleanupViewSet(fiserv_payments.InitiateRetentionCleanupViewSetSuper):
     """
     Initiate retention cleanup viewset.
     """
@@ -126,7 +178,7 @@ class InitiateRetentionCleanupViewSet(InitiateRetentionCleanupViewSetSuper):
     def create(self, request):
        return self.intro(request, "running InitiateRetentionCleanupViewSet")
 
-class OrderCleanupViewSet(OrderCleanupViewSetSuper):
+class FiservOrderCleanupViewSet(fiserv_payments.OrderCleanupViewSetSuper):
     """
     Order cleanup viewset.
     """
@@ -134,7 +186,7 @@ class OrderCleanupViewSet(OrderCleanupViewSetSuper):
     def create(self, request):
         return self.intro(request, "running OrderCleanupViewSet")
 
-class OrderSubmitViewSet(OrderSubmitViewSetSuper):
+class FiservOrderSubmitViewSet(fiserv_payments.OrderSubmitViewSetSuper):
     """
     Order submit viewset.
     """
@@ -142,13 +194,22 @@ class OrderSubmitViewSet(OrderSubmitViewSetSuper):
     def create(self, request):
         return self.intro(request, "Starting OrderSubmitViewSet")
 
-class OrderFormViewSet(OrderFormViewSetSuper): #test
+class FiservOrderFormViewSet(fiserv_payments.OrderFormViewSetSuper):
     """
     Order form viewset.
     """
     permission_classes = [CorsPostPermission]
     def create(self, request):
         return self.intro(request, "running OrderFormViewSet")
+
+class FiservRedirectUrlViewSet(viewsets.ViewSet):
+    """
+    Redirect to a url.
+    """
+    permission_classes = [CorsPostPermission]
+    def create(self, request):
+        # Check Recaptcha return if it fails.
+        return redirect("https://data.geographic.texas.gov/order/redirect?status=success")
 
 # ######################################################
 # ############## CONTACT FORM ENDPOINTS ################

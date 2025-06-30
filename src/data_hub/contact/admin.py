@@ -7,7 +7,7 @@ from django import forms
 from django.shortcuts import redirect
 
 import csv, datetime, json, os, secrets, hashlib, time
-from .new_contacts import resend_email
+from .fiserv_payments import resend_email
 
 from .models import (
     Campaign,

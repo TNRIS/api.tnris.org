@@ -9,14 +9,11 @@ import secrets
 import time
 from datetime import datetime, timezone
 import requests
-from rest_framework.permissions import AllowAny
 from rest_framework import status, viewsets
 from rest_framework.response import Response
 from django.conf import settings
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
-
-from modules.api_helper import CorsPostPermission
 from modules.api_helper import logger
 from modules import api_helper
 from .models import EmailTemplate, OrderType, OrderDetailsType
@@ -31,7 +28,7 @@ TESTING = True
 FISERV_URL_V3 = "https://snappaydirectapi-cert.fiserv.com/api/interop/v3/"
 FISERV_URL_V2 = "https://snappaydirectapi-cert.fiserv.com/api/interop/v2/"
 FISERV_URL = "https://snappaydirectapi-cert.fiserv.com/api/interop/"
-SEND_HTML_FLAG = True # More meaningful than a simple True
+SEND_HTML_FLAG = True
 
 if TESTING:
     FISERV_URL_V2 = "https://snappaydirectapi-cert.fiserv.com/api/interop/v2/"
@@ -40,7 +37,7 @@ if TESTING:
 TESTING_SKIP_CAPTCHA = TESTING and False # Change to True if you want to skip captcha.
 
 def resend_email(self, request, queryset, CC_STRATMAP):
-    cont_static = ContactViewset()
+    cont_static = FiservViewset()
 
     for order in queryset:
         if order.order_approved and order.approved_charge and order.customer_notified:
@@ -64,7 +61,20 @@ def resend_email(self, request, queryset, CC_STRATMAP):
 # #################################################################
 
 
-class ContactViewset(viewsets.ViewSet):
+class FiservViewset(viewsets.ViewSet):
+    def intro(self, request, msg=""):
+        """Abstraction function to check logger, check captcha, then handle failed captchas if needed."""
+        if api_helper.checkLogger():
+            logger.info(msg)
+        verify_req = api_helper.checkCaptcha(request.data["recaptcha"])
+        if json.loads(verify_req.text)["success"] or TESTING_SKIP_CAPTCHA:
+            return self.create_super(request)
+        else:
+            return Response(
+                {"status": "failure", "message": "Captcha is incorrect."},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
     # inject form values into email template body
     def compile_email_body(self, template_body, dict):
         """
@@ -139,31 +149,18 @@ class ContactViewset(viewsets.ViewSet):
     def format_req(self, items):
         return {k.lower().replace(" ", "_"): v for k, v in items}
 
-    def intro(self, request, msg=""):
-        """Abstraction function to check logger, check captcha, then handle failed captchas if needed."""
-        if api_helper.checkLogger():
-            logger.info(msg)
-        verify_req = api_helper.checkCaptcha(request.data["recaptcha"])
-        if json.loads(verify_req.text)["success"] or TESTING_SKIP_CAPTCHA:
-            return self.create_super(request)
-        else:
-            return Response(
-                {"status": "failure", "message": "Captcha is incorrect."},
-                status=status.HTTP_403_FORBIDDEN,
-            )
+# FiservViewset -> OrderFormViewSetSuper -> OrderFormViewSet
 
-# ContactViewset -> OrderFormViewSetSuper -> OrderFormViewSet
-
-# FORMS ORDER ENDPOINT #Beta testing done 02/18/2024
+# FORMS ORDER ENDPOINT
 class OrderFormViewSetSuper(
-        ContactViewset
+        FiservViewset
     ):
     """
-    Handle TxGIO order form submissions
+    Handle TxGIO order form submissions through fiserv (Snap Pay).
     """
     @receiver(pre_save, sender=OrderType)
     def my_callback(sender, instance, *args, **kwargs): #Beta testing done 02/18/2024
-        contact_viewset = ContactViewset()
+        contact_viewset = FiservViewset()
         instance.order_approved
         if instance.order_approved and instance.approved_charge:
             if not instance.customer_notified:
@@ -291,7 +288,7 @@ class OrderFormViewSetSuper(
 
 # Beta testing done 02/18/2024
 class GenOtpViewSetSuper(
-        ContactViewset
+        FiservViewset
     ):
     """
     Regenerate One Time Passcode
@@ -316,7 +313,7 @@ class GenOtpViewSetSuper(
             # Send One time passcode to users email.
             # get email template for generating otp
             email_template = EmailTemplate.objects.get(form_id="gen-otp")
-            # ContactViewset.format_req(request.data.items())
+            # FiservViewset.format_req(request.data.items())
             formatted = self.format_req(request.data.items())
             formatted["otp"] = otp
             self.send_template_email(
@@ -346,7 +343,7 @@ class GenOtpViewSetSuper(
 
 # Beta testing done 02/18/2024
 class OrderStatusViewSetSuper(
-        ContactViewset
+        FiservViewset
     ):
     """
     Handle Checking the order status
@@ -382,7 +379,7 @@ class OrderStatusViewSetSuper(
             )
 
 class InitiateRetentionCleanupViewSetSuper(
-        ContactViewset
+        FiservViewset
     ):
     """
     Delete old orders according to retention policy.
@@ -462,7 +459,7 @@ class InitiateRetentionCleanupViewSetSuper(
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
 
-class OrderCleanupViewSetSuper(ContactViewset):
+class OrderCleanupViewSetSuper(FiservViewset):
     """
     Begin Cleanup routines
     """
@@ -648,7 +645,7 @@ class OrderCleanupViewSetSuper(ContactViewset):
 
 # Beta testing done 02/18/2024
 class OrderSubmitViewSetSuper(
-        ContactViewset
+        FiservViewset
     ):
     """
     Create and return a fiserv order url to HPP.

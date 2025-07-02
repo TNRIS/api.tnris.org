@@ -2,7 +2,6 @@
 Contact viewset
 """
 from urllib.parse import urlparse
-import json
 import os
 import logging
 import watchtower
@@ -76,10 +75,6 @@ class CorsPostPermission(AllowAny):
         return u in self.whitelisted_domains
 
 # ######################################################
-# ################## ORDER ENDPOINTS ###################
-# ######################################################
-
-# ######################################################
 # ################### CCP ENDPOINTS ####################
 # ######################################################
 
@@ -89,7 +84,7 @@ class CcpSubmitFormViewSet(ccp_payments.SubmitFormViewSetSuper):
     """
     permission_classes = [CorsPostPermission]
     def create(self, request):
-        return self.intro(request, "Running CcpSubmitFormViewSet")
+        return self.captcha_intro(request, "Running CcpSubmitFormViewSet")
 
 class CcpGenOtpViewSet(ccp_payments.GenOtpViewSetSuper):
     """
@@ -98,7 +93,7 @@ class CcpGenOtpViewSet(ccp_payments.GenOtpViewSetSuper):
     permission_classes = [CorsPostPermission]
 
     def create(self, request):
-        return self.intro(request, "Regenerating one time passcode. CcpGenOtpViewSet.")
+        return self.captcha_intro(request, "Regenerating one time passcode. CcpGenOtpViewSet.")
 
 class CcpOrderStatusViewSet(ccp_payments.OrderStatusViewSetSuper):
     """
@@ -106,7 +101,7 @@ class CcpOrderStatusViewSet(ccp_payments.OrderStatusViewSetSuper):
     """
     permission_classes = [CorsPostPermission]
     def create(self, request):
-        return self.intro(request, "running CcpOrderStatusViewSet")
+        return self.captcha_intro(request, "running CcpOrderStatusViewSet")
 
 class CcpInitiateRetentionCleanupViewSet(ccp_payments.InitiateRetentionCleanupViewSetSuper):
     """
@@ -160,7 +155,7 @@ class FiservGenOtpViewSet(fiserv_payments.GenOtpViewSetSuper):
     permission_classes = [CorsPostPermission]
 
     def create(self, request):
-        return self.intro(request, "Regenerating one time passcode. GenOtpViewSet.")
+        return self.captcha_intro(request, "Regenerating one time passcode. GenOtpViewSet.")
 
 class FiservOrderStatusViewSet(fiserv_payments.OrderStatusViewSetSuper):
     """
@@ -168,7 +163,7 @@ class FiservOrderStatusViewSet(fiserv_payments.OrderStatusViewSetSuper):
     """
     permission_classes = [CorsPostPermission]
     def create(self, request):
-        return self.intro(request, "running OrderStatusViewSet")
+        return self.captcha_intro(request, "Running OrderStatusViewSet.")
 
 class FiservInitiateRetentionCleanupViewSet(fiserv_payments.InitiateRetentionCleanupViewSetSuper):
     """
@@ -192,7 +187,7 @@ class FiservOrderSubmitViewSet(fiserv_payments.OrderSubmitViewSetSuper):
     """
     permission_classes = [CorsPostPermission]
     def create(self, request):
-        return self.intro(request, "Starting OrderSubmitViewSet")
+        return self.captcha_intro(request, "Starting OrderSubmitViewSet.")
 
 class FiservOrderFormViewSet(fiserv_payments.OrderFormViewSetSuper):
     """
@@ -200,7 +195,7 @@ class FiservOrderFormViewSet(fiserv_payments.OrderFormViewSetSuper):
     """
     permission_classes = [CorsPostPermission]
     def create(self, request):
-        return self.intro(request, "running OrderFormViewSet")
+        return self.captcha_intro(request, "Running OrderFormViewSet.")
 
 class FiservRedirectUrlViewSet(viewsets.ViewSet):
     """
@@ -208,7 +203,7 @@ class FiservRedirectUrlViewSet(viewsets.ViewSet):
     """
     permission_classes = [CorsPostPermission]
     def create(self, request):
-        # Check Recaptcha return if it fails.
+        # Redirect
         return redirect("https://data.geographic.texas.gov/order/redirect?status=success")
 
 # ######################################################

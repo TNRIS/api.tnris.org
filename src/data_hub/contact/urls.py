@@ -25,14 +25,6 @@ from .viewsets import (
     CcpOrderCleanupViewSet,
     CcpInitiateRetentionCleanupViewSet,
     CcpGenOtpViewSet,
-    FiservSubmitFormViewSet,
-    FiservGenOtpViewSet,
-    FiservOrderStatusViewSet,
-    FiservInitiateRetentionCleanupViewSet,
-    FiservOrderCleanupViewSet,
-    FiservOrderSubmitViewSet,
-    FiservOrderFormViewSet,
-    FiservRedirectUrlViewSet,
     ZipPolicyViewSet,
     ImagePolicyViewSet,
     FilePolicyViewSet,
@@ -52,16 +44,6 @@ router.register(r'order/retentionCleanup/?', CcpInitiateRetentionCleanupViewSet,
 router.register(r'order/cleanup/?', CcpOrderCleanupViewSet, basename="OrderCleanup")
 router.register(r'order/?', CcpOrderFormViewSet, basename="OrderForm")
 router.register(r'order/submit/?', CcpOrderSubmitViewSet, basename="PaymentForm")
-#v2 urls FiServ
-router.register(r'v2/submit/?', FiservSubmitFormViewSet, basename="SubmitForm")
-router.register(r'v2/order/otp/?', FiservGenOtpViewSet, basename="OrderOtp")
-router.register(r'v2/order/status/?', FiservOrderStatusViewSet, basename="OrderStatus")
-router.register(r'v2/order/retentionCleanup/?', FiservInitiateRetentionCleanupViewSet, basename="InitiateRetentionCleanup")
-router.register(r'v2/order/cleanup/?', FiservOrderCleanupViewSet, basename="OrderCleanup")
-router.register(r'v2/order/submit/?', FiservOrderSubmitViewSet, basename="PaymentForm")
-router.register(r'v2/order/?', FiservOrderFormViewSet, basename="OrderForm")
-router.register(r'v2/order/redirect/?', FiservRedirectUrlViewSet, basename="RedirectUrl")
-
 router.register(r'policy/zip-upload', ZipPolicyViewSet, basename="ZipPolicy")
 router.register(r'policy/image-upload', ImagePolicyViewSet, basename="ImagePolicy")
 router.register(r'policy/file-upload', FilePolicyViewSet, basename="FilePolicy")

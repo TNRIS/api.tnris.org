@@ -66,9 +66,14 @@ class FiservViewset(viewsets.ViewSet):
         """Abstraction function to check logger, check captcha, then handle failed captchas if needed."""
         if api_helper.checkLogger():
             logger.info(msg)
+        return self.create_super(request)
+
+    def captcha_intro(self, request, msg):
         verify_req = api_helper.checkCaptcha(request.data["recaptcha"])
-        if json.loads(verify_req.text)["success"] or TESTING_SKIP_CAPTCHA:
-            return self.create_super(request)
+
+        # If we need to check the captcha then we verify captcha is correct.
+        if json.loads(verify_req.text)["success"]:
+            return self.intro(request)
         else:
             return Response(
                 {"status": "failure", "message": "Captcha is incorrect."},

@@ -76,14 +76,14 @@ class CcpViewSet(viewsets.ViewSet):
         """Abstraction function to check logger, check captcha, then handle failed captchas if needed."""
         if api_helper_v1.checkLogger():
             logger.info(msg)
-        self.create_super(request)
+        return self.create_super(request)
 
     def captcha_intro(self, request, msg):
         verify_req = api_helper_v1.checkCaptcha(request.data["recaptcha"])
 
         # If we need to check the captcha then we verify captcha is correct.
         if json.loads(verify_req.text)["success"]:
-            return self.intro(self, request)
+            return self.intro(request)
         else:
             return Response(
                 {"status": "failure", "message": "Captcha is incorrect."},

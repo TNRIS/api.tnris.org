@@ -330,7 +330,7 @@ class Image(models.Model):
         super().delete(*args, **kwargs)
 
     def __str__(self):
-        return self.image_url
+        return self.image_url.replace('https://s3.amazonaws.com/data.tnris.org/', 'https://data.geographic.texas.gov/')
 
 
 """

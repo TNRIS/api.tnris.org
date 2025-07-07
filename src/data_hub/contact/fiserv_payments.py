@@ -17,24 +17,14 @@ from django.dispatch import receiver
 from modules.api_helper import logger
 from modules import api_helper
 from .models import EmailTemplate, OrderType, OrderDetailsType
-
 from contact.fiserv_routines import fiserv_helper
 
-PLACEHOLDER_INT = 0
 CLEANING_FLAG = False
-
-# Use testing URLS (Do not use in production)
-TESTING = True
-FISERV_URL_V3 = "https://snappaydirectapi-cert.fiserv.com/api/interop/v3/"
-FISERV_URL_V2 = "https://snappaydirectapi-cert.fiserv.com/api/interop/v2/"
-FISERV_URL = "https://snappaydirectapi-cert.fiserv.com/api/interop/"
 SEND_HTML_FLAG = True
 
-if TESTING:
-    FISERV_URL_V2 = "https://snappaydirectapi-cert.fiserv.com/api/interop/v2/"
-    FISERV_URL_V3 = "https://snappaydirectapi-cert.fiserv.com/api/interop/v3/"
-
-TESTING_SKIP_CAPTCHA = TESTING and False # Change to True if you want to skip captcha.
+FISERV_URL = os.environ.get("FISERV_URL")
+FISERV_URL_V2 = os.environ.get("FISERV_URL_V2")
+FISERV_URL_V3 = os.environ.get("FISERV_URL_V3")
 
 def resend_email(self, request, queryset, CC_STRATMAP):
     cont_static = FiservViewset()
@@ -59,8 +49,6 @@ def resend_email(self, request, queryset, CC_STRATMAP):
 # Call them from viewsets.py and do the authentication in viewsets.py
 # This is so that we can test these functions directly.
 # #################################################################
-
-
 class FiservViewset(viewsets.ViewSet):
     def intro(self, request, msg=""):
         """Abstraction function to check logger, check captcha, then handle failed captchas if needed."""
@@ -164,7 +152,7 @@ class OrderFormViewSetSuper(
     Handle TxGIO order form submissions through fiserv (Snap Pay).
     """
     @receiver(pre_save, sender=OrderType)
-    def my_callback(sender, instance, *args, **kwargs): #Beta testing done 02/18/2024
+    def my_callback(sender, instance, *args, **kwargs):
         contact_viewset = FiservViewset()
         instance.order_approved
         if instance.order_approved and instance.approved_charge:
@@ -188,7 +176,7 @@ class OrderFormViewSetSuper(
                 status=status.HTTP_201_CREATED,
             )
 
-    def notify_user(self, order_object, email): #Beta testing done 02/18/2024
+    def notify_user(self, order_object, email):
         # Notify user
         email_template = EmailTemplate.objects.get(form_id="notify-user")
         self.send_template_email(
@@ -199,7 +187,7 @@ class OrderFormViewSetSuper(
             SEND_HTML_FLAG
         )
 
-    def create_order_object(self, email, order_details, test_otp=None): #Beta testing done 02/18/2024
+    def create_order_object(self, email, order_details, test_otp=None):
         """Create the order and add it to the database."""
 
         try:
@@ -227,7 +215,7 @@ class OrderFormViewSetSuper(
         except Exception as e:
             logger.error("Error creating order object at create_order_object.")
 
-    def create_super(self, request): #Beta testing done 02/18/2024
+    def create_super(self, request):
         """Create a order object and notify"""
         try:
             # Generate Access Code and one way encrypt it.
@@ -291,7 +279,6 @@ class OrderFormViewSetSuper(
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
 
-# Beta testing done 02/18/2024
 class GenOtpViewSetSuper(
         FiservViewset
     ):
@@ -346,7 +333,6 @@ class GenOtpViewSetSuper(
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
 
-# Beta testing done 02/18/2024
 class OrderStatusViewSetSuper(
         FiservViewset
     ):
@@ -584,7 +570,7 @@ class OrderCleanupViewSetSuper(FiservViewset):
             CLEANING_FLAG = False
             return response
 
-    def get_receipt(self, request, format): # TODO: Testing done, check pt 2 
+    def get_receipt(self, request, format):
         # Look for a successful receipt. Otherwise return 404.
         try:
             order = OrderType.objects.get(id=request.query_params["uuid"])
@@ -648,7 +634,6 @@ class OrderCleanupViewSetSuper(FiservViewset):
         finally:
             return response
 
-# Beta testing done 02/18/2024
 class OrderSubmitViewSetSuper(
         FiservViewset
     ):
@@ -723,7 +708,7 @@ class OrderSubmitViewSetSuper(
             if "requestid" in rbody and len(rbody['requestid']) > 0:
                 orderObj.filter(id=request.query_params["uuid"]).update(
                     order_token=rbody["requestid"],
-                    order_url=f"https://snappaydirect-cert.fiserv.com/interop/HostedPaymentPage/ProcessRequest?reqNo={rbody['requestid']}",
+                    order_url=f"{os.environ.get("FISERV_HPP_PAGE")}ProcessRequest?reqNo={rbody['requestid']}",
                 )
                 order = orderObj.get(id=request.query_params["uuid"])
 

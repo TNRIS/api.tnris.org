@@ -1,6 +1,6 @@
 import datetime, uuid, base64, hmac, os, hashlib
 
-api_url = "api.tnris.org"
+api_url = str(os.environ.get('API_URL'))
 
 def computeSignature(requestURI: str, requestMethod: str, payLoad: str, accountId: str, key: str):
     """
@@ -72,8 +72,8 @@ def generate_fiserv_post_body(
         "currencycode": "USD",  # required
         "customerid": os.environ.get("FISERV_CUSTOMER_ID"),  # required
         "userid": os.environ.get("FISERV_USER_ID"),  # required
-        "redirecturl": "https://api.tnris.org/api/v1/contact/order/redirect?status=success",
-        "cancelredirecturl": "https://api.tnris.org/api/v1/contact/order/redirect?status=cancel",  # Optional but we can use it.
+        "redirecturl": "https://" + api_url + "/api/v1/contact/order/redirect?status=success",
+        "cancelredirecturl": "https://" + api_url +"/api/v1/contact/order/redirect?status=cancel",  # Optional but we can use it.
         "reference": "UPI",  # Required
         "templateid": template_id,  # required
         "transactiontype": "S",  # required: S means for a sale.

@@ -94,7 +94,6 @@ class SubmitFormViewSetSuper(CcpViewSet):
     """
     Handle TxGIO form submissions (Restricted Access)
     """
-
     # inject form values into email template body
     def compile_email_body(self, template_body, dict):
         injected = template_body

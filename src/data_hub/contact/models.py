@@ -1,9 +1,6 @@
 from django.db import models
 from . import fields
-from datetime import datetime
 import uuid
-from django_json_widget.widgets import JSONEditorWidget
-from django import forms
 from django.utils import timezone
     
 class OrderDetailsType(models.Model):
@@ -17,6 +14,7 @@ class OrderDetailsType(models.Model):
         max_length=50000,
         editable=False
     )
+    
     access_code = models.CharField(
         'Hash of access code.',
         editable=False,
@@ -86,11 +84,12 @@ class OrderType(models.Model):
     )
     
     # Token for keeping track of a order form.
-    order_token = models.UUIDField(
+    order_token = models.CharField(
         'Order Token',
         editable=False,
         null=True,
-        default=None
+        default=None,
+        max_length=255
     )
     
     order_url = models.CharField(
@@ -193,7 +192,7 @@ class EmailTemplate(models.Model):
     email_template_type = models.CharField(
         'Email Template Type',
         max_length=50,
-        null=False,
+        null=True,
         blank=False,
         help_text="Layman text/name of Form Submission table/model class."
     )
@@ -221,9 +220,9 @@ class EmailTemplate(models.Model):
     serializer_classname = models.CharField(
         'Serializer Classname',
         max_length=70,
-        null=False,
-        blank=False,
-        unique=True,
+        null=True,
+        blank=True,
+        unique=False,
         help_text="Serializer classname from serializers.py file. Must be exact. Typically is: '<-ModelClassname->Serializer'"
     )
     email_template_subject = models.CharField(
@@ -260,7 +259,6 @@ Form parameters
 """
 *********************** FORM SUBMISSION TABLES *************************
 """
-
 
 class DataHubContact(models.Model):
     """
@@ -336,7 +334,6 @@ class DataHubContact(models.Model):
 
     def __str__(self):
         return self.name + " " + self.created.strftime('%Y-%m-%d %H:%M')
-
 
 class DataHubOrder(models.Model):
     """
@@ -431,7 +428,6 @@ class DataHubOrder(models.Model):
     def __str__(self):
         return self.name + " " + self.created.strftime('%Y-%m-%d %H:%M')
 
-
 class DataHubOutsideEntityContact(models.Model):
     """
     DataHub contact form on data.tnris.org outside entity cards (Outside Entity Data Inquiry)
@@ -507,7 +503,6 @@ class DataHubOutsideEntityContact(models.Model):
 
     def __str__(self):
         return self.name + " " + self.created.strftime('%Y-%m-%d %H:%M')
-
 
 class EducationContact(models.Model):
     """
@@ -585,7 +580,6 @@ class EducationContact(models.Model):
     def __str__(self):
         return self.name + " " + self.created.strftime('%Y-%m-%d %H:%M')
 
-
 class ForumJobBoardSubmission(models.Model):
     """
     Forum job board submission form on tnris.org forum pages
@@ -653,7 +647,6 @@ class ForumJobBoardSubmission(models.Model):
 
     def __str__(self):
         return self.name + " " + self.created.strftime('%Y-%m-%d %H:%M')
-
 
 class GeneralContact(models.Model):
     """
@@ -731,6 +724,69 @@ class GeneralContact(models.Model):
     def __str__(self):
         return self.name + " " + self.created.strftime('%Y-%m-%d %H:%M')
 
+class OrderApproved(models.Model):
+    """
+    Orders approved datahub
+    """
+
+    class Meta:
+        verbose_name = 'Order Approved'
+        verbose_name_plural = 'Orders Approved'
+
+    order_id = models.UUIDField(
+        'DataHub Order ID',
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False
+    )
+
+    def __str__(self):
+        return str(self.order_id)
+
+class OrderReceived(models.Model):
+    """
+    Orders Received on datahub
+    """
+
+    class Meta:
+        verbose_name = 'Order Received'
+        verbose_name_plural = 'Orders Received'
+
+    order_id = models.UUIDField(
+        'DataHub Order ID',
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False
+    )
+
+    order_id = models.UUIDField(
+        '',
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False
+    )
+
+    def __str__(self):
+        return str(self.order_id)
+
+class OrderRemoved(models.Model):
+    """
+    Orders Removed from datahub
+    """
+
+    class Meta:
+        verbose_name = 'Order Removed'
+        verbose_name_plural = 'Orders Removed'
+
+    order_id = models.UUIDField(
+        'DataHub Order ID',
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False
+    )
+
+    def __str__(self):
+        return str(self.order_id)
 
 class GeorodeoCallForPresentationsSubmission(models.Model):
     """
@@ -822,7 +878,6 @@ class GeorodeoCallForPresentationsSubmission(models.Model):
 
     def __str__(self):
         return self.name + " " + self.created.strftime('%Y-%m-%d %H:%M')
-
 
 class GeorodeoRegistration(models.Model):
     """
@@ -965,7 +1020,6 @@ class GeorodeoRegistration(models.Model):
     def __str__(self):
         return self.firstname + " " + self.lastname + " " + self.created.strftime('%Y-%m-%d %H:%M')
 
-
 class LakesOfTexasContact(models.Model):
     """
     Lakes of Texas app contact form on lake-gallery.tnris.org
@@ -1023,7 +1077,6 @@ class LakesOfTexasContact(models.Model):
 
     def __str__(self):
         return self.name + " " + self.created.strftime('%Y-%m-%d %H:%M')
-
 
 class OrderMap(models.Model):
     """
@@ -1281,7 +1334,6 @@ class OrderMap(models.Model):
     def __str__(self):
         return self.name + " " + self.created.strftime('%Y-%m-%d %H:%M')
 
-
 class PosterGallerySubmission(models.Model):
     """
     Poster Gallery Submission form on tnris.org
@@ -1349,7 +1401,6 @@ class PosterGallerySubmission(models.Model):
 
     def __str__(self):
         return self.name + " " + self.created.strftime('%Y-%m-%d %H:%M')
-
 
 class TexasImageryServiceContact(models.Model):
     """
@@ -1426,7 +1477,6 @@ class TexasImageryServiceContact(models.Model):
 
     def __str__(self):
         return self.name + " " + self.created.strftime('%Y-%m-%d %H:%M')
-
 
 class TexasImageryServiceRequest(models.Model):
     """
@@ -1614,7 +1664,6 @@ class TexasImageryServiceRequest(models.Model):
 
     def __str__(self):
         return self.name + " " + self.created.strftime('%Y-%m-%d %H:%M')
-
 
 """
 *************************** SURVEY MODAL TEMPLATES ****************************
@@ -1931,4 +1980,3 @@ class CampaignSubscriber(models.Model):
     )
     def __str__(self):
         return "%s | %s" % (self.email, self.campaign)
-    

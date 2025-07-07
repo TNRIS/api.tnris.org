@@ -9,6 +9,9 @@ from .models import (
     EducationContact,
     ForumJobBoardSubmission,
     GeneralContact,
+    OrderApproved,
+    OrderReceived,
+    OrderRemoved,
     GeorodeoCallForPresentationsSubmission,
     GeorodeoRegistration,
     LakesOfTexasContact,
@@ -20,72 +23,80 @@ from .models import (
     TexasImageryServiceRequest
 )
 
-
 class DataHubContactSerializer(serializers.ModelSerializer):
     class Meta:
         model = DataHubContact
         fields = ('__all__')
-
 
 class DataHubOrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = DataHubOrder
         fields = ('__all__')
 
-
 class DataHubOutsideEntityContactSerializer(serializers.ModelSerializer):
     class Meta:
         model = DataHubOutsideEntityContact
         fields = ('__all__')
 
-
 class EducationContactSerializer(serializers.ModelSerializer):
     class Meta:
         model = EducationContact
         fields = ('__all__')
-
         
 class ForumJobBoardSubmissionSerializer(serializers.ModelSerializer):
     class Meta:
         model = ForumJobBoardSubmission
         fields = ('__all__')
         
+class OtpSerializer(serializers.Serializer):
+    class Meta:
+        model = GeneralContact
+        fields = ('__all__')
+
+class OrderReceivedSerializer(serializers.Serializer):
+    class Meta:
+        model = OrderReceived
+        fields = ('__all__')
+
+class OrderRemovedSerializer(serializers.Serializer):
+    class Meta:
+        model = OrderRemoved
+        fields = ('__all__')
+
+class OrderApprovedSerializer(serializers.Serializer):
+    class Meta:
+        model = OrderApproved
+        fields = ('__all__')
 
 class GeneralContactSerializer(serializers.ModelSerializer):
     class Meta:
         model = GeneralContact
         fields = ('__all__')
 
-
 class GeorodeoCallForPresentationsSubmissionSerializer(serializers.ModelSerializer):
     class Meta:
         model = GeorodeoCallForPresentationsSubmission
         fields = ('__all__')
-
 
 class GeorodeoRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = GeorodeoRegistration
         fields = ('__all__')
 
-
 class LakesOfTexasContactSerializer(serializers.ModelSerializer):
     class Meta:
         model = LakesOfTexasContact
         fields = ('__all__')
-
 
 class OrderMapSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrderMap
         fields = ('__all__')
         
-        
 class OrderStatusSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrderType
         fields = ('__all__')
-        
 
 class PosterGallerySubmissionSerializer(serializers.ModelSerializer):
     class Meta:

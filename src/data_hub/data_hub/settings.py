@@ -127,8 +127,7 @@ INSTALLED_APPS = [
     'django_seo_js',
     'rest_framework_gis',
     'axes',
-    'analytics',
-    'django_extensions'
+    'analytics'
 ]
 
 MIDDLEWARE = [

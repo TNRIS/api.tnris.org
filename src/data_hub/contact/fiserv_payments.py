@@ -704,11 +704,11 @@ class OrderSubmitViewSetSuper(
             )
 
             rbody = json.loads(response.text)
-
+            hpp_page = str(os.environ.get("FISERV_HPP_PAGE"))
             if "requestid" in rbody and len(rbody['requestid']) > 0:
                 orderObj.filter(id=request.query_params["uuid"]).update(
                     order_token=rbody["requestid"],
-                    order_url=f"{os.environ.get("FISERV_HPP_PAGE")}ProcessRequest?reqNo={rbody['requestid']}",
+                    order_url=f"{hpp_page}ProcessRequest?reqNo={rbody['requestid']}",
                 )
                 order = orderObj.get(id=request.query_params["uuid"])
 

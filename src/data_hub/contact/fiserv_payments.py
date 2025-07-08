@@ -488,7 +488,7 @@ class OrderCleanupViewSetSuper(FiservViewset):
                     request.query_params._mutable = True
                     request.query_params["uuid"] = str(order["id"])
                     request.query_params._mutable = False
-                    receipt = self.get_receipt(request, format) #TODO: Get receipt then continue.
+                    receipt = self.get_receipt(request, format)
                     if receipt.status_code == 200: 
                         if not order["tnris_notified"]:
                             if api_helper.checkLogger():
@@ -603,7 +603,7 @@ class OrderCleanupViewSetSuper(FiservViewset):
 
                 orderContent = json.loads(orderinfo.content)
                 if orderContent['status'] == "Y":
-                    orders = orderContent["transaction"] # TODO: Check 
+                    orders = orderContent["transaction"]
                     response = Response(
                         {
                             "status_code": orderinfo.status_code,

@@ -102,7 +102,7 @@ def generate_fiserv_post_body(
         },
         "payments": [  # required
             {
-                "mode": payment_method,  # Check these. CC has been checked TODO: Check ACH
+                "mode": payment_method,
                 "merchantid": os.environ.get("FISERV_MERCHANT_ID"),
             }
         ],

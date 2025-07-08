@@ -361,7 +361,6 @@ class SnappayTestCase(GeneralTest):
         if len(orders):  # Check there is an item
             order = orders[0]
 
-            # TODO Check each item instead of all at once
             self.assertIsNotNone(order, "Items does not exist")
 
             # Make sure order details was created successfully.

@@ -9,9 +9,6 @@ from .models import (
     EducationContact,
     ForumJobBoardSubmission,
     GeneralContact,
-    OrderApproved,
-    OrderReceived,
-    OrderRemoved,
     GeorodeoCallForPresentationsSubmission,
     GeorodeoRegistration,
     LakesOfTexasContact,
@@ -51,21 +48,6 @@ class ForumJobBoardSubmissionSerializer(serializers.ModelSerializer):
 class OtpSerializer(serializers.Serializer):
     class Meta:
         model = GeneralContact
-        fields = ('__all__')
-
-class OrderReceivedSerializer(serializers.Serializer):
-    class Meta:
-        model = OrderReceived
-        fields = ('__all__')
-
-class OrderRemovedSerializer(serializers.Serializer):
-    class Meta:
-        model = OrderRemoved
-        fields = ('__all__')
-
-class OrderApprovedSerializer(serializers.Serializer):
-    class Meta:
-        model = OrderApproved
         fields = ('__all__')
 
 class GeneralContactSerializer(serializers.ModelSerializer):

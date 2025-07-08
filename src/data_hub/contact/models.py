@@ -84,12 +84,11 @@ class OrderType(models.Model):
     )
     
     # Token for keeping track of a order form.
-    order_token = models.CharField(
+    order_token = models.UUIDField(
         'Order Token',
         editable=False,
         null=True,
-        default=None,
-        max_length=255
+        default=None
     )
     
     order_url = models.CharField(
@@ -192,7 +191,7 @@ class EmailTemplate(models.Model):
     email_template_type = models.CharField(
         'Email Template Type',
         max_length=50,
-        null=True,
+        null=False,
         blank=False,
         help_text="Layman text/name of Form Submission table/model class."
     )
@@ -723,70 +722,6 @@ class GeneralContact(models.Model):
 
     def __str__(self):
         return self.name + " " + self.created.strftime('%Y-%m-%d %H:%M')
-
-class OrderApproved(models.Model):
-    """
-    Orders approved datahub
-    """
-
-    class Meta:
-        verbose_name = 'Order Approved'
-        verbose_name_plural = 'Orders Approved'
-
-    order_id = models.UUIDField(
-        'DataHub Order ID',
-        primary_key=True,
-        default=uuid.uuid4,
-        editable=False
-    )
-
-    def __str__(self):
-        return str(self.order_id)
-
-class OrderReceived(models.Model):
-    """
-    Orders Received on datahub
-    """
-
-    class Meta:
-        verbose_name = 'Order Received'
-        verbose_name_plural = 'Orders Received'
-
-    order_id = models.UUIDField(
-        'DataHub Order ID',
-        primary_key=True,
-        default=uuid.uuid4,
-        editable=False
-    )
-
-    order_id = models.UUIDField(
-        '',
-        primary_key=True,
-        default=uuid.uuid4,
-        editable=False
-    )
-
-    def __str__(self):
-        return str(self.order_id)
-
-class OrderRemoved(models.Model):
-    """
-    Orders Removed from datahub
-    """
-
-    class Meta:
-        verbose_name = 'Order Removed'
-        verbose_name_plural = 'Orders Removed'
-
-    order_id = models.UUIDField(
-        'DataHub Order ID',
-        primary_key=True,
-        default=uuid.uuid4,
-        editable=False
-    )
-
-    def __str__(self):
-        return str(self.order_id)
 
 class GeorodeoCallForPresentationsSubmission(models.Model):
     """

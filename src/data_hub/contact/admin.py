@@ -7,7 +7,6 @@ from django import forms
 from django.shortcuts import redirect
 
 import csv, datetime, json, os, secrets, hashlib, time
-from .fiserv_payments import resend_email
 
 from .models import (
     Campaign,
@@ -84,7 +83,6 @@ class DataHubContactAdmin(admin.ModelAdmin, ExportSelectedToCsvMixin):
 @admin.register(OrderType)
 class OrderTypeAdmin(admin.ModelAdmin): 
     model = OrderType
-    actions = ["resend_order_link_email"]
     list_filter = (['order_approved', 'order_sent', 'archived'])
     list_display = (
         'id',
@@ -106,18 +104,6 @@ class OrderTypeAdmin(admin.ModelAdmin):
         return format_html(u'<a href="%s">Details</a>' % (link))
     link_to_details.allow_tags=True
 
-    @admin.action(
-        description="Resend a link to the payment portal."
-    )
-    def resend_order_link_email(self, request, queryset):
-        resend_email(self, request, queryset, False)
-
-    @admin.action(
-        description="Resend a link to the payment portal. And CC stratmap. For troubleshooting."
-    )
-    def resend_order_link_email_with_cc(self, request, queryset):
-        resend_email(self, request, queryset, True)
-
     def get_readonly_fields(self, request, obj=None):
         if obj:
             self.readonly_fields = [field.name for field in obj.__class__._meta.fields]
@@ -127,151 +113,151 @@ class OrderTypeAdmin(admin.ModelAdmin):
 class OrderDetailsTypeAdmin(admin.ModelAdmin):
 
     def name_field(self, obj):
-        if "name" in json.loads(obj.details):
-            return json.loads(obj.details)["name"]
+        if "Name" in json.loads(obj.details):
+            return json.loads(obj.details)["Name"]
         else:
             return ""
 
     def email_field(self, obj):
-        if "email" in json.loads(obj.details):
-            return json.loads(obj.details)["email"]
+        if "Email" in json.loads(obj.details):
+            return json.loads(obj.details)["Email"]
         else:
             return ""
 
     def phone_field(self, obj):
-        if "phone" in json.loads(obj.details):
-            return json.loads(obj.details)["phone"]
+        if "Phone" in json.loads(obj.details):
+            return json.loads(obj.details)["Phone"]
         else:
             return ""
 
     def address_field(self, obj):
         obj_details = json.loads(obj.details)
-        if "address" in obj_details:    
-            return obj_details["address"]
-        elif "address_1" in obj_details and "address_2" in obj_details:
-            return obj_details["address_1"] + " " + obj_details["address_2"]
+        if "Address" in obj_details:    
+            return obj_details["Address"]
+        elif "Address_1" in obj_details and "Address_2" in obj_details:
+            return obj_details["Address_1"] + " " + obj_details["Address_2"]
         else:
             return ""
 
     def organization_field(self, obj):
-        if "organization" in json.loads(obj.details):
-            return json.loads(obj.details)["organization"]
+        if "Organization" in json.loads(obj.details):
+            return json.loads(obj.details)["Organization"]
         else:
             return ""
 
     def city_field(self, obj):
-        if "city" in json.loads(obj.details):
-            return json.loads(obj.details)["city"]
+        if "City" in json.loads(obj.details):
+            return json.loads(obj.details)["City"]
         else:
             return ""
 
     def state_field(self, obj):
-        if "state" in json.loads(obj.details):
-            return json.loads(obj.details)["state"]
+        if "State" in json.loads(obj.details):
+            return json.loads(obj.details)["State"]
         else:
             return ""
 
     def zipcode_field(self, obj):
-        if "zipcode" in json.loads(obj.details):
-            return json.loads(obj.details)["zipcode"]
-        elif "zip" in json.loads(obj.details):
-            return json.loads(obj.details)["zip"]
+        if "Zipcode" in json.loads(obj.details):
+            return json.loads(obj.details)["Zipcode"]
+        elif "Zip" in json.loads(obj.details):
+            return json.loads(obj.details)["Zip"]
         else:
             return ""
 
     def industry_field(self, obj):
         obj_details = json.loads(obj.details)
-        if "industry" in obj_details:
-            if "industry_other" in obj_details:
-                return obj_details["industry"] + " " + obj_details["industry_other"]
+        if "Industry" in obj_details:
+            if "Industry_other" in obj_details:
+                return obj_details["Industry"] + " " + obj_details["Industry_other"]
             else:
-                return obj_details["industry"]
+                return obj_details["Industry"]
         else:
             return ""
 
     def notes_field(self, obj):
         obj_details = json.loads(obj.details)
-        if "notes" in obj_details:
-            return obj_details["notes"]
-        elif "additional Info" in obj_details:
-            return obj_details["additional Info"]
+        if "Notes" in obj_details:
+            return obj_details["Notes"]
+        elif "Additional Info" in obj_details:
+            return obj_details["Additional Info"]
         else:
             return ""
 
     def fedex_field(self, obj):
         obj_details = json.loads(obj.details)
-        if "fedex" in obj_details:
-            return obj_details["fedex"]
-        elif "fedex customer number" in obj_details:
-            return obj_details["fedex customer number"]
+        if "Fedex" in obj_details:
+            return obj_details["Fedex"]
+        elif "FedEx Customer Number" in obj_details:
+            return obj_details["FedEx Customer Number"]
         else:
             return ""
 
     def delivery_field(self, obj):
         obj_details = json.loads(obj.details)
-        if "delivery" in obj_details:
-            return obj_details["delivery"]
-        elif "delivery method" in obj_details:
-            return obj_details["delivery method"]
+        if "Delivery" in obj_details:
+            return obj_details["Delivery"]
+        elif "Delivery Method" in obj_details:
+            return obj_details["Delivery Method"]
         else:
             return ""
 
     def harddrive_field(self, obj):
-        if "harddrive" in json.loads(obj.details):
-            return json.loads(obj.details)["harddrive"]
+        if "HardDrive" in json.loads(obj.details):
+            return json.loads(obj.details)["HardDrive"]
         else:
             return ""
 
     def payment_field(self, obj):
         obj_details = json.loads(obj.details)
-        if "payment" in obj_details:
-            return obj_details["payment"]
-        elif "payment method" in obj_details:
-            return obj_details["payment method"]
+        if "Payment" in obj_details:
+            return obj_details["Payment"]
+        elif "Payment Method" in obj_details:
+            return obj_details["Payment Method"]
         else:
             return ""
 
     def order_field(self, obj):
         obj_details = json.loads(obj.details)
-        if "order" in obj_details:
-            return obj_details["order"]
+        if "Order" in obj_details:
+            return obj_details["Order"]
         elif "form_id" in obj_details and obj_details["form_id"] == "order-map":
             details = ""
-            if "type of data" in obj_details:
-                details += "type of data: " + obj_details["type of data"]
+            if "Type of Data" in obj_details:
+                details += "Type of Data: " + obj_details["Type of Data"]
             
-            if "type of map" in obj_details: 
-                details += "\n type of map: " + obj_details["type of map"]
+            if "Type of Map" in obj_details: 
+                details += "\n Type of Map: " + obj_details["Type of Map"]
 
-            if "map size" in obj_details: 
-                details += "\n map size: " + obj_details["map size"]
+            if "Map Size" in obj_details: 
+                details += "\n Map Size: " + obj_details["Map Size"]
             
-            if "custom map size" in obj_details: 
-                details += "\n custom map size: " + obj_details["custom map size"]
+            if "Custom Map Size" in obj_details: 
+                details += "\n Custom Map Size: " + obj_details["Custom Map Size"]
 
-            if "map scale" in obj_details:
-                details += "\n map scale: " + obj_details["map scale"]
+            if "Map Scale" in obj_details:
+                details += "\n Map Scale: " + obj_details["Map Scale"]
 
-            if "map title" in obj_details:
-                details += "\n map title: " + obj_details["map title"]
+            if "Map Title" in obj_details:
+                details += "\n Map Title: " + obj_details["Map Title"]
 
-            if "map date" in obj_details:
-                details += "\n map date: " + obj_details["map date"]
+            if "Map Date" in obj_details:
+                details += "\n Map Date: " + obj_details["Map Date"]
 
-            if "map collection name" in obj_details:
-                details += "\n map collection name: " + obj_details["map collection name"]
+            if "Map Collection Name" in obj_details:
+                details += "\n Map Collection Name: " + obj_details["Map Collection Name"]
 
-            if "map sheet" in obj_details:
-                details += "\n map sheet: " + obj_details["map sheet"]
+            if "Map Sheet" in obj_details:
+                details += "\n Map Sheet: " + obj_details["Map Sheet"]
             
-            if "legislative request?" in obj_details:
-                details += "\n legislative request?: " + obj_details["legislative request?"]
+            if "Legislative Request?" in obj_details:
+                details += "\n Legislative Request?: " + obj_details["Legislative Request?"]
 
-            if "map option" in obj_details:
-                details += "\n map option: " + obj_details["map option"]
+            if "Map Option" in obj_details:
+                details += "\n Map Option: " + obj_details["Map Option"]
 
-            if "map description" in obj_details:
-                details += "\n map description: " + obj_details["map description"]
+            if "Map Description" in obj_details:
+                details += "\n Map Description: " + obj_details["Map Description"]
 
             return details
         else:
@@ -288,10 +274,11 @@ class OrderDetailsTypeAdmin(admin.ModelAdmin):
     def get_readonly_fields(self, request, obj=None):
         return ['id', 'name_field', 'email_field', 'phone_field', 'address_field', 'city_field', 'state_field', 'zipcode_field', 'organization_field', 'industry_field', 'fedex_field', 'notes_field', 'delivery_field', 'harddrive_field',
         'payment_field', 'order_field', 'formid_field']
-
+    list_editable = (['update_email'])
     list_display = (
-        [ 'id' ]
-    )
+        ['name_field', 'update_email', 'email_field', 'phone_field', 'address_field', 'city_field', 'state_field', 'zipcode_field', 'organization_field', 'industry_field', 'fedex_field', 'notes_field', 'delivery_field', 'harddrive_field',
+        'payment_field', 'order_field', 'formid_field']
+        )
     def save_model(self, request, obj, form, change):
         if(change and form.cleaned_data["update_email"] and len(form.cleaned_data["update_email"])):
             obj_details = json.loads(obj.details)

@@ -95,7 +95,7 @@ class FiservViewset(viewsets.ViewSet):
             status=status.HTTP_400_BAD_REQUEST,
         )
 
-    def send_template_email(self, email_template, formatted, sender, replyer, html=False, CC_STRATMAP=False):
+    def send_template_email(self, email_template, formatted, sender, replyer, html=False, CC_EMAIL=""):
         """Send an email to the template email (Configured through API)
         sender and replyer default to mail_default to unless sendpoint
         """
@@ -126,7 +126,7 @@ class FiservViewset(viewsets.ViewSet):
                 body,
                 send_to=sender,
                 reply_to=replyer,
-                cc_email=os.environ.get("MAIL_DEFAULT_TO")
+                cc_email=CC_EMAIL
             )
         else:
             # send to ticketing system unless sendpoint has alternative key value
@@ -136,7 +136,7 @@ class FiservViewset(viewsets.ViewSet):
                 body,
                 send_to=sender,
                 reply_to=replyer,
-                cc_email=os.environ.get("MAIL_DEFAULT_TO")
+                cc_email=CC_EMAIL
             )
     
     def format_req(self, items):
@@ -181,7 +181,7 @@ class OrderFormViewSetSuper(
         email_template = EmailTemplate.objects.get(form_id="notify-user")
         self.send_template_email(
             email_template,
-            {"uuid": str(order_object.id)},
+            {"uuid": str(order_object.id), "email": email},
             email,
             os.environ.get("STRATMAP_EMAIL"),
             SEND_HTML_FLAG
@@ -219,10 +219,10 @@ class OrderFormViewSetSuper(
         """Create a order object and notify"""
         try:
             # Generate Access Code and one way encrypt it.
-            formatted_items = self.format_req(request.data.items())
-            order_details = self.format_req(request.data.get("order_details").items())
+            order_details = request.data.get("order_details")
+
             order_object = self.create_order_object(
-                email=order_details["email"],
+                email=order_details["Email"],
                 order_details=order_details
             )
 
@@ -232,6 +232,7 @@ class OrderFormViewSetSuper(
                 else request.META["HTTP_HOST"]
             )
             order_details["order_uuid"] = str(order_object.id)
+            formatted_details = self.format_req(order_details.items())
             order_object.order_details.details = json.dumps(order_details)
             order_object.order_details.save()
             order_object.save()
@@ -241,22 +242,18 @@ class OrderFormViewSetSuper(
             ################################################
             email_template = EmailTemplate.objects.get(form_id=order_details["form_id"])
             body = self.compile_email_body(
-                email_template.email_template_body, order_details
+                email_template.email_template_body, formatted_details
             )
-            sender = (
-                os.environ.get("MAIL_DEFAULT_TO")
-                if email_template.sendpoint == "default"
-                else order_details[email_template.sendpoint]
-            )
+            sender = os.environ.get("MAIL_DEFAULT_TO")
             replyer = (
-                order_details["email"]
-                if "email" in order_details.keys()
+                formatted_details["email"]
+                if "email" in formatted_details.keys()
                 else "unknown@tnris.org"
             )
 
             # If name was sent in request add it to the address information.
-            if "name" in order_details.keys():
-                replyer = "%s <%s>" % (order_details["name"], order_details["email"])
+            if "name" in formatted_details.keys():
+                replyer = "%s <%s>" % (formatted_details["name"], formatted_details["email"])
             # Send to ticketing system unless sendpoint has alternative key value in email template record.
             api_helper.send_raw_email(
                 subject=email_template.email_template_subject,
@@ -266,7 +263,7 @@ class OrderFormViewSetSuper(
             )
 
             # If we get this far then send a notification to the requester via email, and a 201 created response.
-            self.notify_user(order_object, order_details["email"])
+            self.notify_user(order_object, formatted_details["email"])
             return Response(
                 {"status": "success", "message": "Success"},
                 status=status.HTTP_201_CREATED,
@@ -274,6 +271,7 @@ class OrderFormViewSetSuper(
         except Exception as e:
             if api_helper.checkLogger():
                 logger.error("Error creating order")
+            print(e)
             return Response(
                 {"status": "failure", "message": "internal error"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -288,7 +286,6 @@ class GenOtpViewSetSuper(
     def create_super(self, request, format=None):
         try:
             order = OrderType.objects.get(id=request.query_params["uuid"])
-            details = json.loads(order.order_details.details)
 
             # Regenerate OTP
             otp = secrets.token_urlsafe(12)
@@ -301,17 +298,17 @@ class GenOtpViewSetSuper(
             order.order_details.otp_age = time.time()
 
             order.order_details.save()
+            formatted_details = self.format_req(json.loads(order.order_details.details).items())
 
             # Send One time passcode to users email.
             # get email template for generating otp
             email_template = EmailTemplate.objects.get(form_id="gen-otp")
-            # FiservViewset.format_req(request.data.items())
             formatted = self.format_req(request.data.items())
             formatted["otp"] = otp
             self.send_template_email(
                 email_template,
                 formatted,
-                details["email"],
+                formatted_details["email"],
                 os.environ.get("STRATMAP_EMAIL"),
                 SEND_HTML_FLAG
             )

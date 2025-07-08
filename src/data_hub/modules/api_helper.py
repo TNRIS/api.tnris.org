@@ -158,7 +158,7 @@ def auth_order(auth_details, order):
         # Secret salt to stop rainbow tables
         salt = order_details.access_salt
 
-        # Secret pepper to stop rainbow tables even if salt is known.
+        # Secret pepper. 
         pepper = os.environ.get("ACCESS_PEPPER")
 
         # Hash auth_details

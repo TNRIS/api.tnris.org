@@ -675,13 +675,17 @@ class OrderSubmitViewSetSuper(
                     template_id = 1093
 
             body = fiserv_helper.generate_fiserv_post_body(payment_method, str(order.order_details_id), template_id, total, transactionfee, order_details)
+            logger.info(body)
+            logger.info(os.environ.get("FISERV_DEV_ACCOUNT_ID"))
             requestUri = f"{FISERV_URL_V3}GetRequestID"
+            logger.info(requestUri)
+
             hmac = fiserv_helper.generate_fiserv_hmac(
                 requestUri,
                 "POST",
                 json.dumps(body),
-                os.environ.get("FISERV_DEV_ACCOUNT_ID"),
-                os.environ.get("FISERV_DEV_AUTH_CODE"),
+                str(os.environ.get("FISERV_DEV_ACCOUNT_ID")),
+                str(os.environ.get("FISERV_DEV_AUTH_CODE")),
             )
             basic = fiserv_helper.generate_basic_auth()
             response = requests.post(

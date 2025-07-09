@@ -727,7 +727,7 @@ class OrderSubmitViewSetSuper(
                 )
         except Exception as e:
             if api_helper.checkLogger():
-                print(traceback.format_exc()) 
+                logger.error(traceback.format_exc()) 
                 logger.error(f"Error creating order. Exception: {str(e)}")
             response = Response(
                 {

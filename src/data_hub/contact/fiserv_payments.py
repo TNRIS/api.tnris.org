@@ -9,6 +9,8 @@ import secrets
 import time
 from datetime import datetime, timezone
 import requests
+import traceback
+
 from rest_framework import status, viewsets
 from rest_framework.response import Response
 from django.db.models.signals import pre_save
@@ -656,9 +658,7 @@ class OrderSubmitViewSetSuper(
             # Round to second digit because of binary Float
             transactionfee = round(transactionfee + 0.25, 2)
             template_id = 1092 #Configure the default
-            payment_method = (
-                "CC"
-            )
+            payment_method = "CC"
             if "payment" in order_details:
                 # In this case read in the payment method from the body.
                 payment_method = order_details["payment"]
@@ -726,9 +726,9 @@ class OrderSubmitViewSetSuper(
                     status=status.HTTP_409_CONFLICT,
                 )
         except Exception as e:
-            message = "Error creating order. Exception: " + str(e)
             if api_helper.checkLogger():
-                logger.error(message)
+                print(traceback.format_exc()) 
+                logger.error(f"Error creating order. Exception: {str(e)}")
             response = Response(
                 {
                     "status": "failure",

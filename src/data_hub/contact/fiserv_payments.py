@@ -11,7 +11,6 @@ from datetime import datetime, timezone
 import requests
 from rest_framework import status, viewsets
 from rest_framework.response import Response
-from django.conf import settings
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from modules.api_helper import logger
@@ -552,11 +551,9 @@ class OrderCleanupViewSetSuper(FiservViewset):
             )
             # return response
         except Exception as e:
-            message = "Error cleaning up orders. Exception: "
-            if settings.DEBUG:
-                message = message + str(e)
+            message = "Error cleaning up orders. Exception: "  + str(e)
             if api_helper.checkLogger():
-                logger.error(message=message + str(e))
+                logger.error(message)
             response = Response(
                 {"status": "failure", "message": "failure"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -623,11 +620,9 @@ class OrderCleanupViewSetSuper(FiservViewset):
                 {"status_code": 500}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
-            message = "Error getting receipt: "
-            if settings.DEBUG:
-                message = message + str(e)
-                if api_helper.checkLogger():
-                    logger.error(message)
+            message = "Error getting receipt: "  + str(e)
+            if api_helper.checkLogger():
+                logger.error(message)
         finally:
             return response
 
@@ -731,11 +726,9 @@ class OrderSubmitViewSetSuper(
                     status=status.HTTP_409_CONFLICT,
                 )
         except Exception as e:
-            message = "Error creating order. Exception: "
-            if settings.DEBUG:
-                message = message + str(e)
-                if api_helper.checkLogger():
-                    logger.error(message)
+            message = "Error creating order. Exception: " + str(e)
+            if api_helper.checkLogger():
+                logger.error(message)
             response = Response(
                 {
                     "status": "failure",

@@ -26,6 +26,27 @@ export CCP_SERVICE_CODE=`/envs/data_hub/bin/aws secretsmanager get-secret-value 
 export CCP_API_KEY=`/envs/data_hub/bin/aws secretsmanager get-secret-value --secret-id api-tnris-org --query SecretString --output text | jq -cr '.CCP_API_KEY'`
 export CCP_ACCESS_CODE=`/envs/data_hub/bin/aws secretsmanager get-secret-value --secret-id api-tnris-org --query SecretString --output text | jq -cr '.CCP_ACCESS_CODE'`
 
+export FISERV_DEV_ACCOUNT_ID=`/envs/data_hub/bin/aws secretsmanager get-secret-value --secret-id api-tnris-org --query SecretString --output text | jq -cr '.FISERV_DEV_ACCOUNT_ID'`
+export FISERV_ACCOUNT_NAME=`/envs/data_hub/bin/aws secretsmanager get-secret-value --secret-id api-tnris-org --query SecretString --output text | jq -cr '.FISERV_ACCOUNT_NAME'`
+export FISERV_GATEWAY=`/envs/data_hub/bin/aws secretsmanager get-secret-value --secret-id api-tnris-org --query SecretString --output text | jq -cr '.FISERV_GATEWAY'`
+export FISERV_MERCHANT_ID=`/envs/data_hub/bin/aws secretsmanager get-secret-value --secret-id api-tnris-org --query SecretString --output text | jq -cr '.FISERV_MERCHANT_ID'`
+export FISERV_MERCHANT_NAME=`/envs/data_hub/bin/aws secretsmanager get-secret-value --secret-id api-tnris-org --query SecretString --output text | jq -cr '.FISERV_MERCHANT_NAME'`
+export FISERV_DEV_AUTH_USER=`/envs/data_hub/bin/aws secretsmanager get-secret-value --secret-id api-tnris-org --query SecretString --output text | jq -cr '.FISERV_DEV_AUTH_USER'`
+export FISERV_DEV_AUTH_CODE=`/envs/data_hub/bin/aws secretsmanager get-secret-value --secret-id api-tnris-org --query SecretString --output text | jq -cr '.FISERV_DEV_AUTH_CODE'`
+export FISERV_API_BASIC_AUTH_PWD=`/envs/data_hub/bin/aws secretsmanager get-secret-value --secret-id api-tnris-org --query SecretString --output text | jq -cr '.FISERV_API_BASIC_AUTH_PWD'`
+export FISERV_API_BASIC_AUTH_USERNAME=`/envs/data_hub/bin/aws secretsmanager get-secret-value --secret-id api-tnris-org --query SecretString --output text | jq -cr '.FISERV_API_BASIC_AUTH_USERNAME'`
+export FISERV_COMPANY_CODE=`/envs/data_hub/bin/aws secretsmanager get-secret-value --secret-id api-tnris-org --query SecretString --output text | jq -cr '.FISERV_COMPANY_CODE'`
+export FISERV_CUSTOMER_ID=`/envs/data_hub/bin/aws secretsmanager get-secret-value --secret-id api-tnris-org --query SecretString --output text | jq -cr '.FISERV_CUSTOMER_ID'`
+export FISERV_USER_ID=`/envs/data_hub/bin/aws secretsmanager get-secret-value --secret-id api-tnris-org --query SecretString --output text | jq -cr '.FISERV_USER_ID'`
+export FISERV_SERVICE_CODE=`/envs/data_hub/bin/aws secretsmanager get-secret-value --secret-id api-tnris-org --query SecretString --output text | jq -cr '.FISERV_SERVICE_CODE'`
+
+export API_URL=`stagingapi.tnris.org`
+export FDMS_URL=`https://securecheckout-uat.cdc.nicusa.com/ccprest/api/v1/TX/`
+export FISERV_URL=`https://snappaydirectapi-cert.fiserv.com/api/interop/`
+export FISERV_URL_V2=`https://snappaydirectapi-cert.fiserv.com/api/interop/v2/`
+export FISERV_URL_V3=`https://snappaydirectapi-cert.fiserv.com/api/interop/v3/`
+export FISERV_HPP_PAGE=`https://snappaydirect-cert.fiserv.com/interop/HostedPaymentPage/`
+
 export FKEY1=`/envs/data_hub/bin/aws secretsmanager get-secret-value --secret-id api-tnris-org --query SecretString --output text | jq -cr '.FKEY1'`
 export ACCESS_PEPPER=`/envs/data_hub/bin/aws secretsmanager get-secret-value --secret-id api-tnris-org --query SecretString --output text | jq -cr '.ACCESS_PEPPER'`
 export BCC_EMAIL_1=`/envs/data_hub/bin/aws secretsmanager get-secret-value --secret-id api-tnris-org --query SecretString --output text | jq -cr '.BCC_EMAIL_1'`

@@ -72,8 +72,8 @@ def generate_fiserv_post_body(
         "currencycode": "USD",  # required
         "customerid": os.environ.get("FISERV_CUSTOMER_ID"),  # required
         "userid": os.environ.get("FISERV_USER_ID"),  # required
-        "redirecturl": "https://" + api_url + "/api/v1/contact/order/redirect?status=success",
-        "cancelredirecturl": "https://" + api_url +"/api/v1/contact/order/redirect?status=cancel",  # Optional but we can use it.
+        "redirecturl": "https://" + api_url + "/api/v2/contact/order/redirect?status=success",
+        "cancelredirecturl": "https://" + api_url +"/api/v2/contact/order/redirect?status=cancel",  # Optional but we can use it.
         "reference": "UPI",  # Required
         "templateid": template_id,  # required
         "transactiontype": "S",  # required: S means for a sale.

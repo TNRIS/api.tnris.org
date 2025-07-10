@@ -40,12 +40,12 @@ export FISERV_CUSTOMER_ID=`/envs/data_hub/bin/aws secretsmanager get-secret-valu
 export FISERV_USER_ID=`/envs/data_hub/bin/aws secretsmanager get-secret-value --secret-id api-tnris-org --query SecretString --output text | jq -cr '.FISERV_USER_ID'`
 export FISERV_SERVICE_CODE=`/envs/data_hub/bin/aws secretsmanager get-secret-value --secret-id api-tnris-org --query SecretString --output text | jq -cr '.FISERV_SERVICE_CODE'`
 
-export API_URL=`stagingapi.tnris.org`
-export FDMS_URL=`https://securecheckout-uat.cdc.nicusa.com/ccprest/api/v1/TX/`
-export FISERV_URL=`https://snappaydirectapi-cert.fiserv.com/api/interop/`
-export FISERV_URL_V2=`https://snappaydirectapi-cert.fiserv.com/api/interop/v2/`
-export FISERV_URL_V3=`https://snappaydirectapi-cert.fiserv.com/api/interop/v3/`
-export FISERV_HPP_PAGE=`https://snappaydirect-cert.fiserv.com/interop/HostedPaymentPage/`
+export API_URL=stagingapi.tnris.org
+export FDMS_URL=https://securecheckout-uat.cdc.nicusa.com/ccprest/api/v1/TX/
+export FISERV_URL=https://snappaydirectapi-cert.fiserv.com/api/interop/
+export FISERV_URL_V2=https://snappaydirectapi-cert.fiserv.com/api/interop/v2/
+export FISERV_URL_V3=https://snappaydirectapi-cert.fiserv.com/api/interop/v3/
+export FISERV_HPP_PAGE=https://snappaydirect-cert.fiserv.com/interop/HostedPaymentPage/
 
 export FKEY1=`/envs/data_hub/bin/aws secretsmanager get-secret-value --secret-id api-tnris-org --query SecretString --output text | jq -cr '.FKEY1'`
 export ACCESS_PEPPER=`/envs/data_hub/bin/aws secretsmanager get-secret-value --secret-id api-tnris-org --query SecretString --output text | jq -cr '.ACCESS_PEPPER'`

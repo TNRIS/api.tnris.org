@@ -1,4 +1,7 @@
-
+test-data:
+	python src/data_hub/manage.py dumpdata contact.EmailTemplate > src/data_hub/contact/fixtures/testapi.json
+clean-test-data:
+	rm src/data_hub/contact/testapi.json
 pack-%:
 	echo $(VIRTUAL_ENV)/lib/python3.6/site-packages/.
 	echo ./$(subst pack-,,$(subst --,%,$@))/

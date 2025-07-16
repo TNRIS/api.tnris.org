@@ -275,11 +275,10 @@ class OrderDetailsTypeAdmin(admin.ModelAdmin):
         return ['id', 'name_field', 'email_field', 'phone_field', 'address_field', 'city_field', 'state_field', 'zipcode_field', 'organization_field', 'industry_field', 'fedex_field', 'notes_field', 'delivery_field', 'harddrive_field',
         'payment_field', 'order_field', 'formid_field']
     list_editable = (['update_email'])
-
     list_display = (
         ['name_field', 'update_email', 'email_field', 'phone_field', 'address_field', 'city_field', 'state_field', 'zipcode_field', 'organization_field', 'industry_field', 'fedex_field', 'notes_field', 'delivery_field', 'harddrive_field',
         'payment_field', 'order_field', 'formid_field']
-    )
+        )
     def save_model(self, request, obj, form, change):
         if(change and form.cleaned_data["update_email"] and len(form.cleaned_data["update_email"])):
             obj_details = json.loads(obj.details)

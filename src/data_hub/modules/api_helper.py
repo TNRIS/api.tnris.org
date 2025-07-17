@@ -2,19 +2,13 @@
 Api Helper
 """
 
-import logging
-import time
-import hashlib
-import os
-import json
-import boto3
-import requests
-import watchtower
+import boto3, json, os, hashlib, time, requests
 from botocore.exceptions import ClientError
 from django.core.mail import EmailMessage, EmailMultiAlternatives
+import logging, watchtower
 from lcd.models import LoggerType
-from rest_framework.permissions import AllowAny
 from cryptography.fernet import Fernet
+
 
 logger = logging.getLogger("errLog")
 logger.addHandler(watchtower.CloudWatchLogHandler())
@@ -22,142 +16,6 @@ logger.addHandler(watchtower.CloudWatchLogHandler())
 SHOULD_LOG = False
 LAST_CHECKED = 0
 FISERV_URL = "https://snappaydirectapi-cert.fiserv.com/api/interop/"
-
-
-class CorsPostPermission(AllowAny):
-    """
-    custom permissions for cors control
-    """
-
-    whitelisted_domains = [
-        "api.tnris.org",
-        "beta.tnris.org",
-        "data.tnris.org",
-        "alphabetadata.tnris.org",
-        "api-test.tnris.org",
-        "betadata.tnris.org",
-        "develop.tnris.org",
-        "lake-gallery.tnris.org",
-        "localhost:8000",
-        "localhost",
-        "staging.tnris.org",
-        "stagingapi.tnris.org",
-        "staginghub.tnris.org",
-        "store.tnris.org",
-        "tnris.org",
-        "www.tnris.org",
-        "dev.txgio.org",
-        "geographic.texas.gov",
-        "dev.geographic.texas.gov",
-        "staging.geographic.texas.gov",
-        "dev.gio.texas.gov",
-        "staging.gio.texas.gov",
-        "data.geographic.texas.gov",
-        "data.gio.texas.gov",
-        "devdata.geographic.texas.gov",
-        "stagingdata.geographic.texas.gov",
-        "cmsdev",
-        "cmsprod",
-    ]
-
-    def has_permission(self, request, view):
-        u = (
-            urlparse(request.META["HTTP_REFERER"]).hostname
-            if "HTTP_REFERER" in request.META.keys()
-            else request.META["HTTP_HOST"]
-        )
-        return u in self.whitelisted_domains
-
-
-class CorsPostPermission(AllowAny):
-    """
-    custom permissions for cors control
-    """
-
-    whitelisted_domains = [
-        "api.tnris.org",
-        "beta.tnris.org",
-        "data.tnris.org",
-        "alphabetadata.tnris.org",
-        "api-test.tnris.org",
-        "betadata.tnris.org",
-        "develop.tnris.org",
-        "lake-gallery.tnris.org",
-        "localhost:8000",
-        "localhost",
-        "staging.tnris.org",
-        "stagingapi.tnris.org",
-        "staginghub.tnris.org",
-        "store.tnris.org",
-        "tnris.org",
-        "www.tnris.org",
-        "dev.txgio.org",
-        "geographic.texas.gov",
-        "dev.geographic.texas.gov",
-        "staging.geographic.texas.gov",
-        "dev.gio.texas.gov",
-        "staging.gio.texas.gov",
-        "data.geographic.texas.gov",
-        "data.gio.texas.gov",
-        "devdata.geographic.texas.gov",
-        "stagingdata.geographic.texas.gov",
-        "cmsdev",
-        "cmsprod",
-    ]
-
-    def has_permission(self, request, view):
-        u = (
-            urlparse(request.META["HTTP_REFERER"]).hostname
-            if "HTTP_REFERER" in request.META.keys()
-            else request.META["HTTP_HOST"]
-        )
-        return u in self.whitelisted_domains
-
-
-
-class CorsPostPermission(AllowAny):
-    """
-    custom permissions for cors control
-    """
-
-    whitelisted_domains = [
-        "api.tnris.org",
-        "beta.tnris.org",
-        "data.tnris.org",
-        "alphabetadata.tnris.org",
-        "api-test.tnris.org",
-        "betadata.tnris.org",
-        "develop.tnris.org",
-        "lake-gallery.tnris.org",
-        "localhost:8000",
-        "localhost",
-        "staging.tnris.org",
-        "stagingapi.tnris.org",
-        "staginghub.tnris.org",
-        "store.tnris.org",
-        "tnris.org",
-        "www.tnris.org",
-        "dev.txgio.org",
-        "geographic.texas.gov",
-        "dev.geographic.texas.gov",
-        "staging.geographic.texas.gov",
-        "dev.gio.texas.gov",
-        "staging.gio.texas.gov",
-        "data.geographic.texas.gov",
-        "data.gio.texas.gov",
-        "devdata.geographic.texas.gov",
-        "stagingdata.geographic.texas.gov",
-        "cmsdev",
-        "cmsprod",
-    ]
-
-    def has_permission(self, request, view):
-        u = (
-            urlparse(request.META["HTTP_REFERER"]).hostname
-            if "HTTP_REFERER" in request.META.keys()
-            else request.META["HTTP_HOST"]
-        )
-        return u in self.whitelisted_domains
 
 
 def get_secret(secret_name):
@@ -188,13 +46,14 @@ def get_secret(secret_name):
     # Decrypts secret using the associated KMS key.
     return json.loads(get_secret_value_response["SecretString"])
 
+
 def send_html_email(
     subject,
     body,
     send_from=os.environ.get("MAIL_DEFAULT_FROM"),
     send_to=os.environ.get("MAIL_DEFAULT_TO"),
     reply_to="unknown@tnris.org",
-    cc_email=""
+    cc_email="",
 ):
     """Generic function for sending emails from the API
 
@@ -214,22 +73,26 @@ def send_html_email(
 
     return mail.send()
 
+
 def send_raw_email(
     subject,
     body,
     send_from=os.environ.get("MAIL_DEFAULT_FROM"),
     send_to=os.environ.get("MAIL_DEFAULT_TO"),
     reply_to="unknown@tnris.org",
-    cc_email=""
+    cc_email="",
 ):
     """
     generic function for sending email associated with form submission
     emails send to supportsystem to create tickets in the ticketing system
     which are ultimately managed by IS, RDC, and StratMap
     """
-    email = EmailMessage(subject, body, send_from, [send_to], [cc_email], reply_to=[reply_to])
+    email = EmailMessage(
+        subject, body, send_from, [send_to], [cc_email], reply_to=[reply_to]
+    )
     email.send(fail_silently=False)
     return
+
 
 def auth_order(auth_details, order):
     """Compare hashes of access code and one time passcode
@@ -250,7 +113,7 @@ def auth_order(auth_details, order):
         # Secret salt to stop rainbow tables
         salt = order_details.access_salt
 
-        # Secret pepper. 
+        # Secret pepper.
         pepper = os.environ.get("ACCESS_PEPPER")
 
         # Hash auth_details
@@ -276,6 +139,7 @@ def auth_order(auth_details, order):
         order.save()
     return ACCESS_CODE_VALID and OTP_VALID
 
+
 def checkCaptcha(captcha):
     """Check a captcha string for success.
 
@@ -285,7 +149,7 @@ def checkCaptcha(captcha):
     Returns:
         _type_: python object with information about status of captcha.
     """
-   
+
     recaptcha_secret = os.environ.get("RECAPTCHA_SECRET")
     recaptcha_verify_url = "https://www.google.com/recaptcha/api/siteverify"
     recaptcha_data = {
@@ -294,6 +158,7 @@ def checkCaptcha(captcha):
     }
 
     return requests.post(url=recaptcha_verify_url, data=recaptcha_data)
+
 
 def buildOrderString(order_obj):
     order_string = ""
@@ -350,6 +215,7 @@ def buildOrderString(order_obj):
 
     return order_string
 
+
 def checkLogger():
     try:
         # Check every 30 minutes the SHOULD_LOG Setting otherwise return SHOULD_LOG (Done this way to minimize database use)
@@ -371,6 +237,7 @@ def checkLogger():
         logger.error("Error checking logger.")
         return False
 
+
 def encrypt_string(value):
     """
     Standard function to encrypt a string using
@@ -383,6 +250,7 @@ def encrypt_string(value):
         encrypted = f.encrypt(bytes("", "utf-8"))
     return encrypted.decode("utf-8")
 
+
 def decrypt_string(value):
     """
     Standard function to decrypt a string using
@@ -392,4 +260,3 @@ def decrypt_string(value):
     decrypted = f.decrypt(bytes(value, "utf-8"))
 
     return decrypted.decode("utf-8")
-

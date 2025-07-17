@@ -17,8 +17,8 @@ from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from modules.api_helper import logger
 from modules import api_helper
-from .models import EmailTemplate, OrderType, OrderDetailsType
-from contact.fiserv_routines import fiserv_helper
+from contact.models import EmailTemplate, OrderType, OrderDetailsType
+from contact.fdms import fiserv_helper
 
 CLEANING_FLAG = False
 SEND_HTML_FLAG = True

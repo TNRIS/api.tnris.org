@@ -5,24 +5,19 @@ from urllib.parse import urlparse
 import os
 import logging
 import watchtower
+import boto3
+import gspread # Google Drive auth and GoogleSheets api wrapper libraries
 
 from django.shortcuts import redirect
-
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework import mixins, schemas, status, viewsets
 from rest_framework.response import Response
-from contact import fiserv_payments
+from contact.fdms import fiserv_payments
 from contact import ccp_payments
-
-import boto3
 from botocore.exceptions import ClientError
 from botocore.client import Config
 from modules import api_helper
-# Google Drive auth and GoogleSheets api wrapper libraries
-import gspread
-
 from .models import CampaignSubscriber, SurveyTemplate
-
 from .serializers import (
     SurveyTemplateSerializer,
     DataHubOrderSerializer,
@@ -78,6 +73,7 @@ class CorsPostPermission(AllowAny):
 # ################### CCP ENDPOINTS ####################
 # ######################################################
 
+# POST PERMISSION CCP
 class CcpSubmitFormViewSet(ccp_payments.SubmitFormViewSetSuper):
     """
     Old submit form, will be deprecated soon.
@@ -103,22 +99,6 @@ class CcpOrderStatusViewSet(ccp_payments.OrderStatusViewSetSuper):
     def create(self, request):
         return self.captcha_intro(request, "running CcpOrderStatusViewSet")
 
-class CcpInitiateRetentionCleanupViewSet(ccp_payments.InitiateRetentionCleanupViewSetSuper):
-    """
-    Initiate retention cleanup viewset for ccp.
-    """
-    permission_classes = (AllowAny,)
-    def create(self, request):
-       return self.intro(request, "running CcpInitiateRetentionCleanupViewSet")
-
-class CcpOrderCleanupViewSet(ccp_payments.OrderCleanupViewSetSuper):
-    """
-    Order cleanup viewset.
-    """
-    permission_classes = (AllowAny,)
-    def create(self, request):
-        return self.intro(request, "running CcpOrderCleanupViewSet")
-
 class CcpOrderSubmitViewSet(ccp_payments.OrderSubmitViewSetSuper):
     """
     CCP Order submit viewset.
@@ -134,11 +114,29 @@ class CcpOrderFormViewSet(ccp_payments.OrderFormViewSetSuper):
     permission_classes = [CorsPostPermission]
     def create(self, request):
         return self.intro(request, "running CcpOrderFormViewSet")
+
+# Allow any CCP
+class CcpInitiateRetentionCleanupViewSet(ccp_payments.InitiateRetentionCleanupViewSetSuper):
+    """
+    Initiate retention cleanup viewset for ccp.
+    """
+    permission_classes = (AllowAny,)
+    def create(self, request):
+       return self.intro(request, "running CcpInitiateRetentionCleanupViewSet")
+
+class CcpOrderCleanupViewSet(ccp_payments.OrderCleanupViewSetSuper):
+    """
+    Order cleanup viewset.
+    """
+    permission_classes = (AllowAny,)
+    def create(self, request):
+        return self.intro(request, "running CcpOrderCleanupViewSet")
     
 # ######################################################
 # ################# FiServ ENDPOINTS ###################
 # ######################################################
 
+# POST PERMISSION FISERV
 class FiservSubmitFormViewSet(viewsets.ViewSet):
     """
     Handle TxGIO form submissions (Restricted Access).
@@ -165,22 +163,6 @@ class FiservOrderStatusViewSet(fiserv_payments.OrderStatusViewSetSuper):
     def create(self, request):
         return self.captcha_intro(request, "Running OrderStatusViewSet.")
 
-class FiservInitiateRetentionCleanupViewSet(fiserv_payments.InitiateRetentionCleanupViewSetSuper):
-    """
-    Initiate retention cleanup viewset.
-    """
-    permission_classes = (AllowAny,)
-    def create(self, request):
-       return self.intro(request, "running InitiateRetentionCleanupViewSet")
-
-class FiservOrderCleanupViewSet(fiserv_payments.OrderCleanupViewSetSuper):
-    """
-    Order cleanup viewset.
-    """
-    permission_classes = (AllowAny,)
-    def create(self, request):
-        return self.intro(request, "running OrderCleanupViewSet")
-
 class FiservOrderSubmitViewSet(fiserv_payments.OrderSubmitViewSetSuper):
     """
     Order submit viewset.
@@ -206,101 +188,7 @@ class FiservRedirectUrlViewSet(viewsets.ViewSet):
         # Redirect
         return redirect("https://data.geographic.texas.gov/order/redirect?status=success")
 
-# ######################################################
-# ################## ORDER ENDPOINTS ###################
-# ######################################################
-
-# ######################################################
-# ################### CCP ENDPOINTS ####################
-# ######################################################
-
-class CcpSubmitFormViewSet(ccp_payments.SubmitFormViewSetSuper):
-    """
-    Old submit form, will be deprecated soon.
-    """
-    permission_classes = [CorsPostPermission]
-    def create(self, request):
-        return self.captcha_intro(request, "Running CcpSubmitFormViewSet")
-
-class CcpGenOtpViewSet(ccp_payments.GenOtpViewSetSuper):
-    """
-    Generate One time password viewset for CCP.
-    """
-    permission_classes = [CorsPostPermission]
-
-    def create(self, request):
-        return self.captcha_intro(request, "Regenerating one time passcode. CcpGenOtpViewSet.")
-
-class CcpOrderStatusViewSet(ccp_payments.OrderStatusViewSetSuper):
-    """
-    Order Status viewset.
-    """
-    permission_classes = [CorsPostPermission]
-    def create(self, request):
-        return self.captcha_intro(request, "running CcpOrderStatusViewSet")
-
-class CcpInitiateRetentionCleanupViewSet(ccp_payments.InitiateRetentionCleanupViewSetSuper):
-    """
-    Initiate retention cleanup viewset for ccp.
-    """
-    permission_classes = (AllowAny,)
-    def create(self, request):
-       return self.intro(request, "running CcpInitiateRetentionCleanupViewSet")
-
-class CcpOrderCleanupViewSet(ccp_payments.OrderCleanupViewSetSuper):
-    """
-    Order cleanup viewset.
-    """
-    permission_classes = (AllowAny,)
-    def create(self, request):
-        return self.intro(request, "running CcpOrderCleanupViewSet")
-
-class CcpOrderSubmitViewSet(ccp_payments.OrderSubmitViewSetSuper):
-    """
-    CCP Order submit viewset.
-    """
-    permission_classes = [CorsPostPermission]
-    def create(self, request):
-        return self.intro(request, "Starting CcpOrderSubmitViewSet")
-
-class CcpOrderFormViewSet(ccp_payments.OrderFormViewSetSuper): 
-    """
-    Ccp Order form viewset.
-    """
-    permission_classes = [CorsPostPermission]
-    def create(self, request):
-        return self.intro(request, "running CcpOrderFormViewSet")
-    
-# ######################################################
-# ################# FiServ ENDPOINTS ###################
-# ######################################################
-
-class FiservSubmitFormViewSet(viewsets.ViewSet):
-    """
-    Handle TxGIO form submissions (Restricted Access).
-    """
-    permission_classes = [CorsPostPermission]
-    def create(self, request):
-        # Check Recaptcha return if it fails.
-        return Response("Endpoint deprecated", status=status.HTTP_410_GONE)
-
-class FiservGenOtpViewSet(fiserv_payments.GenOtpViewSetSuper):
-    """
-    Generate One time password viewset.
-    """
-    permission_classes = [CorsPostPermission]
-
-    def create(self, request):
-        return self.captcha_intro(request, "Regenerating one time passcode. GenOtpViewSet.")
-
-class FiservOrderStatusViewSet(fiserv_payments.OrderStatusViewSetSuper):
-    """
-    Order Status viewset.
-    """
-    permission_classes = [CorsPostPermission]
-    def create(self, request):
-        return self.captcha_intro(request, "Running OrderStatusViewSet.")
-
+# Allow any Fiserv
 class FiservInitiateRetentionCleanupViewSet(fiserv_payments.InitiateRetentionCleanupViewSetSuper):
     """
     Initiate retention cleanup viewset.
@@ -316,76 +204,6 @@ class FiservOrderCleanupViewSet(fiserv_payments.OrderCleanupViewSetSuper):
     permission_classes = (AllowAny,)
     def create(self, request):
         return self.intro(request, "running OrderCleanupViewSet")
-
-class FiservOrderSubmitViewSet(fiserv_payments.OrderSubmitViewSetSuper):
-    """
-    Order submit viewset.
-    """
-    permission_classes = [CorsPostPermission]
-    def create(self, request):
-        return self.captcha_intro(request, "Starting OrderSubmitViewSet.")
-
-class FiservOrderFormViewSet(fiserv_payments.OrderFormViewSetSuper):
-    """
-    Order form viewset.
-    """
-    permission_classes = [CorsPostPermission]
-    def create(self, request):
-        return self.captcha_intro(request, "Running OrderFormViewSet.")
-
-class FiservRedirectUrlViewSet(viewsets.ViewSet):
-    """
-    Redirect to a url.
-    """
-    permission_classes = [CorsPostPermission]
-    def create(self, request):
-        # Redirect
-        return redirect("https://data.geographic.texas.gov/order/redirect?status=success")
-
-# ######################################################
-# ################## ORDER ENDPOINTS ###################
-# ######################################################
-class SubmitFormViewSet(SubmitFormViewSetSuper):
-    """
-    Handle TxGIO form submissions (Restricted Access).
-    """
-    def create(self, request):
-        # Check Recaptcha return if it fails.
-        verify_req = api_helper.checkCaptcha(request.data["recaptcha"])
-        if not json.loads(verify_req.text)["success"]:
-            return self.build_error_response("Recaptcha Verification Failed.")
-        
-        super().create(self, request)
-
-class GenOtpViewSet(GenOtpViewSetSuper):
-    """
-    Generate One time password viewset.
-    """
-
-class OrderStatusViewSet(OrderStatusViewSetSuper):
-    """
-    Order Status viewset.
-    """
-
-class InitiateRetentionCleanupViewSet(InitiateRetentionCleanupViewSetSuper):
-    """
-    Initiate retention cleanup viewset.
-    """
-
-class OrderCleanupViewSet(OrderCleanupViewSetSuper):
-    """
-    Order cleanup viewset.
-    """
-
-class OrderSubmitViewSet(OrderSubmitViewSetSuper):
-    """
-    Order submit viewset.
-    """
-
-class OrderFormViewSet(OrderFormViewSetSuper):
-    """
-    Order form viewset.
-    """
 
 # ######################################################
 # ############## CONTACT FORM ENDPOINTS ################

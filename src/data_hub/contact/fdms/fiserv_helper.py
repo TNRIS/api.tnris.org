@@ -1,5 +1,4 @@
 import datetime, uuid, base64, hmac, os, hashlib
-
 api_url = str(os.environ.get('API_URL'))
 
 def computeSignature(requestURI: str, requestMethod: str, payLoad: str, accountId: str, key: str):
@@ -41,7 +40,7 @@ def generate_fiserv_post_body(
         template_id: int,
         total: float,
         transactionfee: float,
-        order_details: object,
+        order_details: dict,
         charge: bool = False
     ):
     """
@@ -52,7 +51,7 @@ def generate_fiserv_post_body(
         template_id (str): Template id.
         total (float): Total of purchase without fee.
         transactionfee (float): DIR fee.
-        order_details (object): Order details object.
+        order_details (dict): Order details object.
         charge (bool): Whether we are using the charge api. Defaults to False
     """
 

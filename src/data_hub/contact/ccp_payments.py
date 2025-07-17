@@ -1,4 +1,3 @@
-from rest_framework.permissions import AllowAny
 from rest_framework import status, viewsets
 from rest_framework.response import Response
 from datetime import datetime, timezone
@@ -6,7 +5,7 @@ from django.conf import settings
 from django.core.mail import EmailMessage
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
-from modules import api_helper_v1
+from modules import api_helper
 from .models import EmailTemplate, OrderType, OrderDetailsType
 from .serializers import *
 
@@ -15,58 +14,10 @@ import logging, watchtower
 
 logger = logging.getLogger("errLog")
 logger.addHandler(watchtower.CloudWatchLogHandler())
+
 CLEANING_FLAG=False
+CCP_URL = str(os.environ.get("CCP_URL"))
 
-# Use testing URLS (Do not use in production)
-TESTING = True
-
-CCP_URL = 'https://securecheckout.cdc.nicusa.com/ccprest/api/v1/TX/'
-
-if(TESTING):
-    CCP_URL = 'https://securecheckout-uat.cdc.nicusa.com/ccprest/api/v1/TX/'
-
-class CorsPostPermission(AllowAny):
-    """
-    custom permissions for cors control
-    """
-    whitelisted_domains = [
-        "api.tnris.org",
-        "beta.tnris.org",
-        "data.tnris.org",
-        "alphabetadata.tnris.org",
-        "api-test.tnris.org",
-        "betadata.tnris.org",
-        "develop.tnris.org",
-        "lake-gallery.tnris.org",
-        "localhost:8000",
-        "localhost",
-        "staging.tnris.org",
-        "stagingapi.tnris.org",
-        "staginghub.tnris.org",
-        "store.tnris.org",
-        "tnris.org",
-        "www.tnris.org",
-        "dev.txgio.org",
-        "geographic.texas.gov",
-        "dev.geographic.texas.gov",
-        "staging.geographic.texas.gov",
-        "dev.gio.texas.gov",
-        "staging.gio.texas.gov",
-        "data.geographic.texas.gov",
-        "data.gio.texas.gov",
-        "devdata.geographic.texas.gov",
-        "stagingdata.geographic.texas.gov",
-        "cmsdev",
-        "cmsprod"
-    ]
-
-    def has_permission(self, request, view):
-        u = (
-            urlparse(request.META["HTTP_REFERER"]).hostname
-            if "HTTP_REFERER" in request.META.keys()
-            else request.META["HTTP_HOST"]
-        )
-        return u in self.whitelisted_domains
 
 class CcpViewSet(viewsets.ViewSet):
     """
@@ -74,12 +25,12 @@ class CcpViewSet(viewsets.ViewSet):
     """
     def intro(self, request, msg=""):
         """Abstraction function to check logger, check captcha, then handle failed captchas if needed."""
-        if api_helper_v1.checkLogger():
+        if api_helper.checkLogger():
             logger.info(msg)
         return self.create_super(request)
 
     def captcha_intro(self, request, msg):
-        verify_req = api_helper_v1.checkCaptcha(request.data["recaptcha"])
+        verify_req = api_helper.checkCaptcha(request.data["recaptcha"])
 
         # If we need to check the captcha then we verify captcha is correct.
         if json.loads(verify_req.text)["success"]:
@@ -125,7 +76,7 @@ class SubmitFormViewSetSuper(CcpViewSet):
         try:
             email_template = EmailTemplate.objects.get(form_id=request.data["form_id"])
         except:
-            if(api_helper_v1.checkLogger()):
+            if(api_helper.checkLogger()):
                 logger.error("form_id not registered.")
             return Response(
                 {"status": "error", "message": "form_id not registered."},
@@ -173,13 +124,13 @@ class SubmitFormViewSetSuper(CcpViewSet):
                 send_to=sender,
                 reply_to=replyer,
             )
-            if(api_helper_v1.checkLogger()):
+            if(api_helper.checkLogger()):
                 logger.info("Form Submitted Successfully!")
             return Response(
                 {"status": "success", "message": "Form Submitted Successfully!"},
                 status=status.HTTP_201_CREATED,
             )
-        if(api_helper_v1.checkLogger()):
+        if(api_helper.checkLogger()):
             logger.info("Serializer Save Failed.")
         return Response(
             {
@@ -210,7 +161,7 @@ class GenOtpViewSetSuper(CcpViewSet):
             order.order_details.save()
             
             # Send One time passcode to users email.
-            api_helper_v1.send_email(
+            api_helper.send_html_email(
                 subject="DataHub one time passcode",
                 body=
                     """
@@ -229,7 +180,7 @@ class GenOtpViewSetSuper(CcpViewSet):
                 send_to=details["Email"],
                 reply_to=os.environ.get("STRATMAP_EMAIL")
             )
-            if(api_helper_v1.checkLogger()):
+            if(api_helper.checkLogger()):
                 logger.info("Passcode sent to email.")
             return Response(
                 {"status": "success", "message": "Passcode sent to email."},
@@ -237,7 +188,7 @@ class GenOtpViewSetSuper(CcpViewSet):
             )
         except Exception as e:
             message = "Error generating the One time passcode. Exception: "
-            if(api_helper_v1.checkLogger()): 
+            if(api_helper.checkLogger()): 
                 message = message + str(e)
                 logger.error(message)
             return Response(
@@ -252,7 +203,7 @@ class OrderStatusViewSetSuper(CcpViewSet):
     def create_super(self, request, format=None):
         try:
             order = OrderType.objects.get(id=request.query_params["uuid"])
-            authorized = api_helper_v1.auth_order(request.data, order)
+            authorized = api_helper.auth_order(request.data, order)
             if(not authorized):
                 return Response({"status": "denied", "message": "Access is denied. Either access code is wrong or One time passcode has expired."},
                 status=status.HTTP_403_FORBIDDEN,
@@ -274,7 +225,7 @@ class OrderStatusViewSetSuper(CcpViewSet):
                 )
         except Exception as e:
             message = "Error checking order status. Exception: "
-            if(api_helper_v1.checkLogger()): 
+            if(api_helper.checkLogger()): 
                 message = message + str(e)
                 logger.error(message)
             return Response(
@@ -291,7 +242,7 @@ class InitiateRetentionCleanupViewSetSuper(CcpViewSet):
 
         # Check CCP ACCESS CODE to prevent bots from making requests.
         if os.environ.get("CCP_ACCESS_CODE")!= request.data["access_code"]:
-            if api_helper_v1.checkLogger():
+            if api_helper.checkLogger():
                 logger.error("CCP access code incorrect in InitiateRetentionCleanup ")
             return Response(
                 {"status": "access_denied", "message": "access_denied"},
@@ -356,7 +307,7 @@ class InitiateRetentionCleanupViewSetSuper(CcpViewSet):
             }, status=status.HTTP_200_OK)
 
         except Exception as e:
-            if api_helper_v1.checkLogger():
+            if api_helper.checkLogger():
                 logger.info("Error cleaning up old orders: %s", str(e))
             return Response({
                 "status": "failure",
@@ -369,7 +320,7 @@ class OrderCleanupViewSetSuper(CcpViewSet):
         response = None #Placeholder to verify in finally block.
 
         if CLEANING_FLAG:
-            if api_helper_v1.checkLogger():
+            if api_helper.checkLogger():
                 logger.error("Cleaning function is already in progress.")
             return Response(
                 {"status": "failure", "message": "failure. Cleaning function already running"},
@@ -378,7 +329,7 @@ class OrderCleanupViewSetSuper(CcpViewSet):
         
         # Check CCP ACCESS CODE to prevent bots from making requests.
         if(os.environ.get("CCP_ACCESS_CODE")!= request.data["access_code"]):
-            if api_helper_v1.checkLogger():
+            if api_helper.checkLogger():
                 logger.error("CCP access code incorrect")
             return Response(
                 {"status": "access_denied", "message": "access_denied"},
@@ -386,7 +337,7 @@ class OrderCleanupViewSetSuper(CcpViewSet):
             )
         try:
             # Select all of the orders that are not archived.
-            if api_helper_v1.checkLogger():
+            if api_helper.checkLogger():
                 logger.info("Starting cleanup.")
             CLEANING_FLAG=True
             unarchived_orders = OrderType.objects.filter(archived=False).values()
@@ -403,7 +354,7 @@ class OrderCleanupViewSetSuper(CcpViewSet):
                     receipt = self.get_receipt(request, format)
                     if(receipt.status_code == 200):
                         if(not order["tnris_notified"]):
-                            if api_helper_v1.checkLogger():
+                            if api_helper.checkLogger():
                                 logger.info("Order receipt found where TxGIO has not been notified.")
                             obj = OrderType.objects.get(id=order["id"])
                             obj.tnris_notified = True
@@ -411,7 +362,7 @@ class OrderCleanupViewSetSuper(CcpViewSet):
                             obj.save()
 
 
-                            order_string = api_helper_v1.buildOrderString(order_obj)
+                            order_string = api_helper.buildOrderString(order_obj)
                             email_body = """
 A payment has been received from from: https://data.geographic.texas.gov/order/
 Please see order details below. And ship the order. \n
@@ -425,7 +376,7 @@ Form parameters
                             reply_email = "unknown@tnris.org"
                             if("Email" in order_obj):
                                 reply_email = order_obj["Email"]
-                            api_helper_v1.send_raw_email(subject="Dataset Order Update: Payment has been received.", body=email_body,
+                            api_helper.send_raw_email(subject="Dataset Order Update: Payment has been received.", body=email_body,
                                 send_from=os.environ.get("MAIL_DEFAULT_FROM"),
                                 send_to=os.environ.get("MAIL_DEFAULT_TO"),
                                 reply_to=reply_email)
@@ -437,7 +388,7 @@ Form parameters
                         obj.archived = True
                         obj.save()
                         if(receipt.status_code != 200 and "Email" in order_obj):
-                            api_helper_v1.send_email(
+                            api_helper.send_html_email(
                                 subject="Your TxGIO Datahub order has been removed",
                                 body=
                                     """
@@ -458,9 +409,9 @@ Form parameters
                                 reply_to=os.environ.get("STRATMAP_EMAIL")
                             )
                 except Exception as e:
-                    if api_helper_v1.checkLogger():
+                    if api_helper.checkLogger():
                         logger.error("There was a problem processing a single order. Proceeding.")
-            if api_helper_v1.checkLogger():
+            if api_helper.checkLogger():
                 logger.info("Successful cleanup")
             response =  Response(
                 {"status": "success", "message": "success"},
@@ -470,14 +421,14 @@ Form parameters
         except Exception as e:
             message = "Error cleaning up orders. Exception: "
             if(settings.DEBUG): message = message + str(e)
-            if api_helper_v1.checkLogger():
+            if api_helper.checkLogger():
                 logger.error(message + str(e))
             response =  Response(
                 {"status": "failure", "message": "failure"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
         finally:
-            if api_helper_v1.checkLogger():
+            if api_helper.checkLogger():
                 logger.info("Finished cleanup.")
             CLEANING_FLAG=False
 
@@ -497,8 +448,6 @@ Form parameters
                     "MerchantCode": os.environ.get("CCP_MERCHANT_CODE"),
                     "ServiceCode": os.environ.get("CCP_SERVICE_CODE")
                 }
-                if(TESTING):
-                    headers["apiKey"] = os.environ.get("CCP_API_KEY_UAT")
                 
                 orderinfo = requests.get(CCP_URL + "tokens/" + str(order.order_token), headers=headers) 
                 
@@ -534,22 +483,21 @@ Form parameters
             message = "Error getting receipt: " 
             if(settings.DEBUG):
                 message = message + str(e)
-                if api_helper_v1.checkLogger():
+                if api_helper.checkLogger():
                     logger.error(message)
         finally:
             return response
 
 class OrderSubmitViewSetSuper(CcpViewSet):
-    permission_classes = [CorsPostPermission]
     def create_super(self, request, format=None):
         try:
-            if api_helper_v1.checkLogger():
+            if api_helper.checkLogger():
                 logger.info("Starting OrderSubmitViewSet")
-            verify_req = api_helper_v1.checkCaptcha(request.data["recaptcha"])
+            verify_req = api_helper.checkCaptcha(request.data["recaptcha"])
             if json.loads(verify_req.text)["success"]:
                 orderObj = OrderType.objects
                 order = orderObj.get(id=request.query_params["uuid"])
-                authorized = api_helper_v1.auth_order(request.data, order)
+                authorized = api_helper.auth_order(request.data, order)
                 if(not authorized):
                     return Response({"status": "denied",
                                     "order_url": "NONE",
@@ -644,9 +592,6 @@ class OrderSubmitViewSetSuper(CcpViewSet):
                 body["LineItems"][0]["ItemAttributes"].append({'FieldName':'CONV_FEE', 'FieldValue': transactionfee})
                 api_key = os.environ.get("CCP_API_KEY")
 
-                if(TESTING):
-                    api_key = os.environ.get("CCP_API_KEY_UAT")
-
                 x = requests.post(
                     CCP_URL + "tokens", 
                     json = body,
@@ -668,13 +613,13 @@ class OrderSubmitViewSetSuper(CcpViewSet):
                         "message": "success"}
                     )
                 else:
-                    if api_helper_v1.checkLogger():
+                    if api_helper.checkLogger():
                         logger.error("An order has failed. because no html5Redirect found in the response.")
                     response =  Response(
                         {"status": "failure", "order_url": "NONE", "message": "The order has failed"},
                         status=status.HTTP_500_INTERNAL_SERVER_ERROR,)
             else:
-                if api_helper_v1.checkLogger():
+                if api_helper.checkLogger():
                     logger.info("An order has failed because Captcha is incorrect.")
                 return Response(
                     {"status": "failure", "message": "Captcha is incorrect."},
@@ -684,7 +629,7 @@ class OrderSubmitViewSetSuper(CcpViewSet):
             message = "Error creating order. Exception: "
             if(settings.DEBUG):
                 message = message + str(e)
-                if api_helper_v1.checkLogger():
+                if api_helper.checkLogger():
                     logger.error(message)
             response =  Response(
                 {"status": "failure", "order_url": "NONE", "message": "The order has failed"},
@@ -696,8 +641,6 @@ class OrderFormViewSetSuper(CcpViewSet):
     """
     Handle TxGIO order form submissions
     """
-    permission_classes = [CorsPostPermission]
-
     # inject form values into email template body
     def compile_email_body(self, template_body, dict):
         injected = template_body
@@ -717,7 +660,7 @@ class OrderFormViewSetSuper(CcpViewSet):
                 instance.customer_notified = True
                 instance.save()
                 order_info = json.loads(instance.order_details.details)
-                api_helper_v1.send_email(
+                api_helper.send_html_email(
                     subject="Your TxGIO Datahub order has been approved",
                     body=
                         """
@@ -745,7 +688,7 @@ class OrderFormViewSetSuper(CcpViewSet):
         
     def notify_user(self, order_object, email):
         #Notify user
-        api_helper_v1.send_email(
+        api_helper.send_html_email(
             "Your datahub order has been received",
             """
                 <html><body style='overflow:hidden'>
@@ -783,9 +726,9 @@ class OrderFormViewSetSuper(CcpViewSet):
 
     def create_super(self, request, format=None):
         try:
-            if api_helper_v1.checkLogger():
+            if api_helper.checkLogger():
                 logger.info("running OrderFormViewSet")
-            verify_req = api_helper_v1.checkCaptcha(request.data["recaptcha"])
+            verify_req = api_helper.checkCaptcha(request.data["recaptcha"])
             if json.loads(verify_req.text)["success"]:
                 order = request.data
 
@@ -821,7 +764,7 @@ class OrderFormViewSetSuper(CcpViewSet):
                     if "name" in formatted.keys():
                         replyer = "%s <%s>" % (formatted["name"], formatted["email"])
 
-                    api_helper_v1.send_raw_email(
+                    api_helper.send_raw_email(
                         subject="Map Order Form",
                         body=body,
                         send_to=sender,
@@ -867,7 +810,7 @@ class OrderFormViewSetSuper(CcpViewSet):
                     if "Name" in formatted.keys():
                         replyer = "%s <%s>" % (formatted["Name"], formatted["Email"])
 
-                    api_helper_v1.send_raw_email(
+                    api_helper.send_raw_email(
                         subject="Dataset Order",
                         body=body,
                         send_to=sender,
@@ -888,7 +831,7 @@ class OrderFormViewSetSuper(CcpViewSet):
             message = "Error creating order: "
             if(settings.DEBUG):
                 message = message + str(e)
-                if api_helper_v1.checkLogger():
+                if api_helper.checkLogger():
                     logger.error(message)
             return Response(
                 {"status": "failure", "message": "internal error"},

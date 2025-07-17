@@ -17,7 +17,7 @@ from django.urls import path, include
 from rest_framework import routers
 from rest_framework_swagger.views import get_swagger_view
 
-from .viewsets import (
+from contact.viewsets import (
     FiservSubmitFormViewSet,
     FiservGenOtpViewSet,
     FiservOrderStatusViewSet,

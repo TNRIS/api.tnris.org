@@ -47,6 +47,8 @@ export FISERV_URL_V2=https://snappaydirectapi-cert.fiserv.com/api/interop/v2/
 export FISERV_URL_V3=https://snappaydirectapi-cert.fiserv.com/api/interop/v3/
 export FISERV_HPP_PAGE=https://snappaydirect-cert.fiserv.com/interop/HostedPaymentPage/
 
+export CCP_URL=https://securecheckout.cdc.nicusa.com/ccprest/api/v1/TX/
+
 export FKEY1=`/envs/data_hub/bin/aws secretsmanager get-secret-value --secret-id api-tnris-org --query SecretString --output text | jq -cr '.FKEY1'`
 export ACCESS_PEPPER=`/envs/data_hub/bin/aws secretsmanager get-secret-value --secret-id api-tnris-org --query SecretString --output text | jq -cr '.ACCESS_PEPPER'`
 export BCC_EMAIL_1=`/envs/data_hub/bin/aws secretsmanager get-secret-value --secret-id api-tnris-org --query SecretString --output text | jq -cr '.BCC_EMAIL_1'`

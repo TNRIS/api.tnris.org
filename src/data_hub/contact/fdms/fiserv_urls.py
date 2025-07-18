@@ -22,7 +22,7 @@ from contact.viewsets import (
     FiservGenOtpViewSet,
     FiservOrderStatusViewSet,
     FiservInitiateRetentionCleanupViewSet,
-    FiservOrderCleanupViewSet,
+    FiservOrderArchivalViewSet,
     FiservOrderSubmitViewSet,
     FiservOrderFormViewSet,
     FiservRedirectUrlViewSet,
@@ -35,7 +35,7 @@ router.register(r'submit/?', FiservSubmitFormViewSet, basename="FiservSubmitForm
 router.register(r'order/otp/?', FiservGenOtpViewSet, basename="FiservOrderOtp")
 router.register(r'order/status/?', FiservOrderStatusViewSet, basename="FiservOrderStatus")
 router.register(r'order/retentionCleanup/?', FiservInitiateRetentionCleanupViewSet, basename="FiservInitiateRetentionCleanup")
-router.register(r'order/cleanup/?', FiservOrderCleanupViewSet, basename="FiservOrderCleanup")
+router.register(r'order/cleanup/?', FiservOrderArchivalViewSet, basename="FiservOrderArchival")
 router.register(r'order/submit/?', FiservOrderSubmitViewSet, basename="FiservPaymentForm")
 router.register(r'order/?', FiservOrderFormViewSet, basename="FiservOrderForm")
 router.register(r'order/redirect/?', FiservRedirectUrlViewSet, basename="FiservRedirectUrl")

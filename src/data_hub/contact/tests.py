@@ -22,7 +22,7 @@ from contact.fdms.fiserv_payments import (
     OrderSubmitViewSetSuper,
     OrderStatusViewSetSuper,
     InitiateRetentionCleanupViewSetSuper,
-    OrderCleanupViewSetSuper
+    OrderArchivalViewSetSuper
 )
 from .models import OrderType, OrderDetailsType
 from rest_framework.request import Request
@@ -414,7 +414,7 @@ class SnappayTestCase(GeneralTest):
 
     def test_order_cleanup(self):
         """Order cleanup test case."""
-        order_cleanup = OrderCleanupViewSetSuper()
+        order_cleanup = OrderArchivalViewSetSuper()
         request = create_super_request(
             {
                 "access_code": os.environ.get("CCP_ACCESS_CODE"),

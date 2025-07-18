@@ -8,7 +8,8 @@ from django.core.mail import EmailMessage, EmailMultiAlternatives
 import logging, watchtower
 from lcd.models import LoggerType
 from cryptography.fernet import Fernet
-
+from rest_framework import status
+from rest_framework.response import Response
 
 logger = logging.getLogger("errLog")
 logger.addHandler(watchtower.CloudWatchLogHandler())
@@ -17,6 +18,19 @@ SHOULD_LOG = False
 LAST_CHECKED = 0
 FISERV_URL = "https://snappaydirectapi-cert.fiserv.com/api/interop/"
 
+def authenticate_lambda(access_code):
+    """
+    Check ACCESS CODE to prevent bots from making requests.
+    """
+    if os.environ.get("CCP_ACCESS_CODE") != access_code:
+        if checkLogger():
+            logger.error("Access code incorrect")
+        return Response(
+            {"status": "access_denied", "message": "access_denied"},
+            status=status.HTTP_401_UNAUTHORIZED,
+        )
+    else:
+        return None
 
 def get_secret(secret_name):
     """Access all of the AWS Secrets via it's Identifier.

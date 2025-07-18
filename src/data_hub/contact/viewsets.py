@@ -145,7 +145,6 @@ class FiservSubmitFormViewSet(viewsets.ViewSet):
     """
     permission_classes = [CorsPostPermission]
     def create(self, request):
-        # Check Recaptcha return if it fails.
         return Response("Endpoint deprecated", status=status.HTTP_410_GONE)
 
 class FiservGenOtpViewSet(fiserv_payments.GenOtpViewSetSuper):
@@ -199,13 +198,13 @@ class FiservInitiateRetentionCleanupViewSet(fiserv_payments.InitiateRetentionCle
     def create(self, request):
        return self.intro(request, "running InitiateRetentionCleanupViewSet")
 
-class FiservOrderCleanupViewSet(fiserv_payments.OrderCleanupViewSetSuper):
+class FiservOrderArchivalViewSet(fiserv_payments.OrderArchivalViewSetSuper):
     """
-    Order cleanup viewset.
+    Order archival viewset.
     """
     permission_classes = (AllowAny,)
     def create(self, request):
-        return self.intro(request, "running OrderCleanupViewSet")
+        return Response("Endpoint deprecated", status=status.HTTP_410_GONE)
 
 # ######################################################
 # ############## CONTACT FORM ENDPOINTS ################

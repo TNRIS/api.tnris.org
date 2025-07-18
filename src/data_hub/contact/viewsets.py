@@ -187,8 +187,13 @@ class FiservRedirectUrlViewSet(viewsets.ViewSet):
     permission_classes = [CorsPostPermission]
     def create(self, request):
         # Redirect
-        return redirect("https://data.geographic.texas.gov/order/redirect?status=success")
-
+        if(request.query_params["status"] == "cancel"):
+            return redirect("https://data.geographic.texas.gov/order/redirect?status=cancel")
+        elif(request.query_params["status"] == "success"):
+            return redirect("https://data.geographic.texas.gov/order/redirect?status=success")
+        else:
+            return redirect("https://data.geographic.texas.gov/order/")
+        
 # Allow any Fiserv
 class FiservInitiateRetentionCleanupViewSet(fiserv_payments.InitiateRetentionCleanupViewSetSuper):
     """

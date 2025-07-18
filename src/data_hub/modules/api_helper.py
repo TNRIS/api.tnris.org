@@ -16,7 +16,6 @@ logger.addHandler(watchtower.CloudWatchLogHandler())
 
 SHOULD_LOG = False
 LAST_CHECKED = 0
-FISERV_URL = "https://snappaydirectapi-cert.fiserv.com/api/interop/"
 
 def authenticate_lambda(access_code):
     """

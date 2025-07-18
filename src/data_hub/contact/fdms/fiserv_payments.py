@@ -461,7 +461,7 @@ class InitiateRetentionCleanupViewSetSuper(
                 receipt = self.get_receipt(order)
 
                 # If order has been paid for notify TxGIO
-                if receipt.status_code == 200: 
+                if order.archived is False and receipt.status_code == 200:
                     if not order["tnris_notified"]:
                         if api_helper.checkLogger():
                             logger.info(
@@ -490,7 +490,7 @@ class InitiateRetentionCleanupViewSetSuper(
                             reply_email,
                         )
                         order.save()
-
+                    continue #This order is done processing for now.
 
                 # Determine how long since the order was created.
                 created_td = datetime.utcnow() - order.created.replace(tzinfo=None)
@@ -526,7 +526,6 @@ class InitiateRetentionCleanupViewSetSuper(
                     # deleted if left in that state for 30 days completely
                     # unmodified.
                     if (days_since_created > 90) and (days_since_modified > 90):
-
                         order_obj = json.loads(order_details.values()[0]["details"])
 
                         if receipt.status_code != 200 and "Email" in order_obj:
@@ -598,11 +597,7 @@ class OrderSubmitViewSetSuper(
                     template_id = 1093
 
             body = fiserv_helper.generate_fiserv_post_body(payment_method, str(order.order_details_id), template_id, total, transactionfee, order_details)
-            logger.info(body)
-            logger.info(os.environ.get("FISERV_DEV_ACCOUNT_ID"))
             requestUri = f"{FISERV_URL_V3}GetRequestID"
-            logger.info(requestUri)
-
             hmac = fiserv_helper.generate_fiserv_hmac(
                 requestUri,
                 "POST",
@@ -615,8 +610,8 @@ class OrderSubmitViewSetSuper(
                 requestUri,
                 json=body,
                 headers={
-                    "accountid": os.environ.get("FISERV_DEV_ACCOUNT_ID"),  # good
-                    "merchantid": os.environ.get("FISERV_MERCHANT_ID"),  # good
+                    "accountid": os.environ.get("FISERV_DEV_ACCOUNT_ID"),
+                    "merchantid": os.environ.get("FISERV_MERCHANT_ID"),
                     "signature": f"Hmac {hmac.decode()}",
                     "Authorization": f"Basic {basic.decode()}",
                 },

@@ -374,204 +374,11 @@ class InitiateRetentionCleanupViewSetSuper(
     Delete old orders according to retention policy.
     """
 
-    def create_super(self, request, format=None):
-        """Delete old orders according to retention policy."""
-
-        # Check CCP ACCESS CODE to prevent bots from making requests.
-        if os.environ.get("CCP_ACCESS_CODE") != request.data["access_code"]:
-            if api_helper.checkLogger():
-                logger.error("CCP access code incorrect in InitiateRetentionCleanup ")
-            return Response(
-                {"status": "access_denied", "message": "access_denied"},
-                status=status.HTTP_401_UNAUTHORIZED,
-            )
-
-        # Boolean flag to determine if we are running a test or not.
-        approve_run = False
-        if "approve_run" in request.data:
-            approve_run = request.data["approve_run"] == "true"
-
-        try:
-            orders = OrderType.objects.get_queryset()
-            # Loop over each order and check if the retention policy has expired them.
-            for order in orders:
-                # Determine how long since the order was created.
-                created_td = datetime.utcnow() - order.created.replace(tzinfo=None)
-                days_since_created = created_td.days
-
-                # Determine how long since the order was modified.
-                modified_td = datetime.utcnow() - order.last_modified.replace(
-                    tzinfo=None
-                )
-                days_since_modified = modified_td.days
-
-                # Get associated order details.
-                order_details = OrderDetailsType.objects.filter(
-                    id=order.order_details_id
-                )
-
-                # If archived we must check if deletion time has come.
-                # This is where the writing to the database should occur. Be
-                # sure to check for "approve_run" is "true" before doing
-                # anything dangerous.
-                if order.archived is True:
-                    # Retention policy - Un-acted upon orders will be archived
-                    # after 90 days. After an additional 30 days then they will
-                    # be deleted from the API database. We can check that at
-                    # least 120 days have passed since that's the minimum
-                    # amount of time we want to keep an order. We also want to
-                    # make sure it was changed to archived and it hasn't been
-                    # modified in any way for 30 days.
-                    if (days_since_created > 120) and (days_since_modified > 30):
-                        if approve_run:
-                            order.delete()
-                            order_details.delete()
-                else:
-                    # If not archived we check the retention policy.
-                    # Retention policy Orders marked as archived will be
-                    # deleted if left in that state for 30 days completely
-                    # unmodified.
-                    if (days_since_created > 90) and (days_since_modified > 90):
-                        if approve_run:
-                            order.archived = True
-                            order.save()
-
-            # General Response
-            if approve_run:
-                return Response({"status": "success", "message": "success"})
-
-        except Exception as e:
-            if api_helper.checkLogger():
-                logger.info("Error cleaning up old orders: %s", str(e))
-            return Response(
-                {"status": "failure", "message": "The order has failed"},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            )
-
-class OrderCleanupViewSetSuper(FiservViewset):
-    """
-    Begin Cleanup routines
-    """
-    def create_super(self, request, format=None):
-        global CLEANING_FLAG
-        if CLEANING_FLAG:
-            if api_helper.checkLogger():
-                logger.error("Cleaning function is already in progress.")
-            return Response(
-                {
-                    "status": "failure",
-                    "message": "failure. Cleaning function already running",
-                },
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            )
-
-        # Check CCP ACCESS CODE to prevent bots from making requests.
-        if os.environ.get("CCP_ACCESS_CODE") != request.data["access_code"]:
-            if api_helper.checkLogger():
-                logger.error("CCP access code incorrect")
-            return Response(
-                {"status": "access_denied", "message": "access_denied"},
-                status=status.HTTP_401_UNAUTHORIZED,
-            )
-        try:
-            # Select all of the orders that are not archived.
-            if api_helper.checkLogger():
-                logger.info("Starting cleanup.")
-            CLEANING_FLAG = True
-            unarchived_orders = OrderType.objects.filter(archived=False).values()
-
-            now = datetime.now(timezone.utc)
-
-            # If an order is older than 15 days archive it regardless.
-            for order in unarchived_orders:
-                try:
-                    difference = now - order["created"]
-                    request.query_params._mutable = True
-                    request.query_params["uuid"] = str(order["id"])
-                    request.query_params._mutable = False
-                    receipt = self.get_receipt(request, format)
-                    if receipt.status_code == 200: 
-                        if not order["tnris_notified"]:
-                            if api_helper.checkLogger():
-                                logger.info(
-                                    "Order receipt found where TxGIO has not been notified."
-                                )
-                            obj = OrderType.objects.get(id=order["id"])
-                            obj.tnris_notified = True
-                            order_obj = json.loads(
-                                OrderDetailsType.objects.filter(
-                                    id=order["order_details_id"]
-                                ).values()[0]["details"]
-                            )
-                            obj.save()
-
-                            order_string = api_helper.buildOrderString(order_obj)
-
-                            reply_email = "unknown@tnris.org"
-                            if "Email" in order_obj:
-                                reply_email = order_obj["Email"]
-
-                            email_template = EmailTemplate.objects.get(form_id="order-received")
-                            self.send_template_email(
-                                email_template,
-                                {"order_id": order["id"], "order_string": order_string},
-                                os.environ.get("MAIL_DEFAULT_TO"),
-                                reply_email,
-                            )
-
-                    # If no receipt was received or order was sent after 90 days then archive order automatically.
-                    if difference.days > 90 and (
-                        receipt.status_code != 200 or order["order_sent"] == True
-                    ):
-                        order_obj = json.loads(
-                            OrderDetailsType.objects.filter(
-                                id=order["order_details_id"]
-                            ).values()[0]["details"]
-                        )
-                        obj = OrderType.objects.get(id=order["id"])
-                        obj.archived = True
-                        obj.save()
-
-                        if receipt.status_code != 200 and "Email" in order_obj:
-                            email_template = EmailTemplate.objects.get(form_id="order-removed")
-                            self.send_template_email(
-                                email_template,
-                                {},
-                                order_obj["Email"],
-                                os.environ.get("STRATMAP_EMAIL"),
-                            )
-                except Exception as e:
-                    if api_helper.checkLogger():
-                        logger.error(
-                            "There was a problem processing a single order. Proceeding."
-                        )
-            if api_helper.checkLogger():
-                logger.info("Successful cleanup")
-            response = Response(
-                {"status": "success", "message": "success"},
-                status=status.HTTP_200_OK,
-            )
-            # return response
-        except Exception as e:
-            message = "Error cleaning up orders. Exception: "  + str(e)
-            if api_helper.checkLogger():
-                logger.error(message)
-            response = Response(
-                {"status": "failure", "message": "failure"},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            )
-        finally:
-            if api_helper.checkLogger():
-                logger.info("Finished cleanup.")
-            CLEANING_FLAG = False
-            return response
-
-    def get_receipt(self, request, format):
+    def get_receipt(self, order):
         # Look for a successful receipt. Otherwise return 404.
         try:
-            order = OrderType.objects.get(id=request.query_params["uuid"])
             if order.order_approved:
-                endpoint = f"{FISERV_URL}GetPaymentDetails" # Change over to gettransaction
+                endpoint = f"{FISERV_URL}GetPaymentDetails" # Potentially can change over to gettransaction.
                 basic = fiserv_helper.generate_basic_auth()
 
                 body = { # check orderid here.
@@ -627,6 +434,122 @@ class OrderCleanupViewSetSuper(FiservViewset):
                 logger.error(message)
         finally:
             return response
+
+    def create_super(self, request, format=None):
+        """Delete old orders according to retention policy."""
+
+        blocked = api_helper.authenticate_lambda(request.data["access_code"])
+        if(blocked):
+            return blocked
+
+        global CLEANING_FLAG
+        if CLEANING_FLAG:
+            if api_helper.checkLogger():
+                logger.error("Cleaning function is already in progress.")
+            return Response(
+                {
+                    "status": "failure",
+                    "message": "failure. Cleaning function already running",
+                },
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+
+        try:
+            orders = OrderType.objects.get_queryset()
+            # Loop over each order and check if the retention policy has expired them.
+            for order in orders:
+                receipt = self.get_receipt(order)
+
+                # If order has been paid for notify TxGIO
+                if receipt.status_code == 200: 
+                    if not order["tnris_notified"]:
+                        if api_helper.checkLogger():
+                            logger.info(
+                                "Order receipt found where TxGIO has not been notified."
+                            )
+                        order.tnris_notified = True
+                        
+                        order_obj = json.loads(
+                            OrderDetailsType.objects.filter(
+                                id=order["order_details_id"]
+                            ).values()[0]["details"]
+                        )
+                        order_string = api_helper.buildOrderString(order_obj)
+
+                        
+
+                        reply_email = "unknown@tnris.org"
+                        if "Email" in order_obj:
+                            reply_email = order_obj["Email"]
+
+                        email_template = EmailTemplate.objects.get(form_id="order-received")
+                        self.send_template_email(
+                            email_template,
+                            {"order_id": order["id"], "order_string": order_string},
+                            os.environ.get("MAIL_DEFAULT_TO"),
+                            reply_email,
+                        )
+                        order.save()
+
+
+                # Determine how long since the order was created.
+                created_td = datetime.utcnow() - order.created.replace(tzinfo=None)
+                days_since_created = created_td.days
+
+                # Determine how long since the order was modified.
+                modified_td = datetime.utcnow() - order.last_modified.replace(
+                    tzinfo=None
+                )
+                days_since_modified = modified_td.days
+
+                # Get associated order details.
+                order_details = OrderDetailsType.objects.filter(
+                    id=order.order_details_id
+                )
+
+                # If archived we must check if deletion time has come.
+                # This is where the writing to the database should occur.
+                if order.archived is True:
+                    # Retention policy - Un-acted upon orders will be archived
+                    # after 90 days. After an additional 30 days then they will
+                    # be deleted from the API database. We can check that at
+                    # least 120 days have passed since that's the minimum
+                    # amount of time we want to keep an order. We also want to
+                    # make sure it was changed to archived and it hasn't been
+                    # modified in any way for 30 days.
+                    if (days_since_created > 120) and (days_since_modified > 30):
+                        order.delete()
+                        order_details.delete()
+                else:
+                    # If not archived we check the retention policy.
+                    # Retention policy Orders marked as archived will be
+                    # deleted if left in that state for 30 days completely
+                    # unmodified.
+                    if (days_since_created > 90) and (days_since_modified > 90):
+
+                        order_obj = json.loads(order_details.values()[0]["details"])
+
+                        if receipt.status_code != 200 and "Email" in order_obj:
+                            email_template = EmailTemplate.objects.get(form_id="order-removed")
+                            self.send_template_email(
+                                email_template,
+                                {},
+                                order_obj["Email"],
+                                os.environ.get("STRATMAP_EMAIL"),
+                            )
+                        order.archived = True
+                        order.save()
+
+            # General Response
+            return Response({"status": "success", "message": "success"})
+
+        except Exception as e:
+            if api_helper.checkLogger():
+                logger.info("Error cleaning up old orders: %s", str(e))
+            return Response(
+                {"status": "failure", "message": "The order has failed"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
 
 class OrderSubmitViewSetSuper(
         FiservViewset

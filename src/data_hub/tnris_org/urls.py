@@ -27,7 +27,6 @@ from .viewsets import (
     TnrisSGMDocumentViewSet,
     TnrisCommunityMeetingDocumentViewSet,
     TnrisCarouselImageViewSet,
-    TnrisMetricsViewSet,
 )
 
 router = routers.DefaultRouter(trailing_slash=False)
@@ -40,7 +39,6 @@ router.register(r'gio_calendar/?', TnrisGioCalendarEventViewSet, basename="Tnris
 router.register(r'sgm_note/?', TnrisSGMDocumentViewSet, basename="TnrisSgmDocument")
 router.register(r'comm_note/?', TnrisCommunityMeetingDocumentViewSet, basename="TnrisCommDocument")
 router.register(r'carousel_image/?', TnrisCarouselImageViewSet, basename="TnrisCarouselImage")
-router.register(r'metrics/?', TnrisMetricsViewSet, basename="TnrisMetrics")
 
 schema_view = get_swagger_view(title='TNRIS.org API')
 

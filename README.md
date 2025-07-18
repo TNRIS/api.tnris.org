@@ -58,3 +58,9 @@ filter to spatially identify collections.
 To be implemented future procedures for handling order deletions for the API. Jun 18 2024
 * Un-acted upon orders will be archived after 90 days. After an additional 30 days then they will be deleted from the API database.
 * Orders manually marked as sent will be archived after 90 days. After an additional 30 days they will be deleted from the API database.
+
+## Contact tests
+Important: Please make a local test database before doing the following.
+run `make test-data` then after testing is done run `make clean-test-data`
+to run tests cd into src/data_hub then run `python manage.py test contact`
+use --keepdb flag if you are running this again and don't need fresh data. (It's faster)

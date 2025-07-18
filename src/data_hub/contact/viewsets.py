@@ -198,7 +198,7 @@ class FiservInitiateRetentionCleanupViewSet(fiserv_payments.InitiateRetentionCle
     def create(self, request):
        return self.intro(request, "running InitiateRetentionCleanupViewSet")
 
-class FiservOrderArchivalViewSet(fiserv_payments.OrderArchivalViewSetSuper):
+class FiservOrderArchivalViewSet(viewsets.ViewSet):
     """
     Order archival viewset.
     """

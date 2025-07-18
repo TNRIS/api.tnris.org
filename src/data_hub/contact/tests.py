@@ -121,9 +121,9 @@ order_details = {
 
 PROTOCOL = "http"
 
-FISERV_URL = "https://snappaydirectapi-cert.fiserv.com/api/interop/"
-FISERV_URL_V2 = "https://snappaydirectapi-cert.fiserv.com/api/interop/v2/"
-FISERV_URL_V3 = "https://snappaydirectapi-cert.fiserv.com/api/interop/v3/"
+FISERV_URL = str(os.environ.get("FISERV_URL"))
+FISERV_URL_V2 = str(os.environ.get("FISERV_URL_V2"))
+FISERV_URL_V3 = str(os.environ.get("FISERV_URL_V3"))
 SEND_EMAIL = "N"
 payload_valid_test = fiserv_helper.generate_fiserv_post_body("CC", "", 1092, 11.11, .50,  order_details)
 

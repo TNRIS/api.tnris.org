@@ -250,15 +250,3 @@ def generate_level_three(f_total_amount, f_tran_fee):
             "unitofmeasure": "EA",
         },
     ]
-
-def authenticate_lambda():
-    """
-    Check CCP ACCESS CODE to prevent bots from making requests.
-    """
-        if os.environ.get("CCP_ACCESS_CODE") != request.data["access_code"]:
-            if api_helper.checkLogger():
-                logger.error("CCP access code incorrect")
-            return Response(
-                {"status": "access_denied", "message": "access_denied"},
-                status=status.HTTP_401_UNAUTHORIZED,
-            )

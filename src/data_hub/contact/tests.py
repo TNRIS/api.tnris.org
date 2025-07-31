@@ -30,7 +30,7 @@ from rest_framework.parsers import JSONParser
 from contact.fdms import fiserv_helper
 
 payload_valid_test = {
-    "accountid": os.environ.get("FISERV_DEV_ACCOUNT_ID"),
+    "accountid": os.environ.get("FISERV_ACCOUNT_ID"),
     "companycode": os.environ.get("FISERV_COMPANY_CODE"),
     "currencycode": "USD",
     "customerid": os.environ.get("FISERV_CUSTOMER_ID"),
@@ -185,7 +185,7 @@ class GeneralTest(TestCase):
     }
 
     fake_charge = {
-        "accountid": os.environ.get("FISERV_DEV_ACCOUNT_ID"),  # required
+        "accountid": os.environ.get("FISERV_ACCOUNT_ID"),  # required
         "userid": os.environ.get("FISERV_USER_ID"),  # required
         "cof": "C",  # Optional, means Card on file, and C means customer.
         "cofscheduled": "N",  # Optional, N means no don't schedule card to be filed.
@@ -222,7 +222,7 @@ class GeneralTest(TestCase):
     }
 
     fake_charge_new = {
-        "accountid": os.environ.get("FISERV_DEV_ACCOUNT_ID"),  # required
+        "accountid": os.environ.get("FISERV_ACCOUNT_ID"),  # required
         "userid": os.environ.get("FISERV_USER_ID"),  # required
         "cof": "C",  # Optional, means Card on file, and C means customer.
         "cofscheduled": "N",  # Optional, N means no don't schedule card to be filed.
@@ -259,7 +259,7 @@ class GeneralTest(TestCase):
     }
 
     fake_tokenize = {
-        "accountid": os.environ.get("FISERV_DEV_ACCOUNT_ID"),
+        "accountid": os.environ.get("FISERV_ACCOUNT_ID"),
         "currency": "USD",
         "companycode": os.environ.get("FISERV_COMPANY_CODE"),
         "mode": "CC",
@@ -309,15 +309,15 @@ class GeneralTest(TestCase):
             f"{FISERV_URL}tokenize",
             "POST",
             json.dumps(cls.fake_tokenize),
-            os.environ.get("FISERV_DEV_ACCOUNT_ID"),
-            os.environ.get("FISERV_DEV_AUTH_CODE"),
+            os.environ.get("FISERV_ACCOUNT_ID"),
+            os.environ.get("FISERV_AUTH_CODE"),
         )
 
         fake_token = requests.post(
             FISERV_URL + "tokenize",
             json=cls.fake_tokenize,
             headers={
-                "accountid": os.environ.get("FISERV_DEV_ACCOUNT_ID"),  # good
+                "accountid": os.environ.get("FISERV_ACCOUNT_ID"),  # good
                 "merchantid": os.environ.get("FISERV_MERCHANT_ID"),  # good
                 "signature": f"Hmac {fake_token_hmac.decode()}",
                 "Authorization": f"Basic {basic.decode()}",
@@ -333,8 +333,8 @@ class GeneralTest(TestCase):
             f"{FISERV_URL_V3}charge",  #NOTE: Doesn't work but just testing v3
             "POST",
             json.dumps(cls.fake_charge),
-            os.environ.get("FISERV_DEV_ACCOUNT_ID"),
-            os.environ.get("FISERV_DEV_AUTH_CODE"),
+            os.environ.get("FISERV_ACCOUNT_ID"),
+            os.environ.get("FISERV_AUTH_CODE"),
         )
 
         #NOTE: Doesn't work but just testing v3
@@ -342,7 +342,7 @@ class GeneralTest(TestCase):
             FISERV_URL_V3 + "charge",
             json=cls.fake_charge,
             headers={
-                "accountid": os.environ.get("FISERV_DEV_ACCOUNT_ID"),  # good
+                "accountid": os.environ.get("FISERV_ACCOUNT_ID"),  # good
                 "merchantid": os.environ.get("FISERV_MERCHANT_ID"),  # good
                 "signature": f"Hmac {fake_hmac_v3.decode()}",
                 "Authorization": f"Basic {basic.decode()}",
@@ -354,8 +354,8 @@ class GeneralTest(TestCase):
             f"{FISERV_URL_V2}Charge",  #NOTE: Doesn't work but just testing v2
             "POST",
             json.dumps(cls.fake_charge),
-            os.environ.get("FISERV_DEV_ACCOUNT_ID"),
-            os.environ.get("FISERV_DEV_AUTH_CODE"),
+            os.environ.get("FISERV_ACCOUNT_ID"),
+            os.environ.get("FISERV_AUTH_CODE"),
         )
 
         #NOTE: Doesn't work but just testing v3
@@ -363,7 +363,7 @@ class GeneralTest(TestCase):
             FISERV_URL_V3 + "charge",
             json=cls.fake_charge,
             headers={
-                "accountid": os.environ.get("FISERV_DEV_ACCOUNT_ID"),  # good
+                "accountid": os.environ.get("FISERV_ACCOUNT_ID"),  # good
                 "merchantid": os.environ.get("FISERV_MERCHANT_ID"),  # good
                 "signature": f"Hmac {fake_hmac_v3.decode()}",
                 "Authorization": f"Basic {basic.decode()}",
@@ -625,8 +625,8 @@ class SnappayTestCase(GeneralTest):
             requestUri,
             "POST",
             json.dumps(payload_valid_test),
-            os.environ.get("FISERV_DEV_ACCOUNT_ID"),
-            os.environ.get("FISERV_DEV_AUTH_CODE"),
+            os.environ.get("FISERV_ACCOUNT_ID"),
+            os.environ.get("FISERV_AUTH_CODE"),
         )
         self.assertIsNotNone(hmac)
         basic = fiserv_helper.generate_basic_auth()
@@ -634,7 +634,7 @@ class SnappayTestCase(GeneralTest):
             FISERV_URL_V3 + "GetRequestID",
             json=payload_valid_test,
             headers={
-                "accountid": os.environ.get("FISERV_DEV_ACCOUNT_ID"),  # good
+                "accountid": os.environ.get("FISERV_ACCOUNT_ID"),  # good
                 "merchantid": os.environ.get("FISERV_MERCHANT_ID"),  # good
                 "signature": f"Hmac {hmac.decode()}",
                 "Authorization": f"Basic {basic.decode()}",

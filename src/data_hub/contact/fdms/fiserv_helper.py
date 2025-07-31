@@ -66,7 +66,7 @@ def generate_fiserv_post_body(
         clx_struct = [clx_struct]
 
     post_body = {
-        "accountid": os.environ.get("FISERV_DEV_ACCOUNT_ID"),  # required
+        "accountid": os.environ.get("FISERV_ACCOUNT_ID"),  # required
         "companycode": os.environ.get("FISERV_COMPANY_CODE"),  # required
         "currencycode": "USD",  # required
         "customerid": os.environ.get("FISERV_CUSTOMER_ID"),  # required

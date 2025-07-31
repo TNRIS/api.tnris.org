@@ -26,14 +26,14 @@ export CCP_SERVICE_CODE=`/envs/data_hub/bin/aws secretsmanager get-secret-value 
 export CCP_API_KEY=`/envs/data_hub/bin/aws secretsmanager get-secret-value --secret-id api-tnris-org --query SecretString --output text | jq -cr '.CCP_API_KEY'`
 export CCP_ACCESS_CODE=`/envs/data_hub/bin/aws secretsmanager get-secret-value --secret-id api-tnris-org --query SecretString --output text | jq -cr '.CCP_ACCESS_CODE'`
 
-export FISERV_DEV_ACCOUNT_ID=`/envs/data_hub/bin/aws secretsmanager get-secret-value --secret-id api-tnris-org --query SecretString --output text | jq -cr '.FISERV_DEV_ACCOUNT_ID'`
+export FISERV_ACCOUNT_ID=`/envs/data_hub/bin/aws secretsmanager get-secret-value --secret-id api-tnris-org --query SecretString --output text | jq -cr '.FISERV_PROD_ACCOUNT_ID'`
 export FISERV_ACCOUNT_NAME=`/envs/data_hub/bin/aws secretsmanager get-secret-value --secret-id api-tnris-org --query SecretString --output text | jq -cr '.FISERV_ACCOUNT_NAME'`
 export FISERV_GATEWAY=`/envs/data_hub/bin/aws secretsmanager get-secret-value --secret-id api-tnris-org --query SecretString --output text | jq -cr '.FISERV_GATEWAY'`
 export FISERV_MERCHANT_ID=`/envs/data_hub/bin/aws secretsmanager get-secret-value --secret-id api-tnris-org --query SecretString --output text | jq -cr '.FISERV_MERCHANT_ID'`
 export FISERV_MERCHANT_NAME=`/envs/data_hub/bin/aws secretsmanager get-secret-value --secret-id api-tnris-org --query SecretString --output text | jq -cr '.FISERV_MERCHANT_NAME'`
 export FISERV_DEV_AUTH_USER=`/envs/data_hub/bin/aws secretsmanager get-secret-value --secret-id api-tnris-org --query SecretString --output text | jq -cr '.FISERV_DEV_AUTH_USER'`
-export FISERV_DEV_AUTH_CODE=`/envs/data_hub/bin/aws secretsmanager get-secret-value --secret-id api-tnris-org --query SecretString --output text | jq -cr '.FISERV_DEV_AUTH_CODE'`
-export FISERV_API_BASIC_AUTH_PWD=`/envs/data_hub/bin/aws secretsmanager get-secret-value --secret-id api-tnris-org --query SecretString --output text | jq -cr '.FISERV_API_BASIC_AUTH_PWD'`
+export FISERV_AUTH_CODE=`/envs/data_hub/bin/aws secretsmanager get-secret-value --secret-id api-tnris-org --query SecretString --output text | jq -cr '.FISERV_PROD_AUTH_CODE'`
+export FISERV_API_BASIC_AUTH_PWD=`/envs/data_hub/bin/aws secretsmanager get-secret-value --secret-id api-tnris-org --query SecretString --output text | jq -cr '.FISERV_PROD_API_BASIC_AUTH_PWD'`
 export FISERV_API_BASIC_AUTH_USERNAME=`/envs/data_hub/bin/aws secretsmanager get-secret-value --secret-id api-tnris-org --query SecretString --output text | jq -cr '.FISERV_API_BASIC_AUTH_USERNAME'`
 export FISERV_COMPANY_CODE=`/envs/data_hub/bin/aws secretsmanager get-secret-value --secret-id api-tnris-org --query SecretString --output text | jq -cr '.FISERV_COMPANY_CODE'`
 export FISERV_CUSTOMER_ID=`/envs/data_hub/bin/aws secretsmanager get-secret-value --secret-id api-tnris-org --query SecretString --output text | jq -cr '.FISERV_CUSTOMER_ID'`

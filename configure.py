@@ -51,14 +51,14 @@ export_command = ("export DB_PASSWORD=" + secrets["DB_PASSWORD"] +
 " CCP_ACCESS_CODE=" + secrets["CCP_ACCESS_CODE"] +
 
 # FISERV Environment Variables
-" FISERV_DEV_ACCOUNT_ID=" + secrets["FISERV_DEV_ACCOUNT_ID"] +
+" FISERV_ACCOUNT_ID=" + secrets["FISERV_PROD_ACCOUNT_ID"] +
 " FISERV_ACCOUNT_NAME=" + secrets["FISERV_ACCOUNT_NAME"] +
 " FISERV_GATEWAY=" + secrets["FISERV_GATEWAY"] +
 " FISERV_MERCHANT_ID=" + secrets["FISERV_MERCHANT_ID"] +
 " FISERV_MERCHANT_NAME=" + secrets["FISERV_MERCHANT_NAME"] +
 " FISERV_DEV_AUTH_USER=" + secrets["FISERV_DEV_AUTH_USER"] +
-" FISERV_DEV_AUTH_CODE=" + secrets["FISERV_DEV_AUTH_CODE"] +
-" FISERV_API_BASIC_AUTH_PWD=" + secrets["FISERV_API_BASIC_AUTH_PWD"] +
+" FISERV_AUTH_CODE=" + secrets["FISERV_PROD_AUTH_CODE"] +
+" FISERV_API_BASIC_AUTH_PWD=" + secrets["FISERV_PROD_API_BASIC_AUTH_PWD"] +
 " FISERV_API_BASIC_AUTH_USERNAME=" + secrets["FISERV_API_BASIC_AUTH_USERNAME"] +
 " FISERV_COMPANY_CODE=" + secrets["FISERV_COMPANY_CODE"] +
 " FISERV_CUSTOMER_ID=" + secrets["FISERV_CUSTOMER_ID"] +
@@ -77,15 +77,15 @@ export_command = ("export DB_PASSWORD=" + secrets["DB_PASSWORD"] +
 " ARCGIS_PASSWORD=" + secrets["ARCGIS_PASSWORD"] +
 
 # FDMS Constants
-" API_URL=stagingapi.tnris.org" +
-" FDMS_URL=https://securecheckout-uat.cdc.nicusa.com/ccprest/api/v1/TX/" +
-" FISERV_URL=https://snappaydirectapi-cert.fiserv.com/api/interop/" +
-" FISERV_URL_V2=https://snappaydirectapi-cert.fiserv.com/api/interop/v2/" +
-" FISERV_URL_V3=https://snappaydirectapi-cert.fiserv.com/api/interop/v3/" +
+" API_URL=api.tnris.org" +
+" FISERV_URL=https://snappaydirectapi.fiserv.com/api/interop/" +
+" FISERV_URL_V2=https://snappaydirectapi.fiserv.com/api/interop/v2/" +
+" FISERV_URL_V3=https://snappaydirectapi.fiserv.com/api/interop/v3/" +
 " FISERV_HPP_PAGE=https://snappaydirect-cert.fiserv.com/interop/HostedPaymentPage/" +
 
 # CCP Constants change to test as needed. https://securecheckout-uat.cdc.nicusa.com/ccprest/api/v1/TX/
 " CCP_URL=https://securecheckout.cdc.nicusa.com/ccprest/api/v1/TX/" +
+" CCP_TEST_URL=https://securecheckout-uat.cdc.nicusa.com/ccprest/api/v1/TX/" +
 
 # the following is only used within ETL scripts (specifically, migrate.py)
 " TNRIS_REPO='local_path_to_cloned_tnris_website_repo'")

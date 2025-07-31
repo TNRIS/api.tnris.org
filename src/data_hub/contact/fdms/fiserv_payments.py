@@ -382,7 +382,7 @@ class InitiateRetentionCleanupViewSetSuper(
                 basic = fiserv_helper.generate_basic_auth()
 
                 body = { # check orderid here.
-                    "accountid": os.environ.get("FISERV_DEV_ACCOUNT_ID"),
+                    "accountid": os.environ.get("FISERV_ACCOUNT_ID"),
                     "token": str(order.order_token)
                 }
 
@@ -390,12 +390,12 @@ class InitiateRetentionCleanupViewSetSuper(
                     endpoint,
                     "POST",
                     json.dumps(body),
-                    os.environ.get("FISERV_DEV_ACCOUNT_ID"),
-                    os.environ.get("FISERV_DEV_AUTH_CODE"),
+                    os.environ.get("FISERV_ACCOUNT_ID"),
+                    os.environ.get("FISERV_AUTH_CODE"),
                 )
 
                 headers = {
-                    "Accountid": os.environ.get("FISERV_DEV_ACCOUNT_ID"),  # good
+                    "Accountid": os.environ.get("FISERV_ACCOUNT_ID"),  # good
                     "Signature": f"Hmac {hmac.decode()}",
                     "Authorization": f"Basic {basic.decode()}",
                     "Content-Type": "application/json"
@@ -602,15 +602,15 @@ class OrderSubmitViewSetSuper(
                 requestUri,
                 "POST",
                 json.dumps(body),
-                str(os.environ.get("FISERV_DEV_ACCOUNT_ID")),
-                str(os.environ.get("FISERV_DEV_AUTH_CODE")),
+                str(os.environ.get("FISERV_ACCOUNT_ID")),
+                str(os.environ.get("FISERV_AUTH_CODE")),
             )
             basic = fiserv_helper.generate_basic_auth()
             response = requests.post(
                 requestUri,
                 json=body,
                 headers={
-                    "accountid": os.environ.get("FISERV_DEV_ACCOUNT_ID"),
+                    "accountid": os.environ.get("FISERV_ACCOUNT_ID"),
                     "merchantid": os.environ.get("FISERV_MERCHANT_ID"),
                     "signature": f"Hmac {hmac.decode()}",
                     "Authorization": f"Basic {basic.decode()}",

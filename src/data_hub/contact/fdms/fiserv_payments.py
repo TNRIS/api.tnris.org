@@ -639,7 +639,6 @@ class OrderSubmitViewSetSuper(
                     logger.error(
                         f"An order has failed to be created, because there was no requestid or order has already been completed."
                     )
-                    logger.info(response.text)
                 response = Response(
                     {
                         "status": "failure",

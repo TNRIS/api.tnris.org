@@ -81,7 +81,7 @@ export_command = ("export DB_PASSWORD=" + secrets["DB_PASSWORD"] +
 " FISERV_URL=https://snappaydirectapi.fiserv.com/api/interop/" +
 " FISERV_URL_V2=https://snappaydirectapi.fiserv.com/api/interop/v2/" +
 " FISERV_URL_V3=https://snappaydirectapi.fiserv.com/api/interop/v3/" +
-" FISERV_HPP_PAGE=https://snappaydirect-cert.fiserv.com/interop/HostedPaymentPage/" +
+" FISERV_HPP_PAGE=https://snappaydirect.fiserv.com/interop/HostedPaymentPage/" +
 
 # CCP Constants change to test as needed. https://securecheckout-uat.cdc.nicusa.com/ccprest/api/v1/TX/
 " CCP_URL=https://securecheckout.cdc.nicusa.com/ccprest/api/v1/TX/" +

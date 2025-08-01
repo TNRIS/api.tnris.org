@@ -49,6 +49,7 @@ urlpatterns = [
     path('admin/', admin.site.urls), # admin site
     path('admin', RedirectView.as_view(url='admin/', permanent=False)), # admin site
     path('api/v1/', include('lcd.urls')),
+    path('api/v2/contact/', include('contact.fdms.fiserv_urls')),
     path('health/', HealthCheckView.as_view()),
     path('api/v1/token/', obtain_auth_token, name="auth_token"),
     path('analytics/', include('analytics.urls')),

@@ -1,9 +1,6 @@
 from django.db import models
 from . import fields
-from datetime import datetime
 import uuid
-from django_json_widget.widgets import JSONEditorWidget
-from django import forms
 from django.utils import timezone
     
 class OrderDetailsType(models.Model):
@@ -17,6 +14,7 @@ class OrderDetailsType(models.Model):
         max_length=50000,
         editable=False
     )
+    
     access_code = models.CharField(
         'Hash of access code.',
         editable=False,
@@ -221,9 +219,9 @@ class EmailTemplate(models.Model):
     serializer_classname = models.CharField(
         'Serializer Classname',
         max_length=70,
-        null=False,
-        blank=False,
-        unique=True,
+        null=True,
+        blank=True,
+        unique=False,
         help_text="Serializer classname from serializers.py file. Must be exact. Typically is: '<-ModelClassname->Serializer'"
     )
     email_template_subject = models.CharField(
@@ -260,7 +258,6 @@ Form parameters
 """
 *********************** FORM SUBMISSION TABLES *************************
 """
-
 
 class DataHubContact(models.Model):
     """
@@ -336,7 +333,6 @@ class DataHubContact(models.Model):
 
     def __str__(self):
         return self.name + " " + self.created.strftime('%Y-%m-%d %H:%M')
-
 
 class DataHubOrder(models.Model):
     """
@@ -431,7 +427,6 @@ class DataHubOrder(models.Model):
     def __str__(self):
         return self.name + " " + self.created.strftime('%Y-%m-%d %H:%M')
 
-
 class DataHubOutsideEntityContact(models.Model):
     """
     DataHub contact form on data.tnris.org outside entity cards (Outside Entity Data Inquiry)
@@ -507,7 +502,6 @@ class DataHubOutsideEntityContact(models.Model):
 
     def __str__(self):
         return self.name + " " + self.created.strftime('%Y-%m-%d %H:%M')
-
 
 class EducationContact(models.Model):
     """
@@ -585,7 +579,6 @@ class EducationContact(models.Model):
     def __str__(self):
         return self.name + " " + self.created.strftime('%Y-%m-%d %H:%M')
 
-
 class ForumJobBoardSubmission(models.Model):
     """
     Forum job board submission form on tnris.org forum pages
@@ -653,7 +646,6 @@ class ForumJobBoardSubmission(models.Model):
 
     def __str__(self):
         return self.name + " " + self.created.strftime('%Y-%m-%d %H:%M')
-
 
 class GeneralContact(models.Model):
     """
@@ -730,7 +722,6 @@ class GeneralContact(models.Model):
 
     def __str__(self):
         return self.name + " " + self.created.strftime('%Y-%m-%d %H:%M')
-
 
 class GeorodeoCallForPresentationsSubmission(models.Model):
     """
@@ -822,7 +813,6 @@ class GeorodeoCallForPresentationsSubmission(models.Model):
 
     def __str__(self):
         return self.name + " " + self.created.strftime('%Y-%m-%d %H:%M')
-
 
 class GeorodeoRegistration(models.Model):
     """
@@ -965,7 +955,6 @@ class GeorodeoRegistration(models.Model):
     def __str__(self):
         return self.firstname + " " + self.lastname + " " + self.created.strftime('%Y-%m-%d %H:%M')
 
-
 class LakesOfTexasContact(models.Model):
     """
     Lakes of Texas app contact form on lake-gallery.tnris.org
@@ -1023,7 +1012,6 @@ class LakesOfTexasContact(models.Model):
 
     def __str__(self):
         return self.name + " " + self.created.strftime('%Y-%m-%d %H:%M')
-
 
 class OrderMap(models.Model):
     """
@@ -1281,7 +1269,6 @@ class OrderMap(models.Model):
     def __str__(self):
         return self.name + " " + self.created.strftime('%Y-%m-%d %H:%M')
 
-
 class PosterGallerySubmission(models.Model):
     """
     Poster Gallery Submission form on tnris.org
@@ -1349,7 +1336,6 @@ class PosterGallerySubmission(models.Model):
 
     def __str__(self):
         return self.name + " " + self.created.strftime('%Y-%m-%d %H:%M')
-
 
 class TexasImageryServiceContact(models.Model):
     """
@@ -1426,7 +1412,6 @@ class TexasImageryServiceContact(models.Model):
 
     def __str__(self):
         return self.name + " " + self.created.strftime('%Y-%m-%d %H:%M')
-
 
 class TexasImageryServiceRequest(models.Model):
     """
@@ -1614,7 +1599,6 @@ class TexasImageryServiceRequest(models.Model):
 
     def __str__(self):
         return self.name + " " + self.created.strftime('%Y-%m-%d %H:%M')
-
 
 """
 *************************** SURVEY MODAL TEMPLATES ****************************
@@ -1931,4 +1915,3 @@ class CampaignSubscriber(models.Model):
     )
     def __str__(self):
         return "%s | %s" % (self.email, self.campaign)
-    

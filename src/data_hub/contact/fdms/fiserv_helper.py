@@ -121,106 +121,106 @@ def generate_clx_stream(f_total_amount, f_tran_fee, order_details_id, payment_me
     """
     """
     return {
-            "transaction": {
-                "agency": "580",
-                "batchid": "",
-                "company": "Texas Water Development Board",
-                "customerid": os.environ.get("FISERV_CUSTOMER_ID"),
-                "department": "Texas Geographic Information Office",
-                "description": "TxGIO DataHub order",
-                "fee": f_tran_fee,
-                "localreferenceid": "580WD" + order_details_id,
-                "merchantid": os.environ.get("FISERV_MERCHANT_ID"),
-                "paymenttype": payment_method,
-                "quantity": "1",
-                "reportlines": "3",  # This should be how many report line details attributes.
-                "sku": "DHUB",  # Should be correct.
-                "type": "ecommerce",
-                "unitprice": f_total_amount,
-                "vendorid": os.environ.get("FISERV_SERVICE_CODE"),
-                "reportlinedetails": [{
-                    "id": "USAS1",
-                    "attributes": [
-                        {
-                            "name": "USAS1COBJ",
-                            "value": "3719",
-                            "type": "String",
-                        },
-                        {
-                            "name": "USAS1PCA",
-                            "value": "19001",
-                            "type": "String",
-                        },
-                        {
-                            "name": "USAS1TCODE",
-                            "value": "195",
-                            "type": "String",
-                        },
-                        {
-                            "name": "USAS1AMOUNT",
-                            "value": f_total_amount,
-                            "type": "DOLLAR",
-                        },
-                    ],
-                },
-                {
-                    "id": "USAS2",
-                    "attributes": [
-                        {
-                            "name": "USAS2COBJ",
-                            "value": "3879",
-                            "type": "String",
-                        },
-                        {
-                            "name": "USAS2PCA",
-                            "value": "07768",
-                            "type": "String",
-                        },
-                        {
-                            "name": "USAS2TCODE",
-                            "value": "179",
-                            "type": "String",
-                        },
-                        {
-                            "name": "USAS2AMOUNT",
-                            "value": f_tran_fee,
-                            "type": "DOLLAR",
-                        },
-                    ],
-                },
-                {
-                    "id": "USAS3",
-                    "attributes": [
-                        {
-                            "name": "USAS3COBJ",
-                            "value": "7219",
-                            "type": "String",
-                        },
-                        {
-                            "name": "USAS3TCODE",
-                            "value": "265",
-                            "type": "String",
-                        },
-                        {
-                            "name": "USAS3PCA",
-                            "value": "07768",
-                            "type": "String",
-                        },
-                        {
-                            "name": "USAS3AMOUNT",
-                            "value": f_tran_fee,
-                            "type": "DOLLAR",
-                        },
-                    ],
-                }],
-                "additionalinfo": [
+        "transaction": {
+            "agency": "580",
+            "batchid": "",
+            "company": "Texas Water Development Board",
+            "customerid": os.environ.get("FISERV_CUSTOMER_ID"),
+            "department": "Texas Geographic Information Office",
+            "description": "TxGIO DataHub order",
+            "fee": f_tran_fee,
+            "localreferenceid": "580WD" + order_details_id,
+            "merchantid": os.environ.get("FISERV_MERCHANT_ID"),
+            "paymenttype": payment_method,
+            "quantity": "1",
+            "reportlines": "3",  # This should be how many report line details attributes.
+            "sku": "DHUB",  # Should be correct.
+            "type": "ecommerce",
+            "unitprice": f_total_amount,
+            "vendorid": os.environ.get("FISERV_SERVICE_CODE"),
+            "reportlinedetails": [{
+                "id": "USAS1",
+                "attributes": [
                     {
-                        "key": "servicecode",
-                        "value": os.environ.get("FISERV_SERVICE_CODE"),
-                    }
+                        "name": "USAS1COBJ",
+                        "value": "3719",
+                        "type": "String",
+                    },
+                    {
+                        "name": "USAS1PCA",
+                        "value": "19001",
+                        "type": "String",
+                    },
+                    {
+                        "name": "USAS1TCODE",
+                        "value": "195",
+                        "type": "String",
+                    },
+                    {
+                        "name": "USAS1AMOUNT",
+                        "value": f_total_amount,
+                        "type": "DOLLAR",
+                    },
                 ],
-            }
+            },
+            {
+                "id": "USAS2",
+                "attributes": [
+                    {
+                        "name": "USAS2COBJ",
+                        "value": "3879",
+                        "type": "String",
+                    },
+                    {
+                        "name": "USAS2PCA",
+                        "value": "07768",
+                        "type": "String",
+                    },
+                    {
+                        "name": "USAS2TCODE",
+                        "value": "179",
+                        "type": "String",
+                    },
+                    {
+                        "name": "USAS2AMOUNT",
+                        "value": f_tran_fee,
+                        "type": "DOLLAR",
+                    },
+                ],
+            },
+            {
+                "id": "USAS3",
+                "attributes": [
+                    {
+                        "name": "USAS3COBJ",
+                        "value": "7219",
+                        "type": "String",
+                    },
+                    {
+                        "name": "USAS3TCODE",
+                        "value": "265",
+                        "type": "String",
+                    },
+                    {
+                        "name": "USAS3PCA",
+                        "value": "07768",
+                        "type": "String",
+                    },
+                    {
+                        "name": "USAS3AMOUNT",
+                        "value": f_tran_fee,
+                        "type": "DOLLAR",
+                    },
+                ],
+            }],
+            "additionalinfo": [
+                {
+                    "key": "servicecode",
+                    "value": os.environ.get("FISERV_SERVICE_CODE"),
+                }
+            ],
         }
+    }
     
 
 def generate_level_three(f_total_amount, f_tran_fee): 

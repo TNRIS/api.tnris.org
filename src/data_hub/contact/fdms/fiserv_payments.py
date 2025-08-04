@@ -58,7 +58,6 @@ class FiservViewset(viewsets.ViewSet):
         return self.create_super(request)
 
     def captcha_intro(self, request, msg):
-        return self.intro(request)
         verify_req = api_helper.checkCaptcha(request.data["recaptcha"])
 
         # If we need to check the captcha then we verify captcha is correct.

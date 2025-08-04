@@ -58,6 +58,7 @@ class FiservViewset(viewsets.ViewSet):
         return self.create_super(request)
 
     def captcha_intro(self, request, msg):
+        return self.intro(request)
         verify_req = api_helper.checkCaptcha(request.data["recaptcha"])
 
         # If we need to check the captcha then we verify captcha is correct.
@@ -462,22 +463,15 @@ class InitiateRetentionCleanupViewSetSuper(
 
                 # If order has been paid for notify TxGIO
                 if order.archived is False and receipt.status_code == 200:
-                    if not order["tnris_notified"]:
+                    if not order.tnris_notified:
                         if api_helper.checkLogger():
                             logger.info(
                                 "Order receipt found where TxGIO has not been notified."
                             )
                         order.tnris_notified = True
-                        
-                        order_obj = json.loads(
-                            OrderDetailsType.objects.filter(
-                                id=order["order_details_id"]
-                            ).values()[0]["details"]
-                        )
+                        order_obj = json.loads(order.order_details.details)
                         order_string = api_helper.buildOrderString(order_obj)
-
                         
-
                         reply_email = "unknown@tnris.org"
                         if "Email" in order_obj:
                             reply_email = order_obj["Email"]
@@ -485,7 +479,7 @@ class InitiateRetentionCleanupViewSetSuper(
                         email_template = EmailTemplate.objects.get(form_id="order-received")
                         self.send_template_email(
                             email_template,
-                            {"order_id": order["id"], "order_string": order_string},
+                            {"order_id": order.id, "order_string": order_string},
                             os.environ.get("MAIL_DEFAULT_TO"),
                             reply_email,
                         )

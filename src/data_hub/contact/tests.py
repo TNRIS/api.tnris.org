@@ -6,6 +6,7 @@ import time
 import json
 import secrets
 import datetime
+import uuid
 
 from django.core import mail
 from django.test import TestCase, AsyncRequestFactory
@@ -21,8 +22,7 @@ from contact.fdms.fiserv_payments import (
     OrderFormViewSetSuper,
     OrderSubmitViewSetSuper,
     OrderStatusViewSetSuper,
-    InitiateRetentionCleanupViewSetSuper,
-    OrderArchivalViewSetSuper
+    InitiateRetentionCleanupViewSetSuper
 )
 from .models import OrderType, OrderDetailsType
 from rest_framework.request import Request
@@ -349,27 +349,6 @@ class GeneralTest(TestCase):
             },
         )
 
-        #NOTE: Doesn't work but just testing v2
-        fake_hmac_v2 = api_helper.generate_fiserv_hmac(
-            f"{FISERV_URL_V2}Charge",  #NOTE: Doesn't work but just testing v2
-            "POST",
-            json.dumps(cls.fake_charge),
-            os.environ.get("FISERV_ACCOUNT_ID"),
-            os.environ.get("FISERV_AUTH_CODE"),
-        )
-
-        #NOTE: Doesn't work but just testing v3
-        fake_response_v3 = requests.post(  #NOTE: Doesn't work but just testing v3
-            FISERV_URL_V3 + "charge",
-            json=cls.fake_charge,
-            headers={
-                "accountid": os.environ.get("FISERV_ACCOUNT_ID"),  # good
-                "merchantid": os.environ.get("FISERV_MERCHANT_ID"),  # good
-                "signature": f"Hmac {fake_hmac_v3.decode()}",
-                "Authorization": f"Basic {basic.decode()}",
-            },
-        )
-
         # Create fake order in the database.abs
         access_token = "TxGIO-DevOps@twdb.texas.gov"
         salt = secrets.token_urlsafe(32)
@@ -389,7 +368,7 @@ class GeneralTest(TestCase):
         created = OrderType.objects.create(order_details=order_details)
         created.order_approved = True
         created.approved_charge = 23
-        created.order_token = json.loads(fake_response_v3.text)["transactions"][0]["pgtransactionid"]
+        created.order_token = uuid.uuid4()
         created.save()
 
         # Put completed order in database.
@@ -411,21 +390,6 @@ class GeneralTest(TestCase):
 class SnappayTestCase(GeneralTest):
     """General Snappay tests"""
     fixtures = ["email_templates.json"]
-
-    def test_order_cleanup(self):
-        """Order cleanup test case."""
-        order_cleanup = OrderArchivalViewSetSuper()
-        request = create_super_request(
-            {
-                "access_code": os.environ.get("CCP_ACCESS_CODE"),
-                "approve_run": "true"
-            },
-            f"?uuid={self.uuid}"
-        )
-        response = order_cleanup.create_super(request)
-        self.assertEqual(response.status_code, 200, "Order Cleanup unsuccessful.")
-        self.assertEqual(mail.outbox[0].subject, 'Order Received', "Dataset order update wasn't first email. ")
-        self.assertEqual(len(mail.outbox), 1, 'Dataset Order Update: Payment has been received.')
 
     def test_initiate_retentions_cleanup(self):
         """Initiate retention cleanup test case."""

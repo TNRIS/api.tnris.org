@@ -4,7 +4,6 @@ from .models import (
     Campaign,
     CampaignSubscriber,
     DataHubContact,
-    DataHubOrder,
     DataHubOutsideEntityContact,
     EducationContact,
     ForumJobBoardSubmission,
@@ -24,12 +23,6 @@ from .models import (
 class DataHubContactSerializer(serializers.ModelSerializer):
     class Meta:
         model = DataHubContact
-        fields = ('__all__')
-
-
-class DataHubOrderSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = DataHubOrder
         fields = ('__all__')
 
 

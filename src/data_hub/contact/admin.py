@@ -12,7 +12,6 @@ from .models import (
     Campaign,
     CampaignSubscriber,
     DataHubContact,
-    DataHubOrder,
     OrderType,
     OrderDetailsType,
     DataHubOutsideEntityContact,
@@ -301,28 +300,6 @@ class OrderDetailsTypeAdmin(admin.ModelAdmin):
         super().save_model(request, obj, form, change)
     def response_change(self, request, obj):
         return redirect('/admin/contact/orderdetailstype/' + str(obj.id) + '/change/')
-@admin.register(DataHubOrder)
-class DataHubOrderAdmin(admin.ModelAdmin, ExportSelectedToCsvMixin):
-    model = DataHubOrder
-    actions = ["export_selected_to_csv"]
-    list_display = (
-        'name',
-        'email',
-        'phone',
-        'address',
-        'organization',
-        'industry',
-        'harddrive',
-        'delivery',
-        'payment',
-        'created'
-    )
-    ordering = ('-created',)
-
-    def get_readonly_fields(self, request, obj=None):
-        if obj:
-            self.readonly_fields = [field.name for field in obj.__class__._meta.fields]
-        return self.readonly_fields
 
 
 @admin.register(DataHubOutsideEntityContact)

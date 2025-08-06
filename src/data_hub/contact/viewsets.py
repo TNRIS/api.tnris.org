@@ -20,7 +20,6 @@ from modules import api_helper
 from .models import CampaignSubscriber, SurveyTemplate
 from .serializers import (
     SurveyTemplateSerializer,
-    DataHubOrderSerializer,
     CampaignSubscriberSerializer)
 
 logger = logging.getLogger("errLog")
@@ -467,23 +466,10 @@ class DataHubOrdersViewSet(viewsets.ReadOnlyModelViewSet):
     Retrieve TxGIO DataHub Order submissions
     """
     permission_classes = (IsAuthenticated,)
-    serializer_class = DataHubOrderSerializer
     http_method_names = ['get']
 
-    def get_queryset(self):
-        args = {}
-        null_list = ['null', 'Null', 'none', 'None']
-        # create argument object of query clauses
-        for field in self.request.query_params.keys():
-            if field != 'limit' and field != 'offset':
-                value = self.request.query_params.get(field)
-                # convert null queries
-                if value in null_list:
-                    value = None
-                args[field] = value
-        # get records using query
-        queryset = DataHubOrder.objects.filter(**args)
-        return queryset
+    def get(self):
+        return Response("Endpoint deprecated", status=status.HTTP_410_GONE)
 
 # Campaigns rw endpoint
 class SubmitCampaignSubscriptionViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin):

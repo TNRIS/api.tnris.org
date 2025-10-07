@@ -514,6 +514,7 @@ class InitiateRetentionCleanupViewSetSuper(
                                 {},
                                 order_obj["Email"],
                                 os.environ.get("STRATMAP_EMAIL"),
+                                SEND_HTML_FLAG
                             )
                         order.archived = True
                         order.save()

@@ -14,6 +14,7 @@ import traceback
 from rest_framework import status, viewsets
 from rest_framework.response import Response
 from django.db.models.signals import pre_save
+from django.db.models import QuerySet
 from django.dispatch import receiver
 from modules.api_helper import logger
 from modules import api_helper
@@ -222,7 +223,7 @@ class OrderFormViewSetSuper(
             # Generate Access Code and one way encrypt it.
             order_details = request.data.get("order_details")
 
-            order_object = self.create_order_object(
+            order_object: OrderType | None = self.create_order_object(
                 email=order_details["Email"],
                 order_details=order_details
             )
@@ -375,7 +376,10 @@ class InitiateRetentionCleanupViewSetSuper(
     """
 
     def get_receipt(self, order):
-        # Look for a successful receipt. Otherwise return 404.
+        # If this isn't overwritten, then 500 is an appropriate
+        response = Response(
+            {"status_code": 500}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
         try:
             if order.order_approved:
                 endpoint = f"{FISERV_URL}GetPaymentDetails" # Potentially can change over to gettransaction.
@@ -416,6 +420,8 @@ class InitiateRetentionCleanupViewSetSuper(
                             "orderReceipt": orders,
                         }
                     )
+                    order.archived = True
+                    order.save()
                 else:
                     response = Response(
                         {"status_code": 404}, status=status.HTTP_404_NOT_FOUND
@@ -435,8 +441,38 @@ class InitiateRetentionCleanupViewSetSuper(
         finally:
             return response
 
+    def get_order_ages(self, order: OrderType) -> tuple[int, int]:
+        """
+        Get age of order creation. And age of last modification
+        """
+
+        # Determine how long since the order was created.
+        created_td = datetime.utcnow() - order.created.replace(tzinfo=None)
+        days_since_created = created_td.days
+
+        # Determine how long since the order was modified.
+        modified_td = datetime.utcnow() - order.last_modified.replace(
+            tzinfo=None
+        )
+        days_since_modified = modified_td.days
+
+        return days_since_created, days_since_modified
+
+    def can_archive_the_following(self, order: OrderType) -> bool:
+        days_since_created, days_since_modified = self.get_order_ages(order)
+        return (days_since_created > 90) and (days_since_modified > 90)
+
+    def can_delete_the_following(self, order: OrderType) -> bool:
+        days_since_created, days_since_modified = self.get_order_ages(order)
+        return (days_since_created > 120) and (days_since_modified > 30)
+
     def create_super(self, request, format=None):
-        """Delete old orders according to retention policy."""
+        """
+        Delete old orders according to retention policy.
+        There are two cases we want to archive orders, when no action has been taken, and no receipt has been received in 30 days,
+        and when a payment has been received. We want to delete order that are archived over 120 days. Details about retention policy found
+        in readme and in comments.
+        """
 
         blocked = api_helper.authenticate_lambda(request.data["access_code"])
         if(blocked):
@@ -455,54 +491,59 @@ class InitiateRetentionCleanupViewSetSuper(
             )
 
         try:
-            orders = OrderType.objects.get_queryset()
+            CLEANING_FLAG=True
+            orders: QuerySet[OrderType] = OrderType.objects.get_queryset()
             # Loop over each order and check if the retention policy has expired them.
             for order in orders:
-                receipt = self.get_receipt(order)
-
-                # If order has been paid for notify TxGIO
-                if order.archived is False and receipt.status_code == 200:
-                    if not order.tnris_notified:
-                        if api_helper.checkLogger():
-                            logger.info(
-                                "Order receipt found where TxGIO has not been notified."
-                            )
-                        order.tnris_notified = True
-                        order_obj = json.loads(order.order_details.details)
-                        order_string = api_helper.buildOrderString(order_obj)
-                        
-                        reply_email = "unknown@tnris.org"
-                        if "Email" in order_obj:
-                            reply_email = order_obj["Email"]
-
-                        email_template = EmailTemplate.objects.get(form_id="order-received")
-                        self.send_template_email(
-                            email_template,
-                            {"order_id": order.id, "order_string": order_string},
-                            os.environ.get("MAIL_DEFAULT_TO"),
-                            reply_email,
-                        )
-                        order.save()
-                    continue #This order is done processing for now.
-
-                # Determine how long since the order was created.
-                created_td = datetime.utcnow() - order.created.replace(tzinfo=None)
-                days_since_created = created_td.days
-
-                # Determine how long since the order was modified.
-                modified_td = datetime.utcnow() - order.last_modified.replace(
-                    tzinfo=None
-                )
-                days_since_modified = modified_td.days
-
                 # Get associated order details.
-                order_details = OrderDetailsType.objects.filter(
-                    id=order.order_details_id
-                )
+                order_details: OrderDetailsType =  order.order_details
+                if order.archived is False:
+                    receipt = self.get_receipt(order)
 
-                # If archived we must check if deletion time has come.
-                # This is where the writing to the database should occur.
-                if order.archived is True:
+                    # If not archived we check the retention policy.
+                    # Retention policy Orders marked as archived will be
+                    # deleted if left in that state for 30 days completely
+                    # unmodified.
+                    if self.can_archive_the_following(order):
+                        order_obj = json.loads(order_details.details)
+
+                        if receipt.status_code != 200 and "Email" in order_obj: # receipt not initialized
+                            email_template = EmailTemplate.objects.get(form_id="order-removed")
+                            self.send_template_email(
+                                email_template,
+                                {},
+                                order_obj["Email"],
+                                os.environ.get("STRATMAP_EMAIL"),
+                                SEND_HTML_FLAG
+                            )
+                        order.archived = True
+                        order.save()
+
+                    # If order has been paid for notify TxGIO
+                    if receipt.status_code == 200:
+                        if not order.tnris_notified:
+                            if api_helper.checkLogger():
+                                logger.info(
+                                    "Order receipt found where TxGIO has not been notified."
+                                )
+                            order.tnris_notified = True
+                            order_obj = json.loads(order.order_details.details)
+                            order_string = api_helper.buildOrderString(order_obj)
+                            
+                            reply_email = "unknown@tnris.org"
+                            if "Email" in order_obj:
+                                reply_email = order_obj["Email"]
+
+                            email_template = EmailTemplate.objects.get(form_id="order-received")
+                            self.send_template_email(
+                                email_template,
+                                {"order_id": order.id, "order_string": order_string},
+                                os.environ.get("MAIL_DEFAULT_TO"),
+                                reply_email,
+                            )
+                            order.save()
+                        continue #This order is done processing for now.
+                else:
                     # Retention policy - Un-acted upon orders will be archived
                     # after 90 days. After an additional 30 days then they will
                     # be deleted from the API database. We can check that at
@@ -510,27 +551,9 @@ class InitiateRetentionCleanupViewSetSuper(
                     # amount of time we want to keep an order. We also want to
                     # make sure it was changed to archived and it hasn't been
                     # modified in any way for 30 days.
-                    if (days_since_created > 120) and (days_since_modified > 30):
+                    if self.can_delete_the_following(order):
                         order.delete()
                         order_details.delete()
-                else:
-                    # If not archived we check the retention policy.
-                    # Retention policy Orders marked as archived will be
-                    # deleted if left in that state for 30 days completely
-                    # unmodified.
-                    if (days_since_created > 90) and (days_since_modified > 90):
-                        order_obj = json.loads(order_details.values()[0]["details"])
-
-                        if receipt.status_code != 200 and "Email" in order_obj:
-                            email_template = EmailTemplate.objects.get(form_id="order-removed")
-                            self.send_template_email(
-                                email_template,
-                                {},
-                                order_obj["Email"],
-                                os.environ.get("STRATMAP_EMAIL"),
-                            )
-                        order.archived = True
-                        order.save()
 
             # General Response
             return Response({"status": "success", "message": "success"})
@@ -539,9 +562,11 @@ class InitiateRetentionCleanupViewSetSuper(
             if api_helper.checkLogger():
                 logger.info("Error cleaning up old orders: %s", str(e))
             return Response(
-                {"status": "failure", "message": "The order has failed"},
+                {"status": "failure", "message": "The cleanup script has failed"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
+        finally:
+            CLEANING_FLAG=False
 
 class OrderSubmitViewSetSuper(
         FiservViewset

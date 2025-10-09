@@ -41,6 +41,14 @@ boto3_logs_client = boto3.client("logs", region_name=AWS_REGION_NAME)
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'root': {
+        'level': 'DEBUG',
+        # Adding the watchtower handler here causes all loggers in the project that
+        # have propagate=True (the default) to send messages to watchtower. If you
+        # wish to send only from specific loggers instead, remove "watchtower" here
+        # and configure individual loggers below.
+        'handlers': ['watchtower', 'console'],
+    },
     'handlers': {
         'console': {
             'class': 'logging.StreamHandler'
@@ -52,7 +60,7 @@ LOGGING = {
             # Decrease the verbosity level here to send only those logs to watchtower,
             # but still see more verbose logs in the console. See the watchtower
             # documentation for other parameters that can be set here.
-            'level': 'INFO'
+            'level': 'DEBUG'
         },
         "file": {
             "level": "DEBUG",
@@ -63,8 +71,8 @@ LOGGING = {
     'loggers': {
         'errLog': {
             'level': 'INFO',
-            'handlers': ['file', 'watchtower', 'console'],
-            'propagate': False
+            'handlers': ['console'],
+            'propagate': True
         },
     }
 }

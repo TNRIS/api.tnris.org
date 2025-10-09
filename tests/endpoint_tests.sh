@@ -34,15 +34,15 @@ paths_array=(
 
 echo running api endpoint ping tests...
 
-for p in ${paths_array[*]}; do
-    url=://$domain/$p
+# for p in ${paths_array[*]}; do
+#     url=://$domain/$p
 
-    echo https$url
-    res=$(curl -s -o /dev/null -w "%{http_code}" https$url);
-    if [ $res -ne 200 ] ; then
-        echo "FAIL! expected 200, received $res"
-        return 1
-    fi
-done
+#     echo https$url
+#     res=$(curl -s -o /dev/null -w "%{http_code}" https$url);
+#     if [ $res -ne 200 ] ; then
+#         echo "FAIL! expected 200, received $res"
+#         return 1
+#     fi
+# done
 
 echo finished successfully

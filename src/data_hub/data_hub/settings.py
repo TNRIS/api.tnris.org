@@ -24,7 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.environ.get('SECRET_KEY', 'PLACEHOLDER')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     'data.tnris.org',
@@ -35,35 +35,47 @@ ALLOWED_HOSTS = [
     '127.0.0.1'
 ]
 
-if True:
-    AWS_REGION_NAME = "us-east-1"
-    boto3_logs_client = boto3.client("logs", region_name=AWS_REGION_NAME)
+AWS_REGION_NAME = "us-east-1"
+boto3_logs_client = boto3.client("logs", region_name=AWS_REGION_NAME)
 
-    LOGGING = {
-        'version': 1,
-        'disable_existing_loggers': False,
-        'handlers': {
-            'console': {
-                'class': 'logging.StreamHandler'
-            },
-            'watchtower': {
-                'class': 'watchtower.CloudWatchLogHandler',
-                'boto3_client': boto3_logs_client,
-                'log_group_name': '/ecs/api-tnris-org-staging',
-                # Decrease the verbosity level here to send only those logs to watchtower,
-                # but still see more verbose logs in the console. See the watchtower
-                # documentation for other parameters that can be set here.
-                'level': 'INFO'
-            }
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'root': {
+        'level': 'WARNING',
+        # Adding the watchtower handler here causes all loggers in the project that
+        # have propagate=True (the default) to send messages to watchtower. If you
+        # wish to send only from specific loggers instead, remove "watchtower" here
+        # and configure individual loggers below.
+        'handlers': ['watchtower', 'console'],
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler'
         },
-        'loggers': {
-            'errLog': {
-                'level': 'INFO',
-                'handlers': ['watchtower', 'console'],
-                'propagate': False
-            },
+        'watchtower': {
+            'class': 'watchtower.CloudWatchLogHandler',
+            'boto3_client': boto3_logs_client,
+            'log_group_name': '/ecs/api-tnris-org-staging',
+            # Decrease the verbosity level here to send only those logs to watchtower,
+            # but still see more verbose logs in the console. See the watchtower
+            # documentation for other parameters that can be set here.
+            'level': 'WARNING'
+        },
+        "file": {
+            "level": "WARNING",
+            "class": "logging.FileHandler",
+            "filename": "staging_debug.log",
+        }
+    },
+    'loggers': {
+        'errLog': {
+            'level': 'WARNING',
+            'handlers': ['console'],
+            'propagate': True
         },
     }
+}
 
 CORS_ORIGIN_ALLOW_ALL = True
 

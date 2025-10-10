@@ -1,14 +1,32 @@
 
-FROM ubuntu:focal
+FROM ubuntu:noble
 
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update && apt-get install -y python3 python3-pip python3-venv nginx supervisor curl libpq-dev jq
 RUN apt-get install -y binutils libproj-dev gdal-bin
 
-# Setup python 3 virtualenv
-RUN mkdir /envs/
-RUN python3 -m venv /envs/data_hub
+# Setup pyenv dependencies
+RUN apt-get install -y make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget llvm libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev git
+
+# Upgrade ubuntu
+RUN apt-get -y upgrade
+
+# Download and install pyenv 
+RUN curl -fsSL https://pyenv.run | bash
+SHELL ["/bin/bash", "--login" , "-c"]
+
+# Setup python 3 virtualenv and pyenv
+RUN ~/.pyenv/bin/pyenv install 3.12
+
+RUN mkdir /envs
+WORKDIR /envs
+RUN ~/.pyenv/bin/pyenv local 3.12
+RUN python3 -m venv ./data_hub
+WORKDIR /
+# Cleanup pyenv dep 
+RUN apt-get remove -y git
+
 ENV PATH /envs/data_hub/bin:$PATH
 # upgrade pip
 RUN pip3 install -U pip

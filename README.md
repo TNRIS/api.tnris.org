@@ -7,11 +7,11 @@ Django RESTful API and PostgreSQL backend database management system for maintai
 ## Setup
 
 Built with:
-* Python 3.8 ([virtual environment (venv)](https://docs.python.org/3/library/venv.html) suggested)
+* Python 3.12 ([virtual environment (venv)](https://docs.python.org/3/library/venv.html) suggested)
 * PostgreSQL 10.7
   * Amazon RDS Aurora Instance (`tnris-general-store`)
 * [Django](https://docs.djangoproject.com/en/3.0/topics/install/)
-* For data scripts, you probably want to use some form of python virtual env manager to maintain an isolated environment. A good run-down of the options can be found in [The Hitchiker's Guide to Python](http://docs.python-guide.org/en/latest/dev/virtualenvs/). A recommended setup is virtualenv + virtualenvwrapper.
+* For data scripts, you probably want to use some form of python virtual env manager to maintain an isolated environment. A good run-down of the options can be found in [The Hitchiker's Guide to Python](http://docs.python-guide.org/en/latest/dev/virtualenvs/). A recommended setup is pyenv.
 
 #### Django App Setup
 1. Requires `jq` package to be installed on local os to startup with env variables from SecretsManager: `apt-get update && apt-get install -y jq`

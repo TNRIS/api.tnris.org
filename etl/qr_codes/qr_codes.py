@@ -24,7 +24,6 @@ credentials = ServiceAccountCredentials.from_json_keyfile_name('', scope)
 
 gc = gspread.authorize(credentials)
 
-
 database = os.environ.get('DB_NAME')
 username = os.environ.get('DB_USER')
 password = os.environ.get('DB_PASSWORD')

@@ -136,6 +136,22 @@ class CollectionAdmin(admin.ModelAdmin):
         return "{}".format(", ".join(name for name in counties))
 
     county_names.short_description = "Counties in Collection"
+    
+    def save_related(self, request, form, formsets, change):
+        super(CollectionAdmin, self).save_related(request, form, formsets, change)
+
+        updated_counties = form.cleaned_data['counties']
+        initial_counties_str = [
+            str(u) for u in form.initial_counties
+        ]
+        removes = [c for c in initial_counties_str if c not in updated_counties]
+        adds = [c for c in updated_counties if c not in initial_counties_str]
+        for remove in removes:
+            CountyRelate.objects.filter(
+                county=remove).filter(collection=form.instance.id).delete()
+            
+        for add in adds:
+            CountyRelate(county_id=add, collection=form.instance).save()
 
     def save_formset(self, request, form, formset, change):
         super(CollectionAdmin, self).save_formset(request, form, formset, change)

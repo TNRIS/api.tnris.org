@@ -190,18 +190,6 @@ class CollectionForm(forms.ModelForm):
         return
 
     def save(self, commit=True):
-        updated_counties = self.cleaned_data['counties']
-        initial_counties_str = [
-            str(u) for u in self.initial_counties
-        ]
-        removes = [c for c in initial_counties_str if c not in updated_counties]
-        adds = [c for c in updated_counties if c not in initial_counties_str]
-        for remove in removes:
-            CountyRelate.objects.filter(
-                county=remove).filter(collection=self.instance.id).delete()
-        for add in adds:
-            CountyRelate(county_id=add, collection=self.instance).save()
-
         return super(CollectionForm, self).save(commit=commit)
 
 

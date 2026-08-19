@@ -10,6 +10,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from .models import CatalogCollectionMetaView, CcrView, RemView, AreasView, ResourceType
 from .serializers import (
     CatalogCollectionMetaSerializer,
+    CatalogCollectionMetaListSerializer,
     CollectionSerializer,
     ResourceSerializer,
     AreaSerializer,
@@ -60,6 +61,14 @@ class CatalogCollectionMetaViewSet(viewsets.ReadOnlyModelViewSet):
     bbox_filter_include_overlapping = True
     serializer_class = CatalogCollectionMetaSerializer
     http_method_names = ['get']
+
+    def get_serializer_class(self):
+        # Geometry is large (~99% of a list page) and is only consumed one
+        # collection at a time, so omit it from list responses. Retrieve still
+        # returns the full record including `the_geom`.
+        if self.action == 'list':
+            return CatalogCollectionMetaListSerializer
+        return CatalogCollectionMetaSerializer
 
     def get_queryset(self):
         # only return public collection records from the catalog

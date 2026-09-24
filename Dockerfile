@@ -3,7 +3,10 @@ FROM ubuntu:noble
 
 ENV DEBIAN_FRONTEND noninteractive
 
-RUN apt-get update && apt-get install -y python3 python3-pip python3-venv nginx supervisor curl libpq-dev jq
+# make sure noble universe is available to apt to prevent it being unable to find files
+RUN echo "deb http://ubuntu.com noble universe" >> /etc/apt/sources.list
+
+RUN apt-get update --fix-missing && apt-get install -y python3 python3-pip python3-venv nginx supervisor curl libpq-dev jq
 RUN apt-get install -y binutils libproj-dev gdal-bin
 
 # Setup pyenv dependencies

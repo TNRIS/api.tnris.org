@@ -58,6 +58,7 @@ class CorsPostPermission(AllowAny):
         "stagingdata.geographic.texas.gov",
         "staginghub.tnris.org",
         "store.tnris.org",
+        "test.txgio.org",
         "tnris.org",
         "www.tnris.org"
     ]
@@ -81,6 +82,7 @@ class CcpSubmitFormViewSet(ccp_payments.SubmitFormViewSetSuper):
     """
     permission_classes = [CorsPostPermission]
     def create(self, request):
+        print('ever here')
         return self.captcha_intro(request, "Running CcpSubmitFormViewSet")
 
 class CcpGenOtpViewSet(ccp_payments.GenOtpViewSetSuper):

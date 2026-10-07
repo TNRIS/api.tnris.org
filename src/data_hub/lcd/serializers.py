@@ -5,8 +5,22 @@ class CatalogCollectionMetaSerializer(serializers.ModelSerializer):
     class Meta:
         model = CatalogCollectionMetaView
         fields = '__all__'
-        #exclude = ('the_geom',)
         geo_field = 'the_geom'
+
+
+class CatalogCollectionMetaListSerializer(CatalogCollectionMetaSerializer):
+    """
+    List-view serializer that omits `the_geom`.
+
+    The coverage geometry is only needed for one collection at a time (drawn on
+    hover / on the detail page), but `fields = '__all__'` shipped it for every
+    row of every list response. On the first catalog page that is ~99% of the
+    payload. The detail endpoint still returns `the_geom`, so single-collection
+    consumers are unaffected.
+    """
+    class Meta(CatalogCollectionMetaSerializer.Meta):
+        exclude = ('the_geom',)
+        fields = None
 
     thumbnail_image = serializers.SerializerMethodField()
     def get_thumbnail_image(self, obj):

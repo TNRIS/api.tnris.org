@@ -24,9 +24,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     gdal-bin
 
 # Add the official NGINX signing key, repository, and APT pinning
-RUN curl -fsSL https://nginx.org | gpg --dearmor \
+RUN curl -fsSL https://nginx.org/keys/nginx_signing.key | gpg --dearmor \
         -o /usr/share/keyrings/nginx-archive-keyring.gpg && \
-    echo "deb [signed-by=/usr/share/keyrings/nginx-archive-keyring.gpg] https://nginx.org $(lsb_release -cs) nginx" \
+    echo "deb [signed-by=/usr/share/keyrings/nginx-archive-keyring.gpg] https://nginx.org/packages/ubuntu $(lsb_release -cs) nginx" \
         > /etc/apt/sources.list.d/nginx.list && \
     printf "Package: *\nPin: origin nginx.org\nPin: release o=nginx\nPin-Priority: 900\n" \
         > /etc/apt/preferences.d/99nginx

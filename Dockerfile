@@ -89,10 +89,9 @@ ENV DJANGO_SETTINGS_MODULE data_hub.production_settings
 RUN chmod -R 777 /src/data_hub/static
 
 # Setup nginx
-RUN rm /etc/nginx/sites-enabled/default
-COPY django.conf /etc/nginx/sites-available/
-RUN ln -s /etc/nginx/sites-available/django.conf /etc/nginx/sites-enabled/django.conf
-RUN echo "daemon off;" >> /etc/nginx/nginx.conf
+RUN rm -f /etc/nginx/conf.d/default.conf && \
+    echo "daemon off;" >> /etc/nginx/nginx.conf
+COPY django.conf /etc/nginx/conf.d/django.conf
 
 # Setup supervisord
 RUN mkdir -p /var/log/supervisor

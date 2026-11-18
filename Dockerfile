@@ -1,13 +1,38 @@
 
 FROM ubuntu:noble
 
-ENV DEBIAN_FRONTEND noninteractive
+ENV DEBIAN_FRONTEND=noninteractive
 
 # make sure noble universe is available to apt to prevent it being unable to find files
-RUN echo "deb http://ubuntu.com noble universe" >> /etc/apt/sources.list
+# obsolete
+# RUN echo "deb http://ubuntu.com noble universe" >> /etc/apt/sources.list
 
-RUN apt-get update --fix-missing && apt-get install -y python3 python3-pip python3-venv nginx supervisor curl libpq-dev jq
-RUN apt-get install -y binutils libproj-dev gdal-bin
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ca-certificates \
+    curl \
+    gnupg2 \
+    lsb-release \
+    ubuntu-keyring \
+    python3 \
+    python3-pip \
+    python3-venv \
+    supervisor \
+    libpq-dev \
+    jq \
+    binutils \
+    libproj-dev \
+    gdal-bin
+
+# Add the official NGINX signing key, repository, and APT pinning
+RUN curl -fsSL https://nginx.org | gpg --dearmor \
+        -o /usr/share/keyrings/nginx-archive-keyring.gpg && \
+    echo "deb [signed-by=/usr/share/keyrings/nginx-archive-keyring.gpg] https://nginx.org $(lsb_release -cs) nginx" \
+        > /etc/apt/sources.list.d/nginx.list && \
+    printf "Package: *\nPin: origin nginx.org\nPin: release o=nginx\nPin-Priority: 900\n" \
+        > /etc/apt/preferences.d/99nginx
+        
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    nginx=1.30.7*
 
 # Setup pyenv dependencies
 RUN apt-get install -y make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget llvm libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev git
